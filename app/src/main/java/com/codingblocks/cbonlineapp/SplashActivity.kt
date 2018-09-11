@@ -27,7 +27,7 @@ class SplashActivity : AppCompatActivity() {
                         val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, splashImageView, "trans1")
                         startActivity(intentFor<LoginActivity>().singleTop(), compat.toBundle())
                     } else {
-                        startActivity(intentFor<MainActivity>().singleTop())
+                        startActivity(intentFor<HomeActivity>().singleTop())
                         finish()
                     }
                 },

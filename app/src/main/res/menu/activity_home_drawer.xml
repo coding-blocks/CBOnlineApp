@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_all_courses"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="All Courses" />
+        <item
+            android:id="@+id/nav_my_courses"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="My Courses" />
+        <item
+            android:id="@+id/nav_notifications"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Notifications" />
+    </group>
+
+
+</menu>

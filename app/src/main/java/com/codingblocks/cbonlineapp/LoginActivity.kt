@@ -13,8 +13,8 @@ import org.jetbrains.anko.singleTop
 
 class LoginActivity : AppCompatActivity(), AnkoLogger {
 
-    private val CLIENT_ID = "9047417470"
-    private val REDIRECT_URI = "http://localhost"
+    private val CLIENT_ID = "442127787"
+    private val REDIRECT_URI = "https://app.codingblocks.com"
     private val OAUTH_URL = "https://account.codingblocks.com/oauth/authorize"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +40,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
                         prefs.SP_ACCESS_TOKEN_KEY = authToken
                         authComplete = true
                         authdialog.dismiss()
-                        startActivity(intentFor<MainActivity>().singleTop())
+                        startActivity(intentFor<HomeActivity>().singleTop())
                     } else if (url.contains("error=access_denied")) {
                         authComplete = true
                         authdialog.dismiss()
