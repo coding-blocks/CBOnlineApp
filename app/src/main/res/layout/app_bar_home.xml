@@ -23,4 +23,15 @@
     <include layout="@layout/content_home" />
 
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_whatsapp"
+        android:layout_width="wrap_content"
+        app:borderWidth="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:backgroundTint="@android:color/white"
+        android:src="@drawable/whatsapp_round" />
+
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

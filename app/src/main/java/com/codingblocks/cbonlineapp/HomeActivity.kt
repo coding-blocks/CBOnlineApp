@@ -1,8 +1,11 @@
 package com.codingblocks.cbonlineapp
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -14,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_home.*
 import kotlinx.android.synthetic.main.nav_header_home.*
 import org.jetbrains.anko.AnkoLogger
+
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, AnkoLogger {
 
@@ -27,6 +31,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
+        fab_whatsapp.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setPackage("com.whatsapp")
+            intent.data = Uri.parse(String.format("https://api.whatsapp.com/send?phone=%s", "919811557517"))
+            if (packageManager.resolveActivity(intent, 0) != null) {
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Please install whatsApp", Toast.LENGTH_SHORT).show()
+            }
+        }
         fetchUser()
     }
 
