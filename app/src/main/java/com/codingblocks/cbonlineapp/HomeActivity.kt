@@ -9,12 +9,15 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.API.Client
+import com.codingblocks.cbonlineapp.Adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_home.*
+import kotlinx.android.synthetic.main.content_home.*
 import kotlinx.android.synthetic.main.nav_header_home.*
 import org.jetbrains.anko.AnkoLogger
 
@@ -34,7 +37,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fab_whatsapp.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setPackage("com.whatsapp")
-            intent.data = Uri.parse(String.format("https://api.whatsapp.com/send?phone=%s", "919811557517"))
+            intent.data = Uri.parse(String.format("https://apiAuth.whatsapp.com/send?phone=%s", "919811557517"))
             if (packageManager.resolveActivity(intent, 0) != null) {
                 startActivity(intent)
             } else {
@@ -42,11 +45,28 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
         fetchUser()
+        fetchRecommendedCourses()
+    }
+
+    private fun fetchRecommendedCourses() {
+
+        val courseDataAdapter = CourseDataAdapter(ArrayList())
+
+        rvCourses.layoutManager = LinearLayoutManager(this);
+        rvCourses.adapter = courseDataAdapter
+
+        Client.api.courseModel.enqueue(retrofitcallback { t, resp ->
+            resp?.body()?.let {
+                val courseModel = it
+                courseDataAdapter.setData(it.data as ArrayList<DataModel>)
+
+            }
+        })
     }
 
     private fun fetchUser() {
         if (!prefs.SP_ACCESS_TOKEN_KEY.equals("access_token")) {
-            Client.api.getMe("Bearer " + prefs.SP_ACCESS_TOKEN_KEY).enqueue(retrofitcallback { t, resp ->
+            Client.apiAuth.getMe("Bearer " + prefs.SP_ACCESS_TOKEN_KEY).enqueue(retrofitcallback { t, resp ->
                 resp?.body()?.let {
                     Picasso.get().load(it.photo).into(nav_header_imageView)
                     nav_header_username_textView.text = it.username

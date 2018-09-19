@@ -45,4 +45,7 @@ dependencies {
         implementation "org.jetbrains.anko:anko-$name:$ankoVersion"
     }
 
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+
 }
