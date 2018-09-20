@@ -93,7 +93,23 @@ data class Courses(
 
 data class Attributes(
         val id: String,
+        val photo: String,
         val name: String,
+        val start: String,
+        val end: String,
+        val price: String,
+        val mrp: String,
+        @SerializedName("is-free")
+        val isFree: Boolean,
         val description: String,
-        val photo: String
+        @SerializedName("enrollment-start")
+        val enrollmentStart: String,
+        @SerializedName("enrollment-end")
+        val enrollmentEnd: String,
+        val status: String,
+        @SerializedName("product-id")
+        val productId: Int,
+        val unlisted: Boolean,
+        @SerializedName("contest-id")
+        val contestId: Any?
 )
