@@ -58,7 +58,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Client.api.courseModel.enqueue(retrofitcallback { t, resp ->
             resp?.body()?.let {
                 val courseModel = it
-                courseDataAdapter.setData(it.data as ArrayList<DataModel>)
+                courseDataAdapter.setData(it)
 
             }
         })
