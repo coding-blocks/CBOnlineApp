@@ -6,6 +6,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface JsonPlaceholderApi {
     @GET("me")
@@ -14,6 +15,10 @@ interface JsonPlaceholderApi {
     @GET("{id}")
     fun getUser(@Header("Authorization") authorization: String, @Path("id") id: Int): Call<User>
 
-    @get:GET("courses?exclude=ratings&filter%5Brecommended%5D=true&filter%5Bunlisted%5D=false&include=instructors%2Cruns&sort=difficulty")
-    val courseModel: Call<CourseModel>
+    @GET("courses")
+    fun getRecommendedCourses(@Query("exclude") query: String = "ratings",
+                              @Query("filter[recommended]") recommended: String = "true",
+                              @Query("filter[unlisted]") unlisted: String = "false",
+                              @Query("include") include: String = "instructors,runs",
+                              @Query("sort") sort: String = "difficulty"): Call<CourseModel>
 }

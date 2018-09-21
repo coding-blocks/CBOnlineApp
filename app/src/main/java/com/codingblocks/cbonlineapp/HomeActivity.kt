@@ -75,11 +75,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun fetchRecommendedCourses() {
 
 
-        Client.api.courseModel.enqueue(retrofitcallback { t, resp ->
+        Client.api.getRecommendedCourses().enqueue(retrofitcallback { t, resp ->
             resp?.body()?.let {
                 courseDataAdapter.setData(it)
                 skeletonScreen.hide()
-
             }
         })
     }
