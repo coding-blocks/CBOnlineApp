@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.API.Client
 import com.codingblocks.cbonlineapp.Adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
+import com.ethanhua.skeleton.Skeleton
+import com.ethanhua.skeleton.SkeletonScreen
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
@@ -23,6 +25,10 @@ import org.jetbrains.anko.AnkoLogger
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, AnkoLogger {
+
+    private lateinit var courseDataAdapter: CourseDataAdapter
+    lateinit var skeletonScreen: SkeletonScreen
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,21 +50,35 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Toast.makeText(this, "Please install whatsApp", Toast.LENGTH_SHORT).show()
             }
         }
+
+        courseDataAdapter = CourseDataAdapter(ArrayList())
+
+        rvCourses.layoutManager = LinearLayoutManager(this)
+        rvCourses.adapter = courseDataAdapter
+
+        skeletonScreen = Skeleton.bind(rvCourses)
+                .adapter(courseDataAdapter)
+                .shimmer(true)
+                .angle(20)
+                .frozen(true)
+                .duration(1200)
+                .count(4)
+                .load(R.layout.item_skeleton_course_card)
+                .show()
+
+
+
         fetchUser()
         fetchRecommendedCourses()
     }
 
     private fun fetchRecommendedCourses() {
 
-        val courseDataAdapter = CourseDataAdapter(ArrayList())
-
-        rvCourses.layoutManager = LinearLayoutManager(this);
-        rvCourses.adapter = courseDataAdapter
 
         Client.api.courseModel.enqueue(retrofitcallback { t, resp ->
             resp?.body()?.let {
-                val courseModel = it
                 courseDataAdapter.setData(it)
+                skeletonScreen.hide()
 
             }
         })
