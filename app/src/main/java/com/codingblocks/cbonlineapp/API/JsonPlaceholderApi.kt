@@ -21,4 +21,7 @@ interface JsonPlaceholderApi {
                               @Query("filter[unlisted]") unlisted: String = "false",
                               @Query("include") include: String = "instructors,runs",
                               @Query("sort") sort: String = "difficulty"): Call<CourseModel>
+
+    @GET("courses/{id}")
+    fun getCourse(@Path("id") query: String): Call<CourseModel>
 }
