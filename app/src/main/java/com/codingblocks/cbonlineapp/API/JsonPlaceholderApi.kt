@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.API
 
 import com.codingblocks.cbonlineapp.CourseModel
+import com.codingblocks.cbonlineapp.SingleCourse
 import com.codingblocks.cbonlineapp.User
 import retrofit2.Call
 import retrofit2.http.GET
@@ -22,6 +23,6 @@ interface JsonPlaceholderApi {
                               @Query("include") include: String = "instructors,runs",
                               @Query("sort") sort: String = "difficulty"): Call<CourseModel>
 
-    @GET("courses/{id}")
-    fun getCourse(@Path("id") query: String): Call<CourseModel>
+    @GET("courses/complete-java-course-online")
+    fun getCourse(): Call<SingleCourse>
 }

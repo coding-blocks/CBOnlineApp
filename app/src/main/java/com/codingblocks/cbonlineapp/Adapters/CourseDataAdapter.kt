@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class CourseDataAdapter(private var courseData: ArrayList<DataModel>?) : RecyclerView.Adapter<CourseDataAdapter.CourseViewHolder>(), AnkoLogger {
+class CourseDataAdapter(private var courseData: ArrayList<DataModel>?) : RecyclerView.Adapter<CourseDataAdapter.CourseViewHolder>() {
 
     private lateinit var course: CourseModel
     private lateinit var context: Context
@@ -88,10 +88,8 @@ class CourseDataAdapter(private var courseData: ArrayList<DataModel>?) : Recycle
             for (i in 0 until data.relationships.runs.data.size) {
                 for (j in 0 until course.included.size) {
                     if (course.included[j].type == "runs" && course.included[j].id == data.relationships.runs.data[i].id) {
-                        info { "hello" + course.included[j].attributes.enrollmentStart + " " + System.currentTimeMillis().toString() + "    " + course.included[j].attributes.enrollmentEnd }
                         runs.add(course.included[j].attributes)
                         if (course.included[j].attributes.enrollmentStart.toLong() < (System.currentTimeMillis() / 1000) && course.included[j].attributes.enrollmentEnd.toLong() > (System.currentTimeMillis() / 1000)) {
-                            info { "inside this loop" }
                             currentRuns.add(course.included[j].attributes)
                         }
 
@@ -115,7 +113,7 @@ class CourseDataAdapter(private var courseData: ArrayList<DataModel>?) : Recycle
                     .with(context as Activity?)
                     .load(data.attributes.logo, itemView.courseLogo)
             itemView.courseBtn1.setOnClickListener {
-                it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id).singleTop())
+                it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id,"courseName" to data.attributes.title).singleTop())
 
             }
 
