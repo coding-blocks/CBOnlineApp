@@ -10,4 +10,6 @@
     <string name="recommended_courses">Recommended Courses</string>
     <string name="home_img">home_img</string>
     <string name="whatsapp_btn">whatsapp_btn</string>
+    <string name="summary">Summary</string>
+    <string name="student_feedback">Student Feedback</string>
 </resources>

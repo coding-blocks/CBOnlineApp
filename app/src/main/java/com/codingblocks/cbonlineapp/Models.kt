@@ -47,7 +47,6 @@ data class DataModel(
 )
 
 
-
 data class AttributesModel(
         val title: String,
         val subtitle: String,
@@ -131,4 +130,11 @@ data class Attributes(
         val unlisted: Boolean,
         @SerializedName("contest-id")
         val contestId: Any?
+)
+
+data class RatingModel(
+        val rating: String,
+        val count: Int,
+        val stats: List<Double>,
+        val userScore: Any?
 )
