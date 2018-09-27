@@ -1,6 +1,6 @@
-package com.codingblocks.onlineapi.api
+package com.codingblocks.onlineandroidapi.api
 
-import com.codingblocks.onlineapi.models.User
+import com.codingblocks.onlineandroidapi.models.User
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header

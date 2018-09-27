@@ -1,4 +1,4 @@
-package com.codingblocks.onlineapi.models
+package com.codingblocks.onlineandroidapi.models
 
 import com.google.gson.annotations.SerializedName
 
