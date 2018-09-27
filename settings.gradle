@@ -1,1 +1,1 @@
-include ':app', ':onlineandroidapi'
+include ':app', ':onlineapi'

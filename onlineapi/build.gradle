@@ -1,0 +1,29 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+apply plugin: 'maven'
+
+group = "com.codingblocks"
+version = "0.1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.github.jasminb:jsonapi-converter:0.9'
+    testImplementation 'junit:junit:4.12'
+}
+
+tasks.withType(JavaCompile) {
+    sourceCompatibility = JavaVersion.VERSION_1_6
+    targetCompatibility = JavaVersion.VERSION_1_6
+}
+tasks.withType(KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = "1.6"
+    }
+}
