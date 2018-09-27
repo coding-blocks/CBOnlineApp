@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadrosid.svgloader.SvgLoader
-import com.codingblocks.cbonlineapp.*
+import com.codingblocks.cbonlineapp.Attributes
+import com.codingblocks.cbonlineapp.CourseModel
+import com.codingblocks.cbonlineapp.DataModel
+import com.codingblocks.cbonlineapp.R
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.single_course_card.view.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.singleTop
+import kotlinx.android.synthetic.main.single_course_card_horizontal.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,10 +41,10 @@ class CourseDataAdapter(private var courseData: ArrayList<DataModel>?) : Recycle
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
-        context = parent.context;
+        context = parent.context
 
         return CourseViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.single_course_card, parent, false))
+                .inflate(R.layout.single_course_card_horizontal, parent, false))  //single_course_card for horizontal cards
     }
 
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -112,10 +111,10 @@ class CourseDataAdapter(private var courseData: ArrayList<DataModel>?) : Recycle
             SvgLoader.pluck()
                     .with(context as Activity?)
                     .load(data.attributes.logo, itemView.courseLogo)
-            itemView.courseBtn1.setOnClickListener {
-                it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id,"courseName" to data.attributes.title).singleTop())
-
-            }
+//            itemView.courseBtn1.setOnClickListener {
+//                it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id, "courseName" to data.attributes.title).singleTop())
+//
+//            }
 
 
         }

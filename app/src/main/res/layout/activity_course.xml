@@ -43,6 +43,7 @@
             android:layout_marginStart="14dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:text="Mentors :Rishab Kapoor,Garima Chhikara"
             android:fontFamily="@font/cabin_medium"
             android:textColor="@color/black"
             android:textSize="20sp"
@@ -324,6 +325,41 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/courseRating1"
             app:layout_constraintTop_toTopOf="@+id/courseRating1" />
+        <TextView
+            android:id="@+id/coursePageTv3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/cabin_semibold"
+            android:text="What will you learn"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/courseRating1" />
+
+        <View
+            android:id="@+id/coursePagev3"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="110dp"
+            android:background="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coursePageTv3" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/learnRv"
+            android:layout_width="0dp"
+            android:layout_height="26dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coursePagev3" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
