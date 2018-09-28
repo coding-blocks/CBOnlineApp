@@ -26,7 +26,7 @@ android {
     }
 }
 
-ext.ankoVersion = '0.10.5'
+ext.ankoVersion = '0.10.6'
 
 
 dependencies {
@@ -54,9 +54,12 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
 
     def anko = [
+            // commons
             'commons',
-//            'sdk15', 'sdk15-listeners',
-//            'support-v4', 'appcompat-v7',
+            // layouts
+            'sdk25', 'appcompat-v7', 'support-v4',
+            // coroutines
+            'sdk25-coroutines', 'appcompat-v7-coroutines', 'coroutines'
 //            'design',  'recyclerview-v7', 'percent', 'cardview-v7'
     ]
 
