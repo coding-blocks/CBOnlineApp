@@ -22,6 +22,13 @@ class OnlinePublicApiTest {
         }
     }
 
+    @Test fun `GET courses|{id}`() {
+        val courses = api.courseById("26").execute().body()
+        courses?.let {
+            assertEquals("Algo++ Online", it.title)
+        }
+    }
+
     @Test fun `GET instructors`() {
         val courses = api.instructors.execute().body()
         courses?.let {
@@ -30,7 +37,7 @@ class OnlinePublicApiTest {
     }
 
     @Test fun `GET instructors?include=courses`() {
-        val courses = api.instructors.execute().body()
+        val courses = api.instructors(arrayOf("courses")).execute().body()
         courses?.let {
             assertEquals(11, it.size)
         }

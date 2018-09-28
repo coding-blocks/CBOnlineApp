@@ -4,6 +4,7 @@ import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Instructor
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface OnlinePublicApi {
@@ -15,6 +16,11 @@ interface OnlinePublicApi {
 
     @get:GET("courses")
     val courses : Call<ArrayList<Course>>
+
+    @GET("course/{id}")
+    fun courseById(
+            @Path("id") id: String
+    ): Call<Course>
 
     @GET("instructors")
     fun instructors(
