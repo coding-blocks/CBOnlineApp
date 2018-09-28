@@ -42,7 +42,7 @@ class Course: BaseModel() {
     @JvmField @JsonProperty("category-id")
     var categoryId: Int? = null
 
-    @Relationship("instructors")
+    @Relationship("instructors", resolve = true)
     @JvmField
     var instructors: ArrayList<Instructor>? = null
 

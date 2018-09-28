@@ -7,16 +7,29 @@ import org.junit.Rule
 import org.junit.Test
 
 class OnlinePublicApiTest {
-    val api = Clients.onlineV2PublicClient()
+    val api = Clients.onlineV2PublicClient
 
-    @Test fun `get all courses`() {
+    @Test fun `GET courses`() {
         val courses = api.courses.execute().body()
         courses?.let {
             assertEquals(20, it.size)
         }
     }
+    @Test fun `GET courses?include=instructors`() {
+        val courses = api.courses(arrayOf("instructors")).execute().body()
+        courses?.let {
+            assertEquals(20, it.size)
+        }
+    }
 
-    @Test fun `get all instructors`() {
+    @Test fun `GET instructors`() {
+        val courses = api.instructors.execute().body()
+        courses?.let {
+            assertEquals(11, it.size)
+        }
+    }
+
+    @Test fun `GET instructors?include=courses`() {
         val courses = api.instructors.execute().body()
         courses?.let {
             assertEquals(11, it.size)

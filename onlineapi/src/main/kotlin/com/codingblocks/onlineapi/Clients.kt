@@ -4,6 +4,7 @@ import com.codingblocks.onlineapi.api.OnlinePublicApi
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Instructor
 import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.jasminb.jsonapi.RelationshipResolver
 import com.github.jasminb.jsonapi.ResourceConverter
@@ -36,12 +37,11 @@ object Clients {
     }
 
 
-    val onlineV2PublicClient: () -> OnlinePublicApi = {
-        Retrofit.Builder()
+    val onlineV2PublicClient: OnlinePublicApi
+        get() = Retrofit.Builder()
                 .baseUrl("https://api-online.cb.lk/api/v2/")
                 .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
                 .build()
                 .create(OnlinePublicApi::class.java)
-    }
 
 }
