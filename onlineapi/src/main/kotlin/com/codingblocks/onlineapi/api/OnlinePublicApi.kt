@@ -2,6 +2,7 @@ package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Instructor
+import com.fasterxml.jackson.databind.util.JSONPObject
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -10,12 +11,12 @@ import retrofit2.http.Query
 interface OnlinePublicApi {
 
     @GET("courses")
-    fun courses (
+    fun courses(
             @Query("include") include: Array<String>? = null
     ): Call<ArrayList<Course>>
 
     @get:GET("courses")
-    val courses : Call<ArrayList<Course>>
+    val courses: Call<ArrayList<Course>>
 
     @GET("course/{id}")
     fun courseById(
@@ -29,4 +30,11 @@ interface OnlinePublicApi {
 
     @get:GET("instructors")
     val instructors: Call<ArrayList<Instructor>>
+
+    @GET("courses")
+    fun getRecommendedCourses(@Query("exclude") query: String = "ratings",
+                              @Query("filter[recommended]") recommended: String = "true",
+                              @Query("filter[unlisted]") unlisted: String = "false",
+                              @Query("include") include: String = "instructors,runs",
+                              @Query("sort") sort: String = "difficulty"): Call<ArrayList<Course>>
 }

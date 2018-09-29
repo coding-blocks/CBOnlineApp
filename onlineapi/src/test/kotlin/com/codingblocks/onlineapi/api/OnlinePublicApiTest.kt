@@ -42,4 +42,11 @@ class OnlinePublicApiTest {
             assertEquals(11, it.size)
         }
     }
+
+    @Test fun `GET recommended`() {
+        val courses = api.getRecommendedCourses().execute().body()
+        courses?.let {
+            assertEquals(11, it.size)
+        }
+    }
 }
