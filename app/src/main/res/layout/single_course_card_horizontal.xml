@@ -174,8 +174,8 @@
             android:id="@+id/coursePrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/cabin_semibold"
             android:textColor="#ff6666"
             android:textSize="14sp"
@@ -186,7 +186,7 @@
             android:id="@+id/courseRun"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="4dp"
             android:fontFamily="@font/cabin_semibold"
             android:text="Batches starting 10th August"
@@ -197,25 +197,25 @@
             app:layout_constraintTop_toBottomOf="@+id/coursePrice" />
 
 
-        <Button
-            android:id="@+id/courseBtn1"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/button_background"
-            android:fontFamily="@font/cabin_medium"
-            android:paddingStart="6dp"
-            android:paddingTop="5dp"
-            android:paddingEnd="6dp"
-            android:paddingBottom="5dp"
-            android:text="Explore"
-            android:textColor="@android:color/white"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/courseRun"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/courseInstructors" />
+        <!--<Button-->
+            <!--android:id="@+id/courseBtn1"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_marginTop="12dp"-->
+            <!--android:layout_marginEnd="4dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:background="@drawable/button_background"-->
+            <!--android:fontFamily="@font/cabin_medium"-->
+            <!--android:paddingStart="6dp"-->
+            <!--android:paddingTop="5dp"-->
+            <!--android:paddingEnd="6dp"-->
+            <!--android:paddingBottom="5dp"-->
+            <!--android:text="Explore"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:textSize="12sp"-->
+            <!--app:layout_constraintBottom_toBottomOf="@+id/courseRun"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/courseInstructors" />-->
 
         <View
             android:id="@+id/view"
@@ -250,11 +250,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="@font/cabin_semibold"
             android:text="Click here to get Free Trial Now"
             android:textAlignment="center"
             android:textColor="#ff6666"
             android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/relativeLayout2"
             app:layout_constraintTop_toBottomOf="@+id/enrollmentTv" />

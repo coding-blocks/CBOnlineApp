@@ -7,12 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadrosid.svgloader.SvgLoader
-import com.codingblocks.cbonlineapp.Attributes
-import com.codingblocks.cbonlineapp.CourseModel
-import com.codingblocks.cbonlineapp.DataModel
-import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.single_course_card_horizontal.view.*
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -111,10 +110,10 @@ class CourseDataAdapter(private var courseData: ArrayList<DataModel>?) : Recycle
             SvgLoader.pluck()
                     .with(context as Activity?)
                     .load(data.attributes.logo, itemView.courseLogo)
-//            itemView.courseBtn1.setOnClickListener {
-//                it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id, "courseName" to data.attributes.title).singleTop())
-//
-//            }
+            itemView.setOnClickListener {
+                it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id, "courseName" to data.attributes.title).singleTop())
+
+            }
 
 
         }

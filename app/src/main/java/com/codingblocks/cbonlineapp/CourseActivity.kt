@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.API.Client
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
+import com.codingblocks.cbonlineapp.widgets.ExpandableCardView
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import kotlinx.android.synthetic.main.activity_course.*
@@ -29,6 +30,12 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         courseId = intent.getStringExtra("courseId")
         courseName = intent.getStringExtra("courseName")
         title = courseName
+
+        val card: ExpandableCardView = findViewById(R.id.sections)
+
+        card.setOnExpandedListener { _, isExpanded ->
+
+        }
 
         progressBar = arrayOf(courseProgress1, courseProgress2, courseProgress3, courseProgress4, courseProgress5)
 
@@ -70,6 +77,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 })
             }
         })
+
     }
 
     inner class ProgressBarAnimation(private val progressBar: ProgressBar?, private val from: Float, private val to: Float) : Animation() {

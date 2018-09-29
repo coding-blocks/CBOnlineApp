@@ -350,17 +350,35 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/coursePageTv3" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/learnRv"
+        <com.codingblocks.cbonlineapp.widgets.ExpandableCardView
+            android:id="@+id/sections"
             android:layout_width="0dp"
-            android:layout_height="26dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
+            app:expandOnClick="true"
+            app:inner_view="@layout/item_section_content"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/coursePagev3" />
+            app:layout_constraintTop_toBottomOf="@+id/coursePagev3"
+            app:title="Introduction And Logistics" />
+
+        <!--<androidx.recyclerview.widget.RecyclerView-->
+            <!--android:id="@+id/learnRv"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="26dp"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="16dp"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/coursePagev3" />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </androidx.core.widget.NestedScrollView>
