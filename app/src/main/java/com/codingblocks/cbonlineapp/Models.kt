@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp
 
+import androidx.annotation.Nullable
 import com.google.gson.annotations.SerializedName
 
 data class User(val id: Int, val username: String, val firstname: String, val lastname: String, val photo: String, val email: String, val createdAt: String, val updatedAt: String)
@@ -11,8 +12,24 @@ data class CourseModel(
         val included: List<Included>
 )
 
+data class SingleCourse(
+        val data: DataModel,
+        val included: List<Sections>
+)
+
+data class Sections(
+        val type: String,
+        val id: String,
+        val attributes: AttributesSections
+)
+
+data class AttributesSections(
+        val id: String,
+        val name: String
+)
+
 data class Meta(
-        val pagination: Pagination
+        @Nullable val pagination: Pagination
 )
 
 data class Pagination(
@@ -28,6 +45,7 @@ data class DataModel(
         val attributes: AttributesModel,
         val relationships: RelationshipsModel
 )
+
 
 data class AttributesModel(
         val title: String,
@@ -112,4 +130,11 @@ data class Attributes(
         val unlisted: Boolean,
         @SerializedName("contest-id")
         val contestId: Any?
+)
+
+data class RatingModel(
+        val rating: String,
+        val count: Int,
+        val stats: List<Double>,
+        val userScore: Any?
 )

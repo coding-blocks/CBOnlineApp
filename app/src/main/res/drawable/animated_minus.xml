@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/minus">
+
+    <target
+        android:name="plus_group"
+        android:animation="@animator/rotate_anticlockwise" />
+
+    <target
+        android:name="plus_path"
+        android:animation="@animator/minus_to_plus" />
+
+</animated-vector>
