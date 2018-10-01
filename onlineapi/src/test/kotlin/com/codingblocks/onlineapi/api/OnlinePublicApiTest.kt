@@ -49,4 +49,10 @@ class OnlinePublicApiTest {
             assertEquals(11, it.size)
         }
     }
+    @Test fun `GET section`() {
+        val courses = api.section.execute().body()
+        courses?.let {
+            assertEquals(11, it)
+        }
+    }
 }

@@ -5,6 +5,7 @@ import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
 
+
 open class BaseModel {
     @Id
     @JvmField
@@ -24,6 +25,46 @@ class Instructor : BaseModel() {
     @JvmField
     var courses: ArrayList<Course>? = null
 }
+
+@Type("sections")
+class Sections : BaseModel() {
+    @JvmField
+    var name: String? = null
+    @JvmField
+    var preminum: Boolean? = false
+    @JvmField
+    var status: String? = null
+
+    @Relationship("contents", resolve = true)
+    @JvmField
+    var contents: ArrayList<Contents>? = null
+}
+
+@Type("contents")
+class Contents : BaseModel() {
+    @JvmField
+    var contentable: String? = null
+    @JvmField
+    var duration: Long? = null
+    @JvmField
+    var title: String? = null
+
+    @JsonProperty("section-content")
+    @JvmField
+    val sectionContent: SectionContent? = null
+
+}
+
+class SectionContent {
+    val id: String? = null
+    val order: Int? = null
+    val createdAt: String? = null
+    val updatedAt: String? = null
+    val sectionId: String? = null
+    val contentId: String? = null
+    val updatedById: String? = null
+}
+
 
 @Type("runs")
 class Runs : BaseModel() {

@@ -2,7 +2,7 @@ package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Instructor
-import com.fasterxml.jackson.databind.util.JSONPObject
+import com.codingblocks.onlineapi.models.Sections
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -37,4 +37,7 @@ interface OnlinePublicApi {
                               @Query("filter[unlisted]") unlisted: String = "false",
                               @Query("include") include: String = "instructors,runs",
                               @Query("sort") sort: String = "difficulty"): Call<ArrayList<Course>>
+
+    @get:GET("sections/908/?include=contents&exclude=contents.*&sort=content.section_content.order")
+    val section: Call<Sections>
 }
