@@ -130,11 +130,11 @@ class Course : BaseModel() {
     @JsonProperty("cover-image")
     var coverImage: String? = null
 
-    @Relationship("instructors", resolve = false)
+    @Relationship("instructors", resolve = true)
     @JvmField
     var instructors: ArrayList<Instructor>? = null
 
-    @Relationship("runs", resolve = false)
+    @Relationship("runs", resolve = true)
     @JvmField
     var runs: ArrayList<Runs>? = null
 

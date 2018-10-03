@@ -37,6 +37,11 @@ interface OnlinePublicApi {
                               @Query("filter[unlisted]") unlisted: String = "false",
                               @Query("include") include: String = "instructors,runs",
                               @Query("sort") sort: String = "difficulty"): Call<ArrayList<Course>>
+    @GET("courses")
+    fun getAllCourses(@Query("exclude") query: String = "ratings",
+                              @Query("filter[unlisted]") unlisted: String = "false",
+                              @Query("include") include: String = "instructors,runs",
+                              @Query("sort") sort: String = "difficulty"): Call<ArrayList<Course>>
 
     @get:GET("sections/908/?include=contents&exclude=contents.*&sort=content.section_content.order")
     val section: Call<Sections>

@@ -6,19 +6,54 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.solver.widgets.ConstraintWidget
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.R
 import org.jetbrains.anko.*
 import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.nestedScrollView
 
-class AllCourseFragmentUi<T> : AnkoComponent<T> {
+
+class HomeFragmentUi<T> : AnkoComponent<T> {
     lateinit var rvCourses: RecyclerView
 
     override fun createView(ui: AnkoContext<T>): View = with(ui) {
         nestedScrollView {
             constraintLayout {
-                val sessionStart = textView("All Courses") {
+
+                val titleText = textView {
+                    text = context.resources.getString(R.string.learn_to_code_interactively)
+                    id = View.generateViewId()
+                    textSize = 26f
+                    textColor = Color.BLACK
+                    val typefaceValue = ResourcesCompat.getFont(ctx, R.font.cabin_semibold)
+                    typeface = typefaceValue
+                    textColor = context.resources.getColor(R.color.salmon)
+                }.lparams(width = wrapContent, height = wrapContent) {
+                    topMargin = dip(16)
+                    marginStart = dip(43)
+                    marginEnd = dip(43)
+                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                    horizontalBias = 0.0f
+                    endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+
+                }
+                val homeImg = imageView(R.drawable.home_img) {
+                    id = View.generateViewId()
+                    adjustViewBounds = true
+                }.lparams(width = matchParent, height = dip(200)) {
+                    marginStart = dip(16)
+                    marginEnd = dip(16)
+                    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                    horizontalBias = 0.0f
+                    topToBottom = titleText.id
+                    endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+
+                }
+                val allcourseText = textView{
+                    text = context.resources.getString(R.string.recommended_courses)
                     id = View.generateViewId()
                     textSize = 24f
                     textColor = Color.BLACK
@@ -26,10 +61,9 @@ class AllCourseFragmentUi<T> : AnkoComponent<T> {
                 }.lparams(width = wrapContent, height = wrapContent) {
                     topMargin = dip(8)
                     marginStart = dip(16)
-                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    topToBottom = homeImg.id
                     startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                     horizontalBias = 0.0f
-                    endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
 
                 }
 
@@ -40,9 +74,9 @@ class AllCourseFragmentUi<T> : AnkoComponent<T> {
                     topMargin = dip(8)
                     marginStart = dip(16)
                     marginEnd = dip(20)
-                    endToEnd = sessionStart.id
+                    endToEnd = allcourseText.id
                     startToStart = ConstraintLayout.LayoutParams.PARENT_ID
-                    topToBottom = sessionStart.id
+                    topToBottom = allcourseText.id
 
                 }
 
@@ -69,6 +103,7 @@ class AllCourseFragmentUi<T> : AnkoComponent<T> {
             }
         }
     }
+
 
 
 }

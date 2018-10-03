@@ -2,28 +2,63 @@ package com.codingblocks.cbonlineapp.fragments
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.codingblocks.cbonlineapp.Adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.Utils.retrofitcallback
+import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
+import com.codingblocks.onlineapi.Clients
+import com.ethanhua.skeleton.Skeleton
+import com.ethanhua.skeleton.SkeletonScreen
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.support.v4.ctx
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- *
- */
 class HomeFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+    private lateinit var courseDataAdapter: CourseDataAdapter
+    lateinit var skeletonScreen: SkeletonScreen
+
+    val ui = HomeFragmentUi<Fragment>()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return ui.createView(AnkoContext.create(ctx, this))
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        courseDataAdapter = CourseDataAdapter(ArrayList())
+
+        ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
+        ui.rvCourses.adapter = courseDataAdapter
+
+        skeletonScreen = Skeleton.bind(ui.rvCourses)
+                .adapter(courseDataAdapter)
+                .shimmer(true)
+                .angle(20)
+                .frozen(true)
+                .duration(1200)
+                .count(4)
+                .load(R.layout.item_skeleton_course_card)
+                .show()
+
+        fetchRecommendedCourses()
+
+    }
+
+    private fun fetchRecommendedCourses() {
+
+
+        Clients.onlineV2PublicClient.getRecommendedCourses().enqueue(retrofitcallback { t, resp ->
+            resp?.body()?.let {
+                courseDataAdapter.setData(it)
+                skeletonScreen.hide()
+            }
+        })
     }
 
 
