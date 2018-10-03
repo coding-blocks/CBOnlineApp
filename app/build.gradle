@@ -57,7 +57,7 @@ dependencies {
             // layouts
             'sdk25', 'appcompat-v7', 'support-v4',
             // coroutines
-            'sdk25-coroutines', 'appcompat-v7-coroutines', 'coroutines'
+            'sdk25-coroutines', 'appcompat-v7-coroutines', 'coroutines', 'recyclerview-v7', 'constraint-layout'
 //            'design',  'recyclerview-v7', 'percent', 'cardview-v7'
     ]
     anko.each { name ->

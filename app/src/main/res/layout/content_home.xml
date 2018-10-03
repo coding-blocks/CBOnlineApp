@@ -10,10 +10,27 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:focusableInTouchMode="true"
-        android:focusable="true"
+        android:layout_height="match_parent"
         android:descendantFocusability="blocksDescendants"
-        android:layout_height="match_parent">
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="43dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="43dp"
+            android:fontFamily="@font/cabin_semibold"
+            android:text="@string/learn_to_code_interactively"
+            android:textColor="@color/salmon"
+            android:textSize="26sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <ImageView
             android:id="@+id/imageView"
@@ -22,13 +39,12 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/home_img"
             android:src="@drawable/home_img"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
-            android:contentDescription="@string/home_img" />
-
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         <TextView
             android:id="@+id/textView"
@@ -65,27 +81,12 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:overScrollMode="never"
-            tools:listitem="@layout/single_course_card"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view9" />
+            app:layout_constraintTop_toBottomOf="@+id/view9"
+            tools:listitem="@layout/single_course_card" />
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="43dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="43dp"
-            android:fontFamily="@font/cabin_semibold"
-            android:text="@string/learn_to_code_interactively"
-            android:textColor="@color/salmon"
-            android:textSize="26sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
