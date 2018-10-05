@@ -7,6 +7,7 @@
     tools:context=".HomeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -20,7 +21,11 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_home" />
+    <FrameLayout
+        android:id="@+id/fragment_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
     <ImageView
@@ -30,9 +35,9 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:backgroundTint="@android:color/white"
+        android:contentDescription="@string/whatsapp_btn"
         android:src="@drawable/whatsapp_round"
-        app:borderWidth="0dp"
-        android:contentDescription="@string/whatsapp_btn" />
+        app:borderWidth="0dp" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

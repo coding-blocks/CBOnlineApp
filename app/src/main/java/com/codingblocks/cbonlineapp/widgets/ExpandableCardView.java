@@ -256,11 +256,11 @@ public class ExpandableCardView extends LinearLayout {
     }
 
     public void setDescription1(String title) {
-        if (textViewTitle != null) textViewTitle.setText(title);
+        if (textViewDescription1 != null) textViewDescription1.setText(title);
     }
 
     public void setDescription2(String title) {
-        if (textViewTitle != null) textViewTitle.setText(title);
+        if (textViewDescription2 != null) textViewDescription2.setText(title);
     }
 
     public void setTitle(int resId) {

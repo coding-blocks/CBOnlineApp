@@ -1,13 +1,15 @@
 package com.codingblocks.onlineapi
 
 import com.codingblocks.onlineapi.api.OnlinePublicApi
+import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Instructor
+import com.codingblocks.onlineapi.models.Sections
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.jasminb.jsonapi.RelationshipResolver
 import com.github.jasminb.jsonapi.ResourceConverter
+import com.github.jasminb.jsonapi.SerializationFeature
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -21,7 +23,9 @@ object Clients {
     private val onlineApiResourceConverter = ResourceConverter(
             om,
             Instructor::class.java,
-            Course::class.java
+            Course::class.java,
+            Sections::class.java,
+            Contents::class.java
     )
     private val relationshipResolver = RelationshipResolver {
         OkHttpClient()
@@ -34,6 +38,7 @@ object Clients {
 
     init {
         onlineApiResourceConverter.setGlobalResolver(relationshipResolver)
+//        onlineApiResourceConverter.enableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES);
     }
 
 

@@ -43,8 +43,8 @@
             android:layout_marginStart="14dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:text="Mentors :Rishab Kapoor,Garima Chhikara"
             android:fontFamily="@font/cabin_medium"
+            android:text="Mentors :Rishab Kapoor,Garima Chhikara"
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -98,12 +98,12 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="14dp"
             android:layout_marginEnd="16dp"
+            android:ellipsize="end"
             android:fontFamily="@font/cabin_medium"
+            android:maxLines="3"
             android:textAlignment="viewStart"
             android:textColor="@color/black"
             android:textSize="18sp"
-            android:ellipsize="end"
-            android:maxLines="3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/coursePagev1" />
@@ -325,6 +325,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/courseRating1"
             app:layout_constraintTop_toTopOf="@+id/courseRating1" />
+
         <TextView
             android:id="@+id/coursePageTv3"
             android:layout_width="wrap_content"
@@ -350,32 +351,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/coursePageTv3" />
 
-        <com.codingblocks.cbonlineapp.widgets.ExpandableCardView
-            android:id="@+id/sections"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvExpendableView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="24dp"
-            app:expandOnClick="true"
-            app:inner_view="@layout/item_section_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/coursePagev3"
-            app:title="Introduction And Logistics" />
-
-        <!--<androidx.recyclerview.widget.RecyclerView-->
-            <!--android:id="@+id/learnRv"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="26dp"-->
-            <!--android:layout_marginStart="16dp"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:layout_marginEnd="16dp"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/coursePagev3" />-->
+            app:layout_constraintTop_toBottomOf="@+id/coursePagev3" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

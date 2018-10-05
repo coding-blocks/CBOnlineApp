@@ -10,27 +10,20 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.API.Client
-import com.codingblocks.cbonlineapp.Adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
-import com.codingblocks.onlineapi.Clients
-import com.ethanhua.skeleton.Skeleton
-import com.ethanhua.skeleton.SkeletonScreen
+import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
+import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_home.*
-import kotlinx.android.synthetic.main.content_home.*
 import kotlinx.android.synthetic.main.nav_header_home.*
 import org.jetbrains.anko.AnkoLogger
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, AnkoLogger {
-
-    private lateinit var courseDataAdapter: CourseDataAdapter
-    lateinit var skeletonScreen: SkeletonScreen
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,45 +39,20 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fab_whatsapp.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setPackage("com.whatsapp")
-            intent.data = Uri.parse(String.format("https://apiAuth.whatsapp.com/send?phone=%s", "919811557517"))
+            intent.data = Uri.parse("https://wa.me/919811557517")
             if (packageManager.resolveActivity(intent, 0) != null) {
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "Please install whatsApp", Toast.LENGTH_SHORT).show()
             }
         }
-
-        courseDataAdapter = CourseDataAdapter(ArrayList())
-
-        rvCourses.layoutManager = LinearLayoutManager(this)
-        rvCourses.adapter = courseDataAdapter
-
-        skeletonScreen = Skeleton.bind(rvCourses)
-                .adapter(courseDataAdapter)
-                .shimmer(true)
-                .angle(20)
-                .frozen(true)
-                .duration(1200)
-                .count(4)
-                .load(R.layout.item_skeleton_course_card)
-                .show()
-
-
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_holder, HomeFragment())
+        transaction.commit()
 
         fetchUser()
-        fetchRecommendedCourses()
     }
 
-    private fun fetchRecommendedCourses() {
-
-
-        Clients.onlineV2PublicClient.getRecommendedCourses().enqueue(retrofitcallback { t, resp ->
-            resp?.body()?.let {
-                courseDataAdapter.setData(it)
-                skeletonScreen.hide()
-            }
-        })
-    }
 
     private fun fetchUser() {
         if (!prefs.SP_ACCESS_TOKEN_KEY.equals("access_token")) {
@@ -128,9 +96,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_all_courses -> {
-                // Handle the camera action
+                changeFragment("All Courses")
             }
-            R.id.nav_my_courses -> {
+            R.id.nav_home -> {
+                changeFragment("Home")
 
             }
             R.id.nav_notifications -> {
@@ -144,5 +113,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
+    }
+
+    fun changeFragment(filter: String) {
+        val transaction = supportFragmentManager.beginTransaction()
+        if (filter == "All Courses")
+            transaction.replace(R.id.fragment_holder, AllCourseFragment())
+        else if (filter == "Home")
+            transaction.replace(R.id.fragment_holder, HomeFragment())
+
+        transaction.commit()
+        onBackPressed()
     }
 }
