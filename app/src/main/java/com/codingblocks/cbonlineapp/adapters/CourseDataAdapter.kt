@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.Adapters
+package com.codingblocks.cbonlineapp.adapters
 
 import android.app.Activity
 import android.content.Context

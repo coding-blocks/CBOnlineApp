@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.codingblocks.cbonlineapp.Adapters.CourseDataAdapter
+import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi

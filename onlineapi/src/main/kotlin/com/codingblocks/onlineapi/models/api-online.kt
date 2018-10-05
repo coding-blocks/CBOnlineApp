@@ -87,6 +87,9 @@ class Runs : BaseModel() {
     @JvmField
     @JsonProperty("enrollment-end")
     val enrollmentEnd: String? = null
+    @Relationship("sections", resolve = true)
+    @JvmField
+    var sections: ArrayList<Sections>? = null
 
 }
 

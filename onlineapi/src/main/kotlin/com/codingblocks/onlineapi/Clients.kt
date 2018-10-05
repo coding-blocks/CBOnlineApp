@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.jasminb.jsonapi.RelationshipResolver
 import com.github.jasminb.jsonapi.ResourceConverter
+import com.github.jasminb.jsonapi.SerializationFeature
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -37,6 +38,7 @@ object Clients {
 
     init {
         onlineApiResourceConverter.setGlobalResolver(relationshipResolver)
+//        onlineApiResourceConverter.enableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES);
     }
 
 
