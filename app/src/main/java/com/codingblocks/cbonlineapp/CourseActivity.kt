@@ -1,14 +1,18 @@
 package com.codingblocks.cbonlineapp
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.animation.Animation
 import android.view.animation.Transformation
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.API.Client
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
+import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Sections
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import kotlinx.android.synthetic.main.activity_course.*
@@ -44,29 +48,40 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 .load(R.layout.item_skeleton_course)
                 .show()
 
+
+
         Clients.onlineV2PublicClient.courseById(courseId).enqueue(retrofitcallback { t, resp ->
             resp?.body()?.let { it ->
-                skeletonScreen.hide()
+                                skeletonScreen.hide()
                 coursePageTitle.text = courseName
                 coursePageSubtitle.text = it.subtitle
                 coursePageSummary.text = it.summary
                 SvgLoader.pluck()
                         .with(this)
                         .load(it.logo, coursePageLogo)
+                fetchRating()
                 val sections = it.runs?.get(0)?.sections
+                val sectionsList = ArrayList<Sections>()
+                val sectionAdapter = SectionsDataAdapter(ArrayList())
+                rvExpendableView.layoutManager = LinearLayoutManager(this)
+                rvExpendableView.adapter = sectionAdapter
                 for (item in sections!!) {
                     Clients.onlineV2PublicClient.getSections(item.id!!).enqueue(retrofitcallback { throwable, response ->
                         response?.body()?.let {
-                            info { it.name }
+                            info { it.toString() }
+                            sectionsList.add(it)
                         }
 
                     })
-
                 }
-
-
+                Handler().postDelayed(
+                        {
+                            sectionAdapter.setData(sectionsList)
+                        }, 3000
+                )
             }
         })
+
 
 //        fetchRating()
 
