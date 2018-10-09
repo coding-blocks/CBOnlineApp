@@ -15,13 +15,6 @@ class OnlinePublicApiTest {
         }
     }
 
-    @Test
-    fun `GET courses?include=instructors`() {
-        val courses = api.courses(arrayOf("instructors")).execute().body()
-        courses?.let {
-            assertEquals(20, it.size)
-        }
-    }
 
     @Test
     fun `GET courses|{id}`() {
@@ -35,7 +28,7 @@ class OnlinePublicApiTest {
     fun `GET instructors`() {
         val courses = api.instructors.execute().body()
         courses?.let {
-            assertEquals(11, it.size)
+            assertEquals(13, it.size)
         }
     }
 
@@ -43,7 +36,7 @@ class OnlinePublicApiTest {
     fun `GET instructors?include=courses`() {
         val courses = api.instructors(arrayOf("courses")).execute().body()
         courses?.let {
-            assertEquals(11, it.size)
+            assertEquals(13, it.size)
         }
     }
 
@@ -51,7 +44,7 @@ class OnlinePublicApiTest {
     fun `GET recommended`() {
         val courses = api.getRecommendedCourses().execute().body()
         courses?.let {
-            assertEquals(11, it.size)
+            assertEquals(10, it.size)
         }
     }
 
