@@ -10,10 +10,6 @@ import retrofit2.http.Query
 
 interface OnlinePublicApi {
 
-    @GET("courses")
-    fun courses(
-            @Query("include") include: Array<String>? = null
-    ): Call<ArrayList<Course>>
 
     @get:GET("courses")
     val courses: Call<ArrayList<Course>>
