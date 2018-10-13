@@ -1,10 +1,9 @@
 package com.codingblocks.onlineapi.api
 
-import com.codingblocks.onlineapi.models.Course
-import com.codingblocks.onlineapi.models.Instructor
-import com.codingblocks.onlineapi.models.Sections
+import com.codingblocks.onlineapi.models.*
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -45,4 +44,14 @@ interface OnlinePublicApi {
                     @Query("exclude") query: String = "contents.*",
                     @Query("include") include: String = "contents",
                     @Query("sort") sort: String = "content.section_content.order"): Call<Sections>
+
+    @GET("courses/{id}/rating")
+    fun getCourseRating(@Path("id") id: String): Call<RatingModel>
+
+    @GET("me")
+    fun getMe(@Header("Authorization") authorization: String): Call<User>
+
+
+    @GET("me")
+    fun getToken(@Header("Authorization") authorization: String): Call<User>
 }

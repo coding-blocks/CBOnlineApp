@@ -142,3 +142,14 @@ class Course : BaseModel() {
     var runs: ArrayList<Runs>? = null
 
 }
+
+
+data class RatingModel(
+        val rating: String,
+        val count: Int,
+        val stats: List<Double>,
+        val userScore: Any?
+)
+
+data class User(val id: Int, val username: String, val firstname: String, val lastname: String, val photo: String, val email: String, val createdAt: String, val updatedAt: String)
+

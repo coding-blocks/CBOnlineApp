@@ -8,7 +8,6 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ahmadrosid.svgloader.SvgLoader
-import com.codingblocks.cbonlineapp.API.Client
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.onlineapi.Clients
@@ -89,7 +88,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     }
 
     fun fetchRating() {
-        Client.api.getCourseRating(courseId).enqueue(retrofitcallback { throwable, response ->
+        Clients.api.getCourseRating(courseId).enqueue(retrofitcallback { throwable, response ->
             response?.body().let { it ->
 
                 coursePageRatingCountTv.text = it?.count.toString() + " Rating"

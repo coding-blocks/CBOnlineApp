@@ -39,7 +39,6 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     // 3rd party libs
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.github.ar-android:AndroidSvgLoader:1.0.1'

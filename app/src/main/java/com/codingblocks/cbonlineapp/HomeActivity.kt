@@ -10,10 +10,10 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import com.codingblocks.cbonlineapp.API.Client
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
+import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_home.*
 import kotlinx.android.synthetic.main.nav_header_home.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, AnkoLogger {
@@ -56,7 +57,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun fetchUser() {
         if (!prefs.SP_ACCESS_TOKEN_KEY.equals("access_token")) {
-            Client.apiAuth.getMe("Bearer " + prefs.SP_ACCESS_TOKEN_KEY).enqueue(retrofitcallback { t, resp ->
+            info { prefs.SP_ACCESS_TOKEN_KEY }
+            Clients.apiAuth.getMe("Bearer " + prefs.SP_ACCESS_TOKEN_KEY).enqueue(retrofitcallback { t, resp ->
                 resp?.body()?.let {
                     Picasso.get().load(it.photo).into(nav_header_imageView)
                     nav_header_username_textView.text = it.username

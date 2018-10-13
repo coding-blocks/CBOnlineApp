@@ -9,11 +9,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.jasminb.jsonapi.RelationshipResolver
 import com.github.jasminb.jsonapi.ResourceConverter
-import com.github.jasminb.jsonapi.SerializationFeature
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
+import retrofit2.converter.jackson.JacksonConverterFactory
 
 object Clients {
     private val om = ObjectMapper()
@@ -48,5 +48,17 @@ object Clients {
                 .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
                 .build()
                 .create(OnlinePublicApi::class.java)
+    val retrofit = Retrofit.Builder()
+            .baseUrl("https://api-online.cb.lk/api/v2/")
+            .addConverterFactory(JacksonConverterFactory.create())
+            .build()
+    val api = retrofit.create(OnlinePublicApi::class.java)
+
+
+    val retrofitAuth = Retrofit.Builder()
+            .baseUrl("https://account.codingblocks.com/apiAuth/users/")
+            .addConverterFactory(JacksonConverterFactory.create())
+            .build()
+    val apiAuth = retrofitAuth.create(OnlinePublicApi::class.java)
 
 }
