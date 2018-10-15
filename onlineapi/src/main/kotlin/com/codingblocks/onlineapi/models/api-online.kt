@@ -93,6 +93,7 @@ class Runs : BaseModel() {
 
 }
 
+
 @Type("courses")
 class Course : BaseModel() {
     @JvmField
@@ -142,7 +143,104 @@ class Course : BaseModel() {
     var runs: ArrayList<Runs>? = null
 
 }
+@Type("run")
+class MyCourseRuns : BaseModel() {
+    @JvmField
 
+    var name: String? = null
+    @JvmField
+    var description: String? = null
+    @JvmField
+    var start: String? = null
+    @JvmField
+    var end: String? = null
+    @JvmField
+    var price: String? = null
+    @JvmField
+    var mrp: String? = null
+    @JvmField
+    @JsonProperty("enrollment-start")
+    val enrollmentStart: String? = null
+    @JvmField
+    @JsonProperty("enrollment-end")
+    val enrollmentEnd: String? = null
+    @Relationship("course", resolve = true)
+    @JvmField
+    var course: MyCourse? = null
+
+    @Relationship("run-attempts", resolve = true)
+    @JvmField
+    var run_attempts: ArrayList<MyRunAttempts>? = null
+
+}
+
+@Type("run_attempts")
+class MyRunAttempts : BaseModel() {
+
+    @JvmField
+    @JsonProperty("certificate-approved")
+    var certificate_approved: Boolean? = false
+    @JvmField
+    var end: String? = null
+    @JvmField
+    var premium: Boolean? = false
+    @JvmField
+    var revoked: Boolean? = false
+    @Relationship("run", resolve = true)
+    @JvmField
+    var run: MyCourseRuns? = null
+
+}
+
+@Type("course")
+class MyCourse : BaseModel() {
+    @JvmField
+    var title: String? = null
+    @JvmField
+    var subtitle: String? = null
+    @JvmField
+    var logo: String? = null
+    @JvmField
+    var summary: String? = null
+
+    @JvmField
+    @JsonProperty("category-name")
+    var categoryName: String? = null
+
+    @JvmField
+    @JsonProperty("category-id")
+    var categoryId: Int? = null
+
+    @JvmField
+    @JsonProperty("promo-video")
+    var promoVideo: String? = null
+
+    @JvmField
+    @JsonProperty("review-count")
+    var reviewCount: Int? = null
+
+    @JvmField
+    var difficulty: String? = null
+
+    @JvmField
+    var rating: Float? = null
+
+    @JvmField
+    var slug: String? = null
+
+    @JvmField
+    @JsonProperty("cover-image")
+    var coverImage: String? = null
+
+    @Relationship("instructors", resolve = true)
+    @JvmField
+    var instructors: ArrayList<Instructor>? = null
+
+    @Relationship("runs", resolve = true)
+    @JvmField
+    var runs: ArrayList<Runs>? = null
+
+}
 
 data class RatingModel(
         val rating: String,

@@ -54,4 +54,10 @@ interface OnlinePublicApi {
 
     @GET("me")
     fun getToken(@Header("Authorization") authorization: String): Call<User>
+
+    @GET("runs")
+    fun getMyCourses(@Header("Authorization") authorization: String,
+                     @Query("enrolled") enrolled:String = "true",
+                     @Query("include") include:String = "course,run_attempts"): Call<ArrayList<MyCourseRuns>>
+
 }
