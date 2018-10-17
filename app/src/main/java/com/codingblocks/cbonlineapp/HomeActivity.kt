@@ -13,6 +13,7 @@ import androidx.core.view.GravityCompat
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
+import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
@@ -48,7 +49,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_holder, HomeFragment())
+        transaction.replace(R.id.fragment_holder, MyCoursesFragment())
         transaction.commit()
 
         fetchUser()

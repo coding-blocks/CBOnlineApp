@@ -5,4 +5,6 @@
     <color name="colorAccent">#D81B60</color>
     <color name="black">#000</color>
     <color name="salmon">#ff6666</color>
+    <color name="holo_orange_light">#ffffbb33</color>
+
 </resources>

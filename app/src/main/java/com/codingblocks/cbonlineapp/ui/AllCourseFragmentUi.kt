@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.constraintlayout.solver.widgets.ConstraintWidget
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -14,11 +15,12 @@ import org.jetbrains.anko.support.v4.nestedScrollView
 
 class AllCourseFragmentUi<T> : AnkoComponent<T> {
     lateinit var rvCourses: RecyclerView
+    lateinit var titleText: TextView
 
     override fun createView(ui: AnkoContext<T>): View = with(ui) {
         nestedScrollView {
             constraintLayout {
-                val sessionStart = textView("All Courses") {
+                titleText = textView("All Courses") {
                     id = View.generateViewId()
                     textSize = 24f
                     textColor = Color.BLACK
@@ -40,9 +42,9 @@ class AllCourseFragmentUi<T> : AnkoComponent<T> {
                     topMargin = dip(8)
                     marginStart = dip(16)
                     marginEnd = dip(20)
-                    endToEnd = sessionStart.id
+                    endToEnd = titleText.id
                     startToStart = ConstraintLayout.LayoutParams.PARENT_ID
-                    topToBottom = sessionStart.id
+                    topToBottom = titleText.id
 
                 }
 

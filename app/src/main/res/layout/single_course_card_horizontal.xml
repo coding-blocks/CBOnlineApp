@@ -111,11 +111,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
                 android:fontFamily="@font/cabin_medium"
-                android:text="4.7"
                 android:textColor="@android:color/white"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/courseDescription" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 
