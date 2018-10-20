@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.Adapters
+package com.codingblocks.cbonlineapp.adapters
 
 import android.app.Activity
 import android.content.Context
@@ -6,13 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadrosid.svgloader.SvgLoader
+import com.codingblocks.cbonlineapp.MyCourseActivity
 import com.codingblocks.cbonlineapp.ui.MyCourseCardUi
 import com.codingblocks.onlineapi.models.MyCourseRuns
-import org.jetbrains.anko.AnkoContext
+import com.squareup.picasso.Picasso
+import org.jetbrains.anko.*
 import java.util.*
 
 
-class MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?) : RecyclerView.Adapter<MyCoursesDataAdapter.CourseViewHolder>() {
+class MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?) : RecyclerView.Adapter<MyCoursesDataAdapter.CourseViewHolder>(),AnkoLogger {
 
     private lateinit var context: Context
     val ui = MyCourseCardUi()
@@ -48,28 +50,28 @@ class MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?) : R
             ui.courseRatingTv.text = data.course?.rating.toString()
             ui.courseRatingBar.rating = data.course?.rating!!
 
-            //bind Instructors
-//            var instructors = ""
-//
-//            for (i in 0 until data.instructors?.size!!) {
-//                if (data.instructors!!.size == 1) {
-//                    itemView.courseInstrucImgView2.visibility = View.INVISIBLE
-//                }
-//                if (i >= 2) {
-//                    instructors += "+" + (data.instructors!!.size - 2) + " more"
-//                    break
-//                }
-//                instructors += data.instructors!![i].name + ", "
-//                if (i == 0)
-//                    Picasso.get().load(data.instructors!![i].photo).into(itemView.courseInstrucImgView1)
-//                else if (i == 1)
-//                    Picasso.get().load(data.instructors!![i].photo).into(itemView.courseInstrucImgView2)
-//                else
-//                    break
-//
-//
-//            }
-//            itemView.courseInstructors.text = instructors
+//            bind Instructors
+            var instructors = ""
+
+            for (i in 0 until data.course!!.instructors?.size!!) {
+                if (data.course!!.instructors!!.size == 1) {
+                    ui.courseInstrucImgView2.visibility = View.INVISIBLE
+                }
+                if (i >= 2) {
+                    instructors += "+" + (data.course!!.instructors!!.size - 2) + " more"
+                    break
+                }
+                instructors += data.course!!.instructors!![i].name + ", "
+                if (i == 0)
+                    Picasso.get().load(data.course!!.instructors!![i].photo).into(ui.courseInstrucImgView1)
+                else if (i == 1)
+                    Picasso.get().load(data.course!!.instructors!![i].photo).into(ui.courseInstrucImgView2)
+                else
+                    break
+
+
+            }
+            ui.courseInstructors.text = instructors
 //
 //            //bind Runs
 //            val currentRuns: ArrayList<Runs> = arrayListOf()
@@ -89,13 +91,15 @@ class MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?) : R
             SvgLoader.pluck()
                     .with(context as Activity?)
                     .load(data.course?.coverImage, ui.courseCoverImageView)
+
+            info { data.course?.logo }
             SvgLoader.pluck()
                     .with(context as Activity?)
                     .load(data.course?.logo, ui.courslogo)
-//            itemView.setOnClickListener {
-//                it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id, "courseName" to data.?title).singleTop())
-//
-//            }
+            itemView.setOnClickListener {
+                it.context.startActivity(it.context.intentFor<MyCourseActivity>("courseId" to data.id, "courseName" to data.course!!.title).singleTop())
+
+            }
 
 
         }

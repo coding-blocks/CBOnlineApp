@@ -9,6 +9,7 @@ import android.view.ViewManager
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.codingblocks.cbonlineapp.R
@@ -41,6 +42,50 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                 cardElevation = 8f
                 preventCornerOverlap = false
                 constraintLayout {
+                    //write this before using its id on another layout
+                    courseInstrucImgView1 = circleImageView {
+                    }.lparams(width = dip(30), height = dip(30)) {
+                        marginStart = dip(30)
+                        topMargin = dip(12)
+                        elevation = 1f
+                        startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                        topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                        endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    }
+                    courseInstrucImgView2 = circleImageView {
+                    }.lparams(width = dip(30), height = dip(30)) {
+                        marginStart = dip(55)
+                        topMargin = dip(12)
+                        elevation = 1f
+                        startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                        topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                        endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    }
+                    val instructorTextView = textView("Instructors") {
+                        id = View.generateViewId()
+                        textSize = 10f
+                        textColor = Color.parseColor("#000000")
+                        val typefaceValue = ResourcesCompat.getFont(ctx, R.font.cabin_medium)
+                        typeface = typefaceValue
+                    }.lparams(width = wrapContent, height = wrapContent) {
+                        marginStart = dip(8)
+                        topMargin = dip(12)
+                        startToEnd = courseInstrucImgView2.id
+                        topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    }
+
+                    courseInstructors = textView {
+                        textSize = 13f
+                        textColor = Color.parseColor("#000000")
+                        val typefaceValue = ResourcesCompat.getFont(ctx, R.font.cabin_medium)
+                        typeface = typefaceValue
+                    }.lparams(width = 0, height = wrapContent) {
+                        marginStart = dip(8)
+                        marginEnd = dip(8)
+                        endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                        startToEnd = courseInstrucImgView2.id
+                        topToBottom = instructorTextView.id
+                    }
                     val imageRelative = relativeLayout {
                         id = View.generateViewId()
                         background = resources.getDrawable(R.drawable.bck_rounded)
@@ -52,8 +97,11 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                             alignParentStart()
                             alignParentEnd()
                         }
-                    }.lparams(width = 0, height = wrapContent) {
+                    }.lparams(width = matchParent, height = wrapContent) {
                         margin = dip(8)
+                        startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                        topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                        endToStart = courseInstrucImgView1.id
                     }
                     courslogo = circleImageView {
                         id = View.generateViewId()
@@ -125,8 +173,9 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                         bottomToBottom = imageRelative.id
                     }
 
-
-                }.lparams(width = matchParent, height = matchParent) {}
+                }.lparams(width = matchParent, height = matchParent) {
+                    isScrollContainer = true
+                }
             }.lparams(width = matchParent, height = wrapContent) {
                 margin = dip(8)
 
