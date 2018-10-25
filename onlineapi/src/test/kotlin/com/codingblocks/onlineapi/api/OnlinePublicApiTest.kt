@@ -26,9 +26,9 @@ class OnlinePublicApiTest {
 
     @Test
     fun `GET instructors`() {
-        val courses = api.instructors.execute().body()
+        val courses = api.instructorsById("6").execute().body()
         courses?.let {
-            assertEquals(14, it.size)
+            assertEquals("Arnav Gupta", it.name)
         }
     }
 

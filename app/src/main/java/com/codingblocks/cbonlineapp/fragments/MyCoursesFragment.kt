@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.codingblocks.cbonlineapp.adapters.MyCoursesDataAdapter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
+import com.codingblocks.cbonlineapp.adapters.MyCoursesDataAdapter
 import com.codingblocks.cbonlineapp.ui.AllCourseFragmentUi
 import com.codingblocks.onlineapi.Clients
 import com.ethanhua.skeleton.Skeleton
