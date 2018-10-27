@@ -1,8 +1,6 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.*
-import com.fasterxml.jackson.databind.util.JSONPObject
-import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -62,8 +60,13 @@ interface OnlinePublicApi {
                      @Query("enrolled") enrolled: String = "true",
                      @Query("include") include: String = "course,run_attempts"): Call<ArrayList<MyCourseRuns>>
 
+    @GET("run_attempts/{runid}")
+    fun enrolledCourseById(@Header("Authorization") authorization: String,
+                           @Path("runid") id: String): Call<MyRunAttempt>
+
+
     @GET("run_attempts/{runid}/progress")
     fun getMyCourseProgress(@Header("Authorization") authorization: String,
-                            @Path("runid") id: String): Call<HashMap<Any,Any>>
+                            @Path("runid") id: String): Call<HashMap<Any, Any>>
 
 }

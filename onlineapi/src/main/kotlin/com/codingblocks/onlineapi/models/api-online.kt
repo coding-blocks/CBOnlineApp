@@ -143,6 +143,7 @@ class Course : BaseModel() {
     var runs: ArrayList<Runs>? = null
 
 }
+
 @Type("run")
 class MyCourseRuns : BaseModel() {
     @JvmField
@@ -189,6 +190,36 @@ class MyRunAttempts : BaseModel() {
     @Relationship("run", resolve = true)
     @JvmField
     var run: MyCourseRuns? = null
+
+}
+
+@Type("run_attempt")
+class MyRunAttempt : BaseModel() {
+
+    @JvmField
+    @JsonProperty("certificate-approved")
+    var certificate_approved: Boolean? = false
+    @JvmField
+    var end: String? = null
+    @JvmField
+    var premium: Boolean? = false
+    @JvmField
+    var revoked: Boolean? = false
+    @Relationship("run", resolve = true)
+    @JvmField
+    var run: MyCourseRuns? = null
+
+    @JsonProperty("videos")
+    @JvmField
+    var videos: ArrayList<LectureVideo>? = null
+
+    @JsonProperty("content")
+    @JvmField
+    var contents: ArrayList<LectureContent>? = null
+
+    @JsonProperty("document")
+    @JvmField
+    var documents: ArrayList<LectureDocument>? = null
 
 }
 
@@ -239,6 +270,77 @@ class MyCourse : BaseModel() {
     @Relationship("runs", resolve = true)
     @JvmField
     var runs: ArrayList<Runs>? = null
+
+}
+
+@Type("video")
+class LectureVideo : BaseModel() {
+    @JvmField
+    var description: String? = null
+
+    @JvmField
+    @JsonProperty("content-id")
+    var content_id: String? = null
+
+    @JvmField
+    var duration: Long? = null
+
+    @JvmField
+    var name: String? = null
+
+    @JvmField
+    var url: String? = null
+
+    @JvmField
+    @JsonProperty("cover-image")
+    var coverImage: String? = null
+
+}
+
+@Type("content")
+class LectureContent : BaseModel() {
+    @JvmField
+    var description: String? = null
+
+    @JvmField
+    @JsonProperty("content-id")
+    var content_id: String? = null
+
+    @JvmField
+    var duration: Long? = null
+
+    @JvmField
+    var name: String? = null
+
+    @JvmField
+    var url: String? = null
+
+    @JvmField
+    @JsonProperty("cover-image")
+    var coverImage: String? = null
+
+}
+@Type("document")
+class LectureDocument : BaseModel() {
+    @JvmField
+    var description: String? = null
+
+    @JvmField
+    @JsonProperty("content-id")
+    var content_id: String? = null
+
+    @JvmField
+    var duration: Long? = null
+
+    @JvmField
+    var name: String? = null
+
+    @JvmField
+    var url: String? = null
+
+    @JvmField
+    @JsonProperty("cover-image")
+    var coverImage: String? = null
 
 }
 

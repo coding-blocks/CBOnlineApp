@@ -47,7 +47,7 @@
         <activity
             android:name=".CourseActivity"
             android:parentActivityName=".HomeActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+            android:theme="@style/myTheme" />
         <activity
             android:name=".MyCourseActivity"
             android:label="@string/title_activity_my_course"

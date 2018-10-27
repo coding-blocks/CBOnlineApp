@@ -105,6 +105,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 changeFragment("Home")
 
             }
+            R.id.nav_my_courses -> {
+                changeFragment("My Courses")
+            }
             R.id.nav_notifications -> {
 
             }
@@ -124,6 +127,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             transaction.replace(R.id.fragment_holder, AllCourseFragment())
         else if (filter == "Home")
             transaction.replace(R.id.fragment_holder, HomeFragment())
+        else if (filter == "My Courses")
+            transaction.replace(R.id.fragment_holder, MyCoursesFragment())
 
         transaction.commit()
         onBackPressed()

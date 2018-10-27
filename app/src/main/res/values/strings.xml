@@ -106,4 +106,6 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="course_progress">Course Progress</string>
+    <string name="trial_text">Start Free Trial</string>
+    <string name="buy_text">Buy Now</string>
 </resources>

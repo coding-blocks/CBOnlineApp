@@ -33,6 +33,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ui.titleText.text = "My Courses"
         courseDataAdapter = MyCoursesDataAdapter(ArrayList())
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
