@@ -37,8 +37,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".HomeActivity"
+            android:launchMode="singleTop"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/myTheme" />
 
         <meta-data
             android:name="preloaded_fonts"
@@ -46,13 +47,15 @@
 
         <activity
             android:name=".CourseActivity"
+            android:launchMode="singleTop"
             android:parentActivityName=".HomeActivity"
             android:theme="@style/myTheme" />
         <activity
             android:name=".MyCourseActivity"
+            android:launchMode="singleTop"
             android:label="@string/title_activity_my_course"
             android:parentActivityName=".HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/myTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.codingblocks.cbonlineapp.HomeActivity" />

@@ -52,7 +52,7 @@ class AllCourseFragmentUi<T> : AnkoComponent<T> {
                 rvCourses = recyclerView {
                     id = View.generateViewId()
                     overScrollMode = View.OVER_SCROLL_NEVER
-                }.lparams(width = matchParent, height = 0) {
+                }.lparams(width = matchParent, height = matchParent) {
                     topMargin = dip(8)
                     marginStart = dip(16)
                     marginEnd = dip(16)

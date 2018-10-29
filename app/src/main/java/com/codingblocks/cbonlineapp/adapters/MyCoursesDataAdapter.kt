@@ -91,8 +91,8 @@ MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?) : Recycle
             SvgLoader.pluck()
                     .with(context as Activity?)
                     .load(data.course?.logo, itemView.courseLogo)
-            itemView.setOnClickListener {
-                it.context.startActivity(it.context.intentFor<MyCourseActivity>("courseId" to data.id, "courseName" to data.course!!.title).singleTop())
+            itemView.courseBtn1.setOnClickListener {
+                it.context.startActivity(it.context.intentFor<MyCourseActivity>("run_id" to data.run_attempts!![0].id, "courseName" to data.course!!.title).singleTop())
 
             }
 

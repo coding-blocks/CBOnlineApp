@@ -26,6 +26,7 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="android:statusBarColor">@color/white_transparency</item>
+
     </style>
 
     <style name="ToolBarStyle" parent="Theme.AppCompat">

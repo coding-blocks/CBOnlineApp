@@ -25,6 +25,19 @@ class Instructor : BaseModel() {
     @JvmField
     var courses: ArrayList<Course>? = null
 }
+@Type("instructor")
+class InstructorCourse : BaseModel() {
+    @JvmField
+    var name: String? = null
+    @JvmField
+    var description: String? = null
+    @JvmField
+    var photo: String? = null
+
+    @Relationship("courses", resolve = true)
+    @JvmField
+    var courses: ArrayList<Course>? = null
+}
 
 @Type("sections")
 class Sections : BaseModel() {
@@ -209,17 +222,17 @@ class MyRunAttempt : BaseModel() {
     @JvmField
     var run: MyCourseRuns? = null
 
-    @JsonProperty("videos")
-    @JvmField
-    var videos: ArrayList<LectureVideo>? = null
-
-    @JsonProperty("content")
-    @JvmField
-    var contents: ArrayList<LectureContent>? = null
-
-    @JsonProperty("document")
-    @JvmField
-    var documents: ArrayList<LectureDocument>? = null
+//    @JsonProperty("videos")
+//    @JvmField
+//    var videos: ArrayList<LectureVideo>? = null
+//
+//    @JsonProperty("content")
+//    @JvmField
+//    var contents: ArrayList<LectureContent>? = null
+//
+//    @JsonProperty("document")
+//    @JvmField
+//    var documents: ArrayList<LectureDocument>? = null
 
 }
 
@@ -296,6 +309,86 @@ class LectureVideo : BaseModel() {
     var coverImage: String? = null
 
 }
+@Type("progress")
+class ContentProgress : BaseModel() {
+
+    @JvmField
+    @JsonProperty("content-id")
+    var content_id: String? = null
+
+    @JvmField
+    @JsonProperty("created-at")
+    var createdAt: String? = null
+
+    @JvmField
+    @JsonProperty("updated-at")
+    var updatedAt: String? = null
+
+    @JvmField
+    var status: String? = null
+
+    @JvmField
+    @JsonProperty("run-attempt-id")
+    var run_attempt_id: String? = null
+
+}
+@Type("section")
+class CourseSection : BaseModel() {
+
+    @JvmField
+    @JsonProperty("created-at")
+    var createdAt: String? = null
+
+    @JvmField
+    var name: String? = null
+
+    @JvmField
+    var order: Int? = null
+
+    @JvmField
+    var premium: Boolean? = null
+
+    @JvmField
+    var status: String? = null
+
+    @JvmField
+    @JsonProperty("updated-at")
+    var updatedAt: String? = null
+
+    @JvmField
+    @JsonProperty("run-id")
+    var run_id: String? = null
+
+}
+@Type("lecture")
+class Lecture : BaseModel() {
+
+    @JvmField
+    @JsonProperty("created-at")
+    var createdAt: String? = null
+
+    @JvmField
+    var description: String? = null
+
+    @JvmField
+    var name: String? = null
+
+    @JvmField
+    var duration: Long? = null
+
+    @JvmField
+    var status: String? = null
+
+    @JvmField
+    @JsonProperty("updated-at")
+    var updatedAt: String? = null
+
+    @JvmField
+    @JsonProperty("video-url")
+    var video_url: String? = null
+
+}
+
 
 @Type("content")
 class LectureContent : BaseModel() {

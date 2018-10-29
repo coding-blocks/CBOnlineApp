@@ -30,7 +30,11 @@ object Clients {
             MyRunAttempt::class.java,
             LectureVideo::class.java,
             LectureContent::class.java,
-            LectureDocument::class.java
+            LectureDocument::class.java,
+            ContentProgress::class.java,
+            CourseSection::class.java,
+            Lecture::class.java,
+            InstructorCourse::class.java
 
     )
     private val relationshipResolver = RelationshipResolver {
@@ -44,7 +48,7 @@ object Clients {
 
     init {
         onlineApiResourceConverter.setGlobalResolver(relationshipResolver)
-        onlineApiResourceConverter.enableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES);
+        onlineApiResourceConverter.disableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES)
     }
 
 

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@drawable/gradient_theme_left_to_right"
     tools:context=".MyCourseActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -12,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
+        android:background="@drawable/gradient_theme_left_to_right"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -19,7 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="256dp"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:titleEnabled="false"
             app:toolbarId="@+id/toolbar">
@@ -39,6 +40,7 @@
                 android:layout_gravity="top"
                 android:layout_marginBottom="48dp"
                 app:layout_collapseMode="pin"
+                android:background="@drawable/gradient_theme_left_to_right"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
             <com.google.android.material.tabs.TabLayout
@@ -55,6 +57,7 @@
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/htab_viewpager"
+        android:background="#fff"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
