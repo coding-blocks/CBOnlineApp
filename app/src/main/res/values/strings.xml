@@ -108,4 +108,22 @@
     <string name="course_progress">Course Progress</string>
     <string name="trial_text">Start Free Trial</string>
     <string name="buy_text">Buy Now</string>
+    <string name="introlecturedescription">2 to 3 lectures will be released every week.\nThere are In-Class Quizzes, Assignments, Notes along with Lecture Videos in a lecture.\nYou should attempt them all to master each section that you study.\nYou should complete the lectures within the week.</string>
+    <string name="introassignmentdecription">After almost every lecture there will be one assignment.\nAssignments will have deadlines. Submissions after deadline will be subject to penalty (Penalty procedure is explained separately).\nApart from assignments there will be frequent tests analysing your concepts and understanding.</string>
+    <string name="introdoubtsdescription">Apart from instructors taking the course, there are teaching assistants in the course who will be taking your doubts.\nYou can ask doubt on any content that you are facing problem at, be it a video or a question.\nThere is an “Ask Doubt” button on the top right corner to raise your doubt.\nFor doubt resolution TA support will be available between 6PM evening till 12AM midnight, on all seven days.</string>
+    <string name="introsolutiondescription">For many assignment problems, there are hint videos which you can watch. Watching them won\'t add any penalty.\nYou can watch solution videos also for some problems and can check the solution code. But after checking/watching the solution, further submissions to that question will not fetch you any marks.</string>
+    <string name="intropenaltydescription">For every Assignment, there is a soft deadline which is mentioned in every assignment. That is - if you submit problems in your assignment within the soft deadline of its release, you can get the full score for problems (if all the testcases for the problem are passed).\nFor next 10 days (after deadline), a penalty of 25% will be applied on your problem submissions i.e. maximum score that you can get is 0.75*total_score.\nFor next 5 days a penalty of 50% will be applied on your submission, so maximum possible score for a problem will be 0.5*total_score. And after that, you won’t get any marks for your submissions.</string>
+    <string name="introavailablitydescription">Lecture Videos in the course will be accessible by for next five weeks from the release date of the last lecture of the course.\nHint/Solution Videos, quizzes, questions within a lecture, assignments and notes are available to you for lifetime.</string>
+    <string name="introleadeboaddescription">All the lecture questions, quizzes and assignments are graded. Submissions after deadlines will be penalised as per the penalty scheme specified above.\nUnder “Your Percentage Score” you can see your \'With\' and \'Without\' penalty score. \"With penalty score\" is your final score considered for leaderboard and certificates.\n“Without penalty score” is your score without any penalties applied to the score, which just indicates your total progress in the course.\nA leaderboard is maintained for the batch which you can see under overview section in your course. Based on your score you can check your class rank.</string>
+    <string name="introcertificatedescription"><![CDATA[After the module ends all those students whose “With Penalty Score” >= 60% will be awarded course certificates.\nYou will have to fill in your details for the certificate. Option to fill certificates details is right below “Resume to Classroom”.\nAfter the course ends, you will see an option to download your certificate right below “Resume to Classroom”.]]></string>
+    <string name="introendnotedescription">Ultimately, PRACTICE IS THE KEY!\nThe more you practice, better will be the results. Also, avoid missing lectures.\nWe wish all the best in this journey of codes! Keep coding :)]</string>
+    <string name="endnote">Endnote</string>
+    <string name="certificate">Certificate</string>
+    <string name="leaderboardtitle">Grading and Leaderboard</string>
+    <string name="availabilitytitle">Content Availability</string>
+    <string name="penaltytitle">Deadlines and Penalty Scheme</string>
+    <string name="solutionstitle">Hint Videos and Video Solutions</string>
+    <string name="doubtstitle">Teaching Assistants and Doubts Resolution</string>
+    <string name="assignmentstitle">Assignments and Tests</string>
+    <string name="lectures">Lectures</string>
 </resources>
