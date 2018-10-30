@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
-import android.view.animation.Transformation;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -58,12 +57,9 @@ public class ExpandableCardView extends LinearLayout {
 
     private OnExpandedListener listener;
 
-    private OnClickListener defaultClickListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (isExpanded()) collapse();
-            else expand();
-        }
+    private OnClickListener defaultClickListener = v -> {
+        if (isExpanded()) collapse();
+        else expand();
     };
 
     public ExpandableCardView(Context context) {
@@ -176,38 +172,57 @@ public class ExpandableCardView extends LinearLayout {
     }
 
     private void animateViews(final int initialHeight, final int distance, final int animationType) {
+        isExpanding = false;
+        isCollapsing = false;
 
-        Animation expandAnimation = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if (interpolatedTime == 1) {
-                    //Setting isExpanding/isCollapsing to false
-                    isExpanding = false;
-                    isCollapsing = false;
+        if (listener != null) {
+            if (animationType == EXPANDING) {
+                listener.onExpandChanged(card, true);
 
-                    if (listener != null) {
-                        if (animationType == EXPANDING) {
-                            listener.onExpandChanged(card, true);
-                        } else {
-                            listener.onExpandChanged(card, false);
-                        }
-                    }
-                }
-
-                card.getLayoutParams().height = animationType == EXPANDING ? (int) (initialHeight + (distance * interpolatedTime)) :
-                        (int) (initialHeight - (distance * interpolatedTime));
-                card.findViewById(R.id.viewContainer).requestLayout();
-
-                containerView.getLayoutParams().height = animationType == EXPANDING ? (int) (initialHeight + (distance * interpolatedTime)) :
-                        (int) (initialHeight - (distance * interpolatedTime));
-
+            } else {
+                listener.onExpandChanged(card, false);
             }
+        }
 
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
+
+        card.getLayoutParams().height = animationType == EXPANDING ? (int) (initialHeight + (distance)) :
+                initialHeight - (distance);
+        card.findViewById(R.id.viewContainer).requestLayout();
+
+        containerView.getLayoutParams().height = animationType == EXPANDING ? (int) (initialHeight + (distance)) :
+                initialHeight - (distance);
+
+//        Animation expandAnimation = new Animation() {
+//            @Override
+//            protected void applyTransformation(float interpolatedTime, Transformation t) {
+//                if (interpolatedTime == 0.5) {
+//                    //Setting isExpanding/isCollapsing to false
+//                    isExpanding = false;
+//                    isCollapsing = false;
+//
+//                    if (listener != null) {
+//                        if (animationType == EXPANDING) {
+//                            listener.onExpandChanged(card, true);
+//                        } else {
+//                            listener.onExpandChanged(card, false);
+//                        }
+//                    }
+//                }
+//
+//                card.getLayoutParams().height = animationType == EXPANDING ? (int) (initialHeight + (distance * interpolatedTime)) :
+//                        (int) (initialHeight - (distance * interpolatedTime));
+//                card.findViewById(R.id.viewContainer).requestLayout();
+//
+//                containerView.getLayoutParams().height = animationType == EXPANDING ? (int) (initialHeight + (distance * interpolatedTime)) :
+//                        (int) (initialHeight - (distance * interpolatedTime));
+//
+//            }
+//
+//            @Override
+//            public boolean willChangeBounds() {
+//                return true;
+//            }
+//        };
 
         RotateAnimation arrowAnimation = animationType == EXPANDING ?
                 new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
@@ -219,12 +234,12 @@ public class ExpandableCardView extends LinearLayout {
 
 
         arrowAnimation.setDuration(animDuration);
-        expandAnimation.setDuration(animDuration);
+//        expandAnimation.setDuration(animDuration);
 
         isExpanding = animationType == EXPANDING;
         isCollapsing = animationType == COLLAPSING;
 
-        startAnimation(expandAnimation);
+//        startAnimation(expandAnimation);
 //        Log.d("SO", "Started animation: " + (animationType == EXPANDING ? "Expanding" : "Collapsing"));
         arrowBtn.startAnimation(arrowAnimation);
         isExpanded = animationType == EXPANDING;

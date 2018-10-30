@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.animation.Animation
 import android.view.animation.Transformation
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ahmadrosid.svgloader.SvgLoader
-import com.codingblocks.cbonlineapp.API.Client
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.onlineapi.Clients
@@ -38,7 +39,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
 
         progressBar = arrayOf(courseProgress1, courseProgress2, courseProgress3, courseProgress4, courseProgress5)
-
+        setSupportActionBar(toolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         skeletonScreen = Skeleton.bind(courseRootView)
@@ -52,13 +53,14 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
         Clients.onlineV2PublicClient.courseById(courseId).enqueue(retrofitcallback { t, resp ->
             resp?.body()?.let { it ->
-                                skeletonScreen.hide()
+                skeletonScreen.hide()
                 coursePageTitle.text = courseName
                 coursePageSubtitle.text = it.subtitle
                 coursePageSummary.text = it.summary
                 SvgLoader.pluck()
                         .with(this)
                         .load(it.logo, coursePageLogo)
+                showpromoVideo(it.promoVideo)
                 fetchRating()
                 val sections = it.runs?.get(0)?.sections
                 val sectionsList = ArrayList<Sections>()
@@ -88,8 +90,23 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     }
 
+    private fun showpromoVideo(promoVideo: String?) {
+
+        val frameVideo = "<html><iframe width=\"420\" height=\"315\" src=\"$promoVideo\" frameborder=\"0\" allowfullscreen></iframe></body></html>"
+
+        displayYoutubeVideo.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                return false
+            }
+        }
+        val webSettings = displayYoutubeVideo.settings
+        webSettings.javaScriptEnabled = true
+        displayYoutubeVideo.loadData(frameVideo, "text/html", "utf-8")
+
+    }
+
     fun fetchRating() {
-        Client.api.getCourseRating(courseId).enqueue(retrofitcallback { throwable, response ->
+        Clients.api.getCourseRating(courseId).enqueue(retrofitcallback { throwable, response ->
             response?.body().let { it ->
 
                 coursePageRatingCountTv.text = it?.count.toString() + " Rating"

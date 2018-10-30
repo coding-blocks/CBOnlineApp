@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#D81B60</color>
+    <color name="colorPrimaryDark">#ff6666</color>
+    <color name="colorAccent">#ffffff</color>
     <color name="black">#000</color>
     <color name="salmon">#ff6666</color>
+    <color name="holo_orange_light">#ffffbb33</color>
+    <color name="white_transparency">#b9ffffff</color>
+
+
 </resources>

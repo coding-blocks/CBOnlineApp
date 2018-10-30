@@ -166,39 +166,50 @@ class ExpandableCardView1 : LinearLayout {
 
     private fun animateViews(initialHeight: Int, distance: Int, animationType: Int) {
 
-        val expandAnimation = object : Animation() {
-            override fun applyTransformation(interpolatedTime: Float, t: Transformation) {
-                if (interpolatedTime == 1f) {
-                    //Setting isExpanding/isCollapsing to false
-                    isExpanding = false
-                    isCollapsing = false
+        isExpanding = false
+        isCollapsing = false
 
-                    if (listener != null) {
-                        if (animationType == EXPANDING) {
-                            listener!!.onExpandChanged(card, true)
-                        } else {
-                            listener!!.onExpandChanged(card, false)
-                        }
-                    }
-                }
-
-                card!!.layoutParams.height = if (animationType == EXPANDING)
-                    (initialHeight + distance * interpolatedTime).toInt()
-                else
-                    (initialHeight - distance * interpolatedTime).toInt()
-                card!!.viewContainer.requestLayout()
-
-                containerView!!.layoutParams.height = if (animationType == EXPANDING)
-                    (initialHeight + distance * interpolatedTime).toInt()
-                else
-                    (initialHeight - distance * interpolatedTime).toInt()
-
-            }
-
-            override fun willChangeBounds(): Boolean {
-                return true
+        if (listener != null) {
+            if (animationType == EXPANDING) {
+                listener!!.onExpandChanged(card, true)
+            } else {
+                listener!!.onExpandChanged(card, false)
             }
         }
+
+//        val expandAnimation = object : Animation() {
+//            override fun applyTransformation(interpolatedTime: Float, t: Transformation) {
+//                if (interpolatedTime == 0.3f) {
+//                    //Setting isExpanding/isCollapsing to false
+//                    isExpanding = false
+//                    isCollapsing = false
+//
+//                    if (listener != null) {
+//                        if (animationType == EXPANDING) {
+//                            listener!!.onExpandChanged(card, true)
+//                        } else {
+//                            listener!!.onExpandChanged(card, false)
+//                        }
+//                    }
+//                }
+//
+//                card!!.layoutParams.height = if (animationType == EXPANDING)
+//                    (initialHeight + distance * interpolatedTime).toInt()
+//                else
+//                    (initialHeight - distance * interpolatedTime).toInt()
+//                card!!.viewContainer.requestLayout()
+//
+//                containerView!!.layoutParams.height = if (animationType == EXPANDING)
+//                    (initialHeight + distance * interpolatedTime).toInt()
+//                else
+//                    (initialHeight - distance * interpolatedTime).toInt()
+//
+//            }
+//
+//            override fun willChangeBounds(): Boolean {
+//                return true
+//            }
+//        }
 
         val arrowAnimation = if (animationType == EXPANDING)
             RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
@@ -211,12 +222,12 @@ class ExpandableCardView1 : LinearLayout {
 
 
         arrowAnimation.duration = animDuration
-        expandAnimation.duration = animDuration
+//        expandAnimation.duration = animDuration
 
         isExpanding = animationType == EXPANDING
         isCollapsing = animationType == COLLAPSING
 
-        startAnimation(expandAnimation)
+//        startAnimation(expandAnimation)
 //        Log.d("SO", "Started animation: " + if (animationType == EXPANDING) "Expanding" else "Collapsing")
         arrowBtn!!.startAnimation(arrowAnimation)
         isExpanded = animationType == EXPANDING
@@ -281,7 +292,7 @@ class ExpandableCardView1 : LinearLayout {
 
     companion object {
 
-        val DEFAULT_ANIM_DURATION = 350
+        val DEFAULT_ANIM_DURATION = 50
 
         private val COLLAPSING = 0
         private val EXPANDING = 1

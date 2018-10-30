@@ -1,10 +1,7 @@
 package com.codingblocks.onlineapi
 
 import com.codingblocks.onlineapi.api.OnlinePublicApi
-import com.codingblocks.onlineapi.models.Contents
-import com.codingblocks.onlineapi.models.Course
-import com.codingblocks.onlineapi.models.Instructor
-import com.codingblocks.onlineapi.models.Sections
+import com.codingblocks.onlineapi.models.*
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.jasminb.jsonapi.RelationshipResolver
@@ -14,6 +11,7 @@ import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 object Clients {
     private val om = ObjectMapper()
@@ -25,7 +23,19 @@ object Clients {
             Instructor::class.java,
             Course::class.java,
             Sections::class.java,
-            Contents::class.java
+            Contents::class.java,
+            MyCourseRuns::class.java,
+            MyCourse::class.java,
+            MyRunAttempts::class.java,
+            MyRunAttempt::class.java,
+            LectureVideo::class.java,
+            LectureContent::class.java,
+            LectureDocument::class.java,
+            ContentProgress::class.java,
+            CourseSection::class.java,
+            Lecture::class.java,
+            InstructorCourse::class.java
+
     )
     private val relationshipResolver = RelationshipResolver {
         OkHttpClient()
@@ -38,7 +48,7 @@ object Clients {
 
     init {
         onlineApiResourceConverter.setGlobalResolver(relationshipResolver)
-//        onlineApiResourceConverter.enableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES);
+        onlineApiResourceConverter.disableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES)
     }
 
 
@@ -48,5 +58,17 @@ object Clients {
                 .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
                 .build()
                 .create(OnlinePublicApi::class.java)
+    val retrofit = Retrofit.Builder()
+            .baseUrl("https://api-online.cb.lk/api/v2/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    val api = retrofit.create(OnlinePublicApi::class.java)
+
+
+    val retrofitAuth = Retrofit.Builder()
+            .baseUrl("https://account.codingblocks.com/apiAuth/users/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    val apiAuth = retrofitAuth.create(OnlinePublicApi::class.java)
 
 }
