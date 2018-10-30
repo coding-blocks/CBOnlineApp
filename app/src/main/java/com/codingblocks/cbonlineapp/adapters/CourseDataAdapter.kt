@@ -13,15 +13,16 @@ import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Runs
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.single_course_card_horizontal.view.*
+import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class CourseDataAdapter(private var courseData: ArrayList<Course>?) : RecyclerView.Adapter<CourseDataAdapter.CourseViewHolder>() {
+class CourseDataAdapter(private var courseData: ArrayList<Course>?, var context: Context) : RecyclerView.Adapter<CourseDataAdapter.CourseViewHolder>(), AnkoLogger {
 
-    private lateinit var context: Context
+    val svgLoader = SvgLoader.pluck().with(context as Activity?)
 
 
     fun setData(courseData: ArrayList<Course>) {
@@ -41,7 +42,6 @@ class CourseDataAdapter(private var courseData: ArrayList<Course>?) : RecyclerVi
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
-        context = parent.context
 
         return CourseViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.single_course_card_horizontal, parent, false))  //single_course_card for horizontal cards
@@ -51,7 +51,7 @@ class CourseDataAdapter(private var courseData: ArrayList<Course>?) : RecyclerVi
 
         fun bindView(data: Course) {
             itemView.courseTitle.text = data.title
-            itemView.courseDescription.text = data.subtitle
+//            itemView.courseDescription.text = data.subtitle
             itemView.courseRatingTv.text = data.rating.toString()
             itemView.courseRatingBar.rating = data.rating!!
 
@@ -93,12 +93,10 @@ class CourseDataAdapter(private var courseData: ArrayList<Course>?) : RecyclerVi
             date = sdf.format(Date(currentRuns[0].start!!.toLong() * 1000))
             itemView.enrollmentTv.text = "Hurry Up! Enrollment ends $date "
 
-            SvgLoader.pluck()
-                    .with(context as Activity?)
+            svgLoader.load(data.logo, itemView.courseLogo)
+            svgLoader.setPlaceHolder(R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e, R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e)
                     .load(data.coverImage, itemView.courseCoverImgView)
-            SvgLoader.pluck()
-                    .with(context as Activity?)
-                    .load(data.logo, itemView.courseLogo)
+
             itemView.setOnClickListener {
                 it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id, "courseName" to data.title).singleTop())
 

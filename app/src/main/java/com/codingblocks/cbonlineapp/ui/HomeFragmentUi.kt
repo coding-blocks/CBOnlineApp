@@ -52,7 +52,7 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                     endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
 
                 }
-                val allcourseText = textView{
+                val allcourseText = textView {
                     text = context.resources.getString(R.string.recommended_courses)
                     id = View.generateViewId()
                     textSize = 24f
@@ -86,8 +86,8 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                     overScrollMode = View.OVER_SCROLL_NEVER
                 }.lparams(width = matchParent, height = 0) {
                     topMargin = dip(8)
-                    marginStart = dip(16)
-                    marginEnd = dip(16)
+                    marginStart = dip(4)
+                    marginEnd = dip(4)
                     horizontalBias = 0.0f
                     matchConstraintDefaultHeight = ConstraintWidget.MATCH_CONSTRAINT_WRAP
                     startToStart = ConstraintLayout.LayoutParams.PARENT_ID
@@ -103,7 +103,6 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
             }
         }
     }
-
 
 
 }

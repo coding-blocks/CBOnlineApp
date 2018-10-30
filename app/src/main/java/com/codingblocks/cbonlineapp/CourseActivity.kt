@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.view.animation.Animation
@@ -10,12 +11,14 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ahmadrosid.svgloader.SvgLoader
+import com.codingblocks.cbonlineapp.Utils.ProgressBarAnimation
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Sections
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
@@ -124,14 +127,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         })
     }
 
-    inner class ProgressBarAnimation(private val progressBar: ProgressBar?, private val from: Float, private val to: Float) : Animation() {
-
-        override fun applyTransformation(interpolatedTime: Float, t: Transformation) {
-            super.applyTransformation(interpolatedTime, t)
-            val value = from + (to - from) * interpolatedTime
-            progressBar!!.progress = value.toInt()
-        }
-
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
 
