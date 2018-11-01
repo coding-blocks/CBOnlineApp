@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:id="@+id/sectionRoot"
+    android:orientation="vertical">
 
     <com.codingblocks.cbonlineapp.widgets.ExpandableCardView
         android:id="@+id/sections"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         app:expandOnClick="true"
-        app:inner_view="@layout/item_section_content"
+        app:inner_view="@layout/item_section_content_info"
         app:title="Introduction And Logistics" />
 </LinearLayout>

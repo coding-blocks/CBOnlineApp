@@ -13,16 +13,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:elevation="4dp"
-        app:theme="@style/ToolBarStyle"
-        android:gravity="center_vertical" />
+        android:gravity="center_vertical"
+        app:theme="@style/ToolBarStyle" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:overScrollMode="never"
         android:background="#fff"
         android:fillViewport="true"
+        android:overScrollMode="never"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".CourseActivity">
 
@@ -31,13 +31,13 @@
             android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                app:civ_border_width="2dp"
-                app:civ_border_color="#fff"
                 android:id="@+id/coursePageLogo"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                app:civ_border_color="#fff"
+                app:civ_border_width="2dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,10 +62,12 @@
                 android:layout_marginStart="14dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 android:fontFamily="@font/cabin_medium"
                 android:text="Mentors :Rishab Kapoor,Garima Chhikara"
                 android:textColor="@color/black"
                 android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/coursePageSubtitle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/coursePageLogo"
                 app:layout_constraintTop_toBottomOf="@+id/coursePageTitle" />
@@ -343,17 +345,18 @@
                 app:layout_constraintStart_toEndOf="@+id/courseRating1"
                 app:layout_constraintTop_toTopOf="@+id/courseRating1" />
 
-            <WebView
+            <fragment
                 android:id="@+id/displayYoutubeVideo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/courseRating1">
+                app:layout_constraintTop_toBottomOf="@+id/courseRating1" />
 
-            </WebView>
+
 
             <LinearLayout
                 android:id="@+id/buttons"

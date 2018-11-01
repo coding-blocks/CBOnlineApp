@@ -3,10 +3,6 @@ package com.codingblocks.cbonlineapp
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.view.animation.Animation
-import android.view.animation.Transformation
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +14,9 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Sections
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
+import com.google.android.youtube.player.YouTubeInitializationResult
+import com.google.android.youtube.player.YouTubePlayer
+import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_course.*
 import org.jetbrains.anko.AnkoLogger
@@ -30,6 +29,13 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     lateinit var courseId: String
     lateinit var courseName: String
     lateinit var progressBar: Array<ProgressBar?>
+
+    companion object {
+        val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
+
+    }
+
+    private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,16 +101,31 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     private fun showpromoVideo(promoVideo: String?) {
 
-        val frameVideo = "<html><iframe width=\"420\" height=\"315\" src=\"$promoVideo\" frameborder=\"0\" allowfullscreen></iframe></body></html>"
 
-        displayYoutubeVideo.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                return false
+//        val frameVideo = "<html><iframe width=\"420\" height=\"315\" src=\"$promoVideo\" frameborder=\"0\" allowfullscreen></iframe></body></html>"
+//
+//        displayYoutubeVideo.webViewClient = object : WebViewClient() {
+//            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+//                return false
+//            }
+//        }
+//        val webSettings = displayYoutubeVideo.settings
+//        webSettings.javaScriptEnabled = true
+//        displayYoutubeVideo.loadData(frameVideo, "text/html", "utf-8")
+
+        youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
+            override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
+            }
+
+            override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
+                if (!p2) {
+                    info { "VIDEO_ID" + promoVideo!!.substring(30,41) }
+                    youtubePlayerInstance?.loadVideo(promoVideo!!.substring(30,41))
+                }
             }
         }
-        val webSettings = displayYoutubeVideo.settings
-        webSettings.javaScriptEnabled = true
-        displayYoutubeVideo.loadData(frameVideo, "text/html", "utf-8")
+        val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
+        youTubePlayerSupportFragment!!.initialize(YOUTUBE_API_KEY, youtubePlayerInit)
 
     }
 
