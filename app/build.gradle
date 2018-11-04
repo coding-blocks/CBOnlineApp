@@ -65,5 +65,5 @@ dependencies {
         implementation "org.jetbrains.anko:anko-$name:$ankoVersion"
     }
     implementation project(':onlineapi')
-    implementation files('build/libs/YouTubeAndroidPlayerApi.jar')
+    implementation files('libs/YouTubeAndroidPlayerApi.jar')
 }
