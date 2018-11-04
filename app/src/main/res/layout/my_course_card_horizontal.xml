@@ -31,6 +31,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
+                android:src="@drawable/ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e"
                 android:scaleType="centerCrop" />
 
 

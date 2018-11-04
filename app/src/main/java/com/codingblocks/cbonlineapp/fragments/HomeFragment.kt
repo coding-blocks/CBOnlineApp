@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        courseDataAdapter = CourseDataAdapter(ArrayList())
+        courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!)
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter

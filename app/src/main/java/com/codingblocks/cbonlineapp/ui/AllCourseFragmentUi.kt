@@ -54,8 +54,8 @@ class AllCourseFragmentUi<T> : AnkoComponent<T> {
                     overScrollMode = View.OVER_SCROLL_NEVER
                 }.lparams(width = matchParent, height = matchParent) {
                     topMargin = dip(8)
-                    marginStart = dip(16)
-                    marginEnd = dip(16)
+                    marginStart = dip(4)
+                    marginEnd = dip(4)
                     horizontalBias = 0.0f
                     matchConstraintDefaultHeight = ConstraintWidget.MATCH_CONSTRAINT_WRAP
                     startToStart = ConstraintLayout.LayoutParams.PARENT_ID

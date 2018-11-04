@@ -44,7 +44,7 @@ class OnlinePublicApiTest {
     fun `GET recommended`() {
         val courses = api.getRecommendedCourses().execute().body()
         courses?.let {
-            assertEquals(10, it.size)
+            assertEquals(11, it.size)
         }
     }
 

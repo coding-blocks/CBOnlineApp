@@ -31,16 +31,16 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-    <ImageView
-        android:id="@+id/fab_whatsapp"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:backgroundTint="@android:color/white"
-        android:contentDescription="@string/whatsapp_btn"
-        android:src="@drawable/whatsapp_round"
-        app:borderWidth="0dp" />
+    <!--<ImageView-->
+        <!--android:id="@+id/fab_whatsapp"-->
+        <!--android:layout_width="54dp"-->
+        <!--android:layout_height="54dp"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:backgroundTint="@android:color/white"-->
+        <!--android:contentDescription="@string/whatsapp_btn"-->
+        <!--android:src="@drawable/whatsapp_round"-->
+        <!--app:borderWidth="0dp" />-->
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

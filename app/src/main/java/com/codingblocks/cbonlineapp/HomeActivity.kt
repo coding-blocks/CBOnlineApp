@@ -38,18 +38,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
-        fab_whatsapp.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.setPackage("com.whatsapp")
-            intent.data = Uri.parse("https://wa.me/919811557517")
-            if (packageManager.resolveActivity(intent, 0) != null) {
-                startActivity(intent)
-            } else {
-                Toast.makeText(this, "Please install whatsApp", Toast.LENGTH_SHORT).show()
-            }
-        }
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_holder, MyCoursesFragment())
+        transaction.replace(R.id.fragment_holder, AllCourseFragment())
         transaction.commit()
 
         fetchUser()
@@ -108,8 +98,15 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_my_courses -> {
                 changeFragment("My Courses")
             }
-            R.id.nav_notifications -> {
-
+            R.id.nav_whatsapp -> {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setPackage("com.whatsapp")
+                intent.data = Uri.parse("https://wa.me/919811557517")
+                if (packageManager.resolveActivity(intent, 0) != null) {
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "Please install whatsApp", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 

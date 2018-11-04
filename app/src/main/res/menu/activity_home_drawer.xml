@@ -6,20 +6,37 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_home_black_24dp"
             android:title="Home" />
         <item
             android:id="@+id/nav_all_courses"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_school_black_24dp"
             android:title="All Courses" />
         <item
             android:id="@+id/nav_my_courses"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_library_books_black_24dp"
             android:title="My Courses" />
+
+    </group>
+
+    <group
+        android:menuCategory="system"
+        android:id="@+id/features"
+        android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_notifications"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Notifications" />
+            android:id="@+id/nav_prefences"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Settings" />
+
+        <item
+            android:id="@+id/nav_signOut"
+            android:icon="@drawable/ic_contact_mail_black_24dp"
+            android:title="Contact Us" />
+        <item
+            android:id="@+id/nav_whatsapp"
+            android:icon="@drawable/whatsapp_icon_color"
+            android:title="Chat on Whatsapp" />
+
     </group>
 
 

@@ -22,10 +22,9 @@ import java.util.*
 
 
 class
-MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?) : RecyclerView.Adapter<MyCoursesDataAdapter.CourseViewHolder>(), AnkoLogger {
+MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?, var context: Context) : RecyclerView.Adapter<MyCoursesDataAdapter.CourseViewHolder>(), AnkoLogger {
 
-    private lateinit var context: Context
-//    val ui = MyCourseCardUi()
+    val svgLoader = SvgLoader.pluck().with(context as Activity?)
 
 
     fun setData(courseData: ArrayList<MyCourseRuns>) {
@@ -45,7 +44,6 @@ MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?) : Recycle
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
-        context = parent.context
 
         return CourseViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.my_course_card_horizontal, parent, false))
@@ -83,13 +81,12 @@ MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?) : Recycle
                 })
             }
 
-            SvgLoader.pluck()
-                    .with(context as Activity?)
+
+            svgLoader.setPlaceHolder(R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e,R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e)
                     .load(data.course?.coverImage, itemView.courseCoverImgView)
 
             info { data.course?.logo }
-            SvgLoader.pluck()
-                    .with(context as Activity?)
+            svgLoader
                     .load(data.course?.logo, itemView.courseLogo)
             itemView.courseBtn1.setOnClickListener {
                 it.context.startActivity(it.context.intentFor<MyCourseActivity>("run_id" to data.run_attempts!![0].id, "courseName" to data.course!!.title).singleTop())

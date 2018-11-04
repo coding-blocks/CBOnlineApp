@@ -4,14 +4,19 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.onlineapi.models.Sections
-import kotlinx.android.synthetic.main.expandable_cardview.view.*
 import kotlinx.android.synthetic.main.item_section.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import java.util.*
+
 
 class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : RecyclerView.Adapter<SectionsDataAdapter.CourseViewHolder>(), AnkoLogger {
 
@@ -45,20 +50,76 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
 
         fun bindView(data: Sections) {
 
-            itemView.sections.title.text = data.name
-            itemView.sections.setDescription1("${data.contents?.size} Lectures")
+            itemView.title.text = data.name
+            itemView.lectures.text = ("${data.contents?.size} Lectures")
             var duration: Long = 0
             for (subitems in data.contents!!) {
-                duration += subitems.duration!!
+                if (subitems.contentable == "lecture" || subitems.contentable == "video")
+                    duration += subitems.duration!!
             }
             val hour = duration / (1000 * 60 * 60) % 24
             val minute = duration / (1000 * 60) % 60
-            if (hour <= 0)
-                itemView.sections.setDescription2("$minute Mins")
-            else if (minute <= 0)
-                itemView.sections.setDescription2("$hour Hours")
-            else
-                itemView.sections.setDescription2("---")
+            info { "hour$hour   minute$minute" }
+
+            if (minute >= 1 && hour == 0L)
+                itemView.lectureTime.text = ("$minute Min")
+            else if (hour >= 1) {
+                itemView.lectureTime.text = ("$hour Hours")
+            } else
+                itemView.lectureTime.text = ("---")
+
+            val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
+            ll.orientation = LinearLayout.VERTICAL
+            ll.visibility = View.GONE
+
+            for (i in data.contents!!) {
+                val factory = LayoutInflater.from(context)
+                val inflatedView = factory.inflate(R.layout.item_section_content_info, ll, false)
+                val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
+                val subDuration = inflatedView.findViewById(R.id.textView16) as TextView
+                val contentImg = inflatedView.findViewById(R.id.imageView3) as ImageView
+                if (i.contentable == "lecture" || i.contentable == "video") {
+                    val contentDuration: Long = i.duration!!
+                    contentImg.setImageDrawable(context.getDrawable(R.drawable.video_green_dark))
+                    val contenthour = contentDuration / (1000 * 60 * 60) % 24
+                    val contentminute = contentDuration / (1000 * 60) % 60
+                    when {
+                        contenthour <= 0 -> subDuration.text = ("$contentminute Mins")
+                        contentminute <= 0 -> subDuration.text = ("$contenthour Hours")
+                        else -> itemView.lectureTime.text = ("---")
+                    }
+                } else if (i.contentable == "document") {
+                    contentImg.setImageDrawable(context.getDrawable(R.drawable.file_green_dark))
+
+                } else if (i.contentable == "code-challenge") {
+                    contentImg.setImageDrawable(context.getDrawable(R.drawable.code_green_dark))
+                }
+                subTitle.text = i.title
+
+
+                ll.addView(inflatedView)
+            }
+            var arrowAnimation: RotateAnimation
+
+            itemView.arrow.setOnClickListener {
+                if (ll.visibility == View.GONE) {
+                    ll.visibility = View.VISIBLE
+                    arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                            0.5f)
+                    arrowAnimation.fillAfter = true
+                    arrowAnimation.duration = 350
+                    itemView.arrow.startAnimation(arrowAnimation)
+                } else {
+                    ll.visibility = View.GONE
+                    arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                            0.5f)
+                    arrowAnimation.fillAfter = true
+                    arrowAnimation.duration = 350
+                    itemView.arrow.startAnimation(arrowAnimation)
+                }
+
+            }
+
 
         }
     }
