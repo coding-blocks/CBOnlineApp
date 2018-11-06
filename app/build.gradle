@@ -48,6 +48,8 @@ dependencies {
     implementation 'io.github.inflationx:viewpump:1.0.0'
     implementation 'android.arch.persistence.room:runtime:1.1.1'
     kapt "android.arch.persistence.room:compiler:1.1.1"
+    // full exoplayer library
+    implementation 'com.google.android.exoplayer:exoplayer:2.8.2'
     // Test Deps
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
