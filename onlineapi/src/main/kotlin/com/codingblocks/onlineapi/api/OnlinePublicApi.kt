@@ -1,7 +1,9 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.*
+import kotlinx.coroutines.Deferred
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
@@ -43,7 +45,7 @@ interface OnlinePublicApi {
     fun getSections(@Path("id") id: String,
                     @Query("exclude") query: String = "contents.*",
                     @Query("include") include: String = "contents",
-                    @Query("sort") sort: String = "content.section_content.order"): Call<Sections>
+                    @Query("sort") sort: String = "content.section_content.order"): Deferred<Response<Sections>>
 
     @GET("courses/{id}/rating")
     fun getCourseRating(@Path("id") id: String): Call<RatingModel>

@@ -2,7 +2,10 @@ package com.codingblocks.cbonlineapp
 
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -11,8 +14,9 @@ import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector
@@ -50,6 +54,10 @@ class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
         setContentView(R.layout.activity_video_player)
 
         if (savedInstanceState != null) {
@@ -94,17 +102,20 @@ class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener {
 
         if (v.id == R.id.settings) {
 
-            val mappedTrackInfo = trackSelector?.currentMappedTrackInfo
 
-            if (mappedTrackInfo != null) {
 
-                val title = getString(R.string.video)
-                val rendererIndex = ivSettings.tag as Int
-                val dialogPair = TrackSelectionView.getDialog(this, title, trackSelector, rendererIndex)
-                dialogPair.second.setShowDisableOption(false)
-                dialogPair.second.setAllowAdaptiveSelections(true)
-                dialogPair.first.show()
-            }
+
+//            val mappedTrackInfo = trackSelector?.currentMappedTrackInfo
+//
+//            if (mappedTrackInfo != null) {
+//
+//                val title = "Video"
+//                val rendererIndex = ivSettings.tag as Int
+//                val dialogPair = TrackSelectionView.getDialog(this, title, trackSelector, rendererIndex)
+//                dialogPair.second.setShowDisableOption(false)
+//                dialogPair.second.setAllowAdaptiveSelections(true)
+//                dialogPair.first.show()
+//            }
         }
     }
 
@@ -140,11 +151,12 @@ class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         // Use Hls, Dash or other smooth streaming media source if you want to test the track quality selection.
-        /*val mediaSource: MediaSource = HlsMediaSource(Uri.parse("https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"),
-                mediaDataSourceFactory, mainHandler, null)*/
+        val mainHandler = Handler()
+        val mediaSource: MediaSource = HlsMediaSource(Uri.parse("https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"),
+                mediaDataSourceFactory, mainHandler, null)
 
-        val mediaSource = ExtractorMediaSource.Factory(mediaDataSourceFactory)
-                .createMediaSource(Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"))
+//        val mediaSource = ExtractorMediaSource.Factory(mediaDataSourceFactory)
+//                .createMediaSource(Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"))
 
         val haveStartPosition = currentWindow != C.INDEX_UNSET
         if (haveStartPosition) {

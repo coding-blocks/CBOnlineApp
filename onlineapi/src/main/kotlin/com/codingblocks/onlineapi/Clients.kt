@@ -8,6 +8,7 @@ import com.github.jasminb.jsonapi.RelationshipResolver
 import com.github.jasminb.jsonapi.ResourceConverter
 import com.github.jasminb.jsonapi.SerializationFeature
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
@@ -56,6 +57,7 @@ object Clients {
         get() = Retrofit.Builder()
                 .baseUrl("https://api-online.cb.lk/api/v2/")
                 .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .build()
                 .create(OnlinePublicApi::class.java)
     val retrofit = Retrofit.Builder()
@@ -68,6 +70,7 @@ object Clients {
     val retrofitAuth = Retrofit.Builder()
             .baseUrl("https://account.codingblocks.com/apiAuth/users/")
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
     val apiAuth = retrofitAuth.create(OnlinePublicApi::class.java)
 

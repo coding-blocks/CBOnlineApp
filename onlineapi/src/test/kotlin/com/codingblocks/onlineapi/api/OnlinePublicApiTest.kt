@@ -48,13 +48,13 @@ class OnlinePublicApiTest {
         }
     }
 
-    @Test
-    fun `GET section`() {
-        val courses = api.getSections("795").execute().body()
-        courses?.let {
-            assertEquals("Python Basics", it.name)
-        }
-    }
+//    @Test
+//    fun `GET section`() {
+//        val courses = api.getSections("795").execute().body()
+//        courses?.let {
+//            assertEquals("Python Basics", it.name)
+//        }
+//    }
 
     @Test
     fun `GET myCourses`() {
