@@ -74,4 +74,13 @@ object Clients {
             .build()
     val apiAuth = retrofitAuth.create(OnlinePublicApi::class.java)
 
+
+    val retrofitToken = Retrofit.Builder()
+            .baseUrl("https://api-online.cb.lk/api/jwt/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .build()
+    val apiToken = retrofitToken.create(OnlinePublicApi::class.java)
+
+
 }

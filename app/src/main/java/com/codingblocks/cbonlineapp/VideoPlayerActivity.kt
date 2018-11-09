@@ -22,7 +22,6 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
-import com.google.android.exoplayer2.ui.TrackSelectionView
 import com.google.android.exoplayer2.upstream.*
 import com.google.android.exoplayer2.util.Util
 
@@ -101,8 +100,6 @@ class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View) {
 
         if (v.id == R.id.settings) {
-
-
 
 
 //            val mappedTrackInfo = trackSelector?.currentMappedTrackInfo

@@ -25,6 +25,7 @@ class Instructor : BaseModel() {
     @JvmField
     var courses: ArrayList<Course>? = null
 }
+
 @Type("instructor")
 class InstructorCourse : BaseModel() {
     @JvmField
@@ -47,6 +48,9 @@ class Sections : BaseModel() {
     var preminum: Boolean? = false
     @JvmField
     var status: String? = null
+
+    @JvmField
+    var order: Int? = null
 
     @Relationship("contents", resolve = true)
     @JvmField
@@ -309,6 +313,7 @@ class LectureVideo : BaseModel() {
     var coverImage: String? = null
 
 }
+
 @Type("progress")
 class ContentProgress : BaseModel() {
 
@@ -332,6 +337,7 @@ class ContentProgress : BaseModel() {
     var run_attempt_id: String? = null
 
 }
+
 @Type("section")
 class CourseSection : BaseModel() {
 
@@ -360,6 +366,7 @@ class CourseSection : BaseModel() {
     var run_id: String? = null
 
 }
+
 @Type("lecture")
 class Lecture : BaseModel() {
 
@@ -413,6 +420,7 @@ class LectureContent : BaseModel() {
     var coverImage: String? = null
 
 }
+
 @Type("document")
 class LectureDocument : BaseModel() {
     @JvmField

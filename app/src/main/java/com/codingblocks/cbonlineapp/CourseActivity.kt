@@ -80,16 +80,19 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 val sectionAdapter = SectionsDataAdapter(ArrayList())
                 rvExpendableView.layoutManager = LinearLayoutManager(this)
                 rvExpendableView.adapter = sectionAdapter
-                for (item in sections!!) {
+                sections!!.forEachIndexed { index, section ->
                     GlobalScope.launch(Dispatchers.Main) {
-                        val request = service.getSections(item.id!!)
+                        val request = service.getSections(section.id!!)
                         val response = request.await()
                         if (response.isSuccessful) {
-                            // Pass in the response.body() to your adapter
-                            sectionsList.add(response.body()!!)
-                            sectionAdapter.setData(sectionsList)
+                            val value = response.body()!!
+                            value.order = index
+                            sectionsList.add(value)
+                            if (sectionsList.size == sections.size) {
+                                sectionsList.sortBy { it.order }
+                                sectionAdapter.setData(sectionsList)
 
-
+                            }
                         } else {
                             toast("Error ${response.code()}")
                         }

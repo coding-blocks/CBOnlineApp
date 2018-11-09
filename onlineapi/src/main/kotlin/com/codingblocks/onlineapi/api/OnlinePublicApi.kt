@@ -1,13 +1,11 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.*
+import com.google.gson.JsonObject
 import kotlinx.coroutines.Deferred
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface OnlinePublicApi {
 
@@ -50,12 +48,13 @@ interface OnlinePublicApi {
     @GET("courses/{id}/rating")
     fun getCourseRating(@Path("id") id: String): Call<RatingModel>
 
-    @GET("me")
-    fun getMe(@Header("Authorization") authorization: String): Call<User>
+    @GET("users/me")
+    fun getMe(@Header("Authorization") authorization: String): Call<JsonObject>
 
 
-    @GET("me")
-    fun getToken(@Header("Authorization") authorization: String): Call<User>
+    @POST("login")
+    @FormUrlEncoded
+    fun getToken(@Field("code") code: String): Call<JsonObject>
 
     @GET("runs")
     fun getMyCourses(@Header("Authorization") authorization: String,
