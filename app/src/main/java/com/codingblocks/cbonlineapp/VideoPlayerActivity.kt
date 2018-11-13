@@ -31,6 +31,9 @@ class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener {
         private const val KEY_PLAY_WHEN_READY = "play_when_ready"
         private const val KEY_WINDOW = "window"
         private const val KEY_POSITION = "position"
+        private const val KEY_ID = "APKAIX3JJRW7RHDSNHGA"
+        private const val POLICY_STRING = "eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9kMXFmMG96c3M0OTR4di5jbG91ZGZyb250Lm5ldC8wODg1ZGMzNi0xODNlLTQzMjUtYWY3Ni05NDlmNmI4NzMwZjAwMU9LSHR0cEludHJvbXA0LyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE1NDE3ODk0ODN9fX1dfQ=="
+        private const val SIGNATURE = "NY1N6wkOWxDxGui2eCzHV9JswFU7PHnjHoXl8Dhz1Fv7a5sJxYzHe5tmNx9Iu0jGUotAki6+HtcsKEGycT0G3tBkp5JCCXo20KHx4ZWvQCcUGscKGmutcshHl8WtJ2gTHQ+LeNyCbpYeXWKsb64PaRYnWO2dg9GCxqAB8saZeSeDV6k6d3WnMH9HfUxCXntdcWJG1Mmtiu/UpfI6iSzwzG4YTMIwe8OvuzTwqjcXPoWnlelSIa798SOX+acWNoSQgvIfwx+mydcH7+y6EVeH9RHN5jamvj+WWh83szN+dd75J0CJNZ+xvQ5FmrUeEG+IZYYlHU/YXmwdljdcXQpkvA=="
     }
 
     private var player: SimpleExoPlayer? = null

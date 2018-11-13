@@ -2,25 +2,39 @@ package com.codingblocks.cbonlineapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
+import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.fragments.AnnouncementsFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
 import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
 import com.codingblocks.cbonlineapp.fragments.OverviewFragment
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.MyCourse
 import kotlinx.android.synthetic.main.activity_my_course.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 
 
-class MyCourseActivity : AppCompatActivity() {
+class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
     lateinit var courseId: String
+    private lateinit var database: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_course)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        database = AppDatabase.getInstance(this)
+
+        val dao = database.courseDao()
+        dao.getCourse(courseId).observe(this, Observer<MyCourse> {
+            info { it.title }
+        })
+
         setupViewPager()
         title = intent.getStringExtra("courseName")
         courseId = intent.getStringExtra("run_id")

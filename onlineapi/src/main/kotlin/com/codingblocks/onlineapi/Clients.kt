@@ -29,12 +29,12 @@ object Clients {
             MyCourse::class.java,
             MyRunAttempts::class.java,
             MyRunAttempt::class.java,
-            LectureVideo::class.java,
+            ContentVideoType::class.java,
             LectureContent::class.java,
-            LectureDocument::class.java,
+            ContentDocumentType::class.java,
             ContentProgress::class.java,
             CourseSection::class.java,
-            Lecture::class.java,
+            ContentLectureType::class.java,
             InstructorCourse::class.java
 
     )
