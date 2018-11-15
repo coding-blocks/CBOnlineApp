@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,8 +18,12 @@ import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_course.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
+import org.jetbrains.anko.toast
 
 
 class CourseActivity : AppCompatActivity(), AnkoLogger {
@@ -59,6 +62,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 .show()
 
 
+        val service = Clients.onlineV2PublicClient
 
         Clients.onlineV2PublicClient.courseById(courseId).enqueue(retrofitcallback { t, resp ->
             resp?.body()?.let { it ->
@@ -76,20 +80,24 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 val sectionAdapter = SectionsDataAdapter(ArrayList())
                 rvExpendableView.layoutManager = LinearLayoutManager(this)
                 rvExpendableView.adapter = sectionAdapter
-                for (item in sections!!) {
-                    Clients.onlineV2PublicClient.getSections(item.id!!).enqueue(retrofitcallback { throwable, response ->
-                        response?.body()?.let {
-                            info { it.toString() }
-                            sectionsList.add(it)
-                        }
+                sections!!.forEachIndexed { index, section ->
+                    GlobalScope.launch(Dispatchers.Main) {
+                        val request = service.getSections(section.id!!)
+                        val response = request.await()
+                        if (response.isSuccessful) {
+                            val value = response.body()!!
+                            value.order = index
+                            sectionsList.add(value)
+                            if (sectionsList.size == sections.size) {
+                                sectionsList.sortBy { it.order }
+                                sectionAdapter.setData(sectionsList)
 
-                    })
+                            }
+                        } else {
+                            toast("Error ${response.code()}")
+                        }
+                    }
                 }
-                Handler().postDelayed(
-                        {
-                            sectionAdapter.setData(sectionsList)
-                        }, 3000
-                )
             }
         })
 
@@ -119,8 +127,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
             override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
                 if (!p2) {
-                    info { "VIDEO_ID" + promoVideo!!.substring(30,41) }
-                    youtubePlayerInstance?.loadVideo(promoVideo!!.substring(30,41))
+                    info { "VIDEO_ID" + promoVideo!!.substring(30, 41) }
+                    youtubePlayerInstance?.loadVideo(promoVideo!!.substring(30, 41))
                 }
             }
         }

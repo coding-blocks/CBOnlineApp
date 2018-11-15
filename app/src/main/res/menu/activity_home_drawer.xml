@@ -13,6 +13,7 @@
             android:icon="@drawable/ic_school_black_24dp"
             android:title="All Courses" />
         <item
+            android:visible="false"
             android:id="@+id/nav_my_courses"
             android:icon="@drawable/ic_library_books_black_24dp"
             android:title="My Courses" />

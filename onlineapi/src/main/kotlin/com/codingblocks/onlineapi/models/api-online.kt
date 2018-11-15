@@ -1,12 +1,22 @@
 package com.codingblocks.onlineapi.models
 
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.ForeignKey
+import android.arch.persistence.room.PrimaryKey
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
 
+data class RatingModel(
+        val rating: String,
+        val count: Int,
+        val stats: List<Double>,
+        val userScore: Any?
+)
 
 open class BaseModel {
+    @PrimaryKey
     @Id
     @JvmField
     var id: String? = null
@@ -25,6 +35,7 @@ class Instructor : BaseModel() {
     @JvmField
     var courses: ArrayList<Course>? = null
 }
+
 @Type("instructor")
 class InstructorCourse : BaseModel() {
     @JvmField
@@ -47,6 +58,9 @@ class Sections : BaseModel() {
     var preminum: Boolean? = false
     @JvmField
     var status: String? = null
+
+    @JvmField
+    var order: Int? = null
 
     @Relationship("contents", resolve = true)
     @JvmField
@@ -157,36 +171,6 @@ class Course : BaseModel() {
 
 }
 
-@Type("run")
-class MyCourseRuns : BaseModel() {
-    @JvmField
-
-    var name: String? = null
-    @JvmField
-    var description: String? = null
-    @JvmField
-    var start: String? = null
-    @JvmField
-    var end: String? = null
-    @JvmField
-    var price: String? = null
-    @JvmField
-    var mrp: String? = null
-    @JvmField
-    @JsonProperty("enrollment-start")
-    val enrollmentStart: String? = null
-    @JvmField
-    @JsonProperty("enrollment-end")
-    val enrollmentEnd: String? = null
-    @Relationship("course", resolve = true)
-    @JvmField
-    var course: MyCourse? = null
-
-    @Relationship("run-attempts", resolve = true)
-    @JvmField
-    var run_attempts: ArrayList<MyRunAttempts>? = null
-
-}
 
 @Type("run_attempts")
 class MyRunAttempts : BaseModel() {
@@ -222,17 +206,41 @@ class MyRunAttempt : BaseModel() {
     @JvmField
     var run: MyCourseRuns? = null
 
-//    @JsonProperty("videos")
-//    @JvmField
-//    var videos: ArrayList<LectureVideo>? = null
-//
-//    @JsonProperty("content")
-//    @JvmField
-//    var contents: ArrayList<LectureContent>? = null
-//
-//    @JsonProperty("document")
-//    @JvmField
-//    var documents: ArrayList<LectureDocument>? = null
+}
+
+@Entity(tableName = "courseData")
+@Type("run")
+class MyCourseRuns : BaseModel() {
+    @JvmField
+    var name: String? = null
+    @JvmField
+    var description: String? = null
+    @JvmField
+    var start: String? = null
+    @JvmField
+    var end: String? = null
+    @JvmField
+    var price: String? = null
+    @JvmField
+    var mrp: String? = null
+    @JvmField
+    @JsonProperty("enrollment-start")
+    val enrollmentStart: String? = null
+    @JvmField
+    @JsonProperty("enrollment-end")
+    val enrollmentEnd: String? = null
+    @Relationship("course", resolve = true)
+    @JvmField
+    var course: MyCourse? = null
+
+    @Relationship("run-attempts", resolve = true)
+    @JvmField
+    var run_attempts: ArrayList<MyRunAttempts>? = null
+
+    @Relationship("sections", resolve = true)
+    @JvmField
+    var sections: ArrayList<CourseSection>? = null
+
 
 }
 
@@ -286,52 +294,14 @@ class MyCourse : BaseModel() {
 
 }
 
-@Type("video")
-class LectureVideo : BaseModel() {
-    @JvmField
-    var description: String? = null
-
-    @JvmField
-    @JsonProperty("content-id")
-    var content_id: String? = null
-
-    @JvmField
-    var duration: Long? = null
-
-    @JvmField
-    var name: String? = null
-
-    @JvmField
-    var url: String? = null
-
-    @JvmField
-    @JsonProperty("cover-image")
-    var coverImage: String? = null
-
-}
-@Type("progress")
-class ContentProgress : BaseModel() {
-
-    @JvmField
-    @JsonProperty("content-id")
-    var content_id: String? = null
-
-    @JvmField
-    @JsonProperty("created-at")
-    var createdAt: String? = null
-
-    @JvmField
-    @JsonProperty("updated-at")
-    var updatedAt: String? = null
-
-    @JvmField
-    var status: String? = null
-
-    @JvmField
-    @JsonProperty("run-attempt-id")
-    var run_attempt_id: String? = null
-
-}
+@Entity(
+        foreignKeys = [(ForeignKey(
+               entity =  MyCourseRuns::class,
+                parentColumns = ["id"],
+                childColumns = ["run_id"],
+                onDelete = ForeignKey.SET_NULL //or CASCADE
+        ))]
+)
 @Type("section")
 class CourseSection : BaseModel() {
 
@@ -359,9 +329,80 @@ class CourseSection : BaseModel() {
     @JsonProperty("run-id")
     var run_id: String? = null
 
+
+    @Relationship("contents", resolve = true)
+    @JvmField
+    var contents: ArrayList<LectureContent>? = null
+
 }
+
+@Type("content")
+class LectureContent : BaseModel() {
+
+    @JvmField
+    var contentable: String? = null
+
+    @JvmField
+    var duration: Long? = null
+
+    @JvmField
+    var title: String? = null
+
+    //    @Relationship("code-challenge", resolve = true)
+//    @JvmField
+//    var code_challenge: LectureContent? = null
+//
+    @Relationship("document", resolve = true)
+    @JvmField
+    var document: ContentDocumentType? = null
+
+    @Relationship("lecture", resolve = true)
+    @JvmField
+    var lecture: ContentLectureType? = null
+
+    @Relationship("progress", resolve = true)
+    @JvmField
+    var progress: ContentProgress? = null
+
+    @Relationship("video", resolve = true)
+    @JvmField
+    var video: ContentVideoType? = null
+
+//    @Relationship("qna", resolve = true)
+//    @JvmField
+//    var qna: LectureContent? = null
+
+}
+
+@Type("document")
+class ContentDocumentType : BaseModel() {
+
+    @JvmField
+    @JsonProperty("content-id")
+    var content_id: String? = null
+
+    @JvmField
+    var duration: Long? = null
+
+    @JvmField
+    var name: String? = null
+
+    @JvmField
+    @JsonProperty("updated-at")
+    val updatedAt: String? = null
+
+
+    @JvmField
+    var markdown: String? = null
+
+    @JvmField
+    @JsonProperty("pdf-link")
+    var pdf_link: String? = null
+
+}
+
 @Type("lecture")
-class Lecture : BaseModel() {
+class ContentLectureType : BaseModel() {
 
     @JvmField
     @JsonProperty("created-at")
@@ -389,9 +430,8 @@ class Lecture : BaseModel() {
 
 }
 
-
-@Type("content")
-class LectureContent : BaseModel() {
+@Type("video")
+class ContentVideoType : BaseModel() {
     @JvmField
     var description: String? = null
 
@@ -409,40 +449,35 @@ class LectureContent : BaseModel() {
     var url: String? = null
 
     @JvmField
-    @JsonProperty("cover-image")
-    var coverImage: String? = null
+    @JsonProperty("updated-at")
+    var updatedAt: String? = null
 
 }
-@Type("document")
-class LectureDocument : BaseModel() {
-    @JvmField
-    var description: String? = null
+
+@Type("progress")
+class ContentProgress : BaseModel() {
 
     @JvmField
     @JsonProperty("content-id")
     var content_id: String? = null
 
     @JvmField
-    var duration: Long? = null
+    @JsonProperty("created-at")
+    var createdAt: String? = null
 
     @JvmField
-    var name: String? = null
+    @JsonProperty("updated-at")
+    var updatedAt: String? = null
 
     @JvmField
-    var url: String? = null
+    var status: String? = null
 
     @JvmField
-    @JsonProperty("cover-image")
-    var coverImage: String? = null
+    @JsonProperty("run-attempt-id")
+    var run_attempt_id: String? = null
 
 }
 
-data class RatingModel(
-        val rating: String,
-        val count: Int,
-        val stats: List<Double>,
-        val userScore: Any?
-)
 
-data class User(val id: Int, val username: String, val firstname: String, val lastname: String, val photo: String, val email: String, val createdAt: String, val updatedAt: String)
+
 
