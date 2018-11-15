@@ -94,7 +94,7 @@ MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?, var conte
 
             }
 
-            Clients.api.getMyCourseProgress("JWT "+ prefs.SP_ACCESS_TOKEN_KEY,
+            Clients.api.getMyCourseProgress("JWT "+ prefs.SP_JWT_TOKEN_KEY,
                     data.run_attempts!![0].id!!).enqueue(retrofitcallback { t, progressResponse ->
                 progressResponse?.body().let {
                     var progress = it!!["percent"] as Double

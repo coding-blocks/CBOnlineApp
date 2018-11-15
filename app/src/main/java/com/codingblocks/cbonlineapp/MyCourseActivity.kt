@@ -28,12 +28,12 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        database = AppDatabase.getInstance(this)
+//        database = AppDatabase.getInstance(this)
 
-        val dao = database.courseDao()
-        dao.getCourse(courseId).observe(this, Observer<MyCourse> {
-            info { it.title }
-        })
+//        val dao = database.courseDao()
+//        dao.getCourse(courseId).observe(this, Observer<MyCourse> {
+//            info { it.title }
+//        })
 
         setupViewPager()
         title = intent.getStringExtra("courseName")
