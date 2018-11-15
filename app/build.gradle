@@ -14,6 +14,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    lintOptions {
+        abortOnError false
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -55,17 +58,14 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:1.1.1"
     // full exoplayer library
     implementation 'com.google.android.exoplayer:exoplayer:2.8.2'
-    // Test Deps
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+
     def anko = [
             // commons
             'commons',
             // layouts
-            'sdk25', 'appcompat-v7', 'support-v4',
+            'sdk25', 'appcompat-v7', 'support-v4', 'recyclerview-v7', 'constraint-layout', 'cardview-v7',
             // coroutines
-            'sdk25-coroutines', 'appcompat-v7-coroutines', 'coroutines', 'recyclerview-v7', 'constraint-layout', 'cardview-v7'
+            'sdk25-coroutines', 'appcompat-v7-coroutines', 'coroutines',
 //            'design', 'percent',
     ]
     anko.each { name ->
@@ -73,4 +73,9 @@ dependencies {
     }
     implementation project(':onlineapi')
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
+
+    // Test Deps
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 }
