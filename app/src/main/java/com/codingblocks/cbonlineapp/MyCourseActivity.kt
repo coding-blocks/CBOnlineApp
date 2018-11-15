@@ -12,6 +12,7 @@ import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
 import com.codingblocks.cbonlineapp.fragments.OverviewFragment
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourse
+import com.codingblocks.onlineapi.models.MyCourseRuns
 import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
@@ -31,8 +32,8 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         database = AppDatabase.getInstance(this)
 
         val dao = database.courseDao()
-        dao.getCourse(courseId).observe(this, Observer<MyCourse> {
-            info { it.title }
+        dao.getCourse(courseId).observe(this, Observer<MyCourseRuns> {
+            info { it.name }
         })
 
         setupViewPager()

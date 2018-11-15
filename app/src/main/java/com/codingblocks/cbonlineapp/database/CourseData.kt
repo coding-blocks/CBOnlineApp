@@ -5,7 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "courseData")
+@Entity
 data class CourseData(@PrimaryKey(autoGenerate = true) var id: Long?,
                       @ColumnInfo(name = "thumbnailUrl") var thumbnailUrl: String,
                       @ColumnInfo(name = "title") var title: String,
