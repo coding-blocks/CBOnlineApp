@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.codingblocks.onlineapi.models.MyCourse
+import com.codingblocks.onlineapi.models.MyCourseRuns
 
 @Database(
         version = 1, entities = [
-    MyCourse::class
+    MyCourseRuns::class
 ]
 )
 
