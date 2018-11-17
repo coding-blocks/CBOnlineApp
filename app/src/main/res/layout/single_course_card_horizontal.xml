@@ -31,7 +31,6 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e"
                 android:scaleType="centerCrop" />
 
 
@@ -161,7 +160,7 @@
             android:fontFamily="@font/cabin_medium"
             android:text="Prateek Narang, Arnav Gupta +2 more"
             android:textColor="@android:color/black"
-            android:textSize="15sp"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/courseInstrucImgView2"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -232,7 +231,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:fontFamily="@font/cabin_semibold"
+            android:fontFamily="@font/cabin_medium"
             android:textAlignment="center"
             android:textColor="@android:color/black"
             android:textSize="14sp"

@@ -1,8 +1,6 @@
 package com.codingblocks.onlineapi.models
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.PrimaryKey
+
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
@@ -16,7 +14,6 @@ data class RatingModel(
 )
 
 open class BaseModel {
-    @PrimaryKey
     @Id
     @JvmField
     var id: String? = null
@@ -208,7 +205,6 @@ class MyRunAttempt : BaseModel() {
 
 }
 
-@Entity(tableName = "courseData")
 @Type("run")
 class MyCourseRuns : BaseModel() {
     @JvmField
@@ -294,14 +290,7 @@ class MyCourse : BaseModel() {
 
 }
 
-@Entity(
-        foreignKeys = [(ForeignKey(
-               entity =  MyCourseRuns::class,
-                parentColumns = ["id"],
-                childColumns = ["run_id"],
-                onDelete = ForeignKey.SET_NULL //or CASCADE
-        ))]
-)
+
 @Type("section")
 class CourseSection : BaseModel() {
 

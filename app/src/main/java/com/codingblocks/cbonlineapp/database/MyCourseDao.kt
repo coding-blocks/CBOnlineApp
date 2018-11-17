@@ -2,8 +2,6 @@ package com.codingblocks.cbonlineapp.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.codingblocks.onlineapi.models.CourseSection
-import com.codingblocks.onlineapi.models.MyCourseRuns
 
 @Dao
 interface MyCourseDao {
