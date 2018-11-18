@@ -4,17 +4,17 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.codingblocks.onlineapi.models.MyCourseRuns
 
 @Database(
         version = 1, entities = [
-    MyCourseRuns::class
-]
+    CourseRun::class, CourseSection::class
+], exportSchema = false
 )
 
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun courseDao(): MyCourseDao
+    abstract fun courseDao(): CourseRunDao
+    abstract fun setionDao(): SectionDao
 
     companion object {
         @Volatile

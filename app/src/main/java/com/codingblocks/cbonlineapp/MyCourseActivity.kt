@@ -2,9 +2,11 @@ package com.codingblocks.cbonlineapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.CourseRun
 import com.codingblocks.cbonlineapp.fragments.AnnouncementsFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
 import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
@@ -12,6 +14,8 @@ import com.codingblocks.cbonlineapp.fragments.OverviewFragment
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+import kotlin.concurrent.thread
 
 
 class MyCourseActivity : AppCompatActivity(), AnkoLogger {
@@ -25,12 +29,14 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-//        database = AppDatabase.getInstance(this)
+        database = AppDatabase.getInstance(this)
 
-//        val dao = database.courseDao()
-//        dao.getCourse(courseId).observe(this, Observer<MyCourse> {
-//            info { it.title }
-//        })
+        val runDao = database.courseDao()
+        val sectionDao = database.courseDao()
+
+        runDao.getCourse().observe(this, Observer<CourseRun> {
+            info { it.name }
+        })
 
 
         setupViewPager()
@@ -39,7 +45,11 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
         Clients.onlineV2PublicClient.enrolledCourseById("JWT " + prefs.SP_JWT_TOKEN_KEY, courseId).enqueue(retrofitcallback { throwable, response ->
             response?.body().let {
-
+                val run = CourseRun(it?.run?.name!!,
+                        it.run?.description!!, it.run?.start!!,
+                        it.run?.end!!, it.run?.price!!,
+                        it.run?.mrp!!, it.run?.courseId!!)
+                thread { runDao.insert(run) }
 
             }
         })

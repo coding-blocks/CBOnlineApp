@@ -79,21 +79,21 @@ class Contents : BaseModel() {
 
 }
 
-class SectionContent {
-    val id: String? = null
+class SectionContent : BaseModel() {
+    @JvmField
     val order: Int? = null
-    val createdAt: String? = null
+    @JvmField
+    @JsonProperty("updated-at")
     val updatedAt: String? = null
-    val sectionId: String? = null
+    @JvmField
+    @JsonProperty("content-id")
     val contentId: String? = null
-    val updatedById: String? = null
 }
 
 
 @Type("runs")
 class Runs : BaseModel() {
     @JvmField
-
     var name: String? = null
     @JvmField
     var description: String? = null
@@ -219,6 +219,9 @@ class MyCourseRuns : BaseModel() {
     var price: String? = null
     @JvmField
     var mrp: String? = null
+    @JsonProperty("course-id")
+    @JvmField
+    var courseId: String? = null
     @JvmField
     @JsonProperty("enrollment-start")
     val enrollmentStart: String? = null
@@ -336,6 +339,11 @@ class LectureContent : BaseModel() {
 
     @JvmField
     var title: String? = null
+
+    @JvmField
+    @JsonProperty("section-content")
+    var section_content: SectionContent? = null
+
 
     //    @Relationship("code-challenge", resolve = true)
 //    @JvmField
