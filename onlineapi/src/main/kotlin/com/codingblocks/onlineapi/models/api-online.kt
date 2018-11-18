@@ -86,8 +86,8 @@ class SectionContent : BaseModel() {
     @JsonProperty("updated-at")
     val updatedAt: String? = null
     @JvmField
-    @JsonProperty("content-id")
-    val contentId: String? = null
+    @JsonProperty("section-id")
+    val sectionId: String? = null
 }
 
 

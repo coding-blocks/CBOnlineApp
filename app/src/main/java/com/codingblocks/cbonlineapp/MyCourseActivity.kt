@@ -35,7 +35,8 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         val sectionDao = database.courseDao()
 
         runDao.getCourse().observe(this, Observer<CourseRun> {
-            info { it.name }
+            info { it
+            }
         })
 
 
@@ -48,7 +49,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                 val run = CourseRun(it?.run?.name!!,
                         it.run?.description!!, it.run?.start!!,
                         it.run?.end!!, it.run?.price!!,
-                        it.run?.mrp!!, it.run?.courseId!!)
+                        it.run?.mrp!!, it.run?.courseId!!, it.id!!)
                 thread { runDao.insert(run) }
 
             }

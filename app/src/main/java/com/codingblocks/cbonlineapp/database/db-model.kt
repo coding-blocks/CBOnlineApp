@@ -15,14 +15,15 @@ open class BaseModel(
 
 @Entity
 class CourseRun(
-        var name: String = "",
-        var description: String = "",
-        var start: String = "",
-        var end: String = "",
-        var price: String = "",
-        var mrp: String = "",
-        var courseId: String = ""
-) : BaseModel()
+        var name: String,
+        var description: String,
+        var start: String,
+        var end: String,
+        var price: String,
+        var mrp: String,
+        var courseId: String,
+        id: String
+) : BaseModel(id)
 
 @Entity(
         foreignKeys = [(ForeignKey(
@@ -33,21 +34,32 @@ class CourseRun(
         ))]
 )
 class CourseSection(
-        var name: String = "",
-        var order: Int = 0,
-        var premium: Boolean = false,
-        var status: String = "",
-        var run_id: String = "") : BaseModel()
+        var name: String,
+        var order: Int,
+        var premium: Boolean,
+        var status: String,
+        var run_id: String,
+        id: String
+) : BaseModel(id)
 
 
-@Entity
+@Entity(
+        foreignKeys = [(ForeignKey(
+                entity = CourseSection::class,
+                parentColumns = ["id"],
+                childColumns = ["section_id"],
+                onDelete = ForeignKey.SET_NULL //or CASCADE
+        ))]
+)
 class CourseContent(
-        var progress: String = "UNDONE",
-        var title: String = "",
-        var duration: Long = 0,
-        var contentable: String = "",
-        var order: Int = 0
-) : BaseModel()
+        var progress: String,
+        var title: String,
+        var duration: Long,
+        var contentable: String,
+        var order: Int,
+        var setion_id: String,
+        id: String
+) : BaseModel(id)
 
 @Entity(
         foreignKeys = [(ForeignKey(
@@ -57,29 +69,13 @@ class CourseContent(
                 onDelete = ForeignKey.SET_NULL //or CASCADE
         ))]
 )
-data class ContentLecture(
-        var name: String = "",
-        var duration: Long = 0,
-        var url: String = "",
-        var content_id: String = ""
-
-) : BaseModel()
-
-@Entity(
-        foreignKeys = [(ForeignKey(
-                entity = CourseContent::class,
-                parentColumns = ["id"],
-                childColumns = ["content_id"],
-                onDelete = ForeignKey.SET_NULL //or CASCADE
-        ))]
-)
-data class ContentVideo(
-        var name: String = "",
-        var duration: Long = 0,
-        var description: String = "",
-        var url: String = "",
-        var content_id: String = ""
-) : BaseModel()
+class ContentLecture(
+        var name: String,
+        var duration: Long,
+        var url: String,
+        var content_id: String,
+        id: String
+) : BaseModel(id)
 
 @Entity(
         foreignKeys = [(ForeignKey(
@@ -89,12 +85,29 @@ data class ContentVideo(
                 onDelete = ForeignKey.SET_NULL //or CASCADE
         ))]
 )
-data class ContentDocument(
-        var name: String = "",
-        var pdf_link: String = "",
-        var content_id: String = ""
+class ContentVideo(
+        var name: String,
+        var duration: Long,
+        var description: String,
+        var url: String,
+        var content_id: String,
+        id: String
+) : BaseModel(id)
 
-) : BaseModel()
+@Entity(
+        foreignKeys = [(ForeignKey(
+                entity = CourseContent::class,
+                parentColumns = ["id"],
+                childColumns = ["content_id"],
+                onDelete = ForeignKey.SET_NULL //or CASCADE
+        ))]
+)
+class ContentDocument(
+        var name: String,
+        var pdf_link: String,
+        var content_id: String,
+        id: String
+) : BaseModel(id)
 
 
 

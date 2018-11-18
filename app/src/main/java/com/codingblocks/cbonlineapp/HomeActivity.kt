@@ -54,19 +54,27 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             info { prefs.SP_ACCESS_TOKEN_KEY }
             Clients.api.getMe("JWT " + prefs.SP_JWT_TOKEN_KEY).enqueue(retrofitcallback { t, resp ->
                 resp?.body()?.let {
-                    val jSONObject = resp.body()!!.getAsJsonObject("data").getAsJsonObject("attributes")
-                    Picasso.get().load(jSONObject.get("photo").asString).into(nav_header_imageView)
+                    if (resp.isSuccessful) {
+                        val jSONObject = resp.body()!!.getAsJsonObject("data").getAsJsonObject("attributes")
+                        Picasso.get().load(jSONObject.get("photo").asString).into(nav_header_imageView)
 //                nav_header_username_textView.text = jSONObject.get("firstname").asString
-                    login_button.text = "Logout"
-                    login_button.setOnClickListener {
-                        prefs.SP_ACCESS_TOKEN_KEY = prefs.ACCESS_TOKEN
-                        prefs.SP_JWT_TOKEN_KEY = prefs.JWT_TOKEN
-                        startActivity(intentFor<LoginActivity>().singleTop())
-                        finish()
+                        login_button.text = "Logout"
+                        login_button.setOnClickListener {
+                            prefs.SP_ACCESS_TOKEN_KEY = prefs.ACCESS_TOKEN
+                            prefs.SP_JWT_TOKEN_KEY = prefs.JWT_TOKEN
+                            startActivity(intentFor<LoginActivity>().singleTop())
+                            finish()
+                        }
+                        val nav_menu = nav_view.menu
+                        nav_menu.findItem(R.id.nav_my_courses).setVisible(true)
+                    } else {
+                        nav_view.getHeaderView(0).login_button.setOnClickListener {
+                            startActivity(intentFor<LoginActivity>().singleTop())
+                        }
                     }
-                    val nav_menu = nav_view.menu
-                    nav_menu.findItem(R.id.nav_my_courses).setVisible(true)
+
                 }
+
             })
         } else {
             nav_view.getHeaderView(0).login_button.setOnClickListener {
