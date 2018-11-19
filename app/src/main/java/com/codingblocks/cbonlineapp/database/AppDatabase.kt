@@ -7,7 +7,9 @@ import androidx.room.RoomDatabase
 
 @Database(
         version = 1, entities = [
-    CourseRun::class, CourseSection::class
+    CourseRun::class,
+    CourseSection::class,
+    CourseContent::class
 ], exportSchema = false
 )
 
@@ -15,6 +17,8 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun courseDao(): CourseRunDao
     abstract fun setionDao(): SectionDao
+    abstract fun contentDao(): ContentDao
+
 
     companion object {
         @Volatile

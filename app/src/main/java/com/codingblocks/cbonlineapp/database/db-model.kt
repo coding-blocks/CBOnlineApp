@@ -7,23 +7,24 @@ import androidx.room.PrimaryKey
 
 open class BaseModel(
         @NonNull
-        @PrimaryKey
-        var id: String = "",
+
         var updatedAt: String = ""
 )
 
 
 @Entity
-class CourseRun(
+data class CourseRun(
+        @PrimaryKey
+        var id: String,
+        var attempt_id: String,
         var name: String,
         var description: String,
         var start: String,
         var end: String,
         var price: String,
         var mrp: String,
-        var courseId: String,
-        id: String
-) : BaseModel(id)
+        var courseId: String
+) : BaseModel()
 
 @Entity(
         foreignKeys = [(ForeignKey(
@@ -33,14 +34,15 @@ class CourseRun(
                 onDelete = ForeignKey.SET_NULL //or CASCADE
         ))]
 )
-class CourseSection(
+data class CourseSection(
+        @PrimaryKey
+        var id: String,
         var name: String,
         var order: Int,
         var premium: Boolean,
         var status: String,
-        var run_id: String,
-        id: String
-) : BaseModel(id)
+        var run_id: String
+) : BaseModel()
 
 
 @Entity(
@@ -51,15 +53,16 @@ class CourseSection(
                 onDelete = ForeignKey.SET_NULL //or CASCADE
         ))]
 )
-class CourseContent(
+data class CourseContent(
+        @PrimaryKey
+        var id: String,
         var progress: String,
         var title: String,
         var duration: Long,
         var contentable: String,
         var order: Int,
-        var setion_id: String,
-        id: String
-) : BaseModel(id)
+        var section_id: String
+) : BaseModel()
 
 @Entity(
         foreignKeys = [(ForeignKey(

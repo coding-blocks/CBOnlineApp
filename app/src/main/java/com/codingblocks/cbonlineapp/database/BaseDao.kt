@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.database
 
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Update
 
 interface BaseDao<T> {
@@ -11,8 +12,11 @@ interface BaseDao<T> {
      *
      * @param obj the object to be inserted.
      */
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(obj: T)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertAll(obj: ArrayList<T>)
 
     /**
      * Insert an array of objects in the database.

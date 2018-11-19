@@ -6,7 +6,9 @@ import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.CourseContent
 import com.codingblocks.cbonlineapp.database.CourseRun
+import com.codingblocks.cbonlineapp.database.CourseSection
 import com.codingblocks.cbonlineapp.fragments.AnnouncementsFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
 import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
@@ -27,30 +29,61 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_course)
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        title = intent.getStringExtra("courseName")
+        courseId = intent.getStringExtra("run_id")
         database = AppDatabase.getInstance(this)
 
         val runDao = database.courseDao()
-        val sectionDao = database.courseDao()
+        val sectionDao = database.setionDao()
+        val contentDao = database.contentDao()
 
-        runDao.getCourse().observe(this, Observer<CourseRun> {
-            info { it
+
+        runDao.getCourse(courseId).observe(this, Observer<CourseRun> {
+            info {
+                "course$it"
+            }
+        })
+        sectionDao.getSections().observe(this, Observer<List<CourseSection>> {
+            info {
+                "sections$it"
+            }
+        })
+        contentDao.getContent().observe(this, Observer<List<CourseContent>> {
+            info {
+                "content$it"
             }
         })
 
-
         setupViewPager()
-        title = intent.getStringExtra("courseName")
-        courseId = intent.getStringExtra("run_id")
+
 
         Clients.onlineV2PublicClient.enrolledCourseById("JWT " + prefs.SP_JWT_TOKEN_KEY, courseId).enqueue(retrofitcallback { throwable, response ->
             response?.body().let {
-                val run = CourseRun(it?.run?.name!!,
+                val run = CourseRun(it?.run?.id!!, it.id!!, it.run?.name!!,
                         it.run?.description!!, it.run?.start!!,
                         it.run?.end!!, it.run?.price!!,
-                        it.run?.mrp!!, it.run?.courseId!!, it.id!!)
+                        it.run?.mrp!!, it.run?.courseId!!)
                 thread { runDao.insert(run) }
+                val sections: ArrayList<CourseSection> = ArrayList()
+                for (section in it.run?.sections!!) {
+                    sections.add(CourseSection(section.id!!, section.name!!, section.order!!, section.premium!!, section.status!!, section.run_id!!))
+                    val contents: ArrayList<CourseContent> = ArrayList()
+                    for (content in section.contents!!) {
+                        contents.add(CourseContent(
+                                content.id!!,
+                                content.progress?.status!!,
+                                content.title!!,
+                                content.duration!!,
+                                content.contentable!!,
+                                content.section_content?.order!!,
+                                content.section_content?.sectionId!!
+                                ))
+                    }
+                    thread { contentDao.insertAll(contents) }
+                }
+                thread { sectionDao.insertAll(sections) }
 
             }
         })
