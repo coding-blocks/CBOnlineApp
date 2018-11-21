@@ -35,7 +35,7 @@ object Clients {
             ContentProgress::class.java,
             CourseSection::class.java,
             ContentLectureType::class.java,
-            InstructorCourse::class.java
+            InstructorSingle::class.java
 
     )
     private val relationshipResolver = RelationshipResolver {

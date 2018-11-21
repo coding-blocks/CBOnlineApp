@@ -5,10 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
-import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.CourseContent
-import com.codingblocks.cbonlineapp.database.CourseRun
-import com.codingblocks.cbonlineapp.database.CourseSection
+import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.fragments.AnnouncementsFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
 import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
@@ -35,9 +32,12 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         courseId = intent.getStringExtra("run_id")
         database = AppDatabase.getInstance(this)
 
-        val runDao = database.courseDao()
+        val runDao = database.courseRunDao()
         val sectionDao = database.setionDao()
         val contentDao = database.contentDao()
+        val courseDao = database.courseDao()
+        val instructorDao = database.instructorDao()
+
 
 
         runDao.getCourse(courseId).observe(this, Observer<CourseRun> {
@@ -55,35 +55,64 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                 "content$it"
             }
         })
+        courseDao.getCourses().observe(this, Observer<List<Course>> {
+            info {
+                "course$it"
+            }
+        })
+        instructorDao.getInstructors().observe(this, Observer<List<Instructor>> {
+            info {
+                "instructor$it"
+            }
+        })
 
         setupViewPager()
 
 
         Clients.onlineV2PublicClient.enrolledCourseById("JWT " + prefs.SP_JWT_TOKEN_KEY, courseId).enqueue(retrofitcallback { throwable, response ->
             response?.body().let {
-                val run = CourseRun(it?.run?.id!!, it.id!!, it.run?.name!!,
+
+                val course = Course(it?.run?.course?.id!!, it.run?.course?.title!!,
+                        it.run?.course?.subtitle!!, it.run?.course?.logo!!,
+                        it.run?.course?.summary!!, it.run?.course?.promoVideo!!,
+                        it.run?.course?.difficulty!!, it.run?.course?.reviewCount!!,
+                        it.run?.course?.rating!!, it.run?.course?.slug!!,
+                        it.run?.course?.coverImage!!, it.run?.course?.updatedAt!!)
+
+                val run = CourseRun(it.run?.id!!, it.id!!, it.run?.name!!,
                         it.run?.description!!, it.run?.start!!,
                         it.run?.end!!, it.run?.price!!,
-                        it.run?.mrp!!, it.run?.courseId!!)
-                thread { runDao.insert(run) }
-                val sections: ArrayList<CourseSection> = ArrayList()
-                for (section in it.run?.sections!!) {
-                    sections.add(CourseSection(section.id!!, section.name!!, section.order!!, section.premium!!, section.status!!, section.run_id!!))
-                    val contents: ArrayList<CourseContent> = ArrayList()
-                    for (content in section.contents!!) {
-                        contents.add(CourseContent(
-                                content.id!!,
-                                content.progress?.status!!,
-                                content.title!!,
-                                content.duration!!,
-                                content.contentable!!,
-                                content.section_content?.order!!,
-                                content.section_content?.sectionId!!
-                                ))
+                        it.run?.mrp!!, it.run?.courseId!!, it.run?.updatedAt!!)
+                thread {
+                    courseDao.insert(course)
+                    runDao.insert(run)
+
+                    //Course Instructors List
+                    for (instructor in it.run?.course!!.instructors!!) {
+                        instructorDao.insert(Instructor(instructor.id!!, instructor.name!!,
+                                instructor.description!!, instructor.photo!!,
+                                instructor.updatedAt!!, instructor.instructorCourse?.courseId!!))
                     }
-                    thread { contentDao.insertAll(contents) }
+
+                    //Course Sections List
+                    for (section in it.run?.sections!!) {
+                        sectionDao.insert(CourseSection(section.id!!, section.name!!,
+                                section.order!!, section.premium!!, section.status!!,
+                                section.run_id!!, section.updatedAt!!))
+
+                        //Section Contents List
+                        val contents: ArrayList<CourseContent> = ArrayList()
+                        for (content in section.contents!!) {
+                            contents.add(CourseContent(
+                                    content.id!!, "UNDONE",
+                                    content.title!!, content.duration!!,
+                                    content.contentable!!, content.section_content?.order!!,
+                                    content.section_content?.sectionId!!, content.section_content?.updatedAt!!
+                            ))
+                        }
+                        contentDao.insertAll(contents)
+                    }
                 }
-                thread { sectionDao.insertAll(sections) }
 
             }
         })

@@ -17,10 +17,13 @@ open class BaseModel {
     @Id
     @JvmField
     var id: String? = null
+    @JvmField
+    @JsonProperty("updated-at")
+    var updatedAt: String? = null
 }
 
 @Type("instructors")
-class Instructor : BaseModel() {
+open class Instructor : BaseModel() {
     @JvmField
     var name: String? = null
     @JvmField
@@ -31,20 +34,23 @@ class Instructor : BaseModel() {
     @Relationship("courses", resolve = true)
     @JvmField
     var courses: ArrayList<Course>? = null
+
+    @JsonProperty("instructor-course")
+    @JvmField
+    var instructorCourse: InstructorCourse? = null
+
+
 }
 
 @Type("instructor")
+class InstructorSingle : Instructor() {
+
+}
+
 class InstructorCourse : BaseModel() {
     @JvmField
-    var name: String? = null
-    @JvmField
-    var description: String? = null
-    @JvmField
-    var photo: String? = null
-
-    @Relationship("courses", resolve = true)
-    @JvmField
-    var courses: ArrayList<Course>? = null
+    @JsonProperty("course-id")
+    var courseId: String? = null
 }
 
 @Type("sections")
@@ -82,9 +88,6 @@ class Contents : BaseModel() {
 class SectionContent : BaseModel() {
     @JvmField
     val order: Int? = null
-    @JvmField
-    @JsonProperty("updated-at")
-    val updatedAt: String? = null
     @JvmField
     @JsonProperty("section-id")
     val sectionId: String? = null
@@ -203,6 +206,7 @@ class MyRunAttempt : BaseModel() {
     @JvmField
     var run: MyCourseRuns? = null
 
+
 }
 
 @Type("run")
@@ -239,6 +243,10 @@ class MyCourseRuns : BaseModel() {
     @Relationship("sections", resolve = true)
     @JvmField
     var sections: ArrayList<CourseSection>? = null
+
+    @JvmField
+    @JsonProperty("whatsapp-link")
+    var whatsappLink: String? = null
 
 
 }
@@ -287,9 +295,10 @@ class MyCourse : BaseModel() {
     @JvmField
     var instructors: ArrayList<Instructor>? = null
 
-    @Relationship("runs", resolve = true)
-    @JvmField
-    var runs: ArrayList<Runs>? = null
+//    @Relationship("runs", resolve = true)
+//    @JvmField
+//    var runs: ArrayList<Runs>? = null
+
 
 }
 
@@ -313,9 +322,6 @@ class CourseSection : BaseModel() {
     @JvmField
     var status: String? = null
 
-    @JvmField
-    @JsonProperty("updated-at")
-    var updatedAt: String? = null
 
     @JvmField
     @JsonProperty("run-id")
@@ -384,10 +390,6 @@ class ContentDocumentType : BaseModel() {
     @JvmField
     var name: String? = null
 
-    @JvmField
-    @JsonProperty("updated-at")
-    val updatedAt: String? = null
-
 
     @JvmField
     var markdown: String? = null
@@ -418,10 +420,6 @@ class ContentLectureType : BaseModel() {
     var status: String? = null
 
     @JvmField
-    @JsonProperty("updated-at")
-    var updatedAt: String? = null
-
-    @JvmField
     @JsonProperty("video-url")
     var video_url: String? = null
 
@@ -445,9 +443,6 @@ class ContentVideoType : BaseModel() {
     @JvmField
     var url: String? = null
 
-    @JvmField
-    @JsonProperty("updated-at")
-    var updatedAt: String? = null
 
 }
 
@@ -462,9 +457,6 @@ class ContentProgress : BaseModel() {
     @JsonProperty("created-at")
     var createdAt: String? = null
 
-    @JvmField
-    @JsonProperty("updated-at")
-    var updatedAt: String? = null
 
     @JvmField
     var status: String? = null

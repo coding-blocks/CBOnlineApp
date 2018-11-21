@@ -9,15 +9,20 @@ import androidx.room.RoomDatabase
         version = 1, entities = [
     CourseRun::class,
     CourseSection::class,
-    CourseContent::class
+    CourseContent::class,
+    Instructor::class,
+    Course::class
 ], exportSchema = false
 )
 
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun courseDao(): CourseRunDao
+    abstract fun courseRunDao(): CourseRunDao
     abstract fun setionDao(): SectionDao
     abstract fun contentDao(): ContentDao
+    abstract fun instructorDao(): InstructorDao
+    abstract fun courseDao(): CourseDao
+
 
 
     companion object {
