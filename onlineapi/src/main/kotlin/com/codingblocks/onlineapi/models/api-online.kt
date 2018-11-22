@@ -244,6 +244,11 @@ class MyCourseRuns : BaseModel() {
     @JvmField
     var sections: ArrayList<CourseSection>? = null
 
+
+    @Relationship("announcements", resolve = true)
+    @JvmField
+    var announcements: ArrayList<Announcement>? = null
+
     @JvmField
     @JsonProperty("whatsapp-link")
     var whatsappLink: String? = null
@@ -351,10 +356,10 @@ class LectureContent : BaseModel() {
     var section_content: SectionContent? = null
 
 
-    //    @Relationship("code-challenge", resolve = true)
-//    @JvmField
-//    var code_challenge: LectureContent? = null
-//
+    @Relationship("code-challenge", resolve = true)
+    @JvmField
+    var code_challenge: ContentCodeChallenge? = null
+    //
     @Relationship("document", resolve = true)
     @JvmField
     var document: ContentDocumentType? = null
@@ -371,10 +376,44 @@ class LectureContent : BaseModel() {
     @JvmField
     var video: ContentVideoType? = null
 
-//    @Relationship("qna", resolve = true)
-//    @JvmField
-//    var qna: LectureContent? = null
+    @Relationship("qna", resolve = true)
+    @JvmField
+    var qna: ContentQna? = null
 
+}
+
+@Type("code_challenge")
+class ContentCodeChallenge : BaseModel() {
+    @JvmField
+    @JsonProperty("content-id")
+    var content_id: String? = null
+
+    @JvmField
+    @JsonProperty("hb-contest-id")
+    var hb_contest_id: Int? = null
+
+    @JvmField
+    var name: String? = null
+
+
+    @JvmField
+    @JsonProperty("hb-problem-id")
+    var hb_problem_id: Int? = null
+
+}
+
+@Type("qna")
+class ContentQna : BaseModel() {
+    @JvmField
+    @JsonProperty("content-id")
+    var content_id: String? = null
+
+    @JvmField
+    @JsonProperty("q-id")
+    var q_id: Int? = null
+
+    @JvmField
+    var name: String? = null
 }
 
 @Type("document")
@@ -464,6 +503,30 @@ class ContentProgress : BaseModel() {
     @JvmField
     @JsonProperty("run-attempt-id")
     var run_attempt_id: String? = null
+
+}
+
+@Type("announcement")
+class Announcement : BaseModel() {
+
+    @JvmField
+    @JsonProperty("user-id")
+    var user_id: String? = null
+
+    @JvmField
+    @JsonProperty("created-at")
+    var createdAt: String? = null
+
+
+    @JvmField
+    var text: String? = null
+
+    @JvmField
+    var title: String? = null
+
+    @JvmField
+    @JsonProperty("run-id")
+    var run_id: String? = null
 
 }
 

@@ -44,7 +44,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_holder, AllCourseFragment())
         transaction.commit()
-
+        nav_view.getHeaderView(0).login_button.setOnClickListener {
+            startActivity(intentFor<LoginActivity>().singleTop())
+        }
         fetchUser()
     }
 
@@ -53,7 +55,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (!prefs.SP_ACCESS_TOKEN_KEY.equals("access_token")) {
             info { prefs.SP_ACCESS_TOKEN_KEY }
             Clients.api.getMe("JWT " + prefs.SP_JWT_TOKEN_KEY).enqueue(retrofitcallback { t, resp ->
-                resp?.body()?.let {
+                resp?.body()?.let { it ->
                     if (resp.isSuccessful) {
                         val jSONObject = resp.body()!!.getAsJsonObject("data").getAsJsonObject("attributes")
                         Picasso.get().load(jSONObject.get("photo").asString).into(nav_header_imageView)
@@ -74,6 +76,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
 
                 }
+                info { "login error ${t?.localizedMessage}" }
 
             })
         } else {

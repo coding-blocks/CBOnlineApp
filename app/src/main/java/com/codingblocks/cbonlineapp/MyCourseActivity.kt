@@ -19,7 +19,7 @@ import kotlin.concurrent.thread
 
 class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
-    lateinit var courseId: String
+    lateinit var attempt_Id: String
     private lateinit var database: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +29,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = intent.getStringExtra("courseName")
-        courseId = intent.getStringExtra("run_id")
+        attempt_Id = intent.getStringExtra("attempt_id")
         database = AppDatabase.getInstance(this)
 
         val runDao = database.courseRunDao()
@@ -40,27 +40,27 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
 
 
-        runDao.getCourse(courseId).observe(this, Observer<CourseRun> {
+        runDao.getCourseRun(attempt_Id).observe(this, Observer<CourseRun> {
             info {
                 "course$it"
             }
         })
-        sectionDao.getSections().observe(this, Observer<List<CourseSection>> {
+        sectionDao.getCourseSection(attempt_Id).observe(this, Observer<List<CourseSection>> {
             info {
                 "sections$it"
             }
         })
-        contentDao.getContent().observe(this, Observer<List<CourseContent>> {
+        contentDao.getCourseContents(attempt_Id).observe(this, Observer<List<CourseContent>> {
             info {
                 "content$it"
             }
         })
-        courseDao.getCourses().observe(this, Observer<List<Course>> {
+        courseDao.getCourse(attempt_Id).observe(this, Observer<Course> {
             info {
                 "course$it"
             }
         })
-        instructorDao.getInstructors().observe(this, Observer<List<Instructor>> {
+        instructorDao.getInstructors(attempt_Id).observe(this, Observer<List<Instructor>> {
             info {
                 "instructor$it"
             }
@@ -69,7 +69,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         setupViewPager()
 
 
-        Clients.onlineV2PublicClient.enrolledCourseById("JWT " + prefs.SP_JWT_TOKEN_KEY, courseId).enqueue(retrofitcallback { throwable, response ->
+        Clients.onlineV2PublicClient.enrolledCourseById("JWT " + prefs.SP_JWT_TOKEN_KEY, attempt_Id).enqueue(retrofitcallback { throwable, response ->
             response?.body().let {
 
                 val course = Course(it?.run?.course?.id!!, it.run?.course?.title!!,
@@ -77,9 +77,9 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                         it.run?.course?.summary!!, it.run?.course?.promoVideo!!,
                         it.run?.course?.difficulty!!, it.run?.course?.reviewCount!!,
                         it.run?.course?.rating!!, it.run?.course?.slug!!,
-                        it.run?.course?.coverImage!!, it.run?.course?.updatedAt!!)
+                        it.run?.course?.coverImage!!, attempt_Id, it.run?.course?.updatedAt!!)
 
-                val run = CourseRun(it.run?.id!!, it.id!!, it.run?.name!!,
+                val run = CourseRun(it.run?.id!!, attempt_Id, it.run?.name!!,
                         it.run?.description!!, it.run?.start!!,
                         it.run?.end!!, it.run?.price!!,
                         it.run?.mrp!!, it.run?.courseId!!, it.run?.updatedAt!!)
@@ -91,14 +91,14 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                     for (instructor in it.run?.course!!.instructors!!) {
                         instructorDao.insert(Instructor(instructor.id!!, instructor.name!!,
                                 instructor.description!!, instructor.photo!!,
-                                instructor.updatedAt!!, instructor.instructorCourse?.courseId!!))
+                                instructor.updatedAt!!, attempt_Id, instructor.instructorCourse?.courseId!!))
                     }
 
                     //Course Sections List
                     for (section in it.run?.sections!!) {
                         sectionDao.insert(CourseSection(section.id!!, section.name!!,
                                 section.order!!, section.premium!!, section.status!!,
-                                section.run_id!!, section.updatedAt!!))
+                                section.run_id!!, attempt_Id, section.updatedAt!!))
 
                         //Section Contents List
                         val contents: ArrayList<CourseContent> = ArrayList()
@@ -107,7 +107,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                                     content.id!!, "UNDONE",
                                     content.title!!, content.duration!!,
                                     content.contentable!!, content.section_content?.order!!,
-                                    content.section_content?.sectionId!!, content.section_content?.updatedAt!!
+                                    content.section_content?.sectionId!!, attempt_Id, content.section_content?.updatedAt!!
                             ))
                         }
                         contentDao.insertAll(contents)
@@ -115,6 +115,8 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                 }
 
             }
+            info { "error ${throwable?.localizedMessage}" }
+
         })
 
     }
