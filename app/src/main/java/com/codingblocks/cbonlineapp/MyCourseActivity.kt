@@ -70,22 +70,44 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
 
         Clients.onlineV2PublicClient.enrolledCourseById("JWT " + prefs.SP_JWT_TOKEN_KEY, attempt_Id).enqueue(retrofitcallback { throwable, response ->
-            response?.body().let {
+            response?.body()?.let {
 
-                val course = Course(it?.run?.course?.id!!, it.run?.course?.title!!,
-                        it.run?.course?.subtitle!!, it.run?.course?.logo!!,
-                        it.run?.course?.summary!!, it.run?.course?.promoVideo!!,
-                        it.run?.course?.difficulty!!, it.run?.course?.reviewCount!!,
-                        it.run?.course?.rating!!, it.run?.course?.slug!!,
-                        it.run?.course?.coverImage!!, attempt_Id, it.run?.course?.updatedAt!!)
+                val course = it.run?.course?.run {
+                    Course (
+                            id!!,
+                            title!!,
+                            subtitle!!,
+                            logo!!,
+                            summary!!,
+                            promoVideo!!,
+                            difficulty!!,
+                            reviewCount!!,
+                            rating!!,
+                            slug!!,
+                            coverImage!!,
+                            attempt_Id,
+                            updatedAt!!
+                    )
+                }
 
-                val run = CourseRun(it.run?.id!!, attempt_Id, it.run?.name!!,
-                        it.run?.description!!, it.run?.start!!,
-                        it.run?.end!!, it.run?.price!!,
-                        it.run?.mrp!!, it.run?.courseId!!, it.run?.updatedAt!!)
+                val run = it.run?.run {
+                    CourseRun(
+                            id!!,
+                            attempt_Id,
+                            name!!,
+                            description!!,
+                            start!!,
+                            end!!,
+                            price!!,
+                            mrp!!,
+                            courseId!!,
+                            updatedAt!!
+                    )
+                }
+
                 thread {
-                    courseDao.insert(course)
-                    runDao.insert(run)
+                    courseDao.insert(course!!)
+                    runDao.insert(run!!)
 
                     //Course Instructors List
                     for (instructor in it.run?.course!!.instructors!!) {

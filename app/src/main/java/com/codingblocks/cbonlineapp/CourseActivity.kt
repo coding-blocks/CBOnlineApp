@@ -139,11 +139,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     fun fetchRating() {
         Clients.api.getCourseRating(courseId).enqueue(retrofitcallback { throwable, response ->
-            response?.body().let { it ->
-
-                coursePageRatingCountTv.text = it?.count.toString() + " Rating"
-                coursePageRatingTv.text = it?.rating + " out of 5 stars"
-                coursePageRatingBar.rating = it?.rating?.toFloat()!!
+            response?.body().let { it?.apply {
+                coursePageRatingCountTv.text = count.toString() + " Rating"
+                coursePageRatingTv.text = rating + " out of 5 stars"
+                coursePageRatingBar.rating = rating?.toFloat()!!
                 for (i in 0 until progressBar.size) {
                     progressBar[i]?.max = it.count * 1000
                     progressBar[i]?.progress = it.stats[i].toInt() * 1000
@@ -151,6 +150,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     anim.duration = 1500
                     progressBar[i]?.startAnimation(anim)
                 }
+            }
 
             }
         })
