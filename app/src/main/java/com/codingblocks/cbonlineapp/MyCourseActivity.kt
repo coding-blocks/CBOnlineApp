@@ -5,47 +5,140 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
-import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.fragments.AnnouncementsFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
 import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
 import com.codingblocks.cbonlineapp.fragments.OverviewFragment
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.MyCourse
-import com.codingblocks.onlineapi.models.MyCourseRuns
 import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
+import kotlin.concurrent.thread
 
 
 class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
-    lateinit var courseId: String
+    lateinit var attempt_Id: String
     private lateinit var database: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_course)
         setSupportActionBar(toolbar)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        title = intent.getStringExtra("courseName")
+        attempt_Id = intent.getStringExtra("attempt_id")
+        database = AppDatabase.getInstance(this)
 
-//        database = AppDatabase.getInstance(this)
+        val runDao = database.courseRunDao()
+        val sectionDao = database.setionDao()
+        val contentDao = database.contentDao()
+        val courseDao = database.courseDao()
+        val instructorDao = database.instructorDao()
 
-//        val dao = database.courseDao()
-//        dao.getCourse(courseId).observe(this, Observer<MyCourse> {
-//            info { it.title }
-//        })
 
+
+        runDao.getCourseRun(attempt_Id).observe(this, Observer<CourseRun> {
+            info {
+                "course$it"
+            }
+        })
+        sectionDao.getCourseSection(attempt_Id).observe(this, Observer<List<CourseSection>> {
+            info {
+                "sections$it"
+            }
+        })
+        contentDao.getCourseContents(attempt_Id).observe(this, Observer<List<CourseContent>> {
+            info {
+                "content$it"
+            }
+        })
+        courseDao.getCourse(attempt_Id).observe(this, Observer<Course> {
+            info {
+                "course$it"
+            }
+        })
+        instructorDao.getInstructors(attempt_Id).observe(this, Observer<List<Instructor>> {
+            info {
+                "instructor$it"
+            }
+        })
 
         setupViewPager()
-        title = intent.getStringExtra("courseName")
-        courseId = intent.getStringExtra("run_id")
 
-        Clients.onlineV2PublicClient.enrolledCourseById("JWT " + prefs.SP_JWT_TOKEN_KEY, courseId).enqueue(retrofitcallback { throwable, response ->
-            response?.body().let {
 
+        Clients.onlineV2PublicClient.enrolledCourseById("JWT " + prefs.SP_JWT_TOKEN_KEY, attempt_Id).enqueue(retrofitcallback { throwable, response ->
+            response?.body()?.let {
+
+                val course = it.run?.course?.run {
+                    Course (
+                            id!!,
+                            title!!,
+                            subtitle!!,
+                            logo!!,
+                            summary!!,
+                            promoVideo!!,
+                            difficulty!!,
+                            reviewCount!!,
+                            rating!!,
+                            slug!!,
+                            coverImage!!,
+                            attempt_Id,
+                            updatedAt!!
+                    )
+                }
+
+                val run = it.run?.run {
+                    CourseRun(
+                            id!!,
+                            attempt_Id,
+                            name!!,
+                            description!!,
+                            start!!,
+                            end!!,
+                            price!!,
+                            mrp!!,
+                            courseId!!,
+                            updatedAt!!
+                    )
+                }
+
+                thread {
+                    courseDao.insert(course!!)
+                    runDao.insert(run!!)
+
+                    //Course Instructors List
+                    for (instructor in it.run?.course!!.instructors!!) {
+                        instructorDao.insert(Instructor(instructor.id!!, instructor.name!!,
+                                instructor.description!!, instructor.photo!!,
+                                instructor.updatedAt!!, attempt_Id, instructor.instructorCourse?.courseId!!))
+                    }
+
+                    //Course Sections List
+                    for (section in it.run?.sections!!) {
+                        sectionDao.insert(CourseSection(section.id!!, section.name!!,
+                                section.order!!, section.premium!!, section.status!!,
+                                section.run_id!!, attempt_Id, section.updatedAt!!))
+
+                        //Section Contents List
+                        val contents: ArrayList<CourseContent> = ArrayList()
+                        for (content in section.contents!!) {
+                            contents.add(CourseContent(
+                                    content.id!!, "UNDONE",
+                                    content.title!!, content.duration!!,
+                                    content.contentable!!, content.section_content?.order!!,
+                                    content.section_content?.sectionId!!, attempt_Id, content.section_content?.updatedAt!!
+                            ))
+                        }
+                        contentDao.insertAll(contents)
+                    }
+                }
 
             }
+            info { "error ${throwable?.localizedMessage}" }
+
         })
 
     }

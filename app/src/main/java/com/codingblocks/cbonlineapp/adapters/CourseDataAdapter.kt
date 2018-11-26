@@ -93,8 +93,9 @@ class CourseDataAdapter(private var courseData: ArrayList<Course>?, var context:
             date = sdf.format(Date(currentRuns[0].start!!.toLong() * 1000))
             itemView.enrollmentTv.text = "Hurry Up! Enrollment ends $date "
 
-            svgLoader.load(data.logo, itemView.courseLogo)
-            svgLoader.setPlaceHolder(R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e, R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e)
+            svgLoader
+                    .load(data.logo, itemView.courseLogo)
+            svgLoader
                     .load(data.coverImage, itemView.courseCoverImgView)
 
             itemView.setOnClickListener {

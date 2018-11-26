@@ -4,17 +4,27 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.codingblocks.onlineapi.models.MyCourseRuns
+import androidx.room.TypeConverters
 
 @Database(
         version = 1, entities = [
-    MyCourseRuns::class
-]
+    CourseRun::class,
+    CourseSection::class,
+    CourseContent::class,
+    Instructor::class,
+    Course::class,
+    Announcement::class
+], exportSchema = false
 )
-
+@TypeConverters(AnnouncementConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun courseDao(): MyCourseDao
+    abstract fun courseRunDao(): CourseRunDao
+    abstract fun setionDao(): SectionDao
+    abstract fun contentDao(): ContentDao
+    abstract fun instructorDao(): InstructorDao
+    abstract fun courseDao(): CourseDao
+
 
     companion object {
         @Volatile

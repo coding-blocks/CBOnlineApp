@@ -36,8 +36,8 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
 
                 var authComplete = false
 
-                override fun onLoadResource(view: WebView, url: String) {
-                    super.onLoadResource(view, url)
+                override fun onPageFinished(view: WebView, url: String) {
+                    super.onPageFinished(view, url)
 
                     if (url.contains("code=") && !authComplete) {
                         val grantCode = Uri.parse(url).getQueryParameter("code")

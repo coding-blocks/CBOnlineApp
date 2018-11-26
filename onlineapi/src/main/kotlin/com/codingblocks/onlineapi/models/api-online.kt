@@ -1,8 +1,6 @@
 package com.codingblocks.onlineapi.models
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.PrimaryKey
+
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
@@ -16,14 +14,16 @@ data class RatingModel(
 )
 
 open class BaseModel {
-    @PrimaryKey
     @Id
     @JvmField
     var id: String? = null
+    @JvmField
+    @JsonProperty("updated-at")
+    var updatedAt: String? = null
 }
 
 @Type("instructors")
-class Instructor : BaseModel() {
+open class Instructor : BaseModel() {
     @JvmField
     var name: String? = null
     @JvmField
@@ -34,20 +34,23 @@ class Instructor : BaseModel() {
     @Relationship("courses", resolve = true)
     @JvmField
     var courses: ArrayList<Course>? = null
+
+    @JsonProperty("instructor-course")
+    @JvmField
+    var instructorCourse: InstructorCourse? = null
+
+
 }
 
 @Type("instructor")
+class InstructorSingle : Instructor() {
+
+}
+
 class InstructorCourse : BaseModel() {
     @JvmField
-    var name: String? = null
-    @JvmField
-    var description: String? = null
-    @JvmField
-    var photo: String? = null
-
-    @Relationship("courses", resolve = true)
-    @JvmField
-    var courses: ArrayList<Course>? = null
+    @JsonProperty("course-id")
+    var courseId: String? = null
 }
 
 @Type("sections")
@@ -82,21 +85,18 @@ class Contents : BaseModel() {
 
 }
 
-class SectionContent {
-    val id: String? = null
+class SectionContent : BaseModel() {
+    @JvmField
     val order: Int? = null
-    val createdAt: String? = null
-    val updatedAt: String? = null
+    @JvmField
+    @JsonProperty("section-id")
     val sectionId: String? = null
-    val contentId: String? = null
-    val updatedById: String? = null
 }
 
 
 @Type("runs")
 class Runs : BaseModel() {
     @JvmField
-
     var name: String? = null
     @JvmField
     var description: String? = null
@@ -206,9 +206,9 @@ class MyRunAttempt : BaseModel() {
     @JvmField
     var run: MyCourseRuns? = null
 
+
 }
 
-@Entity(tableName = "courseData")
 @Type("run")
 class MyCourseRuns : BaseModel() {
     @JvmField
@@ -223,6 +223,9 @@ class MyCourseRuns : BaseModel() {
     var price: String? = null
     @JvmField
     var mrp: String? = null
+    @JsonProperty("course-id")
+    @JvmField
+    var courseId: String? = null
     @JvmField
     @JsonProperty("enrollment-start")
     val enrollmentStart: String? = null
@@ -240,6 +243,15 @@ class MyCourseRuns : BaseModel() {
     @Relationship("sections", resolve = true)
     @JvmField
     var sections: ArrayList<CourseSection>? = null
+
+
+    @Relationship("announcements", resolve = true)
+    @JvmField
+    var announcements: ArrayList<Announcement>? = null
+
+    @JvmField
+    @JsonProperty("whatsapp-link")
+    var whatsappLink: String? = null
 
 
 }
@@ -288,20 +300,14 @@ class MyCourse : BaseModel() {
     @JvmField
     var instructors: ArrayList<Instructor>? = null
 
-    @Relationship("runs", resolve = true)
-    @JvmField
-    var runs: ArrayList<Runs>? = null
+//    @Relationship("runs", resolve = true)
+//    @JvmField
+//    var runs: ArrayList<Runs>? = null
+
 
 }
 
-@Entity(
-        foreignKeys = [(ForeignKey(
-               entity =  MyCourseRuns::class,
-                parentColumns = ["id"],
-                childColumns = ["run_id"],
-                onDelete = ForeignKey.SET_NULL //or CASCADE
-        ))]
-)
+
 @Type("section")
 class CourseSection : BaseModel() {
 
@@ -321,9 +327,6 @@ class CourseSection : BaseModel() {
     @JvmField
     var status: String? = null
 
-    @JvmField
-    @JsonProperty("updated-at")
-    var updatedAt: String? = null
 
     @JvmField
     @JsonProperty("run-id")
@@ -348,10 +351,15 @@ class LectureContent : BaseModel() {
     @JvmField
     var title: String? = null
 
-    //    @Relationship("code-challenge", resolve = true)
-//    @JvmField
-//    var code_challenge: LectureContent? = null
-//
+    @JvmField
+    @JsonProperty("section-content")
+    var section_content: SectionContent? = null
+
+
+    @Relationship("code-challenge", resolve = true)
+    @JvmField
+    var code_challenge: ContentCodeChallenge? = null
+    //
     @Relationship("document", resolve = true)
     @JvmField
     var document: ContentDocumentType? = null
@@ -368,10 +376,44 @@ class LectureContent : BaseModel() {
     @JvmField
     var video: ContentVideoType? = null
 
-//    @Relationship("qna", resolve = true)
-//    @JvmField
-//    var qna: LectureContent? = null
+    @Relationship("qna", resolve = true)
+    @JvmField
+    var qna: ContentQna? = null
 
+}
+
+@Type("code_challenge")
+class ContentCodeChallenge : BaseModel() {
+    @JvmField
+    @JsonProperty("content-id")
+    var content_id: String? = null
+
+    @JvmField
+    @JsonProperty("hb-contest-id")
+    var hb_contest_id: Int? = null
+
+    @JvmField
+    var name: String? = null
+
+
+    @JvmField
+    @JsonProperty("hb-problem-id")
+    var hb_problem_id: Int? = null
+
+}
+
+@Type("qna")
+class ContentQna : BaseModel() {
+    @JvmField
+    @JsonProperty("content-id")
+    var content_id: String? = null
+
+    @JvmField
+    @JsonProperty("q-id")
+    var q_id: Int? = null
+
+    @JvmField
+    var name: String? = null
 }
 
 @Type("document")
@@ -386,10 +428,6 @@ class ContentDocumentType : BaseModel() {
 
     @JvmField
     var name: String? = null
-
-    @JvmField
-    @JsonProperty("updated-at")
-    val updatedAt: String? = null
 
 
     @JvmField
@@ -421,10 +459,6 @@ class ContentLectureType : BaseModel() {
     var status: String? = null
 
     @JvmField
-    @JsonProperty("updated-at")
-    var updatedAt: String? = null
-
-    @JvmField
     @JsonProperty("video-url")
     var video_url: String? = null
 
@@ -448,9 +482,6 @@ class ContentVideoType : BaseModel() {
     @JvmField
     var url: String? = null
 
-    @JvmField
-    @JsonProperty("updated-at")
-    var updatedAt: String? = null
 
 }
 
@@ -465,9 +496,6 @@ class ContentProgress : BaseModel() {
     @JsonProperty("created-at")
     var createdAt: String? = null
 
-    @JvmField
-    @JsonProperty("updated-at")
-    var updatedAt: String? = null
 
     @JvmField
     var status: String? = null
@@ -475,6 +503,30 @@ class ContentProgress : BaseModel() {
     @JvmField
     @JsonProperty("run-attempt-id")
     var run_attempt_id: String? = null
+
+}
+
+@Type("announcement")
+class Announcement : BaseModel() {
+
+    @JvmField
+    @JsonProperty("user-id")
+    var user_id: String? = null
+
+    @JvmField
+    @JsonProperty("created-at")
+    var createdAt: String? = null
+
+
+    @JvmField
+    var text: String? = null
+
+    @JvmField
+    var title: String? = null
+
+    @JvmField
+    @JsonProperty("run-id")
+    var run_id: String? = null
 
 }
 

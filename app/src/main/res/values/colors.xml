@@ -7,6 +7,7 @@
     <color name="salmon">#ff6666</color>
     <color name="holo_orange_light">#ffffbb33</color>
     <color name="white_transparency">#b9ffffff</color>
+    <color name="white">#ffffff</color>
 
 
 </resources>

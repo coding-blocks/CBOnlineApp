@@ -90,7 +90,7 @@ MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?, var conte
             svgLoader
                     .load(data.course?.logo, itemView.courseLogo)
             itemView.courseBtn1.setOnClickListener {
-                it.context.startActivity(it.context.intentFor<MyCourseActivity>("run_id" to data.run_attempts!![0].id, "courseName" to data.course!!.title).singleTop())
+                it.context.startActivity(it.context.intentFor<MyCourseActivity>("attempt_id" to data.run_attempts!![0].id, "courseName" to data.course!!.title).singleTop())
 
             }
 

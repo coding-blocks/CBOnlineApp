@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -54,8 +55,14 @@ dependencies {
     implementation 'io.supercharge:shimmerlayout:2.1.0'
     implementation 'io.github.inflationx:calligraphy3:3.0.0'
     implementation 'io.github.inflationx:viewpump:1.0.0'
-    implementation 'android.arch.persistence.room:runtime:1.1.1'
-    kapt "android.arch.persistence.room:compiler:1.1.1"
+
+    //database
+    def room_version = "2.1.0-alpha02"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+
     // full exoplayer library
     implementation 'com.google.android.exoplayer:exoplayer:2.8.2'
 
