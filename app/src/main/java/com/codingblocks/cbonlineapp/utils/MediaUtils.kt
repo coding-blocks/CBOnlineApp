@@ -14,7 +14,7 @@ object MediaUtils {
         return Uri.parse(dataFile.toURI().toString())
     }
 
-    fun getCourseDownloadUrls(videoUrl: String, context: Context): ArrayList<String> {
+    fun getCourseDownloadUrls(m3u8Uri: String, context: Context): ArrayList<String> {
         //TODO
         return arrayListOf()
     }
