@@ -3,6 +3,7 @@ package com.codingblocks.onlineapi.api
 import com.codingblocks.onlineapi.models.*
 import com.google.gson.JsonObject
 import kotlinx.coroutines.Deferred
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -96,6 +97,10 @@ interface OnlinePublicApi {
      */
 
     @GET("{videoUrl}/{fileType}")
-    fun getIndexm3u8(@Path("videoUrl") videoUrl: String, @Path("fileType") fileType: String)
+    fun getVideoFiles(@Path("videoUrl") videoUrl: String,
+                      @Path("fileType") fileName: String,
+                      @Query("Key-Pair-Id") key_pair_id: String = "APKAIX3JJRW7RHDSNHGA",
+                      @Query("Signature") signature: String = "h2g/SDxrtF4nt9Xf+PDIhPElWrveYwRIX5AGG3Tg8NTr5DJFMgUhDiW7LtwOz+EgpnLley0GIVPe3mWiNl++b9iG908S4TvVWGN/30Owa9/JSfEfZ0Dw2AgBkZEZ5j4ObeCT/6Tziuz7V+1JoY/8P2grby4+UHy6IQX5s4U6qgLsT5QR5F+BGF5NTMkMc771KDeyHq9h7YlLpaD9Fc3iubjYeiWCfHKjDWlFSi9Y1dIl3B8uA7q87AwAZo5nStg56NalblNP653c65XGklx4knuuWevgAyIfr5bNLL7CUC4st5I5rWO3qbE2nCO3pooDC6F3zOycuHb3p6UW5tK0tg==",
+                      @Query("Policy") policy: String = "eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9kMXFmMG96c3M0OTR4di5jbG91ZGZyb250Lm5ldC80ODgxM2EwYy1jMzVkLTQ4YzgtYTZjMS0zYmU0Nzk2YjFlMDMwMzAxYnRub25jbGlja2Zsdi8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNTQzNDE2ODkxfX19XX0="): Call<ResponseBody>
 
 }

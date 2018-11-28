@@ -29,6 +29,8 @@ data class Course(
         var updated_at: String
 ) : BaseModel(uid, updated_at)
 
+//add type converter for arraylist of instructors,contents,sections(if possible)
+
 @Entity
 data class CourseRun(
         var uid: String,
