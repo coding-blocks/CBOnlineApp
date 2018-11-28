@@ -112,7 +112,7 @@ data class CourseContent(
         var progress: String,
         var title: String,
         var duration: Long,
-        var contentable: String,
+        var contentTable: String,
         var order: Int,
         var section_id: String,
         var attempt_id: String,

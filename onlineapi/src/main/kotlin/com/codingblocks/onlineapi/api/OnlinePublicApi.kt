@@ -70,4 +70,32 @@ interface OnlinePublicApi {
     fun getMyCourseProgress(@Header("Authorization") authorization: String,
                             @Path("runid") id: String): Call<HashMap<Any, Any>>
 
+    /*
+    Hit this endpoint to get the API KEY for downloading video and the m3u8 files
+    The videoUrl param contains the URL of the file that you're trying to download.
+    In case you get a 403, hit this endpoint again and fetch a fresh api
+
+    response :
+    {
+        policyString : "",
+        signature : "",
+        keyId : ""
+    }
+
+    Send this response as a query param to the API endpoint that lets you download the video
+     */
+    @GET("aws/cookie")
+    fun getVideoDownloadKey(@Query("url") videoUrl: String)
+
+    /*
+    send the video_url that you receive in ContentLectureType
+    fileType is the type of file you plan on downloading, start with index.m3u8 then video.m3u8 and video.key
+    Store them in internal storage, inside Android/Data/com.codingblocks.cbonlineapp/files/data/{video_url}
+
+    Hit this endpoint again by traversing through the returned ArrayList in MediaUtils.getCourseDownloadUrls()
+     */
+
+    @GET("{videoUrl}/{fileType}")
+    fun getIndexm3u8(@Path("videoUrl") videoUrl: String, @Path("fileType") fileType: String)
+
 }

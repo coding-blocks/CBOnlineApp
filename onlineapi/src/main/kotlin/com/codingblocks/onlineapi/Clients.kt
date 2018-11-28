@@ -85,5 +85,10 @@ object Clients {
             .build()
     val apiToken = retrofitToken.create(OnlinePublicApi::class.java)
 
+    //This client will download the video and m3u8 files from the server
+    val videoDownloadClient = Retrofit.Builder()
+            .baseUrl("https://d1qf0ozss494xv.cloudfront.net/")
+            .build()
+
 
 }
