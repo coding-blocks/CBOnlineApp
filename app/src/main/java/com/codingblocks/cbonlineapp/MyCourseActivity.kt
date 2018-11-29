@@ -1,9 +1,7 @@
 package com.codingblocks.cbonlineapp
 
 import android.os.Bundle
-import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.Utils.retrofitcallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.*
@@ -11,13 +9,10 @@ import com.codingblocks.cbonlineapp.fragments.AnnouncementsFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
 import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
 import com.codingblocks.cbonlineapp.fragments.OverviewFragment
-import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.activity_my_course.*
-import okhttp3.ResponseBody
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
-import java.io.*
 import kotlin.concurrent.thread
 
 
@@ -44,35 +39,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         val contentDao = database.contentDao()
         val courseDao = database.courseDao()
         val instructorDao = database.instructorDao()
-
-
-
-        runDao.getCourseRun(attempt_Id).observe(this, Observer<CourseRun> {
-            info {
-                "course$it"
-            }
-        })
-        sectionDao.getCourseSection(attempt_Id).observe(this, Observer<List<CourseSection>> {
-            info {
-                "sections$it"
-            }
-        })
-        contentDao.getCourseContents(attempt_Id).observe(this, Observer<List<CourseContent>> {
-            info {
-                "content$it"
-            }
-        })
-        courseDao.getCourse(attempt_Id).observe(this, Observer<Course> {
-            info {
-                "course$it"
-            }
-        })
-        instructorDao.getInstructors(attempt_Id).observe(this, Observer<List<Instructor>> {
-            info {
-                "instructor$it"
-            }
-        })
-
         setupViewPager()
 
 
@@ -132,44 +98,18 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                         //Section Contents List
                         val contents: ArrayList<CourseContent> = ArrayList()
                         for (content in section.contents!!) {
-                            contents.add(CourseContent(
-                                    content.id!!, "UNDONE",
-                                    content.title!!, content.duration!!,
-                                    content.contentable!!, content.section_content?.order!!,
-                                    content.section_content?.sectionId!!, attempt_Id, content.section_content?.updatedAt!!
-                            ))
-                            if (content.contentable.equals("lecture") && !writtenToDisk) {
-                                val url = content.lecture?.video_url?.substring(38, (content.lecture?.video_url?.length!! - 11))
-// download lecture index.m3u8,video.key and video.m3u8
-                                Clients.apiVideo.getVideoFiles(url!!, "index.m3u8").enqueue(retrofitcallback { index_throwable, index_response ->
-                                    index_response?.body()?.let {
-                                        writtenToDisk = writeResponseBodyToDisk(it, url, "index.m3u8")
-                                        info { "url$url" }
-                                        info { "Downloaded file$writtenToDisk" }
-                                        Clients.apiVideo.getVideoFiles(url, "video.m3u8").enqueue(retrofitcallback { video_throwable, video_response ->
-                                            video_response?.body()?.let {
-                                                writtenToDiskVideo = writeResponseBodyToDisk(it, url, "video.m3u8")
-                                                if (writtenToDiskVideo) {
-                                                    Clients.apiVideo.getVideoFiles(url, "video.key").enqueue(retrofitcallback { key_throwable, key_response ->
-                                                        key_response?.body()?.let {
-                                                            writtenToDiskVideo = writeResponseBodyToDisk(it, url, "video.key")
-                                                            val videoChunks = MediaUtils.getCourseDownloadUrls(url, this@MyCourseActivity)
-                                                            videoChunks.forEach { videoName ->
-                                                                Clients.apiVideo.getVideoFiles(url, videoName).enqueue(retrofitcallback { throwable, response ->
-                                                                    response?.body().let {
-                                                                        writeResponseBodyToDisk(it!!, url, videoName)
-                                                                    }
-                                                                })
-                                                            }
-                                                        }
-                                                    })
-                                                }
-                                            }
-                                        })
+                            if (content.contentable.equals("lecture")) {
+                                val contentLecture = ContentLecture(content.lecture?.id!!, content.lecture?.name!!, content.lecture?.duration!!, content.lecture?.video_url!!, content.section_content?.id!!, content.updatedAt!!)
+//                                val contentVideo = ContentVideo(content.lecture?.id!!, content.lecture?.name!!, content.lecture?.duration!!, content.lecture?.video_url!!, content.section_content?.id!!, content.updatedAt!!)
+//                                val contentCodeChallanege = ContentCodeChallanege(content.lecture?.id!!, content.lecture?.name!!, content.lecture?.duration!!, content.lecture?.video_url!!, content.section_content?.id!!, content.updatedAt!!)
+//                                val contentDocument = ContentDocument(content.lecture?.id!!, content.lecture?.name!!, content.lecture?.duration!!, content.lecture?.video_url!!, content.section_content?.id!!, content.updatedAt!!)
+//                                val contentQna = ContentQna(content.lecture?.id!!, content.lecture?.name!!, content.lecture?.duration!!, content.lecture?.video_url!!, content.section_content?.id!!, content.updatedAt!!)
 
-
-                                    }
-                                })
+                                contents.add(CourseContent(
+                                        content.id!!, "UNDONE",
+                                        content.title!!, content.duration!!,
+                                        content.contentable!!, content.section_content?.order!!,
+                                        content.section_content?.sectionId!!, attempt_Id, content.section_content?.updatedAt!!, contentLecture))
                             }
                         }
 
@@ -189,7 +129,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         val adapter = TabLayoutAdapter(supportFragmentManager)
         adapter.add(OverviewFragment(), "")
         adapter.add(AnnouncementsFragment(), "")
-        adapter.add(CourseContentFragment(), "")
+        adapter.add(CourseContentFragment.newInstance(attempt_Id), "")
         adapter.add(DoubtsFragment(), "")
         htab_viewpager.adapter = adapter
         htab_tabs.setupWithViewPager(htab_viewpager)
@@ -200,61 +140,5 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
     }
 
-    private fun writeResponseBodyToDisk(body: ResponseBody, videoUrl: String?, fileName: String): Boolean {
-        try {
-
-            val file = getExternalFilesDir(Environment.getDataDirectory().absolutePath)
-            val folderFile = File(file, "/$videoUrl")
-            val dataFile = File(file, "/$videoUrl/$fileName")
-            if (!folderFile.exists()) {
-                folderFile.mkdir()
-            }
-            // todo change the file location/name according to your needs
-
-            var inputStream: InputStream? = null
-            var outputStream: OutputStream? = null
-
-            try {
-                val fileReader = ByteArray(4096)
-
-                val fileSize = body.contentLength()
-                var fileSizeDownloaded: Long = 0
-
-                inputStream = body.byteStream()
-                outputStream = FileOutputStream(dataFile)
-
-                while (true) {
-                    val read = inputStream!!.read(fileReader)
-
-                    if (read == -1) {
-                        break
-                    }
-
-                    outputStream!!.write(fileReader, 0, read)
-
-                    fileSizeDownloaded += read.toLong()
-                    info { "file download: $fileSizeDownloaded of $fileSize" }
-//                    Log.d(FragmentActivity.TAG, "file download: $fileSizeDownloaded of $fileSize")
-                }
-
-                outputStream!!.flush()
-
-                return true
-            } catch (e: IOException) {
-                return false
-            } finally {
-                if (inputStream != null) {
-                    inputStream!!.close()
-                }
-
-                if (outputStream != null) {
-                    outputStream!!.close()
-                }
-            }
-        } catch (e: IOException) {
-            return false
-        }
-
-    }
 
 }

@@ -10,7 +10,11 @@ abstract class ContentDao : BaseDao<CourseContent> {
     @Query("SElECT * FROM CourseContent ")
     abstract fun getContent(): LiveData<List<CourseContent>>
 
-    @Query("SElECT * FROM CourseContent where attempt_id = :courseId ")
-    abstract fun getCourseContents(courseId: String): LiveData<List<CourseContent>>
+    @Query("SElECT * FROM CourseContent where attempt_id = :attempt_id ")
+    abstract fun getCourseContents(attempt_id: String): LiveData<List<CourseContent>>
+
+    @Query("SElECT * FROM CourseContent where attempt_id = :attempt AND section_id = :section")
+    abstract fun getCourseSectionContents(attempt: String,section: String): LiveData<List<CourseContent>>
+
 
 }
