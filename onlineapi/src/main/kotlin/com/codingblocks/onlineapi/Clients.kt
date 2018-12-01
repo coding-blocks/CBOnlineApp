@@ -85,9 +85,13 @@ object Clients {
             .build()
     val apiToken = retrofitToken.create(OnlinePublicApi::class.java)
 
+
+    var interceptor = CustomResponseInterceptor()
+    var client = OkHttpClient.Builder().addInterceptor(interceptor).build()
     //This client will download the video and m3u8 files from the server
     val videoDownloadClient = Retrofit.Builder()
             .baseUrl("https://d1qf0ozss494xv.cloudfront.net/")
+            .client(client)
             .build()
 
     //https://d1qf0ozss494xv.cloudfront.net/48813a0c-c35d-48c8-a6c1-3be4796b1e030301btnonclickflv/index.m3u8

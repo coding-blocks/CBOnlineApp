@@ -19,7 +19,8 @@ public class AnnouncementConverter {
             return Collections.emptyList();
         }
 
-        Type listType = new TypeToken<List<Announcement>>() {}.getType();
+        Type listType = new TypeToken<List<Announcement>>() {
+        }.getType();
 
         return gson.fromJson(data, listType);
     }

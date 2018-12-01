@@ -86,7 +86,7 @@ interface OnlinePublicApi {
     Send this response as a query param to the API endpoint that lets you download the video
      */
     @GET("aws/cookie")
-    fun getVideoDownloadKey(@Query("url") videoUrl: String)
+    fun getVideoDownloadKey(@Query("url") videoUrl: String): Call<ResponseBody>
 
     /*
     send the video_url that you receive in ContentLectureType
@@ -100,7 +100,7 @@ interface OnlinePublicApi {
     fun getVideoFiles(@Path("videoUrl") videoUrl: String,
                       @Path("fileType") fileName: String,
                       @Query("Key-Pair-Id") key_pair_id: String = "APKAIX3JJRW7RHDSNHGA",
-                      @Query("Signature") signature: String = "bMglGfFI3uksgIL++8S3//Nlh6TTVN3tNEVFUDAUAV8jNFV9odw9diIM2FbT0TMW+MB+MgXTewkzRrcLhrf1/5NFt9t2vdzJqBLoeRyRC/VrMWUuEOfXw3Rf7sk50uo1brabJvCusbiLJtuDEiZFApj2EKXqJR5Hu8P7z1h1VSE+yhLCGEn2iZCCGOMHDHDugeykNM2ssjtxWJkFqWFX+bHFNarVyhbr0z0md9edrbz6De4r/mBiN3RRx756elLiRfJENPUmLyXKBVdmuaYtrfX/RBpZrMOAgRkPY9O2K5tNBoFQpk5/MR8lP+LKpQOMwipgkm1S0jBydNxo6V0HHQ==",
-                      @Query("Policy") policy: String = "eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9kMXFmMG96c3M0OTR4di5jbG91ZGZyb250Lm5ldC80ODgxM2EwYy1jMzVkLTQ4YzgtYTZjMS0zYmU0Nzk2YjFlMDMwMzAxYnRub25jbGlja2Zsdi8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNTQzNTAyOTE2fX19XX0="): Call<ResponseBody>
+                      @Query("Signature") signature: String = "aEhb5Kivj+Ej8K90Q9Qx7fHrgFJfaVYw+GNSEjUB78WecHxm81h2UC8Xhh6/+HOwvbP/TS9FqiEIuxpxdqIBzVrFSsujg04XYBPY/eNOKMx033XogPs60Jna6WKiPNnr1dzvWOz+qpkUKaFabkguT+m59eCjtuAfbt4u7QmFVDUZpsYzDN57YvbVQgJpFluoYAJHVcgz4BDwKwTuom/b+CBAZT6yUhnH+DDXlo8ogKNLnyrCilQeZu3aDeUmGQIqnyXaZmRxVh+6fLsznEawLBbLRcxNRUHm8v4hEUVEEvaZc9izsfYv/h1My+mJ9WDc6Hb7dAR39PsOjDTXUCyZ7w==",
+                      @Query("Policy") policy: String = "eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9kMXFmMG96c3M0OTR4di5jbG91ZGZyb250Lm5ldC8zMDI2YThiMC05YjQyLTQwY2ItOGZmNi1lMzZmNmUwYmRhY2MwMzAyYnRuc2V0T0NMZmx2LyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE1NDM3MTA5MTV9fX1dfQ=="): Call<ResponseBody>
 
 }
