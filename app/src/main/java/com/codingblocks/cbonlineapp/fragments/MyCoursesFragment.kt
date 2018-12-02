@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.retrofitcallback
+import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.MyCoursesDataAdapter
 import com.codingblocks.cbonlineapp.prefs
 import com.codingblocks.cbonlineapp.ui.AllCourseFragmentUi
@@ -57,7 +57,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     private fun fetchAllCourses() {
 
 
-        Clients.onlineV2PublicClient.getMyCourses("JWT " + prefs.SP_JWT_TOKEN_KEY).enqueue(retrofitcallback { t, resp ->
+        Clients.onlineV2PublicClient.getMyCourses("JWT " + prefs.SP_JWT_TOKEN_KEY).enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let {
                 info { it.toString() }
                 courseDataAdapter.setData(it)

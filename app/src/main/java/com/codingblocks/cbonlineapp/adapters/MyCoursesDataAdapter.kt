@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.MyCourseActivity
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.retrofitcallback
+import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.prefs
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourseRuns
@@ -70,7 +70,7 @@ MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?, var conte
                     instructors += "+" + (data.course!!.instructors!!.size - 2) + " more"
                     break
                 }
-                Clients.onlineV2PublicClient.instructorsById(data.course!!.instructors!![i].id!!).enqueue(retrofitcallback { throwable, response ->
+                Clients.onlineV2PublicClient.instructorsById(data.course!!.instructors!![i].id!!).enqueue(retrofitCallback { throwable, response ->
                     response?.body().let {
                         instructors += it?.name + ", "
                         if (i == 0)
@@ -95,7 +95,7 @@ MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?, var conte
             }
 
             Clients.api.getMyCourseProgress("JWT "+ prefs.SP_JWT_TOKEN_KEY,
-                    data.run_attempts!![0].id!!).enqueue(retrofitcallback { t, progressResponse ->
+                    data.run_attempts!![0].id!!).enqueue(retrofitCallback { t, progressResponse ->
                 progressResponse?.body().let {
                     var progress = it!!["percent"] as Double
                     itemView.courseProgress.progress = (progress).toInt()

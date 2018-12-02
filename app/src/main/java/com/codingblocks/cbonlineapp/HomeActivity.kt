@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import com.codingblocks.cbonlineapp.Utils.retrofitcallback
+import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
@@ -54,7 +54,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun fetchUser() {
         if (!prefs.SP_ACCESS_TOKEN_KEY.equals("access_token")) {
             info { prefs.SP_ACCESS_TOKEN_KEY }
-            Clients.api.getMe("JWT " + prefs.SP_JWT_TOKEN_KEY).enqueue(retrofitcallback { t, resp ->
+            Clients.api.getMe("JWT " + prefs.SP_JWT_TOKEN_KEY).enqueue(retrofitCallback { t, resp ->
                 resp?.body()?.let { it ->
                     if (resp.isSuccessful) {
                         val jSONObject = resp.body()!!.getAsJsonObject("data").getAsJsonObject("attributes")

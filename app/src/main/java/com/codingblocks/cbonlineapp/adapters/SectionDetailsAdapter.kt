@@ -14,7 +14,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.retrofitcallback
+import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
@@ -89,37 +89,33 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                     ll.addView(inflatedView)
                     inflatedView.setOnClickListener {
                         info { "onclick" }
-// download lecture index.m3u8,video.key and video.m3u8
-                        //TODO
-                        ///refractor this code
-                        Clients.apiVideo.getVideoFiles(url, "index.m3u8").enqueue(retrofitcallback { index_throwable, index_response ->
-                            index_response?.body()?.let {
-                                writeResponseBodyToDisk(it, url, "index.m3u8")
-                                Clients.apiVideo.getVideoFiles(url, "video.m3u8").enqueue(retrofitcallback { video_throwable, video_response ->
-                                    video_response?.body()?.let {
-                                        writeResponseBodyToDisk(it, url, "video.m3u8")
-                                        Clients.apiVideo.getVideoFiles(url, "video.key").enqueue(retrofitcallback { key_throwable, key_response ->
-                                            key_response?.body()?.let {
-                                                writeResponseBodyToDisk(it, url, "video.key")
-                                                val videoChunks = MediaUtils.getCourseDownloadUrls(url, context)
-                                                videoChunks.forEach { videoName: String ->
-                                                    Clients.apiVideo.getVideoFiles(url, videoName).enqueue(retrofitcallback { throwable, response ->
-                                                        response?.body().let {
-                                                            writeResponseBodyToDisk(it!!, url, videoName)
-                                                        }
-                                                    })
-                                                }
-                                            }
-                                        })
-
-                                    }
-                                })
-
-
+                        // download lecture index.m3u8,video.key and video.m3u8
+                        //TODO : Error handling
+                        //No need to nest every call within one another, we can start the larger downloads sequentially once the smaller
+                        //downloads (m3u8 and key) have been completed
+                        Clients.initiateDowload(url, "index.m3u8").enqueue(retrofitCallback { _, response ->
+                            response?.body()?.let { indexResponse ->
+                                writeResponseBodyToDisk(indexResponse, url, "index.m3u8")
                             }
                         })
 
+                        Clients.initiateDowload(url, "video.m3u8").enqueue(retrofitCallback { throwable, response ->
+                            response?.body()?.let { videoResponse ->
+                                writeResponseBodyToDisk(videoResponse, url, "video.m3u8")
+                            }
+                        })
 
+                        Clients.initiateDowload(url, "video.key").enqueue(retrofitCallback { throwable, response ->
+                            response?.body()?.let { keyResponse ->
+                                writeResponseBodyToDisk(keyResponse, url, "video.key")
+                                val videoChunks = MediaUtils.getCourseDownloadUrls(url, context)
+                                videoChunks.forEach { videoName: String ->
+                                    Clients.initiateDowload(url, videoName).enqueue(retrofitCallback { throwable, response ->
+                                        writeResponseBodyToDisk(response?.body()!!, url, videoName)
+                                    })
+                                }
+                            }
+                        })
                     }
                     var arrowAnimation: RotateAnimation
 

@@ -7,7 +7,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.codingblocks.cbonlineapp.Utils.retrofitcallback
+import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.AnkoLogger
@@ -44,7 +44,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
                         authComplete = true
                         info { "grant code $grantCode" }
 
-                        Clients.apiToken.getToken(grantCode).enqueue(retrofitcallback { _, response ->
+                        Clients.apiToken.getToken(grantCode).enqueue(retrofitCallback { _, response ->
                             info { "token" + response!!.message() }
 
                             if (response!!.isSuccessful) {

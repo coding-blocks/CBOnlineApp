@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.Utils.ProgressBarAnimation
-import com.codingblocks.cbonlineapp.Utils.retrofitcallback
+import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Sections
@@ -64,7 +64,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
         val service = Clients.onlineV2PublicClient
 
-        Clients.onlineV2PublicClient.courseById(courseId).enqueue(retrofitcallback { t, resp ->
+        Clients.onlineV2PublicClient.courseById(courseId).enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let { it ->
                 skeletonScreen.hide()
                 coursePageTitle.text = courseName
@@ -138,7 +138,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     }
 
     fun fetchRating() {
-        Clients.api.getCourseRating(courseId).enqueue(retrofitcallback { throwable, response ->
+        Clients.api.getCourseRating(courseId).enqueue(retrofitCallback { throwable, response ->
             response?.body().let { it?.apply {
                 coursePageRatingCountTv.text = count.toString() + " Rating"
                 coursePageRatingTv.text = rating + " out of 5 stars"
