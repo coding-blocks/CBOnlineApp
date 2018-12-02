@@ -86,7 +86,8 @@ interface OnlinePublicApi {
     Send this response as a query param to the API endpoint that lets you download the video
      */
     @GET("aws/cookie")
-    fun getVideoDownloadKey(@Query("url") videoUrl: String): Call<ResponseBody>
+    fun getVideoDownloadKey(@Header("Authorization") authorization: String,
+                            @Query("url") videoUrl: String): Call<ResponseBody>
 
     /*
     send the video_url that you receive in ContentLectureType
