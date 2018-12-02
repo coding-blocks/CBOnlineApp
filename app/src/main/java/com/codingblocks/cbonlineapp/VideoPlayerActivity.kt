@@ -22,7 +22,6 @@ class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener, OnPrepare
 
     override fun onStart() {
         super.onStart()
-        //TODO : Pass the url from the course content activity to this activity
         val url = intent.getStringExtra("FOLDER_NAME")
         setupVideoView(url)
     }

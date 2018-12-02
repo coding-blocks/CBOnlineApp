@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.retrofitcallback
+import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.ui.AllCourseFragmentUi
 import com.codingblocks.onlineapi.Clients
 import com.ethanhua.skeleton.Skeleton
@@ -55,7 +55,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     private fun fetchAllCourses() {
 
 
-        Clients.onlineV2PublicClient.getAllCourses().enqueue(retrofitcallback { t, resp ->
+        Clients.onlineV2PublicClient.getAllCourses().enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let {
                 courseDataAdapter.setData(it)
                 skeletonScreen.hide()
