@@ -82,8 +82,8 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                     val subDuration = inflatedView.findViewById(R.id.textView16) as TextView
                     val contentImg = inflatedView.findViewById(R.id.imageView3) as ImageView
                     val url = content.contentLecture.url.substring(38, (content.contentLecture.url.length - 11))
-                    contentImg.setOnClickListener {
-                        it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url).singleTop())
+                    contentImg.setOnClickListener {view ->
+                        view.context.startActivity(view.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url).singleTop())
                     }
                     subTitle.text = content.contentLecture.name
                     ll.addView(inflatedView)
@@ -135,7 +135,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                             arrowAnimation.duration = 350
                             itemView.arrow.startAnimation(arrowAnimation)
                         }
-
                     }
                 }
             })
