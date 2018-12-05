@@ -14,6 +14,7 @@ import com.codingblocks.onlineapi.models.Runs
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.single_course_card_horizontal.view.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.error
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import java.text.SimpleDateFormat
@@ -85,24 +86,29 @@ class CourseDataAdapter(private var courseData: ArrayList<Course>?, var context:
                     currentRuns.add(data.runs!![i])
             }
             currentRuns.sortWith(Comparator { o1, o2 -> java.lang.Long.compare(o2.price!!.toLong(), o1.price!!.toLong()) })
-            itemView.coursePrice.text = "Rs." + currentRuns[0].price
-            var sdf = SimpleDateFormat("MMM dd ")
-            var date = sdf.format(Date(currentRuns[0].start!!.toLong() * 1000))
-            itemView.courseRun.text = "Batches Starting $date"
-            sdf = SimpleDateFormat("dd MMM YYYY")
-            date = sdf.format(Date(currentRuns[0].start!!.toLong() * 1000))
-            itemView.enrollmentTv.text = "Hurry Up! Enrollment ends $date "
+            try {
+                itemView.coursePrice.text = "Rs. ${currentRuns[0].price}"
+                var sdf = SimpleDateFormat("MMM dd ")
+                var date = sdf.format(Date(currentRuns[0].start!!.toLong() * 1000))
+                itemView.courseRun.text = "Batches Starting $date"
+                sdf = SimpleDateFormat("dd MMM YYYY")
+                date = sdf.format(Date(currentRuns[0].start!!.toLong() * 1000))
+                itemView.enrollmentTv.text = "Hurry Up! Enrollment ends $date"
 
-            svgLoader
-                    .load(data.logo, itemView.courseLogo)
-            svgLoader
-                    .load(data.coverImage, itemView.courseCoverImgView)
+                svgLoader
+                        .load(data.logo, itemView.courseLogo)
+                svgLoader
+                        .load(data.coverImage, itemView.courseCoverImgView)
 
-            itemView.setOnClickListener {
-                it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id, "courseName" to data.title).singleTop())
+                itemView.setOnClickListener {
+                    it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id, "courseName" to data.title).singleTop())
 
+                }
+            } catch (e: IndexOutOfBoundsException) {
+                error {
+                    data.promoVideo
+                }
             }
-
 
         }
     }

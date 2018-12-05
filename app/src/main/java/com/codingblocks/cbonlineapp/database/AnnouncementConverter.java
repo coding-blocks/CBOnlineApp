@@ -11,7 +11,7 @@ import androidx.room.TypeConverter;
 
 public class AnnouncementConverter {
 
-    static Gson gson = new Gson();
+    private static Gson gson = new Gson();
 
     @TypeConverter
     public static List<Announcement> stringToSomeObjectList(String data) {
