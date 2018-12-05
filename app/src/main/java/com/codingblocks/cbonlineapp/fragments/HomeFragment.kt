@@ -53,7 +53,7 @@ class HomeFragment : Fragment() {
     private fun fetchRecommendedCourses() {
 
 
-        Clients.onlineV2PublicClient.getRecommendedCourses().enqueue(retrofitCallback { t, resp ->
+        Clients.onlineV2JsonApi.getRecommendedCourses().enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let {
                 courseDataAdapter.setData(it)
                 skeletonScreen.hide()

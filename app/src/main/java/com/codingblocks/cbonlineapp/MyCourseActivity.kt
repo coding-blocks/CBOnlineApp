@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp
 
 import android.os.Bundle
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
@@ -42,7 +43,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         setupViewPager()
 
 
-        Clients.onlineV2PublicClient.enrolledCourseById("JWT " + prefs.SP_JWT_TOKEN_KEY, attempt_Id).enqueue(retrofitCallback { throwable, response ->
+        Clients.onlineV2JsonApi.enrolledCourseById(attempt_Id).enqueue(retrofitCallback { throwable, response ->
             response?.body()?.let {
 
                 val course = it.run?.course?.run {
@@ -98,19 +99,21 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                         //Section Contents List
                         val contents: ArrayList<CourseContent> = ArrayList()
                         for (content in section.contents!!) {
-                            if (content.contentable.equals("lecture")) {
-                                val contentLecture = ContentLecture(content.lecture?.id!!, content.lecture?.name!!, content.lecture?.duration!!, content.lecture?.video_url!!, content.section_content?.id!!, content.updatedAt!!)
-//                                val contentVideo = ContentVideo(content.lecture?.id!!, content.lecture?.name!!, content.lecture?.duration!!, content.lecture?.video_url!!, content.section_content?.id!!, content.updatedAt!!)
-//                                val contentCodeChallanege = ContentCodeChallanege(content.lecture?.id!!, content.lecture?.name!!, content.lecture?.duration!!, content.lecture?.video_url!!, content.section_content?.id!!, content.updatedAt!!)
-//                                val contentDocument = ContentDocument(content.lecture?.id!!, content.lecture?.name!!, content.lecture?.duration!!, content.lecture?.video_url!!, content.section_content?.id!!, content.updatedAt!!)
-//                                val contentQna = ContentQna(content.lecture?.id!!, content.lecture?.name!!, content.lecture?.duration!!, content.lecture?.video_url!!, content.section_content?.id!!, content.updatedAt!!)
+                            var contentDocument = ContentDocument()
+                            var contentLecture = ContentLecture()
+                            var contentVideo = ContentVideo()
 
-                                contents.add(CourseContent(
-                                        content.id!!, "UNDONE",
-                                        content.title!!, content.duration!!,
-                                        content.contentable!!, content.section_content?.order!!,
-                                        content.section_content?.sectionId!!, attempt_Id, content.section_content?.updatedAt!!, contentLecture))
+
+                            when {
+                                content.contentable.equals("lecture") -> contentLecture = ContentLecture(content.lecture?.id!!, content.lecture?.name!!, content.lecture?.duration!!, content.lecture?.video_url!!, content.section_content?.id!!, content.updatedAt!!)
+                                content.contentable.equals("document") -> contentDocument = ContentDocument(content.document?.id!!, content.document?.name!!, content.document?.pdf_link!!, content.section_content?.id!!, content.updatedAt!!)
+                                content.contentable.equals("video") -> contentVideo = ContentVideo(content.video?.id!!, content.video?.name!!, content.video?.duration!!, content.video?.description!!, content.video?.url!!, content.section_content?.id!!, content.updatedAt!!)
                             }
+                            contents.add(CourseContent(
+                                    content.id!!, "UNDONE",
+                                    content.title!!, content.duration!!,
+                                    content.contentable!!, content.section_content?.order!!,
+                                    content.section_content?.sectionId!!, attempt_Id, content.section_content?.updatedAt!!, contentLecture, contentDocument, contentVideo))
                         }
 
                         contentDao.insertAll(contents)

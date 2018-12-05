@@ -62,9 +62,9 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 .show()
 
 
-        val service = Clients.onlineV2PublicClient
+        val service = Clients.onlineV2JsonApi
 
-        Clients.onlineV2PublicClient.courseById(courseId).enqueue(retrofitCallback { t, resp ->
+        Clients.onlineV2JsonApi.courseById(courseId).enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let { it ->
                 skeletonScreen.hide()
                 coursePageTitle.text = courseName

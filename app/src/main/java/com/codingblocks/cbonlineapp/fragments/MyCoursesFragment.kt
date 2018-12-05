@@ -56,8 +56,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
     private fun fetchAllCourses() {
 
-
-        Clients.onlineV2PublicClient.getMyCourses("JWT " + prefs.SP_JWT_TOKEN_KEY).enqueue(retrofitCallback { t, resp ->
+        Clients.onlineV2JsonApi.getMyCourses().enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let {
                 info { it.toString() }
                 courseDataAdapter.setData(it)
