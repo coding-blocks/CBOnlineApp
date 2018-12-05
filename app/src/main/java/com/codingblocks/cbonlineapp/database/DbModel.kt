@@ -116,43 +116,41 @@ data class CourseContent(
         var progress: String,
         var title: String,
         var contentDuration: Long,
-        var contentTable: String,
+        var contentable: String,
         var order: Int,
         var section_id: String,
         var attempt_id: String,
         var contentUpdatedAt: String,
         @Embedded
         @Nullable
-        var contentLecture: ContentLecture
+        var contentLecture: ContentLecture,
+        @Embedded
+        @Nullable
+        var contentDocument: ContentDocument
 //add rest of the embedded objects
 ) : BaseModel(uid, contentUpdatedAt)
 
-@Entity(
-//        foreignKeys = [(ForeignKey(
-//                entity = CourseContent::class,
-//                parentColumns = ["id"],
-//                childColumns = ["content_id"],
-//                onDelete = ForeignKey.SET_NULL //or CASCADE
-//        ))]
-)
+@Entity()
 data class ContentLecture(
-        var lectureUid: String,
-        var name: String,
-        var duration: Long,
-        var url: String,
-        var content_id: String,
-        var updated_at: String
+        var lectureUid: String = "",
+        var lectureName: String = "",
+        var lectureDuration: Long = 0L,
+        var lectureUrl: String = "",
+        var lectureContentId: String = "",
+        var lectureUpdatedAt: String = ""
 
 )
 
-@Entity(
-//        foreignKeys = [(ForeignKey(
-//                entity = CourseContent::class,
-//                parentColumns = ["id"],
-//                childColumns = ["content_id"],
-//                onDelete = ForeignKey.SET_NULL //or CASCADE
-//        ))]
+@Entity()
+data class ContentDocument(
+        var documentUid: String = "",
+        var documentName: String = "",
+        var documentPdfLink: String = "",
+        var documentContentId: String = "",
+        var documentUpdatedAt: String = ""
 )
+
+@Entity()
 data class ContentVideo(
         var videoUid: String,
         var name: String,
@@ -172,22 +170,6 @@ data class ContentVideo(
 //                onDelete = ForeignKey.SET_NULL //or CASCADE
 //        ))]
 )
-data class ContentDocument(
-        var documentUid: String,
-        var name: String,
-        var pdf_link: String,
-        var content_id: String,
-        var updated_at: String
-)
-
-@Entity(
-//        foreignKeys = [(ForeignKey(
-//                entity = CourseContent::class,
-//                parentColumns = ["id"],
-//                childColumns = ["content_id"],
-//                onDelete = ForeignKey.SET_NULL //or CASCADE
-//        ))]
-)
 data class ContentCodeChallanege(
         var codeUid: String,
         var name: String,
@@ -196,6 +178,7 @@ data class ContentCodeChallanege(
         var content_id: String,
         var updated_at: String
 )
+
 @Entity(
 //        foreignKeys = [(ForeignKey(
 //                entity = CourseContent::class,

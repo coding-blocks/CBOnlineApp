@@ -92,11 +92,12 @@ object Clients {
             .client(client)
             .build()
 
-    //https://d1qf0ozss494xv.cloudfront.net/48813a0c-c35d-48c8-a6c1-3be4796b1e030301btnonclickflv/index.m3u8
-
     val apiVideo = videoDownloadClient.create(OnlineVideosApi::class.java)
 
     fun initiateDowload(url: String, fileName: String) = apiVideo.getVideoFiles(url, fileName)
+
+
+
 
 
 }

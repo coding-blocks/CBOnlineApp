@@ -36,7 +36,7 @@ class CustomResponseInterceptor : Interceptor {
         print("Retrying new request")
         /* fetch refreshed token, some synchronous API call, whatever */
         val oldUrl = HttpUrl.get(URL(req.url().toString().split("?")[0]))!!
-        val newParams = Clients.api.getVideoDownloadKey(req.url().toString().split("?")[0]).execute().body()   /* make a new request which is same as the original one, except that its headers now contain a refreshed query params */
+        val newParams = Clients.api.getVideoDownloadKey(oldUrl.toString()).execute().body()   /* make a new request which is same as the original one, except that its headers now contain a refreshed query params */
         val newRequest: Request
         // pass new policy-string as query param for the request
         val url = oldUrl.newBuilder()
@@ -46,7 +46,7 @@ class CustomResponseInterceptor : Interceptor {
                 .build()
         newRequest = req.newBuilder().url(url).build()
         val another = chain.proceed(newRequest)
-        while (another.code() != 200) {
+        while (another.code() == 403) {
             makeTokenRefreshCall(newRequest, chain)
         }
         return another

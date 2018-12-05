@@ -66,13 +66,16 @@
             android:name=".VideoPlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PdfActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
+        <receiver android:name=".DownloadBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

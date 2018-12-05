@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.PdfActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.VideoPlayerActivity
@@ -81,41 +82,50 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                     val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
                     val subDuration = inflatedView.findViewById(R.id.textView16) as TextView
                     val contentImg = inflatedView.findViewById(R.id.imageView3) as ImageView
-                    val url = content.contentLecture.url.substring(38, (content.contentLecture.url.length - 11))
-                    contentImg.setOnClickListener {view ->
-                        view.context.startActivity(view.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url).singleTop())
-                    }
-                    subTitle.text = content.contentLecture.name
-                    ll.addView(inflatedView)
-                    inflatedView.setOnClickListener {
-                        info { "onclick" }
-                        // download lecture index.m3u8,video.key and video.m3u8
-                        //TODO : Error handling
-                        //No need to nest every call within one another, we can start the larger downloads sequentially once the smaller
-                        //downloads (m3u8 and key) have been completed
-                        Clients.initiateDowload(url, "index.m3u8").enqueue(retrofitCallback { _, response ->
-                            response?.body()?.let { indexResponse ->
-                                writeResponseBodyToDisk(indexResponse, url, "index.m3u8")
-                            }
-                        })
-
-                        Clients.initiateDowload(url, "video.m3u8").enqueue(retrofitCallback { throwable, response ->
-                            response?.body()?.let { videoResponse ->
-                                writeResponseBodyToDisk(videoResponse, url, "video.m3u8")
-                            }
-                        })
-
-                        Clients.initiateDowload(url, "video.key").enqueue(retrofitCallback { throwable, response ->
-                            response?.body()?.let { keyResponse ->
-                                writeResponseBodyToDisk(keyResponse, url, "video.key")
-                                val videoChunks = MediaUtils.getCourseDownloadUrls(url, context)
-                                videoChunks.forEach { videoName: String ->
-                                    Clients.initiateDowload(url, videoName).enqueue(retrofitCallback { throwable, response ->
-                                        writeResponseBodyToDisk(response?.body()!!, url, videoName)
-                                    })
+                    if (content.contentable.equals("lecture")) {
+                        val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
+                        contentImg.setOnClickListener { view ->
+                            view.context.startActivity(view.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url).singleTop())
+                        }
+                        subTitle.text = content.contentLecture.lectureName
+                        ll.addView(inflatedView)
+                        inflatedView.setOnClickListener {
+                            // download lecture index.m3u8,video.key and video.m3u8
+                            //TODO : Error handling
+                            //No need to nest every call within one another, we can start the larger downloads sequentially once the smaller
+                            //downloads (m3u8 and key) have been completed
+                            Clients.initiateDowload(url, "index.m3u8").enqueue(retrofitCallback { _, response ->
+                                response?.body()?.let { indexResponse ->
+                                    writeResponseBodyToDisk(indexResponse, url, "index.m3u8")
                                 }
-                            }
-                        })
+                            })
+
+                            Clients.initiateDowload(url, "video.m3u8").enqueue(retrofitCallback { throwable, response ->
+                                response?.body()?.let { videoResponse ->
+                                    writeResponseBodyToDisk(videoResponse, url, "video.m3u8")
+                                }
+                            })
+
+                            Clients.initiateDowload(url, "video.key").enqueue(retrofitCallback { throwable, response ->
+                                response?.body()?.let { keyResponse ->
+                                    writeResponseBodyToDisk(keyResponse, url, "video.key")
+                                    val videoChunks = MediaUtils.getCourseDownloadUrls(url, context)
+                                    videoChunks.forEach { videoName: String ->
+                                        Clients.initiateDowload(url, videoName).enqueue(retrofitCallback { throwable, response ->
+                                            writeResponseBodyToDisk(response?.body()!!, url, videoName)
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    } else if (content.contentable.equals("document")) {
+                        subTitle.text = content.contentDocument.documentName
+                        ll.addView(inflatedView)
+                        inflatedView.setOnClickListener {
+                            info { "onclick" }
+                            it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
+
+                        }
                     }
                     var arrowAnimation: RotateAnimation
 
@@ -195,7 +205,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
 
                     fileSizeDownloaded += read.toLong()
                     info { "file download: $fileSizeDownloaded of $fileSize" }
-//                    Log.d(FragmentActivity.TAG, "file download: $fileSizeDownloaded of $fileSize")
                 }
 
                 outputStream.flush()
