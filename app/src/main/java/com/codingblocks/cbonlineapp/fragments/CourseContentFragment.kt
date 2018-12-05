@@ -12,7 +12,6 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.CourseSection
-import kotlinx.android.synthetic.main.activity_course.view.*
 import kotlinx.android.synthetic.main.fragment_course_content.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
@@ -20,14 +19,14 @@ import org.jetbrains.anko.info
 class CourseContentFragment : Fragment(), AnkoLogger {
 
     private lateinit var database: AppDatabase
-    lateinit var attempt_Id: String
+    lateinit var attemptId: String
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_course_content, container, false)
-        attempt_Id = arguments?.getString(ARG__ATTEMPT_ID)!!
+        attemptId = arguments?.getString(ARG__ATTEMPT_ID)!!
         database = AppDatabase.getInstance(context!!)
         val sectionDao = database.setionDao()
         val sectionsList = ArrayList<CourseSection>()
@@ -36,7 +35,7 @@ class CourseContentFragment : Fragment(), AnkoLogger {
         view.rvExpendableView.adapter = sectionAdapter
 
 
-        sectionDao.getCourseSection(attempt_Id).observe(this, Observer<List<CourseSection>> {
+        sectionDao.getCourseSection(attemptId).observe(this, Observer<List<CourseSection>> {
             info {
                 "sections$it"
                 sectionAdapter.setData(it as ArrayList<CourseSection>)
@@ -50,10 +49,10 @@ class CourseContentFragment : Fragment(), AnkoLogger {
 
         private const val ARG__ATTEMPT_ID = "attempt_id"
 
-        fun newInstance(attemot_id: String): CourseContentFragment {
+        fun newInstance(attemptId: String): CourseContentFragment {
             val fragment = CourseContentFragment()
             val args = Bundle()
-            args.putString(ARG__ATTEMPT_ID, attemot_id)
+            args.putString(ARG__ATTEMPT_ID, attemptId)
             fragment.arguments = args
             return fragment
         }

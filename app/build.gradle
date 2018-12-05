@@ -64,6 +64,9 @@ dependencies {
     //exomedia library
     implementation 'com.devbrackets.android:exomedia:4.3.0'
 
+    //gson
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+
     def anko = [
             // commons
             'commons',

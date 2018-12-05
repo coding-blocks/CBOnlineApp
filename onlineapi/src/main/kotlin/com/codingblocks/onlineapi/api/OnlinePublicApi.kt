@@ -101,7 +101,7 @@ interface OnlinePublicApi {
     fun getVideoFiles(@Path("videoUrl") videoUrl: String,
                       @Path("fileType") fileName: String,
                       @Query("Key-Pair-Id") key_pair_id: String = "APKAIX3JJRW7RHDSNHGA",
-                      @Query("Signature") signature: String = "aEhb5Kivj+Ej8K90Q9Qx7fHrgFJfaVYw+GNSEjUB78WecHxm81h2UC8Xhh6/+HOwvbP/TS9FqiEIuxpxdqIBzVrFSsujg04XYBPY/eNOKMx033XogPs60Jna6WKiPNnr1dzvWOz+qpkUKaFabkguT+m59eCjtuAfbt4u7QmFVDUZpsYzDN57YvbVQgJpFluoYAJHVcgz4BDwKwTuom/b+CBAZT6yUhnH+DDXlo8ogKNLnyrCilQeZu3aDeUmGQIqnyXaZmRxVh+6fLsznEawLBbLRcxNRUHm8v4hEUVEEvaZc9izsfYv/h1My+mJ9WDc6Hb7dAR39PsOjDTXUCyZ7w==",
-                      @Query("Policy") policy: String = "eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9kMXFmMG96c3M0OTR4di5jbG91ZGZyb250Lm5ldC8zMDI2YThiMC05YjQyLTQwY2ItOGZmNi1lMzZmNmUwYmRhY2MwMzAyYnRuc2V0T0NMZmx2LyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE1NDM3MTA5MTV9fX1dfQ=="): Call<ResponseBody>
+                      @Query("Signature") signature: String = "F+oM2Bwkkky7qxDKzPl/hIFLAajrAX6QYc+54aTJSlF/P4JcyeAckqHtDhDG+8SGOoiL4K8kbp0PP4Lmlpp8buijLEynAfy+Sb5klaAL2wH03dJjxNHWud78YmXPpjfrcCrk3a3dmxlPIQFJvkut/fXmmeDzDz6ksiuo6dvnSaTTRj4uwo0iWfOYe8RQWVb1AeKkWWmDgoMhNKtFwUJO3VH/uKS2ourBT2ElFbkk9+dMOgpRzRkzenqWUn0/hFIzv6qIAXKpn0jQrq0/ODrisMscnAwgjSYrdEQipzhU25oc7YWXcLf0h4rRyAeI8iHGiCxZsCdWYiskgnITDu0EJg==",
+                      @Query("Policy") policy: String = "eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9kMXFmMG96c3M0OTR4di5jbG91ZGZyb250Lm5ldC81OTQ5ZGNkYi1hMTAwLTQxNDctOTQxMS1lYjVlODAzNjg0NDFJbnRyb3RzLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE1NDQwMTUwODN9fX1dfQ=="): Call<ResponseBody>
 
 }
