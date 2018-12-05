@@ -4,8 +4,8 @@ import com.codingblocks.onlineapi.Clients
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class OnlinePublicApiTest {
-    val api = Clients.onlineV2PublicClient
+class OnlineJsonApiTest {
+    val api = Clients.onlineV2JsonApi
 
     @Test
     fun `GET courses`() {

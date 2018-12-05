@@ -1,6 +1,8 @@
 package com.codingblocks.onlineapi
 
-import com.codingblocks.onlineapi.api.OnlinePublicApi
+import com.codingblocks.onlineapi.api.OnlineJsonApi
+import com.codingblocks.onlineapi.api.OnlineRestApi
+import com.codingblocks.onlineapi.api.OnlineVideosApi
 import com.codingblocks.onlineapi.models.*
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -11,8 +13,6 @@ import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -20,6 +20,9 @@ object Clients {
     private val om = ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false)
+
+
+    var authJwt = ""
 
     private val onlineApiResourceConverter = ResourceConverter(
             om,
@@ -57,36 +60,29 @@ object Clients {
         onlineApiResourceConverter.disableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES)
     }
 
+    val onlineV2JsonClient = OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                chain.proceed(chain.request().newBuilder().addHeader("Authorization", "JWT $authJwt").build())
+            }
+            .build()
 
-    val onlineV2PublicClient: OnlinePublicApi
-        get() = Retrofit.Builder()
-                .baseUrl("https://api-online.cb.lk/api/v2/")
-                .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
-                .addCallAdapterFactory(CoroutineCallAdapterFactory())
-                .build()
-                .create(OnlinePublicApi::class.java)
-    val retrofit = Retrofit.Builder()
+    val onlineV2JsonRetrofit = Retrofit.Builder()
+            .client(onlineV2JsonClient)
             .baseUrl("https://api-online.cb.lk/api/v2/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    val api = retrofit.create(OnlinePublicApi::class.java)
-
-
-    val retrofitAuth = Retrofit.Builder()
-            .baseUrl("https://account.codingblocks.com/apiAuth/users/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
-    val apiAuth = retrofitAuth.create(OnlinePublicApi::class.java)
+    val onlineV2JsonApi: OnlineJsonApi
+        get() = onlineV2JsonRetrofit
+                .create(OnlineJsonApi::class.java)
 
 
-    val retrofitToken = Retrofit.Builder()
-            .baseUrl("https://api-online.cb.lk/api/jwt/")
+    val retrofit = Retrofit.Builder()
+            .client(onlineV2JsonClient)
+            .baseUrl("https://api-online.cb.lk/api/")
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
-    val apiToken = retrofitToken.create(OnlinePublicApi::class.java)
-
+    val api = retrofit.create(OnlineRestApi::class.java)
 
     var interceptor = CustomResponseInterceptor()
     var client = OkHttpClient.Builder().addInterceptor(interceptor).build()
@@ -98,7 +94,7 @@ object Clients {
 
     //https://d1qf0ozss494xv.cloudfront.net/48813a0c-c35d-48c8-a6c1-3be4796b1e030301btnonclickflv/index.m3u8
 
-    val apiVideo = videoDownloadClient.create(OnlinePublicApi::class.java)
+    val apiVideo = videoDownloadClient.create(OnlineVideosApi::class.java)
 
     fun initiateDowload(url: String, fileName: String) = apiVideo.getVideoFiles(url, fileName)
 

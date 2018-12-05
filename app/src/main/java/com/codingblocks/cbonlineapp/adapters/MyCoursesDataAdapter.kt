@@ -10,7 +10,6 @@ import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.MyCourseActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
-import com.codingblocks.cbonlineapp.prefs
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourseRuns
 import com.squareup.picasso.Picasso
@@ -70,7 +69,7 @@ MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?, var conte
                     instructors += "+" + (data.course!!.instructors!!.size - 2) + " more"
                     break
                 }
-                Clients.onlineV2PublicClient.instructorsById(data.course!!.instructors!![i].id!!).enqueue(retrofitCallback { throwable, response ->
+                Clients.onlineV2JsonApi.instructorsById(data.course!!.instructors!![i].id!!).enqueue(retrofitCallback { throwable, response ->
                     response?.body().let {
                         instructors += it?.name + ", "
                         if (i == 0)
@@ -83,7 +82,7 @@ MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?, var conte
             }
 
 
-            svgLoader.setPlaceHolder(R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e,R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e)
+            svgLoader.setPlaceHolder(R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e, R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e)
                     .load(data.course?.coverImage, itemView.courseCoverImgView)
 
             info { data.course?.logo }
@@ -94,8 +93,7 @@ MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?, var conte
 
             }
 
-            Clients.api.getMyCourseProgress("JWT "+ prefs.SP_JWT_TOKEN_KEY,
-                    data.run_attempts!![0].id!!).enqueue(retrofitCallback { t, progressResponse ->
+            Clients.api.getMyCourseProgress(data.run_attempts!![0].id!!).enqueue(retrofitCallback { t, progressResponse ->
                 progressResponse?.body().let {
                     var progress = it!!["percent"] as Double
                     itemView.courseProgress.progress = (progress).toInt()

@@ -55,7 +55,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     private fun fetchAllCourses() {
 
 
-        Clients.onlineV2PublicClient.getAllCourses().enqueue(retrofitCallback { t, resp ->
+        Clients.onlineV2JsonApi.getAllCourses().enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let {
                 courseDataAdapter.setData(it)
                 skeletonScreen.hide()

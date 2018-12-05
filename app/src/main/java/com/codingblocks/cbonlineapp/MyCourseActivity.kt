@@ -42,7 +42,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         setupViewPager()
 
 
-        Clients.onlineV2PublicClient.enrolledCourseById("JWT " + prefs.SP_JWT_TOKEN_KEY, attempt_Id).enqueue(retrofitCallback { throwable, response ->
+        Clients.onlineV2JsonApi.enrolledCourseById( attempt_Id).enqueue(retrofitCallback { throwable, response ->
             response?.body()?.let {
 
                 val course = it.run?.course?.run {

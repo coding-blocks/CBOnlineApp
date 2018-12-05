@@ -44,7 +44,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
                         authComplete = true
                         info { "grant code $grantCode" }
 
-                        Clients.apiToken.getToken(grantCode).enqueue(retrofitCallback { _, response ->
+                        Clients.api.getToken(grantCode).enqueue(retrofitCallback { _, response ->
                             info { "token" + response!!.message() }
 
                             if (response!!.isSuccessful) {
@@ -53,6 +53,8 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
                                 prefs.SP_ACCESS_TOKEN_KEY = grantCode
                                 prefs.SP_JWT_TOKEN_KEY = jwt
                                 prefs.SP_JWT_REFRESH_TOKEN = rt
+                                Clients.authJwt = jwt
+
                                 Toast.makeText(this@LoginActivity, "Logged In", Toast.LENGTH_SHORT).show()
                                 startActivity(intentFor<HomeActivity>().singleTop())
                                 finish()
