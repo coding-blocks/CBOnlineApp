@@ -126,8 +126,11 @@ data class CourseContent(
         var contentLecture: ContentLecture,
         @Embedded
         @Nullable
-        var contentDocument: ContentDocument
-//add rest of the embedded objects
+        var contentDocument: ContentDocument,
+        @Embedded
+        @Nullable
+        var contentVideo: ContentVideo
+        //add rest of the embedded objects
 ) : BaseModel(uid, contentUpdatedAt)
 
 @Entity()
@@ -152,13 +155,13 @@ data class ContentDocument(
 
 @Entity()
 data class ContentVideo(
-        var videoUid: String,
-        var name: String,
-        var duration: Long,
-        var description: String,
-        var url: String,
-        var content_id: String,
-        var updated_at: String
+        var videoUid: String = "",
+        var videoName: String = "",
+        var videoDuration: Long = 0L,
+        var videoDescription: String = "",
+        var videoUrl: String = "",
+        var videoContentId: String = "",
+        var videoUpdatedAt: String = ""
 )
 
 

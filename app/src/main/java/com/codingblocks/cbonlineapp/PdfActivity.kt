@@ -75,6 +75,7 @@ class PdfActivity : AppCompatActivity(), AnkoLogger {
                 super.onReceive(context, intent)
                 val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
                 val file = File(downloadManager.getUriForDownloadedFile(id).path)
+                //TODO open pdf on download
                 downloadManager.addCompletedDownload(fileName, " ", false, "application/pdf", path, file.length(), true)
                 showpdf(file)
             }

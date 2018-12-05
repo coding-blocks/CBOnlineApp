@@ -17,6 +17,7 @@ import com.codingblocks.cbonlineapp.PdfActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.YoutubePlayerActivity
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseContent
@@ -122,8 +123,14 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                         subTitle.text = content.contentDocument.documentName
                         ll.addView(inflatedView)
                         inflatedView.setOnClickListener {
-                            info { "onclick" }
                             it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
+
+                        }
+                    } else if (content.contentable.equals("video")) {
+                        subTitle.text = content.contentVideo.videoName
+                        ll.addView(inflatedView)
+                        inflatedView.setOnClickListener {
+                            it.context.startActivity(it.context.intentFor<YoutubePlayerActivity>("videoUrl" to content.contentVideo.videoUrl).singleTop())
 
                         }
                     }

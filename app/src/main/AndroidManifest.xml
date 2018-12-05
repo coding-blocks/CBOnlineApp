@@ -73,9 +73,15 @@
 
         <receiver android:name=".DownloadBroadcastReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".YoutubePlayerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
