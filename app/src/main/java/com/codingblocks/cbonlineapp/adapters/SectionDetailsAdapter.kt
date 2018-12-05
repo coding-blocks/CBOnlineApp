@@ -192,25 +192,25 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                         break
                     }
 
-                    outputStream!!.write(fileReader, 0, read)
+                    outputStream.write(fileReader, 0, read)
 
                     fileSizeDownloaded += read.toLong()
                     info { "file download: $fileSizeDownloaded of $fileSize" }
 //                    Log.d(FragmentActivity.TAG, "file download: $fileSizeDownloaded of $fileSize")
                 }
 
-                outputStream!!.flush()
+                outputStream.flush()
 
                 return true
             } catch (e: IOException) {
                 return false
             } finally {
                 if (inputStream != null) {
-                    inputStream!!.close()
+                    inputStream.close()
                 }
 
                 if (outputStream != null) {
-                    outputStream!!.close()
+                    outputStream.close()
                 }
             }
         } catch (e: IOException) {
