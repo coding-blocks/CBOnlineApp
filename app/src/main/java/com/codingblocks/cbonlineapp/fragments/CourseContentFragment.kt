@@ -33,6 +33,9 @@ class CourseContentFragment : Fragment(), AnkoLogger {
         val sectionAdapter = SectionDetailsAdapter(sectionsList, activity!!)
         view.rvExpendableView.layoutManager = LinearLayoutManager(context)
         view.rvExpendableView.adapter = sectionAdapter
+        //to stop recyclerview from binding again again
+        //fix for adding items on runtime
+        view.rvExpendableView.setItemViewCacheSize(25)
 
 
         sectionDao.getCourseSection(attemptId).observe(this, Observer<List<CourseSection>> {

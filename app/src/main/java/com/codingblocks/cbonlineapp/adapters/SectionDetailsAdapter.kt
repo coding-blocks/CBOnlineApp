@@ -103,7 +103,8 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                     subTitle.text = content.title
                     subDuration.text = content.progress
                     when {
-                        content.contentable.equals("lecture") -> {
+                        content.contentable == "lecture" -> {
+                            contentImg.setImageDrawable(context.getDrawable(R.drawable.video_green_dark))
                             val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
                             contentImg.setOnClickListener { view ->
                                 view.context.startActivity(view.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url).singleTop())
@@ -139,14 +140,16 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                                 })
                             }
                         }
-                        content.contentable.equals("document") -> {
+                        content.contentable == "document" -> {
+                            contentImg.setImageDrawable(context.getDrawable(R.drawable.file_green_dark))
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
                                 it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
 
                             }
                         }
-                        content.contentable.equals("video") -> {
+                        content.contentable == "video" -> {
+                            contentImg.setImageDrawable(context.getDrawable(R.drawable.code_green_dark))
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
                                 it.context.startActivity(it.context.intentFor<YoutubePlayerActivity>("videoUrl" to content.contentVideo.videoUrl).singleTop())
