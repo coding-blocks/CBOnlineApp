@@ -1,8 +1,9 @@
-package com.codingblocks.cbonlineapp
+package com.codingblocks.cbonlineapp.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.*
@@ -129,7 +130,8 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                             when {
                                 content.contentable.equals("lecture") -> content.lecture?.let { contentLecture = ContentLecture(it.id!!, it.name!!, it.duration!!, it.video_url!!, content.section_content?.id!!, it.updatedAt!!) }
                                 content.contentable.equals("document") -> content.document?.let { contentDocument = ContentDocument(it.id!!, it.name!!, it.pdf_link!!, content.section_content?.id!!, it.updatedAt!!) }
-                                content.contentable.equals("video") -> content.video?.let { contentVideo = ContentVideo() }
+                                //check for crash
+                                content.contentable.equals("video") -> content.video?.let { contentVideo = ContentVideo(it.id!!, it.name!!, it.duration!!, it.description!!, it.url!!, content.section_content?.id!!, it.updatedAt!!) }
                             }
                             val status: String = if (content.progress != null)
                                 content.progress?.status!!

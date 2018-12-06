@@ -1,10 +1,11 @@
-package com.codingblocks.cbonlineapp
+package com.codingblocks.cbonlineapp.activities
 
 import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.devbrackets.android.exomedia.listener.OnPreparedListener
 import kotlinx.android.synthetic.main.activity_video_player.*

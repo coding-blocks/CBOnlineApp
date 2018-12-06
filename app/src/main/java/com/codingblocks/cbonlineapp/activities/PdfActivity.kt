@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp
+package com.codingblocks.cbonlineapp.activities
 
 import android.Manifest
 import android.app.DownloadManager
@@ -14,6 +14,8 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.utils.DownloadBroadcastReceiver
 import es.voghdev.pdfviewpager.library.PDFViewPager
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter
 import kotlinx.android.synthetic.main.activity_pdf.*

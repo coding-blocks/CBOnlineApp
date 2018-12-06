@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadrosid.svgloader.SvgLoader
-import com.codingblocks.cbonlineapp.MyCourseActivity
+import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.onlineapi.Clients

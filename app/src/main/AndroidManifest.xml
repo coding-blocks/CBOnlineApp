@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SplashActivity"
+            android:name=".activities.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -35,10 +35,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home"
             android:launchMode="singleTop"
             android:theme="@style/myTheme" />
@@ -48,37 +48,37 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name=".CourseActivity"
+            android:name=".activities.CourseActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".HomeActivity"
+            android:parentActivityName=".activities.HomeActivity"
             android:theme="@style/myTheme" />
         <activity
-            android:name=".MyCourseActivity"
+            android:name=".activities.MyCourseActivity"
             android:label="@string/title_activity_my_course"
             android:launchMode="singleTop"
-            android:parentActivityName=".HomeActivity"
+            android:parentActivityName=".activities.HomeActivity"
             android:theme="@style/myTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.codingblocks.cbonlineapp.HomeActivity" />
+                android:value="com.codingblocks.cbonlineapp.activities.HomeActivity" />
         </activity>
         <activity
-            android:name=".VideoPlayerActivity"
+            android:name=".activities.VideoPlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".PdfActivity"
+            android:name=".activities.PdfActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
-        <receiver android:name=".DownloadBroadcastReceiver">
+        <receiver android:name=".utils.DownloadBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
 
         <activity
-            android:name=".YoutubePlayerActivity"
+            android:name=".activities.YoutubePlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />

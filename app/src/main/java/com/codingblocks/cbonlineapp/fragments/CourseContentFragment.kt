@@ -16,17 +16,25 @@ import kotlinx.android.synthetic.main.fragment_course_content.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
+private const val ARG__ATTEMPT_ID = "attempt_id"
+
 class CourseContentFragment : Fragment(), AnkoLogger {
 
     private lateinit var database: AppDatabase
     lateinit var attemptId: String
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            attemptId = it.getString(ARG__ATTEMPT_ID)!!
+        }
+
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_course_content, container, false)
-        attemptId = arguments?.getString(ARG__ATTEMPT_ID)!!
         database = AppDatabase.getInstance(context!!)
         val sectionDao = database.setionDao()
         val sectionsList = ArrayList<CourseSection>()
@@ -50,15 +58,13 @@ class CourseContentFragment : Fragment(), AnkoLogger {
 
     companion object {
 
-        private const val ARG__ATTEMPT_ID = "attempt_id"
-
-        fun newInstance(attemptId: String): CourseContentFragment {
-            val fragment = CourseContentFragment()
-            val args = Bundle()
-            args.putString(ARG__ATTEMPT_ID, attemptId)
-            fragment.arguments = args
-            return fragment
-        }
+        @JvmStatic
+        fun newInstance(param1: String) =
+                CourseContentFragment().apply {
+                    arguments = Bundle().apply {
+                        putString(ARG__ATTEMPT_ID, param1)
+                    }
+                }
     }
 
 

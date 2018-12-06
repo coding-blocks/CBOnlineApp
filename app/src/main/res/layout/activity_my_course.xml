@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_theme_left_to_right"
     android:fitsSystemWindows="true"
-    tools:context=".MyCourseActivity">
+    tools:context=".activities.MyCourseActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"

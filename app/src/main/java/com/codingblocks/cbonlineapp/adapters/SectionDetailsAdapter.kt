@@ -13,11 +13,11 @@ import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import com.codingblocks.cbonlineapp.PdfActivity
+import com.codingblocks.cbonlineapp.activities.PdfActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
-import com.codingblocks.cbonlineapp.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.YoutubePlayerActivity
+import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.activities.YoutubePlayerActivity
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseContent

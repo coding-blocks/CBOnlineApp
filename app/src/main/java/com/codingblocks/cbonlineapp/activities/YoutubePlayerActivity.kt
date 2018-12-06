@@ -1,9 +1,10 @@
-package com.codingblocks.cbonlineapp
+package com.codingblocks.cbonlineapp.activities
 
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.codingblocks.cbonlineapp.R
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment

@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp
+package com.codingblocks.cbonlineapp.activities
 
 import android.net.Uri
 import android.os.Bundle
@@ -7,7 +7,9 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.prefs
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.AnkoLogger

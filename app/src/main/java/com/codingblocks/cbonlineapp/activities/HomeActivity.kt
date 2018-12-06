@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp
+package com.codingblocks.cbonlineapp.activities
 
 import android.content.Context
 import android.content.Intent
@@ -10,10 +10,12 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
+import com.codingblocks.cbonlineapp.prefs
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
