@@ -56,8 +56,8 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
                 override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
                     if (!p2) {
-                        info { it.promoVideo }
-                        youtubePlayerInstance?.loadVideo(it.promoVideo.substring(30,41))
+                        if (it != null)
+                            youtubePlayerInstance?.loadVideo(it.promoVideo.substring(30, 41))
                     }
                 }
             }
@@ -67,7 +67,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
 
         Clients.onlineV2JsonApi.enrolledCourseById(attempt_Id).enqueue(retrofitCallback { throwable, response ->
-            response?.body()?.let {
+            response?.body()?.let { it ->
 
                 val course = it.run?.course?.run {
                     Course(
@@ -126,14 +126,18 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                             var contentLecture = ContentLecture()
                             var contentVideo = ContentVideo()
 
-
                             when {
-                                content.contentable.equals("lecture") -> contentLecture = ContentLecture(content.lecture?.id!!, content.lecture?.name!!, content.lecture?.duration!!, content.lecture?.video_url!!, content.section_content?.id!!, content.updatedAt!!)
-                                content.contentable.equals("document") -> contentDocument = ContentDocument(content.document?.id!!, content.document?.name!!, content.document?.pdf_link!!, content.section_content?.id!!, content.updatedAt!!)
-                                content.contentable.equals("video") -> contentVideo = ContentVideo()
+                                content.contentable.equals("lecture") -> content.lecture?.let { contentLecture = ContentLecture(it.id!!, it.name!!, it.duration!!, it.video_url!!, content.section_content?.id!!, it.updatedAt!!) }
+                                content.contentable.equals("document") -> content.document?.let { contentDocument = ContentDocument(it.id!!, it.name!!, it.pdf_link!!, content.section_content?.id!!, it.updatedAt!!) }
+                                content.contentable.equals("video") -> content.video?.let { contentVideo = ContentVideo() }
+                            }
+                            val status: String = if (content.progress != null)
+                                content.progress?.status!!
+                            else {
+                                "UNDONE"
                             }
                             contents.add(CourseContent(
-                                    content.id!!, "UNDONE",
+                                    content.id!!, status,
                                     content.title!!, content.duration!!,
                                     content.contentable!!, content.section_content?.order!!,
                                     content.section_content?.sectionId!!, attempt_Id, content.section_content?.updatedAt!!, contentLecture, contentDocument, contentVideo))

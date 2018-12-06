@@ -23,7 +23,7 @@ object MediaUtils {
 
         dataFile.forEachLine {
             Log.i("fileName", it)
-            if (it.contains(".ts")){
+            if (it.contains(".ts")) {
                 Log.i("fileName", it)
                 videoNames.add(it)
             }

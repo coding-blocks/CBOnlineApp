@@ -76,20 +76,38 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                 val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
                 ll.orientation = LinearLayout.VERTICAL
                 ll.visibility = View.GONE
-
+                itemView.lectures.text = "${it.size} Lectures"
+                var duration: Long = 0
                 for (content in it) {
+                    if (content.contentable == "lecture")
+                        duration += content.contentLecture.lectureDuration
+                    else if (content.contentable == "video") {
+                        duration += content.contentVideo.videoDuration
+                    }
+                    val hour = duration / (1000 * 60 * 60) % 24
+                    val minute = duration / (1000 * 60) % 60
+                    info { "hour$hour   minute$minute" }
+
+                    if (minute >= 1 && hour == 0L)
+                        itemView.lectureTime.text = ("$minute Min")
+                    else if (hour >= 1) {
+                        itemView.lectureTime.text = ("$hour Hours")
+                    } else
+                        itemView.lectureTime.text = ("---")
+
                     val factory = LayoutInflater.from(context)
                     val inflatedView = factory.inflate(R.layout.item_section_content_info, ll, false)
                     val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
                     val subDuration = inflatedView.findViewById(R.id.textView16) as TextView
                     val contentImg = inflatedView.findViewById(R.id.imageView3) as ImageView
+                    subTitle.text = content.title
+                    subDuration.text = content.progress
                     when {
                         content.contentable.equals("lecture") -> {
                             val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
                             contentImg.setOnClickListener { view ->
                                 view.context.startActivity(view.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url).singleTop())
                             }
-                            subTitle.text = content.contentLecture.lectureName
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
                                 // download lecture index.m3u8,video.key and video.m3u8
@@ -122,7 +140,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                             }
                         }
                         content.contentable.equals("document") -> {
-                            subTitle.text = content.contentDocument.documentName
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
                                 it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
@@ -130,7 +147,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                             }
                         }
                         content.contentable.equals("video") -> {
-                            subTitle.text = content.contentVideo.videoName
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
                                 it.context.startActivity(it.context.intentFor<YoutubePlayerActivity>("videoUrl" to content.contentVideo.videoUrl).singleTop())
@@ -159,26 +175,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                     }
                 }
             })
-
-//            itemView.lectures.text = ("${data.contents?.size} Lectures")
-//            var duration: Long = 0
-//            for (subitems in data.contents!!) {
-//                if (subitems.contentable == "lecture" || subitems.contentable == "video")
-//                    duration += subitems.duration!!
-//            }
-//            val hour = duration / (1000 * 60 * 60) % 24
-//            val minute = duration / (1000 * 60) % 60
-//            info { "hour$hour   minute$minute" }
-//
-//            if (minute >= 1 && hour == 0L)
-//                itemView.lectureTime.text = ("$minute Min")
-//            else if (hour >= 1) {
-//                itemView.lectureTime.text = ("$hour Hours")
-//            } else
-//                itemView.lectureTime.text = ("---")
-//
-
-
         }
     }
 
