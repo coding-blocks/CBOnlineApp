@@ -72,7 +72,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
 
             itemView.title.text = data.name
 
-            contentDao.getCourseSectionContents(data.attempt_id, data.id).observe(activity, Observer<List<CourseContent>> {
+            contentDao.getCourseSectionContents(data.attempt_id, data.id).observe(activity, Observer<List<CourseContent>> { it ->
                 val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
                 ll.orientation = LinearLayout.VERTICAL
                 ll.visibility = View.GONE
@@ -83,55 +83,59 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                     val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
                     val subDuration = inflatedView.findViewById(R.id.textView16) as TextView
                     val contentImg = inflatedView.findViewById(R.id.imageView3) as ImageView
-                    if (content.contentable.equals("lecture")) {
-                        val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
-                        contentImg.setOnClickListener { view ->
-                            view.context.startActivity(view.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url).singleTop())
-                        }
-                        subTitle.text = content.contentLecture.lectureName
-                        ll.addView(inflatedView)
-                        inflatedView.setOnClickListener {
-                            // download lecture index.m3u8,video.key and video.m3u8
-                            //TODO : Error handling
-                            //No need to nest every call within one another, we can start the larger downloads sequentially once the smaller
-                            //downloads (m3u8 and key) have been completed
-                            Clients.initiateDowload(url, "index.m3u8").enqueue(retrofitCallback { _, response ->
-                                response?.body()?.let { indexResponse ->
-                                    writeResponseBodyToDisk(indexResponse, url, "index.m3u8")
-                                }
-                            })
-
-                            Clients.initiateDowload(url, "video.m3u8").enqueue(retrofitCallback { throwable, response ->
-                                response?.body()?.let { videoResponse ->
-                                    writeResponseBodyToDisk(videoResponse, url, "video.m3u8")
-                                }
-                            })
-
-                            Clients.initiateDowload(url, "video.key").enqueue(retrofitCallback { throwable, response ->
-                                response?.body()?.let { keyResponse ->
-                                    writeResponseBodyToDisk(keyResponse, url, "video.key")
-                                    val videoChunks = MediaUtils.getCourseDownloadUrls(url, context)
-                                    videoChunks.forEach { videoName: String ->
-                                        Clients.initiateDowload(url, videoName).enqueue(retrofitCallback { throwable, response ->
-                                            writeResponseBodyToDisk(response?.body()!!, url, videoName)
-                                        })
+                    when {
+                        content.contentable.equals("lecture") -> {
+                            val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
+                            contentImg.setOnClickListener { view ->
+                                view.context.startActivity(view.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url).singleTop())
+                            }
+                            subTitle.text = content.contentLecture.lectureName
+                            ll.addView(inflatedView)
+                            inflatedView.setOnClickListener {
+                                // download lecture index.m3u8,video.key and video.m3u8
+                                //TODO : Error handling
+                                //No need to nest every call within one another, we can start the larger downloads sequentially once the smaller
+                                //downloads (m3u8 and key) have been completed
+                                Clients.initiateDowload(url, "index.m3u8").enqueue(retrofitCallback { _, response ->
+                                    response?.body()?.let { indexResponse ->
+                                        writeResponseBodyToDisk(indexResponse, url, "index.m3u8")
                                     }
-                                }
-                            })
-                        }
-                    } else if (content.contentable.equals("document")) {
-                        subTitle.text = content.contentDocument.documentName
-                        ll.addView(inflatedView)
-                        inflatedView.setOnClickListener {
-                            it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
+                                })
 
-                        }
-                    } else if (content.contentable.equals("video")) {
-                        subTitle.text = content.contentVideo.videoName
-                        ll.addView(inflatedView)
-                        inflatedView.setOnClickListener {
-                            it.context.startActivity(it.context.intentFor<YoutubePlayerActivity>("videoUrl" to content.contentVideo.videoUrl).singleTop())
+                                Clients.initiateDowload(url, "video.m3u8").enqueue(retrofitCallback { throwable, response ->
+                                    response?.body()?.let { videoResponse ->
+                                        writeResponseBodyToDisk(videoResponse, url, "video.m3u8")
+                                    }
+                                })
 
+                                Clients.initiateDowload(url, "video.key").enqueue(retrofitCallback { throwable, response ->
+                                    response?.body()?.let { keyResponse ->
+                                        writeResponseBodyToDisk(keyResponse, url, "video.key")
+                                        val videoChunks = MediaUtils.getCourseDownloadUrls(url, context)
+                                        videoChunks.forEach { videoName: String ->
+                                            Clients.initiateDowload(url, videoName).enqueue(retrofitCallback { throwable, response ->
+                                                writeResponseBodyToDisk(response?.body()!!, url, videoName)
+                                            })
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                        content.contentable.equals("document") -> {
+                            subTitle.text = content.contentDocument.documentName
+                            ll.addView(inflatedView)
+                            inflatedView.setOnClickListener {
+                                it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
+
+                            }
+                        }
+                        content.contentable.equals("video") -> {
+                            subTitle.text = content.contentVideo.videoName
+                            ll.addView(inflatedView)
+                            inflatedView.setOnClickListener {
+                                it.context.startActivity(it.context.intentFor<YoutubePlayerActivity>("videoUrl" to content.contentVideo.videoUrl).singleTop())
+
+                            }
                         }
                     }
                     var arrowAnimation: RotateAnimation

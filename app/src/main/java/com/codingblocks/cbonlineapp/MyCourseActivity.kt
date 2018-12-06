@@ -1,8 +1,8 @@
 package com.codingblocks.cbonlineapp
 
 import android.os.Bundle
-import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.*
@@ -11,6 +11,9 @@ import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
 import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
 import com.codingblocks.cbonlineapp.fragments.OverviewFragment
 import com.codingblocks.onlineapi.Clients
+import com.google.android.youtube.player.YouTubeInitializationResult
+import com.google.android.youtube.player.YouTubePlayer
+import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
@@ -21,9 +24,13 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
     lateinit var attempt_Id: String
     private lateinit var database: AppDatabase
-    var writtenToDisk = false
-    var writtenToDiskVideo = false
 
+    companion object {
+        val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
+
+    }
+
+    private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +48,22 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         val courseDao = database.courseDao()
         val instructorDao = database.instructorDao()
         setupViewPager()
+
+        courseDao.getCourse(attempt_Id).observe(this, Observer<Course> {
+            youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
+                override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
+                }
+
+                override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
+                    if (!p2) {
+                        info { it.promoVideo }
+                        youtubePlayerInstance?.loadVideo(it.promoVideo.substring(30,41))
+                    }
+                }
+            }
+            val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
+            youTubePlayerSupportFragment!!.initialize(YOUTUBE_API_KEY, youtubePlayerInit)
+        })
 
 
         Clients.onlineV2JsonApi.enrolledCourseById(attempt_Id).enqueue(retrofitCallback { throwable, response ->
@@ -107,7 +130,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                             when {
                                 content.contentable.equals("lecture") -> contentLecture = ContentLecture(content.lecture?.id!!, content.lecture?.name!!, content.lecture?.duration!!, content.lecture?.video_url!!, content.section_content?.id!!, content.updatedAt!!)
                                 content.contentable.equals("document") -> contentDocument = ContentDocument(content.document?.id!!, content.document?.name!!, content.document?.pdf_link!!, content.section_content?.id!!, content.updatedAt!!)
-                                content.contentable.equals("video") -> contentVideo = ContentVideo(content.video?.id!!, content.video?.name!!, content.video?.duration!!, content.video?.description!!, content.video?.url!!, content.section_content?.id!!, content.updatedAt!!)
+                                content.contentable.equals("video") -> contentVideo = ContentVideo()
                             }
                             contents.add(CourseContent(
                                     content.id!!, "UNDONE",
