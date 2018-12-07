@@ -11,6 +11,7 @@ import com.codingblocks.cbonlineapp.fragments.AnnouncementsFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
 import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
 import com.codingblocks.cbonlineapp.fragments.OverviewFragment
+import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
@@ -58,7 +59,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                 override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
                     if (!p2) {
                         if (it != null)
-                            youtubePlayerInstance?.loadVideo(it.promoVideo.substring(30, 41))
+                            youtubePlayerInstance?.loadVideo(MediaUtils.getYotubeVideoId(it.promoVideo))
                     }
                 }
             }

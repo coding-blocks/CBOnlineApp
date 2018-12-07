@@ -10,6 +10,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.ProgressBarAnimation
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
+import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Sections
 import com.ethanhua.skeleton.Skeleton
@@ -129,7 +130,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
             override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
                 if (!p2) {
                     info { "VIDEO_ID" + promoVideo!!.substring(30, 41) }
-                    youtubePlayerInstance?.loadVideo(promoVideo!!.substring(30, 41))
+                    youtubePlayerInstance?.loadVideo(MediaUtils.getYotubeVideoId(promoVideo!!))
                 }
             }
         }
@@ -140,18 +141,19 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     fun fetchRating() {
         Clients.api.getCourseRating(courseId).enqueue(retrofitCallback { throwable, response ->
-            response?.body().let { it?.apply {
-                coursePageRatingCountTv.text = count.toString() + " Rating"
-                coursePageRatingTv.text = rating + " out of 5 stars"
-                coursePageRatingBar.rating = rating?.toFloat()!!
-                for (i in 0 until progressBar.size) {
-                    progressBar[i]?.max = it.count * 1000
-                    progressBar[i]?.progress = it.stats[i].toInt() * 1000
-                    val anim = ProgressBarAnimation(progressBar[i], 0F, it.stats[i].toInt() * 1000F)
-                    anim.duration = 1500
-                    progressBar[i]?.startAnimation(anim)
+            response?.body().let {
+                it?.apply {
+                    coursePageRatingCountTv.text = count.toString() + " Rating"
+                    coursePageRatingTv.text = rating + " out of 5 stars"
+                    coursePageRatingBar.rating = rating?.toFloat()!!
+                    for (i in 0 until progressBar.size) {
+                        progressBar[i]?.max = it.count * 1000
+                        progressBar[i]?.progress = it.stats[i].toInt() * 1000
+                        val anim = ProgressBarAnimation(progressBar[i], 0F, it.stats[i].toInt() * 1000F)
+                        anim.duration = 1500
+                        progressBar[i]?.startAnimation(anim)
+                    }
                 }
-            }
 
             }
         })

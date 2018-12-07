@@ -5,6 +5,8 @@ import android.net.Uri
 import android.os.Environment
 import android.util.Log
 import java.io.File
+import java.util.regex.Pattern
+
 
 object MediaUtils {
 
@@ -30,6 +32,18 @@ object MediaUtils {
         }        //Read the file above and add the ts names to videoNames
 
         return videoNames
+    }
+
+    fun getYotubeVideoId(videoUrl: String): String {
+        var vId: String = ""
+        val pattern = Pattern.compile(
+                "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$",
+                Pattern.CASE_INSENSITIVE)
+        val matcher = pattern.matcher(videoUrl)
+        if (matcher.matches()) {
+            vId = matcher.group(1)
+        }
+        return vId
     }
 
 }
