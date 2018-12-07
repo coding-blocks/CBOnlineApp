@@ -5,6 +5,7 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
@@ -16,7 +17,7 @@ class YoutubePlayerActivity : AppCompatActivity(),AnkoLogger {
     lateinit var videoUrl: String
 
     companion object {
-        val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
+        const val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
 
     }
 
@@ -35,7 +36,7 @@ class YoutubePlayerActivity : AppCompatActivity(),AnkoLogger {
 
             override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
                 if (!p2) {
-                    youtubePlayerInstance?.loadVideo(videoUrl.substring(32))
+                    youtubePlayerInstance?.loadVideo(MediaUtils.getYotubeVideoId(videoUrl))
                 }
             }
         }

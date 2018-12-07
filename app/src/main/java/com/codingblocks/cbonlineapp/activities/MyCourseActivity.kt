@@ -131,8 +131,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                             when {
                                 content.contentable.equals("lecture") -> content.lecture?.let { contentLecture = ContentLecture(it.id!!, it.name!!, it.duration!!, it.video_url!!, content.section_content?.id!!, it.updatedAt!!) }
                                 content.contentable.equals("document") -> content.document?.let { contentDocument = ContentDocument(it.id!!, it.name!!, it.pdf_link!!, content.section_content?.id!!, it.updatedAt!!) }
-                                //check for crash
-                                content.contentable.equals("video") -> content.video?.let { contentVideo = ContentVideo(it.id!!, it.name!!, it.duration!!, it.description!!, it.url!!, content.section_content?.id!!, it.updatedAt!!) }
+                                content.contentable.equals("video") -> content.video?.let { contentVideo = ContentVideo(it.id!!, it.name!!, it.duration!!, it.description, it.url!!, content.section_content?.id!!, it.updatedAt!!) }
                             }
                             val status: String = if (content.progress != null)
                                 content.progress?.status!!

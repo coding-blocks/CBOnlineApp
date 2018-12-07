@@ -158,7 +158,7 @@ data class ContentVideo(
         var videoUid: String = "",
         var videoName: String = "",
         var videoDuration: Long = 0L,
-        var videoDescription: String = "",
+        var videoDescription: String? = "",
         var videoUrl: String = "",
         var videoContentId: String = "",
         var videoUpdatedAt: String = ""
