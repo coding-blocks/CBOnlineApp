@@ -35,7 +35,7 @@ object MediaUtils {
     }
 
     fun getYotubeVideoId(videoUrl: String): String {
-        var vId: String = ""
+        var vId = ""
         val pattern = Pattern.compile(
                 "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$",
                 Pattern.CASE_INSENSITIVE)

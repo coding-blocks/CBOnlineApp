@@ -36,7 +36,7 @@ class YoutubePlayerActivity : AppCompatActivity(),AnkoLogger {
 
             override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
                 if (!p2) {
-                    youtubePlayerInstance?.loadVideo(MediaUtils.getYotubeVideoId(videoUrl))
+                    youtubePlayerInstance?.loadVideo(videoUrl.substring(32))
                 }
             }
         }
