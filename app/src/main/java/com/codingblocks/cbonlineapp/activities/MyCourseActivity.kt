@@ -29,6 +29,8 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
     companion object {
         val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
+        val MESSAGE_PROGRESS = "message_progress"
+
 
     }
 

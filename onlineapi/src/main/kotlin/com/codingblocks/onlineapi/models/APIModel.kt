@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
+import java.io.Serializable
 
 data class RatingModel(
         val rating: String,
@@ -527,6 +528,13 @@ class Announcement : BaseModel() {
     @JvmField
     @JsonProperty("run-id")
     var run_id: String? = null
+
+}
+class Download : Serializable {
+
+    var progress: Int = 0
+    var currentFileSize: Int = 0
+    var totalFileSize: Int = 0
 
 }
 
