@@ -19,10 +19,9 @@ interface OnlineVideosApi {
     @GET("{videoUrl}/{fileType}")
     fun getVideoFiles(@Path("videoUrl") videoUrl: String,
                       @Path("fileType") fileName: String,
-                      @Query("Key-Pair-Id") key_pair_id: String = "APKAIX3JJRW7RHDSNHGA",
-                      @Query("Signature") signature: String = "cKCAUOlaWIqV3xdJNB50k2pj/XImjKZcH3fqm26MjtQ810AJ0X0nvnXI862YoWAS4plaEq7CxCUjT7CFueAu27+P4vi362wd9Od8FfBD29o+EaIVYQwu4audv3AGqR9nhOn1wqHyhAgTZqBZRf5kJXysuGb5kRT+O2okm79CtVJFOoXEtAVlrJEiQE1g1DLZ8sH5J406qMwQsM6ItscehWYqfbfH2D71ijqVNlu66Rn+6oz2eqUVE0Y54Mu5Cg17aQ95bWIYTXAlWC5D0p/jBGwjTa3L+0Ed4gaVaHjsOlpmSZjNC812cq1NQmVJvKnDytvDXfkfAc5D9n+7FKYMtQ==",
-                      @Query("Policy") policy: String = "eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9kMXFmMG96c3M0OTR4di5jbG91ZGZyb250Lm5ldC8xZGIyZTM3Yy0wZmM3LTQzOGYtYjk4NS0wY2IwNzU4MThjYjVWaWV3Z3JvdXBtcDQvKiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTU0NDA0Mjc3Mn19fV19"): Call<ResponseBody>
-
+                      @Query("Key-Pair-Id") key_pair_id: String = "",
+                      @Query("Signature") signature: String = "",
+                      @Query("Policy") policy: String = ""): Call<ResponseBody>
 
 
 }

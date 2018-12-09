@@ -115,24 +115,25 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                                 //TODO : Error handling
                                 //No need to nest every call within one another, we can start the larger downloads sequentially once the smaller
                                 //downloads (m3u8 and key) have been completed
-                                Clients.initiateDowload(url, "index.m3u8").enqueue(retrofitCallback { _, response ->
+
+                                Clients.initiateDownload(url, "index.m3u8").enqueue(retrofitCallback { _, response ->
                                     response?.body()?.let { indexResponse ->
                                         writeResponseBodyToDisk(indexResponse, url, "index.m3u8")
                                     }
                                 })
 
-                                Clients.initiateDowload(url, "video.m3u8").enqueue(retrofitCallback { throwable, response ->
+                                Clients.initiateDownload(url, "video.m3u8").enqueue(retrofitCallback { throwable, response ->
                                     response?.body()?.let { videoResponse ->
                                         writeResponseBodyToDisk(videoResponse, url, "video.m3u8")
                                     }
                                 })
 
-                                Clients.initiateDowload(url, "video.key").enqueue(retrofitCallback { throwable, response ->
+                                Clients.initiateDownload(url, "video.key").enqueue(retrofitCallback { throwable, response ->
                                     response?.body()?.let { keyResponse ->
                                         writeResponseBodyToDisk(keyResponse, url, "video.key")
                                         val videoChunks = MediaUtils.getCourseDownloadUrls(url, context)
                                         videoChunks.forEach { videoName: String ->
-                                            Clients.initiateDowload(url, videoName).enqueue(retrofitCallback { throwable, response ->
+                                            Clients.initiateDownload(url, videoName).enqueue(retrofitCallback { throwable, response ->
                                                 writeResponseBodyToDisk(response?.body()!!, url, videoName)
                                             })
                                         }

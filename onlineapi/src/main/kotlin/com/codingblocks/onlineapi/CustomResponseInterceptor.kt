@@ -40,11 +40,11 @@ class CustomResponseInterceptor : Interceptor {
         val newRequest: Request
         // pass new policy-string as query param for the request
         val url = oldUrl.newBuilder()
-                .addQueryParameter("Key-Pair-Id", newParams?.get("keyId").toString())
-                .addQueryParameter("Signature", newParams?.get("policyString").toString())
-                .addQueryParameter("Policy,", newParams?.get("signature").toString())
+                .addQueryParameter("Key-Pair-Id", newParams?.get("keyId")?.asString)
+                .addQueryParameter("Signature", newParams?.get("signature")?.asString)
+                .addQueryParameter("Policy", newParams?.get("policyString")?.asString)
                 .build()
-        newRequest = req.newBuilder().url(url).build()
+        newRequest = Request.Builder().url(url).build()
         val another = chain.proceed(newRequest)
         while (another.code() == 403) {
             makeTokenRefreshCall(newRequest, chain)

@@ -94,7 +94,7 @@ object Clients {
 
     val apiVideo = videoDownloadClient.create(OnlineVideosApi::class.java)
 
-    fun initiateDowload(url: String, fileName: String) = apiVideo.getVideoFiles(url, fileName)
+    fun initiateDownload(url: String, fileName: String) = apiVideo.getVideoFiles(url, fileName)
 
 
 
