@@ -37,7 +37,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
     private lateinit var context: Context
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
-
+    lateinit var arrowAnimation: RotateAnimation
 
     fun setData(sectionData: ArrayList<CourseSection>) {
         this.sectionData = sectionData
@@ -158,27 +158,34 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                             }
                         }
                     }
-                    var arrowAnimation: RotateAnimation
+
+                    itemView.setOnClickListener {
+                        showOrHide(ll, it)
+                    }
 
                     itemView.arrow.setOnClickListener {
-                        if (ll.visibility == View.GONE) {
-                            ll.visibility = View.VISIBLE
-                            arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                                    0.5f)
-                            arrowAnimation.fillAfter = true
-                            arrowAnimation.duration = 350
-                            itemView.arrow.startAnimation(arrowAnimation)
-                        } else {
-                            ll.visibility = View.GONE
-                            arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                                    0.5f)
-                            arrowAnimation.fillAfter = true
-                            arrowAnimation.duration = 350
-                            itemView.arrow.startAnimation(arrowAnimation)
-                        }
+                        showOrHide(ll, itemView)
                     }
                 }
             })
+        }
+    }
+
+    fun showOrHide(ll: View, itemView: View) {
+        if (ll.visibility == View.GONE) {
+            ll.visibility = View.VISIBLE
+            arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                    0.5f)
+            arrowAnimation.fillAfter = true
+            arrowAnimation.duration = 350
+            itemView.arrow.startAnimation(arrowAnimation)
+        } else {
+            ll.visibility = View.GONE
+            arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                    0.5f)
+            arrowAnimation.fillAfter = true
+            arrowAnimation.duration = 350
+            itemView.arrow.startAnimation(arrowAnimation)
         }
     }
 
