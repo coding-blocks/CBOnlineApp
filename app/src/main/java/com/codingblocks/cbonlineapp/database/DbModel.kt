@@ -140,8 +140,8 @@ data class ContentLecture(
         var lectureDuration: Long = 0L,
         var lectureUrl: String = "",
         var lectureContentId: String = "",
-        var lectureUpdatedAt: String = ""
-
+        var lectureUpdatedAt: String = "",
+        var isDownloaded:Boolean = false
 )
 
 @Entity()
