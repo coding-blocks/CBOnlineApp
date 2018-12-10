@@ -55,6 +55,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun fetchUser() {
         if (!prefs.SP_ACCESS_TOKEN_KEY.equals("access_token")) {
+            Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
             info { prefs.SP_ACCESS_TOKEN_KEY }
             Clients.api.getMe().enqueue(retrofitCallback { t, resp ->
                 resp?.body()?.let { it ->

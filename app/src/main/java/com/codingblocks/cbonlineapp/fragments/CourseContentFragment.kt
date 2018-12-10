@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.codingblocks.cbonlineapp.DownloadStarter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
@@ -18,7 +19,10 @@ import org.jetbrains.anko.info
 
 private const val ARG__ATTEMPT_ID = "attempt_id"
 
-class CourseContentFragment : Fragment(), AnkoLogger {
+class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
+    override fun startDownload(url: String, id: String, lectureContentId: String) {
+        info { "$url  $id  $lectureContentId  " }
+    }
 
     private lateinit var database: AppDatabase
     lateinit var attemptId: String
@@ -38,19 +42,16 @@ class CourseContentFragment : Fragment(), AnkoLogger {
         database = AppDatabase.getInstance(context!!)
         val sectionDao = database.setionDao()
         val sectionsList = ArrayList<CourseSection>()
-        val sectionAdapter = SectionDetailsAdapter(sectionsList, activity!!)
+        val sectionAdapter = SectionDetailsAdapter(sectionsList, activity!!, this)
         view.rvExpendableView.layoutManager = LinearLayoutManager(context)
         view.rvExpendableView.adapter = sectionAdapter
         //to stop recyclerview from binding again again
-        //fix for adding items on runtime
+        //TODO fix for adding items on runtime
         view.rvExpendableView.setItemViewCacheSize(25)
 
 
         sectionDao.getCourseSection(attemptId).observe(this, Observer<List<CourseSection>> {
-            info {
-                "sections$it"
-                sectionAdapter.setData(it as ArrayList<CourseSection>)
-            }
+            sectionAdapter.setData(it as ArrayList<CourseSection>)
         })
 
         return view

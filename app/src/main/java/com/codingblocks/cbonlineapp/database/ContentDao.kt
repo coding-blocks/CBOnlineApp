@@ -14,7 +14,10 @@ abstract class ContentDao : BaseDao<CourseContent> {
     abstract fun getCourseContents(attempt_id: String): LiveData<List<CourseContent>>
 
     @Query("SElECT * FROM CourseContent where attempt_id = :attempt AND section_id = :section")
-    abstract fun getCourseSectionContents(attempt: String,section: String): LiveData<List<CourseContent>>
+    abstract fun getCourseSectionContents(attempt: String, section: String): LiveData<List<CourseContent>>
+
+    @Query("UPDATE CourseContent SET isDownloaded = 1 WHERE lectureContentId = :contentid AND section_id = :section")
+    abstract fun updateContent(section: String, contentid: String)
 
 
 }
