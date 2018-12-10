@@ -32,11 +32,11 @@ class OnlineJsonApiAuthenticatedTest {
         }
     }
 
-    @Test
-    fun `GET myCourse`() {
-        val attempt = api.enrolledCourseById("8252").execute().body()
-        attempt?.let {
-            assertEquals(1, 1)
-        }
-    }
+//    @Test
+//    fun `GET myCourse`() {
+//        val attempt = api.enrolledCourseById("8252").execute().body()
+//        attempt?.let {
+//            assertEquals(1, 1)
+//        }
+//    }
 }

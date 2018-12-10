@@ -9,7 +9,6 @@ import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.fragments.AnnouncementsFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
-import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
 import com.codingblocks.cbonlineapp.fragments.OverviewFragment
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
@@ -29,6 +28,8 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
     companion object {
         val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
+        val MESSAGE_PROGRESS = "message_progress"
+
 
     }
 
@@ -169,6 +170,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         htab_tabs.getTabAt(1)?.setIcon(R.drawable.ic_announcement)
         htab_tabs.getTabAt(2)?.setIcon(R.drawable.ic_docs)
         htab_tabs.getTabAt(2)?.select()
+        htab_viewpager.offscreenPageLimit = 3
 //        htab_tabs.getTabAt(3)?.setIcon(R.drawable.ic_support)
 
     }
