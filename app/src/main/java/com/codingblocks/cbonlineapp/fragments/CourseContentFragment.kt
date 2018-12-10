@@ -13,15 +13,18 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.CourseSection
+import com.codingblocks.cbonlineapp.services.DownloadService
 import kotlinx.android.synthetic.main.fragment_course_content.view.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
+import org.jetbrains.anko.support.v4.startService
+
 
 private const val ARG__ATTEMPT_ID = "attempt_id"
 
 class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     override fun startDownload(url: String, id: String, lectureContentId: String) {
-        info { "$url  $id  $lectureContentId  " }
+        startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId)
+
     }
 
     private lateinit var database: AppDatabase

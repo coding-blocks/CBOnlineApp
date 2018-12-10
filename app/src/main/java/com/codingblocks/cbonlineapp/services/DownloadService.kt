@@ -1,117 +1,156 @@
 package com.codingblocks.cbonlineapp.services
 
+import android.annotation.SuppressLint
 import android.app.IntentService
 import android.app.Notification
 import android.app.NotificationManager
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Environment
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
-import com.codingblocks.cbonlineapp.activities.MyCourseActivity
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.ContentDao
+import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Download
 import okhttp3.ResponseBody
-import java.io.BufferedInputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+import java.io.*
+import kotlin.concurrent.thread
 
-class DownloadService : IntentService("Download Service") {
+@SuppressLint("Registered")
+class DownloadService : IntentService("Download Service"), AnkoLogger {
 
     private var notificationBuilder: Notification.Builder? = null
     private var notificationManager: NotificationManager? = null
     private var totalFileSize: Int = 0
+    private lateinit var database: AppDatabase
+    private lateinit var contentDao: ContentDao
 
 
-    override fun onHandleIntent(intent: Intent?) {
+    override fun onHandleIntent(intent: Intent) {
 
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         notificationBuilder = Notification.Builder(this)
-                //                .setSmallIcon(R.drawable.ic_download)
+                .setSmallIcon(R.drawable.ic_announcement)
                 .setContentTitle("Download")
                 .setContentText("Downloading File")
                 .setAutoCancel(true)
         notificationManager!!.notify(0, notificationBuilder!!.build())
 
-        initDownload()
+        database = AppDatabase.getInstance(this)
+        contentDao = database.contentDao()
+
+        initDownload(intent)
 
     }
 
-    private fun initDownload() {
-
+    private fun initDownload(intent: Intent) {
+        var downloadCount = 0
+        val url = intent.getStringExtra("url")
         Clients.initiateDownload(url, "index.m3u8").enqueue(retrofitCallback { _, response ->
             response?.body()?.let { indexResponse ->
-                downloadFile(indexResponse)
+                writeResponseBodyToDisk(indexResponse, url, "index.m3u8")
+            }
+        })
+
+        Clients.initiateDownload(url, "video.key").enqueue(retrofitCallback { throwable, response ->
+            response?.body()?.let { videoResponse ->
+                writeResponseBodyToDisk(videoResponse, url, "video.key")
+            }
+        })
+
+        Clients.initiateDownload(url, "video.m3u8").enqueue(retrofitCallback { throwable, response ->
+            response?.body()?.let { keyResponse ->
+                writeResponseBodyToDisk(keyResponse, url, "video.m3u8")
+                val videoChunks = MediaUtils.getCourseDownloadUrls(url, this)
+                videoChunks.forEach { videoName: String ->
+                    Clients.initiateDownload(url, videoName).enqueue(retrofitCallback { throwable, response ->
+                        val isDownloaded = writeResponseBodyToDisk(response?.body()!!, url, videoName)
+                        if (isDownloaded) {
+                            downloadCount++
+                        }
+                        if (downloadCount == videoChunks.size) {
+                            onDownloadComplete()
+                            thread {
+                                contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"))
+                            }
+                        }
+                    })
+                }
             }
         })
 
     }
 
-    @Throws(IOException::class)
-    private fun downloadFile(body: ResponseBody) {
+    private fun writeResponseBodyToDisk(body: ResponseBody, videoUrl: String?, fileName: String): Boolean {
+        try {
 
-        var count: Int
-        val data = ByteArray(1024 * 4)
-        val fileSize = body.contentLength()
-        val bis = BufferedInputStream(body.byteStream(), 1024 * 8)
-        val outputFile = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "file.zip")
-        val output = FileOutputStream(outputFile)
-        var total: Long = 0
-        val startTime = System.currentTimeMillis()
-        var timeCount = 1
-        while ((count = bis.read(data)) != -1) {
-
-            total += count.toLong()
-            totalFileSize = (fileSize / Math.pow(1024.0, 2.0)).toInt()
-            val current = Math.round(total / Math.pow(1024.0, 2.0)).toDouble()
-
-            val progress = (total * 100 / fileSize).toInt()
-
-            val currentTime = System.currentTimeMillis() - startTime
-
-            val download = Download()
-            download.totalFileSize = totalFileSize
-
-            if (currentTime > 1000 * timeCount) {
-
-                download.currentFileSize = current.toInt()
-                download.progress = progress
-                sendNotification(download)
-                timeCount++
+            val file = this.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+            val folderFile = File(file, "/$videoUrl")
+            val dataFile = File(file, "/$videoUrl/$fileName")
+            if (!folderFile.exists()) {
+                folderFile.mkdir()
             }
+            // todo change the file location/name according to your needs
 
-            output.write(data, 0, count)
+            var inputStream: InputStream? = null
+            var outputStream: OutputStream? = null
+
+            try {
+                val fileReader = ByteArray(4096)
+
+                val fileSize = body.contentLength()
+                var fileSizeDownloaded: Long = 0
+
+
+                inputStream = body.byteStream()
+                outputStream = FileOutputStream(dataFile)
+
+                while (true) {
+                    val read = inputStream!!.read(fileReader)
+
+                    if (read == -1) {
+                        break
+                    }
+
+                    outputStream.write(fileReader, 0, read)
+
+                    fileSizeDownloaded += read.toLong()
+
+                }
+
+                outputStream.flush()
+
+                return true
+            } catch (e: IOException) {
+                return false
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close()
+                }
+
+                if (outputStream != null) {
+                    outputStream.close()
+                }
+            }
+        } catch (e: IOException) {
+            return false
         }
-        onDownloadComplete()
-        output.flush()
-        output.close()
-        bis.close()
 
     }
 
-    private fun sendNotification(download: Download) {
+    private fun sendNotification(download: Int) {
 
-        sendIntent(download)
-        notificationBuilder!!.setProgress(100, download.progress, false)
-        notificationBuilder!!.setContentText(String.format("Downloaded (%d/%d) MB", download.currentFileSize, download.totalFileSize))
+        notificationBuilder!!.setProgress(100, download, false)
+        notificationBuilder!!.setContentText(String.format("Downloaded (%d/%d) MB", download, download))
         notificationManager!!.notify(0, notificationBuilder!!.build())
     }
 
 
-    private fun sendIntent(download: Download) {
-
-        val intent = Intent(MyCourseActivity.MESSAGE_PROGRESS)
-        intent.putExtra("download", download)
-        BroadcastReceiver.getInstance(this@DownloadService).sendBroadcast(intent)
-    }
-
     private fun onDownloadComplete() {
-
-        val download = Download()
-        download.progress = 100
-        sendIntent(download)
 
         notificationManager!!.cancel(0)
         notificationBuilder!!.setProgress(0, 0, false)

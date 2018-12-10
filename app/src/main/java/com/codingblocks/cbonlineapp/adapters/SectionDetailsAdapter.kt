@@ -116,45 +116,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                                     starter.startDownload(url,data.id, content.contentLecture.lectureContentId)
                                     downloadBtn.isEnabled = false
                                     (downloadBtn.background as AnimationDrawable).start()
-//                                    var downloadCount = 0
-//                                    // download lecture index.m3u8,video.key and video.m3u8
-//                                    //TODO : Error handling
-//                                    //No need to nest every call within one another, we can start the larger downloads sequentially once the smaller
-//                                    //downloads (m3u8 and key) have been completed
-//
-//                                    Clients.initiateDownload(url, "index.m3u8").enqueue(retrofitCallback { _, response ->
-//                                        response?.body()?.let { indexResponse ->
-//                                            writeResponseBodyToDisk(indexResponse, url, "index.m3u8")
-//                                        }
-//                                    })
-//
-//                                    Clients.initiateDownload(url, "video.key").enqueue(retrofitCallback { throwable, response ->
-//                                        response?.body()?.let { videoResponse ->
-//                                            writeResponseBodyToDisk(videoResponse, url, "video.key")
-//                                        }
-//                                    })
-//
-//                                    Clients.initiateDownload(url, "video.m3u8").enqueue(retrofitCallback { throwable, response ->
-//                                        response?.body()?.let { keyResponse ->
-//                                            writeResponseBodyToDisk(keyResponse, url, "video.m3u8")
-//                                            val videoChunks = MediaUtils.getCourseDownloadUrls(url, context)
-//                                            videoChunks.forEach { videoName: String ->
-//                                                Clients.initiateDownload(url, videoName).enqueue(retrofitCallback { throwable, response ->
-//                                                    val isDownloaded = writeResponseBodyToDisk(response?.body()!!, url, videoName)
-//                                                    if (isDownloaded) {
-//                                                        downloadCount++
-//                                                    }
-//                                                    if (downloadCount == videoChunks.size) {
-//                                                        thread {
-//                                                            contentDao.updateContent(data.id, content.contentLecture.lectureContentId)
-//                                                        }
-//
-//
-//                                                    }
-//                                                })
-//                                            }
-//                                        }
-//                                    })
                                 }
                             } else {
                                 downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
@@ -222,62 +183,5 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
             arrowAnimation.duration = 350
             itemView.arrow.startAnimation(arrowAnimation)
         }
-    }
-
-    private fun writeResponseBodyToDisk(body: ResponseBody, videoUrl: String?, fileName: String): Boolean {
-        try {
-
-            val file = context.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
-            val folderFile = File(file, "/$videoUrl")
-            val dataFile = File(file, "/$videoUrl/$fileName")
-            if (!folderFile.exists()) {
-                folderFile.mkdir()
-            }
-            // todo change the file location/name according to your needs
-
-            var inputStream: InputStream? = null
-            var outputStream: OutputStream? = null
-
-            try {
-                val fileReader = ByteArray(4096)
-
-                val fileSize = body.contentLength()
-                var fileSizeDownloaded: Long = 0
-
-
-                inputStream = body.byteStream()
-                outputStream = FileOutputStream(dataFile)
-
-                while (true) {
-                    val read = inputStream!!.read(fileReader)
-
-                    if (read == -1) {
-                        break
-                    }
-
-                    outputStream.write(fileReader, 0, read)
-
-                    fileSizeDownloaded += read.toLong()
-
-                }
-
-                outputStream.flush()
-
-                return true
-            } catch (e: IOException) {
-                return false
-            } finally {
-                if (inputStream != null) {
-                    inputStream.close()
-                }
-
-                if (outputStream != null) {
-                    outputStream.close()
-                }
-            }
-        } catch (e: IOException) {
-            return false
-        }
-
     }
 }

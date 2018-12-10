@@ -530,13 +530,6 @@ class Announcement : BaseModel() {
     var run_id: String? = null
 
 }
-class Download : Serializable {
-
-    var progress: Int = 0
-    var currentFileSize: Int = 0
-    var totalFileSize: Int = 0
-
-}
 
 
 
