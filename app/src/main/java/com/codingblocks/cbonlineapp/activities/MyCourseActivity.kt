@@ -159,16 +159,17 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
     private fun setupViewPager() {
         val adapter = TabLayoutAdapter(supportFragmentManager)
-        adapter.add(OverviewFragment(), "")
-        adapter.add(AnnouncementsFragment(), "")
-        adapter.add(CourseContentFragment.newInstance(attempt_Id), "")
-        adapter.add(DoubtsFragment(), "")
+        adapter.add(OverviewFragment(), "Overview")
+        adapter.add(AnnouncementsFragment(), "About")
+        adapter.add(CourseContentFragment.newInstance(attempt_Id), "Course Content")
+//        adapter.add(DoubtsFragment(), "")
         htab_viewpager.adapter = adapter
         htab_tabs.setupWithViewPager(htab_viewpager)
         htab_tabs.getTabAt(0)?.setIcon(R.drawable.ic_menu)
         htab_tabs.getTabAt(1)?.setIcon(R.drawable.ic_announcement)
         htab_tabs.getTabAt(2)?.setIcon(R.drawable.ic_docs)
-        htab_tabs.getTabAt(3)?.setIcon(R.drawable.ic_support)
+        htab_tabs.getTabAt(2)?.select()
+//        htab_tabs.getTabAt(3)?.setIcon(R.drawable.ic_support)
 
     }
 
