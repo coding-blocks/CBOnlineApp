@@ -50,7 +50,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         view.rvExpendableView.adapter = sectionAdapter
         //to stop recyclerview from binding again again
         //TODO fix for adding items on runtime
-        view.rvExpendableView.setItemViewCacheSize(25)
 
 
         sectionDao.getCourseSection(attemptId).observe(this, Observer<List<CourseSection>> {
