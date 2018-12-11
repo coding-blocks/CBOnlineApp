@@ -134,13 +134,16 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                                 content.contentable.equals("document") -> content.document?.let { contentDocument = ContentDocument(it.id!!, it.name!!, it.pdf_link!!, content.section_content?.id!!, it.updatedAt!!) }
                                 content.contentable.equals("video") -> content.video?.let { contentVideo = ContentVideo(it.id!!, it.name!!, it.duration!!, it.description, it.url!!, content.section_content?.id!!, it.updatedAt!!) }
                             }
-                            val status: String = if (content.progress != null)
-                                content.progress?.status!!
-                            else {
-                                "UNDONE"
+                            var progressId = ""
+                            var status: String
+                            if (content.progress != null) {
+                                status = content.progress?.status!!
+                                progressId = content.progress?.id!!
+                            } else {
+                                status = "UNDONE"
                             }
                             contents.add(CourseContent(
-                                    content.id!!, status,
+                                    content.id!!, status, progressId,
                                     content.title!!, content.duration!!,
                                     content.contentable!!, content.section_content?.order!!,
                                     content.section_content?.sectionId!!, attempt_Id, content.section_content?.updatedAt!!, contentLecture, contentDocument, contentVideo))

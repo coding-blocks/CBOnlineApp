@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.adapters
 
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,15 +23,12 @@ import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseContent
 import com.codingblocks.cbonlineapp.database.CourseSection
 import kotlinx.android.synthetic.main.item_section.view.*
-import okhttp3.ResponseBody
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
-import java.io.*
+import kotlin.concurrent.thread
 
 
-class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, private var activity: LifecycleOwner, private var starter: DownloadStarter) : RecyclerView.Adapter<SectionDetailsAdapter.CourseViewHolder>(), AnkoLogger {
+class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, private var activity: LifecycleOwner, private var starter: DownloadStarter) : RecyclerView.Adapter<SectionDetailsAdapter.CourseViewHolder>() {
 
     private lateinit var context: Context
     private lateinit var database: AppDatabase
@@ -42,7 +38,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
 
     fun setData(sectionData: ArrayList<CourseSection>) {
         this.sectionData = sectionData
-        info { sectionData.size }
         notifyDataSetChanged()
     }
 
@@ -92,7 +87,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                     }
                     val hour = duration / (1000 * 60 * 60) % 24
                     val minute = duration / (1000 * 60) % 60
-                    info { "hour$hour   minute$minute" }
 
                     if (minute >= 1 && hour == 0L)
                         itemView.lectureTime.text = ("$minute Min")
@@ -113,7 +107,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                             ll.addView(inflatedView)
                             if (!content.contentLecture.isDownloaded) {
                                 downloadBtn.setOnClickListener {
-                                    starter.startDownload(url,data.id, content.contentLecture.lectureContentId)
+                                    starter.startDownload(url, data.id, content.contentLecture.lectureContentId)
                                     downloadBtn.isEnabled = false
                                     (downloadBtn.background as AnimationDrawable).start()
                                 }
@@ -124,6 +118,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                                     downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
                                 }
                                 inflatedView.setOnClickListener {
+                                    //TODO status to be updated on server as well
+                                    if (content.progress == "UNDONE")
+                                        thread { contentDao.updateProgress(data.id, content.contentLecture.lectureContentId, "DONE") }
                                     it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url).singleTop())
                                 }
                             }
@@ -137,6 +134,8 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                             }
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
+                                if (content.progress == "UNDONE")
+                                    thread { contentDao.updateProgress(data.id, content.contentLecture.lectureContentId, "DONE") }
                                 it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
 
                             }
@@ -149,6 +148,8 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                             }
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
+                                if (content.progress == "UNDONE")
+                                    thread { contentDao.updateProgress(data.id, content.contentLecture.lectureContentId, "DONE") }
                                 it.context.startActivity(it.context.intentFor<YoutubePlayerActivity>("videoUrl" to content.contentVideo.videoUrl).singleTop())
 
                             }
