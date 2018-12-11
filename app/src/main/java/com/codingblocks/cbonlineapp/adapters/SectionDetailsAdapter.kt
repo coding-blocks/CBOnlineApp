@@ -120,7 +120,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                                 inflatedView.setOnClickListener {
                                     //TODO status to be updated on server as well
                                     if (content.progress == "UNDONE")
-                                        thread { contentDao.updateProgress(data.id, content.contentLecture.lectureContentId, "DONE") }
+                                        thread { contentDao.updateProgressLecture(data.id, content.contentLecture.lectureContentId, "DONE") }
                                     it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url).singleTop())
                                 }
                             }
@@ -135,7 +135,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
                                 if (content.progress == "UNDONE")
-                                    thread { contentDao.updateProgress(data.id, content.contentLecture.lectureContentId, "DONE") }
+                                    thread { contentDao.updateProgressDocuemnt( data.id, content.contentDocument.documentContentId, "DONE") }
                                 it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
 
                             }
@@ -149,7 +149,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
                                 if (content.progress == "UNDONE")
-                                    thread { contentDao.updateProgress(data.id, content.contentLecture.lectureContentId, "DONE") }
+                                    thread { contentDao.updateProgressVideo(data.id, content.contentVideo.videoContentId, "DONE") }
                                 it.context.startActivity(it.context.intentFor<YoutubePlayerActivity>("videoUrl" to content.contentVideo.videoUrl).singleTop())
 
                             }
