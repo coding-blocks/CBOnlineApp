@@ -114,6 +114,7 @@ data class Announcement(
 data class CourseContent(
         var uid: String,
         var progress: String,
+        var progressId: String,
         var title: String,
         var contentDuration: Long,
         var contentable: String,
@@ -141,7 +142,7 @@ data class ContentLecture(
         var lectureUrl: String = "",
         var lectureContentId: String = "",
         var lectureUpdatedAt: String = "",
-        var isDownloaded:Boolean = false
+        var isDownloaded: Boolean = false
 )
 
 @Entity()
