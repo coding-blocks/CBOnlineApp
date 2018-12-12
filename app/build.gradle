@@ -56,6 +56,8 @@ dependencies {
     implementation 'io.github.inflationx:calligraphy3:3.0.0'
     implementation 'io.github.inflationx:viewpump:1.0.0'
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
+    implementation 'com.android.support:customtabs:28.0.0'
+
 
     //database
     def room_version = "2.1.0-alpha02"
@@ -94,5 +96,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'com.google.firebase:firebase-invites:16.0.5'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.7'
+    implementation 'com.android.support:customtabs:23.3.0'
+
 
 }

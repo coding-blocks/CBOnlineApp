@@ -1,9 +1,11 @@
 package com.codingblocks.cbonlineapp.activities
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.R
@@ -32,6 +34,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     lateinit var skeletonScreen: SkeletonScreen
     lateinit var courseId: String
+    var runId: String = ""
     lateinit var courseName: String
     lateinit var progressBar: Array<ProgressBar?>
 
@@ -56,28 +59,43 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         setSupportActionBar(toolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        skeletonScreen = Skeleton.bind(courseRootView)
-                .shimmer(true)
-                .angle(20)
-                .duration(1200)
-                .load(R.layout.item_skeleton_course)
-                .show()
+//        skeletonScreen = Skeleton.bind(courseRootView)
+//                .shimmer(true)
+//                .angle(20)
+//                .duration(1200)
+//                .load(R.layout.item_skeleton_course)
+//                .show()
 
 
         val service = Clients.onlineV2JsonApi
 
         Clients.onlineV2JsonApi.courseById(courseId).enqueue(retrofitCallback { t, resp ->
-            resp?.body()?.let { it ->
-                skeletonScreen.hide()
+            resp?.body()?.let { course ->
+//                skeletonScreen.hide()
                 coursePageTitle.text = courseName
-                coursePageSubtitle.text = it.subtitle
-                coursePageSummary.text = it.summary
+                coursePageSubtitle.text = course.subtitle
+                coursePageSummary.text = course.summary
+                runId = course.runs!![0].id!!
+                info { runId }
+                trialBtn.setOnClickListener {
+                    Clients.api.enrollTrial(course.runs!![0].id!!).enqueue(retrofitCallback { throwable, response ->
+
+                    })
+                }
+                buyBtn.setOnClickListener {
+                    Clients.api.addToCart(course.runs!![0].id!!).enqueue(retrofitCallback { throwable, response ->
+                        val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+                        val customTabsIntent = builder.build()
+                        customTabsIntent.launchUrl(this, Uri.parse("https://dukaan.codingblocks.com/mycart"))
+
+                    })
+                }
                 SvgLoader.pluck()
                         .with(this)
-                        .load(it.logo, coursePageLogo)
-                showpromoVideo(it.promoVideo)
+                        .load(course.logo, coursePageLogo)
+                showpromoVideo(course.promoVideo)
                 fetchRating()
-                val sections = it.runs?.get(0)?.sections
+                val sections = course.runs?.get(0)?.sections
                 val sectionsList = ArrayList<Sections>()
                 val sectionAdapter = SectionsDataAdapter(ArrayList())
                 rvExpendableView.layoutManager = LinearLayoutManager(this)
@@ -110,18 +128,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     }
 
     private fun showpromoVideo(promoVideo: String?) {
-
-
-//        val frameVideo = "<html><iframe width=\"420\" height=\"315\" src=\"$promoVideo\" frameborder=\"0\" allowfullscreen></iframe></body></html>"
-//
-//        displayYoutubeVideo.webViewClient = object : WebViewClient() {
-//            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-//                return false
-//            }
-//        }
-//        val webSettings = displayYoutubeVideo.settings
-//        webSettings.javaScriptEnabled = true
-//        displayYoutubeVideo.loadData(frameVideo, "text/html", "utf-8")
 
         youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
             override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {

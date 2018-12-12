@@ -1,6 +1,7 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Progress
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -11,7 +12,7 @@ class OnlineJsonApiAuthenticatedTest {
 
     @Before
     fun `set JWT` () {
-        Clients.authJwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc5NzUsImZpcnN0bmFtZSI6IlB1bGtpdCIsImxhc3RuYW1lIjoiQWdnYXJ3YWwiLCJlbWFpbCI6ImFnZ2Fyd2FscHVsa2l0NTk2QGdtYWlsLmNvbSIsIm1vYmlsZSI6Ijk1ODIwNTQ2NjQiLCJvbmVhdXRoX2lkIjoiMTIwMzUiLCJsYXN0X3JlYWRfbm90aWZpY2F0aW9uIjoiMCIsInBob3RvIjoiaHR0cHM6Ly9ncmFwaC5mYWNlYm9vay5jb20vMTc4MzM4OTczNTAyODQ2MC9waWN0dXJlP3R5cGU9bGFyZ2UiLCJjb2xsZWdlIjoiQW1pdHkgU2Nob29sIE9mIEVuZ2luZWVyaW5nICYgVGVjaG5vbG9neSAoTm9pZGEpIiwicm9sZUlkIjoyLCJjcmVhdGVkQXQiOiIyMDE4LTA5LTI3VDEzOjEwOjU5LjM5NloiLCJ1cGRhdGVkQXQiOiIyMDE4LTExLTE4VDA4OjIwOjI5LjE4NloiLCJyb2xlIjp7ImlkIjoyLCJuYW1lIjoiU3R1ZGVudCIsImNyZWF0ZWRBdCI6IjIwMTctMDktMDdUMTA6NTg6MTkuOTkzWiIsInVwZGF0ZWRBdCI6IjIwMTctMDktMDdUMTA6NTg6MTkuOTkzWiJ9LCJjbGllbnRJZCI6IjZkMWI3ZmNiLWZiMDYtNDJiZC1iMzM1LTRiNWMwYmIxMDUwNiIsImlzVG9rZW5Gb3JBZG1pbiI6ZmFsc2UsImlhdCI6MTU0MjUyOTIyOSwiZXhwIjoxNTQyNTMwNzI5fQ.f3-SOcIFQbsORcMYmIJR0wWz8x3RHrGtbCuuogVlWLsIuX1WLVI6bo1v4JUC3_P8WVzNxwjdcxn5hA5vHtfbjMUPWe_Uy5n9S15ECVy5H6NngU4eF6zTfX6CUlIApgNFZcpPnF2yvkqeX7OEJfcyTFjTk4REQaL7-SkuXBTbKJhzd6MCHs1dmYTEXj98fKNcBmfYCBNVy0q_ETtlPE-3ukKwJgoDl6KCVhZc1uemgFGxjnnsKh_UJxUNnmbAXraMC-255ObJy3dAOQZppU5wMNlPtKgqazjXwUnRO1dP8gq2WcLOv-cqLKGnOTZWxLnxyPhflxKd3yfm_8qu1OiwUg"
+        Clients.authJwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc5NzUsImZpcnN0bmFtZSI6IlB1bGtpdCIsImxhc3RuYW1lIjoiQWdnYXJ3YWwiLCJ1c2VybmFtZSI6ImFnZ2Fyd2FscHVsa2l0NTk2LWciLCJlbWFpbCI6ImFnZ2Fyd2FscHVsa2l0NTk2QGdtYWlsLmNvbSIsIm1vYmlsZSI6Iis5MS05NTgyMDU0NjY0Iiwib25lYXV0aF9pZCI6IjEyMDM1IiwibGFzdF9yZWFkX25vdGlmaWNhdGlvbiI6IjAiLCJwaG90byI6Imh0dHBzOi8vZ3JhcGguZmFjZWJvb2suY29tLzE3ODMzODk3MzUwMjg0NjAvcGljdHVyZT90eXBlPWxhcmdlIiwiY29sbGVnZSI6IkFtaXR5IFNjaG9vbCBPZiBFbmdpbmVlcmluZyAmIFRlY2hub2xvZ3kgKE5vaWRhKSIsInJvbGVJZCI6MiwiY3JlYXRlZEF0IjoiMjAxOC0wOS0yN1QxMzoxMDo1OS4zOTZaIiwidXBkYXRlZEF0IjoiMjAxOC0xMi0xMlQxMDozMDo1Ni45MDJaIiwicm9sZSI6eyJpZCI6MiwibmFtZSI6IlN0dWRlbnQiLCJjcmVhdGVkQXQiOiIyMDE3LTA5LTA3VDEwOjU4OjE5Ljk5M1oiLCJ1cGRhdGVkQXQiOiIyMDE3LTA5LTA3VDEwOjU4OjE5Ljk5M1oifSwiY2xpZW50SWQiOiI1ODBhM2Y4Mi1mNjc4LTQ3Y2YtYmRlZi1mYzhjNTQxZDliODIiLCJpc1Rva2VuRm9yQWRtaW4iOmZhbHNlLCJpYXQiOjE1NDQ2MTA2NTYsImV4cCI6MTU0NDYxMjE1Nn0.Vk-S_MFYhkazWQW6zUBgYJbiQa4u3E0ygkn0mFUqfYDtgB1I4qUmju-zeGuJf2bkGZrxZQvo8p6mUtf48IjD27Hbzcg5H5hZxu1X5aHkMxckU4_obD8Rb-7gvEF9ZB57x2ljII7oR7mQCaIipkNTtkVWlH9m0i4zlQ8CTh3XPn5Quijltcg0wNgNqTyHVYT4jCbU9A6zW71UIKXgagQ0ZMxBNYegLfPySUGA02u79kV_J_CIjp2ZCkLHsFRpMJTbGUa4ElRul3gNhnobkWmY10a37J3vr9nFqOMwxOHxExMvpt6yQ_goT0_9wPWK_lRb-jQn85ULLH1fJB_p7ocK-Q"
     }
 
     @Test
@@ -32,11 +33,15 @@ class OnlineJsonApiAuthenticatedTest {
         }
     }
 
-//    @Test
-//    fun `GET myCourse`() {
-//        val attempt = api.enrolledCourseById("8252").execute().body()
-//        attempt?.let {
-//            assertEquals(1, 1)
-//        }
-//    }
+    @Test
+    fun `SET progress`() {
+        val p  = Progress()
+        p.status = "DONE"
+        p.runs?.id = "8252"
+        p.content?.id = "216"
+        val progress = api.setProgress(p).execute().body()
+        progress?.let {
+            assertEquals(1, 1)
+        }
+    }
 }

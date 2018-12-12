@@ -19,6 +19,10 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import java.text.SimpleDateFormat
 import java.util.*
+import com.google.android.youtube.player.internal.i
+import androidx.core.content.ContextCompat.startActivity
+import android.app.ActivityOptions
+import androidx.core.app.ActivityOptionsCompat
 
 
 class CourseDataAdapter(private var courseData: ArrayList<Course>?, var context: Context) : RecyclerView.Adapter<CourseDataAdapter.CourseViewHolder>(), AnkoLogger {
@@ -101,7 +105,8 @@ class CourseDataAdapter(private var courseData: ArrayList<Course>?, var context:
                         .load(data.coverImage, itemView.courseCoverImgView)
 
                 itemView.setOnClickListener {
-                    it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id, "courseName" to data.title).singleTop())
+                    val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity,itemView.courseLogo, "imageTrans")
+                    it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id, "courseName" to data.title).singleTop(),compat.toBundle())
 
                 }
             } catch (e: IndexOutOfBoundsException) {

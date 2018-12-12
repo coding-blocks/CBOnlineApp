@@ -43,7 +43,8 @@ object Clients {
             InstructorSingle::class.java,
             ContentCodeChallenge::class.java,
             ContentQna::class.java,
-            Announcement::class.java
+            Announcement::class.java,
+            Progress::class.java
 
     )
     private val relationshipResolver = RelationshipResolver {

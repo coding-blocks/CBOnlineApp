@@ -35,4 +35,10 @@ interface OnlineRestApi {
 
     @GET("v2/users/me")
     fun getMe(): Call<JsonObject>
+
+    @GET("v2/runs/{runId}/enroll")
+    fun enrollTrial(@Path("runId") id: String): Call<JsonObject>
+
+    @GET("v2/runs/{runId}/buy")
+    fun addToCart(@Path("runId") id: String): Call<JsonObject>
 }

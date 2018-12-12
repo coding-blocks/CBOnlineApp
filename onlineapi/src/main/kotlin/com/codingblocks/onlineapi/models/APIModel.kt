@@ -530,6 +530,22 @@ class Announcement : BaseModel() {
 
 }
 
+@Type("progresses")
+class Progress : BaseModel() {
+    @JvmField
+    @JsonProperty("status")
+    var status: String? = null
+
+    @Relationship("run-attempts", resolve = true)
+    @JvmField
+    var runs: MyRunAttempts? = null
+
+    @Relationship("contents", resolve = true)
+    @JvmField
+    var content: Contents? = null
+
+}
+
 
 
 

@@ -49,7 +49,30 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.getHeaderView(0).login_button.setOnClickListener {
             startActivity(intentFor<LoginActivity>().singleTop())
         }
-        fetchUser()
+        val data = this.intent.data
+        if (data != null && data.isHierarchical) {
+            if (data.getQueryParameter("code") != null) {
+                val grantCode = data.getQueryParameter("code")
+                info { "grantcode$grantCode" }
+                Clients.api.getToken(grantCode).enqueue(retrofitCallback { _, response ->
+                    info { "token" + response!!.message() }
+
+                    if (response!!.isSuccessful) {
+                        val jwt = response.body()?.asJsonObject?.get("jwt")?.asString!!
+                        val rt = response.body()?.asJsonObject?.get("refresh_token")?.asString!!
+                        prefs.SP_ACCESS_TOKEN_KEY = grantCode
+                        prefs.SP_JWT_TOKEN_KEY = jwt
+                        prefs.SP_JWT_REFRESH_TOKEN = rt
+                        Clients.authJwt = jwt
+                        fetchUser()
+                        Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
+                    }
+
+                })
+            }
+        }else{
+            fetchUser()
+        }
     }
 
 

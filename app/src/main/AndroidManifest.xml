@@ -9,9 +9,9 @@
     <application
         android:name=".CBOnlineApp"
         android:allowBackup="true"
-        android:icon="@drawable/cblogo"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/cblogo"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -41,8 +41,18 @@
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home"
             android:launchMode="singleTop"
-            android:theme="@style/myTheme" />
+            android:theme="@style/myTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="online.codingblocks.com"
+                    android:scheme="app" />
+            </intent-filter>
+        </activity>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
