@@ -84,6 +84,7 @@ class CourseDataAdapter(private var courseData: ArrayList<Course>?, var context:
             itemView.courseInstructors.text = instructors
 
             //bind Runs
+            // TODO: reduce operations being done on bindView to increase perf
             val currentRuns: ArrayList<Runs> = arrayListOf()
             for (i in 0 until data.runs!!.size) {
                 if (data.runs!![i].enrollmentStart!!.toLong() < (System.currentTimeMillis() / 1000) && data.runs!![i].enrollmentEnd!!.toLong() > (System.currentTimeMillis() / 1000))
