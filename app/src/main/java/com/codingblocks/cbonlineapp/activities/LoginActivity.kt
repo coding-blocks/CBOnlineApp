@@ -1,13 +1,18 @@
 package com.codingblocks.cbonlineapp.activities
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.utils.MediaUtils
+import com.devbrackets.android.exomedia.util.MediaUtil
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.singleTop
 
 
@@ -20,6 +25,9 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        createDownloadChannel(MediaUtils.DOWNLOAD_CHANNEL_ID)
+
         login_button.setOnClickListener {
             val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
             val customTabsIntent = builder.build()
@@ -30,5 +38,16 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
             finish()
         }
     }
+
+    private fun createDownloadChannel(channelId: String) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(channelId,
+                    "Course Download",
+                    NotificationManager.IMPORTANCE_DEFAULT)
+
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+    }
+
 
 }

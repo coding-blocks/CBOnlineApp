@@ -1,12 +1,11 @@
 package com.codingblocks.cbonlineapp.services
 
-import android.annotation.SuppressLint
 import android.app.IntentService
-import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Environment
+import androidx.core.app.NotificationCompat
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.database.AppDatabase
@@ -15,15 +14,23 @@ import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
 import okhttp3.ResponseBody
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import java.io.*
 import kotlin.concurrent.thread
 
-@SuppressLint("Registered")
 class DownloadService : IntentService("Download Service"), AnkoLogger {
 
-    private var notificationBuilder: Notification.Builder? = null
-    private var notificationManager: NotificationManager? = null
+    private val notificationManager by lazy {
+        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    }
+
+    private val notificationBuilder by lazy {
+        NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_announcement)
+                .setContentTitle("Download")
+                .setContentText("Downloading File")
+                .setAutoCancel(true)
+    }
+
     private var totalFileSize: Int = 0
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
@@ -31,20 +38,13 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
 
     override fun onHandleIntent(intent: Intent) {
 
-        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        notificationBuilder = Notification.Builder(this)
-                .setSmallIcon(R.drawable.ic_announcement)
-                .setContentTitle("Download")
-                .setContentText("Downloading File")
-                .setAutoCancel(true)
-        notificationManager!!.notify(0, notificationBuilder!!.build())
+        notificationManager.notify(0, notificationBuilder.build())
 
         database = AppDatabase.getInstance(this)
         contentDao = database.contentDao()
 
         initDownload(intent)
-
     }
 
     private fun initDownload(intent: Intent) {
@@ -82,7 +82,6 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
                 }
             }
         })
-
     }
 
     private fun writeResponseBodyToDisk(body: ResponseBody, videoUrl: String?, fileName: String): Boolean {
@@ -128,39 +127,30 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
             } catch (e: IOException) {
                 return false
             } finally {
-                if (inputStream != null) {
-                    inputStream.close()
-                }
-
-                if (outputStream != null) {
-                    outputStream.close()
-                }
+                inputStream?.close()
+                outputStream?.close()
             }
         } catch (e: IOException) {
             return false
         }
-
     }
 
     private fun sendNotification(download: Int) {
-
         notificationBuilder!!.setProgress(100, download, false)
         notificationBuilder!!.setContentText(String.format("Downloaded (%d/%d) MB", download, download))
-        notificationManager!!.notify(0, notificationBuilder!!.build())
+        notificationManager.notify(0, notificationBuilder!!.build())
     }
 
 
     private fun onDownloadComplete() {
-
-        notificationManager!!.cancel(0)
+        notificationManager.cancel(0)
         notificationBuilder!!.setProgress(0, 0, false)
         notificationBuilder!!.setContentText("File Downloaded")
-        notificationManager!!.notify(0, notificationBuilder!!.build())
-
+        notificationManager.notify(0, notificationBuilder!!.build())
     }
 
     override fun onTaskRemoved(rootIntent: Intent) {
-        notificationManager!!.cancel(0)
+        notificationManager.cancel(0)
     }
 
 }

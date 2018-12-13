@@ -10,6 +10,8 @@ import java.util.regex.Pattern
 
 object MediaUtils {
 
+    const val DOWNLOAD_CHANNEL_ID = "downloadChannel"
+
     //Call this when you want to play a video and pass the return type to exoplayer
     fun getCourseVideoUri(videoUrl: String, context: Context): Uri {
         val file = context.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
