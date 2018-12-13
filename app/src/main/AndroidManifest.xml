@@ -102,6 +102,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.codingblocks.cbonlineapp.activities.HomeActivity" />
         </activity>
+        <activity android:name=".AboutActivity"></activity>
     </application>
 
 </manifest>

@@ -28,9 +28,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
     companion object {
         val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
-        val MESSAGE_PROGRESS = "message_progress"
-
-
     }
 
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
@@ -60,7 +57,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                 override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
                     if (!p2) {
                         if (it != null)
-                            youtubePlayerInstance?.loadVideo(MediaUtils.getYotubeVideoId(it.promoVideo))
+                            youtubePlayerInstance?.cueVideo(MediaUtils.getYotubeVideoId(it.promoVideo))
                     }
                 }
             }

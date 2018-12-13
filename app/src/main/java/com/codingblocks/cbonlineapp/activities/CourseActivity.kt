@@ -92,7 +92,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
                     })
                 }
-//                showPromoVideo(course.promoVideo)
+                showPromoVideo(course.promoVideo)
                 fetchRating()
                 val sections = course.runs?.get(0)?.sections
                 val sectionsList = ArrayList<Sections>()
@@ -119,7 +119,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 }
             }
         })
-//        fetchRating()
     }
 
     private fun showPromoVideo(promoVideo: String?) {
@@ -160,5 +159,11 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
+    }
+
+    override fun onBackPressed() {
+        //TODO :hack need to fix it
+        finish()
+
     }
 }

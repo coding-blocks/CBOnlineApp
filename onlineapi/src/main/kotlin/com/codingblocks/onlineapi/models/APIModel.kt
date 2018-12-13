@@ -532,7 +532,7 @@ class Announcement : BaseModel() {
 
 }
 
-@Type("progress")
+@Type("progresses")
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator::class, property = "id")
 class Progress : BaseModel() {
     @JvmField
