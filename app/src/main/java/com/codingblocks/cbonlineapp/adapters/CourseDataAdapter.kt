@@ -5,10 +5,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadrosid.svgloader.SvgLoader
-import com.codingblocks.cbonlineapp.activities.CourseActivity
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.activities.CourseActivity
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Runs
 import com.squareup.picasso.Picasso
@@ -16,13 +18,8 @@ import kotlinx.android.synthetic.main.single_course_card_horizontal.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.error
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.singleTop
 import java.text.SimpleDateFormat
 import java.util.*
-import com.google.android.youtube.player.internal.i
-import androidx.core.content.ContextCompat.startActivity
-import android.app.ActivityOptions
-import androidx.core.app.ActivityOptionsCompat
 
 
 class CourseDataAdapter(private var courseData: ArrayList<Course>?, var context: Context) : RecyclerView.Adapter<CourseDataAdapter.CourseViewHolder>(), AnkoLogger {
@@ -106,8 +103,10 @@ class CourseDataAdapter(private var courseData: ArrayList<Course>?, var context:
                         .load(data.coverImage, itemView.courseCoverImgView)
 
                 itemView.setOnClickListener {
-                    val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity,itemView.courseLogo, "imageTrans")
-                    it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id, "courseName" to data.title).singleTop(),compat.toBundle())
+                    val textPair: Pair<View, String> = Pair(itemView.courseTitle, "textTrans")
+                    val imagePair: Pair<View, String> = Pair(itemView.courseLogo, "imageTrans")
+                    val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity, textPair, imagePair)
+                    it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id, "courseName" to data.title, "courseLogo" to data.logo), compat.toBundle())
 
                 }
             } catch (e: IndexOutOfBoundsException) {

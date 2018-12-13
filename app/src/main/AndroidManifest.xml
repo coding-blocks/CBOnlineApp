@@ -60,7 +60,6 @@
 
         <activity
             android:name=".activities.CourseActivity"
-            android:launchMode="singleTop"
             android:parentActivityName=".activities.HomeActivity"
             android:theme="@style/myTheme" />
         <activity

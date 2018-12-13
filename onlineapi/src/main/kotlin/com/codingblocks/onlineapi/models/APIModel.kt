@@ -1,7 +1,9 @@
 package com.codingblocks.onlineapi.models
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
@@ -530,7 +532,8 @@ class Announcement : BaseModel() {
 
 }
 
-@Type("progresses")
+@Type("progress")
+@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator::class, property = "id")
 class Progress : BaseModel() {
     @JvmField
     @JsonProperty("status")
