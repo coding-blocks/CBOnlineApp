@@ -21,7 +21,7 @@ import java.util.*
 class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : RecyclerView.Adapter<SectionsDataAdapter.CourseViewHolder>(), AnkoLogger {
 
     private lateinit var context: Context
-
+    private lateinit var arrowAnimation: RotateAnimation
 
     fun setData(sectionData: ArrayList<Sections>) {
         this.sectionData = sectionData
@@ -80,7 +80,7 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
                 val contentImg = inflatedView.findViewById(R.id.imageView3) as ImageView
                 if (i.contentable == "lecture" || i.contentable == "video") {
                     val contentDuration: Long = i.duration!!
-                    contentImg.setImageDrawable(context.getDrawable(R.drawable.video_green_dark))
+                    contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
                     val contenthour = contentDuration / (1000 * 60 * 60) % 24
                     val contentminute = contentDuration / (1000 * 60) % 60
                     when {
@@ -89,38 +89,44 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
                         else -> itemView.lectureTime.text = ("---")
                     }
                 } else if (i.contentable == "document") {
-                    contentImg.setImageDrawable(context.getDrawable(R.drawable.file_green_dark))
+                    contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_document))
 
                 } else if (i.contentable == "code-challenge") {
-                    contentImg.setImageDrawable(context.getDrawable(R.drawable.code_green_dark))
+                    contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
                 }
                 subTitle.text = i.title
 
 
                 ll.addView(inflatedView)
             }
-            var arrowAnimation: RotateAnimation
 
-            itemView.arrow.setOnClickListener {
-                if (ll.visibility == View.GONE) {
-                    ll.visibility = View.VISIBLE
-                    arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                            0.5f)
-                    arrowAnimation.fillAfter = true
-                    arrowAnimation.duration = 350
-                    itemView.arrow.startAnimation(arrowAnimation)
-                } else {
-                    ll.visibility = View.GONE
-                    arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                            0.5f)
-                    arrowAnimation.fillAfter = true
-                    arrowAnimation.duration = 350
-                    itemView.arrow.startAnimation(arrowAnimation)
-                }
-
+            itemView.setOnClickListener {
+                showOrHide(ll, it)
             }
 
+            itemView.arrow.setOnClickListener {
+                showOrHide(ll, itemView)
+            }
 
         }
+
+        private fun showOrHide(ll: View, itemView: View) {
+            if (ll.visibility == View.GONE) {
+                ll.visibility = View.VISIBLE
+                arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                        0.5f)
+                arrowAnimation.fillAfter = true
+                arrowAnimation.duration = 350
+                itemView.arrow.startAnimation(arrowAnimation)
+            } else {
+                ll.visibility = View.GONE
+                arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                        0.5f)
+                arrowAnimation.fillAfter = true
+                arrowAnimation.duration = 350
+                itemView.arrow.startAnimation(arrowAnimation)
+            }
+        }
+
     }
 }

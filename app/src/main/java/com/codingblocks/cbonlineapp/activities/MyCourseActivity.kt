@@ -23,7 +23,7 @@ import kotlin.concurrent.thread
 
 class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
-    lateinit var attempt_Id: String
+    lateinit var attemptId: String
     private lateinit var database: AppDatabase
 
     companion object {
@@ -42,7 +42,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = intent.getStringExtra("courseName")
-        attempt_Id = intent.getStringExtra("attempt_id")
+        attemptId = intent.getStringExtra("attempt_id")
         database = AppDatabase.getInstance(this)
 
         val runDao = database.courseRunDao()
@@ -52,7 +52,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         val instructorDao = database.instructorDao()
         setupViewPager()
 
-        courseDao.getCourse(attempt_Id).observe(this, Observer<Course> {
+        courseDao.getCourse(attemptId).observe(this, Observer<Course> {
             youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
                 override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
                 }
@@ -69,7 +69,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         })
 
 
-        Clients.onlineV2JsonApi.enrolledCourseById(attempt_Id).enqueue(retrofitCallback { throwable, response ->
+        Clients.onlineV2JsonApi.enrolledCourseById(attemptId).enqueue(retrofitCallback { throwable, response ->
             response?.body()?.let { it ->
 
                 val course = it.run?.course?.run {
@@ -85,7 +85,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                             rating!!,
                             slug!!,
                             coverImage!!,
-                            attempt_Id,
+                            attemptId,
                             updatedAt!!
                     )
                 }
@@ -93,7 +93,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                 val run = it.run?.run {
                     CourseRun(
                             id!!,
-                            attempt_Id,
+                            attemptId,
                             name!!,
                             description!!,
                             start!!,
@@ -113,14 +113,14 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                     for (instructor in it.run?.course!!.instructors!!) {
                         instructorDao.insert(Instructor(instructor.id!!, instructor.name!!,
                                 instructor.description!!, instructor.photo!!,
-                                instructor.updatedAt!!, attempt_Id, instructor.instructorCourse?.courseId!!))
+                                instructor.updatedAt!!, attemptId, instructor.instructorCourse?.courseId!!))
                     }
 
                     //Course Sections List
                     for (section in it.run?.sections!!) {
                         sectionDao.insert(CourseSection(section.id!!, section.name!!,
                                 section.order!!, section.premium!!, section.status!!,
-                                section.run_id!!, attempt_Id, section.updatedAt!!))
+                                section.run_id!!, attemptId, section.updatedAt!!))
 
                         //Section Contents List
                         val contents: ArrayList<CourseContent> = ArrayList()
@@ -146,7 +146,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                                     content.id!!, status, progressId,
                                     content.title!!, content.duration!!,
                                     content.contentable!!, content.section_content?.order!!,
-                                    content.section_content?.sectionId!!, attempt_Id, content.section_content?.updatedAt!!, contentLecture, contentDocument, contentVideo))
+                                    content.section_content?.sectionId!!, attemptId, content.section_content?.updatedAt!!, contentLecture, contentDocument, contentVideo))
                         }
 
                         contentDao.insertAll(contents)
@@ -165,7 +165,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         val adapter = TabLayoutAdapter(supportFragmentManager)
         adapter.add(OverviewFragment(), "Overview")
         adapter.add(AnnouncementsFragment(), "About")
-        adapter.add(CourseContentFragment.newInstance(attempt_Id), "Course Content")
+        adapter.add(CourseContentFragment.newInstance(attemptId), "Course Content")
 //        adapter.add(DoubtsFragment(), "")
         htab_viewpager.adapter = adapter
         htab_tabs.setupWithViewPager(htab_viewpager)

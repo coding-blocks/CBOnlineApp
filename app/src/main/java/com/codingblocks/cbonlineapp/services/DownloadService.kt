@@ -28,6 +28,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
                 .setSmallIcon(R.drawable.ic_announcement)
                 .setContentTitle("Download")
                 .setContentText("Downloading File")
+                .setProgress(0, 0, true)
                 .setAutoCancel(true)
     }
 

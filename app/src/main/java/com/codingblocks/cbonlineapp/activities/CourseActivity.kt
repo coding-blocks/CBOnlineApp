@@ -15,7 +15,6 @@ import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Sections
-import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
@@ -40,7 +39,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     companion object {
         val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
-
     }
 
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
@@ -53,7 +51,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         courseId = intent.getStringExtra("courseId")
         courseName = intent.getStringExtra("courseName")
         title = courseName
-
 
         progressBar = arrayOf(courseProgress1, courseProgress2, courseProgress3, courseProgress4, courseProgress5)
         setSupportActionBar(toolbar)
@@ -71,7 +68,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
         Clients.onlineV2JsonApi.courseById(courseId).enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let { course ->
-//                skeletonScreen.hide()
+                //                skeletonScreen.hide()
                 coursePageTitle.text = courseName
                 coursePageSubtitle.text = course.subtitle
                 coursePageSummary.text = course.summary
@@ -93,7 +90,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 SvgLoader.pluck()
                         .with(this)
                         .load(course.logo, coursePageLogo)
-                showpromoVideo(course.promoVideo)
+                showPromoVideo(course.promoVideo)
                 fetchRating()
                 val sections = course.runs?.get(0)?.sections
                 val sectionsList = ArrayList<Sections>()
@@ -120,14 +117,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 }
             }
         })
-
-
 //        fetchRating()
-
-
     }
 
-    private fun showpromoVideo(promoVideo: String?) {
+    private fun showPromoVideo(promoVideo: String?) {
 
         youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
             override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
@@ -142,16 +135,15 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         }
         val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
         youTubePlayerSupportFragment!!.initialize(YOUTUBE_API_KEY, youtubePlayerInit)
-
     }
 
-    fun fetchRating() {
+    private fun fetchRating() {
         Clients.api.getCourseRating(courseId).enqueue(retrofitCallback { throwable, response ->
             response?.body().let {
                 it?.apply {
-                    coursePageRatingCountTv.text = count.toString() + " Rating"
-                    coursePageRatingTv.text = rating + " out of 5 stars"
-                    coursePageRatingBar.rating = rating?.toFloat()!!
+                    coursePageRatingCountTv.text = "$count Rating"
+                    coursePageRatingTv.text = "$rating out of 5 stars"
+                    coursePageRatingBar.rating = rating.toFloat()
                     for (i in 0 until progressBar.size) {
                         progressBar[i]?.max = it.count * 1000
                         progressBar[i]?.progress = it.stats[i].toInt() * 1000
@@ -168,6 +160,5 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
-
 
 }
