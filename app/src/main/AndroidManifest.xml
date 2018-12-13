@@ -41,7 +41,7 @@
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home"
             android:launchMode="singleTop"
-            android:theme="@style/myTheme" >
+            android:theme="@style/myTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -53,6 +53,7 @@
                     android:scheme="app" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -86,14 +87,22 @@
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
-        <service android:name=".services.DownloadService"/>
 
+        <service android:name=".services.DownloadService" />
 
         <activity
             android:name=".activities.YoutubePlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activities.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.codingblocks.cbonlineapp.activities.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

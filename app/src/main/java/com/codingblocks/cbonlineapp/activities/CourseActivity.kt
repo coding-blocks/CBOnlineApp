@@ -128,7 +128,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
             override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
                 if (!p2) {
-                    info { "VIDEO_ID" + promoVideo!!.substring(30, 41) }
                     youtubePlayerInstance?.loadVideo(MediaUtils.getYotubeVideoId(promoVideo!!))
                 }
             }
