@@ -21,7 +21,6 @@ object Clients {
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false)
 
-
     var authJwt = ""
 
     private val onlineApiResourceConverter = ResourceConverter(
@@ -43,8 +42,7 @@ object Clients {
             InstructorSingle::class.java,
             ContentCodeChallenge::class.java,
             ContentQna::class.java,
-            Announcement::class.java,
-            Progress::class.java
+            Announcement::class.java
 
     )
     private val relationshipResolver = RelationshipResolver {
@@ -53,7 +51,6 @@ object Clients {
                 .execute()
                 .body()
                 ?.bytes()
-
     }
 
     init {
@@ -61,44 +58,43 @@ object Clients {
         onlineApiResourceConverter.disableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES)
     }
 
-    val onlineV2JsonClient = OkHttpClient.Builder()
+    private val onlineV2JsonClient = OkHttpClient.Builder()
             .addInterceptor { chain ->
                 chain.proceed(chain.request().newBuilder().addHeader("Authorization", "JWT $authJwt").build())
             }
             .build()
 
-    val onlineV2JsonRetrofit = Retrofit.Builder()
+    private val onlineV2JsonRetrofit = Retrofit.Builder()
             .client(onlineV2JsonClient)
             .baseUrl("https://api-online.cb.lk/api/v2/")
             .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
+
     val onlineV2JsonApi: OnlineJsonApi
         get() = onlineV2JsonRetrofit
                 .create(OnlineJsonApi::class.java)
 
 
-    val retrofit = Retrofit.Builder()
+    private val retrofit = Retrofit.Builder()
             .client(onlineV2JsonClient)
             .baseUrl("https://api-online.cb.lk/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-    val api = retrofit.create(OnlineRestApi::class.java)
+
+    val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)
 
     var interceptor = CustomResponseInterceptor()
-    var client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
+    private var client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
     //This client will download the video and m3u8 files from the server
-    val videoDownloadClient = Retrofit.Builder()
+    private val videoDownloadClient = Retrofit.Builder()
             .baseUrl("https://d1qf0ozss494xv.cloudfront.net/")
             .client(client)
             .build()
 
-    val apiVideo = videoDownloadClient.create(OnlineVideosApi::class.java)
+    private val apiVideo: OnlineVideosApi = videoDownloadClient.create(OnlineVideosApi::class.java)
 
     fun initiateDownload(url: String, fileName: String) = apiVideo.getVideoFiles(url, fileName)
-
-
-
-
-
 }
