@@ -111,7 +111,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                             if (!content.contentLecture.isDownloaded) {
                                 downloadBtn.setOnClickListener {
                                     if(MediaUtils.checkPermission(context)) {
-                                        starter.startDownload(url, data.id, content.contentLecture.lectureContentId)
+                                        starter.startDownload(url, data.id, content.contentLecture.lectureContentId,content.title)
                                         downloadBtn.isEnabled = false
                                         (downloadBtn.background as AnimationDrawable).start()
                                     }else{

@@ -2,16 +2,14 @@ package com.codingblocks.cbonlineapp.database
 
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
+
 
 open class BaseModel(
         @NonNull
         @PrimaryKey
         var id: String,
-        var updatedAt: String
+        var updatedAt: String?
 )
 
 @Entity
@@ -28,7 +26,9 @@ data class Course(
         var slug: String,
         var coverImage: String,
         var attempt_id: String,
-        var updated_at: String
+        var updated_at: String?,
+        var progress: Double = 0.0,
+        var runDescription: String = ""
 ) : BaseModel(uid, updated_at)
 
 //add type converter for arraylist of instructors,contents,sections(if possible)
@@ -47,23 +47,24 @@ data class CourseRun(
         var updated_at: String
 ) : BaseModel(uid, updated_at)
 
-@Entity(
-        foreignKeys = [(ForeignKey(
-                entity = Course::class,
-                parentColumns = ["id"],
-                childColumns = ["course_id"],
-                onDelete = ForeignKey.SET_NULL //or CASCADE
-        ))]
-)
+@Entity()
 data class Instructor(
         var uid: String,
-        var name: String,
+        var name: String?,
         var description: String,
-        var photo: String,
-        var updated_at: String,
-        var attempt_id: String,
-        var course_id: String
+        var photo: String?,
+        var updated_at: String?,
+        var attempt_id: String?,
+        var course_id: String?
 ) : BaseModel(uid, updated_at)
+
+class CourseWithInstructor {
+    @Embedded
+    var course: Course? = null
+
+    @Relation(parentColumn = "uid", entityColumn = "course_id")
+    var instructorList: List<Instructor>? = null
+}
 
 @Entity(
         foreignKeys = [(ForeignKey(
