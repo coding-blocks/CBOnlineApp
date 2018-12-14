@@ -97,12 +97,15 @@
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.HomeActivity">
+            android:parentActivityName=".activities.HomeActivity"
+            android:theme="@style/myTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.codingblocks.cbonlineapp.activities.HomeActivity" />
         </activity>
-        <activity android:name=".AboutActivity"></activity>
+        <activity
+            android:name=".activities.AboutActivity"
+            android:theme="@style/myTheme" />
     </application>
 
 </manifest>
