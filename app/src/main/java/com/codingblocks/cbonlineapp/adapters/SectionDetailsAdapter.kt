@@ -22,6 +22,7 @@ import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseContent
 import com.codingblocks.cbonlineapp.database.CourseSection
+import com.codingblocks.cbonlineapp.utils.MediaUtils
 import kotlinx.android.synthetic.main.item_section.view.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
@@ -109,9 +110,13 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                             ll.addView(inflatedView)
                             if (!content.contentLecture.isDownloaded) {
                                 downloadBtn.setOnClickListener {
-                                    starter.startDownload(url, data.id, content.contentLecture.lectureContentId)
-                                    downloadBtn.isEnabled = false
-                                    (downloadBtn.background as AnimationDrawable).start()
+                                    if(MediaUtils.checkPermission(context)) {
+                                        starter.startDownload(url, data.id, content.contentLecture.lectureContentId)
+                                        downloadBtn.isEnabled = false
+                                        (downloadBtn.background as AnimationDrawable).start()
+                                    }else{
+                                        MediaUtils.isStoragePermissionGranted(context)
+                                    }
                                 }
                             } else {
                                 downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))

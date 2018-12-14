@@ -1,21 +1,17 @@
 package com.codingblocks.cbonlineapp.activities
 
-import android.Manifest
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.utils.DownloadBroadcastReceiver
+import com.codingblocks.cbonlineapp.utils.MediaUtils
 import es.voghdev.pdfviewpager.library.PDFViewPager
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter
 import kotlinx.android.synthetic.main.activity_pdf.*
@@ -40,7 +36,7 @@ class PdfActivity : AppCompatActivity(), AnkoLogger {
         url = intent.getStringExtra("fileUrl")
         fileName = intent.getStringExtra("fileName")
 
-        if (checkPermission()) {
+        if (MediaUtils.checkPermission(this)) {
 
             path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()
             var downloadedFile: File? = null
@@ -62,7 +58,7 @@ class PdfActivity : AppCompatActivity(), AnkoLogger {
                 showpdf(downloadedFile!!)
             }
         } else {
-            if (isStoragePermissionGranted()) {
+            if (MediaUtils.isStoragePermissionGranted(this)) {
                 this.recreate()
             } else {
                 onBackPressed()
@@ -111,7 +107,7 @@ class PdfActivity : AppCompatActivity(), AnkoLogger {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (checkPermission()) {
+        if (MediaUtils.checkPermission(this)) {
             try {
                 (pdfViewPager.adapter as PDFPagerAdapter).close()
 
@@ -123,27 +119,5 @@ class PdfActivity : AppCompatActivity(), AnkoLogger {
         }
         this@PdfActivity.unregisterReceiver(receiver)
 
-    }
-
-    private fun checkPermission(): Boolean {
-
-        val readExternal = ContextCompat.checkSelfPermission(this.applicationContext, Manifest.permission.READ_EXTERNAL_STORAGE)
-        val writeExternal = ContextCompat.checkSelfPermission(this.applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
-        return readExternal == PackageManager.PERMISSION_GRANTED && writeExternal == PackageManager.PERMISSION_GRANTED
-    }
-
-    fun isStoragePermissionGranted(): Boolean {
-        return if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                true
-            } else {
-
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
-                false
-            }
-        } else { //permission is automatically granted on sdk<23 upon installation
-            true
-        }
     }
 }

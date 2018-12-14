@@ -1,9 +1,15 @@
 package com.codingblocks.cbonlineapp.utils
 
+import android.Manifest
+import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import java.io.File
 import java.util.regex.Pattern
 
@@ -46,6 +52,28 @@ object MediaUtils {
             vId = matcher.group(1)
         }
         return vId
+    }
+
+    fun checkPermission(context: Context): Boolean {
+
+        val readExternal = ContextCompat.checkSelfPermission(context.applicationContext, Manifest.permission.READ_EXTERNAL_STORAGE)
+        val writeExternal = ContextCompat.checkSelfPermission(context.applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        return readExternal == PackageManager.PERMISSION_GRANTED && writeExternal == PackageManager.PERMISSION_GRANTED
+    }
+
+    fun isStoragePermissionGranted(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= 23) {
+            if (context.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                true
+            } else {
+
+                ActivityCompat.requestPermissions(context as Activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                false
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            true
+        }
     }
 
 }
