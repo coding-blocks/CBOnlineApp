@@ -11,7 +11,7 @@ open class BaseModel(
         @NonNull
         @PrimaryKey
         var id: String,
-        var updatedAt: String
+        var updatedAt: String?
 )
 
 @Entity
@@ -28,8 +28,8 @@ data class Course(
         var slug: String,
         var coverImage: String,
         var attempt_id: String,
-        var updated_at: String,
-        var progress: Double= 0.0
+        var updated_at: String?,
+        var progress: Double = 0.0
 ) : BaseModel(uid, updated_at)
 
 //add type converter for arraylist of instructors,contents,sections(if possible)
@@ -48,22 +48,15 @@ data class CourseRun(
         var updated_at: String
 ) : BaseModel(uid, updated_at)
 
-@Entity(
-        foreignKeys = [(ForeignKey(
-                entity = Course::class,
-                parentColumns = ["id"],
-                childColumns = ["course_id"],
-                onDelete = ForeignKey.SET_NULL //or CASCADE
-        ))]
-)
+@Entity()
 data class Instructor(
         var uid: String,
-        var name: String,
+        var name: String?,
         var description: String,
-        var photo: String,
-        var updated_at: String,
-        var attempt_id: String,
-        var course_id: String
+        var photo: String?,
+        var updated_at: String?,
+        var attempt_id: String?,
+        var course_id: String?
 ) : BaseModel(uid, updated_at)
 
 @Entity(

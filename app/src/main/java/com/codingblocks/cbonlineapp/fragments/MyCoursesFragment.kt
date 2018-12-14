@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
@@ -19,6 +20,7 @@ import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.ctx
+import kotlin.concurrent.thread
 
 
 class MyCoursesFragment : Fragment(), AnkoLogger {
@@ -58,6 +60,10 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 .load(R.layout.item_skeleton_course_card)
                 .show()
 
+        courseDao.getCourses().observe(this, Observer<List<Course>> {
+            courseDataAdapter.setData(it as ArrayList<Course>)
+            skeletonScreen.hide()
+        })
         fetchAllCourses()
 
     }
@@ -87,11 +93,13 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                         slug!!,
                                         coverImage!!,
                                         myCourses.run_attempts!![0].id!!,
-                                        updatedAt!!,
+                                        updatedAt,
                                         progress
                                 )
                             }
-                            courseDao.insert(course!!)
+                            thread {
+                                courseDao.insert(course!!)
+                            }
                         }
                     })
 
@@ -100,16 +108,16 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
                         Clients.onlineV2JsonApi.instructorsById(myCourses.course!!.instructors!![i].id!!).enqueue(retrofitCallback { throwable, response ->
                             response?.body().let {
+                                thread {
+                                    instructorDao.insert(Instructor(it?.id!!, it.name!!,
+                                            it.description!!, it.photo!!,
+                                            "", myCourses.run_attempts!![0].id!!, myCourses.course!!.id))
+                                }
 
-                                instructorDao.insert(Instructor(it?.id!!, it.name!!,
-                                        it.description!!, it.photo!!,
-                                        it.updatedAt!!, myCourses.run_attempts!![0].id!!, it.instructorCourse?.courseId!!))
                             }
                         })
                     }
                 }
-                courseDataAdapter.setData(it)
-                skeletonScreen.hide()
             }
         })
     }
