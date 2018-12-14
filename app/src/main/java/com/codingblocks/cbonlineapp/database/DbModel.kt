@@ -2,10 +2,8 @@ package com.codingblocks.cbonlineapp.database
 
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
+
 
 open class BaseModel(
         @NonNull
@@ -29,7 +27,8 @@ data class Course(
         var coverImage: String,
         var attempt_id: String,
         var updated_at: String?,
-        var progress: Double = 0.0
+        var progress: Double = 0.0,
+        var runDescription: String = ""
 ) : BaseModel(uid, updated_at)
 
 //add type converter for arraylist of instructors,contents,sections(if possible)
@@ -58,6 +57,14 @@ data class Instructor(
         var attempt_id: String?,
         var course_id: String?
 ) : BaseModel(uid, updated_at)
+
+class CourseWithInstructor {
+    @Embedded
+    var course: Course? = null
+
+    @Relation(parentColumn = "uid", entityColumn = "course_id")
+    var instructorList: List<Instructor>? = null
+}
 
 @Entity(
         foreignKeys = [(ForeignKey(

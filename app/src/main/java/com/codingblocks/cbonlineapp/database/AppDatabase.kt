@@ -24,6 +24,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun contentDao(): ContentDao
     abstract fun instructorDao(): InstructorDao
     abstract fun courseDao(): CourseDao
+    abstract fun courseWithInstructorDao(): CourseWithInstructorDao
+
 
 
     companion object {

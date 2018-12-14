@@ -35,6 +35,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     private lateinit var courseDataAdapter: MyCoursesDataAdapter
     lateinit var skeletonScreen: SkeletonScreen
     lateinit var courseDao: CourseDao
+    lateinit var courseWithInstructorDao: CourseWithInstructorDao
     lateinit var instructorDao: InstructorDao
 
 
@@ -46,6 +47,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
         courseDao = database.courseDao()
         instructorDao = database.instructorDao()
+        courseWithInstructorDao = database.courseWithInstructorDao()
+
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
@@ -60,10 +63,13 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 .load(R.layout.item_skeleton_course_card)
                 .show()
 
-        courseDao.getCourses().observe(this, Observer<List<Course>> {
-            courseDataAdapter.setData(it as ArrayList<Course>)
-            skeletonScreen.hide()
-        })
+        courseWithInstructorDao.courseWithInstructors.observe(this, Observer<List<CourseWithInstructor>> {
+            if(it.isNotEmpty()){
+                skeletonScreen.hide()
+            }
+            courseDataAdapter.setData(it as ArrayList<CourseWithInstructor>)})
+
+
         fetchAllCourses()
 
     }
@@ -94,7 +100,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                         coverImage!!,
                                         myCourses.run_attempts!![0].id!!,
                                         updatedAt,
-                                        progress
+                                        progress,
+                                        myCourses.description!!
                                 )
                             }
                             thread {
