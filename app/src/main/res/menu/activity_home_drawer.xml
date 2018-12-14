@@ -25,12 +25,12 @@
         android:id="@+id/features"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_prefences"
+            android:id="@+id/nav_preferences"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="Settings" />
 
         <item
-            android:id="@+id/nav_signOut"
+            android:id="@+id/nav_contactUs"
             android:icon="@drawable/ic_contact_mail_black_24dp"
             android:title="Contact Us" />
         <item

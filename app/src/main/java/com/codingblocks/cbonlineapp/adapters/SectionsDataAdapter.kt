@@ -18,14 +18,13 @@ import org.jetbrains.anko.info
 import java.util.*
 
 
-class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : RecyclerView.Adapter<SectionsDataAdapter.CourseViewHolder>(), AnkoLogger {
+class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : RecyclerView.Adapter<SectionsDataAdapter.CourseViewHolder>() {
 
     private lateinit var context: Context
     private lateinit var arrowAnimation: RotateAnimation
 
     fun setData(sectionData: ArrayList<Sections>) {
         this.sectionData = sectionData
-        info { sectionData.size }
         notifyDataSetChanged()
     }
 
@@ -59,8 +58,6 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
             }
             val hour = duration / (1000 * 60 * 60) % 24
             val minute = duration / (1000 * 60) % 60
-            info { "hour$hour   minute$minute" }
-
             if (minute >= 1 && hour == 0L)
                 itemView.lectureTime.text = ("$minute Min")
             else if (hour >= 1) {

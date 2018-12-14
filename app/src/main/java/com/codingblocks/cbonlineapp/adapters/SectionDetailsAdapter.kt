@@ -74,6 +74,8 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
 
             contentDao.getCourseSectionContents(data.attempt_id, data.id).observe(activity, Observer<List<CourseContent>> { it ->
                 val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
+                if (ll.childCount != 0)
+                    showOrHide(ll, itemView)
                 ll.removeAllViews()
                 ll.orientation = LinearLayout.VERTICAL
                 ll.visibility = View.GONE
@@ -135,7 +137,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
                                 if (content.progress == "UNDONE")
-                                    thread { contentDao.updateProgressDocuemnt( data.id, content.contentDocument.documentContentId, "DONE") }
+                                    thread { contentDao.updateProgressDocuemnt(data.id, content.contentDocument.documentContentId, "DONE") }
                                 it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
 
                             }

@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import com.codingblocks.cbonlineapp.AboutActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
@@ -155,6 +156,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 } else {
                     Toast.makeText(this, "Please install whatsApp", Toast.LENGTH_SHORT).show()
                 }
+            }
+            R.id.nav_preferences -> {
+                startActivity(intentFor<SettingsActivity>().singleTop())
+            }
+            R.id.nav_contactUs -> {
+                startActivity(intentFor<AboutActivity>().singleTop())
             }
         }
 

@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Sections
+import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
@@ -47,29 +48,33 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course)
-
         courseId = intent.getStringExtra("courseId")
         courseName = intent.getStringExtra("courseName")
+        val image = intent.getStringExtra("courseLogo")
+        SvgLoader.pluck()
+                .with(this)
+                .load(image, coursePageLogo)
         title = courseName
+        coursePageTitle.text = courseName
+
 
         progressBar = arrayOf(courseProgress1, courseProgress2, courseProgress3, courseProgress4, courseProgress5)
         setSupportActionBar(toolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        skeletonScreen = Skeleton.bind(courseRootView)
-//                .shimmer(true)
-//                .angle(20)
-//                .duration(1200)
-//                .load(R.layout.item_skeleton_course)
-//                .show()
+        skeletonScreen = Skeleton.bind(courseRootView)
+                .shimmer(true)
+                .angle(20)
+                .duration(1200)
+                .load(R.layout.item_skeleton_course)
+                .show()
 
 
         val service = Clients.onlineV2JsonApi
 
         Clients.onlineV2JsonApi.courseById(courseId).enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let { course ->
-                //                skeletonScreen.hide()
-                coursePageTitle.text = courseName
+                skeletonScreen.hide()
                 coursePageSubtitle.text = course.subtitle
                 coursePageSummary.text = course.summary
                 runId = course.runs!![0].id!!
@@ -87,9 +92,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
                     })
                 }
-                SvgLoader.pluck()
-                        .with(this)
-                        .load(course.logo, coursePageLogo)
                 showPromoVideo(course.promoVideo)
                 fetchRating()
                 val sections = course.runs?.get(0)?.sections
@@ -117,7 +119,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 }
             }
         })
-//        fetchRating()
     }
 
     private fun showPromoVideo(promoVideo: String?) {
@@ -128,7 +129,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
             override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
                 if (!p2) {
-                    info { "VIDEO_ID" + promoVideo!!.substring(30, 41) }
                     youtubePlayerInstance?.loadVideo(MediaUtils.getYotubeVideoId(promoVideo!!))
                 }
             }
@@ -161,4 +161,9 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
+    override fun onBackPressed() {
+        //TODO :hack need to fix it
+        finish()
+
+    }
 }

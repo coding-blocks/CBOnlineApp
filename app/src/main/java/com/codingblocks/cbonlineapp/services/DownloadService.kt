@@ -25,10 +25,12 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
 
     private val notificationBuilder by lazy {
         NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_announcement)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("Download")
                 .setContentText("Downloading File")
                 .setProgress(0, 0, true)
+                .setColor(resources.getColor(R.color.colorPrimaryDark))
+                .setOngoing(true) // THIS is the important line
                 .setAutoCancel(true)
     }
 
@@ -147,6 +149,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
         notificationManager.cancel(0)
         notificationBuilder!!.setProgress(0, 0, false)
         notificationBuilder!!.setContentText("File Downloaded")
+        notificationBuilder.setOngoing(false)
         notificationManager.notify(0, notificationBuilder!!.build())
     }
 

@@ -58,7 +58,6 @@ dependencies {
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
     implementation 'androidx.browser:browser:1.0.0'
 
-
     //database
     def room_version = "2.1.0-alpha02"
 
