@@ -28,7 +28,8 @@ data class Course(
         var slug: String,
         var coverImage: String,
         var attempt_id: String,
-        var updated_at: String
+        var updated_at: String,
+        var progress: Double= 0.0
 ) : BaseModel(uid, updated_at)
 
 //add type converter for arraylist of instructors,contents,sections(if possible)

@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadrosid.svgloader.SvgLoader
-import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourseRuns
 import com.squareup.picasso.Picasso
@@ -51,14 +51,14 @@ MyCoursesDataAdapter(private var courseData: ArrayList<MyCourseRuns>?, var conte
 
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindView(data: MyCourseRuns) {
+        fun bindView(data: MyCourseRuns) {0
             itemView.courseTitle.text = data.course?.title
             itemView.courseDescription.text = data.course?.subtitle
             itemView.courseRatingTv.text = data.course?.rating.toString()
             itemView.courseRatingBar.rating = data.course?.rating!!
             itemView.courseRunDescription.text = data.description
 
-//            bind Instructors
+            //bind Instructors
             var instructors = ""
 
             for (i in 0 until data.course!!.instructors?.size!!) {

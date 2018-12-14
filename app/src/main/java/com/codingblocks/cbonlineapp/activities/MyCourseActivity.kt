@@ -46,7 +46,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         val sectionDao = database.setionDao()
         val contentDao = database.contentDao()
         val courseDao = database.courseDao()
-        val instructorDao = database.instructorDao()
         setupViewPager()
 
         courseDao.getCourse(attemptId).observe(this, Observer<Course> {
@@ -68,24 +67,24 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
         Clients.onlineV2JsonApi.enrolledCourseById(attemptId).enqueue(retrofitCallback { throwable, response ->
             response?.body()?.let { it ->
-
-                val course = it.run?.course?.run {
-                    Course(
-                            id!!,
-                            title!!,
-                            subtitle!!,
-                            logo!!,
-                            summary!!,
-                            promoVideo!!,
-                            difficulty!!,
-                            reviewCount!!,
-                            rating!!,
-                            slug!!,
-                            coverImage!!,
-                            attemptId,
-                            updatedAt!!
-                    )
-                }
+                //Saved On MyCourses Page
+//                val course = it.run?.course?.run {
+//                    Course(
+//                            id!!,
+//                            title!!,
+//                            subtitle!!,
+//                            logo!!,
+//                            summary!!,
+//                            promoVideo!!,
+//                            difficulty!!,
+//                            reviewCount!!,
+//                            rating!!,
+//                            slug!!,
+//                            coverImage!!,
+//                            attemptId,
+//                            updatedAt!!
+//                    )
+//                }
 
                 val run = it.run?.run {
                     CourseRun(
@@ -103,15 +102,14 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                 }
 
                 thread {
-                    courseDao.insert(course!!)
                     runDao.insert(run!!)
 
-                    //Course Instructors List
-                    for (instructor in it.run?.course!!.instructors!!) {
-                        instructorDao.insert(Instructor(instructor.id!!, instructor.name!!,
-                                instructor.description!!, instructor.photo!!,
-                                instructor.updatedAt!!, attemptId, instructor.instructorCourse?.courseId!!))
-                    }
+                    //Saved On MyCourses Page
+//                    for (instructor in it.run?.course!!.instructors!!) {
+//                        instructorDao.insert(Instructor(instructor.id!!, instructor.name!!,
+//                                instructor.description!!, instructor.photo!!,
+//                                instructor.updatedAt!!, attemptId, instructor.instructorCourse?.courseId!!))
+//                    }
 
                     //Course Sections List
                     for (section in it.run?.sections!!) {

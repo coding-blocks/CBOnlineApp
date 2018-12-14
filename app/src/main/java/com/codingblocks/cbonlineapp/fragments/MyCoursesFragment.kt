@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.MyCoursesDataAdapter
-import com.codingblocks.cbonlineapp.prefs
+import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.ui.AllCourseFragmentUi
 import com.codingblocks.onlineapi.Clients
 import com.ethanhua.skeleton.Skeleton
@@ -24,6 +24,7 @@ import org.jetbrains.anko.support.v4.ctx
 class MyCoursesFragment : Fragment(), AnkoLogger {
 
     val ui = AllCourseFragmentUi<Fragment>()
+    private lateinit var database: AppDatabase
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return ui.createView(AnkoContext.create(ctx, this))
@@ -31,11 +32,18 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
     private lateinit var courseDataAdapter: MyCoursesDataAdapter
     lateinit var skeletonScreen: SkeletonScreen
+    lateinit var courseDao: CourseDao
+    lateinit var instructorDao: InstructorDao
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ui.titleText.text = "My Courses"
         courseDataAdapter = MyCoursesDataAdapter(ArrayList(), activity!!)
+        database = AppDatabase.getInstance(context!!)
+
+        courseDao = database.courseDao()
+        instructorDao = database.instructorDao()
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
@@ -59,6 +67,47 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         Clients.onlineV2JsonApi.getMyCourses().enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let {
                 info { it.toString() }
+                for (myCourses in it) {
+
+                    //Add Course Progress to Course Object
+                    Clients.api.getMyCourseProgress(myCourses.run_attempts!![0].id!!).enqueue(retrofitCallback { t, progressResponse ->
+                        progressResponse?.body().let {
+                            val progress = it!!["percent"] as Double
+                            val course = myCourses.course?.run {
+                                Course(
+                                        id!!,
+                                        title!!,
+                                        subtitle!!,
+                                        logo!!,
+                                        summary!!,
+                                        promoVideo!!,
+                                        difficulty!!,
+                                        reviewCount!!,
+                                        rating!!,
+                                        slug!!,
+                                        coverImage!!,
+                                        myCourses.run_attempts!![0].id!!,
+                                        updatedAt!!,
+                                        progress
+                                )
+                            }
+                            courseDao.insert(course!!)
+                        }
+                    })
+
+                    //fetch CourseInstructors
+                    for (i in 0 until myCourses.course!!.instructors?.size!!) {
+
+                        Clients.onlineV2JsonApi.instructorsById(myCourses.course!!.instructors!![i].id!!).enqueue(retrofitCallback { throwable, response ->
+                            response?.body().let {
+
+                                instructorDao.insert(Instructor(it?.id!!, it.name!!,
+                                        it.description!!, it.photo!!,
+                                        it.updatedAt!!, myCourses.run_attempts!![0].id!!, it.instructorCourse?.courseId!!))
+                            }
+                        })
+                    }
+                }
                 courseDataAdapter.setData(it)
                 skeletonScreen.hide()
             }

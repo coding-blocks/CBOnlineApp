@@ -4,6 +4,7 @@ import android.app.IntentService
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Environment
 import androidx.core.app.NotificationCompat
 import com.codingblocks.cbonlineapp.R
@@ -27,11 +28,12 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
         NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("Download")
+                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.mipmap.ic_launcher))
                 .setContentText("Downloading File")
                 .setProgress(0, 0, true)
                 .setColor(resources.getColor(R.color.colorPrimaryDark))
                 .setOngoing(true) // THIS is the important line
-                .setAutoCancel(true)
+                .setAutoCancel(false)
     }
 
     private var totalFileSize: Int = 0
@@ -40,10 +42,8 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
 
 
     override fun onHandleIntent(intent: Intent) {
-
-
-        notificationManager.notify(0, notificationBuilder.build())
-
+        val title = intent.getStringExtra("title")
+        notificationBuilder.setContentTitle(title)
         database = AppDatabase.getInstance(this)
         contentDao = database.contentDao()
 
@@ -51,6 +51,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
     }
 
     private fun initDownload(intent: Intent) {
+        notificationManager.notify(0, notificationBuilder.build())
         var downloadCount = 0
         val url = intent.getStringExtra("url")
         Clients.initiateDownload(url, "index.m3u8").enqueue(retrofitCallback { _, response ->
@@ -138,6 +139,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
         }
     }
 
+    //function to update progress according to download progress
     private fun sendNotification(download: Int) {
         notificationBuilder!!.setProgress(100, download, false)
         notificationBuilder!!.setContentText(String.format("Downloaded (%d/%d) MB", download, download))
@@ -150,6 +152,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
         notificationBuilder!!.setProgress(0, 0, false)
         notificationBuilder!!.setContentText("File Downloaded")
         notificationBuilder.setOngoing(false)
+        notificationBuilder.setAutoCancel(true)
         notificationManager.notify(0, notificationBuilder!!.build())
     }
 
