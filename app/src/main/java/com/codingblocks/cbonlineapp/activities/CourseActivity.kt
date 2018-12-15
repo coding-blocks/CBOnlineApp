@@ -26,7 +26,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
 
 
@@ -77,43 +76,47 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 skeletonScreen.hide()
                 coursePageSubtitle.text = course.subtitle
                 coursePageSummary.text = course.summary
-                runId = course.runs!![0].id!!
-                info { runId }
                 trialBtn.setOnClickListener {
-                    Clients.api.enrollTrial(course.runs!![0].id!!).enqueue(retrofitCallback { throwable, response ->
+                    if (course.runs != null)
+                        Clients.api.enrollTrial(course.runs!![0].id!!).enqueue(retrofitCallback { throwable, response ->
 
-                    })
+                        })
                 }
                 buyBtn.setOnClickListener {
-                    Clients.api.addToCart(course.runs!![0].id!!).enqueue(retrofitCallback { throwable, response ->
-                        val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
-                        val customTabsIntent = builder.build()
-                        customTabsIntent.launchUrl(this, Uri.parse("https://dukaan.codingblocks.com/mycart"))
-
-                    })
+                    if (course.runs != null) {
+                        Clients.api.addToCart(course.runs!![0].id!!).enqueue(retrofitCallback { throwable, response ->
+                            val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+                            val customTabsIntent = builder.build()
+                            customTabsIntent.launchUrl(this, Uri.parse("https://dukaan.codingblocks.com/mycart"))
+                        })
+                    } else {
+                        toast("No available runs right now ! Please check back later")
+                    }
                 }
                 showPromoVideo(course.promoVideo)
                 fetchRating()
-                val sections = course.runs?.get(0)?.sections
-                val sectionsList = ArrayList<Sections>()
-                val sectionAdapter = SectionsDataAdapter(ArrayList())
-                rvExpendableView.layoutManager = LinearLayoutManager(this)
-                rvExpendableView.adapter = sectionAdapter
-                sections!!.forEachIndexed { index, section ->
-                    GlobalScope.launch(Dispatchers.Main) {
-                        val request = service.getSections(section.id!!)
-                        val response = request.await()
-                        if (response.isSuccessful) {
-                            val value = response.body()!!
-                            value.order = index
-                            sectionsList.add(value)
-                            if (sectionsList.size == sections.size) {
-                                sectionsList.sortBy { it.order }
-                                sectionAdapter.setData(sectionsList)
+                if (!course.runs.isNullOrEmpty()) {
+                    val sections = course.runs?.get(0)?.sections
+                    val sectionsList = ArrayList<Sections>()
+                    val sectionAdapter = SectionsDataAdapter(ArrayList())
+                    rvExpendableView.layoutManager = LinearLayoutManager(this)
+                    rvExpendableView.adapter = sectionAdapter
+                    sections!!.forEachIndexed { index, section ->
+                        GlobalScope.launch(Dispatchers.Main) {
+                            val request = service.getSections(section.id!!)
+                            val response = request.await()
+                            if (response.isSuccessful) {
+                                val value = response.body()!!
+                                value.order = index
+                                sectionsList.add(value)
+                                if (sectionsList.size == sections.size) {
+                                    sectionsList.sortBy { it.order }
+                                    sectionAdapter.setData(sectionsList)
 
+                                }
+                            } else {
+                                toast("Error ${response.code()}")
                             }
-                        } else {
-                            toast("Error ${response.code()}")
                         }
                     }
                 }

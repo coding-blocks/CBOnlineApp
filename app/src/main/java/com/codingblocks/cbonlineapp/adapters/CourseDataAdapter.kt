@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.adapters
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -89,7 +90,10 @@ class CourseDataAdapter(private var courseData: ArrayList<Course>?, var context:
             }
             currentRuns.sortWith(Comparator { o1, o2 -> java.lang.Long.compare(o2.price!!.toLong(), o1.price!!.toLong()) })
             try {
-                itemView.coursePrice.text = "Rs. ${currentRuns[0].price}"
+                itemView.coursePrice.text = "₹ ${currentRuns[0].price}"
+                if (currentRuns[0].price != currentRuns[0].mrp)
+                    itemView.courseActualPrice.text = "₹ ${currentRuns[0].mrp}"
+                itemView.courseActualPrice.paintFlags = itemView.courseActualPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 var sdf = SimpleDateFormat("MMM dd ")
                 var date = sdf.format(Date(currentRuns[0].start!!.toLong() * 1000))
                 itemView.courseRun.text = "Batches Starting $date"

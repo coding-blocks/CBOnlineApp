@@ -64,10 +64,11 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 .show()
 
         courseWithInstructorDao.courseWithInstructors.observe(this, Observer<List<CourseWithInstructor>> {
-            if(it.isNotEmpty()){
+            if (it.isNotEmpty()) {
                 skeletonScreen.hide()
             }
-            courseDataAdapter.setData(it as ArrayList<CourseWithInstructor>)})
+            courseDataAdapter.setData(it as ArrayList<CourseWithInstructor>)
+        })
 
 
         fetchAllCourses()
