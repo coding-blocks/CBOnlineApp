@@ -88,21 +88,21 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                             val progress = map!!["percent"] as Double
                             val course = myCourses.course?.run {
                                 Course(
-                                        id.toString(),
-                                        title.toString(),
-                                        subtitle.toString(),
-                                        logo.toString(),
-                                        summary.toString(),
-                                        promoVideo.toString(),
-                                        difficulty.toString(),
-                                        reviewCount!!,
-                                        rating!!,
-                                        slug.toString(),
-                                        coverImage.toString(),
-                                        myCourses.run_attempts?.get(0)?.id.toString(),
+                                        id ?: "",
+                                        title ?: "",
+                                        subtitle ?: "",
+                                        logo ?: "",
+                                        summary ?: "",
+                                        promoVideo ?: "",
+                                        difficulty ?: "",
+                                        reviewCount ?: 0,
+                                        rating ?: 0f,
+                                        slug ?: "",
+                                        coverImage ?: "",
+                                        myCourses.run_attempts?.get(0)?.id ?: "",
                                         updatedAt,
                                         progress,
-                                        myCourses.description.toString()
+                                        myCourses.description ?: ""
                                 )
                             }
                             thread {

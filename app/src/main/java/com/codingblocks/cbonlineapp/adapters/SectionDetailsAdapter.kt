@@ -5,7 +5,6 @@ import android.graphics.drawable.AnimationDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -34,7 +33,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
     private lateinit var context: Context
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
-    lateinit var arrowAnimation: RotateAnimation
 
 
     fun setData(sectionData: ArrayList<CourseSection>) {
@@ -110,11 +108,11 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                             ll.addView(inflatedView)
                             if (!content.contentLecture.isDownloaded) {
                                 downloadBtn.setOnClickListener {
-                                    if(MediaUtils.checkPermission(context)) {
-                                        starter.startDownload(url, data.id, content.contentLecture.lectureContentId,content.title)
+                                    if (MediaUtils.checkPermission(context)) {
+                                        starter.startDownload(url, data.id, content.contentLecture.lectureContentId, content.title)
                                         downloadBtn.isEnabled = false
                                         (downloadBtn.background as AnimationDrawable).start()
-                                    }else{
+                                    } else {
                                         MediaUtils.isStoragePermissionGranted(context)
                                     }
                                 }
