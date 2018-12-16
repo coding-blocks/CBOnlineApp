@@ -19,7 +19,6 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.ctx
 import kotlin.concurrent.thread
 
@@ -69,11 +68,9 @@ class HomeFragment : Fragment(), AnkoLogger {
         courseDao.getCourses().observe(this, Observer<List<Course>> {
             if (it.isNotEmpty()) {
                 skeletonScreen.hide()
-                info { "heelo" + it[0].title }
-                info { "heelo" + it[0].courseRun.crPrice }
-
-
             }
+            courseDataAdapter.setData(it as ArrayList<Course>)
+
         })
 
         fetchRecommendedCourses()

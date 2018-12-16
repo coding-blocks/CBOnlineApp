@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
@@ -68,7 +69,13 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 .count(4)
                 .load(R.layout.item_skeleton_course_card)
                 .show()
+        courseDao.getMyCourse().observe(this, Observer<List<Course>> {
+            if (it.isNotEmpty()) {
+                skeletonScreen.hide()
+            }
+            courseDataAdapter.setData(it as ArrayList<Course>)
 
+        })
         fetchAllCourses()
     }
 
@@ -103,7 +110,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                 )
                             }
                             thread {
-                                courseDao.insert(course!!)
+                                courseDao.update(course!!)
                                 //fetch CourseInstructors
                                 myCourses.course?.instructors?.forEachIndexed { index, _ ->
                                     Clients.onlineV2JsonApi.instructorsById(myCourses.course!!.instructors!![index].id!!).enqueue(retrofitCallback { throwable, response ->

@@ -64,12 +64,12 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                 .load(R.layout.item_skeleton_course_card)
                 .show()
 
-//        courseWithInstructorDao.courseWithInstructors.observe(this, Observer<List<CourseWithInstructor>> {
-//            if (it.isNotEmpty()) {
-//                skeletonScreen.hide()
-//            }
-//            courseDataAdapter.setData(it as ArrayList<CourseWithInstructor>)
-//        })
+        courseDao.getCourses().observe(this, Observer<List<Course>> {
+            if (it.isNotEmpty()) {
+                skeletonScreen.hide()
+            }
+            courseDataAdapter.setData(it as ArrayList<Course>)
+        })
 
 
         fetchAllCourses()

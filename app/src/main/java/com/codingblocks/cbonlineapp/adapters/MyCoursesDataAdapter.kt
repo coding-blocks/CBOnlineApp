@@ -8,23 +8,27 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.CourseWithInstructor
+import com.codingblocks.cbonlineapp.activities.MyCourseActivity
+import com.codingblocks.cbonlineapp.database.Course
+import kotlinx.android.synthetic.main.my_course_card_horizontal.view.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
 
 
-class MyCoursesDataAdapter(private var courseData: ArrayList<CourseWithInstructor>?, var context: Context) : RecyclerView.Adapter<MyCoursesDataAdapter.CourseViewHolder>(), AnkoLogger {
+class MyCoursesDataAdapter(private var courseData: ArrayList<Course>?, var context: Context) : RecyclerView.Adapter<MyCoursesDataAdapter.CourseViewHolder>(), AnkoLogger {
 
-//    val svgLoader = SvgLoader.pluck().with(context as Activity?)!!
+    val svgLoader = SvgLoader.pluck().with(context as Activity?)!!
 
 
-    fun setData(courseData: ArrayList<CourseWithInstructor>) {
+    fun setData(courseData: ArrayList<Course>) {
         this.courseData = courseData
 
         notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
-//        holder.bindView(courseData!![position])
+        holder.bindView(courseData!![position])
     }
 
 
@@ -41,31 +45,31 @@ class MyCoursesDataAdapter(private var courseData: ArrayList<CourseWithInstructo
 
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-//        fun bindView(data: CourseWithInstructor) {
-//            data.course?.run {
-//                itemView.courseTitle.text = title
-//                itemView.courseDescription.text = subtitle
-//                itemView.courseRatingTv.text = rating.toString()
-//                itemView.courseRatingBar.rating = rating
-//                itemView.courseRunDescription.text = runDescription
-//                itemView.courseProgress.progress = progress.toInt()
-//                svgLoader.setPlaceHolder(R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e, R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e)
-//                        .load(coverImage, itemView.courseCoverImgView)
-//
-//                svgLoader
-//                        .load(logo, itemView.courseLogo)
-//                itemView.courseBtn1.setOnClickListener {
-//                    it.context.startActivity(it.context.intentFor<MyCourseActivity>("attempt_id" to attempt_id, "courseName" to title).singleTop())
-//
-//                }
-//                itemView.setOnClickListener {
-//                    it.context.startActivity(it.context.intentFor<MyCourseActivity>("attempt_id" to attempt_id, "courseName" to title).singleTop())
-//
-//                }
-//            }
-//            //bind Instructors
-//            var instructors = ""
-//
+        fun bindView(data: Course) {
+            data.run {
+                itemView.courseTitle.text = title
+                itemView.courseDescription.text = subtitle
+                itemView.courseRatingTv.text = rating.toString()
+                itemView.courseRatingBar.rating = rating
+                itemView.courseRunDescription.text = runDescription
+                itemView.courseProgress.progress = progress.toInt()
+                svgLoader.setPlaceHolder(R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e, R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e)
+                        .load(coverImage, itemView.courseCoverImgView)
+
+                svgLoader
+                        .load(logo, itemView.courseLogo)
+                itemView.courseBtn1.setOnClickListener {
+                    it.context.startActivity(it.context.intentFor<MyCourseActivity>("attempt_id" to attempt_id, "courseName" to title).singleTop())
+
+                }
+                itemView.setOnClickListener {
+                    it.context.startActivity(it.context.intentFor<MyCourseActivity>("attempt_id" to attempt_id, "courseName" to title).singleTop())
+
+                }
+            }
+            //bind Instructors
+            var instructors = ""
+
 //            if (data.instructorList!!.size == 1) {
 //                itemView.courseInstrucImgView2.visibility = View.INVISIBLE
 //            }
@@ -80,7 +84,7 @@ class MyCoursesDataAdapter(private var courseData: ArrayList<CourseWithInstructo
 //            if (data.instructorList!!.size > 2) {
 //                instructors += "+" + (data.instructorList!!.size - 2) + " more"
 //            }
-//        }
+        }
 
     }
 }
