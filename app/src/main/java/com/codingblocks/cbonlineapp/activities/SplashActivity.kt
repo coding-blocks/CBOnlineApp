@@ -45,7 +45,7 @@ class SplashActivity : AppCompatActivity() {
         lateinit var logo: ImageView
         override fun createView(ui: AnkoContext<SplashActivity>): View = with(ui) {
             frameLayout {
-                logo = imageView(R.drawable.cblogo)
+                logo = imageView(R.mipmap.ic_launcher_foreground)
                         .lparams {
                             width = wrapContent
                             height = wrapContent
