@@ -34,7 +34,7 @@ data class Course(
         var runDescription: String = "",
         @Nullable
         @Embedded
-        var courseRun: CourseRun= CourseRun()
+        var courseRun: CourseRun = CourseRun()
 ) : BaseModel(uid, updated_at)
 
 //add type converter for arraylist of instructors,contents,sections(if possible)
@@ -66,8 +66,8 @@ data class Instructor(
         var course_id: String?
 ) : BaseModel(uid, updated_at)
 
-
-@Entity(primaryKeys = ["course_id", "instructor_id"],
+@Entity(
+        primaryKeys = ["course_id", "instructor_id"],
         indices = [
             Index(value = ["course_id"]),
             Index(value = ["instructor_id"])
@@ -82,6 +82,7 @@ data class Instructor(
                     onDelete = ForeignKey.SET_NULL)
         ])
 data class CourseWithInstructor(
+//        @Nullable @PrimaryKey(autoGenerate = true) val id: Int?,
         @ColumnInfo(name = "course_id") val courseId: String,
         @ColumnInfo(name = "instructor_id") val instructorId: String)
 

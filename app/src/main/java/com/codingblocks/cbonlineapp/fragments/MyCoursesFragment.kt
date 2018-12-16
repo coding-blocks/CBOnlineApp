@@ -112,8 +112,9 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                             thread {
                                 courseDao.update(course!!)
                                 //fetch CourseInstructors
-                                myCourses.course?.instructors?.forEachIndexed { index, _ ->
-                                    Clients.onlineV2JsonApi.instructorsById(myCourses.course!!.instructors!![index].id!!).enqueue(retrofitCallback { throwable, response ->
+
+                                myCourses.course?.instructors?.forEachIndexed { index, it ->
+                                    Clients.onlineV2JsonApi.instructorsById(it.id!!).enqueue(retrofitCallback { throwable, response ->
 
                                         response?.body().let { instructor ->
                                             thread {
@@ -123,12 +124,11 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                                                 ?: "", instructor?.photo ?: "",
                                                         "", myCourses.run_attempts!![0].id!!, myCourses.course!!.id))
                                                 try {
+                                                    Log.e("TAG", "ID : ${instructor?.id}  Name : ${instructor?.name}")
                                                     insertCourseAndInstructor(myCourses.course!!, instructor!!)
                                                 } catch (e: Exception) {
                                                     Log.e("TAG", "gfdsgdsg" + instructor?.id + myCourses.course?.id, e)
-
                                                 }
-
                                             }
                                         }
                                     })
