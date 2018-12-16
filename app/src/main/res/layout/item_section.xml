@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sectionRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -20,7 +21,7 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/cabin_medium"
             android:maxLines="1"
-            android:text="Introduction And Logistics"
+            tools:text="Introduction And Logistics"
             android:textColor="@android:color/primary_text_light"
             android:textSize="16sp" />
 
@@ -43,7 +44,7 @@
             android:layout_marginLeft="10dp"
             android:fontFamily="@font/cabin_medium"
             android:maxLines="1"
-            android:text="3 Lectures"
+            tools:text="3 Lectures"
             android:textColor="@android:color/primary_text_light"
             android:textSize="13sp" />
 
@@ -57,7 +58,7 @@
             android:layout_toEndOf="@id/lectures"
             android:fontFamily="@font/cabin_medium"
             android:maxLines="1"
-            android:text="30 Mins"
+            tools:text="30 Mins"
             android:textColor="@android:color/primary_text_light"
             android:textSize="13sp" />
     </RelativeLayout>

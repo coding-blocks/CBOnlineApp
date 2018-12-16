@@ -14,7 +14,6 @@ open class BaseModel(
 
 @Entity
 data class Course(
-        @PrimaryKey
         var uid: String,
         var title: String,
         var subtitle: String,
@@ -56,7 +55,6 @@ data class CourseRun(
 
 @Entity()
 data class Instructor(
-        @PrimaryKey
         var uid: String,
         var name: String?,
         var description: String,
@@ -74,12 +72,11 @@ data class Instructor(
         ],
         foreignKeys = [
             ForeignKey(entity = Course::class,
-                    parentColumns = ["uid"],
+                    parentColumns = ["id"],
                     childColumns = ["course_id"]),
             ForeignKey(entity = Instructor::class,
-                    parentColumns = ["uid"],
-                    childColumns = ["instructor_id"],
-                    onDelete = ForeignKey.SET_NULL)
+                    parentColumns = ["id"],
+                    childColumns = ["instructor_id"])
         ])
 data class CourseWithInstructor(
 //        @Nullable @PrimaryKey(autoGenerate = true) val id: Int?,

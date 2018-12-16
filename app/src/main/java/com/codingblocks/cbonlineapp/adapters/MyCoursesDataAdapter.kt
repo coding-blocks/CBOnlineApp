@@ -2,15 +2,20 @@ package com.codingblocks.cbonlineapp.adapters
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.database.Course
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.database.Instructor
+import com.codingblocks.cbonlineapp.database.InstructorDao
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.my_course_card_horizontal.view.*
 import org.jetbrains.anko.AnkoLogger
@@ -18,8 +23,11 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 
 
-class MyCoursesDataAdapter(private var courseData: ArrayList<Course>?, var context: Context, var instructorDao: CourseWithInstructorDao) : RecyclerView.Adapter<MyCoursesDataAdapter.CourseViewHolder>(), AnkoLogger {
-
+class MyCoursesDataAdapter(private var courseData: ArrayList<Course>?,
+                           val activity: Activity,
+                           private val courseWithInstructorDao: CourseWithInstructorDao,
+                           private val instructorDao: InstructorDao) : RecyclerView.Adapter<MyCoursesDataAdapter.CourseViewHolder>(), AnkoLogger {
+    val context = activity
     val svgLoader = SvgLoader.pluck().with(context as Activity?)!!
 
 
@@ -30,7 +38,7 @@ class MyCoursesDataAdapter(private var courseData: ArrayList<Course>?, var conte
     }
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
-        holder.bindView(courseData!![position], instructorDao)
+        holder.bindView(courseData!![position], courseWithInstructorDao)
     }
 
 
@@ -69,33 +77,39 @@ class MyCoursesDataAdapter(private var courseData: ArrayList<Course>?, var conte
 
                 }
             }
+
+            Log.e("COURSE ID ", data.id)
+
+
             //bind Instructors
-            val instructorsList = instructorDao.getInstructorWithCourseId(data.id).value
-            var instructors = ""
+            val instructorsLiveData = instructorDao.getInstructorWithCourseId(data.id)
 
+            instructorsLiveData.observe({ (activity as LifecycleOwner).lifecycle }, {
+                val instructorsList = it
 
-            if (instructorsList?.size == 1) {
-                itemView.courseInstrucImgView2.visibility = View.INVISIBLE
-            }
+                var instructors = ""
 
-            instructorsList?.forEachIndexed { i, instructor ->
-                instructors += instructor.name + ", "
-                if (i == 0)
-                    Picasso.get().load(instructor.photo).into(itemView.courseInstrucImgView1)
-                else if (i == 1)
-                    Picasso.get().load(instructor.photo).into(itemView.courseInstrucImgView2)
-            }
-
-            instructorsList?.let {
-                if (it.size > 2) {
-                    instructors += "+" + (instructorsList.size - 2) + " more"
+                if (instructorsList.size == 1) {
+                    itemView.courseInstrucImgView2.visibility = View.INVISIBLE
                 }
-                itemView.courseInstructors.text = instructors
-            }
+                instructorsList.forEachIndexed { i, instructor ->
+                    instructors += instructor.name + ", "
+                    if (i == 0)
+                        Picasso.get().load(instructor.photo).into(itemView.courseInstrucImgView1)
+                    else if (i == 1)
+                        Picasso.get().load(instructor.photo).into(itemView.courseInstrucImgView2)
+                }
+                instructorsList.let {
 
+                    Log.e("INSTRUCTOR LIST", it.size.toString())
 
+                    if (it.size > 2) {
+                        instructors += "+" + (instructorsList.size - 2) + " more"
+                    }
+                    itemView.courseInstructors.text = instructors
+                }
+            })
         }
-
     }
 }
 

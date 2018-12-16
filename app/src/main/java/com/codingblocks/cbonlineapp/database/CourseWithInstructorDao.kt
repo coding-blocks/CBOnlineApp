@@ -10,9 +10,10 @@ interface CourseWithInstructorDao {
 
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("""
-        SELECT * FROM instructor INNER JOIN coursewithinstructor ON
-        instructor.uid = coursewithinstructor.instructor_id WHERE
-        coursewithinstructor.course_id = :courseID
+        SELECT * FROM instructor
+        INNER JOIN coursewithinstructor ON
+        instructor.id = coursewithinstructor.instructor_id
+        WHERE coursewithinstructor.course_id = :courseID
         """)
     fun getInstructorWithCourseId(courseID: String): LiveData<List<Instructor>>
 

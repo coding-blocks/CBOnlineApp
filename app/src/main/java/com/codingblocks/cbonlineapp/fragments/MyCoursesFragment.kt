@@ -21,9 +21,7 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourse
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
+import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.ctx
 import kotlin.concurrent.thread
 
@@ -55,7 +53,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ui.titleText.text = "My Courses"
-        courseDataAdapter = MyCoursesDataAdapter(ArrayList(), activity!!,courseWithInstructorDao)
+        courseDataAdapter = MyCoursesDataAdapter(ArrayList(), activity!!, courseWithInstructorDao,instructorDao)
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
@@ -109,7 +107,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                         myCourses.description ?: ""
                                 )
                             }
-                            thread {
+                            doAsync {
                                 courseDao.update(course!!)
                                 //fetch CourseInstructors
 
@@ -123,12 +121,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                                         instructor?.description
                                                                 ?: "", instructor?.photo ?: "",
                                                         "", myCourses.run_attempts!![0].id!!, myCourses.course!!.id))
-                                                try {
-                                                    Log.e("TAG", "ID : ${instructor?.id}  Name : ${instructor?.name}")
-                                                    insertCourseAndInstructor(myCourses.course!!, instructor!!)
-                                                } catch (e: Exception) {
-                                                    Log.e("TAG", "gfdsgdsg" + instructor?.id + myCourses.course?.id, e)
-                                                }
+                                                Log.e("TAG", "ID : ${instructor?.id}  Name : ${instructor?.name}")
+                                                insertCourseAndInstructor(myCourses.course!!, instructor!!)
                                             }
                                         }
                                     })
@@ -144,7 +138,13 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     private fun insertCourseAndInstructor(course: MyCourse, instructor: com.codingblocks.onlineapi.models.Instructor) {
 
         thread {
-            courseWithInstructorDao.insert(CourseWithInstructor(course.id!!, instructor.id!!))
+            try {
+                courseWithInstructorDao.insert(CourseWithInstructor(course.id!!, instructor.id!!))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("CRASH", "COURSE ID : ${course.id.toString()}")
+                Log.e("CRASH", "INSTRUCTOR ID : ${instructor.id.toString()}")
+            }
         }
     }
 
