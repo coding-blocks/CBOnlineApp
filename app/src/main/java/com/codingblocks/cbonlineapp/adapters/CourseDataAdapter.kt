@@ -11,6 +11,7 @@ import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.CourseActivity
 import com.codingblocks.cbonlineapp.database.Course
+import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import kotlinx.android.synthetic.main.single_course_card_horizontal.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor

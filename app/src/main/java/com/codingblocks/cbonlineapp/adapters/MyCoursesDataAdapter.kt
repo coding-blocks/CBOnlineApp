@@ -10,13 +10,15 @@ import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.database.Course
+import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.my_course_card_horizontal.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 
 
-class MyCoursesDataAdapter(private var courseData: ArrayList<Course>?, var context: Context) : RecyclerView.Adapter<MyCoursesDataAdapter.CourseViewHolder>(), AnkoLogger {
+class MyCoursesDataAdapter(private var courseData: ArrayList<Course>?, var context: Context, var instructorDao: CourseWithInstructorDao) : RecyclerView.Adapter<MyCoursesDataAdapter.CourseViewHolder>(), AnkoLogger {
 
     val svgLoader = SvgLoader.pluck().with(context as Activity?)!!
 
@@ -28,7 +30,7 @@ class MyCoursesDataAdapter(private var courseData: ArrayList<Course>?, var conte
     }
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
-        holder.bindView(courseData!![position])
+        holder.bindView(courseData!![position], instructorDao)
     }
 
 
@@ -45,7 +47,7 @@ class MyCoursesDataAdapter(private var courseData: ArrayList<Course>?, var conte
 
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindView(data: Course) {
+        fun bindView(data: Course, instructorDao: CourseWithInstructorDao) {
             data.run {
                 itemView.courseTitle.text = title
                 itemView.courseDescription.text = subtitle
@@ -68,22 +70,30 @@ class MyCoursesDataAdapter(private var courseData: ArrayList<Course>?, var conte
                 }
             }
             //bind Instructors
+            val instructorsList = instructorDao.getInstructorWithCourseId(data.id).value
             var instructors = ""
 
-//            if (data.instructorList!!.size == 1) {
-//                itemView.courseInstrucImgView2.visibility = View.INVISIBLE
-//            }
-//            for (i in 0 until data.instructorList!!.size) {
-//                instructors += data.instructorList!![i].name + ", "
-//                if (i == 0)
-//                    Picasso.get().load(data.instructorList!![i].photo).into(itemView.courseInstrucImgView1)
-//                else if (i == 1)
-//                    Picasso.get().load(data.instructorList!![i].photo).into(itemView.courseInstrucImgView2)
-//            }
-//            itemView.courseInstructors.text = instructors
-//            if (data.instructorList!!.size > 2) {
-//                instructors += "+" + (data.instructorList!!.size - 2) + " more"
-//            }
+
+            if (instructorsList?.size == 1) {
+                itemView.courseInstrucImgView2.visibility = View.INVISIBLE
+            }
+
+            instructorsList?.forEachIndexed { i, instructor ->
+                instructors += instructor.name + ", "
+                if (i == 0)
+                    Picasso.get().load(instructor.photo).into(itemView.courseInstrucImgView1)
+                else if (i == 1)
+                    Picasso.get().load(instructor.photo).into(itemView.courseInstrucImgView2)
+            }
+
+            instructorsList?.let {
+                if (it.size > 2) {
+                    instructors += "+" + (instructorsList.size - 2) + " more"
+                }
+                itemView.courseInstructors.text = instructors
+            }
+
+
         }
 
     }
