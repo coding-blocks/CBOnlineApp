@@ -43,7 +43,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         database = AppDatabase.getInstance(this)
 
         val runDao = database.courseRunDao()
-        val sectionDao = database.setionDao()
+        val sectionDao = database.sectionDao()
         val contentDao = database.contentDao()
         val courseDao = database.courseDao()
         setupViewPager()
