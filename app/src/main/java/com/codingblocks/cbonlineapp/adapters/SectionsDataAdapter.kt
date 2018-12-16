@@ -11,10 +11,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.R.id.sectionContents
 import com.codingblocks.onlineapi.models.Sections
 import kotlinx.android.synthetic.main.item_section.view.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import java.util.*
 
 
@@ -52,9 +51,9 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
             itemView.title.text = data.name
             itemView.lectures.text = ("${data.contents?.size} Lectures")
             var duration: Long = 0
-            for (subitems in data.contents!!) {
-                if (subitems.contentable == "lecture" || subitems.contentable == "video")
-                    duration += subitems.duration!!
+            for (subItems in data.contents!!) {
+                if (subItems.contentable == "lecture" || subItems.contentable == "video")
+                    duration += subItems.duration!!
             }
             val hour = duration / (1000 * 60 * 60) % 24
             val minute = duration / (1000 * 60) % 60
@@ -78,11 +77,11 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
                 if (i.contentable == "lecture" || i.contentable == "video") {
                     val contentDuration: Long = i.duration!!
                     contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
-                    val contenthour = contentDuration / (1000 * 60 * 60) % 24
-                    val contentminute = contentDuration / (1000 * 60) % 60
+                    val contentHour = contentDuration / (1000 * 60 * 60) % 24
+                    val contentMinute = contentDuration / (1000 * 60) % 60
                     when {
-                        contenthour <= 0 -> subDuration.text = ("$contentminute Mins")
-                        contentminute <= 0 -> subDuration.text = ("$contenthour Hours")
+                        contentHour <= 0 -> subDuration.text = ("$contentMinute Mins")
+                        contentMinute <= 0 -> subDuration.text = ("$contentHour Hours")
                         else -> itemView.lectureTime.text = ("---")
                     }
                 } else if (i.contentable == "document") {
@@ -101,27 +100,28 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
                 showOrHide(ll, it)
             }
 
-            itemView.arrow.setOnClickListener {
-                showOrHide(ll, itemView)
-            }
+//            itemView.arrow.setOnClickListener {
+//                showOrHide(ll, itemView)
+//            }
 
         }
 
         private fun showOrHide(ll: View, itemView: View) {
             if (ll.visibility == View.GONE) {
                 ll.visibility = View.VISIBLE
-                arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                        0.5f)
-                arrowAnimation.fillAfter = true
-                arrowAnimation.duration = 350
-                itemView.arrow.startAnimation(arrowAnimation)
+//                arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+//                        0.5f)
+//                arrowAnimation.fillAfter = true
+//                arrowAnimation.duration = 350
+
+//                itemView.arrow.startAnimation(arrowAnimation)
             } else {
                 ll.visibility = View.GONE
-                arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                        0.5f)
-                arrowAnimation.fillAfter = true
-                arrowAnimation.duration = 350
-                itemView.arrow.startAnimation(arrowAnimation)
+//                arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+//                        0.5f)
+//                arrowAnimation.fillAfter = true
+//                arrowAnimation.duration = 350
+//                itemView.arrow.startAnimation(arrowAnimation)
             }
         }
 

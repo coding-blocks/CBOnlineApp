@@ -64,10 +64,11 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 .show()
 
         courseWithInstructorDao.courseWithInstructors.observe(this, Observer<List<CourseWithInstructor>> {
-            if(it.isNotEmpty()){
+            if (it.isNotEmpty()) {
                 skeletonScreen.hide()
             }
-            courseDataAdapter.setData(it as ArrayList<CourseWithInstructor>)})
+            courseDataAdapter.setData(it as ArrayList<CourseWithInstructor>)
+        })
 
 
         fetchAllCourses()
@@ -82,26 +83,26 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 for (myCourses in it) {
 
                     //Add Course Progress to Course Object
-                    Clients.api.getMyCourseProgress(myCourses.run_attempts!![0].id!!).enqueue(retrofitCallback { t, progressResponse ->
-                        progressResponse?.body().let {
-                            val progress = it!!["percent"] as Double
+                    Clients.api.getMyCourseProgress(myCourses.run_attempts?.get(0)?.id.toString()).enqueue(retrofitCallback { t, progressResponse ->
+                        progressResponse?.body().let { map ->
+                            val progress = map!!["percent"] as Double
                             val course = myCourses.course?.run {
                                 Course(
-                                        id!!,
-                                        title!!,
-                                        subtitle!!,
-                                        logo!!,
-                                        summary!!,
-                                        promoVideo!!,
-                                        difficulty!!,
+                                        id.toString(),
+                                        title.toString(),
+                                        subtitle.toString(),
+                                        logo.toString(),
+                                        summary.toString(),
+                                        promoVideo.toString(),
+                                        difficulty.toString(),
                                         reviewCount!!,
                                         rating!!,
-                                        slug!!,
-                                        coverImage!!,
-                                        myCourses.run_attempts!![0].id!!,
+                                        slug.toString(),
+                                        coverImage.toString(),
+                                        myCourses.run_attempts?.get(0)?.id.toString(),
                                         updatedAt,
                                         progress,
-                                        myCourses.description!!
+                                        myCourses.description.toString()
                                 )
                             }
                             thread {

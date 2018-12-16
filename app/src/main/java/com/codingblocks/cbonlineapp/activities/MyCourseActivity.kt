@@ -23,11 +23,11 @@ import kotlin.concurrent.thread
 
 class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
-    lateinit var attemptId: String
+    private lateinit var attemptId: String
     private lateinit var database: AppDatabase
 
     companion object {
-        val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
+        const val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
     }
 
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
@@ -55,8 +55,9 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
                 override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
                     if (!p2) {
-                        if (it != null)
+                        it?.let {
                             youtubePlayerInstance?.cueVideo(MediaUtils.getYotubeVideoId(it.promoVideo))
+                        }
                     }
                 }
             }
@@ -88,16 +89,16 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
                 val run = it.run?.run {
                     CourseRun(
-                            id!!,
+                            id.toString(),
                             attemptId,
-                            name!!,
-                            description!!,
-                            start!!,
-                            end!!,
-                            price!!,
-                            mrp!!,
-                            courseId!!,
-                            updatedAt!!
+                            name.toString(),
+                            description.toString(),
+                            start.toString(),
+                            end.toString(),
+                            price.toString(),
+                            mrp.toString(),
+                            courseId.toString(),
+                            updatedAt.toString()
                     )
                 }
 
@@ -113,9 +114,9 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
                     //Course Sections List
                     for (section in it.run?.sections!!) {
-                        sectionDao.insert(CourseSection(section.id!!, section.name!!,
-                                section.order!!, section.premium!!, section.status!!,
-                                section.run_id!!, attemptId, section.updatedAt!!))
+                        sectionDao.insert(CourseSection(section.id.toString(), section.name.toString(),
+                                section.order!!, section.premium!!, section.status.toString(),
+                                section.run_id.toString(), attemptId, section.updatedAt.toString()))
 
                         //Section Contents List
                         val contents: ArrayList<CourseContent> = ArrayList()
@@ -125,23 +126,46 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                             var contentVideo = ContentVideo()
 
                             when {
-                                content.contentable.equals("lecture") -> content.lecture?.let { contentLecture = ContentLecture(it.id!!, it.name!!, it.duration!!, it.video_url!!, content.section_content?.id!!, it.updatedAt!!) }
-                                content.contentable.equals("document") -> content.document?.let { contentDocument = ContentDocument(it.id!!, it.name!!, it.pdf_link!!, content.section_content?.id!!, it.updatedAt!!) }
-                                content.contentable.equals("video") -> content.video?.let { contentVideo = ContentVideo(it.id!!, it.name!!, it.duration!!, it.description, it.url!!, content.section_content?.id!!, it.updatedAt!!) }
+                                content.contentable.equals("lecture") -> content.lecture?.let {
+                                    contentLecture = ContentLecture(it.id.toString(),
+                                            it.name.toString(),
+                                            it.duration!!,
+                                            it.video_url.toString(),
+                                            content.section_content?.id.toString(),
+                                            it.updatedAt.toString())
+                                }
+                                content.contentable.equals("document") -> content.document?.let {
+                                    contentDocument = ContentDocument(it.id.toString(),
+                                            it.name.toString(),
+                                            it.pdf_link.toString(),
+                                            content.section_content?.id.toString(),
+                                            it.updatedAt.toString())
+                                }
+                                content.contentable.equals("video") -> content.video?.let {
+                                    contentVideo = ContentVideo(it.id.toString(),
+                                            it.name.toString(),
+                                            it.duration!!,
+                                            it.description.toString(),
+                                            it.url.toString(),
+                                            content.section_content?.id.toString(),
+                                            it.updatedAt.toString())
+                                }
                             }
                             var progressId = ""
                             var status: String
                             if (content.progress != null) {
-                                status = content.progress?.status!!
-                                progressId = content.progress?.id!!
+                                status = content.progress?.status.toString()
+                                progressId = content.progress?.id.toString()
                             } else {
                                 status = "UNDONE"
                             }
                             contents.add(CourseContent(
-                                    content.id!!, status, progressId,
-                                    content.title!!, content.duration!!,
-                                    content.contentable!!, content.section_content?.order!!,
-                                    content.section_content?.sectionId!!, attemptId, content.section_content?.updatedAt!!, contentLecture, contentDocument, contentVideo))
+                                    content.id.toString(), status, progressId,
+                                    content.title.toString(), content.duration!!,
+                                    content.contentable.toString(), content.section_content?.order!!,
+                                    content.section_content?.sectionId.toString(), attemptId,
+                                    content.section_content?.updatedAt.toString(), contentLecture,
+                                    contentDocument, contentVideo))
                         }
 
                         contentDao.insertAll(contents)

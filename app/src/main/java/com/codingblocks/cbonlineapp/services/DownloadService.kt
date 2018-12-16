@@ -26,7 +26,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
 
     private val notificationBuilder by lazy {
         NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_file_download)
                 .setContentTitle("Download")
                 .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.mipmap.ic_launcher))
                 .setContentText("Downloading File")
@@ -141,19 +141,19 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
 
     //function to update progress according to download progress
     private fun sendNotification(download: Int) {
-        notificationBuilder!!.setProgress(100, download, false)
-        notificationBuilder!!.setContentText(String.format("Downloaded (%d/%d) MB", download, download))
-        notificationManager.notify(0, notificationBuilder!!.build())
+        notificationBuilder.setProgress(100, download, false)
+        notificationBuilder.setContentText(String.format("Downloaded (%d/%d) MB", download, download))
+        notificationManager.notify(0, notificationBuilder.build())
     }
 
 
     private fun onDownloadComplete() {
         notificationManager.cancel(0)
-        notificationBuilder!!.setProgress(0, 0, false)
-        notificationBuilder!!.setContentText("File Downloaded")
+        notificationBuilder.setProgress(0, 0, false)
+        notificationBuilder.setContentText("File Downloaded")
         notificationBuilder.setOngoing(false)
         notificationBuilder.setAutoCancel(true)
-        notificationManager.notify(0, notificationBuilder!!.build())
+        notificationManager.notify(0, notificationBuilder.build())
     }
 
     override fun onTaskRemoved(rootIntent: Intent) {

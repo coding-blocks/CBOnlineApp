@@ -167,9 +167,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                         showOrHide(ll, it)
                     }
 
-                    itemView.arrow.setOnClickListener {
-                        showOrHide(ll, itemView)
-                    }
+//                    itemView.arrow.setOnClickListener {
+//                        showOrHide(ll, itemView)
+//                    }
                 }
             })
         }
@@ -178,18 +178,18 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
     fun showOrHide(ll: View, itemView: View) {
         if (ll.visibility == View.GONE) {
             ll.visibility = View.VISIBLE
-            arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                    0.5f)
-            arrowAnimation.fillAfter = true
-            arrowAnimation.duration = 350
-            itemView.arrow.startAnimation(arrowAnimation)
+//            arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+//                    0.5f)
+//            arrowAnimation.fillAfter = true
+//            arrowAnimation.duration = 350
+//            itemView.arrow.startAnimation(arrowAnimation)
         } else {
             ll.visibility = View.GONE
-            arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                    0.5f)
-            arrowAnimation.fillAfter = true
-            arrowAnimation.duration = 350
-            itemView.arrow.startAnimation(arrowAnimation)
+//            arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+//                    0.5f)
+//            arrowAnimation.fillAfter = true
+//            arrowAnimation.duration = 350
+//            itemView.arrow.startAnimation(arrowAnimation)
         }
     }
 }
