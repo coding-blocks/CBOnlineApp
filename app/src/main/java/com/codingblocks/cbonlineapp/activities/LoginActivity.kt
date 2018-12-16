@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.activities
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +25,8 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        window.statusBarColor = Color.BLACK
 
         createDownloadChannel(MediaUtils.DOWNLOAD_CHANNEL_ID)
 

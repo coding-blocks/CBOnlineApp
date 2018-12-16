@@ -3,13 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <item android:drawable="@color/white" />
+    <item>
+        <color android:color="#222222"/>
+    </item>
 
     <!-- Set the Background Image-->
-    <item
-        android:gravity="center">
-        <bitmap
-            android:gravity="fill_horizontal|fill_vertical"
-            android:src="@mipmap/ic_launcher_foreground" />
-    </item>
+
 </layer-list>
