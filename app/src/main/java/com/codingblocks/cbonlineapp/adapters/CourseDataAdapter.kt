@@ -97,7 +97,7 @@ class CourseDataAdapter(private var courseData: ArrayList<Course>?, var context:
                 var sdf = SimpleDateFormat("MMM dd ")
                 var date = sdf.format(Date(currentRuns[0].start!!.toLong() * 1000))
                 itemView.courseRun.text = "Batches Starting $date"
-                sdf = SimpleDateFormat("dd MMM YYYY")
+                sdf = SimpleDateFormat("dd MMM yyyy")
                 date = sdf.format(Date(currentRuns[0].start!!.toLong() * 1000))
                 itemView.enrollmentTv.text = "Hurry Up! Enrollment ends $date"
 

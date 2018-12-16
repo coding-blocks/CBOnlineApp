@@ -20,7 +20,7 @@ import androidx.room.TypeConverters
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun courseRunDao(): CourseRunDao
-    abstract fun setionDao(): SectionDao
+    abstract fun sectionDao(): SectionDao
     abstract fun contentDao(): ContentDao
     abstract fun instructorDao(): InstructorDao
     abstract fun courseDao(): CourseDao

@@ -43,7 +43,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_course_content, container, false)
         database = AppDatabase.getInstance(context!!)
-        val sectionDao = database.setionDao()
+        val sectionDao = database.sectionDao()
         val sectionsList = ArrayList<CourseSection>()
         val sectionAdapter = SectionDetailsAdapter(sectionsList, activity!!, this)
         view.rvExpendableView.layoutManager = LinearLayoutManager(context)
