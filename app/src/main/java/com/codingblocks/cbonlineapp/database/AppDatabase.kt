@@ -7,13 +7,14 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(
-        version = 1, entities = [
+        version = 2, entities = [
     CourseRun::class,
     CourseSection::class,
     CourseContent::class,
     Instructor::class,
     Course::class,
-    Announcement::class
+    Announcement::class,
+    CourseWithInstructor::class
 ], exportSchema = false
 )
 @TypeConverters(AnnouncementConverter::class)
@@ -25,7 +26,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun instructorDao(): InstructorDao
     abstract fun courseDao(): CourseDao
     abstract fun courseWithInstructorDao(): CourseWithInstructorDao
-
 
 
     companion object {

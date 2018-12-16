@@ -50,9 +50,9 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         courseId = intent.getStringExtra("courseId")
         courseName = intent.getStringExtra("courseName")
         val image = intent.getStringExtra("courseLogo")
-        SvgLoader.pluck()
-                .with(this)
-                .load(image, coursePageLogo)
+//        SvgLoader.pluck()
+//                .with(this)
+//                .load(image, coursePageLogo)
         title = courseName
         coursePageTitle.text = courseName
 

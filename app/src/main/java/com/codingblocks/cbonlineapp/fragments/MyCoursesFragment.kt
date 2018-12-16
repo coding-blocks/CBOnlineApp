@@ -2,18 +2,22 @@ package com.codingblocks.cbonlineapp.fragments
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.MyCoursesDataAdapter
-import com.codingblocks.cbonlineapp.database.*
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.Course
+import com.codingblocks.cbonlineapp.database.CourseWithInstructor
+import com.codingblocks.cbonlineapp.database.Instructor
 import com.codingblocks.cbonlineapp.ui.AllCourseFragmentUi
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.MyCourse
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import org.jetbrains.anko.AnkoContext
@@ -26,29 +30,31 @@ import kotlin.concurrent.thread
 class MyCoursesFragment : Fragment(), AnkoLogger {
 
     val ui = AllCourseFragmentUi<Fragment>()
-    private lateinit var database: AppDatabase
+    private lateinit var courseDataAdapter: MyCoursesDataAdapter
+    private lateinit var skeletonScreen: SkeletonScreen
+
+    private val database: AppDatabase by lazy {
+        AppDatabase.getInstance(context!!)
+    }
+
+    private val courseDao by lazy {
+        database.courseDao()
+    }
+    private val courseWithInstructorDao by lazy {
+        database.courseWithInstructorDao()
+    }
+    private val instructorDao by lazy {
+        database.instructorDao()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return ui.createView(AnkoContext.create(ctx, this))
     }
 
-    private lateinit var courseDataAdapter: MyCoursesDataAdapter
-    lateinit var skeletonScreen: SkeletonScreen
-    lateinit var courseDao: CourseDao
-    lateinit var courseWithInstructorDao: CourseWithInstructorDao
-    lateinit var instructorDao: InstructorDao
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ui.titleText.text = "My Courses"
         courseDataAdapter = MyCoursesDataAdapter(ArrayList(), activity!!)
-        database = AppDatabase.getInstance(context!!)
-
-        courseDao = database.courseDao()
-        instructorDao = database.instructorDao()
-        courseWithInstructorDao = database.courseWithInstructorDao()
-
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
@@ -63,16 +69,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 .load(R.layout.item_skeleton_course_card)
                 .show()
 
-//        courseWithInstructorDao.courseWithInstructors.observe(this, Observer<List<CourseWithInstructor>> {
-//            if (it.isNotEmpty()) {
-//                skeletonScreen.hide()
-//            }
-//            courseDataAdapter.setData(it as ArrayList<CourseWithInstructor>)
-//        })
-
-
         fetchAllCourses()
-
     }
 
     private fun fetchAllCourses() {
@@ -107,28 +104,41 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                             }
                             thread {
                                 courseDao.insert(course!!)
+                                //fetch CourseInstructors
+                                myCourses.course?.instructors?.forEachIndexed { index, _ ->
+                                    Clients.onlineV2JsonApi.instructorsById(myCourses.course!!.instructors!![index].id!!).enqueue(retrofitCallback { throwable, response ->
+
+                                        response?.body().let { instructor ->
+                                            thread {
+                                                instructorDao.insert(Instructor(instructor?.id
+                                                        ?: "", instructor?.name ?: "",
+                                                        instructor?.description
+                                                                ?: "", instructor?.photo ?: "",
+                                                        "", myCourses.run_attempts!![0].id!!, myCourses.course!!.id))
+                                                try {
+                                                    insertCourseAndInstructor(myCourses.course!!, instructor!!)
+                                                } catch (e: Exception) {
+                                                    Log.e("TAG", "gfdsgdsg" + instructor?.id + myCourses.course?.id, e)
+
+                                                }
+
+                                            }
+                                        }
+                                    })
+                                }
                             }
                         }
                     })
-
-                    //fetch CourseInstructors
-                    for (i in 0 until myCourses.course!!.instructors?.size!!) {
-
-                        Clients.onlineV2JsonApi.instructorsById(myCourses.course!!.instructors!![i].id!!).enqueue(retrofitCallback { throwable, response ->
-                            response?.body().let {
-                                thread {
-                                    instructorDao.insert(Instructor(it?.id!!, it.name!!,
-                                            it.description!!, it.photo!!,
-                                            "", myCourses.run_attempts!![0].id!!, myCourses.course!!.id))
-                                }
-
-                            }
-                        })
-                    }
                 }
             }
         })
     }
 
+    private fun insertCourseAndInstructor(course: MyCourse, instructor: com.codingblocks.onlineapi.models.Instructor) {
+
+        thread {
+            courseWithInstructorDao.insert(CourseWithInstructor(course.id!!, instructor.id!!))
+        }
+    }
 
 }

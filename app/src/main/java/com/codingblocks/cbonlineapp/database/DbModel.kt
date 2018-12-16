@@ -14,6 +14,7 @@ open class BaseModel(
 
 @Entity
 data class Course(
+        @PrimaryKey
         var uid: String,
         var title: String,
         var subtitle: String,
@@ -55,6 +56,7 @@ data class CourseRun(
 
 @Entity()
 data class Instructor(
+        @PrimaryKey
         var uid: String,
         var name: String?,
         var description: String,
@@ -64,13 +66,24 @@ data class Instructor(
         var course_id: String?
 ) : BaseModel(uid, updated_at)
 
-class CourseWithInstructor {
-    @Embedded
-    var course: Course? = null
 
-    @Relation(parentColumn = "crUid", entityColumn = "crCourseId")
-    var instructorList: List<Instructor>? = null
-}
+@Entity(primaryKeys = ["course_id", "instructor_id"],
+        indices = [
+            Index(value = ["course_id"]),
+            Index(value = ["instructor_id"])
+        ],
+        foreignKeys = [
+            ForeignKey(entity = Course::class,
+                    parentColumns = ["uid"],
+                    childColumns = ["course_id"]),
+            ForeignKey(entity = Instructor::class,
+                    parentColumns = ["uid"],
+                    childColumns = ["instructor_id"],
+                    onDelete = ForeignKey.SET_NULL)
+        ])
+data class CourseWithInstructor(
+        @ColumnInfo(name = "course_id") val courseId: String,
+        @ColumnInfo(name = "instructor_id") val instructorId: String)
 
 @Entity(
         foreignKeys = [(ForeignKey(
