@@ -164,9 +164,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
-    override fun onBackPressed() {
-        //TODO :hack need to fix it
-        finish()
-
-    }
+//    override fun onBackPressed() {
+//        finish()
+//
+//    }
 }

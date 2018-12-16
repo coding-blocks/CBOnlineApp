@@ -5,7 +5,6 @@ import android.graphics.drawable.AnimationDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -107,7 +106,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
                             val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
                             ll.addView(inflatedView)
                             if (!content.contentLecture.isDownloaded) {
-                                downloadBtn.setOnClickListener {
+                                inflatedView.setOnClickListener {
                                     if (MediaUtils.checkPermission(context)) {
                                         starter.startDownload(url, data.id, content.contentLecture.lectureContentId, content.title)
                                         downloadBtn.isEnabled = false

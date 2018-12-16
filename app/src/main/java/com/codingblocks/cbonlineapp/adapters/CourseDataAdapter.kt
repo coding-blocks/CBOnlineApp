@@ -109,8 +109,10 @@ class CourseDataAdapter(private var courseData: ArrayList<Course>?, var context:
                 itemView.setOnClickListener {
                     val textPair: Pair<View, String> = Pair(itemView.courseTitle, "textTrans")
                     val imagePair: Pair<View, String> = Pair(itemView.courseLogo, "imageTrans")
+
+                    //TODO fix transition
                     val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity, textPair, imagePair)
-                    it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id, "courseName" to data.title, "courseLogo" to data.logo), compat.toBundle())
+                    it.context.startActivity(it.context.intentFor<CourseActivity>("courseId" to data.id, "courseName" to data.title, "courseLogo" to data.logo))
 
                 }
             } catch (e: IndexOutOfBoundsException) {
