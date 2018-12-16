@@ -63,6 +63,10 @@ class MyCoursesDataAdapter(private var courseData: ArrayList<CourseWithInstructo
                     it.context.startActivity(it.context.intentFor<MyCourseActivity>("attempt_id" to attempt_id, "courseName" to title).singleTop())
 
                 }
+                itemView.setOnClickListener {
+                    it.context.startActivity(it.context.intentFor<MyCourseActivity>("attempt_id" to attempt_id, "courseName" to title).singleTop())
+
+                }
             }
             //bind Instructors
             var instructors = ""

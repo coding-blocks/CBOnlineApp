@@ -25,27 +25,33 @@ data class Course(
         var rating: Float,
         var slug: String,
         var coverImage: String,
+        @Nullable
         var attempt_id: String,
         var updated_at: String?,
         var progress: Double = 0.0,
-        var runDescription: String = ""
+        @Nullable
+        var runDescription: String = "",
+        @Nullable
+        @Embedded
+        var courseRun: CourseRun= CourseRun()
 ) : BaseModel(uid, updated_at)
 
 //add type converter for arraylist of instructors,contents,sections(if possible)
 
 @Entity
 data class CourseRun(
-        var uid: String,
-        var attempt_id: String,
-        var name: String,
-        var description: String,
-        var start: String,
-        var end: String,
-        var price: String,
-        var mrp: String,
-        var courseId: String,
-        var updated_at: String
-) : BaseModel(uid, updated_at)
+        @PrimaryKey
+        var crUid: String = "",
+        var crAttemptId: String = "",
+        var crName: String = "",
+        var crDescription: String = "",
+        var crStart: String = "",
+        var crEnd: String = "",
+        var crPrice: String = "",
+        var crMrp: String = "",
+        var crCourseId: String = "",
+        var crUpdatedAt: String = ""
+)
 
 @Entity()
 data class Instructor(
@@ -62,14 +68,14 @@ class CourseWithInstructor {
     @Embedded
     var course: Course? = null
 
-    @Relation(parentColumn = "uid", entityColumn = "course_id")
+    @Relation(parentColumn = "crUid", entityColumn = "crCourseId")
     var instructorList: List<Instructor>? = null
 }
 
 @Entity(
         foreignKeys = [(ForeignKey(
                 entity = CourseRun::class,
-                parentColumns = ["id"],
+                parentColumns = ["crUid"],
                 childColumns = ["run_id"],
                 onDelete = ForeignKey.SET_NULL //or CASCADE
         ))]
@@ -88,7 +94,7 @@ data class CourseSection(
 @Entity(
         foreignKeys = [(ForeignKey(
                 entity = CourseRun::class,
-                parentColumns = ["id"],
+                parentColumns = ["crUid"],
                 childColumns = ["run_id"],
                 onDelete = ForeignKey.SET_NULL //or CASCADE
         ))]
