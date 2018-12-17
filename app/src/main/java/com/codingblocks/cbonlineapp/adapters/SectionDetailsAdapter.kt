@@ -16,10 +16,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.PdfActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.activities.YoutubePlayerActivity
-import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.ContentDao
-import com.codingblocks.cbonlineapp.database.CourseContent
-import com.codingblocks.cbonlineapp.database.CourseSection
+import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import kotlinx.android.synthetic.main.item_section.view.*
 import org.jetbrains.anko.intentFor
@@ -27,12 +24,15 @@ import org.jetbrains.anko.singleTop
 import kotlin.concurrent.thread
 
 
-class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, private var activity: LifecycleOwner, private var starter: DownloadStarter) : RecyclerView.Adapter<SectionDetailsAdapter.CourseViewHolder>() {
+class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
+                            private var activity: LifecycleOwner,
+                            private var starter: DownloadStarter
+) : RecyclerView.Adapter<SectionDetailsAdapter.CourseViewHolder>() {
 
     private lateinit var context: Context
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
-
+    private lateinit var sectionWithContentDao: SectionWithContentsDao
 
     fun setData(sectionData: ArrayList<CourseSection>) {
         this.sectionData = sectionData
@@ -52,8 +52,8 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
         context = parent.context
         database = AppDatabase.getInstance(context)
-
         contentDao = database.contentDao()
+        sectionWithContentDao = database.sectionWithContentsDao()
 
 
         return CourseViewHolder(LayoutInflater.from(parent.context)
@@ -70,7 +70,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?, 
             itemView.title.text = data.name
             this.starter = starter
 
-            contentDao.getCourseSectionContents(data.attempt_id, data.id).observe(activity, Observer<List<CourseContent>> { it ->
+            sectionWithContentDao.getContentWithSectionId(data.id).observe(activity, Observer<List<CourseContent>> { it ->
                 val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
                 if (ll.childCount != 0)
                     showOrHide(ll, itemView)

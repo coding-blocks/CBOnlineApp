@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.R
@@ -25,7 +26,17 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
     private lateinit var attemptId: String
     private lateinit var courseId: String
-    private lateinit var database: AppDatabase
+    private val database: AppDatabase by lazy {
+        AppDatabase.getInstance(this)
+    }
+
+    private val courseDao by lazy {
+        database.courseDao()
+    }
+    private val sectionWithContentsDao by lazy {
+        database.sectionWithContentsDao()
+    }
+
 
     companion object {
         const val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
@@ -42,12 +53,10 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         courseId = intent.getStringExtra("course_id")
         title = intent.getStringExtra("courseName")
         attemptId = intent.getStringExtra("attempt_id")
-        database = AppDatabase.getInstance(this)
 
         val runDao = database.courseRunDao()
         val sectionDao = database.sectionDao()
         val contentDao = database.contentDao()
-        val courseDao = database.courseDao()
         setupViewPager()
 
         courseDao.getMyCourse(attemptId).observe(this, Observer<Course> {
@@ -70,6 +79,8 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
         Clients.onlineV2JsonApi.enrolledCourseById(attemptId).enqueue(retrofitCallback { throwable, response ->
             response?.body()?.let { it ->
+
+                //TODO change primary key of sections to course attempt_id
                 val run = it.run?.run {
                     CourseRun(
                             id.toString(),
@@ -89,12 +100,11 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                     runDao.insert(run!!)
                     //Course Sections List
                     for (section in it.run?.sections!!) {
-                        sectionDao.insert(CourseSection(section.id.toString(), section.name.toString(),
-                                section.order!!, section.premium!!, section.status.toString(),
-                                section.run_id.toString(), attemptId, section.updatedAt.toString()))
+                        sectionDao.insert(CourseSection(section.id ?: "", section.name ?: "",
+                                section.order!!, section.premium!!, section.status ?: "",
+                                section.run_id ?: "", attemptId, section.updatedAt ?: ""))
 
                         //Section Contents List
-                        val contents: ArrayList<CourseContent> = ArrayList()
                         for (content in section.contents!!) {
                             var contentDocument = ContentDocument()
                             var contentLecture = ContentLecture()
@@ -102,48 +112,49 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
                             when {
                                 content.contentable.equals("lecture") -> content.lecture?.let {
-                                    contentLecture = ContentLecture(it.id.toString(),
-                                            it.name.toString(),
+                                    contentLecture = ContentLecture(it.id ?: "",
+                                            it.name ?: "",
                                             it.duration!!,
-                                            it.video_url.toString(),
-                                            content.section_content?.id.toString(),
-                                            it.updatedAt.toString())
+                                            it.video_url ?: "",
+                                            content.section_content?.id ?: "",
+                                            it.updatedAt ?: "")
                                 }
                                 content.contentable.equals("document") -> content.document?.let {
-                                    contentDocument = ContentDocument(it.id.toString(),
-                                            it.name.toString(),
-                                            it.pdf_link.toString(),
-                                            content.section_content?.id.toString(),
-                                            it.updatedAt.toString())
+                                    contentDocument = ContentDocument(it.id ?: "",
+                                            it.name ?: "",
+                                            it.pdf_link ?: "",
+                                            content.section_content?.id ?: "",
+                                            it.updatedAt ?: "")
                                 }
                                 content.contentable.equals("video") -> content.video?.let {
-                                    contentVideo = ContentVideo(it.id.toString(),
-                                            it.name.toString(),
+                                    contentVideo = ContentVideo(it.id ?: "",
+                                            it.name ?: "",
                                             it.duration!!,
-                                            it.description.toString(),
-                                            it.url.toString(),
-                                            content.section_content?.id.toString(),
-                                            it.updatedAt.toString())
+                                            it.description ?: "",
+                                            it.url ?: "",
+                                            content.section_content?.id ?: "",
+                                            it.updatedAt ?: "")
                                 }
                             }
                             var progressId = ""
                             var status: String
                             if (content.progress != null) {
-                                status = content.progress?.status.toString()
-                                progressId = content.progress?.id.toString()
+                                status = content.progress?.status ?: ""
+                                progressId = content.progress?.id ?: ""
                             } else {
                                 status = "UNDONE"
                             }
-                            contents.add(CourseContent(
-                                    content.id.toString(), status, progressId,
-                                    content.title.toString(), content.duration!!,
-                                    content.contentable.toString(), content.section_content?.order!!,
-                                    content.section_content?.sectionId.toString(), attemptId,
-                                    content.section_content?.updatedAt.toString(), contentLecture,
+                            contentDao.insert(CourseContent(
+                                    content.id ?: "", status, progressId,
+                                    content.title ?: "", content.duration!!,
+                                    content.contentable ?: "", content.section_content?.order!!,
+                                    content.section_content?.sectionId ?: "", attemptId,
+                                    content.section_content?.updatedAt ?: "", contentLecture,
                                     contentDocument, contentVideo))
+                            insertSectionWithContent(section.id ?: "", content.id ?: "")
+
                         }
 
-                        contentDao.insertAll(contents)
                     }
                 }
 
@@ -152,6 +163,18 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
         })
 
+    }
+
+    private fun insertSectionWithContent(sectionId: String, contentId: String) {
+        thread {
+            try {
+                sectionWithContentsDao.insert(SectionWithContent(sectionId, contentId))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("CRASH", "COURSE ID : $sectionId")
+                Log.e("CRASH", "INSTRUCTOR ID : $contentId")
+            }
+        }
     }
 
 
