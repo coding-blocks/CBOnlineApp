@@ -34,19 +34,17 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val instructorsList = it
 
             var instructors = ""
-
-            if (instructorsList.size == 1) {
-                itemView.courseInstrucImgView2.visibility = View.INVISIBLE
-            }
-            instructorsList.forEachIndexed { i, instructor ->
-                instructors += instructor.name + ", "
-                if (i == 0)
-                    Picasso.get().load(instructor.photo).into(itemView.courseInstrucImgView1)
-                else if (i == 1)
-                    Picasso.get().load(instructor.photo).into(itemView.courseInstrucImgView2)
-                if (i == 2) {
-                    instructors += "+" + (instructorsList.size - 2) + " more"
-                    return@forEachIndexed
+            for (i in 0 until instructorsList.size) {
+                if (i == 0) {
+                    Picasso.get().load(instructorsList[i].photo).into(itemView.courseInstrucImgView1)
+                    instructors += instructorsList[i].name
+                } else if (i == 1) {
+                    itemView.courseInstrucImgView2.visibility = View.VISIBLE
+                    Picasso.get().load(instructorsList[i].photo).into(itemView.courseInstrucImgView2)
+                    instructors += " ,${instructorsList[i].name}"
+                } else if (i >= 2) {
+                    instructors += " +" + (instructorsList.size - 2) + " more"
+                    break
                 }
             }
             itemView.courseInstructors.text = instructors
