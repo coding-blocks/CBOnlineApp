@@ -49,46 +49,27 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         val contentDao = database.contentDao()
         val courseDao = database.courseDao()
         setupViewPager()
-
-        courseDao.getMyCourse(attemptId).observe(this, Observer<Course> {
-            youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
-                override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
-                }
-
-                override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
-                    if (!p2) {
-                        it?.let {
-                            youtubePlayerInstance?.cueVideo(MediaUtils.getYotubeVideoId(it.promoVideo))
-                        }
-                    }
-                }
-            }
-            val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
-            youTubePlayerSupportFragment!!.initialize(YOUTUBE_API_KEY, youtubePlayerInit)
-        })
+//
+//        courseDao.getMyCourse(attemptId).observe(this, Observer<Course> {
+//            youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
+//                override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
+//                }
+//
+//                override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
+//                    if (!p2) {
+//                        it?.let {
+//                            youtubePlayerInstance?.cueVideo(MediaUtils.getYotubeVideoId(it.promoVideo))
+//                        }
+//                    }
+//                }
+//            }
+//            val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
+//            youTubePlayerSupportFragment!!.initialize(YOUTUBE_API_KEY, youtubePlayerInit)
+//        })
 
 
         Clients.onlineV2JsonApi.enrolledCourseById(attemptId).enqueue(retrofitCallback { throwable, response ->
             response?.body()?.let { it ->
-                //Saved On MyCourses Page
-//                val course = it.run?.course?.run {
-//                    Course(
-//                            id!!,
-//                            title!!,
-//                            subtitle!!,
-//                            logo!!,
-//                            summary!!,
-//                            promoVideo!!,
-//                            difficulty!!,
-//                            reviewCount!!,
-//                            rating!!,
-//                            slug!!,
-//                            coverImage!!,
-//                            attemptId,
-//                            updatedAt!!
-//                    )
-//                }
-
                 val run = it.run?.run {
                     CourseRun(
                             id.toString(),
@@ -106,14 +87,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
                 thread {
                     runDao.insert(run!!)
-
-                    //Saved On MyCourses Page
-//                    for (instructor in it.run?.course!!.instructors!!) {
-//                        instructorDao.insert(Instructor(instructor.id!!, instructor.name!!,
-//                                instructor.description!!, instructor.photo!!,
-//                                instructor.updatedAt!!, attemptId, instructor.instructorCourse?.courseId!!))
-//                    }
-
                     //Course Sections List
                     for (section in it.run?.sections!!) {
                         sectionDao.insert(CourseSection(section.id.toString(), section.name.toString(),
@@ -187,7 +160,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         adapter.add(OverviewFragment.newInstance(attemptId), "Overview")
         adapter.add(AnnouncementsFragment.newInstance(courseId), "About")
         adapter.add(CourseContentFragment.newInstance(attemptId), "Course Content")
-//        adapter.add(DoubtsFragment(), "")
         htab_viewpager.adapter = adapter
         htab_tabs.setupWithViewPager(htab_viewpager)
         htab_tabs.getTabAt(0)?.setIcon(R.drawable.ic_menu)
@@ -195,7 +167,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         htab_tabs.getTabAt(2)?.setIcon(R.drawable.ic_docs)
         htab_tabs.getTabAt(2)?.select()
         htab_viewpager.offscreenPageLimit = 3
-//        htab_tabs.getTabAt(3)?.setIcon(R.drawable.ic_support)
 
     }
 

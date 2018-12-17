@@ -20,6 +20,7 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.ctx
 import kotlin.concurrent.thread
 
@@ -120,7 +121,15 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                                 ))
                     }
                     thread {
-                        courseDao.insert(course)
+                        val updatedCourse = courseDao.getCourse(course.id)
+                        info { updatedCourse }
+                        //update if price does not match else insert on first time
+                        if(updatedCourse == null){
+                            courseDao.insert(course)
+                        }else if(updatedCourse.courseRun.crPrice != course.courseRun.crPrice){
+                            courseDao.update(course)
+
+                        }
                         //Add CourseInstructors
                         for (i in myCourses.instructors!!) {
                             instructorDao.insert(Instructor(i.id ?: "", i.name ?: "",

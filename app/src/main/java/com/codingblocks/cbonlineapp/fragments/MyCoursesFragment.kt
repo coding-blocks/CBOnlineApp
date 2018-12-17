@@ -111,15 +111,14 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                 )
                             }
                             doAsync {
-                                val updateCourse = courseDao.getCourse(myCourses.course?.id!!).value
-                                Log.e("CRASH", "UPDATE AT : ${updateCourse?.updatedAt}")
-                                Log.e("CRASH", "UPDATE AT NEW: ${myCourses.course?.updatedAt}")
-
-
-                                if (updateCourse?.updatedAt == null || updateCourse.updatedAt != myCourses.course?.updatedAt)
+                                val updateCourse = courseDao.getCourse(course?.id ?: "")
+                                info { updateCourse }
+                                if (updateCourse == null) {
+                                    courseDao.insert(course!!)
+                                } else if (updateCourse.attempt_id == "") {
                                     courseDao.update(course!!)
+                                }
                                 //fetch CourseInstructors
-
                                 myCourses.course?.instructors?.forEachIndexed { _, it ->
                                     Clients.onlineV2JsonApi.instructorsById(it.id!!).enqueue(retrofitCallback { _, response ->
 
