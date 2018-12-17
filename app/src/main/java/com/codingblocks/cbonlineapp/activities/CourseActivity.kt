@@ -7,7 +7,6 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.ProgressBarAnimation
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback

@@ -36,9 +36,9 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
-                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/gradient_theme_left_to_right"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 

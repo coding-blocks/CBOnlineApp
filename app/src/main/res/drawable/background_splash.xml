@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <item>
-        <color android:color="#222222"/>
+        <color android:color="#222222" />
     </item>
 
     <!-- Set the Background Image-->

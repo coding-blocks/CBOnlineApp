@@ -51,7 +51,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 
         courseWithInstructorDao = database.courseWithInstructorDao()
 
-        courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao)
+        courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao,"allCourses")
 
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)

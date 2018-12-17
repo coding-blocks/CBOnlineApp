@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
@@ -28,11 +27,11 @@
             <ImageView
                 android:id="@+id/courseCoverImgView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="fitXY"
+                android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:scaleType="centerCrop" />
 
         </RelativeLayout>
 
@@ -41,9 +40,9 @@
             android:layout_width="76dp"
             android:layout_height="76dp"
             android:layout_marginStart="8dp"
-            android:transitionName="imageTrans"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
+            android:transitionName="imageTrans"
             app:civ_border_color="#fff"
             app:civ_border_width="2dp"
             app:layout_constraintEnd_toEndOf="@+id/relativeLayout2"
@@ -57,30 +56,30 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
-            android:transitionName="textTrans"
             android:layout_marginEnd="4dp"
             android:fontFamily="@font/cabin_semibold"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="18sp"
+            android:transitionName="textTrans"
             app:layout_constraintEnd_toEndOf="@+id/relativeLayout2"
             app:layout_constraintStart_toStartOf="@+id/relativeLayout2"
             app:layout_constraintTop_toBottomOf="@+id/courseLogo" />
 
         <!--<TextView-->
-            <!--android:id="@+id/courseDescription"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginStart="8dp"-->
-            <!--android:layout_marginTop="4dp"-->
-            <!--android:layout_marginEnd="8dp"-->
-            <!--android:fontFamily="@font/myriadpro_regular"-->
-            <!--android:textAlignment="center"-->
-            <!--android:textColor="@android:color/white"-->
-            <!--android:textSize="12sp"-->
-            <!--app:layout_constraintEnd_toEndOf="@+id/relativeLayout2"-->
-            <!--app:layout_constraintStart_toStartOf="@+id/relativeLayout2"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/courseTitle" />-->
+        <!--android:id="@+id/courseDescription"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:fontFamily="@font/myriadpro_regular"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="12sp"-->
+        <!--app:layout_constraintEnd_toEndOf="@+id/relativeLayout2"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/relativeLayout2"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/courseTitle" />-->
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -160,7 +159,6 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/cabin_medium"
-            android:text="Prateek Narang, Arnav Gupta +2 more"
             android:textColor="@android:color/black"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -178,6 +176,7 @@
             android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@+id/relativeLayout2"
             app:layout_constraintTop_toBottomOf="@+id/courseInstructors" />
+
         <TextView
             android:id="@+id/courseActualPrice"
             android:layout_width="wrap_content"
@@ -204,24 +203,24 @@
 
 
         <!--<Button-->
-            <!--android:id="@+id/courseBtn1"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:layout_marginTop="12dp"-->
-            <!--android:layout_marginEnd="4dp"-->
-            <!--android:layout_marginBottom="8dp"-->
-            <!--android:background="@drawable/button_background"-->
-            <!--android:fontFamily="@font/cabin_medium"-->
-            <!--android:paddingStart="6dp"-->
-            <!--android:paddingTop="5dp"-->
-            <!--android:paddingEnd="6dp"-->
-            <!--android:paddingBottom="5dp"-->
-            <!--android:text="Explore"-->
-            <!--android:textColor="@android:color/white"-->
-            <!--android:textSize="12sp"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/courseRun"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/courseInstructors" />-->
+        <!--android:id="@+id/courseBtn1"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_marginTop="12dp"-->
+        <!--android:layout_marginEnd="4dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:background="@drawable/button_background"-->
+        <!--android:fontFamily="@font/cabin_medium"-->
+        <!--android:paddingStart="6dp"-->
+        <!--android:paddingTop="5dp"-->
+        <!--android:paddingEnd="6dp"-->
+        <!--android:paddingBottom="5dp"-->
+        <!--android:text="Explore"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="12sp"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/courseRun"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/courseInstructors" />-->
 
         <View
             android:id="@+id/view"
@@ -253,21 +252,21 @@
             app:layout_constraintStart_toEndOf="@+id/relativeLayout2" />
 
         <!--<TextView-->
-            <!--android:id="@+id/textView2"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginStart="8dp"-->
-            <!--android:layout_marginEnd="8dp"-->
-            <!--android:layout_marginBottom="8dp"-->
-            <!--android:fontFamily="@font/cabin_semibold"-->
-            <!--android:text="Click here to get Free Trial Now"-->
-            <!--android:textAlignment="center"-->
-            <!--android:textColor="#ff6666"-->
-            <!--android:textSize="12sp"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintStart_toEndOf="@+id/relativeLayout2"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/enrollmentTv" />-->
+        <!--android:id="@+id/textView2"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:fontFamily="@font/cabin_semibold"-->
+        <!--android:text="Click here to get Free Trial Now"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textColor="#ff6666"-->
+        <!--android:textSize="12sp"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toEndOf="@+id/relativeLayout2"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/enrollmentTv" />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

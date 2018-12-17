@@ -5,13 +5,12 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import org.jetbrains.anko.AnkoLogger
 
-class YoutubePlayerActivity : AppCompatActivity(),AnkoLogger {
+class YoutubePlayerActivity : AppCompatActivity(), AnkoLogger {
 
 
     lateinit var videoUrl: String

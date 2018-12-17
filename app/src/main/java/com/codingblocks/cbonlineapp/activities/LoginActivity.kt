@@ -32,10 +32,10 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
 
         login_button.setOnClickListener {
             val builder = CustomTabsIntent.Builder()
-                .enableUrlBarHiding()
-                .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
-                .setShowTitle(true)
-                .setSecondaryToolbarColor(resources.getColor(R.color.colorPrimary))
+                    .enableUrlBarHiding()
+                    .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+                    .setShowTitle(true)
+                    .setSecondaryToolbarColor(resources.getColor(R.color.colorPrimary))
             val customTabsIntent = builder.build()
             customTabsIntent.launchUrl(this, Uri.parse("$OAUTH_URL?redirect_uri=$REDIRECT_URI&response_type=code&client_id=$CLIENT_ID"))
         }

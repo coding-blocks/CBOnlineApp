@@ -4,14 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.R.id.sectionContents
 import com.codingblocks.onlineapi.models.Sections
 import kotlinx.android.synthetic.main.item_section.view.*
 import java.util.*

@@ -45,7 +45,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_holder, HomeFragment())
+        transaction.replace(R.id.fragment_holder, AllCourseFragment())
         transaction.commit()
         nav_view.getHeaderView(0).login_button.setOnClickListener {
             startActivity(intentFor<LoginActivity>().singleTop())

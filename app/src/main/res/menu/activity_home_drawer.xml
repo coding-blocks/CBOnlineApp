@@ -13,17 +13,17 @@
             android:icon="@drawable/ic_school_black_24dp"
             android:title="All Courses" />
         <item
-            android:visible="false"
             android:id="@+id/nav_my_courses"
             android:icon="@drawable/ic_library_books_black_24dp"
-            android:title="My Courses" />
+            android:title="My Courses"
+            android:visible="false" />
 
     </group>
 
     <group
-        android:menuCategory="system"
         android:id="@+id/features"
-        android:checkableBehavior="single">
+        android:checkableBehavior="single"
+        android:menuCategory="system">
         <item
             android:id="@+id/nav_preferences"
             android:icon="@drawable/ic_settings_black_24dp"

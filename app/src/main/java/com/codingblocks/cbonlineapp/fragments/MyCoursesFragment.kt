@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
-import com.codingblocks.cbonlineapp.adapters.MyCoursesDataAdapter
+import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.Course
 import com.codingblocks.cbonlineapp.database.CourseWithInstructor
@@ -32,7 +32,7 @@ import kotlin.concurrent.thread
 class MyCoursesFragment : Fragment(), AnkoLogger {
 
     val ui = AllCourseFragmentUi<Fragment>()
-    private lateinit var courseDataAdapter: MyCoursesDataAdapter
+    private lateinit var courseDataAdapter: CourseDataAdapter
     private lateinit var skeletonScreen: SkeletonScreen
 
     private val database: AppDatabase by lazy {
@@ -56,7 +56,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ui.titleText.text = "My Courses"
-        courseDataAdapter = MyCoursesDataAdapter(ArrayList(), activity!!, courseWithInstructorDao)
+        courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao, "myCourses")
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter

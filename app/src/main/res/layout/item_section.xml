@@ -21,19 +21,19 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/cabin_medium"
             android:maxLines="1"
-            tools:text="Introduction And Logistics"
             android:textColor="@android:color/primary_text_light"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:text="Introduction And Logistics" />
 
         <!--<ImageButton-->
-            <!--android:id="@+id/arrow"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginEnd="20dp"-->
-            <!--android:background="?selectableItemBackgroundBorderless"-->
-            <!--android:src="@drawable/plus" />-->
+        <!--android:id="@+id/arrow"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginEnd="20dp"-->
+        <!--android:background="?selectableItemBackgroundBorderless"-->
+        <!--android:src="@drawable/plus" />-->
 
         <TextView
             android:id="@+id/lectures"
@@ -44,9 +44,9 @@
             android:layout_marginLeft="10dp"
             android:fontFamily="@font/cabin_medium"
             android:maxLines="1"
-            tools:text="3 Lectures"
             android:textColor="@android:color/primary_text_light"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            tools:text="3 Lectures" />
 
         <TextView
             android:id="@+id/lectureTime"
@@ -58,14 +58,14 @@
             android:layout_toEndOf="@id/lectures"
             android:fontFamily="@font/cabin_medium"
             android:maxLines="1"
-            tools:text="30 Mins"
             android:textColor="@android:color/primary_text_light"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            tools:text="30 Mins" />
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/sectionContents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/sectionContents"
         android:orientation="vertical" />
 </LinearLayout>

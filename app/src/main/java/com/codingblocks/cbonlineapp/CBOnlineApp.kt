@@ -7,7 +7,6 @@ import io.github.inflationx.calligraphy3.CalligraphyInterceptor
 import io.github.inflationx.viewpump.ViewPump
 
 
-
 val prefs: Prefs by lazy {
     CBOnlineApp.prefs!!
 }

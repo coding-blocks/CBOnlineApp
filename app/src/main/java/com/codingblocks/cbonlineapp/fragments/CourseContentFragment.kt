@@ -23,7 +23,7 @@ private const val ARG__ATTEMPT_ID = "attempt_id"
 
 class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     override fun startDownload(url: String, id: String, lectureContentId: String, title: String) {
-        startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId,"title" to title)
+        startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId, "title" to title)
 
     }
 

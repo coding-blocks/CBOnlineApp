@@ -245,6 +245,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/introLecturesTitle" />
+
         <TextView
             android:id="@+id/introAssignmentTitle"
             android:layout_width="0dp"
@@ -274,6 +275,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/introAssignmentTitle" />
+
         <TextView
             android:id="@+id/introDoubtsTitle"
             android:layout_width="0dp"
@@ -303,6 +305,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/introDoubtsTitle" />
+
         <TextView
             android:id="@+id/introSolutionsTitle"
             android:layout_width="0dp"
@@ -332,6 +335,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/introSolutionsTitle" />
+
         <TextView
             android:id="@+id/introPenaltyTitle"
             android:layout_width="0dp"
@@ -361,6 +365,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/introPenaltyTitle" />
+
         <TextView
             android:id="@+id/introAvailabilityTitle"
             android:layout_width="0dp"
@@ -390,6 +395,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/introAvailabilityTitle" />
+
         <TextView
             android:id="@+id/introLeaderboardTitle"
             android:layout_width="0dp"
@@ -419,6 +425,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/introLeaderboardTitle" />
+
         <TextView
             android:id="@+id/introCertificateTitle"
             android:layout_width="0dp"
@@ -448,6 +455,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/introCertificateTitle" />
+
         <TextView
             android:id="@+id/introEndnoteTitle"
             android:layout_width="0dp"

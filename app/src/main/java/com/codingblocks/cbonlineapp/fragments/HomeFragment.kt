@@ -20,7 +20,6 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.ctx
 import kotlin.concurrent.thread
 
@@ -53,7 +52,7 @@ class HomeFragment : Fragment(), AnkoLogger {
 
         courseWithInstructorDao = database.courseWithInstructorDao()
 
-        courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao)
+        courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao, "allCourses")
 
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
