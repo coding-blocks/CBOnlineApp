@@ -69,9 +69,6 @@ class HomeFragment : Fragment(), AnkoLogger {
                 .show()
 
         courseDao.getCourses().observe(this, Observer<List<Course>> {
-            if (it.isNotEmpty()) {
-                skeletonScreen.hide()
-            }
             courseDataAdapter.setData(it as ArrayList<Course>)
 
         })
@@ -132,6 +129,7 @@ class HomeFragment : Fragment(), AnkoLogger {
 
                 }
             }
+            skeletonScreen.hide()
         })
     }
 

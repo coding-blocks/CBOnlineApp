@@ -50,14 +50,19 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.getHeaderView(0).login_button.setOnClickListener {
             startActivity(intentFor<LoginActivity>().singleTop())
         }
+        info { "hello"+this.intent.data }
 
+        fetchUser()
+    }
+
+    override fun onStart() {
+        super.onStart()
         val data = this.intent.data
         if (data != null && data.isHierarchical) {
             if (data.getQueryParameter("code") != null) {
                 fetchToken(data)
             }
         }
-        fetchUser()
     }
 
     private fun fetchToken(data: Uri) {
@@ -186,5 +191,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         transaction.commit()
         onBackPressed()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        //now getIntent() should always return the last received intent
     }
 }

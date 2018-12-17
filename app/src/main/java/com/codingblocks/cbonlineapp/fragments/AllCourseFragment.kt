@@ -52,7 +52,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 
         courseWithInstructorDao = database.courseWithInstructorDao()
 
-        courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao,"allCourses")
+        courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao, "allCourses")
 
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
@@ -69,12 +69,8 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                 .show()
 
         courseDao.getCourses().observe(this, Observer<List<Course>> {
-            if (it.isNotEmpty()) {
-                skeletonScreen.hide()
-            }
             courseDataAdapter.setData(it as ArrayList<Course>)
         })
-
 
         fetchAllCourses()
 
@@ -124,9 +120,9 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                         val updatedCourse = courseDao.getCourse(course.id)
                         info { updatedCourse }
                         //update if price does not match else insert on first time
-                        if(updatedCourse == null){
+                        if (updatedCourse == null) {
                             courseDao.insert(course)
-                        }else if(updatedCourse.courseRun.crPrice != course.courseRun.crPrice){
+                        } else if (updatedCourse.courseRun.crPrice != course.courseRun.crPrice) {
                             courseDao.update(course)
 
                         }
@@ -140,6 +136,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                     }
 
                 }
+                skeletonScreen.hide()
             }
         })
     }

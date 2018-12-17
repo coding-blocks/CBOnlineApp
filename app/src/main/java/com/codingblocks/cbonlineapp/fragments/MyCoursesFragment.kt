@@ -71,9 +71,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 .load(R.layout.item_skeleton_course_card)
                 .show()
         courseDao.getMyCourses().observe(this, Observer<List<Course>> {
-            if (it.isNotEmpty()) {
-                skeletonScreen.hide()
-            }
             courseDataAdapter.setData(it as ArrayList<Course>)
 
         })
@@ -139,6 +136,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                         }
                     })
                 }
+                skeletonScreen.hide()
             }
         })
     }
