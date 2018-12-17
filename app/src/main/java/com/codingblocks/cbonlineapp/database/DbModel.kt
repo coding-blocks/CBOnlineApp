@@ -12,6 +12,23 @@ open class BaseModel(
         var updatedAt: String?
 )
 
+
+@Entity
+data class CourseRun(
+        @PrimaryKey
+        var crUid: String = "",
+        var crAttemptId: String = "",
+        var crName: String = "",
+        var crDescription: String = "",
+        var crStart: String = "",
+        var crEnd: String = "",
+        var crPrice: String = "",
+        var crMrp: String = "",
+        var crCourseId: String = "",
+        var crUpdatedAt: String = ""
+)
+
+
 @Entity
 data class Course(
         var uid: String,
@@ -36,22 +53,6 @@ data class Course(
         var courseRun: CourseRun = CourseRun()
 ) : BaseModel(uid, updated_at)
 
-//add type converter for arraylist of instructors,contents,sections(if possible)
-
-@Entity
-data class CourseRun(
-        @PrimaryKey
-        var crUid: String = "",
-        var crAttemptId: String = "",
-        var crName: String = "",
-        var crDescription: String = "",
-        var crStart: String = "",
-        var crEnd: String = "",
-        var crPrice: String = "",
-        var crMrp: String = "",
-        var crCourseId: String = "",
-        var crUpdatedAt: String = ""
-)
 
 @Entity()
 data class Instructor(
@@ -104,25 +105,6 @@ data class CourseSection(
 
 @Entity(
         foreignKeys = [(ForeignKey(
-                entity = CourseRun::class,
-                parentColumns = ["crUid"],
-                childColumns = ["run_id"],
-                onDelete = ForeignKey.SET_NULL //or CASCADE
-        ))]
-)
-data class Announcement(
-        var uid: String,
-        var text: String,
-        var title: String,
-        var user_id: String,
-        var createdAt: String,
-        var run_id: String,
-        var updated_at: String
-) : BaseModel(uid, updated_at)
-
-
-@Entity(
-        foreignKeys = [(ForeignKey(
                 entity = CourseSection::class,
                 parentColumns = ["id"],
                 childColumns = ["section_id"],
@@ -151,6 +133,43 @@ data class CourseContent(
         var contentVideo: ContentVideo
         //add rest of the embedded objects
 ) : BaseModel(uid, contentUpdatedAt)
+
+@Entity(
+        primaryKeys = ["section_id", "content_id"],
+        indices = [
+                Index(value = ["section_id"]),
+                Index(value = ["content_id"])
+        ],
+        foreignKeys = [
+                ForeignKey(entity = CourseSection::class,
+                        parentColumns = ["id"],
+                        childColumns = ["section_id"]),
+                ForeignKey(entity = CourseContent::class,
+                        parentColumns = ["id"],
+                        childColumns = ["content_id"])
+        ])
+data class SectionWithContent(
+//        @Nullable @PrimaryKey(autoGenerate = true) val id: Int?,
+        @ColumnInfo(name = "section_id") val sectionId: String,
+        @ColumnInfo(name = "content_id") val contentId: String)
+
+@Entity(
+        foreignKeys = [(ForeignKey(
+                entity = CourseRun::class,
+                parentColumns = ["crUid"],
+                childColumns = ["run_id"],
+                onDelete = ForeignKey.SET_NULL //or CASCADE
+        ))]
+)
+data class Announcement(
+        var uid: String,
+        var text: String,
+        var title: String,
+        var user_id: String,
+        var createdAt: String,
+        var run_id: String,
+        var updated_at: String
+) : BaseModel(uid, updated_at)
 
 @Entity()
 data class ContentLecture(
