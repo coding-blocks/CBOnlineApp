@@ -12,10 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
-import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.Course
-import com.codingblocks.cbonlineapp.database.CourseWithInstructor
-import com.codingblocks.cbonlineapp.database.Instructor
+import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.ui.AllCourseFragmentUi
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourse
@@ -104,7 +101,14 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                         myCourses.run_attempts?.get(0)?.id ?: "",
                                         updatedAt,
                                         progress,
-                                        myCourses.description ?: ""
+                                        myCourses.description ?: "",
+                                        CourseRun(myCourses.id ?: "", myCourses.run_attempts?.get(0)?.id ?: "",
+                                                myCourses.name ?: "", myCourses.description ?: "",
+                                                myCourses.start ?: "", myCourses.run_attempts!![0].end ?: "",
+                                                myCourses.price ?: "", myCourses.mrp ?: "",
+                                                id ?: "", myCourses.updatedAt ?: ""
+
+                                        )
                                 )
                             }
                             doAsync {

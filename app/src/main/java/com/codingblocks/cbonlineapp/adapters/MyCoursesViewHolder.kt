@@ -12,10 +12,12 @@ import com.codingblocks.cbonlineapp.database.Course
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.my_course_card_horizontal.view.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 
-class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), AnkoLogger {
 
     fun bindView(data: Course, instructorDao: CourseWithInstructorDao, context: Context) {
         val svgLoader = SvgLoader.pluck().with(context as Activity?)!!
@@ -32,12 +34,20 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             svgLoader
                     .load(logo, itemView.courseLogo)
-            itemView.courseBtn1.setOnClickListener {
-                it.context.startActivity(it.context.intentFor<MyCourseActivity>("course_id" to id, "attempt_id" to attempt_id, "courseName" to title).singleTop())
 
-            }
-            itemView.setOnClickListener {
-                it.context.startActivity(it.context.intentFor<MyCourseActivity>("course_id" to id, "attempt_id" to attempt_id, "courseName" to title).singleTop())
+            if (data.courseRun.crEnd.toLong() * 1000 > System.currentTimeMillis()) {
+                itemView.courseBtn1.setOnClickListener {
+                    it.context.startActivity(it.context.intentFor<MyCourseActivity>("course_id" to id, "attempt_id" to attempt_id, "courseName" to title).singleTop())
+
+                }
+                itemView.setOnClickListener {
+                    it.context.startActivity(it.context.intentFor<MyCourseActivity>("course_id" to id, "attempt_id" to attempt_id, "courseName" to title).singleTop())
+
+                }
+            } else {
+                itemView.courseBtn1.text = "Expired"
+                itemView.courseBtn1.isEnabled = false
+                itemView.courseBtn1.background = context.getDrawable(R.drawable.button_disable)
 
             }
         }

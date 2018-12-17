@@ -8,6 +8,8 @@
     <color name="holo_orange_light">#ffffbb33</color>
     <color name="white_transparency">#b9ffffff</color>
     <color name="white">#ffffff</color>
+    <color name="battleship_gray">#64707b</color>
+
 
 
 </resources>

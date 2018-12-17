@@ -118,13 +118,11 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                     }
                     thread {
                         val updatedCourse = courseDao.getCourse(course.id)
-                        info { updatedCourse }
                         //update if price does not match else insert on first time
                         if (updatedCourse == null) {
                             courseDao.insert(course)
                         } else if (updatedCourse.courseRun.crPrice != course.courseRun.crPrice) {
                             courseDao.update(course)
-
                         }
                         //Add CourseInstructors
                         for (i in myCourses.instructors!!) {

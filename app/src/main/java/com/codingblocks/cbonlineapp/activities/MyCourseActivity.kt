@@ -49,23 +49,23 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         val contentDao = database.contentDao()
         val courseDao = database.courseDao()
         setupViewPager()
-//
-//        courseDao.getMyCourse(attemptId).observe(this, Observer<Course> {
-//            youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
-//                override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
-//                }
-//
-//                override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
-//                    if (!p2) {
-//                        it?.let {
-//                            youtubePlayerInstance?.cueVideo(MediaUtils.getYotubeVideoId(it.promoVideo))
-//                        }
-//                    }
-//                }
-//            }
-//            val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
-//            youTubePlayerSupportFragment!!.initialize(YOUTUBE_API_KEY, youtubePlayerInit)
-//        })
+
+        courseDao.getMyCourse(attemptId).observe(this, Observer<Course> {
+            youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
+                override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
+                }
+
+                override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
+                    if (!p2) {
+                        it?.let {
+                            youtubePlayerInstance?.cueVideo(MediaUtils.getYotubeVideoId(it.promoVideo))
+                        }
+                    }
+                }
+            }
+            val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
+            youTubePlayerSupportFragment!!.initialize(YOUTUBE_API_KEY, youtubePlayerInit)
+        })
 
 
         Clients.onlineV2JsonApi.enrolledCourseById(attemptId).enqueue(retrofitCallback { throwable, response ->

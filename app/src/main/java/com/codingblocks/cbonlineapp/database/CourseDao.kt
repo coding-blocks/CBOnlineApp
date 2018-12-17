@@ -14,7 +14,7 @@ abstract class CourseDao : BaseDao<Course> {
     abstract fun getCourse(courseId: String): Course
 
     @Query("SElECT * FROM Course where attempt_id = :courseId ")
-    abstract fun getMyCourse(courseId: String): Course
+    abstract fun getMyCourse(courseId: String): LiveData<Course>
 
     @Query("SElECT * FROM Course where attempt_id != " + "'" + "'")
     abstract fun getMyCourses(): LiveData<List<Course>>
