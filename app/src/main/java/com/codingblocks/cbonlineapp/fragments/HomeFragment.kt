@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.fragments
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.ctx
 import kotlin.concurrent.thread
 
@@ -42,7 +44,6 @@ class HomeFragment : Fragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!)
 
         database = AppDatabase.getInstance(context!!)
 
@@ -51,6 +52,9 @@ class HomeFragment : Fragment(), AnkoLogger {
         runDao = database.courseRunDao()
 
         courseWithInstructorDao = database.courseWithInstructorDao()
+
+        courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao)
+
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
@@ -82,11 +86,7 @@ class HomeFragment : Fragment(), AnkoLogger {
 
         Clients.onlineV2JsonApi.getRecommendedCourses().enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let {
-                //                courseDataAdapter.setData(it)
-//                skeletonScreen.hide()
-
                 for (myCourses in it) {
-
                     //calculate top run
                     val currentRuns: ArrayList<Runs> = arrayListOf()
                     for (i in 0 until myCourses.runs!!.size) {
@@ -127,12 +127,26 @@ class HomeFragment : Fragment(), AnkoLogger {
                             instructorDao.insert(Instructor(i.id ?: "", i.name ?: "",
                                     i.description ?: "", i.photo ?: "",
                                     "", "", myCourses.id))
+                            insertCourseAndInstructor(myCourses, i)
                         }
                     }
 
                 }
             }
         })
+    }
+
+    private fun insertCourseAndInstructor(course: com.codingblocks.onlineapi.models.Course, instructor: com.codingblocks.onlineapi.models.Instructor) {
+
+        thread {
+            try {
+                courseWithInstructorDao.insert(CourseWithInstructor(course.id!!, instructor.id!!))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("CRASH", "COURSE ID : ${course.id}")
+                Log.e("CRASH", "INSTRUCTOR ID : ${instructor.id.toString()}")
+            }
+        }
     }
 
 

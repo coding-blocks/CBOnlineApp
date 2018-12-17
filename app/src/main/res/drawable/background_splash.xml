@@ -9,4 +9,6 @@
 
     <!-- Set the Background Image-->
 
+    <item android:drawable="@drawable/cblogo" />
+
 </layer-list>

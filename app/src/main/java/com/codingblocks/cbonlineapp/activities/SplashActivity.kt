@@ -26,9 +26,10 @@ class SplashActivity : AppCompatActivity() {
         Handler().postDelayed(
                 {
                     // After the splash screen duration, route to the right activities
-                    if (prefs.SP_ACCESS_TOKEN_KEY.equals("access_token")) {
+                    if (prefs.SP_ACCESS_TOKEN_KEY == "access_token") {
                         val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ui.logo, "trans1")
                         startActivity(intentFor<LoginActivity>().singleTop(), compat.toBundle())
+                        finish()
                     } else {
                         startActivity(intentFor<HomeActivity>().singleTop())
                         finish()

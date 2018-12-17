@@ -24,6 +24,7 @@ import kotlin.concurrent.thread
 class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
     private lateinit var attemptId: String
+    private lateinit var courseId: String
     private lateinit var database: AppDatabase
 
     companion object {
@@ -38,6 +39,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        courseId = intent.getStringExtra("course_id")
         title = intent.getStringExtra("courseName")
         attemptId = intent.getStringExtra("attempt_id")
         database = AppDatabase.getInstance(this)
@@ -48,7 +50,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         val courseDao = database.courseDao()
         setupViewPager()
 
-        courseDao.getCourse(attemptId).observe(this, Observer<Course> {
+        courseDao.getMyCourse(attemptId).observe(this, Observer<Course> {
             youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
                 override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
                 }
@@ -183,7 +185,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
     private fun setupViewPager() {
         val adapter = TabLayoutAdapter(supportFragmentManager)
         adapter.add(OverviewFragment.newInstance(attemptId), "Overview")
-        adapter.add(AnnouncementsFragment.newInstance(attemptId), "About")
+        adapter.add(AnnouncementsFragment.newInstance(courseId), "About")
         adapter.add(CourseContentFragment.newInstance(attemptId), "Course Content")
 //        adapter.add(DoubtsFragment(), "")
         htab_viewpager.adapter = adapter

@@ -3,23 +3,29 @@ package com.codingblocks.cbonlineapp.adapters
 import android.app.Activity
 import android.content.Context
 import android.graphics.Paint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.CourseActivity
 import com.codingblocks.cbonlineapp.database.Course
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.single_course_card_horizontal.view.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class CourseDataAdapter(private var courseData: ArrayList<Course>?, var context: Context) : RecyclerView.Adapter<CourseDataAdapter.CourseViewHolder>(), AnkoLogger {
+class CourseDataAdapter(private var courseData: ArrayList<Course>?,
+                        var context: Context,
+                        private val courseWithInstructorDao: CourseWithInstructorDao) : RecyclerView.Adapter<CourseDataAdapter.CourseViewHolder>(), AnkoLogger {
 
     val svgLoader = SvgLoader.pluck().with(context as Activity?)
 
@@ -31,7 +37,7 @@ class CourseDataAdapter(private var courseData: ArrayList<Course>?, var context:
     }
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
-        holder.bindView(courseData!![position])
+        holder.bindView(courseData!![position],courseWithInstructorDao)
     }
 
 
@@ -48,43 +54,47 @@ class CourseDataAdapter(private var courseData: ArrayList<Course>?, var context:
 
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindView(data: Course) {
+        fun bindView(data: Course, courseWithInstructorDao: CourseWithInstructorDao) {
             itemView.courseTitle.text = data.title
 //            itemView.courseDescription.text = data.subtitle
             itemView.courseRatingTv.text = data.rating.toString()
             itemView.courseRatingBar.rating = data.rating
 
             //bind Instructors
-            var instructors = ""
+            val instructorsLiveData = courseWithInstructorDao.getInstructorWithCourseId(data.id)
 
-//            for (i in 0 until data.instructorList?.size!!) {
-//                if (data.instructorList!!.size == 1) {
-//                    itemView.courseInstrucImgView2.visibility = View.INVISIBLE
-//                }
-//                if (i >= 2) {
-//                    instructors += "+" + (data.instructorList!!.size - 2) + " more"
-//                    break
-//                }
-//                instructors += data.instructorList!![i].name + ", "
-//                if (i == 0)
-//                    Picasso.get().load(data.instructorList!![i].photo).into(itemView.courseInstrucImgView1)
-//                else if (i == 1)
-//                    Picasso.get().load(data.instructorList!![i].photo).into(itemView.courseInstrucImgView2)
-//                else
-//                    break
-//
-//
-//            }
-            itemView.courseInstructors.text = instructors
+            instructorsLiveData.observe({ (context as LifecycleOwner).lifecycle }, {
+                val instructorsList = it
+
+                var instructors = ""
+
+                if (instructorsList.size == 1) {
+                    itemView.courseInstrucImgView2.visibility = View.INVISIBLE
+                }
+                instructorsList.forEachIndexed { i, instructor ->
+                    instructors += instructor.name + ", "
+                    if (i == 0)
+                        Picasso.get().load(instructor.photo).into(itemView.courseInstrucImgView1)
+                    else if (i == 1)
+                        Picasso.get().load(instructor.photo).into(itemView.courseInstrucImgView2)
+                    if (i == 2) {
+                        instructors += "+" + (instructorsList.size - 2) + " more"
+                        return@forEachIndexed
+                    }
+                }
+                itemView.courseInstructors.text = instructors
+
+            })
 
 //            //bind Runs
             try {
                 data.courseRun.run {
                     itemView.coursePrice.text = "₹ $crPrice"
-                    if (crPrice != crMrp)
+                    if (crPrice != crMrp) {
                         itemView.courseActualPrice.text = "₹ $crMrp"
-                    itemView.courseActualPrice.paintFlags = itemView.courseActualPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                    var sdf = SimpleDateFormat("MMM dd ")
+                        itemView.courseActualPrice.paintFlags = itemView.courseActualPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    }
+                    val sdf = SimpleDateFormat("MMM dd ")
                     var date: String? = ""
                     try {
                         date = sdf.format(Date(crStart.toLong() * 1000))

@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.fragments
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +42,6 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!)
 
         database = AppDatabase.getInstance(context!!)
 
@@ -50,6 +50,9 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         runDao = database.courseRunDao()
 
         courseWithInstructorDao = database.courseWithInstructorDao()
+
+        courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao)
+
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
@@ -123,12 +126,26 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                             instructorDao.insert(Instructor(i.id ?: "", i.name ?: "",
                                     i.description ?: "", i.photo ?: "",
                                     "", "", myCourses.id))
+                            insertCourseAndInstructor(myCourses, i)
                         }
                     }
 
                 }
             }
         })
+    }
+
+    private fun insertCourseAndInstructor(course: com.codingblocks.onlineapi.models.Course, instructor: com.codingblocks.onlineapi.models.Instructor) {
+
+        thread {
+            try {
+                courseWithInstructorDao.insert(CourseWithInstructor(course.id!!, instructor.id!!))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("CRASH", "COURSE ID : ${course.id.toString()}")
+                Log.e("CRASH", "INSTRUCTOR ID : ${instructor.id.toString()}")
+            }
+        }
     }
 
 

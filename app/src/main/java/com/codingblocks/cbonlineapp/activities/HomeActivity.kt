@@ -42,8 +42,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
+
+
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_holder, AllCourseFragment())
+        transaction.replace(R.id.fragment_holder, HomeFragment())
         transaction.commit()
         nav_view.getHeaderView(0).login_button.setOnClickListener {
             startActivity(intentFor<LoginActivity>().singleTop())
@@ -52,37 +54,38 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val data = this.intent.data
         if (data != null && data.isHierarchical) {
             if (data.getQueryParameter("code") != null) {
-                val grantCode = data.getQueryParameter("code")
-                info { "grantcode$grantCode" }
-                Clients.api.getToken(grantCode).enqueue(retrofitCallback { _, response ->
-                    info { "token" + response!!.message() }
-
-                    if (response!!.isSuccessful) {
-                        val jwt = response.body()?.asJsonObject?.get("jwt")?.asString!!
-                        val rt = response.body()?.asJsonObject?.get("refresh_token")?.asString!!
-                        prefs.SP_ACCESS_TOKEN_KEY = grantCode
-                        prefs.SP_JWT_TOKEN_KEY = jwt
-                        prefs.SP_JWT_REFRESH_TOKEN = rt
-                        Clients.authJwt = jwt
-                        fetchUser()
-                        Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
-                    }
-
-                })
+                fetchToken(data)
             }
-        } else {
-            fetchUser()
         }
+        fetchUser()
+    }
+
+    private fun fetchToken(data: Uri) {
+        val grantCode = data.getQueryParameter("code")
+        Clients.api.getToken(grantCode).enqueue(retrofitCallback { _, response ->
+            info { "token" + response!!.message() }
+
+            if (response!!.isSuccessful) {
+                val jwt = response.body()?.asJsonObject?.get("jwt")?.asString!!
+                val rt = response.body()?.asJsonObject?.get("refresh_token")?.asString!!
+                prefs.SP_ACCESS_TOKEN_KEY = grantCode
+                prefs.SP_JWT_TOKEN_KEY = jwt
+                prefs.SP_JWT_REFRESH_TOKEN = rt
+                Clients.authJwt = jwt
+                fetchUser()
+                Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
     private fun fetchUser() {
-        if (!prefs.SP_ACCESS_TOKEN_KEY.equals("access_token")) {
+        if (prefs.SP_ACCESS_TOKEN_KEY != "access_token") {
             Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
-            info { prefs.SP_ACCESS_TOKEN_KEY }
             Clients.api.getMe().enqueue(retrofitCallback { t, resp ->
                 resp?.body()?.let { it ->
                     if (resp.isSuccessful) {
-                        val jSONObject = resp.body()!!.getAsJsonObject("data").getAsJsonObject("attributes")
+                        val jSONObject = it.getAsJsonObject("data").getAsJsonObject("attributes")
                         Picasso.get().load(jSONObject.get("photo").asString).into(nav_header_imageView)
 //                nav_header_username_textView.text = jSONObject.get("firstname").asString
                         login_button.text = "Logout"

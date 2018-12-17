@@ -21,7 +21,10 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourse
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.ctx
 import kotlin.concurrent.thread
 
@@ -53,7 +56,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ui.titleText.text = "My Courses"
-        courseDataAdapter = MyCoursesDataAdapter(ArrayList(), activity!!, courseWithInstructorDao,instructorDao)
+        courseDataAdapter = MyCoursesDataAdapter(ArrayList(), activity!!, courseWithInstructorDao)
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
@@ -67,7 +70,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 .count(4)
                 .load(R.layout.item_skeleton_course_card)
                 .show()
-        courseDao.getMyCourse().observe(this, Observer<List<Course>> {
+        courseDao.getMyCourses().observe(this, Observer<List<Course>> {
             if (it.isNotEmpty()) {
                 skeletonScreen.hide()
             }
@@ -108,11 +111,17 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                 )
                             }
                             doAsync {
-                                courseDao.update(course!!)
+                                val updateCourse = courseDao.getCourse(myCourses.course?.id!!).value
+                                Log.e("CRASH", "UPDATE AT : ${updateCourse?.updatedAt}")
+                                Log.e("CRASH", "UPDATE AT NEW: ${myCourses.course?.updatedAt}")
+
+
+                                if (updateCourse?.updatedAt == null || updateCourse.updatedAt != myCourses.course?.updatedAt)
+                                    courseDao.update(course!!)
                                 //fetch CourseInstructors
 
-                                myCourses.course?.instructors?.forEachIndexed { index, it ->
-                                    Clients.onlineV2JsonApi.instructorsById(it.id!!).enqueue(retrofitCallback { throwable, response ->
+                                myCourses.course?.instructors?.forEachIndexed { _, it ->
+                                    Clients.onlineV2JsonApi.instructorsById(it.id!!).enqueue(retrofitCallback { _, response ->
 
                                         response?.body().let { instructor ->
                                             thread {
