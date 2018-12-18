@@ -33,6 +33,9 @@
                     android:host="app.codingblocks.com"
                     android:scheme="https" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcut" />
         </activity>
         <activity
             android:name=".activities.LoginActivity"
@@ -68,6 +71,10 @@
             android:launchMode="singleTop"
             android:parentActivityName=".activities.HomeActivity"
             android:theme="@style/myTheme">
+            <intent-filter>
+                <action android:name="com.coddinblocks.appshortcuts.OPEN_DYNAMIC_SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.codingblocks.cbonlineapp.activities.HomeActivity" />
