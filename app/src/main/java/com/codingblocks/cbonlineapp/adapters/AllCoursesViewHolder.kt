@@ -1,12 +1,10 @@
 package com.codingblocks.cbonlineapp.adapters
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Paint
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.activities.CourseActivity
 import com.codingblocks.cbonlineapp.database.Course
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
@@ -20,7 +18,6 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 
     fun bindView(data: Course, courseWithInstructorDao: CourseWithInstructorDao, context: Context) {
-        val svgLoader = SvgLoader.pluck().with(context as Activity?)!!
 
         itemView.courseTitle.text = data.title
 //            itemView.courseDescription.text = data.subtitle
@@ -69,12 +66,9 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 itemView.courseRun.text = "Batches Starting $date"
                 itemView.enrollmentTv.text = "Hurry Up! Enrollment ends $date"
             }
+            Picasso.get().load(data.coverImage).into(itemView.courseCoverImgView)
+            Picasso.get().load(data.logo).into(itemView.courseLogo)
 
-
-            svgLoader
-                    .load(data.logo, itemView.courseLogo)
-            svgLoader
-                    .load(data.coverImage, itemView.courseCoverImgView)
 
             itemView.setOnClickListener {
                 val textPair: Pair<View, String> = Pair(itemView.courseTitle, "textTrans")
