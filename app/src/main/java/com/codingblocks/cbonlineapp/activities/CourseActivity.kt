@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.ProgressBarAnimation
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
@@ -24,6 +23,7 @@ import com.ethanhua.skeleton.SkeletonScreen
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
+import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.coroutines.Dispatchers
@@ -61,9 +61,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         courseId = intent.getStringExtra("courseId")
         courseName = intent.getStringExtra("courseName")
         val image = intent.getStringExtra("courseLogo")
-        SvgLoader.pluck()
-                .with(this)
-                .load(image, coursePageLogo)
+        Picasso.get().load(image).into(coursePageLogo)
         title = courseName
         coursePageTitle.text = courseName
 

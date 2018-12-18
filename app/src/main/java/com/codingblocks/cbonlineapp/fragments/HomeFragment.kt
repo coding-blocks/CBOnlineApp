@@ -20,6 +20,7 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.ctx
 import kotlin.concurrent.thread
 
@@ -98,19 +99,16 @@ class HomeFragment : Fragment(), AnkoLogger {
                                 id ?: "",
                                 title ?: "",
                                 subtitle ?: "",
-                                logo ?: "",
+                                logo?.replace(".svg", ".png") ?: "",
                                 summary ?: "",
                                 promoVideo ?: "",
                                 difficulty ?: "",
                                 reviewCount ?: 0,
                                 rating ?: 0f,
                                 slug ?: "",
-                                coverImage ?: "",
-                                "",
-                                updatedAt,
-                                0.0,
-                                "",
-                                CourseRun(currentRuns[0].id ?: "", "",
+                                coverImage?.replace(".svg", ".png") ?: "",
+                                updated_at = updatedAt,
+                                courseRun = CourseRun(currentRuns[0].id ?: "", "",
                                         currentRuns[0].name ?: "", currentRuns[0].description ?: "",
                                         currentRuns[0].start ?: "", currentRuns[0].end ?: "",
                                         currentRuns[0].price ?: "", currentRuns[0].mrp ?: "",
@@ -119,6 +117,7 @@ class HomeFragment : Fragment(), AnkoLogger {
                                 ))
                     }
                     thread {
+                        info { course.coverImage }
                         courseDao.insert(course)
                         //Add CourseInstructors
                         for (i in myCourses.instructors!!) {

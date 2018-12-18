@@ -103,12 +103,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //                nav_header_username_textView.text = jSONObject.get("firstname").asString
                         login_button.text = "Logout"
                         if (Build.VERSION.SDK_INT >= 25) {
-                            createShorcut()
+                            createShortcut()
                         }
                         login_button.setOnClickListener {
                             prefs.SP_ACCESS_TOKEN_KEY = prefs.ACCESS_TOKEN
                             prefs.SP_JWT_TOKEN_KEY = prefs.JWT_TOKEN
-                            removeShorcuts()
+                            removeShortcuts()
                             startActivity(intentFor<LoginActivity>().singleTop())
                             finish()
                         }
@@ -195,12 +195,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun changeFragment(filter: String) {
         val transaction = supportFragmentManager.beginTransaction()
-        if (filter == "All Courses")
-            transaction.replace(R.id.fragment_holder, AllCourseFragment())
-        else if (filter == "Home")
-            transaction.replace(R.id.fragment_holder, HomeFragment())
-        else if (filter == "My Courses")
-            transaction.replace(R.id.fragment_holder, MyCoursesFragment())
+        when (filter) {
+            "All Courses" -> transaction.replace(R.id.fragment_holder, AllCourseFragment())
+            "Home" -> transaction.replace(R.id.fragment_holder, HomeFragment())
+            "My Courses" -> transaction.replace(R.id.fragment_holder, MyCoursesFragment())
+        }
 
         transaction.commit()
         onBackPressed()
@@ -213,7 +212,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     @TargetApi(25)
-    private fun createShorcut() {
+    private fun createShortcut() {
         val sM = getSystemService(ShortcutManager::class.java)
 
         val intent1 = Intent(applicationContext, HomeActivity::class.java)
@@ -232,7 +231,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     @TargetApi(25)
-    private fun removeShorcuts() {
+    private fun removeShortcuts() {
         val shortcutManager = getSystemService(ShortcutManager::class.java)
         shortcutManager.disableShortcuts(Arrays.asList("shortcut1"))
         shortcutManager.removeAllDynamicShortcuts()

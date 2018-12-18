@@ -1,11 +1,9 @@
 package com.codingblocks.cbonlineapp.adapters
 
-import android.app.Activity
 import android.content.Context
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.database.Course
@@ -13,15 +11,12 @@ import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.my_course_card_horizontal.view.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 
 class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), AnkoLogger {
 
     fun bindView(data: Course, instructorDao: CourseWithInstructorDao, context: Context) {
-        val svgLoader = SvgLoader.pluck().with(context as Activity?)!!
-
         data.run {
             itemView.courseTitle.text = title
             itemView.courseDescription.text = subtitle
@@ -29,12 +24,8 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
             itemView.courseRatingBar.rating = rating
             itemView.courseRunDescription.text = runDescription
             itemView.courseProgress.progress = progress.toInt()
-            svgLoader
-                    .load(coverImage, itemView.courseCoverImgView)
-
-            svgLoader
-                    .load(logo, itemView.courseLogo)
-
+            Picasso.get().load(coverImage).into(itemView.courseCoverImgView)
+            Picasso.get().load(logo).into(itemView.courseLogo)
             if (data.courseRun.crEnd.toLong() * 1000 > System.currentTimeMillis()) {
                 itemView.courseBtn1.setOnClickListener {
                     it.context.startActivity(it.context.intentFor<MyCourseActivity>("course_id" to id, "attempt_id" to attempt_id, "courseName" to title).singleTop())

@@ -18,7 +18,7 @@ class AboutActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         callTv.setOnClickListener {
-            makeCall("1800 274 4504")
+            makeCall("18002744504")
         }
         mailTv.setOnClickListener {
             email(mailTv.text.toString())
