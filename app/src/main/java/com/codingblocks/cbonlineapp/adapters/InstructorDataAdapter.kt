@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.adapters
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.Instructor
 import com.codingblocks.cbonlineapp.ui.InstructorListUi
 import com.squareup.picasso.Picasso
@@ -35,7 +36,7 @@ class InstructorDataAdapter(private var instructorData: ArrayList<Instructor>?) 
         fun bindView(instructor: Instructor) {
             ui.instructorTitle.text = instructor.name
             ui.instructorDescription.text = instructor.description
-            Picasso.get().load(instructor.photo).into(ui.instructorImgView)
+            Picasso.get().load(instructor.photo).placeholder(R.drawable.defaultavatar).into(ui.instructorImgView)
 
         }
 
