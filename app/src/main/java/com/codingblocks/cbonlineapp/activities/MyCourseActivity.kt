@@ -1,7 +1,9 @@
 package com.codingblocks.cbonlineapp.activities
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.R
@@ -20,13 +22,6 @@ import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import kotlin.concurrent.thread
-import android.content.pm.ShortcutManager
-import android.content.Intent
-import android.os.Build
-import android.content.pm.ShortcutInfo
-import android.graphics.drawable.Icon
-import androidx.annotation.RequiresApi
-import java.util.*
 
 
 class MyCourseActivity : AppCompatActivity(), AnkoLogger {
@@ -56,23 +51,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_course)
         setSupportActionBar(toolbar)
-
-        val shortcutManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getSystemService(ShortcutManager::class.java)
-        } else {
-            TODO("VERSION.SDK_INT < M")
-        }
-        val intent = Intent(this, MyCourseActivity::class.java)
-        intent.action = Intent.ACTION_VIEW
-
-        val dynamicShortcut = ShortcutInfo.Builder(this, "dyanmicShortcut")
-                .setShortLabel("Dynamic")
-                .setLongLabel("Open dynamic shortcut")
-                .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
-                .setIntent(intent)
-                .setRank(0)
-                .build()
-        shortcutManager.dynamicShortcuts = Collections.singletonList(dynamicShortcut)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         courseId = intent.getStringExtra("course_id")

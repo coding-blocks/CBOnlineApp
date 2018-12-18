@@ -13,7 +13,7 @@
             android:targetPackage="com.codingblocks.cbonlineapp">
             <extra
                 android:name="course"
-                android:value="mycourses" />
+                android:value="allcourses" />
         </intent>
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
