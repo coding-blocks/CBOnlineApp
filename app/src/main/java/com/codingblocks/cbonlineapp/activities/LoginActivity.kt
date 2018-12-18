@@ -38,6 +38,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
                     .setSecondaryToolbarColor(resources.getColor(R.color.colorPrimary))
             val customTabsIntent = builder.build()
             customTabsIntent.launchUrl(this, Uri.parse("$OAUTH_URL?redirect_uri=$REDIRECT_URI&response_type=code&client_id=$CLIENT_ID"))
+
         }
         skipBtn.setOnClickListener {
             startActivity(intentFor<HomeActivity>().singleTop())

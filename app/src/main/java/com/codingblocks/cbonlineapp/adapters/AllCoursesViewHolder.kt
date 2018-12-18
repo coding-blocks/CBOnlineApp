@@ -56,7 +56,7 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         try {
             data.courseRun.run {
                 itemView.coursePrice.text = "₹ $crPrice"
-                if (crPrice != crMrp) {
+                if (crPrice != crMrp && crMrp != "") {
                     itemView.courseActualPrice.text = "₹ $crMrp"
                     itemView.courseActualPrice.paintFlags = itemView.courseActualPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 }

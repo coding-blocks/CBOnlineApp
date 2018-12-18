@@ -43,7 +43,7 @@ data class Course(
         var slug: String,
         var coverImage: String,
         @Nullable
-        var attempt_id: String = "",
+        var attempt_id: String="",
         var updated_at: String?,
         var progress: Double = 0.0,
         @Nullable

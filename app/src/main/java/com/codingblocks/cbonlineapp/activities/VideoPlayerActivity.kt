@@ -55,8 +55,8 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener {
         videoView.start()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         videoView.release()
     }
 

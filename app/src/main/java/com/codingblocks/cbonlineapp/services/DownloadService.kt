@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.services
 
 import android.app.IntentService
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -9,6 +10,7 @@ import android.os.Environment
 import androidx.core.app.NotificationCompat
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.utils.MediaUtils
@@ -77,7 +79,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
                             downloadCount++
                         }
                         if (downloadCount == videoChunks.size) {
-                            onDownloadComplete()
+                            onDownloadComplete(url)
                             thread {
                                 contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"))
                             }
@@ -147,10 +149,16 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
     }
 
 
-    private fun onDownloadComplete() {
+    private fun onDownloadComplete(url: String) {
+        val intent = Intent(this, VideoPlayerActivity::class.java)
+        intent.putExtra("FOLDER_NAME", url)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT)
         notificationManager.cancel(0)
         notificationBuilder.setProgress(0, 0, false)
         notificationBuilder.setContentText("File Downloaded")
+        notificationBuilder.setContentIntent(pendingIntent)
         notificationBuilder.setOngoing(false)
         notificationBuilder.setAutoCancel(true)
         notificationManager.notify(0, notificationBuilder.build())
