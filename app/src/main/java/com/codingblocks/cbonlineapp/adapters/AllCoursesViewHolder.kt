@@ -41,9 +41,9 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 } else if (i == 1) {
                     itemView.courseInstrucImgView2.visibility = View.VISIBLE
                     Picasso.get().load(instructorsList[i].photo).into(itemView.courseInstrucImgView2)
-                    instructors += " ,${instructorsList[i].name}"
+                    instructors += ", ${instructorsList[i].name}"
                 } else if (i >= 2) {
-                    instructors += " +" + (instructorsList.size - 2) + " more"
+                    instructors += "+ " + (instructorsList.size - 2) + " more"
                     break
                 }
             }

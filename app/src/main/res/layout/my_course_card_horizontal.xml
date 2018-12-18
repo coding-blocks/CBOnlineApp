@@ -10,15 +10,16 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:isScrollContainer="true">
 
         <RelativeLayout
             android:id="@+id/relativeLayout2"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/bck_rounded"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/courseInstrucImgView1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -187,7 +188,7 @@
             android:id="@+id/courseInstructors"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="4dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/cabin_medium"
             android:textColor="@android:color/black"

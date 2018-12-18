@@ -29,7 +29,7 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
             itemView.courseRatingBar.rating = rating
             itemView.courseRunDescription.text = runDescription
             itemView.courseProgress.progress = progress.toInt()
-            svgLoader.setPlaceHolder(R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e, R.drawable.ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e)
+            svgLoader
                     .load(coverImage, itemView.courseCoverImgView)
 
             svgLoader
@@ -66,9 +66,9 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
                 } else if (i == 1) {
                     itemView.courseInstrucImgView2.visibility = View.VISIBLE
                     Picasso.get().load(instructorsList[i].photo).into(itemView.courseInstrucImgView2)
-                    instructors += " ,${instructorsList[i].name}"
+                    instructors += ", ${instructorsList[i].name}"
                 } else if (i >= 2) {
-                    instructors += " +" + (instructorsList.size - 2) + " more"
+                    instructors += "+ " + (instructorsList.size - 2) + " more"
                     break
                 }
             }

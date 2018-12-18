@@ -58,6 +58,7 @@ class HomeFragment : Fragment(), AnkoLogger {
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
 
+
         skeletonScreen = Skeleton.bind(ui.rvCourses)
                 .adapter(courseDataAdapter)
                 .shimmer(true)
@@ -81,6 +82,7 @@ class HomeFragment : Fragment(), AnkoLogger {
 
 
         Clients.onlineV2JsonApi.getRecommendedCourses().enqueue(retrofitCallback { t, resp ->
+            skeletonScreen.hide()
             resp?.body()?.let {
                 for (myCourses in it) {
                     //calculate top run
@@ -129,7 +131,6 @@ class HomeFragment : Fragment(), AnkoLogger {
 
                 }
             }
-            skeletonScreen.hide()
         })
     }
 

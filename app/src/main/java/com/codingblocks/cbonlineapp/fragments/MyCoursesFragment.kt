@@ -77,6 +77,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     private fun fetchAllCourses() {
 
         Clients.onlineV2JsonApi.getMyCourses().enqueue(retrofitCallback { t, resp ->
+            skeletonScreen.hide()
             resp?.body()?.let {
                 info { it.toString() }
                 for (myCourses in it) {
@@ -113,10 +114,10 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                             }
                             doAsync {
                                 val updateCourse = courseDao.getCourse(course?.id ?: "")
-                                info { updateCourse }
                                 if (updateCourse == null) {
                                     courseDao.insert(course!!)
                                 } else if (updateCourse.attempt_id == "") {
+                                    info { "updateCourse is happening" }
                                     courseDao.update(course!!)
                                 }
                                 //fetch CourseInstructors
@@ -140,7 +141,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                         }
                     })
                 }
-                skeletonScreen.hide()
             }
         })
     }

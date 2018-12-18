@@ -20,7 +20,6 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.ctx
 import kotlin.concurrent.thread
 
@@ -58,6 +57,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
 
+
         skeletonScreen = Skeleton.bind(ui.rvCourses)
                 .adapter(courseDataAdapter)
                 .shimmer(true)
@@ -80,6 +80,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 
 
         Clients.onlineV2JsonApi.getAllCourses().enqueue(retrofitCallback { t, resp ->
+            skeletonScreen.hide()
             resp?.body()?.let {
                 for (myCourses in it) {
 
@@ -134,7 +135,6 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                     }
 
                 }
-                skeletonScreen.hide()
             }
         })
     }

@@ -40,18 +40,18 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                     endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
 
                 }
-//                val homeImg = imageView(R.drawable.home_img) {
-//                    id = View.generateViewId()
-//                    adjustViewBounds = true
-//                }.lparams(width = matchParent, height = dip(200)) {
-//                    marginStart = dip(16)
-//                    marginEnd = dip(16)
-//                    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
-//                    horizontalBias = 0.0f
-//                    topToBottom = titleText.id
-//                    endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-//
-//                }
+                val homeImg = imageView(R.drawable.ic_home) {
+                    id = View.generateViewId()
+                    adjustViewBounds = true
+                }.lparams(width = matchParent, height = dip(200)) {
+                    marginStart = dip(16)
+                    marginEnd = dip(16)
+                    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                    horizontalBias = 0.0f
+                    topToBottom = titleText.id
+                    endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+
+                }
                 val allcourseText = textView {
                     text = context.resources.getString(R.string.recommended_courses)
                     id = View.generateViewId()
@@ -61,7 +61,7 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                 }.lparams(width = wrapContent, height = wrapContent) {
                     topMargin = dip(8)
                     marginStart = dip(16)
-                    topToBottom = titleText.id
+                    topToBottom = homeImg.id
                     startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                     horizontalBias = 0.0f
 

@@ -14,16 +14,16 @@ import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.Instructor
 import kotlinx.android.synthetic.main.fragment_annoucements.view.*
 
-private const val ARG__ATTEMPT_ID = "attempt_id"
+private const val ARG__COURSE_ID = "course_id"
 
 class AnnouncementsFragment : Fragment() {
     private lateinit var database: AppDatabase
-    lateinit var attemptId: String
+    lateinit var courseId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            attemptId = it.getString(ARG__ATTEMPT_ID)!!
+            courseId = it.getString(ARG__COURSE_ID)!!
         }
 
     }
@@ -39,7 +39,7 @@ class AnnouncementsFragment : Fragment() {
         view.instructorRv.layoutManager = LinearLayoutManager(context)
         view.instructorRv.adapter = instructorAdapter
 
-        instructorDao.getInstructorWithCourseId(attemptId).observe(this, Observer<List<Instructor>> {
+        instructorDao.getInstructorWithCourseId(courseId).observe(this, Observer<List<Instructor>> {
             instructorAdapter.setData(it as ArrayList<Instructor>)
         })
 
@@ -52,7 +52,7 @@ class AnnouncementsFragment : Fragment() {
         fun newInstance(param1: String) =
                 AnnouncementsFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG__ATTEMPT_ID, param1)
+                        putString(ARG__COURSE_ID, param1)
                     }
                 }
     }

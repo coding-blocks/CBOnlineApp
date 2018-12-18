@@ -6,11 +6,16 @@ import android.os.Bundle
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ahmadrosid.svgloader.SvgLoader
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.ProgressBarAnimation
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.Instructor
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Sections
@@ -32,9 +37,16 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     lateinit var skeletonScreen: SkeletonScreen
     lateinit var courseId: String
-    var runId: String = ""
     lateinit var courseName: String
     lateinit var progressBar: Array<ProgressBar?>
+
+    private val database: AppDatabase by lazy {
+        AppDatabase.getInstance(this)
+    }
+
+    private val courseWithInstructorDao by lazy {
+        database.courseWithInstructorDao()
+    }
 
     companion object {
         val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
@@ -49,12 +61,33 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         courseId = intent.getStringExtra("courseId")
         courseName = intent.getStringExtra("courseName")
         val image = intent.getStringExtra("courseLogo")
-//        SvgLoader.pluck()
-//                .with(this)
-//                .load(image, coursePageLogo)
+        SvgLoader.pluck()
+                .with(this)
+                .load(image, coursePageLogo)
         title = courseName
         coursePageTitle.text = courseName
 
+        //fetch instructors
+        val instructorList = ArrayList<Instructor>()
+        val instructorAdapter = InstructorDataAdapter(instructorList)
+        instructorRv.layoutManager = LinearLayoutManager(this)
+        instructorRv.adapter = instructorAdapter
+
+        courseWithInstructorDao.getInstructorWithCourseId(courseId).observe(this, Observer<List<Instructor>> {
+            instructorAdapter.setData(it as ArrayList<Instructor>)
+            var instructors = "Mentors:"
+            for (i in 0 until it.size) {
+                if (i == 0) {
+                    instructors += it[i].name
+                } else if (i == 1) {
+                    instructors += ", ${it[i].name}"
+                } else if (i >= 2) {
+                    instructors += "+ " + (it.size - 2) + " more"
+                    break
+                }
+                coursePageMentors.text = instructors
+            }
+        })
 
         progressBar = arrayOf(courseProgress1, courseProgress2, courseProgress3, courseProgress4, courseProgress5)
         setSupportActionBar(toolbar)
