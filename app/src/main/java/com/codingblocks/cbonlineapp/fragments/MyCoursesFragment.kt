@@ -103,9 +103,12 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                         updatedAt,
                                         progress,
                                         myCourses.description ?: "",
-                                        CourseRun(myCourses.id ?: "", myCourses.run_attempts?.get(0)?.id ?: "",
+                                        CourseRun(myCourses.id
+                                                ?: "", myCourses.run_attempts?.get(0)?.id ?: "",
                                                 myCourses.name ?: "", myCourses.description ?: "",
-                                                myCourses.start ?: "", myCourses.run_attempts!![0].end ?: "",
+                                                myCourses.start
+                                                        ?: "", myCourses.run_attempts!![0].end
+                                                ?: "",
                                                 myCourses.price ?: "", myCourses.mrp ?: "",
                                                 id ?: "", myCourses.updatedAt ?: ""
 
@@ -116,7 +119,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                 val updateCourse = courseDao.getCourse(course?.id ?: "")
                                 if (updateCourse == null) {
                                     courseDao.insert(course!!)
-                                } else if (updateCourse.attempt_id == "") {
+                                } else if (updateCourse.attempt_id == "" || updateCourse.progress != course?.progress) {
                                     info { "updateCourse is happening" }
                                     courseDao.update(course!!)
                                 }
