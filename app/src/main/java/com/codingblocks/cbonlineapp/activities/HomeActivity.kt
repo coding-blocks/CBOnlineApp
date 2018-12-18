@@ -1,8 +1,13 @@
 package com.codingblocks.cbonlineapp.activities
 
+import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -28,6 +33,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
+import java.util.*
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, AnkoLogger {
@@ -42,15 +48,17 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
-
-
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_holder, AllCourseFragment())
         transaction.commit()
+        when {
+            intent.getStringExtra("course") == "mycourses" -> transaction.replace(R.id.fragment_holder, MyCoursesFragment())
+            intent.getStringExtra("course") == "allcourses" -> transaction.replace(R.id.fragment_holder, AllCourseFragment())
+            else -> transaction.replace(R.id.fragment_holder, HomeFragment())
+        }
         nav_view.getHeaderView(0).login_button.setOnClickListener {
             startActivity(intentFor<LoginActivity>().singleTop())
         }
-        info { "hello"+this.intent.data }
+        info { "hello" + this.intent.data }
 
         fetchUser()
     }
@@ -94,9 +102,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         Picasso.get().load(jSONObject.get("photo").asString).into(nav_header_imageView)
 //                nav_header_username_textView.text = jSONObject.get("firstname").asString
                         login_button.text = "Logout"
+                        if (Build.VERSION.SDK_INT >= 25) {
+                            createShorcut()
+                        }
                         login_button.setOnClickListener {
                             prefs.SP_ACCESS_TOKEN_KEY = prefs.ACCESS_TOKEN
                             prefs.SP_JWT_TOKEN_KEY = prefs.JWT_TOKEN
+                            removeShorcuts()
                             startActivity(intentFor<LoginActivity>().singleTop())
                             finish()
                         }
@@ -105,6 +117,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     } else {
                         nav_view.getHeaderView(0).login_button.setOnClickListener {
                             startActivity(intentFor<LoginActivity>().singleTop())
+
                         }
                     }
 
@@ -197,5 +210,31 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onNewIntent(intent)
         setIntent(intent)
         //now getIntent() should always return the last received intent
+    }
+
+    @TargetApi(25)
+    private fun createShorcut() {
+        val sM = getSystemService(ShortcutManager::class.java)
+
+        val intent1 = Intent(applicationContext, HomeActivity::class.java)
+        intent1.action = Intent.ACTION_VIEW
+        intent1.putExtra("course", "mycourses")
+
+        val shortcut1 = ShortcutInfo.Builder(this, "shortcut1")
+                .setIntent(intent1)
+                .setLongLabel("My Courses")
+                .setShortLabel("Open My Courses")
+                .setDisabledMessage("Login to open this")
+                .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
+                .build()
+
+        sM.dynamicShortcuts = Arrays.asList(shortcut1)
+    }
+
+    @TargetApi(25)
+    private fun removeShorcuts() {
+        val shortcutManager = getSystemService(ShortcutManager::class.java)
+        shortcutManager.disableShortcuts(Arrays.asList("shortcut1"))
+        shortcutManager.removeAllDynamicShortcuts()
     }
 }

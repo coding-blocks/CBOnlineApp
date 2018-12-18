@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:targetApi="25">
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutId="shortcut_name"
+        android:shortcutShortLabel="@string/my_courses">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.codingblocks.cbonlineapp.activities.HomeActivity"
+            android:targetPackage="com.codingblocks.cbonlineapp">
+            <extra
+                android:name="course"
+                android:value="allcourses" />
+        </intent>
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+</shortcuts>

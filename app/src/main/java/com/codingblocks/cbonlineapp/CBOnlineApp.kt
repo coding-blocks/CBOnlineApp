@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp
 
 import android.app.Application
+import android.content.Context
 import com.codingblocks.cbonlineapp.Utils.Prefs
 import io.github.inflationx.calligraphy3.CalligraphyConfig
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor
@@ -14,6 +15,7 @@ val prefs: Prefs by lazy {
 class CBOnlineApp : Application() {
     companion object {
         var prefs: Prefs? = null
+        lateinit var APP_CONTEXT: Context
     }
 
     override fun onCreate() {
@@ -26,5 +28,9 @@ class CBOnlineApp : Application() {
                                 .setFontAttrId(R.attr.fontPath)
                                 .build()))
                 .build())
+
+        APP_CONTEXT = this
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
+//            shortcutAction(::updateShortcuts)
     }
 }

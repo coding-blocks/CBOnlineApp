@@ -1,7 +1,9 @@
 package com.codingblocks.cbonlineapp.activities
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.R
@@ -44,6 +46,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
 
+    @RequiresApi(Build.VERSION_CODES.N_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_course)
