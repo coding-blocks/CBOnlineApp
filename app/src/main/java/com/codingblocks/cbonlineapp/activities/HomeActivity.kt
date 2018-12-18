@@ -28,7 +28,6 @@ import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_home.*
-import kotlinx.android.synthetic.main.nav_header_home.*
 import kotlinx.android.synthetic.main.nav_header_home.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
@@ -52,21 +51,37 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.commit()
-        if(prefs.SP_ACCESS_TOKEN_KEY != "access_token"){
+        if (prefs.SP_ACCESS_TOKEN_KEY != "access_token") {
             transaction.replace(R.id.fragment_holder, MyCoursesFragment())
-        }else{
+            setUser()
+        } else {
             transaction.replace(R.id.fragment_holder, HomeFragment())
         }
         when {
             intent.getStringExtra("course") == "mycourses" -> transaction.replace(R.id.fragment_holder, MyCoursesFragment())
             intent.getStringExtra("course") == "allcourses" -> transaction.replace(R.id.fragment_holder, AllCourseFragment())
-            }
+        }
         nav_view.getHeaderView(0).login_button.setOnClickListener {
             startActivity(intentFor<LoginActivity>().singleTop())
         }
-        info { "hello" + this.intent.data }
-
         fetchUser()
+    }
+
+    private fun setUser() {
+        Picasso.get().load(prefs.SP_USER_IMAGE).placeholder(R.drawable.defaultavatar).into(nav_view.getHeaderView(0).nav_header_imageView)
+        nav_view.getHeaderView(0).login_button.text = "Logout"
+        if (Build.VERSION.SDK_INT >= 25) {
+            createShortcut()
+        }
+        nav_view.getHeaderView(0).login_button.setOnClickListener {
+            prefs.SP_ACCESS_TOKEN_KEY = prefs.ACCESS_TOKEN
+            prefs.SP_JWT_TOKEN_KEY = prefs.JWT_TOKEN
+            removeShortcuts()
+            startActivity(intentFor<LoginActivity>().singleTop())
+            finish()
+        }
+        val nav_menu = nav_view.menu
+        nav_menu.findItem(R.id.nav_my_courses).isVisible = true
     }
 
     override fun onStart() {
@@ -105,21 +120,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 resp?.body()?.let { it ->
                     if (resp.isSuccessful) {
                         val jSONObject = it.getAsJsonObject("data").getAsJsonObject("attributes")
-                        Picasso.get().load(jSONObject.get("photo").asString).into(nav_header_imageView)
-//                nav_header_username_textView.text = jSONObject.get("firstname").asString
-                        login_button.text = "Logout"
-                        if (Build.VERSION.SDK_INT >= 25) {
-                            createShortcut()
-                        }
-                        login_button.setOnClickListener {
-                            prefs.SP_ACCESS_TOKEN_KEY = prefs.ACCESS_TOKEN
-                            prefs.SP_JWT_TOKEN_KEY = prefs.JWT_TOKEN
-                            removeShortcuts()
-                            startActivity(intentFor<LoginActivity>().singleTop())
-                            finish()
-                        }
-                        val nav_menu = nav_view.menu
-                        nav_menu.findItem(R.id.nav_my_courses).setVisible(true)
+                        prefs.SP_USER_IMAGE = jSONObject.get("photo").asString
+                        setUser()
                     } else {
                         nav_view.getHeaderView(0).login_button.setOnClickListener {
                             startActivity(intentFor<LoginActivity>().singleTop())

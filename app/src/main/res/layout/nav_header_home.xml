@@ -17,6 +17,7 @@
         android:id="@+id/nav_header_imageView"
         android:layout_width="84dp"
         android:layout_height="84dp"
+        android:src="@drawable/defaultavatar"
         android:layout_marginStart="4dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
