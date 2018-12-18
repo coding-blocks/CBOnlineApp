@@ -117,7 +117,7 @@ class HomeFragment : Fragment(), AnkoLogger {
                                 ))
                     }
                     thread {
-                        info { course.coverImage }
+                        info { course.courseRun.crMrp }
                         courseDao.insert(course)
                         //Add CourseInstructors
                         for (i in myCourses.instructors!!) {
