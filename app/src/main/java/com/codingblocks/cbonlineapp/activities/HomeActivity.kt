@@ -52,11 +52,15 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.commit()
+        if(prefs.SP_ACCESS_TOKEN_KEY != "access_token"){
+            transaction.replace(R.id.fragment_holder, MyCoursesFragment())
+        }else{
+            transaction.replace(R.id.fragment_holder, HomeFragment())
+        }
         when {
             intent.getStringExtra("course") == "mycourses" -> transaction.replace(R.id.fragment_holder, MyCoursesFragment())
             intent.getStringExtra("course") == "allcourses" -> transaction.replace(R.id.fragment_holder, AllCourseFragment())
-            else -> transaction.replace(R.id.fragment_holder, HomeFragment())
-        }
+            }
         nav_view.getHeaderView(0).login_button.setOnClickListener {
             startActivity(intentFor<LoginActivity>().singleTop())
         }
