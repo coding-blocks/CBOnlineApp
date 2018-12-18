@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.devbrackets.android.exomedia.ui.widget.VideoView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/videoView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:useDefaultControls="true" />
+    android:layout_height="match_parent">
+
+    <com.devbrackets.android.exomedia.ui.widget.VideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:useDefaultControls="true" />
+
+    <ImageView
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:background="@drawable/drawable_playback_bg"
+        android:id="@+id/playback_speed"
+        android:padding="8dp"
+        android:layout_margin="16dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="top|end"
+        app:srcCompat="@drawable/ic_fast_forward" />
+
+</FrameLayout>

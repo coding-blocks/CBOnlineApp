@@ -1,24 +1,38 @@
 package com.codingblocks.cbonlineapp.activities
 
 import android.os.Bundle
-import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.devbrackets.android.exomedia.listener.OnPreparedListener
 import kotlinx.android.synthetic.main.activity_video_player.*
 
-class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener, OnPreparedListener {
+class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
-
         setContentView(R.layout.activity_video_player)
+
+        playback_speed.setOnClickListener {
+            showSpeedDialog()
+        }
+    }
+
+    private val playbackSpeeds = arrayOf("0.5", "0.75", "1", "1.5", "2")
+
+    private fun showSpeedDialog() {
+        AlertDialog.Builder(this)
+                .setTitle("Select Playback speed")
+                .setSingleChoiceItems(playbackSpeeds, 1) { _, which ->
+                    videoView.playbackSpeed = playbackSpeeds[which].toFloat()
+                }
+                .show()
     }
 
     override fun onStart() {
@@ -37,10 +51,6 @@ class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener, OnPrepare
 
     override fun onPrepared() {
         videoView.start()
-    }
-
-    override fun onClick(v: View?) {
-
     }
 
     override fun onStop() {
