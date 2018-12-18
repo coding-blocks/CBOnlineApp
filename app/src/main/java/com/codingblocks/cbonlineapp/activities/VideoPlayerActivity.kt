@@ -24,13 +24,15 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener {
         }
     }
 
-    private val playbackSpeeds = arrayOf("0.5", "0.75", "1", "1.5", "2")
+    private val playbackSpeeds = floatArrayOf(0.5f, 0.75f, 1f, 1.5f, 2f)
+    private val speedString = arrayOf("0.5x", "0.75x", "1x", "1.5x", "2x")
 
     private fun showSpeedDialog() {
         AlertDialog.Builder(this)
                 .setTitle("Select Playback speed")
-                .setSingleChoiceItems(playbackSpeeds, 1) { _, which ->
-                    videoView.playbackSpeed = playbackSpeeds[which].toFloat()
+                .setSingleChoiceItems(speedString, playbackSpeeds.indexOf(videoView.playbackSpeed)) { it, which ->
+                    videoView.playbackSpeed = playbackSpeeds[which]
+                    it.cancel()
                 }
                 .show()
     }
