@@ -13,15 +13,46 @@ import org.jetbrains.anko.*
 
 
 class SplashActivity : AppCompatActivity() {
+    val ui = SplashActivityUI()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (prefs.SP_ACCESS_TOKEN_KEY == "access_token") {
-            startActivity(intentFor<LoginActivity>().singleTop())
-            finish()
-        } else {
-            startActivity(intentFor<HomeActivity>().singleTop())
-            finish()
+        ui.setContentView(this)
+        scheduleSplashScreen()
+    }
+
+    private fun scheduleSplashScreen() {
+        val splashScreenDuration = getSplashScreenDuration()
+        Handler().postDelayed(
+                {
+                    // After the splash screen duration, route to the right activities
+                    if (prefs.SP_ACCESS_TOKEN_KEY == "access_token") {
+                        val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ui.logo, "trans1")
+                        startActivity(intentFor<LoginActivity>().singleTop(), compat.toBundle())
+                        finish()
+                    } else {
+                        startActivity(intentFor<HomeActivity>().singleTop())
+                        finish()
+                    }
+                },
+                splashScreenDuration
+        )
+    }
+
+
+    private fun getSplashScreenDuration() = 3000L
+
+    class SplashActivityUI : AnkoComponent<SplashActivity> {
+        lateinit var logo: ImageView
+        override fun createView(ui: AnkoContext<SplashActivity>): View = with(ui) {
+            frameLayout {
+                logo = imageView(R.mipmap.ic_launcher_foreground)
+                        .lparams {
+                            width = wrapContent
+                            height = wrapContent
+                            gravity = Gravity.CENTER
+                        }
+            }
         }
     }
 }
