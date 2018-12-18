@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.fragments
 
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -68,7 +69,12 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 .load(R.layout.item_skeleton_course_card)
                 .show()
         courseDao.getMyCourses().observe(this, Observer<List<Course>> {
-            courseDataAdapter.setData(it as ArrayList<Course>)
+            courseDataAdapter.setData(
+                // TODO: Ideally do this at DB query level itself
+                (it).filter { c ->
+                    c.courseRun.crEnd.toLong() * 1000 > System.currentTimeMillis()
+                } as ArrayList<Course>
+            )
 
         })
         fetchAllCourses()
