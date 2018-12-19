@@ -12,8 +12,8 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 11
+        versionName "0.0.1-beta1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
@@ -60,7 +60,7 @@ dependencies {
     implementation 'androidx.browser:browser:1.0.0'
     // 3rd party libs
     implementation 'com.google.code.gson:gson:2.8.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.ethanhua:skeleton:1.1.1'
     implementation 'io.supercharge:shimmerlayout:2.1.0'
     implementation 'io.github.inflationx:calligraphy3:3.0.0'
@@ -76,7 +76,7 @@ dependencies {
     //exomedia library
     implementation 'com.devbrackets.android:exomedia:4.3.0'
     //gson
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     ankoLibs.each { name ->
         implementation "org.jetbrains.anko:anko-$name:$ankoVersion"
     }
