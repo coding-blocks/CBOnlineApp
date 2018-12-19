@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.utils
 
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
 import android.view.View
 import android.widget.ImageView
@@ -10,7 +11,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.uiThread
 
-fun ImageView.loadSvg(svgUrl: String) {
+fun ImageView.loadSvg(svgUrl: String, onDrawableCreated: ((Drawable) -> Unit)?) {
     setLayerType(View.LAYER_TYPE_SOFTWARE, null)
 
     doAsync {
@@ -18,12 +19,15 @@ fun ImageView.loadSvg(svgUrl: String) {
             .execute().body()?.let {
                 with(SVG.getFromInputStream(it.byteStream())) {
                     uiThread {
-                        setImageDrawable(
-                            PictureDrawable(renderToPicture())
-                        )
+                        val picDrawable = PictureDrawable(renderToPicture())
+                        setImageDrawable(picDrawable)
+                        onDrawableCreated?.let { it(picDrawable) }
                     }
 
                 }
             }
     }
+}
+fun ImageView.loadSvg(svgUrl: String) {
+    loadSvg(svgUrl, null)
 }
