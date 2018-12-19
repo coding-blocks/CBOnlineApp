@@ -31,7 +31,20 @@ android {
     }
 }
 
-ext.ankoVersion = '0.10.6'
+ext {
+    ankoVersion = '0.10.6'
+    room_version = "2.1.0-alpha02"
+    ankoLibs = [
+            // commons
+            'commons',
+            // layouts
+            'sdk25', 'appcompat-v7', 'support-v4', 'recyclerview-v7', 'constraint-layout', 'cardview-v7',
+            // coroutines
+            'sdk25-coroutines', 'appcompat-v7-coroutines', 'coroutines',
+             'design',
+            // 'percent',
+    ]
+}
 
 
 dependencies {
@@ -45,7 +58,6 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.0'
-
     // 3rd party libs
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
@@ -56,44 +68,26 @@ dependencies {
     implementation 'io.github.inflationx:viewpump:1.0.0'
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
     implementation 'androidx.browser:browser:1.0.0'
-
-
     //database
-    def room_version = "2.1.0-alpha02"
-
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
-
     //exomedia library
     implementation 'com.devbrackets.android:exomedia:4.3.0'
-
     //gson
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-
-    def anko = [
-            // commons
-            'commons',
-            // layouts
-            'sdk25', 'appcompat-v7', 'support-v4', 'recyclerview-v7', 'constraint-layout', 'cardview-v7',
-            // coroutines
-            'sdk25-coroutines', 'appcompat-v7-coroutines', 'coroutines',
-//            'design', 'percent',
-    ]
-    anko.each { name ->
+    ankoLibs.each { name ->
         implementation "org.jetbrains.anko:anko-$name:$ankoVersion"
     }
-    implementation project(':onlineapi')
-    implementation files('libs/YouTubeAndroidPlayerApi.jar')
-
-    // Test Deps
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
-
     //Firebase
     implementation 'com.google.firebase:firebase-core:16.0.5'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'com.google.firebase:firebase-invites:16.0.5'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.7'
 
+    implementation project(':onlineapi')
+    implementation files('libs/YouTubeAndroidPlayerApi.jar')
+    // Test Deps
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 }
