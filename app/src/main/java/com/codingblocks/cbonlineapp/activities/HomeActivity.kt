@@ -17,11 +17,12 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.Utils.Prefs
+import com.codingblocks.cbonlineapp.Utils.getPrefs
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
-import com.codingblocks.cbonlineapp.prefs
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
@@ -38,9 +39,11 @@ import java.util.*
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, AnkoLogger {
     private var doubleBackToExitPressedOnce = false
+    lateinit var prefs: Prefs
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        prefs = getPrefs()
         setContentView(R.layout.activity_home)
         setSupportActionBar(toolbar)
         title = "Coding Blocks"
@@ -68,14 +71,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun setUser() {
-        Picasso.get().load(prefs.SP_USER_IMAGE).placeholder(R.drawable.defaultavatar).into(nav_view.getHeaderView(0).nav_header_imageView)
+        Picasso.get().load(prefs.SP_USER_IMAGE).placeholder(R.drawable.defaultavatar).fit().into(nav_view.getHeaderView(0).nav_header_imageView)
         nav_view.getHeaderView(0).login_button.text = "Logout"
         if (Build.VERSION.SDK_INT >= 25) {
             createShortcut()
         }
         nav_view.getHeaderView(0).login_button.setOnClickListener {
-            prefs.SP_ACCESS_TOKEN_KEY = prefs.ACCESS_TOKEN
-            prefs.SP_JWT_TOKEN_KEY = prefs.JWT_TOKEN
+            prefs.SP_ACCESS_TOKEN_KEY = Prefs.ACCESS_TOKEN
+            prefs.SP_JWT_TOKEN_KEY = Prefs.JWT_TOKEN
             removeShortcuts()
             startActivity(intentFor<LoginActivity>().singleTop())
             finish()

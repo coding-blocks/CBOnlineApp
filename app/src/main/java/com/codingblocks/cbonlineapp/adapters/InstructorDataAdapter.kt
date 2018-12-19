@@ -36,7 +36,7 @@ class InstructorDataAdapter(private var instructorData: ArrayList<Instructor>?) 
         fun bindView(instructor: Instructor) {
             ui.instructorTitle.text = instructor.name
             ui.instructorDescription.text = instructor.description
-            Picasso.get().load(instructor.photo).placeholder(R.drawable.defaultavatar).into(ui.instructorImgView)
+            Picasso.get().load(instructor.photo).placeholder(R.drawable.defaultavatar).fit().into(ui.instructorImgView)
 
         }
 

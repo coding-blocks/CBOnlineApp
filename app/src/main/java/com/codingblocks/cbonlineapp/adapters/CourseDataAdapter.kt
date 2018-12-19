@@ -12,7 +12,7 @@ import java.util.*
 
 
 class CourseDataAdapter(private var courseData: ArrayList<Course>?,
-                        var context: Context,
+                        val context: Context,
                         private val courseWithInstructorDao: CourseWithInstructorDao, var type: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AnkoLogger {
     fun setData(courseData: ArrayList<Course>) {
         this.courseData = courseData

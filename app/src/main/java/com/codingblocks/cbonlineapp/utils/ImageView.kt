@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
 import android.view.View
 import android.widget.ImageView
+import com.caverock.androidsvg.RenderOptions
 import com.caverock.androidsvg.SVG
 import com.codingblocks.cbonlineapp.R
 import okhttp3.Request
@@ -19,7 +20,9 @@ fun ImageView.loadSvg(svgUrl: String, onDrawableCreated: ((Drawable) -> Unit)?) 
             .execute().body()?.let {
                 with(SVG.getFromInputStream(it.byteStream())) {
                     uiThread {
-                        val picDrawable = PictureDrawable(renderToPicture())
+                        val picDrawable = PictureDrawable(renderToPicture(
+                            400, 400
+                        ))
                         setImageDrawable(picDrawable)
                         onDrawableCreated?.let { it(picDrawable) }
                     }

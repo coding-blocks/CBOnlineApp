@@ -9,7 +9,8 @@ import androidx.annotation.UiThread
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.prefs
+import com.codingblocks.cbonlineapp.Utils.getPrefs
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.coroutines.experimental.asReference
@@ -25,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-    suspend fun getAccessToken() = prefs.SP_ACCESS_TOKEN_KEY
+    suspend fun getAccessToken() = getPrefs().SP_ACCESS_TOKEN_KEY
 
     suspend fun finishSplashScreen() {
         // After the splash screen duration, route to the right activities

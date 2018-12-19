@@ -16,6 +16,7 @@ import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.Instructor
 import com.codingblocks.cbonlineapp.utils.MediaUtils
+import com.codingblocks.cbonlineapp.utils.loadSvg
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Sections
 import com.ethanhua.skeleton.Skeleton
@@ -61,7 +62,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         courseId = intent.getStringExtra("courseId")
         courseName = intent.getStringExtra("courseName")
         val image = intent.getStringExtra("courseLogo")
-        Picasso.get().load(image).into(coursePageLogo)
+        coursePageLogo.loadSvg(image)
         title = courseName
         coursePageTitle.text = courseName
 

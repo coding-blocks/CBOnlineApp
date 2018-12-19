@@ -44,13 +44,13 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     if (i == 0) {
                         Picasso.get().load(instructorsList!![i].photo)
                             .placeholder(R.drawable.defaultavatar)
-                            .into(itemView.courseInstrucImgView1)
+                            .fit().into(itemView.courseInstrucImgView1)
                         instructors += instructorsList!![i].name
                     } else if (i == 1) {
                         itemView.courseInstrucImgView2.visibility = View.VISIBLE
                         Picasso.get().load(instructorsList!![i].photo)
                             .placeholder(R.drawable.defaultavatar)
-                            .into(itemView.courseInstrucImgView2)
+                            .fit().into(itemView.courseInstrucImgView2)
                         instructors += ", ${instructorsList!![i].name}"
                     } else if (i >= 2) {
                         instructors += "+ " + (instructorsList!!.size - 2) + " more"
