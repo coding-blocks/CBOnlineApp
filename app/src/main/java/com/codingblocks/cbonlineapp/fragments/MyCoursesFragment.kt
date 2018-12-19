@@ -2,7 +2,7 @@ package com.codingblocks.cbonlineapp.fragments
 
 
 import android.os.Bundle
-import android.os.SystemClock
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -70,13 +70,22 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 .show()
         courseDao.getMyCourses().observe(this, Observer<List<Course>> {
             courseDataAdapter.setData(
-                // TODO: Ideally do this at DB query level itself
-                (it).filter { c ->
-                    c.courseRun.crEnd.toLong() * 1000 > System.currentTimeMillis()
-                } as ArrayList<Course>
+                    // TODO: Ideally do this at DB query level itself
+                    (it).filter { c ->
+                        c.courseRun.crEnd.toLong() * 1000 > System.currentTimeMillis()
+                    } as ArrayList<Course>
             )
 
         })
+        ui.swipeRefreshLayout.setOnRefreshListener {
+            // Your code here
+            fetchAllCourses()
+            // To keep animation for 4 seconds
+            Handler().postDelayed({
+                // Stop animation (This will be after 3 seconds)
+                ui.swipeRefreshLayout.isRefreshing = false
+            }, 4000) // Delay in millis
+        }
         fetchAllCourses()
     }
 
@@ -97,14 +106,14 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                         id ?: "",
                                         title ?: "",
                                         subtitle ?: "",
-                                        logo?: "",
+                                        logo ?: "",
                                         summary ?: "",
                                         promoVideo ?: "",
                                         difficulty ?: "",
                                         reviewCount ?: 0,
                                         rating ?: 0f,
                                         slug ?: "",
-                                        coverImage?: "",
+                                        coverImage ?: "",
                                         myCourses.run_attempts?.get(0)?.id ?: "",
                                         updatedAt,
                                         progress,

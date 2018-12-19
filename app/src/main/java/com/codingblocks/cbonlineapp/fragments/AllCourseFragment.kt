@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.fragments
 
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -72,6 +73,15 @@ class AllCourseFragment : Fragment(), AnkoLogger {
             courseDataAdapter.setData(it as ArrayList<Course>)
         })
 
+        ui.swipeRefreshLayout.setOnRefreshListener {
+            // Your code here
+            fetchAllCourses()
+            // To keep animation for 4 seconds
+            Handler().postDelayed({
+                // Stop animation (This will be after 3 seconds)
+                ui.swipeRefreshLayout.isRefreshing = false
+            }, 4000) // Delay in millis
+        }
         fetchAllCourses()
 
     }
