@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.lifecycle.Observer
@@ -24,13 +25,15 @@ import com.ethanhua.skeleton.SkeletonScreen
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
-import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_course.*
+import kotlinx.android.synthetic.main.custom_dialog.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
 
 
@@ -110,7 +113,9 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 trialBtn.setOnClickListener {
                     if (course.runs != null)
                         Clients.api.enrollTrial(course.runs!![0].id!!).enqueue(retrofitCallback { throwable, response ->
-
+                            if (response?.isSuccessful!!) {
+                                showconfirmation()
+                            }
                         })
                 }
                 buyBtn.setOnClickListener {
@@ -195,8 +200,18 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
-//    override fun onBackPressed() {
-//        finish()
-//
-//    }
+    private fun showconfirmation() {
+        val confirmDialog = AlertDialog.Builder(this).create()
+        val updateView = layoutInflater.inflate(R.layout.custom_dialog, null)
+        updateView.okBtn.setOnClickListener {
+            startActivity(intentFor<HomeActivity>("course" to "mycourses").singleTop())
+        }
+        updateView.cancelBtn.setOnClickListener {
+            confirmDialog.dismiss()
+        }
+        confirmDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+        confirmDialog.setView(updateView)
+        confirmDialog.setCancelable(false)
+        confirmDialog.show()
+    }
 }
