@@ -33,7 +33,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_ccaf84b6_63df_40f8_b4df_f64b8b9ecd9e" />
+                android:src="@drawable/placeholder_course_cover" />
 
 
         </RelativeLayout>

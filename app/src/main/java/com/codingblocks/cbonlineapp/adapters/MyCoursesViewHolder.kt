@@ -8,6 +8,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.database.Course
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.utils.loadSvg
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.my_course_card_horizontal.view.*
 import org.jetbrains.anko.AnkoLogger
@@ -24,8 +25,8 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
             itemView.courseRatingBar.rating = rating
             itemView.courseRunDescription.text = runDescription
             itemView.courseProgress.progress = progress.toInt()
-            Picasso.get().load(coverImage).into(itemView.courseCoverImgView)
-            Picasso.get().load(logo).into(itemView.courseLogo)
+            itemView.courseCoverImgView.loadSvg(coverImage)
+            itemView.courseLogo.loadSvg(logo)
             if (data.courseRun.crEnd.toLong() * 1000 > System.currentTimeMillis()) {
                 itemView.courseBtn1.setOnClickListener {
                     it.context.startActivity(it.context.intentFor<MyCourseActivity>("course_id" to id, "attempt_id" to attempt_id, "courseName" to title).singleTop())

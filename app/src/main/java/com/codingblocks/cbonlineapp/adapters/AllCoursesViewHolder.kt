@@ -2,15 +2,21 @@ package com.codingblocks.cbonlineapp.adapters
 
 import android.content.Context
 import android.graphics.Paint
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
+import com.caverock.androidsvg.SVG
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.CourseActivity
 import com.codingblocks.cbonlineapp.database.Course
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.utils.MediaUtils
+import com.codingblocks.cbonlineapp.utils.loadSvg
+import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.single_course_card_horizontal.view.*
+import okhttp3.OkHttpClient
 import org.jetbrains.anko.intentFor
 import java.text.SimpleDateFormat
 import java.util.*
@@ -70,9 +76,8 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 itemView.courseRun.text = "Batches Starting $date"
                 itemView.enrollmentTv.text = "Hurry Up! Enrollment ends $date"
             }
-            Picasso.get().load(data.coverImage).into(itemView.courseCoverImgView)
-            Picasso.get().load(data.logo).into(itemView.courseLogo)
-
+            itemView.courseCoverImgView.loadSvg(data.coverImage)
+            itemView.courseLogo.loadSvg(data.logo)
 
             itemView.setOnClickListener {
                 val textPair: Pair<View, String> = Pair(itemView.courseTitle, "textTrans")
