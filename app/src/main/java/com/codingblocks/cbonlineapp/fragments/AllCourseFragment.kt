@@ -2,11 +2,9 @@ package com.codingblocks.cbonlineapp.fragments
 
 
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,6 +48,10 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         instructorDao = database.instructorDao()
         runDao = database.courseRunDao()
 
+
+        //it is important to make oncreateoptions menu work
+        setHasOptionsMenu(true)
+
         courseWithInstructorDao = database.courseWithInstructorDao()
 
         courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao, "allCourses")
@@ -69,20 +71,25 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                 .load(R.layout.item_skeleton_course_card)
                 .show()
 
-        courseDao.getCourses().observe(this, Observer<List<Course>> {
-            courseDataAdapter.setData(it as ArrayList<Course>)
-        })
+        displayCourses()
 
         ui.swipeRefreshLayout.setOnRefreshListener {
             // Your code here
             fetchAllCourses()
-            // To keep animation for 4 seconds
-            Handler().postDelayed({
-                // Stop animation (This will be after 3 seconds)
-                ui.swipeRefreshLayout.isRefreshing = false
-            }, 4000) // Delay in millis
         }
         fetchAllCourses()
+
+    }
+
+    private fun displayCourses(searchQuery: String = "") {
+        courseDao.getCourses().observe(this, Observer<List<Course>> {
+            if (ui.swipeRefreshLayout.isRefreshing) {
+                ui.swipeRefreshLayout.isRefreshing = false
+            }
+            courseDataAdapter.setData(it.filter { c ->
+                c.title.contains(searchQuery, true)
+            } as ArrayList<Course>)
+        })
 
     }
 
@@ -107,14 +114,14 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                                 id ?: "",
                                 title ?: "",
                                 subtitle ?: "",
-                                logo?: "",
+                                logo ?: "",
                                 summary ?: "",
                                 promoVideo ?: "",
                                 difficulty ?: "",
                                 reviewCount ?: 0,
                                 rating ?: 0f,
                                 slug ?: "",
-                                coverImage?: "",
+                                coverImage ?: "",
                                 updated_at = updatedAt,
                                 courseRun = CourseRun(currentRuns[0].id ?: "", "",
                                         currentRuns[0].name ?: "", currentRuns[0].description ?: "",
@@ -145,6 +152,28 @@ class AllCourseFragment : Fragment(), AnkoLogger {
             }
         })
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.home, menu)
+        val item = menu.findItem(R.id.action_search)
+        val searchView = item.actionView as SearchView
+        searchView.setOnCloseListener {
+            displayCourses()
+            false
+        }
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                displayCourses(newText)
+                return true
+            }
+        })
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
 
     private fun insertCourseAndInstructor(course: com.codingblocks.onlineapi.models.Course, instructor: com.codingblocks.onlineapi.models.Instructor) {
 

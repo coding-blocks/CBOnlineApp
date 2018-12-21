@@ -3,9 +3,8 @@ package com.codingblocks.cbonlineapp.fragments
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,6 +50,9 @@ class HomeFragment : Fragment(), AnkoLogger {
         instructorDao = database.instructorDao()
         runDao = database.courseRunDao()
 
+        setHasOptionsMenu(true)
+
+
         courseWithInstructorDao = database.courseWithInstructorDao()
 
         courseDataAdapter = CourseDataAdapter(ArrayList(), view.context, courseWithInstructorDao, "allCourses")
@@ -69,13 +71,20 @@ class HomeFragment : Fragment(), AnkoLogger {
                 .count(4)
                 .load(R.layout.item_skeleton_course_card)
                 .show()
-
-        courseDao.getCourses().observe(this, Observer<List<Course>> {
-            courseDataAdapter.setData(it as ArrayList<Course>)
-
-        })
-
+        displayCourses()
         fetchRecommendedCourses()
+
+    }
+
+    private fun displayCourses(searchQuery: String = "") {
+        courseDao.getCourses().observe(this, Observer<List<Course>> {
+//            if (ui.swipeRefreshLayout.isRefreshing) {
+//                ui.swipeRefreshLayout.isRefreshing = false
+//            }
+            courseDataAdapter.setData(it.filter { c ->
+                c.title.contains(searchQuery, true)
+            } as ArrayList<Course>)
+        })
 
     }
 
@@ -132,6 +141,29 @@ class HomeFragment : Fragment(), AnkoLogger {
             }
         })
     }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.home, menu)
+        val item = menu.findItem(R.id.action_search)
+        val searchView = item.actionView as SearchView
+        searchView.setOnCloseListener {
+            displayCourses()
+            false
+        }
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                displayCourses(newText)
+                return true
+            }
+        })
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
 
     private fun insertCourseAndInstructor(course: com.codingblocks.onlineapi.models.Course, instructor: com.codingblocks.onlineapi.models.Instructor) {
 

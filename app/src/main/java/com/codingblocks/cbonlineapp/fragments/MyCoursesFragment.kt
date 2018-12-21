@@ -4,9 +4,8 @@ package com.codingblocks.cbonlineapp.fragments
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,6 +54,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         super.onViewCreated(view, savedInstanceState)
         ui.titleText.text = "My Courses"
         courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao, "myCourses")
+        setHasOptionsMenu(true)
+
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
@@ -68,15 +69,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 .count(4)
                 .load(R.layout.item_skeleton_course_card)
                 .show()
-        courseDao.getMyCourses().observe(this, Observer<List<Course>> {
-            courseDataAdapter.setData(
-                    // TODO: Ideally do this at DB query level itself
-                    (it).filter { c ->
-                        c.courseRun.crEnd.toLong() * 1000 > System.currentTimeMillis()
-                    } as ArrayList<Course>
-            )
+        displayCourses()
 
-        })
         ui.swipeRefreshLayout.setOnRefreshListener {
             // Your code here
             fetchAllCourses()
@@ -87,6 +81,20 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             }, 4000) // Delay in millis
         }
         fetchAllCourses()
+    }
+
+    private fun displayCourses(searchQuery: String = "") {
+        courseDao.getMyCourses().observe(this, Observer<List<Course>> {
+            if (ui.swipeRefreshLayout.isRefreshing) {
+                ui.swipeRefreshLayout.isRefreshing = false
+            }
+            courseDataAdapter.setData(it.filter { c ->
+                c.title.contains(searchQuery, true) &&
+                        c.courseRun.crEnd.toLong() * 1000 > System.currentTimeMillis()
+
+            } as ArrayList<Course>)
+        })
+
     }
 
     private fun fetchAllCourses() {
@@ -162,6 +170,29 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             }
         })
     }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.home, menu)
+        val item = menu.findItem(R.id.action_search)
+        val searchView = item.actionView as SearchView
+        searchView.setOnCloseListener {
+            displayCourses()
+            false
+        }
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                displayCourses(newText)
+                return true
+            }
+        })
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
 
     private fun insertCourseAndInstructor(course: MyCourse, instructor: com.codingblocks.onlineapi.models.Instructor) {
 
