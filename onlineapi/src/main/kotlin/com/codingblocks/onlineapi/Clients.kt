@@ -59,14 +59,15 @@ object Clients {
         onlineApiResourceConverter.disableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES)
     }
 
-    private val onlineV2JsonClient = OkHttpClient.Builder()
+    private val ClientInterceptor = OkHttpClient.Builder()
             .addInterceptor { chain ->
                 chain.proceed(chain.request().newBuilder().addHeader("Authorization", "JWT $authJwt").build())
             }
             .build()
 
+
     private val onlineV2JsonRetrofit = Retrofit.Builder()
-            .client(onlineV2JsonClient)
+            .client(ClientInterceptor)
             .baseUrl("https://api-online.cb.lk/api/v2/")
             .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
@@ -78,7 +79,7 @@ object Clients {
 
 
     private val retrofit = Retrofit.Builder()
-            .client(onlineV2JsonClient)
+            .client(ClientInterceptor)
             .baseUrl("https://api-online.cb.lk/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()

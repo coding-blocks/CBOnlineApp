@@ -12,7 +12,7 @@ interface SectionWithContentsDao {
         SELECT * FROM CourseContent
         INNER JOIN sectionwithcontent ON
         CourseContent.id = sectionwithcontent.content_id
-        WHERE sectionwithcontent.section_id = :sectionID
+        WHERE sectionwithcontent.section_id = :sectionID ORDER BY `order`
         """)
     fun getContentWithSectionId(sectionID: String): LiveData<List<CourseContent>>
 

@@ -56,7 +56,7 @@ interface OnlineJsonApi {
             @Path("runid") id: String): Call<MyRunAttempt>
 
     @POST("progresses")
-    fun setProgress(@Body params: Progress): Call<Progress>
+    fun setProgress(@Body params: Progress): Call<ContentProgress>
 
     @PATCH("progresses/{id}")
     fun updateProgress(@Path("id") id: String,@Body params: Progress): Call<Progress>

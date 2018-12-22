@@ -13,12 +13,19 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.DownloadStarter
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.activities.PdfActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.activities.YoutubePlayerActivity
 import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.utils.MediaUtils
+import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Contents
+import com.codingblocks.onlineapi.models.MyRunAttempts
+import com.codingblocks.onlineapi.models.Progress
 import kotlinx.android.synthetic.main.item_section.view.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import kotlin.concurrent.thread
@@ -27,7 +34,7 @@ import kotlin.concurrent.thread
 class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             private var activity: LifecycleOwner,
                             private var starter: DownloadStarter
-) : RecyclerView.Adapter<SectionDetailsAdapter.CourseViewHolder>() {
+) : RecyclerView.Adapter<SectionDetailsAdapter.CourseViewHolder>(), AnkoLogger {
 
     private lateinit var context: Context
     private lateinit var database: AppDatabase
@@ -123,8 +130,10 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                 }
                                 inflatedView.setOnClickListener {
                                     //TODO status to be updated on server as well
-                                    if (content.progress == "UNDONE")
+                                    if (content.progress == "UNDONE") {
                                         thread { contentDao.updateProgressLecture(data.id, content.contentLecture.lectureContentId, "DONE") }
+                                        updateProgress(content.id, content.attempt_id)
+                                    }
                                     it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url).singleTop())
                                 }
                             }
@@ -138,8 +147,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             }
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
-                                if (content.progress == "UNDONE")
-                                    thread { contentDao.updateProgressDocuemnt(data.id, content.contentDocument.documentContentId, "DONE") }
+                                if (content.progress == "UNDONE") {
+                                    updateProgress(content.id, content.attempt_id)
+                                }
                                 it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
 
                             }
@@ -152,8 +162,10 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             }
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
-                                if (content.progress == "UNDONE")
+                                if (content.progress == "UNDONE") {
                                     thread { contentDao.updateProgressVideo(data.id, content.contentVideo.videoContentId, "DONE") }
+                                    updateProgress(content.id, content.attempt_id)
+                                }
                                 it.context.startActivity(it.context.intentFor<YoutubePlayerActivity>("videoUrl" to content.contentVideo.videoUrl).singleTop())
 
                             }
@@ -188,5 +200,19 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
 //            arrowAnimation.duration = 350
 //            itemView.arrow.startAnimation(arrowAnimation)
         }
+    }
+
+    fun updateProgress(id: String, attempt_id: String) {
+        val p = Progress()
+        val runAttempts = MyRunAttempts()
+        val contents = Contents()
+        runAttempts.id = attempt_id
+        contents.id = id
+        p.status = "DONE"
+        p.runs = runAttempts
+        p.content = contents
+        Clients.onlineV2JsonApi.setProgress(p).enqueue(retrofitCallback { throwable, response ->
+            info { "resp" + response?.code().toString() }
+        })
     }
 }

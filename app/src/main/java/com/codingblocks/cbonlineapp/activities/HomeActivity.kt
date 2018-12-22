@@ -6,11 +6,11 @@ import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -54,7 +54,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.commit()
-        if (prefs.SP_ACCESS_TOKEN_KEY != "access_token") {
+        if (prefs.SP_ACCESS_TOKEN_KEY != "access_token" && !isNetworkAvailable(this)) {
             transaction.replace(R.id.fragment_holder, MyCoursesFragment())
             setUser()
         } else {
@@ -240,5 +240,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val shortcutManager = getSystemService(ShortcutManager::class.java)
         shortcutManager.disableShortcuts(Arrays.asList("shortcut1"))
         shortcutManager.removeAllDynamicShortcuts()
+    }
+
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo.isConnected
     }
 }
