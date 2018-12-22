@@ -16,8 +16,8 @@ abstract class ContentDao : BaseDao<CourseContent> {
     @Query("SElECT * FROM CourseContent where attempt_id = :attempt AND section_id = :section")
     abstract fun getCourseSectionContents(attempt: String, section: String): LiveData<List<CourseContent>>
 
-    @Query("UPDATE CourseContent SET isDownloaded = 1 WHERE lectureContentId = :contentid AND section_id = :section")
-    abstract fun updateContent(section: String, contentid: String)
+    @Query("UPDATE CourseContent SET isDownloaded = :downloadprogress WHERE lectureContentId = :contentid AND section_id = :section")
+    abstract fun updateContent(section: String, contentid: String, downloadprogress: String)
 
     //TODO use case with when instead of making 3 functions
     //Dynamic paramters not working

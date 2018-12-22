@@ -76,12 +76,17 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
                     Clients.initiateDownload(url, videoName).enqueue(retrofitCallback { throwable, response ->
                         val isDownloaded = writeResponseBodyToDisk(response?.body()!!, url, videoName)
                         if (isDownloaded) {
+                            if (videoName == "video00000.ts") {
+                                thread {
+                                    contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "inprogress")
+                                }
+                            }
                             downloadCount++
                         }
                         if (downloadCount == videoChunks.size) {
                             onDownloadComplete(url)
                             thread {
-                                contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"))
+                                contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "true")
                             }
                         }
                     })

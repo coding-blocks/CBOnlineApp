@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(
-        version = 2, entities = [
+        version = 3, entities = [
     CourseRun::class,
     CourseSection::class,
     CourseContent::class,
@@ -43,6 +43,7 @@ abstract class AppDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, "app-database")
+                    .fallbackToDestructiveMigration()
                     .build()
         }
     }

@@ -179,7 +179,7 @@ data class ContentLecture(
         var lectureUrl: String = "",
         var lectureContentId: String = "",
         var lectureUpdatedAt: String = "",
-        var isDownloaded: Boolean = false
+        var isDownloaded: String = "false"
 )
 
 @Entity()

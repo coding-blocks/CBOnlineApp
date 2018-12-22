@@ -105,7 +105,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                         content.contentable == "lecture" -> {
                             val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
                             ll.addView(inflatedView)
-                            if (!content.contentLecture.isDownloaded) {
+                            if (content.contentLecture.isDownloaded == "false") {
                                 inflatedView.setOnClickListener {
                                     if (MediaUtils.checkPermission(context)) {
                                         starter.startDownload(url, data.id, content.contentLecture.lectureContentId, content.title)
