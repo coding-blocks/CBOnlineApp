@@ -25,7 +25,7 @@ dependencies {
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
-    implementation 'io.github.inflationx:viewpump:1.0.0'
+    implementation 'io.github.inflationx:viewpump:2.0.0'
     implementation 'org.jetbrains.anko:anko-commons:0.10.6'
     testImplementation 'junit:junit:4.12'
 }
