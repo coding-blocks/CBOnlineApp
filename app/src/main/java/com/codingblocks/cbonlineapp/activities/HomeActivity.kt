@@ -23,6 +23,7 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
+import com.codingblocks.cbonlineapp.utils.Components
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
@@ -99,10 +100,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun fetchToken(data: Uri) {
         val grantCode = data.getQueryParameter("code")
-        Clients.api.getToken(grantCode).enqueue(retrofitCallback { _, response ->
-            info { "token" + response!!.message() }
-
+        Clients.api.getToken(grantCode).enqueue(retrofitCallback { error, response ->
             if (response!!.isSuccessful) {
+
                 val jwt = response.body()?.asJsonObject?.get("jwt")?.asString!!
                 val rt = response.body()?.asJsonObject?.get("refresh_token")?.asString!!
                 prefs.SP_ACCESS_TOKEN_KEY = grantCode
@@ -111,6 +111,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Clients.authJwt = jwt
                 fetchUser()
                 Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
+            } else if (response.code() == 500) {
+                info { response.body().toString() }
+                Components.showconfirmation(this, "verify")
             }
 
         })

@@ -31,5 +31,8 @@ abstract class ContentDao : BaseDao<CourseContent> {
     @Query("UPDATE CourseContent SET progress = :progress WHERE videoContentId = :contentid AND section_id = :section")
     abstract fun updateProgressVideo(section: String, contentid: String, progress: String)
 
+    @Query("UPDATE CourseContent SET progress = :progress WHERE qnaContentId = :contentid AND section_id = :section")
+    abstract fun updateProgressQna(section: String, contentid: String, progress: String)
+
 
 }

@@ -112,6 +112,10 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                             var contentDocument = ContentDocument()
                             var contentLecture = ContentLecture()
                             var contentVideo = ContentVideo()
+                            var contentQna = ContentQna()
+                            var contentCodeChallenge = ContentCodeChallenge()
+
+
 
                             when {
                                 content.contentable.equals("lecture") -> content.lecture?.let {
@@ -138,6 +142,21 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                                             content.section_content?.id ?: "",
                                             it.updatedAt ?: "")
                                 }
+                                content.contentable.equals("qna") -> content.qna?.let {
+                                    contentQna = ContentQna(it.id ?: "",
+                                            it.name ?: "",
+                                            it.q_id ?: 0,
+                                            content.section_content?.id ?: "",
+                                            it.updatedAt ?: "")
+                                }
+                                content.contentable.equals("code_challenge") -> content.code_challenge?.let {
+                                    contentCodeChallenge = ContentCodeChallenge(it.id ?: "",
+                                            it.name ?: "",
+                                            it.hb_problem_id ?: 0,
+                                            it.hb_contest_id ?: 0,
+                                            content.section_content?.id ?: "",
+                                            it.updatedAt ?: "")
+                                }
                             }
                             var progressId = ""
                             var status: String
@@ -152,8 +171,12 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                                     content.title ?: "", content.duration!!,
                                     content.contentable ?: "", content.section_content?.order!!,
                                     content.section_content?.sectionId ?: "", attemptId,
-                                    content.section_content?.updatedAt ?: "", contentLecture,
-                                    contentDocument, contentVideo))
+                                    content.section_content?.updatedAt ?: "",
+                                    contentLecture,
+                                    contentDocument,
+                                    contentVideo,
+                                    contentQna,
+                                    contentCodeChallenge))
                             insertSectionWithContent(section.id ?: "", content.id ?: "")
 
                         }

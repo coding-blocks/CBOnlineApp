@@ -139,6 +139,9 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                         } else if (updatedCourse.courseRun.crPrice != course.courseRun.crPrice) {
                             courseDao.update(course)
                         }
+                        if (ui.swipeRefreshLayout.isRefreshing) {
+                            ui.swipeRefreshLayout.isRefreshing = false
+                        }
                         //Add CourseInstructors
                         for (i in myCourses.instructors!!) {
                             instructorDao.insert(Instructor(i.id ?: "", i.name ?: "",
