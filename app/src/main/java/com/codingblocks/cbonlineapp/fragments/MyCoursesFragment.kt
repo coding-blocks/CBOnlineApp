@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.fragments
 
 
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
@@ -74,11 +73,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         ui.swipeRefreshLayout.setOnRefreshListener {
             // Your code here
             fetchAllCourses()
-            // To keep animation for 4 seconds
-            Handler().postDelayed({
-                // Stop animation (This will be after 3 seconds)
-                ui.swipeRefreshLayout.isRefreshing = false
-            }, 4000) // Delay in millis
+
         }
         fetchAllCourses()
     }
@@ -145,6 +140,9 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                 } else if (updateCourse.attempt_id == "" || updateCourse.progress != course?.progress) {
                                     info { "updateCourse is happening" }
                                     courseDao.update(course!!)
+                                }
+                                if (ui.swipeRefreshLayout.isRefreshing) {
+                                    ui.swipeRefreshLayout.isRefreshing = false
                                 }
                                 //fetch CourseInstructors
                                 myCourses.course?.instructors?.forEachIndexed { _, it ->

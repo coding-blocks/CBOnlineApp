@@ -15,6 +15,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.GravityCompat
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.Prefs
@@ -31,6 +32,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_home.*
 import kotlinx.android.synthetic.main.nav_header_home.view.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
@@ -99,10 +101,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun fetchToken(data: Uri) {
         val grantCode = data.getQueryParameter("code")
-        Clients.api.getToken(grantCode).enqueue(retrofitCallback { _, response ->
-            info { "token" + response!!.message() }
-
+        Clients.api.getToken(grantCode).enqueue(retrofitCallback { error, response ->
             if (response!!.isSuccessful) {
+
                 val jwt = response.body()?.asJsonObject?.get("jwt")?.asString!!
                 val rt = response.body()?.asJsonObject?.get("refresh_token")?.asString!!
                 prefs.SP_ACCESS_TOKEN_KEY = grantCode
@@ -111,6 +112,17 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Clients.authJwt = jwt
                 fetchUser()
                 Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
+            } else if (response.code() == 500) {
+                rootView.longSnackbar("You need to verify your email ", "Verify Now") {
+                    val builder = CustomTabsIntent.Builder()
+                            .enableUrlBarHiding()
+                            .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+                            .setShowTitle(true)
+                            .setSecondaryToolbarColor(resources.getColor(R.color.colorPrimary))
+                    val customTabsIntent = builder.build()
+                    customTabsIntent.launchUrl(this, Uri.parse("https://account.codingblocks.com/users/me"))
+                }.setActionTextColor(resources.getColor(R.color.colorPrimaryDark))
+
             }
 
         })

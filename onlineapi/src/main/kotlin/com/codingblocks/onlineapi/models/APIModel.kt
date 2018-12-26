@@ -533,17 +533,16 @@ class Announcement : BaseModel() {
 }
 
 @Type("progresses")
-@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator::class, property = "id")
 class Progress : BaseModel() {
     @JvmField
     @JsonProperty("status")
     var status: String? = null
 
-    @Relationship("run-attempts", resolve = true)
+    @Relationship("run-attempts")
     @JvmField
     var runs: MyRunAttempts? = null
 
-    @Relationship("contents", resolve = true)
+    @Relationship("contents")
     @JvmField
     var content: Contents? = null
 
