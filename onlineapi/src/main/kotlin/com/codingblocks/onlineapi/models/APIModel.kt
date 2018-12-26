@@ -361,7 +361,7 @@ class LectureContent : BaseModel() {
     @Relationship("code-challenge", resolve = true)
     @JvmField
     var code_challenge: ContentCodeChallenge? = null
-    //
+
     @Relationship("document", resolve = true)
     @JvmField
     var document: ContentDocumentType? = null

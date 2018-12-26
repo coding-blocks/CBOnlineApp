@@ -170,6 +170,23 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
 
                             }
                         }
+                        content.contentable == "qna" -> {
+                            downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_youtube_video))
+                            downloadBtn.background = null
+                            if (content.progress == "DONE") {
+                                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
+                            }
+                            ll.addView(inflatedView)
+                            inflatedView.setOnClickListener {
+                                if (content.progress == "UNDONE") {
+                                    thread { contentDao.updateProgressVideo(data.id, content.contentVideo.videoContentId, "DONE") }
+                                    updateProgress(content.id, content.attempt_id)
+                                }
+                                it.context.startActivity(it.context.intentFor<YoutubePlayerActivity>("videoUrl" to content.contentVideo.videoUrl).singleTop())
+
+                            }
+                        }
+
                     }
 
                     itemView.setOnClickListener {

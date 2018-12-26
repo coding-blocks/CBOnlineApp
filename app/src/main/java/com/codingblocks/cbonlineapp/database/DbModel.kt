@@ -43,7 +43,7 @@ data class Course(
         var slug: String,
         var coverImage: String,
         @Nullable
-        var attempt_id: String="",
+        var attempt_id: String = "",
         var updated_at: String?,
         var progress: Double = 0.0,
         @Nullable
@@ -124,29 +124,34 @@ data class CourseContent(
         var contentUpdatedAt: String,
         @Embedded
         @Nullable
-        var contentLecture: ContentLecture,
+        var contentLecture: ContentLecture = ContentLecture(),
         @Embedded
         @Nullable
-        var contentDocument: ContentDocument,
+        var contentDocument: ContentDocument = ContentDocument(),
         @Embedded
         @Nullable
-        var contentVideo: ContentVideo
-        //add rest of the embedded objects
+        var contentVideo: ContentVideo = ContentVideo(),
+        @Embedded
+        @Nullable
+        var contentQna: ContentQna = ContentQna(),
+        @Embedded
+        @Nullable
+        var contentCode: ContentCodeChallenge = ContentCodeChallenge()
 ) : BaseModel(uid, contentUpdatedAt)
 
 @Entity(
         primaryKeys = ["section_id", "content_id"],
         indices = [
-                Index(value = ["section_id"]),
-                Index(value = ["content_id"])
+            Index(value = ["section_id"]),
+            Index(value = ["content_id"])
         ],
         foreignKeys = [
-                ForeignKey(entity = CourseSection::class,
-                        parentColumns = ["id"],
-                        childColumns = ["section_id"]),
-                ForeignKey(entity = CourseContent::class,
-                        parentColumns = ["id"],
-                        childColumns = ["content_id"])
+            ForeignKey(entity = CourseSection::class,
+                    parentColumns = ["id"],
+                    childColumns = ["section_id"]),
+            ForeignKey(entity = CourseContent::class,
+                    parentColumns = ["id"],
+                    childColumns = ["content_id"])
         ])
 data class SectionWithContent(
 //        @Nullable @PrimaryKey(autoGenerate = true) val id: Int?,
@@ -203,37 +208,23 @@ data class ContentVideo(
 )
 
 
-@Entity(
-//        foreignKeys = [(ForeignKey(
-//                entity = CourseContent::class,
-//                parentColumns = ["id"],
-//                childColumns = ["content_id"],
-//                onDelete = ForeignKey.SET_NULL //or CASCADE
-//        ))]
-)
-data class ContentCodeChallanege(
-        var codeUid: String,
-        var name: String,
-        var hb_problem_id: Int,
-        var hb_contest_id: Int,
-        var content_id: String,
-        var updated_at: String
+@Entity()
+data class ContentCodeChallenge(
+        var codeUid: String = "",
+        var codeName: String = "",
+        var codeProblemId: Int = 0,
+        var codeContestId: Int = 0,
+        var codeContentId: String = "",
+        var codeUpdatedAt: String = ""
 )
 
-@Entity(
-//        foreignKeys = [(ForeignKey(
-//                entity = CourseContent::class,
-//                parentColumns = ["id"],
-//                childColumns = ["content_id"],
-//                onDelete = ForeignKey.SET_NULL //or CASCADE
-//        ))]
-)
+@Entity()
 data class ContentQna(
-        var qnaUid: String,
-        var name: String,
-        var q_id: Int,
-        var content_id: String,
-        var updated_at: String
+        var qnaUid: String = "",
+        var qnaName: String = "",
+        var qnaQid: Int = 0,
+        var qnaContentId: String = "",
+        var qnaUpdatedAt: String = ""
 )
 
 
