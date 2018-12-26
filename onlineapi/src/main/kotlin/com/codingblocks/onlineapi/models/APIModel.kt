@@ -553,25 +553,7 @@ class Quizzes : BaseModel() {
 
     @JvmField
     var description: String? = null
-
-    @Relationship("max-attempts")
-    @JvmField
-    var maxAttempts: Int? = null
-
-    @Relationship("start-date")
-    @JvmField
-    var startDate: String? = null
-
-    @Relationship("end-date")
-    @JvmField
-    var endDate: String? = null
-
-    @JvmField
-    var duration: String? = null
-
-    @JvmField
-    var image: String? = null
-
+    
     @Relationship("questions", resolve = true)
     @JvmField
     var questions: ArrayList<Question>? = null
@@ -585,9 +567,6 @@ class Question : BaseModel() {
 
     @JvmField
     var description: String? = null
-
-    @JvmField
-    var diffliculty: Int? = null
 
     @Relationship("choices", resolve = true)
     @JvmField

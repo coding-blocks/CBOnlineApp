@@ -15,7 +15,6 @@ import com.codingblocks.cbonlineapp.DownloadStarter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.activities.PdfActivity
-import com.codingblocks.cbonlineapp.activities.QuizActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.activities.YoutubePlayerActivity
 import com.codingblocks.cbonlineapp.database.*
@@ -128,15 +127,16 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                 downloadBtn.background = null
                                 if (content.progress == "DONE") {
                                     downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
+                                    downloadBtn.setOnClickListener {
+                                        updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)
+                                    }
                                 }
                                 inflatedView.setOnClickListener {
-                                    //TODO status to be updated on server as well
                                     if (content.progress == "UNDONE") {
-                                        thread { contentDao.updateProgressLecture(data.id, content.contentLecture.lectureContentId, "DONE") }
-                                        if (content.progressId == "")
-                                            setProgress(content.id, content.attempt_id)
+                                        if (content.progressId.isEmpty())
+                                            setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentLecture.lectureContentId)
                                         else
-                                            updateProgress(content.id, content.attempt_id, content.progressId)
+                                            updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
                                     }
                                     it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url).singleTop())
                                 }
@@ -148,11 +148,17 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             downloadBtn.background = null
                             if (content.progress == "DONE") {
                                 downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
+                                downloadBtn.setOnClickListener {
+                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentDocument.documentContentId)
+                                }
                             }
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
                                 if (content.progress == "UNDONE") {
-                                    setProgress(content.id, content.attempt_id)
+                                    if (content.progressId.isEmpty())
+                                        setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentDocument.documentContentId)
+                                    else
+                                        updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentDocument.documentContentId)
                                 }
                                 it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
 
@@ -163,12 +169,18 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             downloadBtn.background = null
                             if (content.progress == "DONE") {
                                 downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
+                                downloadBtn.setOnClickListener {
+                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentVideo.videoContentId)
+                                }
                             }
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
+                                info { "resp" + content.progress + content.progressId }
                                 if (content.progress == "UNDONE") {
-                                    thread { contentDao.updateProgressVideo(data.id, content.contentVideo.videoContentId, "DONE") }
-                                    setProgress(content.id, content.attempt_id)
+                                    if (content.progressId.isEmpty())
+                                        setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentVideo.videoContentId)
+                                    else
+                                        updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentVideo.videoContentId)
                                 }
                                 it.context.startActivity(it.context.intentFor<YoutubePlayerActivity>("videoUrl" to content.contentVideo.videoUrl).singleTop())
 
@@ -177,18 +189,23 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                         content.contentable == "qna" -> {
                             downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_quiz))
                             downloadBtn.background = null
-                            if (content.progress == "DONE") {
-                                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
-                            }
-                            ll.addView(inflatedView)
-                            inflatedView.setOnClickListener {
-                                if (content.progress == "UNDONE") {
-                                    thread { contentDao.updateProgressQna(data.id, content.contentQna.qnaContentId, "DONE") }
-                                    setProgress(content.id, content.attempt_id)
-                                }
-                                it.context.startActivity(it.context.intentFor<QuizActivity>("questionId" to content.contentQna.qnaQid).singleTop())
-
-                            }
+//                            if (content.progress == "DONE") {
+//                                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
+//                                downloadBtn.setOnClickListener {
+//                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)
+//                                }
+//                            }
+//                            ll.addView(inflatedView)
+//                            inflatedView.setOnClickListener {
+//                                if (content.progress == "UNDONE") {
+//                                    if (content.progressId.isEmpty())
+//                                        setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentQna.qnaContentId)
+//                                    else
+//                                        updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
+//                                }
+//                                it.context.startActivity(it.context.intentFor<QuizActivity>("questionId" to content.contentQna.qnaQid).singleTop())
+//
+//                            }
                         }
 
                     }
@@ -224,7 +241,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
         }
     }
 
-    fun setProgress(id: String, attempt_id: String) {
+    fun setProgress(id: String, attempt_id: String, contentable: String, sectionId: String, contentId: String) {
         val p = Progress()
         val runAttempts = MyRunAttempts()
         val contents = Contents()
@@ -234,22 +251,71 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
         p.runs = runAttempts
         p.content = contents
         Clients.onlineV2JsonApi.setProgress(p).enqueue(retrofitCallback { throwable, response ->
-            info { "resp" + response?.isSuccessful }
+            info { "resp" + response?.code() }
+
+            if (response?.isSuccessful!!) {
+
+                val progressId = response.body()?.id
+                when (contentable) {
+                    "lecture" -> thread {
+                        contentDao.updateProgressLecture(sectionId, contentId, "DONE", progressId
+                                ?: "")
+                    }
+
+                    "document" ->
+                        thread {
+                            contentDao.updateProgressDocuemnt(sectionId, contentId, "DONE", progressId
+                                    ?: "")
+                        }
+                    "video" ->
+                        thread {
+                            contentDao.updateProgressVideo(sectionId, contentId, "DONE", progressId
+                                    ?: "")
+                        }
+                    "qna" ->
+                        thread {
+                            contentDao.updateProgressQna(sectionId, contentId, "DONE", progressId
+                                    ?: "")
+                        }
+                }
+
+            }
         })
     }
 
-    private fun updateProgress(id: String, attempt_id: String, progressId: String) {
+    private fun updateProgress(id: String, attempt_id: String, progressId: String, status: String, contentable: String, sectionId: String, contentId: String) {
         val p = Progress()
         val runAttempts = MyRunAttempts()
         val contents = Contents()
         runAttempts.id = attempt_id
         contents.id = id
         p.id = progressId
-        p.status = "DONE"
+        p.status = status
         p.runs = runAttempts
         p.content = contents
         Clients.onlineV2JsonApi.updateProgress(progressId, p).enqueue(retrofitCallback { throwable, response ->
-            info { "resp" + response?.isSuccessful }
+            if (response?.isSuccessful!!) {
+                when (contentable) {
+                    "lecture" -> thread {
+                        contentDao.updateProgressLecture(sectionId, contentId, status, progressId)
+                    }
+
+                    "document" ->
+                        thread {
+                            contentDao.updateProgressDocuemnt(sectionId, contentId, status, progressId)
+                        }
+                    "video" ->
+                        thread {
+                            contentDao.updateProgressVideo(sectionId, contentId, status, progressId)
+                        }
+                    "qna" ->
+                        thread {
+                            contentDao.updateProgressQna(sectionId, contentId, status, progressId)
+                        }
+                }
+
+
+            }
         })
     }
 }
