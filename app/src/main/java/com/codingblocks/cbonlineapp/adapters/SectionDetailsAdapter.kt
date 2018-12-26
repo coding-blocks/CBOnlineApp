@@ -132,7 +132,10 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                     //TODO status to be updated on server as well
                                     if (content.progress == "UNDONE") {
                                         thread { contentDao.updateProgressLecture(data.id, content.contentLecture.lectureContentId, "DONE") }
-                                        updateProgress(content.id, content.attempt_id)
+                                        if (content.progressId == "")
+                                            setProgress(content.id, content.attempt_id)
+                                        else
+                                            updateProgress(content.id, content.attempt_id, content.progressId)
                                     }
                                     it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url).singleTop())
                                 }
@@ -148,7 +151,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
                                 if (content.progress == "UNDONE") {
-                                    updateProgress(content.id, content.attempt_id)
+                                    setProgress(content.id, content.attempt_id)
                                 }
                                 it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
 
@@ -164,7 +167,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             inflatedView.setOnClickListener {
                                 if (content.progress == "UNDONE") {
                                     thread { contentDao.updateProgressVideo(data.id, content.contentVideo.videoContentId, "DONE") }
-                                    updateProgress(content.id, content.attempt_id)
+                                    setProgress(content.id, content.attempt_id)
                                 }
                                 it.context.startActivity(it.context.intentFor<YoutubePlayerActivity>("videoUrl" to content.contentVideo.videoUrl).singleTop())
 
@@ -180,7 +183,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             inflatedView.setOnClickListener {
                                 if (content.progress == "UNDONE") {
                                     thread { contentDao.updateProgressVideo(data.id, content.contentVideo.videoContentId, "DONE") }
-                                    updateProgress(content.id, content.attempt_id)
+                                    setProgress(content.id, content.attempt_id)
                                 }
                                 it.context.startActivity(it.context.intentFor<YoutubePlayerActivity>("videoUrl" to content.contentVideo.videoUrl).singleTop())
 
@@ -201,6 +204,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
         }
     }
 
+
     fun showOrHide(ll: View, itemView: View) {
         if (ll.visibility == View.GONE) {
             ll.visibility = View.VISIBLE
@@ -219,7 +223,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
         }
     }
 
-    fun updateProgress(id: String, attempt_id: String) {
+    fun setProgress(id: String, attempt_id: String) {
         val p = Progress()
         val runAttempts = MyRunAttempts()
         val contents = Contents()
@@ -229,7 +233,22 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
         p.runs = runAttempts
         p.content = contents
         Clients.onlineV2JsonApi.setProgress(p).enqueue(retrofitCallback { throwable, response ->
-            info { "resp" + response?.code().toString() }
+            info { "resp" + response?.isSuccessful }
+        })
+    }
+
+    private fun updateProgress(id: String, attempt_id: String, progressId: String) {
+        val p = Progress()
+        val runAttempts = MyRunAttempts()
+        val contents = Contents()
+        runAttempts.id = attempt_id
+        contents.id = id
+        p.id = progressId
+        p.status = "DONE"
+        p.runs = runAttempts
+        p.content = contents
+        Clients.onlineV2JsonApi.updateProgress(progressId, p).enqueue(retrofitCallback { throwable, response ->
+            info { "resp" + response?.isSuccessful }
         })
     }
 }

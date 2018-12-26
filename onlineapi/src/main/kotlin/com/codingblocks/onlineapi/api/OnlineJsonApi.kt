@@ -59,7 +59,7 @@ interface OnlineJsonApi {
     fun setProgress(@Body params: Progress): Call<ContentProgress>
 
     @PATCH("progresses/{id}")
-    fun updateProgress(@Path("id") id: String,@Body params: Progress): Call<Progress>
+    fun updateProgress(@Path("id") id: String,@Body params: Progress): Call<ContentProgress>
 
 
 }

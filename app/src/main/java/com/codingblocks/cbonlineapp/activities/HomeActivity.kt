@@ -15,7 +15,6 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.GravityCompat
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.Prefs
@@ -24,6 +23,7 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
+import com.codingblocks.cbonlineapp.utils.Components
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
@@ -32,7 +32,6 @@ import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_home.*
 import kotlinx.android.synthetic.main.nav_header_home.view.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
@@ -113,15 +112,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 fetchUser()
                 Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
             } else if (response.code() == 500) {
-                rootView.longSnackbar("You need to verify your email ", "Verify Now") {
-                    val builder = CustomTabsIntent.Builder()
-                            .enableUrlBarHiding()
-                            .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
-                            .setShowTitle(true)
-                            .setSecondaryToolbarColor(resources.getColor(R.color.colorPrimary))
-                    val customTabsIntent = builder.build()
-                    customTabsIntent.launchUrl(this, Uri.parse("https://account.codingblocks.com/users/me"))
-                }.setActionTextColor(resources.getColor(R.color.colorPrimaryDark))
+                Components.showconfirmation(this, "verify")
 
             }
 

@@ -538,11 +538,11 @@ class Progress : BaseModel() {
     @JsonProperty("status")
     var status: String? = null
 
-    @Relationship("run-attempts")
+    @Relationship("run-attempt")
     @JvmField
     var runs: MyRunAttempts? = null
 
-    @Relationship("contents")
+    @Relationship("content")
     @JvmField
     var content: Contents? = null
 

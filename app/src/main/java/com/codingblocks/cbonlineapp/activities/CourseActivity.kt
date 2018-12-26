@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ProgressBar
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.lifecycle.Observer
@@ -16,6 +15,7 @@ import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.Instructor
+import com.codingblocks.cbonlineapp.utils.Components
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.cbonlineapp.utils.loadSvg
 import com.codingblocks.onlineapi.Clients
@@ -27,13 +27,10 @@ import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_course.*
-import kotlinx.android.synthetic.main.custom_dialog.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
 
 
@@ -114,7 +111,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     if (course.runs != null)
                         Clients.api.enrollTrial(course.runs!![0].id!!).enqueue(retrofitCallback { throwable, response ->
                             if (response?.isSuccessful!!) {
-                                showconfirmation()
+                                 Components.showconfirmation(this,"trial")
                             }
                         })
                 }
@@ -200,18 +197,5 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
-    private fun showconfirmation() {
-        val confirmDialog = AlertDialog.Builder(this).create()
-        val updateView = layoutInflater.inflate(R.layout.custom_dialog, null)
-        updateView.okBtn.setOnClickListener {
-            startActivity(intentFor<HomeActivity>("course" to "mycourses").singleTop())
-        }
-        updateView.cancelBtn.setOnClickListener {
-            confirmDialog.dismiss()
-        }
-        confirmDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
-        confirmDialog.setView(updateView)
-        confirmDialog.setCancelable(false)
-        confirmDialog.show()
-    }
+
 }
