@@ -111,8 +111,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Clients.authJwt = jwt
                 fetchUser()
                 Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
-            } else if (response.code() == 500) {
-                info {  }
+            } else if (response.code() == 500 && prefs.SP_ACCESS_TOKEN_KEY == "access_token") {
                 Components.showconfirmation(this, "verify")
             }
 

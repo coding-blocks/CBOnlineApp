@@ -127,9 +127,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                 downloadBtn.background = null
                                 if (content.progress == "DONE") {
                                     downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
-                                    downloadBtn.setOnClickListener {
-                                        updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)
-                                    }
+//                                    downloadBtn.setOnClickListener {
+//                                        updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)
+//                                    }
                                 }
                                 inflatedView.setOnClickListener {
                                     if (content.progress == "UNDONE") {
@@ -148,9 +148,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             downloadBtn.background = null
                             if (content.progress == "DONE") {
                                 downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
-                                downloadBtn.setOnClickListener {
-                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentDocument.documentContentId)
-                                }
+//                                downloadBtn.setOnClickListener {
+//                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentDocument.documentContentId)
+//                                }
                             }
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
@@ -169,9 +169,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             downloadBtn.background = null
                             if (content.progress == "DONE") {
                                 downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
-                                downloadBtn.setOnClickListener {
-                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentVideo.videoContentId)
-                                }
+//                                downloadBtn.setOnClickListener {
+//                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentVideo.videoContentId)
+//                                }
                             }
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
