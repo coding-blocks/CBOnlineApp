@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.DownloadStarter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.activities.PdfActivity
+import com.codingblocks.cbonlineapp.activities.QuizActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.activities.YoutubePlayerActivity
 import com.codingblocks.cbonlineapp.database.*
@@ -174,7 +175,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             }
                         }
                         content.contentable == "qna" -> {
-                            downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_youtube_video))
+                            downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_quiz))
                             downloadBtn.background = null
                             if (content.progress == "DONE") {
                                 downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
@@ -182,10 +183,10 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             ll.addView(inflatedView)
                             inflatedView.setOnClickListener {
                                 if (content.progress == "UNDONE") {
-                                    thread { contentDao.updateProgressVideo(data.id, content.contentVideo.videoContentId, "DONE") }
+                                    thread { contentDao.updateProgressQna(data.id, content.contentQna.qnaContentId, "DONE") }
                                     setProgress(content.id, content.attempt_id)
                                 }
-                                it.context.startActivity(it.context.intentFor<YoutubePlayerActivity>("videoUrl" to content.contentVideo.videoUrl).singleTop())
+                                it.context.startActivity(it.context.intentFor<QuizActivity>("questionId" to content.contentQna.qnaQid).singleTop())
 
                             }
                         }

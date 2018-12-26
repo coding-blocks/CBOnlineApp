@@ -2,8 +2,7 @@ package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Progress
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -44,6 +43,21 @@ class OnlineJsonApiAuthenticatedTest {
         val progress = api.updateProgress("316797",p).execute().body()
         progress?.let {
             assertEquals(1, 1)
+        }
+    }
+
+    @Test
+    fun `GET Quiz`() {
+        val quizzes = api.getQuizById("3").execute().body()
+        quizzes?.let {
+            assertNotNull(it.title)
+        }
+    }
+    @Test
+    fun `GET Question`() {
+        val quizzes = api.getQuestionById("22").execute().body()
+        quizzes?.let {
+            assertNotNull(it.title)
         }
     }
 }

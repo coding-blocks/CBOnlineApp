@@ -43,7 +43,11 @@ object Clients {
             ContentCodeChallenge::class.java,
             ContentQna::class.java,
             Announcement::class.java,
-            Progress::class.java
+            Progress::class.java,
+            Quizzes::class.java,
+            Question::class.java,
+            Choice::class.java
+
 
     )
     private val relationshipResolver = RelationshipResolver {

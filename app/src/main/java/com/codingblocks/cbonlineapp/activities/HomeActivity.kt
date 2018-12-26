@@ -112,8 +112,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 fetchUser()
                 Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
             } else if (response.code() == 500) {
+                info { response.body().toString() }
                 Components.showconfirmation(this, "verify")
-
             }
 
         })

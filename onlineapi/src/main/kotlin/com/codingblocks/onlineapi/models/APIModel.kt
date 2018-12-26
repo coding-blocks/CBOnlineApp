@@ -1,9 +1,7 @@
 package com.codingblocks.onlineapi.models
 
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
@@ -546,6 +544,63 @@ class Progress : BaseModel() {
     @JvmField
     var content: Contents? = null
 
+}
+
+@Type("quizzes")
+class Quizzes : BaseModel() {
+    @JvmField
+    var title: String? = null
+
+    @JvmField
+    var description: String? = null
+
+    @Relationship("max-attempts")
+    @JvmField
+    var maxAttempts: Int? = null
+
+    @Relationship("start-date")
+    @JvmField
+    var startDate: String? = null
+
+    @Relationship("end-date")
+    @JvmField
+    var endDate: String? = null
+
+    @JvmField
+    var duration: String? = null
+
+    @JvmField
+    var image: String? = null
+
+    @Relationship("questions", resolve = true)
+    @JvmField
+    var questions: ArrayList<Question>? = null
+
+}
+
+@Type("questions")
+class Question : BaseModel() {
+    @JvmField
+    var title: String? = null
+
+    @JvmField
+    var description: String? = null
+
+    @JvmField
+    var diffliculty: Int? = null
+
+    @Relationship("choices", resolve = true)
+    @JvmField
+    var choices: ArrayList<Choice>? = null
+}
+
+@Type("choices")
+class Choice : BaseModel() {
+    @JvmField
+    var title: String? = null
+
+    @JvmField
+    var description: String? = null
 }
 
 

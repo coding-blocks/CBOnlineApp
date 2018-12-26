@@ -55,6 +55,14 @@ interface OnlineJsonApi {
     fun enrolledCourseById(
             @Path("runid") id: String): Call<MyRunAttempt>
 
+    @GET("quizzes/{quizid}")
+    fun getQuizById(
+            @Path("quizid") id: String): Call<Quizzes>
+
+    @GET("questions/{questionid}")
+    fun getQuestionById(
+            @Path("questionid") id: String): Call<Question>
+
     @POST("progresses")
     fun setProgress(@Body params: Progress): Call<ContentProgress>
 
