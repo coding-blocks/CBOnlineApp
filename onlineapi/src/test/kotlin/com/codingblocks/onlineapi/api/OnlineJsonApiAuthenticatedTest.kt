@@ -12,7 +12,7 @@ class OnlineJsonApiAuthenticatedTest {
 
     @Before
     fun `set JWT` () {
-        Clients.authJwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc5NzUsImZpcnN0bmFtZSI6IlB1bGtpdCIsImxhc3RuYW1lIjoiQWdnYXJ3YWwiLCJ1c2VybmFtZSI6ImFnZ2Fyd2FscHVsa2l0NTk2LWciLCJlbWFpbCI6ImFnZ2Fyd2FscHVsa2l0NTk2QGdtYWlsLmNvbSIsIm1vYmlsZSI6Iis5MS05NTgyMDU0NjY0Iiwib25lYXV0aF9pZCI6IjEyMDM1IiwibGFzdF9yZWFkX25vdGlmaWNhdGlvbiI6IjAiLCJwaG90byI6Imh0dHBzOi8vZ3JhcGguZmFjZWJvb2suY29tLzE3ODMzODk3MzUwMjg0NjAvcGljdHVyZT90eXBlPWxhcmdlIiwiY29sbGVnZSI6IkFtaXR5IFNjaG9vbCBPZiBFbmdpbmVlcmluZyAmIFRlY2hub2xvZ3kgKE5vaWRhKSIsInJvbGVJZCI6MiwiY3JlYXRlZEF0IjoiMjAxOC0wOS0yN1QxMzoxMDo1OS4zOTZaIiwidXBkYXRlZEF0IjoiMjAxOC0xMi0yOFQwOTo0NDozNy4yNzFaIiwicm9sZSI6eyJpZCI6MiwibmFtZSI6IlN0dWRlbnQiLCJjcmVhdGVkQXQiOiIyMDE3LTA5LTA3VDEwOjU4OjE5Ljk5M1oiLCJ1cGRhdGVkQXQiOiIyMDE3LTA5LTA3VDEwOjU4OjE5Ljk5M1oifSwiY2xpZW50SWQiOiJhMDlhYTgwMy0xNWVjLTQ1MzgtOTY1NC0zYTY5ZTg4MzkxZTYiLCJjbGllbnQiOiJhbmRyb2lkIiwiaWF0IjoxNTQ1OTkwMjc3LCJleHAiOjE1NTEzOTAyNzd9.RYMUV_wa81CLtQl0_0vJyClD4-lGNdELDkPQPG0UH2NCrWNL0N1pdfEql1oOfVuTVk9XaLeAUGDMjRTBMsptjjPOdXqG3jgN3gNvSr328R9Mfixb8dcGDyCsaGmC-4yUbpUtAGwzUs6nHWfHJeFe6QvYBfIKs8gwAqrds5fZGursZaaE3EM0Ung-ZZRX3OAAQt4p8EdNHtlAGTB8bguplP32Jp-0wQsMIlF-mrCJD5Xc0_rcIUwGqjdrQ_wZ6yLwnJk9wVmm9_GA6M3VOqRSGY0zkg2GNzKqULj75LQyxu7ydk0-naLRIWVuhNbhW26kPzFv9owg6IlWS11q0ODCFA"
+        Clients.authJwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc5NzUsImZpcnN0bmFtZSI6IlB1bGtpdCIsImxhc3RuYW1lIjoiQWdnYXJ3YWwiLCJ1c2VybmFtZSI6ImFnZ2Fyd2FscHVsa2l0NTk2LWciLCJlbWFpbCI6ImFnZ2Fyd2FscHVsa2l0NTk2QGdtYWlsLmNvbSIsIm1vYmlsZSI6Iis5MS05NTgyMDU0NjY0Iiwib25lYXV0aF9pZCI6IjEyMDM1IiwibGFzdF9yZWFkX25vdGlmaWNhdGlvbiI6IjAiLCJwaG90byI6Imh0dHBzOi8vZ3JhcGguZmFjZWJvb2suY29tLzE3ODMzODk3MzUwMjg0NjAvcGljdHVyZT90eXBlPWxhcmdlIiwiY29sbGVnZSI6IkFtaXR5IFNjaG9vbCBPZiBFbmdpbmVlcmluZyAmIFRlY2hub2xvZ3kgKE5vaWRhKSIsInJvbGVJZCI6MiwiY3JlYXRlZEF0IjoiMjAxOC0wOS0yN1QxMzoxMDo1OS4zOTZaIiwidXBkYXRlZEF0IjoiMjAxOC0xMi0yOFQxMDowNzozOS4wNDNaIiwiY2xpZW50SWQiOiJmNWFiMDFjMC03YTAwLTQ5MWMtYjI5Ni0yN2EyN2EwYjYxMDYiLCJjbGllbnQiOiJ3ZWIiLCJpc1Rva2VuRm9yQWRtaW4iOmZhbHNlLCJpYXQiOjE1NDU5OTU5OTIsImV4cCI6MTU0NTk5NzQ5Mn0.OJui9f8_adxzFnfhYKyaX_HTicym7TUEntGn0p_LOGRAzQtLKhJJEmGvXSEbI1mqSVGPUqV553xC3XHej0H1-wZTJG8x0HqWqD_tdaHxReyt9MAdFszTXflCKzwYLQvbeD2JASleFfQ2qKkIDxuDX4BvES_ChzJdcKcrPHl4yelgTW3RxfiLU17J-c2hr_RglaHWIDfu0C8rQBN9iePtHgO41Is_qzpYvoOXOmZzy8fELl23NyxVhXFXfs1u0EYz5NBaKOvW_KuaE1fNnTTg_ctEjpAS6mfBtDNulZiPlwkwRA9eTVjkGHWhFD84WbxKveO80eMSge8M6wno8rSCaA"
     }
 
     @Test
@@ -55,9 +55,16 @@ class OnlineJsonApiAuthenticatedTest {
     }
     @Test
     fun `GET Question`() {
-        val quizzes = api.getQuestionById("22").execute().body()
-        quizzes?.let {
+        val questions = api.getQuestionById("22").execute().body()
+        questions?.let {
             assertNotNull(it.title)
+        }
+    }
+    @Test
+    fun `GET Quiz Attempt`() {
+        val quizAttempt = api.getQuizAttempt("3").execute().body()
+        quizAttempt?.let {
+            assertNotNull(it.size)
         }
     }
 }

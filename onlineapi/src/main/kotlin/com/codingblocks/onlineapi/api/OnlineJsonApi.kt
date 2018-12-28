@@ -1,7 +1,6 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.*
-import com.google.gson.JsonObject
 import kotlinx.coroutines.Deferred
 import retrofit2.Call
 import retrofit2.Response
@@ -63,11 +62,16 @@ interface OnlineJsonApi {
     fun getQuestionById(
             @Path("questionid") id: String): Call<Question>
 
+    @GET("quiz_attempts")
+    fun getQuizAttempt(
+            @Query("filter[qnaId]") qnaId: String,
+            @Query("sort") sort: String = "-createdAt"): Call<List<QuizAttempt>>
+
     @POST("progresses")
     fun setProgress(@Body params: Progress): Call<ContentProgress>
 
     @PATCH("progresses/{id}")
-    fun updateProgress(@Path("id") id: String,@Body params: Progress): Call<ContentProgress>
+    fun updateProgress(@Path("id") id: String, @Body params: Progress): Call<ContentProgress>
 
 
 }

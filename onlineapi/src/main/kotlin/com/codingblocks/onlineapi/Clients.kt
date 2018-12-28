@@ -46,7 +46,8 @@ object Clients {
             Progress::class.java,
             Quizzes::class.java,
             Question::class.java,
-            Choice::class.java
+            Choice::class.java,
+            QuizAttempt::class.java
 
 
     )

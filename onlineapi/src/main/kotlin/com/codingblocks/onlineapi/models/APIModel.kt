@@ -553,7 +553,7 @@ class Quizzes : BaseModel() {
 
     @JvmField
     var description: String? = null
-    
+
     @Relationship("questions", resolve = true)
     @JvmField
     var questions: ArrayList<Question>? = null
@@ -580,6 +580,54 @@ class Choice : BaseModel() {
 
     @JvmField
     var description: String? = null
+}
+
+@Type("quiz_attempts")
+class QuizAttempt : BaseModel() {
+    @JvmField
+    var status: String? = null
+
+    @JvmField
+    var result: QuizResult? = null
+
+    @JvmField
+    var submission: ArrayList<QuizSubmission>? = null
+
+}
+
+class QuizSubmission : BaseModel() {
+
+    @JvmField
+    @JsonProperty("marked-choices")
+    var markedChoices: Array<String>? = null
+}
+
+
+class QuizResult : BaseModel() {
+    @JvmField
+    var type: String? = null
+    @JvmField
+    var score: Int? = null
+
+    @JvmField
+    var questions: ArrayList<QuizQuestion>? = null
+
+}
+
+class QuizQuestion : BaseModel() {
+    @JvmField
+    var score: Int? = null
+
+    @JvmField
+    var answers: Array<String>? = null
+
+    @JvmField
+    var correctlyAnswered: Array<Choice>? = null
+
+    @JvmField
+    var incorrectlyAnswered: Array<Choice>? = null
+
+
 }
 
 

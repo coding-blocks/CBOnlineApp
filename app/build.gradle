@@ -41,7 +41,7 @@ ext {
             'sdk25', 'appcompat-v7', 'support-v4', 'recyclerview-v7', 'constraint-layout', 'cardview-v7',
             // coroutines
             'sdk25-coroutines', 'appcompat-v7-coroutines', 'coroutines',
-             'design',
+            'design',
             // 'percent',
     ]
 }

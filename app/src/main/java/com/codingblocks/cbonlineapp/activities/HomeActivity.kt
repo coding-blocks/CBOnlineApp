@@ -124,8 +124,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Clients.api.getMe().enqueue(retrofitCallback { t, resp ->
                 resp?.body()?.let { it ->
                     if (resp.isSuccessful) {
-                        val jSONObject = it.getAsJsonObject("data").getAsJsonObject("attributes")
-                        prefs.SP_USER_IMAGE = jSONObject.get("photo").asString
+                        try {
+                            val jSONObject = it.getAsJsonObject("data").getAsJsonObject("attributes")
+                            prefs.SP_USER_IMAGE = jSONObject.get("photo").asString
+                        } catch (e: Exception) {
+
+                        }
                         setUser()
                     } else {
                         nav_view.getHeaderView(0).login_button.setOnClickListener {
