@@ -26,7 +26,7 @@ interface OnlineRestApi {
     @GET("v2/aws/cookie")
     fun getVideoDownloadKey(@Query("url") videoUrl: String): Call<JsonObject>
 
-    @POST("jwt/login")
+    @POST("jwt/login?android=true")
     @FormUrlEncoded
     fun getToken(@Field("code") code: String): Call<JsonObject>
 
