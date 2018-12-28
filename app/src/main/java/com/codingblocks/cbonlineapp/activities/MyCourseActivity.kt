@@ -100,6 +100,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                 }
 
                 thread {
+
                     runDao.insert(run!!)
                     //Course Sections List
                     for (section in it.run?.sections!!) {
@@ -166,18 +167,36 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                             } else {
                                 status = "UNDONE"
                             }
-                            contentDao.insert(CourseContent(
-                                    content.id ?: "", status, progressId,
-                                    content.title ?: "", content.duration!!,
-                                    content.contentable ?: "", content.section_content?.order!!,
-                                    content.section_content?.sectionId ?: "", attemptId,
-                                    content.section_content?.updatedAt ?: "",
-                                    contentLecture,
-                                    contentDocument,
-                                    contentVideo,
-                                    contentQna,
-                                    contentCodeChallenge))
-                            insertSectionWithContent(section.id ?: "", content.id ?: "")
+                            val updateContent = contentDao.getContentWithId(attemptId, content.id
+                                    ?: "")
+                            if (updateContent == null) {
+                                contentDao.insert(CourseContent(
+                                        content.id ?: "", status, progressId,
+                                        content.title ?: "", content.duration!!,
+                                        content.contentable ?: "", content.section_content?.order!!,
+                                        content.section_content?.sectionId ?: "", attemptId,
+                                        content.section_content?.updatedAt ?: "",
+                                        contentLecture,
+                                        contentDocument,
+                                        contentVideo,
+                                        contentQna,
+                                        contentCodeChallenge))
+                                insertSectionWithContent(section.id ?: "", content.id ?: "")
+                            } else if (updateContent.progress != status || updateContent.title != content.title) {
+                                info { "update is happening" }
+                                contentDao.update(CourseContent(
+                                        content.id ?: "", status, progressId,
+                                        content.title ?: "", content.duration!!,
+                                        content.contentable ?: "", content.section_content?.order!!,
+                                        content.section_content?.sectionId ?: "", attemptId,
+                                        content.section_content?.updatedAt ?: "",
+                                        contentLecture,
+                                        contentDocument,
+                                        contentVideo,
+                                        contentQna,
+                                        contentCodeChallenge))
+                            }
+
 
                         }
 

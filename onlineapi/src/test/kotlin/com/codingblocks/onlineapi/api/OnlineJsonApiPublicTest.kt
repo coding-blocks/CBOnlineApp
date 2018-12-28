@@ -36,7 +36,7 @@ class OnlineJsonApiPublicTest {
     fun `GET instructors?include=courses`() {
         val courses = api.instructors(arrayOf("courses")).execute().body()
         courses?.let {
-            assertEquals(15, it.size)
+            assertEquals(16, it.size)
         }
     }
 
