@@ -584,6 +584,11 @@ class Choice : BaseModel() {
 
 @Type("quiz_attempts")
 class QuizAttempt : BaseModel() {
+
+    @JsonProperty("created-at")
+    @JvmField
+    var createdAt:String?=null
+
     @JvmField
     var status: String? = null
 
