@@ -294,27 +294,29 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
         p.runs = runAttempts
         p.content = contents
         Clients.onlineV2JsonApi.updateProgress(progressId, p).enqueue(retrofitCallback { throwable, response ->
-            if (response?.isSuccessful!!) {
-                when (contentable) {
-                    "lecture" -> thread {
-                        contentDao.updateProgressLecture(sectionId, contentId, status, progressId)
+            if (response != null) {
+                if (response.isSuccessful) {
+                    when (contentable) {
+                        "lecture" -> thread {
+                            contentDao.updateProgressLecture(sectionId, contentId, status, progressId)
+                        }
+
+                        "document" ->
+                            thread {
+                                contentDao.updateProgressDocuemnt(sectionId, contentId, status, progressId)
+                            }
+                        "video" ->
+                            thread {
+                                contentDao.updateProgressVideo(sectionId, contentId, status, progressId)
+                            }
+                        "qna" ->
+                            thread {
+                                contentDao.updateProgressQna(sectionId, contentId, status, progressId)
+                            }
                     }
 
-                    "document" ->
-                        thread {
-                            contentDao.updateProgressDocuemnt(sectionId, contentId, status, progressId)
-                        }
-                    "video" ->
-                        thread {
-                            contentDao.updateProgressVideo(sectionId, contentId, status, progressId)
-                        }
-                    "qna" ->
-                        thread {
-                            contentDao.updateProgressQna(sectionId, contentId, status, progressId)
-                        }
+
                 }
-
-
             }
         })
     }
