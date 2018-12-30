@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_weight="4"
-    android:padding="10dp"
     android:orientation="horizontal">
 
     <TextView
@@ -13,7 +12,7 @@
         android:layout_gravity="center"
         android:layout_weight="0.8"
         android:gravity="center"
-        android:text="1"
+        android:text="S.No."
         android:textColor="@color/black" />
 
     <TextView
@@ -22,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="1.4"
-        android:text="Dec 28th 2018 04:39 pm"
+        android:text="Attempt Time"
         android:textColor="@color/black" />
 
     <TextView
@@ -31,9 +30,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="0.8"
-        android:textColor="@color/green"
         android:gravity="center"
-        android:text="100" />
+        android:text="Score"
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/statusTv"
@@ -42,6 +41,6 @@
         android:layout_gravity="center"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="Resume"
-        android:textColor="@color/salmon" />
+        android:text="Action"
+        android:textColor="@color/black" />
 </LinearLayout>

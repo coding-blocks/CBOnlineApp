@@ -117,7 +117,9 @@
         <activity
             android:name=".activities.AboutActivity"
             android:theme="@style/myTheme" />
-        <activity android:name=".activities.QuizActivity"></activity>
+        <activity
+            android:name=".activities.QuizActivity"
+            android:theme="@style/myTheme" />
     </application>
 
 </manifest>

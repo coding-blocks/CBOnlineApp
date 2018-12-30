@@ -595,8 +595,8 @@ class QuizAttempt : BaseModel() {
     @JvmField
     var result: QuizResult? = null
 
-    @JvmField
-    var submission: ArrayList<QuizSubmission>? = null
+//    @JvmField
+//    var submission: ArrayList<QuizSubmission>? = null
 
 }
 
