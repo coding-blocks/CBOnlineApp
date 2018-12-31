@@ -11,6 +11,8 @@ import kotlinx.android.synthetic.main.activity_quiz.*
 class QuizActivity : AppCompatActivity() {
 
     private lateinit var quizId: String
+    private lateinit var attemptId: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,10 +22,11 @@ class QuizActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         intent.getStringExtra("quizId").let {
+            attemptId = intent.getStringExtra("attemptId")
             quizId = it
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.framelayout_quiz, AboutQuizFragment.newInstance(it))
+                    .replace(R.id.framelayout_quiz, AboutQuizFragment.newInstance(it,attemptId))
                     .commit()
         }
     }

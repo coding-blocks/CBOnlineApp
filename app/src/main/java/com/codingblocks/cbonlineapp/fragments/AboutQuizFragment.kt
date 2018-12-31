@@ -11,11 +11,16 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.QuizAttemptListAdapter
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttempt
+import com.codingblocks.onlineapi.models.QuizAttemptModel
+import com.codingblocks.onlineapi.models.QuizRunAttempt
+import com.codingblocks.onlineapi.models.Quizqnas
 import kotlinx.android.synthetic.main.fragment_about_quiz.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.support.v4.toast
 
 
 private const val ARG__QUIZ_ID = "quiz_id"
+private const val ARG__ATTEMPT_ID = "attempt_id"
 
 
 class AboutQuizFragment : Fragment(), AnkoLogger {
@@ -23,6 +28,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
     private lateinit var quizAttemptListAdapter: QuizAttemptListAdapter
     private var attemptList = ArrayList<QuizAttempt>()
     private lateinit var quizId: String
+    private lateinit var attemptId: String
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -37,14 +43,16 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         super.onActivityCreated(savedInstanceState)
         arguments?.let {
             quizId = it.getString(ARG__QUIZ_ID)!!
+            attemptId = it.getString(ARG__ATTEMPT_ID)!!
+
         }
         val header = layoutInflater.inflate(R.layout.quiz_attempt_header, quizAttemptLv, false) as ViewGroup
         quizAttemptLv.addHeaderView(header, null, false)
         quizAttemptLv.adapter = quizAttemptListAdapter
         Clients.onlineV2JsonApi.getQuizById(quizId).enqueue(retrofitCallback { throwable, response ->
             response?.body()?.let { quiz ->
-                quizTitle.text = quiz.description
-                quizDescription.text = quiz.title
+                quizTitle.text = quiz.title
+                quizDescription.text = quiz.description
                 quizQuestion.text = "${quiz.questions?.size} Question"
                 quizMarks.text = "${quiz.questions?.size} Marks"
                 quizType.text = "MCQ"
@@ -59,20 +67,48 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
             }
 
         })
+
+        startQuiz.setOnClickListener {
+
+            val quizAttempt = QuizAttemptModel()
+            val runAttempts = QuizRunAttempt()
+            runAttempts.id = attemptId
+            val qna = Quizqnas()
+            qna.id = quizId
+            quizAttempt.qna = qna
+            quizAttempt.runAttempt = runAttempts
+
+            Clients.onlineV2JsonApi.createQuizAttempt(quizAttempt).enqueue(retrofitCallback { throwable, response ->
+                response?.body().let {
+                    val fragmentManager = fragmentManager!!
+                    val fragmentTransaction = fragmentManager.beginTransaction()
+                    fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//            fragmentManager.addOnBackStackChangedListener(this)
+                    fragmentTransaction.replace(R.id.framelayout_quiz,
+                            QuizFragment.newInstance(quizId,
+                                    attemptId,
+                                    it?.id
+                                            ?: ""), "quiz")
+//            fragmentTransaction.addToBackStack("quiz")
+                    fragmentTransaction.commit()
+                }
+                throwable?.localizedMessage.let {
+                    if (it != null)
+                        toast("Can't Create Quiz.Try Again !!!$it")
+                }
+            })
+
+        }
     }
-
-    private fun fetchQuizAttempts() {
-
-    }
-
 
     companion object {
-
         @JvmStatic
-        fun newInstance(param1: String) =
+        fun newInstance(quizId: String, attemptId: String) =
                 AboutQuizFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG__QUIZ_ID, param1)
+                        putString(ARG__QUIZ_ID, quizId)
+                        putString(ARG__ATTEMPT_ID, attemptId)
+
                     }
                 }
     }

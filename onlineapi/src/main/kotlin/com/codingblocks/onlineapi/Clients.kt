@@ -47,7 +47,10 @@ object Clients {
             Quizzes::class.java,
             Question::class.java,
             Choice::class.java,
-            QuizAttempt::class.java
+            QuizAttempt::class.java,
+            QuizAttemptModel::class.java,
+            QuizRunAttempt::class.java,
+            Quizqnas::class.java
 
 
     )

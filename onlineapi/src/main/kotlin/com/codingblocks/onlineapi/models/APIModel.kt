@@ -634,3 +634,27 @@ class QuizQuestion : BaseModel() {
 
 
 }
+
+@Type("quiz-attempts")
+class QuizAttemptModel : BaseModel() {
+
+    @JvmField
+    var status: String? = "draft"
+
+    @Relationship("qna", resolve = true)
+    @JvmField
+    var qna: Quizqnas? = null
+
+    @Relationship("run-attempt", resolve = true)
+    @JvmField
+    var runAttempt: QuizRunAttempt? = null
+
+}
+
+@Type("qnas")
+class Quizqnas : BaseModel()
+
+@Type("run-attempts")
+class QuizRunAttempt : BaseModel()
+
+

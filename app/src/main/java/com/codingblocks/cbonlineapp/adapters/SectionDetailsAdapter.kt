@@ -204,7 +204,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                     else
                                         updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
                                 }
-                                it.context.startActivity(it.context.intentFor<QuizActivity>("quizId" to content.contentQna.qnaQid.toString()).singleTop())
+                                it.context.startActivity(it.context.intentFor<QuizActivity>("quizId" to content.contentQna.qnaQid.toString(), "attemptId" to content.attempt_id).singleTop())
 
                             }
                         }
