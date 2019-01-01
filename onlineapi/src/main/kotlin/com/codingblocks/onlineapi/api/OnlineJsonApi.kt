@@ -60,7 +60,8 @@ interface OnlineJsonApi {
 
     @GET("questions/{questionid}")
     fun getQuestionById(
-            @Path("questionid") id: String): Call<Question>
+            @Path("questionid") id: String,
+            @Query("include") include: String = "choices"): Call<Question>
 
     @GET("quiz_attempts")
     fun getQuizAttempt(
