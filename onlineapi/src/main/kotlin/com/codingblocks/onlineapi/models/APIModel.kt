@@ -638,8 +638,12 @@ class QuizQuestion : BaseModel() {
 @Type("quiz-attempts")
 class QuizAttemptModel : BaseModel() {
 
+    @JsonProperty("created-at")
     @JvmField
-    var status: String? = "draft"
+    var createdAt:String?=null
+
+    @JvmField
+    var status: String? = "DRAFT"
 
     @Relationship("qna", resolve = true)
     @JvmField

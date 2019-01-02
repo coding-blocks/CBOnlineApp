@@ -19,7 +19,7 @@
         android:textColor="@color/black" />
 
     <TextView
-        android:id="@+id/dateTv"
+        android:id="@+id/optionTitle"
         android:layout_marginStart="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

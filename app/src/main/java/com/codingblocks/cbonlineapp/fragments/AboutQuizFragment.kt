@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.QuizAttemptListAdapter
+import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.QuizAttemptModel
@@ -30,12 +31,31 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
     private lateinit var quizId: String
     private lateinit var attemptId: String
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?)
             : View? = inflater.inflate(R.layout.fragment_about_quiz, container, false).apply {
-        quizAttemptListAdapter = QuizAttemptListAdapter(context, attemptList)
+        quizAttemptListAdapter = QuizAttemptListAdapter(context, attemptList, object : OnItemClickListener {
+            override fun onItemClick(position: Int, id: String) {
+                intiateQuiz(id)
 
+            }
+
+        })
+
+    }
+
+    private fun intiateQuiz(attemptId: String) {
+
+        val fragmentManager = fragmentManager!!
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//            fragmentManager.addOnBackStackChangedListener(this)
+        fragmentTransaction.replace(R.id.framelayout_quiz,
+                QuizFragment.newInstance(quizId,
+                        attemptId,
+                        attemptId), "quiz")
+//            fragmentTransaction.addToBackStack("quiz")
+        fragmentTransaction.commit()
     }
 
 
@@ -80,17 +100,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
 
             Clients.onlineV2JsonApi.createQuizAttempt(quizAttempt).enqueue(retrofitCallback { throwable, response ->
                 response?.body().let {
-                    val fragmentManager = fragmentManager!!
-                    val fragmentTransaction = fragmentManager.beginTransaction()
-                    fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-//            fragmentManager.addOnBackStackChangedListener(this)
-                    fragmentTransaction.replace(R.id.framelayout_quiz,
-                            QuizFragment.newInstance(quizId,
-                                    attemptId,
-                                    it?.id
-                                            ?: ""), "quiz")
-//            fragmentTransaction.addToBackStack("quiz")
-                    fragmentTransaction.commit()
+                    intiateQuiz(it?.id ?: "")
                 }
                 throwable?.localizedMessage.let {
                     if (it != null)

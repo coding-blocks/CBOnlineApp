@@ -7,12 +7,15 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.onlineapi.models.QuizAttempt
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import java.util.*
 
-class QuizAttemptListAdapter(internal var context: Context, var list: ArrayList<QuizAttempt>?) : ArrayAdapter<QuizAttempt>(context, 0), AnkoLogger {
+class QuizAttemptListAdapter(internal var context: Context,
+                             var list: ArrayList<QuizAttempt>?,
+                             var listener: OnItemClickListener
+) : ArrayAdapter<QuizAttempt>(context, 0), AnkoLogger {
 
     override fun getCount(): Int {
         return if (list == null) 0 else list!!.size
@@ -51,7 +54,7 @@ class QuizAttemptListAdapter(internal var context: Context, var list: ArrayList<
 
         }
         attemptViewHolder.statusTextView.setOnClickListener {
-
+            listener.onItemClick(position, e.id!!)
         }
 
         return view
