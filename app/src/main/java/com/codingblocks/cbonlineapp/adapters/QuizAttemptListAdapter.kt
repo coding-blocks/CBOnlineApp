@@ -50,6 +50,9 @@ class QuizAttemptListAdapter(internal var context: Context, var list: ArrayList<
             attemptViewHolder.scoreTextView.text = "N/A"
 
         }
+        attemptViewHolder.statusTextView.setOnClickListener {
+
+        }
 
         return view
     }

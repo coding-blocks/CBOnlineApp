@@ -74,6 +74,10 @@ interface OnlineJsonApi {
     @POST("quiz_attempts")
     fun createQuizAttempt(@Body params: QuizAttemptModel): Call<QuizAttempt>
 
+    @PATCH("quiz_attempts/{id}")
+    fun updateQuizAttempt(@Path("id") attemptId: String,
+                          @Body params: QuizAttemptModel): Call<QuizAttempt>
+
     @PATCH("progresses/{id}")
     fun updateProgress(@Path("id") id: String, @Body params: Progress): Call<ContentProgress>
 

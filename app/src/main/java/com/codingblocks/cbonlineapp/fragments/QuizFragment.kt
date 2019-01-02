@@ -6,18 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.adapters.ViewPagerAdapter
+import com.codingblocks.onlineapi.Clients
+import kotlinx.android.synthetic.main.fragment_quiz.*
+import org.jetbrains.anko.AnkoLogger
 
 private const val ARG__QUIZ_ID = "quiz_id"
 private const val ARG__ATTEMPT_ID = "attempt_id"
 private const val ARG__QUIZ_ATTEMPT_ID = "quiz_attempt_id"
 
 
-class QuizFragment : Fragment() {
-
+class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener {
     private lateinit var quizId: String
     private lateinit var attemptId: String
     private lateinit var quizAttemptId: String
+
+    lateinit var mAdapter: ViewPagerAdapter
+    var questionList = HashMap<Int, String>()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +41,32 @@ class QuizFragment : Fragment() {
             attemptId = it.getString(ARG__ATTEMPT_ID)!!
             quizAttemptId = it.getString(ARG__QUIZ_ATTEMPT_ID)!!
         }
+        Clients.onlineV2JsonApi.getQuizById(quizId).enqueue(retrofitCallback { throwable, response ->
+            response?.body()?.let { quiz ->
+                quiz.questions?.forEachIndexed { index, question ->
+                    questionList[index] = question.id ?: ""
+                    if (index == quiz.questions!!.size - 1) {
+                        mAdapter = ViewPagerAdapter(context!!, quizId, quizAttemptId, attemptId, questionList)
+                        quizViewPager.adapter = mAdapter
+                        quizViewPager.currentItem = 0
+                        quizViewPager.setOnPageChangeListener(this)
+                        quizViewPager.offscreenPageLimit = 3
+                    }
+                }
+
+            }
+        })
+
+    }
+
+    override fun onPageScrollStateChanged(state: Int) {
+
+    }
+
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+    }
+
+    override fun onPageSelected(position: Int) {
     }
 
     companion object {
