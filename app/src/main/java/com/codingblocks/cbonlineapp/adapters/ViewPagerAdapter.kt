@@ -12,12 +12,16 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttemptModel
-import com.codingblocks.onlineapi.models.QuizRunAttempt
+import com.codingblocks.onlineapi.models.QuizSubmission
 import com.codingblocks.onlineapi.models.Quizqnas
 import kotlinx.android.synthetic.main.quizlayout.view.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 
-class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: String, var attemptId: String, private var questionList: HashMap<Int, String>) : PagerAdapter() {
+class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: String, var attemptId: String, private var questionList: HashMap<Int, String>) : PagerAdapter(), AnkoLogger {
     private lateinit var choiceDataAdapter: QuizChoiceAdapter
+    var submission: ArrayList<QuizSubmission> = arrayListOf()
+
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
 
@@ -38,19 +42,24 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                 } else {
                     view.questionDescription.loadMarkdown(it?.description)
                 }
-                choiceDataAdapter = QuizChoiceAdapter(it?.choices!!,object : OnItemClickListener{
+                choiceDataAdapter = QuizChoiceAdapter(it?.choices!!, object : OnItemClickListener {
                     override fun onItemClick(position: Int, id: String) {
+                        info { "quiz${it.choices!![position].id}" }
+//TODO need to improvise this
+                        it.choices!![position].marked = true
+                        choiceDataAdapter.notifyDataSetChanged()
                         val quizAttempt = QuizAttemptModel()
                         quizAttempt.id = qaId
                         quizAttempt.status = "DRAFT"
-                        quizAttempt.createdAt = System.currentTimeMillis().toString()
-
+                        val quizSubmission = QuizSubmission()
+                        quizSubmission.id = questionList[pos]!!
+                        quizSubmission.markedChoices = arrayOf(id)
+                        submission.add(quizSubmission)
+                        quizAttempt.submission.addAll(submission)
                         val qna = Quizqnas()
                         qna.id = quizId
                         quizAttempt.qna = qna
-
-
-                        Clients.onlineV2JsonApi.updateQuizAttempt(qaId,quizAttempt).enqueue(retrofitCallback { throwable, response ->
+                        Clients.onlineV2JsonApi.updateQuizAttempt(qaId, quizAttempt).enqueue(retrofitCallback { throwable, response ->
 
                         })
                     }

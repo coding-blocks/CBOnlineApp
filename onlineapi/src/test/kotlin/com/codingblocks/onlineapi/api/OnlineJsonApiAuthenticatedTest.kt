@@ -48,9 +48,9 @@ class OnlineJsonApiAuthenticatedTest {
 
     @Test
     fun `GET Quiz`() {
-        val quizzes = api.getQuizById("3").execute().body()
+        val quizzes = api.getQuizAttempt("3").execute().body()
         quizzes?.let {
-            assertNotNull(it.title)
+            assertNotNull(it.size)
         }
     }
     @Test

@@ -580,6 +580,9 @@ class Choice : BaseModel() {
 
     @JvmField
     var description: String? = null
+
+    @JvmField
+    var marked: Boolean = false
 }
 
 @Type("quiz_attempts")
@@ -587,7 +590,7 @@ class QuizAttempt : BaseModel() {
 
     @JsonProperty("created-at")
     @JvmField
-    var createdAt:String?=null
+    var createdAt: String? = null
 
     @JvmField
     var status: String? = null
@@ -595,8 +598,8 @@ class QuizAttempt : BaseModel() {
     @JvmField
     var result: QuizResult? = null
 
-//    @JvmField
-//    var submission: ArrayList<QuizSubmission>? = null
+    @JvmField
+    var submission: List<QuizSubmission>? = listOf()
 
 }
 
@@ -635,12 +638,12 @@ class QuizQuestion : BaseModel() {
 
 }
 
-@Type("quiz-attempts")
+@Type("quiz_attempts")
 class QuizAttemptModel : BaseModel() {
 
     @JsonProperty("created-at")
     @JvmField
-    var createdAt:String?=null
+    var createdAt: String? = null
 
     @JvmField
     var status: String? = "DRAFT"
@@ -652,6 +655,9 @@ class QuizAttemptModel : BaseModel() {
     @Relationship("run-attempt", resolve = true)
     @JvmField
     var runAttempt: QuizRunAttempt? = null
+
+    @JvmField
+    var submission: ArrayList<QuizSubmission> = arrayListOf()
 
 }
 

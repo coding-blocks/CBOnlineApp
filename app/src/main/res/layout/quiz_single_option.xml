@@ -7,13 +7,11 @@
     android:paddingBottom="10dp"
     android:orientation="horizontal">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/numberTv"
         android:layout_width="40dp"
-        app:civ_border_width="2dp"
+        android:background="@color/black"
         android:layout_height="40dp"
-        android:src="@color/white"
-        app:civ_border_color="@color/salmon"
         android:layout_gravity="center"
         android:gravity="center"
         android:textColor="@color/black" />
