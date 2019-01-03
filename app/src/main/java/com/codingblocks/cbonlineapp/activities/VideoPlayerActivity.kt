@@ -1,15 +1,18 @@
 package com.codingblocks.cbonlineapp.activities
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.LayoutTransition
 import android.os.Bundle
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.utils.DoubleClickListener
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.devbrackets.android.exomedia.listener.OnPreparedListener
-import com.devbrackets.android.exomedia.ui.widget.VideoControls
-import com.devbrackets.android.exomedia.ui.widget.VideoControlsCore
 import kotlinx.android.synthetic.main.activity_video_player.*
 
 class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener {
@@ -21,18 +24,67 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_video_player)
 
+        rootLayout.layoutTransition
+                .enableTransitionType(LayoutTransition.CHANGING)
+
         playback_speed.setOnClickListener {
             showSpeedDialog()
         }
 
-        fastFw.setOnClickListener {
-            videoView.seekTo(videoView.currentPosition + 10000)
-        }
+        fastFwLayout.setOnClickListener(object : DoubleClickListener() {
+            override fun onSingleClick(v: View) {
 
-        rewind.setOnClickListener {
-            videoView.seekTo(videoView.currentPosition - 10000)
-        }
+            }
 
+            override fun onDoubleClick(v: View) {
+                videoView.seekTo(videoView.currentPosition + 10000)
+
+                fastFw.animate()
+                        .setDuration(300)
+                        .alpha(0.5f)
+                        .setListener(object : AnimatorListenerAdapter() {
+                            override fun onAnimationStart(animation: Animator?) {
+                                super.onAnimationStart(animation)
+                                fastFw.visibility = View.VISIBLE
+
+                            }
+
+                            override fun onAnimationEnd(animation: Animator?) {
+                                super.onAnimationEnd(animation)
+                                fastFw.visibility = View.INVISIBLE
+                            }
+
+                        })
+            }
+
+        })
+
+        rewindLayout.setOnClickListener(object : DoubleClickListener() {
+            override fun onSingleClick(v: View) {
+            }
+
+            override fun onDoubleClick(v: View) {
+                videoView.seekTo(videoView.currentPosition - 10000)
+
+                rewind.animate()
+                        .setDuration(300)
+                        .alpha(0.5f)
+                        .setListener(object : AnimatorListenerAdapter() {
+                            override fun onAnimationStart(animation: Animator?) {
+                                super.onAnimationStart(animation)
+                                rewind.visibility = View.VISIBLE
+
+                            }
+
+                            override fun onAnimationEnd(animation: Animator?) {
+                                super.onAnimationEnd(animation)
+                                rewind.visibility = View.INVISIBLE
+                            }
+
+                        })
+            }
+
+        })
     }
 
     private val playbackSpeeds = floatArrayOf(0.5f, 0.75f, 1f, 1.5f, 2f)
