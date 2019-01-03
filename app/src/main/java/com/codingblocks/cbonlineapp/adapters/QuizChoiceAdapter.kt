@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.quiz_single_option.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor
 
+
 class QuizChoiceAdapter(private var choices: ArrayList<Choice>, private var listener: OnItemClickListener) : RecyclerView.Adapter<QuizChoiceAdapter.ChoiceViewHolder>() {
     lateinit var context: Context
 
@@ -35,22 +36,22 @@ class QuizChoiceAdapter(private var choices: ArrayList<Choice>, private var list
             itemView.optionTitle.text = choice.title
             if (choice.correct != null) {
                 if (choice.marked && choice.correct!!) {
-                    itemView.numberTv.background = context.getDrawable(R.drawable.ic_status_done)
+                    itemView.markedImgView.background = context.getDrawable(R.drawable.ic_correct)
                     itemView.optionTitle.textColor = context.resources.getColor(R.color.green)
                 } else {
-                    itemView.numberTv.background = context.getDrawable(R.drawable.ic_youtube_video)
+                    itemView.markedImgView.background = context.getDrawable(R.drawable.ic_incorrect)
                     itemView.optionTitle.textColor = context.resources.getColor(R.color.colorPrimaryDark)
                 }
                 if (choice.correct!!) {
-                    itemView.numberTv.background = context.getDrawable(R.drawable.ic_status_done)
+                    itemView.markedImgView.background = context.getDrawable(R.drawable.ic_correct)
                     itemView.optionTitle.textColor = context.resources.getColor(R.color.green)
                 }
             } else if (choice.marked && choice.correct == null) {
-                itemView.numberTv.background = context.getDrawable(R.drawable.youtube)
+                itemView.markedImgView.background = context.getDrawable(R.drawable.ic_incorrect)
                 itemView.optionTitle.textColor = context.resources.getColor(R.color.colorPrimaryDark)
 
             }
-            itemView.numberTv.setOnClickListener {
+            itemView.markedImgView.setOnClickListener {
                 listener.onItemClick(position, choice.id!!)
             }
 

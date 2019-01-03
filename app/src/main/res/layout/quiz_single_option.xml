@@ -8,9 +8,9 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/numberTv"
+        android:id="@+id/markedImgView"
         android:layout_width="40dp"
-        android:background="@color/black"
+        android:src="@drawable/ic_correct"
         android:layout_height="40dp"
         android:layout_gravity="center"
         android:gravity="center"
