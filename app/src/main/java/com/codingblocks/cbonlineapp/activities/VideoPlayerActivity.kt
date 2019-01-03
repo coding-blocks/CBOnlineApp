@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.devbrackets.android.exomedia.listener.OnPreparedListener
+import com.devbrackets.android.exomedia.ui.widget.VideoControls
+import com.devbrackets.android.exomedia.ui.widget.VideoControlsCore
 import kotlinx.android.synthetic.main.activity_video_player.*
 
 class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener {
@@ -22,6 +24,15 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener {
         playback_speed.setOnClickListener {
             showSpeedDialog()
         }
+
+        fastFw.setOnClickListener {
+            videoView.seekTo(videoView.currentPosition + 10000)
+        }
+
+        rewind.setOnClickListener {
+            videoView.seekTo(videoView.currentPosition - 10000)
+        }
+
     }
 
     private val playbackSpeeds = floatArrayOf(0.5f, 0.75f, 1f, 1.5f, 2f)

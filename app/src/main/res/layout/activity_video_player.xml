@@ -11,15 +11,40 @@
         app:useDefaultControls="true" />
 
     <ImageView
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
+        android:id="@+id/rewind"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="89dp"
+        app:srcCompat="@drawable/ic_rewind"
         android:background="@drawable/drawable_playback_bg"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="32dp"/>
+
+    <ImageView
+        android:id="@+id/fastFw"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginEnd="89dp"
+        app:srcCompat="@drawable/ic_forward"
+        android:background="@drawable/drawable_playback_bg"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="32dp"/>
+
+    <ImageView
         android:id="@+id/playback_speed"
-        android:padding="8dp"
-        android:layout_margin="16dp"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="top|end"
+        android:layout_margin="16dp"
+        android:background="@drawable/drawable_playback_bg"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="8dp"
         app:srcCompat="@drawable/ic_fast_forward" />
+
 
 </FrameLayout>
