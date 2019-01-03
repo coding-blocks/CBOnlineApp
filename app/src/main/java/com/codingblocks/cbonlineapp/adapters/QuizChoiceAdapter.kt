@@ -33,10 +33,12 @@ class QuizChoiceAdapter(private var choices: ArrayList<Choice>, private var list
     class ChoiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), AnkoLogger {
         fun bindView(choice: Choice, listener: OnItemClickListener, context: Context) {
             itemView.optionTitle.text = choice.title
+            if(choice.marked){
+                itemView.numberTv.background = context.getDrawable(R.drawable.ic_status_done)
+            }
             itemView.numberTv.setOnClickListener {
                 info { "quiz${choice.id}" }
                 listener.onItemClick(position, choice.id!!)
-                itemView.numberTv.background = context.getDrawable(R.drawable.ic_status_done)
             }
 
         }

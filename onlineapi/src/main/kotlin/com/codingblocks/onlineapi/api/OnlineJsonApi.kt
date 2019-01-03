@@ -71,6 +71,11 @@ interface OnlineJsonApi {
     @POST("progresses")
     fun setProgress(@Body params: Progress): Call<ContentProgress>
 
+
+    @GET("quiz_attempts/{id}")
+    fun getQuizAttemptById(
+            @Path("id") id: String): Call<QuizAttempt>
+
     @POST("quiz_attempts")
     fun createQuizAttempt(@Body params: QuizAttemptModel): Call<QuizAttempt>
 

@@ -2,38 +2,49 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="5"
     tools:context=".fragments.QuizFragment">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/quizViewPager"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_weight="4.5" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="2">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/black"
+            android:layout_weight="1"
+            android:id="@+id/prevBtn"
+            android:layout_marginStart="16dp"
             android:fontFamily="@font/cabin"
-            android:text="Previous" />
+            android:text="Previous"
+            android:textColor="#808080"
+            android:textSize="22sp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="end"
-            android:textSize="18sp"
-            android:textColor="@color/black"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/nextBtn"
+
             android:fontFamily="@font/cabin"
-            android:layout_height="wrap_content"
-            android:text=" Next" />
+            android:text="Next"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
     </LinearLayout>
 
 </LinearLayout>

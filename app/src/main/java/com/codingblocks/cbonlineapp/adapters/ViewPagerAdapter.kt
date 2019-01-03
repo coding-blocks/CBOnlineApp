@@ -18,9 +18,9 @@ import kotlinx.android.synthetic.main.quizlayout.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
-class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: String, var attemptId: String, private var questionList: HashMap<Int, String>) : PagerAdapter(), AnkoLogger {
+class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: String, var attemptId: String, private var questionList: HashMap<Int, String>, submission: List<QuizSubmission>?) : PagerAdapter(), AnkoLogger {
     private lateinit var choiceDataAdapter: QuizChoiceAdapter
-    var submission: ArrayList<QuizSubmission> = arrayListOf()
+    var submissionList: ArrayList<QuizSubmission> = submission as ArrayList<QuizSubmission>
 
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
@@ -35,7 +35,7 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
 
     private fun fetchQuestion(pos: Int, view: View) {
         Clients.onlineV2JsonApi.getQuestionById(questionList[pos]!!).enqueue(retrofitCallback { throwable, response ->
-            response?.body().let {
+            response?.body().let { it ->
                 view.questionTitle.text = "Q${pos + 1}. ${it?.title}"
                 if (it?.title.equals(it?.description)) {
                     view.questionDescription.visibility = View.GONE
@@ -54,8 +54,8 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                         val quizSubmission = QuizSubmission()
                         quizSubmission.id = questionList[pos]!!
                         quizSubmission.markedChoices = arrayOf(id)
-                        submission.add(quizSubmission)
-                        quizAttempt.submission.addAll(submission)
+                        submissionList.add(quizSubmission)
+                        quizAttempt.submission.addAll(submissionList)
                         val qna = Quizqnas()
                         qna.id = quizId
                         quizAttempt.qna = qna
@@ -65,6 +65,20 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                     }
 
                 })
+
+                submissionList.forEach { quizSumbission ->
+                    if (quizSumbission.id == questionList[pos]!!) {
+                        quizSumbission.markedChoices?.forEach { markedChoice ->
+                            it.choices?.forEach { choice ->
+                                info { "Question choice" + choice.id + ">," + markedChoice }
+                                if (markedChoice.contains(choice.id!!)) {
+                                    choice.marked = true
+                                    choiceDataAdapter.notifyDataSetChanged()
+                                }
+                            }
+                        }
+                    }
+                }
                 view.questionRv.layoutManager = LinearLayoutManager(mContext)
                 view.questionRv.adapter = choiceDataAdapter
 
@@ -74,11 +88,13 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
+        info { "isViewFromObject" }
         return view == `object`
 
     }
 
     override fun getCount(): Int {
+        info { "count" }
         return questionList.size
     }
 }
