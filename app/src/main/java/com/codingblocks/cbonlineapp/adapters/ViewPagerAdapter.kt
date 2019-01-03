@@ -12,13 +12,14 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttempt
+import com.codingblocks.onlineapi.models.QuizResult
 import com.codingblocks.onlineapi.models.QuizSubmission
 import com.codingblocks.onlineapi.models.Quizqnas
 import kotlinx.android.synthetic.main.quizlayout.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
-class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: String, var attemptId: String, private var questionList: HashMap<Int, String>, submission: List<QuizSubmission>?) : PagerAdapter(), AnkoLogger {
+class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: String, var attemptId: String, private var questionList: HashMap<Int, String>, submission: List<QuizSubmission>?, var result: QuizResult?) : PagerAdapter(), AnkoLogger {
     private lateinit var choiceDataAdapter: QuizChoiceAdapter
     var submissionList: ArrayList<QuizSubmission> = submission as ArrayList<QuizSubmission>
 
@@ -34,7 +35,7 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
     }
 
     private fun fetchQuestion(pos: Int, view: View) {
-        if (pos == questionList.size - 1) {
+        if (pos == questionList.size - 1 && result == null) {
             view.submitButton.visibility = View.VISIBLE
         }
         Clients.onlineV2JsonApi.getQuestionById(questionList[pos]!!).enqueue(retrofitCallback { throwable, response ->
@@ -47,36 +48,40 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                 }
                 choiceDataAdapter = QuizChoiceAdapter(it?.choices!!, object : OnItemClickListener {
                     override fun onItemClick(position: Int, id: String) {
+                        if (result == null) {
+                            //marking correct option in the list
+                            it.choices!![position].marked = true
 
-                        //unmarking rest of the options
-                        it.choices!!.forEachIndexed { index, choice ->
-                            if (index != position) {
-                                info { "quiz${choice.title}" }
-                                it.choices!![index].marked = false
-                                choiceDataAdapter.notifyDataSetChanged()
+                            //unmarking rest of the options
+                            it.choices!!.forEachIndexed { index, choice ->
+                                if (index != position) {
+                                    info { "quiz${choice.title}" }
+                                    it.choices!![index].marked = false
+                                    choiceDataAdapter.notifyDataSetChanged()
 
+                                }
                             }
-                        }
-                        //adding or removing the previous marked option
-                        submissionList.forEach { quizSumbission ->
-                            if (quizSumbission.id == questionList[pos]!!) {
-                                quizSumbission.markedChoices = arrayOf(it.choices!![position].id!!)
+                            //adding or removing the previous marked option
+                            submissionList.forEach { quizSumbission ->
+                                if (quizSumbission.id == questionList[pos]!!) {
+                                    quizSumbission.markedChoices = arrayOf(it.choices!![position].id!!)
+                                }
                             }
-                        }
-                        val quizAttempt = QuizAttempt()
-                        quizAttempt.id = qaId
-                        quizAttempt.status = "DRAFT"
-                        val quizSubmission = QuizSubmission()
-                        quizSubmission.id = questionList[pos]!!
-                        quizSubmission.markedChoices = arrayOf(id)
-                        submissionList.add(quizSubmission)
-                        quizAttempt.submission.addAll(submissionList)
-                        val qna = Quizqnas()
-                        qna.id = quizId
-                        quizAttempt.qna = qna
-                        Clients.onlineV2JsonApi.updateQuizAttempt(qaId, quizAttempt).enqueue(retrofitCallback { throwable, response ->
+                            val quizAttempt = QuizAttempt()
+                            quizAttempt.id = qaId
+                            quizAttempt.status = "DRAFT"
+                            val quizSubmission = QuizSubmission()
+                            quizSubmission.id = questionList[pos]!!
+                            quizSubmission.markedChoices = arrayOf(id)
+                            submissionList.add(quizSubmission)
+                            quizAttempt.submission.addAll(submissionList)
+                            val qna = Quizqnas()
+                            qna.id = quizId
+                            quizAttempt.qna = qna
+                            Clients.onlineV2JsonApi.updateQuizAttempt(qaId, quizAttempt).enqueue(retrofitCallback { throwable, response ->
 
-                        })
+                            })
+                        }
                     }
 
                 })
@@ -86,6 +91,18 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                             it.choices?.forEach { choice ->
                                 if (markedChoice.contains(choice.id!!)) {
                                     choice.marked = true
+                                    choiceDataAdapter.notifyDataSetChanged()
+                                }
+                            }
+                        }
+                    }
+                }
+                result?.questions?.forEach { quizQuestion ->
+                    if (quizQuestion.id == questionList[pos]!!) {
+                        quizQuestion.answers?.forEach { answers ->
+                            it.choices?.forEach { choice ->
+                                if (answers.contains(choice.id!!)) {
+                                    choice.correct = true
                                     choiceDataAdapter.notifyDataSetChanged()
                                 }
                             }

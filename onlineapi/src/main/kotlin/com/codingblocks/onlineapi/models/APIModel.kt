@@ -583,6 +583,9 @@ class Choice : BaseModel() {
 
     @JvmField
     var marked: Boolean = false
+
+    @JvmField
+    var correct: Boolean? = null
 }
 
 @Type("quiz_attempts")
