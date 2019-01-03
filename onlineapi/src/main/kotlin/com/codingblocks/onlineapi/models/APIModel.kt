@@ -593,13 +593,21 @@ class QuizAttempt : BaseModel() {
     var createdAt: String? = null
 
     @JvmField
-    var status: String? = null
-
-    @JvmField
     var result: QuizResult? = null
 
     @JvmField
-    var submission: List<QuizSubmission>? = listOf()
+    var status: String? = "DRAFT"
+
+    @Relationship("qna", resolve = true)
+    @JvmField
+    var qna: Quizqnas? = null
+
+    @Relationship("run-attempt", resolve = true)
+    @JvmField
+    var runAttempt: QuizRunAttempt? = null
+
+    @JvmField
+    var submission: ArrayList<QuizSubmission> = arrayListOf()
 
 }
 
@@ -638,28 +646,6 @@ class QuizQuestion : BaseModel() {
 
 }
 
-@Type("quiz_attempts")
-class QuizAttemptModel : BaseModel() {
-
-    @JsonProperty("created-at")
-    @JvmField
-    var createdAt: String? = null
-
-    @JvmField
-    var status: String? = "DRAFT"
-
-    @Relationship("qna", resolve = true)
-    @JvmField
-    var qna: Quizqnas? = null
-
-    @Relationship("run-attempt", resolve = true)
-    @JvmField
-    var runAttempt: QuizRunAttempt? = null
-
-    @JvmField
-    var submission: ArrayList<QuizSubmission> = arrayListOf()
-
-}
 
 @Type("qnas")
 class Quizqnas : BaseModel()

@@ -76,12 +76,16 @@ interface OnlineJsonApi {
     fun getQuizAttemptById(
             @Path("id") id: String): Call<QuizAttempt>
 
+    @POST("quiz_attempts/{id}/submit")
+    fun sumbitQuizById(
+            @Path("id") id: String): Call<QuizAttempt>
+
     @POST("quiz_attempts")
-    fun createQuizAttempt(@Body params: QuizAttemptModel): Call<QuizAttempt>
+    fun createQuizAttempt(@Body params: QuizAttempt): Call<QuizAttempt>
 
     @PATCH("quiz_attempts/{id}")
     fun updateQuizAttempt(@Path("id") attemptId: String,
-                          @Body params: QuizAttemptModel): Call<QuizAttempt>
+                          @Body params: QuizAttempt): Call<QuizAttempt>
 
     @PATCH("progresses/{id}")
     fun updateProgress(@Path("id") id: String, @Body params: Progress): Call<ContentProgress>

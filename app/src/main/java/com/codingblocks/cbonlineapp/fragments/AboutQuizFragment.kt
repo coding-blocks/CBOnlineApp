@@ -12,7 +12,6 @@ import com.codingblocks.cbonlineapp.adapters.QuizAttemptListAdapter
 import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttempt
-import com.codingblocks.onlineapi.models.QuizAttemptModel
 import com.codingblocks.onlineapi.models.QuizRunAttempt
 import com.codingblocks.onlineapi.models.Quizqnas
 import kotlinx.android.synthetic.main.fragment_about_quiz.*
@@ -90,7 +89,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
 
         startQuiz.setOnClickListener {
 
-            val quizAttempt = QuizAttemptModel()
+            val quizAttempt = QuizAttempt()
             val runAttempts = QuizRunAttempt()
             runAttempts.id = attemptId
             val qna = Quizqnas()

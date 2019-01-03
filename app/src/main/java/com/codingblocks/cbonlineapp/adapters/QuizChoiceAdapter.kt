@@ -10,7 +10,6 @@ import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.onlineapi.models.Choice
 import kotlinx.android.synthetic.main.quiz_single_option.view.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 
 class QuizChoiceAdapter(private var choices: ArrayList<Choice>, private var listener: OnItemClickListener) : RecyclerView.Adapter<QuizChoiceAdapter.ChoiceViewHolder>() {
     lateinit var context: Context
@@ -26,18 +25,18 @@ class QuizChoiceAdapter(private var choices: ArrayList<Choice>, private var list
     }
 
     override fun onBindViewHolder(holder: ChoiceViewHolder, position: Int) {
-        holder.bindView(choices[position], listener, context)
+        holder.bindView(choices[position], listener, context, position)
 
     }
 
     class ChoiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), AnkoLogger {
-        fun bindView(choice: Choice, listener: OnItemClickListener, context: Context) {
+        fun bindView(choice: Choice, listener: OnItemClickListener, context: Context, position: Int) {
             itemView.optionTitle.text = choice.title
-            if(choice.marked){
+            if (choice.marked) {
                 itemView.numberTv.background = context.getDrawable(R.drawable.ic_status_done)
             }
             itemView.numberTv.setOnClickListener {
-                info { "quiz${choice.id}" }
+                choice.marked = true
                 listener.onItemClick(position, choice.id!!)
             }
 

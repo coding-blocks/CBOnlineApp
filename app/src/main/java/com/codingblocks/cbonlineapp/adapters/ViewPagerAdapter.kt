@@ -4,14 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.PagerAdapter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.QuizAttemptModel
+import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.QuizSubmission
 import com.codingblocks.onlineapi.models.Quizqnas
 import kotlinx.android.synthetic.main.quizlayout.view.*
@@ -25,7 +25,7 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
 
-        container.removeView(`object` as LinearLayout)
+        container.removeView(`object` as ScrollView)
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any = LayoutInflater.from(mContext).inflate(R.layout.quizlayout, container, false).apply {
@@ -34,6 +34,9 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
     }
 
     private fun fetchQuestion(pos: Int, view: View) {
+        if (pos == questionList.size - 1) {
+            view.submitButton.visibility = View.VISIBLE
+        }
         Clients.onlineV2JsonApi.getQuestionById(questionList[pos]!!).enqueue(retrofitCallback { throwable, response ->
             response?.body().let { it ->
                 view.questionTitle.text = "Q${pos + 1}. ${it?.title}"
@@ -44,11 +47,23 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                 }
                 choiceDataAdapter = QuizChoiceAdapter(it?.choices!!, object : OnItemClickListener {
                     override fun onItemClick(position: Int, id: String) {
-                        info { "quiz${it.choices!![position].id}" }
-//TODO need to improvise this
-                        it.choices!![position].marked = true
-                        choiceDataAdapter.notifyDataSetChanged()
-                        val quizAttempt = QuizAttemptModel()
+
+                        //unmarking rest of the options
+                        it.choices!!.forEachIndexed { index, choice ->
+                            if (index != position) {
+                                info { "quiz${choice.title}" }
+                                it.choices!![index].marked = false
+                                choiceDataAdapter.notifyDataSetChanged()
+
+                            }
+                        }
+                        //adding or removing the previous marked option
+                        submissionList.forEach { quizSumbission ->
+                            if (quizSumbission.id == questionList[pos]!!) {
+                                quizSumbission.markedChoices = arrayOf(it.choices!![position].id!!)
+                            }
+                        }
+                        val quizAttempt = QuizAttempt()
                         quizAttempt.id = qaId
                         quizAttempt.status = "DRAFT"
                         val quizSubmission = QuizSubmission()
@@ -65,12 +80,10 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                     }
 
                 })
-
                 submissionList.forEach { quizSumbission ->
                     if (quizSumbission.id == questionList[pos]!!) {
                         quizSumbission.markedChoices?.forEach { markedChoice ->
                             it.choices?.forEach { choice ->
-                                info { "Question choice" + choice.id + ">," + markedChoice }
                                 if (markedChoice.contains(choice.id!!)) {
                                     choice.marked = true
                                     choiceDataAdapter.notifyDataSetChanged()
@@ -84,17 +97,20 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
 
             }
         })
+        view.submitButton.setOnClickListener {
+            Clients.onlineV2JsonApi.sumbitQuizById(qaId).enqueue(retrofitCallback { throwable, response ->
+
+            })
+        }
 
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        info { "isViewFromObject" }
         return view == `object`
 
     }
 
     override fun getCount(): Int {
-        info { "count" }
         return questionList.size
     }
 }

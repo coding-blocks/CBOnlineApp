@@ -80,9 +80,9 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     override fun onPageSelected(position: Int) {
 
         when {
-            position + 1 == questionList.size - 1 -> {
+            position + 1 == questionList.size -> {
 
-                nextBtn.text = "Finish"
+                nextBtn.text = "End"
                 prevBtn.setTextColor(Color.parseColor("#000000"))
             }
             position == 0 -> {
@@ -101,7 +101,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.nextBtn -> if (nextBtn.text == "Finish") {
+            R.id.nextBtn -> if (nextBtn.text == "End") {
                 //sumbit quiz
             } else
                 quizViewPager.currentItem = if (quizViewPager.currentItem < questionList.size - 1)
