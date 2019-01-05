@@ -32,6 +32,18 @@
             android:text="Previous"
             android:textColor="#808080"
             android:textSize="22sp" />
+        <Button
+            android:id="@+id/questionBtn"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:textColor="@color/white"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="Questions"
+            android:background="@drawable/button_background"
+            android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="match_parent"
@@ -46,5 +58,7 @@
             android:textColor="@color/black"
             android:textSize="22sp" />
     </LinearLayout>
+
+
 
 </LinearLayout>

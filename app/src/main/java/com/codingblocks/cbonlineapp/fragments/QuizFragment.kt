@@ -47,6 +47,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
         }
         nextBtn.setOnClickListener(this)
         prevBtn.setOnClickListener(this)
+        questionBtn.setOnClickListener(this)
         Clients.onlineV2JsonApi.getQuizById(quizId).enqueue(retrofitCallback { _, response ->
             response?.body()?.let { quiz ->
                 quiz.questions?.forEachIndexed { index, question ->
@@ -113,6 +114,9 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                 quizViewPager.currentItem - 1
             else
                 0
+            R.id.questionBtn ->{
+
+            }
         }
     }
 
