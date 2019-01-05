@@ -12,6 +12,8 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.ViewPagerAdapter
 import com.codingblocks.onlineapi.Clients
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.android.synthetic.main.bottom_question_sheet.*
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import org.jetbrains.anko.AnkoLogger
 
@@ -30,6 +32,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
     lateinit var mAdapter: ViewPagerAdapter
     var questionList = HashMap<Int, String>()
+    var sheetBehavior: BottomSheetBehavior<*>? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -45,9 +48,13 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             attemptId = it.getString(ARG__ATTEMPT_ID)!!
             quizAttemptId = it.getString(ARG__QUIZ_ATTEMPT_ID)!!
         }
+
+        sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
+
         nextBtn.setOnClickListener(this)
         prevBtn.setOnClickListener(this)
         questionBtn.setOnClickListener(this)
+
         Clients.onlineV2JsonApi.getQuizById(quizId).enqueue(retrofitCallback { _, response ->
             response?.body()?.let { quiz ->
                 quiz.questions?.forEachIndexed { index, question ->
@@ -55,7 +62,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                     if (index == quiz.questions!!.size - 1) {
                         Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, attemptResponse ->
                             attemptResponse?.body().let {
-                                mAdapter = ViewPagerAdapter(context!!, quizId, quizAttemptId, attemptId, questionList, it?.submission,it?.result)
+                                mAdapter = ViewPagerAdapter(context!!, quizId, quizAttemptId, attemptId, questionList, it?.submission, it?.result)
                                 quizViewPager.adapter = mAdapter
                                 quizViewPager.currentItem = 0
                                 quizViewPager.setOnPageChangeListener(this)
@@ -114,8 +121,12 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                 quizViewPager.currentItem - 1
             else
                 0
-            R.id.questionBtn ->{
-
+            R.id.questionBtn -> {
+                if (sheetBehavior?.state != BottomSheetBehavior.STATE_EXPANDED) {
+                    sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+                } else {
+                    sheetBehavior?.setState(BottomSheetBehavior.STATE_COLLAPSED)
+                }
             }
         }
     }
