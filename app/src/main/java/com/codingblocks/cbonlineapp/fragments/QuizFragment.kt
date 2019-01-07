@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.codingblocks.cbonlineapp.R
@@ -57,6 +59,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
         Clients.onlineV2JsonApi.getQuizById(quizId).enqueue(retrofitCallback { _, response ->
             response?.body()?.let { quiz ->
+                setUpQuestionBottomSheet(quiz.questions?.size?:0)
                 quiz.questions?.forEachIndexed { index, question ->
                     questionList[index] = question.id ?: ""
                     if (index == quiz.questions!!.size - 1) {
@@ -76,6 +79,33 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             }
         })
 
+    }
+
+    private fun setUpQuestionBottomSheet(size: Int) {
+        var count = 0
+        val buttonParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT,1f)
+        var rowLayout:LinearLayout
+        rowLayout = LinearLayout(context)
+        rowLayout.orientation =LinearLayout.HORIZONTAL
+        rowLayout.weightSum = 3f
+        numberLayout.addView(rowLayout)
+        for (i in 0 until size){
+            if(count == 3){
+                count = 0
+                rowLayout = LinearLayout(context)
+                rowLayout.orientation =LinearLayout.HORIZONTAL
+                rowLayout.weightSum = 3f
+                numberLayout.addView(rowLayout)
+            }
+            val numberBtn = Button(context)
+            numberBtn.layoutParams = buttonParams
+            numberBtn.text = (i+1).toString()
+            numberBtn.setOnClickListener {
+                quizViewPager.currentItem = i
+            }
+            count++
+            rowLayout.addView(numberBtn)
+        }
     }
 
     override fun onPageScrollStateChanged(state: Int) {
