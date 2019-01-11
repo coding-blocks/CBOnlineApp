@@ -48,7 +48,6 @@ class QuizChoiceAdapter(private var choices: ArrayList<Choice>, private var list
                 }
             } else if (choice.marked && choice.correct == null) {
                 itemView.markedImgView.background = context.getDrawable(R.drawable.ic_incorrect)
-                itemView.optionTitle.textColor = context.resources.getColor(R.color.colorPrimaryDark)
 
             }
             itemView.markedImgView.setOnClickListener {
