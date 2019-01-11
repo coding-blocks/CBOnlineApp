@@ -55,7 +55,6 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                             //unmarking rest of the options
                             it.choices!!.forEachIndexed { index, choice ->
                                 if (index != position) {
-                                    info { "quiz${choice.title}" }
                                     it.choices!![index].marked = false
                                     choiceDataAdapter.notifyDataSetChanged()
                                 }
@@ -102,6 +101,9 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                             it.choices?.forEach { choice ->
                                 if (answers.contains(choice.id!!)) {
                                     choice.correct = true
+                                    choiceDataAdapter.notifyDataSetChanged()
+                                }else{
+                                    choice.correct = false
                                     choiceDataAdapter.notifyDataSetChanged()
                                 }
                             }

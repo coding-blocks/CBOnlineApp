@@ -30,7 +30,8 @@ object Components {
                     customTabsIntent.launchUrl(context, Uri.parse("https://account.codingblocks.com/users/me"))
                 }
                 "exit" -> {
-                    (context as Activity).onBackPressed()
+                    updateView.okBtn.text = "Yes"
+                    (context as Activity).finish()
                 }
 
             }

@@ -18,6 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.bottom_question_sheet.*
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.textColor
 
 
 private const val ARG__QUIZ_ID = "quiz_id"
@@ -59,7 +60,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
         Clients.onlineV2JsonApi.getQuizById(quizId).enqueue(retrofitCallback { _, response ->
             response?.body()?.let { quiz ->
-                setUpQuestionBottomSheet(quiz.questions?.size?:0)
+                setUpQuestionBottomSheet(quiz.questions?.size ?: 0)
                 quiz.questions?.forEachIndexed { index, question ->
                     questionList[index] = question.id ?: ""
                     if (index == quiz.questions!!.size - 1) {
@@ -83,23 +84,30 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
     private fun setUpQuestionBottomSheet(size: Int) {
         var count = 0
-        val buttonParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT,1f)
-        var rowLayout:LinearLayout
+
+        val dpValue = 60 // margin in dips
+        val d = context!!.resources.displayMetrics.density
+        val buttonSize = (dpValue * d).toInt() // margin in pixels
+        val buttonParams = LinearLayout.LayoutParams(buttonSize, buttonSize)
+        buttonParams.setMargins(buttonSize / 6, buttonSize / 6, buttonSize / 6, buttonSize / 6)
+        var rowLayout: LinearLayout
         rowLayout = LinearLayout(context)
-        rowLayout.orientation =LinearLayout.HORIZONTAL
-        rowLayout.weightSum = 3f
+        rowLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        rowLayout.orientation = LinearLayout.HORIZONTAL
         numberLayout.addView(rowLayout)
-        for (i in 0 until size){
-            if(count == 3){
+        for (i in 0 until size) {
+            if (count == 3) {
                 count = 0
                 rowLayout = LinearLayout(context)
-                rowLayout.orientation =LinearLayout.HORIZONTAL
-                rowLayout.weightSum = 3f
+                rowLayout.orientation = LinearLayout.HORIZONTAL
+                rowLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 numberLayout.addView(rowLayout)
             }
             val numberBtn = Button(context)
+            numberBtn.background = context!!.getDrawable(R.drawable.button_rounded_background)
+            numberBtn.textColor = context!!.resources.getColor(R.color.white)
             numberBtn.layoutParams = buttonParams
-            numberBtn.text = (i+1).toString()
+            numberBtn.text = (i + 1).toString()
             numberBtn.setOnClickListener {
                 quizViewPager.currentItem = i
             }

@@ -11,7 +11,6 @@ import com.codingblocks.onlineapi.models.Choice
 import kotlinx.android.synthetic.main.quiz_single_option.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.backgroundColor
-import org.jetbrains.anko.info
 import org.jetbrains.anko.textColor
 
 
@@ -35,16 +34,15 @@ class QuizChoiceAdapter(private var choices: ArrayList<Choice>, private var list
 
     inner class ChoiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), AnkoLogger {
         fun bindView(choice: Choice, listener: OnItemClickListener, context: Context, position: Int) {
-            info { choice.title }
             itemView.optionTitle.text = choice.title
             if (choice.correct != null) {
                 if (choice.marked && choice.correct!!) {
                     itemView.markedImgView.background = context.getDrawable(R.drawable.ic_correct)
                     itemView.optionTitle.textColor = context.resources.getColor(R.color.green)
-                } else if (choice.marked && !choice.correct!!) {
+                } else if(choice.marked && !choice.correct!!) {
                     itemView.markedImgView.background = context.getDrawable(R.drawable.ic_incorrect)
                     itemView.optionTitle.textColor = context.resources.getColor(R.color.colorPrimaryDark)
-                } else {
+                }else if(!choice.marked && choice.correct!!) {
                     itemView.markedImgView.background = context.getDrawable(R.drawable.ic_correct)
                     itemView.optionTitle.textColor = context.resources.getColor(R.color.green)
                 }
@@ -56,7 +54,7 @@ class QuizChoiceAdapter(private var choices: ArrayList<Choice>, private var list
                 itemView.optionTitle.textColor = context.resources.getColor(R.color.black)
                 itemView.markedImgView.background = context.resources.getDrawable(R.drawable.ic_circle)
             }
-            itemView.markedImgView.setOnClickListener {
+            itemView.setOnClickListener {
                 listener.onItemClick(position, choice.id!!)
                 this@QuizChoiceAdapter.notifyDataSetChanged()
             }

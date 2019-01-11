@@ -14,6 +14,8 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.QuizRunAttempt
 import com.codingblocks.onlineapi.models.Quizqnas
+import com.ethanhua.skeleton.Skeleton
+import com.ethanhua.skeleton.SkeletonScreen
 import kotlinx.android.synthetic.main.fragment_about_quiz.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
@@ -29,10 +31,13 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
     private var attemptList = ArrayList<QuizAttempt>()
     private lateinit var quizId: String
     private lateinit var attemptId: String
+    lateinit var skeletonScreen: SkeletonScreen
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?)
             : View? = inflater.inflate(R.layout.fragment_about_quiz, container, false).apply {
+
         quizAttemptListAdapter = QuizAttemptListAdapter(context, attemptList, object : OnItemClickListener {
             override fun onItemClick(position: Int, id: String) {
                 intiateQuiz(id)
@@ -60,6 +65,12 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        skeletonScreen = Skeleton.bind(aboutQuiz)
+                .shimmer(true)
+                .angle(20)
+                .duration(1200)
+                .load(R.layout.item_skeleton_course)
+                .show()
         arguments?.let {
             quizId = it.getString(ARG__QUIZ_ID)!!
             attemptId = it.getString(ARG__ATTEMPT_ID)!!
@@ -70,6 +81,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         quizAttemptLv.adapter = quizAttemptListAdapter
         Clients.onlineV2JsonApi.getQuizById(quizId).enqueue(retrofitCallback { throwable, response ->
             response?.body()?.let { quiz ->
+                skeletonScreen.hide()
                 quizTitle.text = quiz.title
                 quizDescription.text = quiz.description
                 quizQuestion.text = "${quiz.questions?.size} Question"

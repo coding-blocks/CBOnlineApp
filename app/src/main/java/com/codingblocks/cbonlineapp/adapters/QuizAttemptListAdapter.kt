@@ -53,7 +53,7 @@ class QuizAttemptListAdapter(internal var context: Context,
             attemptViewHolder.scoreTextView.text = "N/A"
 
         }
-        attemptViewHolder.statusTextView.setOnClickListener {
+        view.setOnClickListener {
             listener.onItemClick(position, e.id!!)
         }
 
