@@ -89,7 +89,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
         val d = context!!.resources.displayMetrics.density
         val buttonSize = (dpValue * d).toInt() // margin in pixels
         val buttonParams = LinearLayout.LayoutParams(buttonSize, buttonSize)
-        buttonParams.setMargins(buttonSize / 6, buttonSize / 6, buttonSize / 6, buttonSize / 6)
+        buttonParams.setMargins(buttonSize / 6, buttonSize / 12, buttonSize / 6, buttonSize / 12)
         var rowLayout: LinearLayout
         rowLayout = LinearLayout(context)
         rowLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -148,7 +148,14 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     override fun onClick(v: View) {
         when (v.id) {
             R.id.nextBtn -> if (nextBtn.text == "End") {
-                //sumbit quiz
+                val fragmentManager = fragmentManager!!
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                fragmentTransaction.replace(R.id.framelayout_quiz,
+                        AboutQuizFragment.newInstance(quizId,
+                                attemptId), "quiz")
+//            fragmentTransaction.addToBackStack("quiz")
+                fragmentTransaction.commit()
             } else
                 quizViewPager.currentItem = if (quizViewPager.currentItem < questionList.size - 1)
                     quizViewPager.currentItem + 1

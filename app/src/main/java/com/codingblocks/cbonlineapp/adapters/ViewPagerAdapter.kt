@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.PagerAdapter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.fragments.QuizFragment
 import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttempt
@@ -18,6 +19,9 @@ import com.codingblocks.onlineapi.models.Quizqnas
 import kotlinx.android.synthetic.main.quizlayout.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
+import android.app.Activity
+
+
 
 class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: String, var attemptId: String, private var questionList: HashMap<Int, String>, submission: List<QuizSubmission>?, var result: QuizResult?) : PagerAdapter(), AnkoLogger {
     private lateinit var choiceDataAdapter: QuizChoiceAdapter
@@ -117,7 +121,7 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
         })
         view.submitButton.setOnClickListener {
             Clients.onlineV2JsonApi.sumbitQuizById(qaId).enqueue(retrofitCallback { throwable, response ->
-
+                (mContext as Activity).finish()
             })
         }
 

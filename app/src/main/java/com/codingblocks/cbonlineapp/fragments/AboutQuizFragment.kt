@@ -48,7 +48,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
 
     }
 
-    private fun intiateQuiz(attemptId: String) {
+    private fun intiateQuiz(quizAttemptId: String) {
 
         val fragmentManager = fragmentManager!!
         val fragmentTransaction = fragmentManager.beginTransaction()
@@ -57,7 +57,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         fragmentTransaction.replace(R.id.framelayout_quiz,
                 QuizFragment.newInstance(quizId,
                         attemptId,
-                        attemptId), "quiz")
+                        quizAttemptId), "quiz")
 //            fragmentTransaction.addToBackStack("quiz")
         fragmentTransaction.commit()
     }
