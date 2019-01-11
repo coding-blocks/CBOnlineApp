@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.fragments.AboutQuizFragment
+import com.codingblocks.cbonlineapp.utils.Components
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_quiz.*
 
@@ -33,5 +34,9 @@ class QuizActivity : AppCompatActivity() {
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
+    }
+
+    override fun onBackPressed() {
+        Components.showconfirmation(this,"exit")
     }
 }

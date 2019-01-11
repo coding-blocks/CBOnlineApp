@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.utils
 
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import androidx.appcompat.app.AlertDialog
@@ -10,6 +11,7 @@ import kotlinx.android.synthetic.main.custom_dialog.view.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.singleTop
+
 
 object Components {
     fun showconfirmation(context: Context, type: String) {
@@ -26,6 +28,9 @@ object Components {
                             .setSecondaryToolbarColor(context.resources.getColor(R.color.colorPrimary))
                     val customTabsIntent = builder.build()
                     customTabsIntent.launchUrl(context, Uri.parse("https://account.codingblocks.com/users/me"))
+                }
+                "exit" -> {
+                    (context as Activity).onBackPressed()
                 }
 
             }

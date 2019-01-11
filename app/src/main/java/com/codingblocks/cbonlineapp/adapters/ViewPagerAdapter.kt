@@ -58,7 +58,6 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                                     info { "quiz${choice.title}" }
                                     it.choices!![index].marked = false
                                     choiceDataAdapter.notifyDataSetChanged()
-
                                 }
                             }
                             //adding or removing the previous marked option
