@@ -60,7 +60,8 @@ interface OnlineJsonApi {
 
     @GET("questions/{questionid}")
     fun getQuestionById(
-            @Path("questionid") id: String): Call<Question>
+            @Path("questionid") id: String,
+            @Query("include") include: String = "choices"): Call<Question>
 
     @GET("quiz_attempts")
     fun getQuizAttempt(
@@ -69,6 +70,22 @@ interface OnlineJsonApi {
 
     @POST("progresses")
     fun setProgress(@Body params: Progress): Call<ContentProgress>
+
+
+    @GET("quiz_attempts/{id}")
+    fun getQuizAttemptById(
+            @Path("id") id: String): Call<QuizAttempt>
+
+    @POST("quiz_attempts/{id}/submit")
+    fun sumbitQuizById(
+            @Path("id") id: String): Call<QuizAttempt>
+
+    @POST("quiz_attempts")
+    fun createQuizAttempt(@Body params: QuizAttempt): Call<QuizAttempt>
+
+    @PATCH("quiz_attempts/{id}")
+    fun updateQuizAttempt(@Path("id") attemptId: String,
+                          @Body params: QuizAttempt): Call<QuizAttempt>
 
     @PATCH("progresses/{id}")
     fun updateProgress(@Path("id") id: String, @Body params: Progress): Call<ContentProgress>

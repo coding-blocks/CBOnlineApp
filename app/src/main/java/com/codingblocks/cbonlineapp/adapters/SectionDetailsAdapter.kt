@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.DownloadStarter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.activities.PdfActivity
+import com.codingblocks.cbonlineapp.activities.QuizActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.activities.YoutubePlayerActivity
 import com.codingblocks.cbonlineapp.database.*
@@ -189,23 +190,23 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                         content.contentable == "qna" -> {
                             downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_quiz))
                             downloadBtn.background = null
-//                            if (content.progress == "DONE") {
-//                                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
-//                                downloadBtn.setOnClickListener {
-//                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)
-//                                }
-//                            }
-//                            ll.addView(inflatedView)
-//                            inflatedView.setOnClickListener {
-//                                if (content.progress == "UNDONE") {
-//                                    if (content.progressId.isEmpty())
-//                                        setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentQna.qnaContentId)
-//                                    else
-//                                        updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
-//                                }
-//                                it.context.startActivity(it.context.intentFor<QuizActivity>("questionId" to content.contentQna.qnaQid).singleTop())
-//
-//                            }
+                            if (content.progress == "DONE") {
+                                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
+                                downloadBtn.setOnClickListener {
+                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)
+                                }
+                            }
+                            ll.addView(inflatedView)
+                            inflatedView.setOnClickListener {
+                                if (content.progress == "UNDONE") {
+                                    if (content.progressId.isEmpty())
+                                        setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentQna.qnaContentId)
+                                    else
+                                        updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
+                                }
+                                it.context.startActivity(it.context.intentFor<QuizActivity>("quizId" to content.contentQna.qnaQid.toString(), "attemptId" to content.attempt_id).singleTop())
+
+                            }
                         }
 
                     }

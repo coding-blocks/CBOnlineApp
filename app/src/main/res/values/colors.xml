@@ -9,4 +9,5 @@
     <color name="white_transparency">#b9ffffff</color>
     <color name="white">#ffffff</color>
     <color name="battleship_gray">#64707b</color>
+    <color name="green">#8dbf75</color>
 </resources>
