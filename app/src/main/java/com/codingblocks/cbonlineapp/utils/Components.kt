@@ -17,6 +17,20 @@ object Components {
     fun showconfirmation(context: Context, type: String) {
         val confirmDialog = AlertDialog.Builder(context).create()
         val updateView = context.layoutInflater.inflate(R.layout.custom_dialog, null)
+        when(type){
+            "verify" -> {
+                updateView.okBtn.text = "Verify Now"
+                updateView.description.text = "You need to verify your account first before continuing"
+            }
+            "trial" ->{
+                updateView.okBtn.text = "Explore Now"
+                updateView.description.text = "You have been successfully enrolled into this course"
+            }
+            "exit" ->{
+                updateView.okBtn.text = "Okay"
+                updateView.description.text = "Are you you want to exit ?"
+            }
+        }
         updateView.okBtn.setOnClickListener {
             when (type) {
                 "trial" -> context.startActivity(context.intentFor<HomeActivity>("course" to "mycourses").singleTop())

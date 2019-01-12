@@ -42,7 +42,6 @@
                 android:layout_marginTop="18dp"
                 android:layout_marginEnd="24dp"
                 android:lineSpacingExtra="2sp"
-                android:text="You have Been enrolled into the course"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
