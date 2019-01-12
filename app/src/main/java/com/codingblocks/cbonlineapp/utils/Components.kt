@@ -28,7 +28,7 @@ object Components {
             }
             "exit" ->{
                 updateView.okBtn.text = "Okay"
-                updateView.description.text = "Are you you want to exit ?"
+                updateView.description.text = "Do you want to exit?"
             }
         }
         updateView.okBtn.setOnClickListener {
