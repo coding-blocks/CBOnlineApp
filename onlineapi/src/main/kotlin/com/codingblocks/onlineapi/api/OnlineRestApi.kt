@@ -43,7 +43,7 @@ interface OnlineRestApi {
     @GET("v2/runs/{runId}/buy")
     fun addToCart(@Path("runId") id: String): Call<JsonObject>
 
-    @GET("runs/{runid}/leaderboard")
+    @GET("v2/runs/{runid}/leaderboard")
     fun leaderboardById(
             @Path("runid") id: String): Call<List<Leaderboard>>
 }
