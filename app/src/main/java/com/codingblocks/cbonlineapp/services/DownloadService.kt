@@ -53,7 +53,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
     }
 
     private fun initDownload(intent: Intent) {
-        notificationManager.notify(0, notificationBuilder.build())
+        notificationManager.notify(System.currentTimeMillis().toInt(), notificationBuilder.build())
         var downloadCount = 0
         val url = intent.getStringExtra("url")
         Clients.initiateDownload(url, "index.m3u8").enqueue(retrofitCallback { _, response ->
