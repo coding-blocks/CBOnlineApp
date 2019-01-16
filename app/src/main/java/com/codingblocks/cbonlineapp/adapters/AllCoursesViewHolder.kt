@@ -101,14 +101,16 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                             Paint.STRIKE_THRU_TEXT_FLAG
                 }
                 val sdf = SimpleDateFormat("MMM dd ")
-                var date: String? = ""
+                var startDate: String? = ""
+                var endDate: String? = ""
                 try {
-                    date = sdf.format(Date(crStart.toLong() * 1000))
+                    startDate = sdf.format(Date(crStart.toLong() * 1000))
+                    endDate = sdf.format(Date(crEnd.toLong() * 1000))
                 } catch (nfe: NumberFormatException) {
                     nfe.printStackTrace()
                 }
-                itemView.courseRun.text = "Batches Starting $date"
-                itemView.enrollmentTv.text = "Hurry Up! Enrollment ends $date"
+                itemView.courseRun.text = "Batches Starting $startDate"
+                itemView.enrollmentTv.text = "Hurry Up! Enrollment ends $endDate"
             }
 
             // TODO: Prefer to cache the created drawables
