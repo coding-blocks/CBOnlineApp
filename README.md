@@ -19,3 +19,11 @@ To make it work with Android Studio 3.3
  - Edit `181.*` in version range to `182.*`
  - Install as jar into the Android Studio
 
+### Libraries used and their documentation
+
+- Retrofit [Docs](http://square.github.io/retrofit/2.x/retrofit/)
+- Picasso [Docs](http://square.github.io/picasso/)
+- JSON API Converter [Docs](https://github.com/jasminb/jsonapi-converter)
+- ExoMedia [Docs](https://devbrackets.com/dev/libs/docs/exomedia/4.0.0/index.html)
+
+- Room Persistence Library [Docs](https://developer.android.com/topic/libraries/architecture/room)
