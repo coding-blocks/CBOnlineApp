@@ -105,7 +105,13 @@ class HomeFragment : Fragment(), AnkoLogger {
                             currentRuns.add(myCourses.runs!![i])
                     }
 
+                    //for no current runs
+                    if(currentRuns.size == 0){
+                        currentRuns.addAll(myCourses.runs!!)
+                    }
+
                     currentRuns.sortWith(Comparator { o1, o2 -> java.lang.Long.compare(o2.price!!.toLong(), o1.price!!.toLong()) })
+                    info { "size ${myCourses.title}" + currentRuns.size }
                     val course = myCourses.run {
                         Course(
                                 id ?: "",
