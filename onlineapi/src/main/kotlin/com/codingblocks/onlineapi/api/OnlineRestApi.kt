@@ -1,5 +1,6 @@
 package com.codingblocks.onlineapi.api
 
+import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.RatingModel
 import com.google.gson.JsonObject
 import retrofit2.Call
@@ -41,4 +42,8 @@ interface OnlineRestApi {
 
     @GET("v2/runs/{runId}/buy")
     fun addToCart(@Path("runId") id: String): Call<JsonObject>
+
+    @GET("v2/runs/{runid}/leaderboard")
+    fun leaderboardById(
+            @Path("runid") id: String): Call<List<Leaderboard>>
 }

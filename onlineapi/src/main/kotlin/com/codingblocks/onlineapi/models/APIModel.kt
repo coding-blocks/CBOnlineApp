@@ -209,6 +209,17 @@ class MyRunAttempt : BaseModel() {
 
 }
 
+class Leaderboard(@JvmField
+                  var userName: String) : BaseModel() {
+
+    @JvmField
+    var collegeName: String? = null
+    @JvmField
+    var photo: String? = null
+    @JvmField
+    var score: Int? = 0
+}
+
 @Type("run")
 class MyCourseRuns : BaseModel() {
     @JvmField
