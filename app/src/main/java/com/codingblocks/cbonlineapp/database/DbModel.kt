@@ -12,23 +12,6 @@ open class BaseModel(
         var updatedAt: String?
 )
 
-
-@Entity
-data class CourseRun(
-        @PrimaryKey
-        var crUid: String = "",
-        var crAttemptId: String = "",
-        var crName: String = "",
-        var crDescription: String = "",
-        var crStart: String = "",
-        var crEnd: String = "",
-        var crPrice: String = "",
-        var crMrp: String = "",
-        var crCourseId: String = "",
-        var crUpdatedAt: String = ""
-)
-
-
 @Entity
 data class Course(
         var uid: String,
@@ -47,12 +30,31 @@ data class Course(
         var updated_at: String?,
         var progress: Double = 0.0,
         @Nullable
-        var runDescription: String = "",
-        @Nullable
-        @Embedded
-        var courseRun: CourseRun = CourseRun()
+        var runDescription: String = ""
 ) : BaseModel(uid, updated_at)
 
+
+@Entity(
+        foreignKeys = [
+            ForeignKey(entity = Course::class,
+                    parentColumns = ["id"],
+                    childColumns = ["crCourseId"])
+        ])
+data class CourseRun(
+        @PrimaryKey
+        var crUid: String = "",
+        var crAttemptId: String = "",
+        var crName: String = "",
+        var crDescription: String = "",
+        var crEnrollmentStart: String = "",
+        var crEnrollmentEnd: String = "",
+        var crStart: String = "",
+        var crEnd: String = "",
+        var crPrice: String = "",
+        var crMrp: String = "",
+        var crCourseId: String = "",
+        var crUpdatedAt: String = "",
+        var progress: Double = 0.0)
 
 @Entity()
 data class Instructor(

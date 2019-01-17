@@ -28,11 +28,11 @@ class HomeFragment : Fragment(), AnkoLogger {
 
     private lateinit var database: AppDatabase
     private lateinit var courseDataAdapter: CourseDataAdapter
-    lateinit var skeletonScreen: SkeletonScreen
-    lateinit var courseDao: CourseDao
-    lateinit var courseWithInstructorDao: CourseWithInstructorDao
-    lateinit var instructorDao: InstructorDao
-    lateinit var runDao: CourseRunDao
+    private lateinit var skeletonScreen: SkeletonScreen
+    private lateinit var courseDao: CourseDao
+    private lateinit var courseWithInstructorDao: CourseWithInstructorDao
+    private lateinit var instructorDao: InstructorDao
+    private lateinit var runDao: CourseRunDao
 
 
     val ui = HomeFragmentUi<Fragment>()
@@ -74,14 +74,18 @@ class HomeFragment : Fragment(), AnkoLogger {
                 .count(4)
                 .load(R.layout.item_skeleton_course_card)
                 .show()
-        displayCourses()
+        runDao.getAllRuns().observe(this, Observer<List<CourseRun>> {
+
+            info { "course runs$it" }
+        })
+//        displayCourses()
         fetchRecommendedCourses()
 
     }
 
     private fun displayCourses(searchQuery: String = "") {
         courseDao.getCourses().observe(this, Observer<List<Course>> {
-//            if (ui.swipeRefreshLayout.isRefreshing) {
+            //            if (ui.swipeRefreshLayout.isRefreshing) {
 //                ui.swipeRefreshLayout.isRefreshing = false
 //            }
             courseDataAdapter.setData(it.filter { c ->
@@ -106,7 +110,7 @@ class HomeFragment : Fragment(), AnkoLogger {
                     }
 
                     //for no current runs
-                    if(currentRuns.size == 0){
+                    if (currentRuns.size == 0) {
                         currentRuns.addAll(myCourses.runs!!)
                     }
 
@@ -117,26 +121,26 @@ class HomeFragment : Fragment(), AnkoLogger {
                                 id ?: "",
                                 title ?: "",
                                 subtitle ?: "",
-                                logo?: "",
+                                logo ?: "",
                                 summary ?: "",
                                 promoVideo ?: "",
                                 difficulty ?: "",
                                 reviewCount ?: 0,
                                 rating ?: 0f,
                                 slug ?: "",
-                                coverImage?: "",
-                                updated_at = updatedAt,
-                                courseRun = CourseRun(currentRuns[0].id ?: "", "",
-                                        currentRuns[0].name ?: "", currentRuns[0].description ?: "",
-                                        currentRuns[0].start ?: "", currentRuns[0].end ?: "",
-                                        currentRuns[0].price ?: "", currentRuns[0].mrp ?: "",
-                                        myCourses.id ?: "", currentRuns[0].updatedAt ?: ""
-
-                                ))
+                                coverImage ?: "",
+                                updated_at = updatedAt)
                     }
+                    val courseRun = CourseRun(currentRuns[0].id ?: "", "",
+                            currentRuns[0].name ?: "", currentRuns[0].description ?: "",
+                            currentRuns[0].enrollmentStart ?: "",
+                            currentRuns[0].enrollmentEnd ?: "",
+                            currentRuns[0].start ?: "", currentRuns[0].end ?: "",
+                            currentRuns[0].price ?: "", currentRuns[0].mrp ?: "",
+                            myCourses.id ?: "", currentRuns[0].updatedAt ?: "")
                     thread {
-                        info { course.courseRun.crMrp }
                         courseDao.insert(course)
+                        runDao.insert(courseRun)
                         //Add CourseInstructors
                         for (i in myCourses.instructors!!) {
                             instructorDao.insert(Instructor(i.id ?: "", i.name ?: "",
