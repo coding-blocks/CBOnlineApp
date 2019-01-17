@@ -45,6 +45,10 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         database.instructorDao()
     }
 
+    private val runDao by lazy {
+        database.courseRunDao()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return ui.createView(AnkoContext.create(ctx, this))
     }
@@ -79,16 +83,16 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        courseDao.getMyCourses().observe(this, Observer<List<Course>> {
-            if (ui.swipeRefreshLayout.isRefreshing) {
-                ui.swipeRefreshLayout.isRefreshing = false
-            }
-            courseDataAdapter.setData(it.filter { c ->
-                c.title.contains(searchQuery, true) &&
-                        c.courseRun.crEnd.toLong() * 1000 > System.currentTimeMillis()
-
-            } as ArrayList<Course>)
-        })
+//        courseDao.getMyCourses().observe(this, Observer<List<Course>> {
+//            if (ui.swipeRefreshLayout.isRefreshing) {
+//                ui.swipeRefreshLayout.isRefreshing = false
+//            }
+//            courseDataAdapter.setData(it.filter { c ->
+//                c.title.contains(searchQuery, true) &&
+//                        c.courseRun.crEnd.toLong() * 1000 > System.currentTimeMillis()
+//
+//            } as ArrayList<Course>)
+//        })
 
     }
 
@@ -117,30 +121,32 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                         rating ?: 0f,
                                         slug ?: "",
                                         coverImage ?: "",
-                                        myCourses.run_attempts?.get(0)?.id ?: "",
-                                        updatedAt,
-                                        progress,
-                                        myCourses.description ?: "",
-                                        CourseRun(myCourses.id
-                                                ?: "", myCourses.run_attempts?.get(0)?.id ?: "",
-                                                myCourses.name ?: "", myCourses.description ?: "",
-                                                myCourses.start
-                                                        ?: "", myCourses.run_attempts!![0].end
-                                                ?: "",
-                                                myCourses.price ?: "", myCourses.mrp ?: "",
-                                                id ?: "", myCourses.updatedAt ?: ""
-
-                                        )
-                                )
+                                        updatedAt)
                             }
+                                val courseRun = CourseRun(myCourses.id ?: "",
+                                        myCourses.run_attempts?.get(0)?.id ?: "",
+                                        myCourses.name ?: "",
+                                        myCourses.description ?: "",
+                                        myCourses.start ?: "",
+                                        myCourses.run_attempts!![0].end ?: "",
+                                        myCourses.start ?: "",
+                                        myCourses.run_attempts!![0].end ?: "",
+                                        myCourses.price ?: "",
+                                        myCourses.mrp ?: "",
+                                        myCourses.course?.id ?: "",
+                                        myCourses.updatedAt ?: "",
+                                        progress)
+
                             doAsync {
                                 val updateCourse = courseDao.getCourse(course?.id ?: "")
                                 if (updateCourse == null) {
                                     courseDao.insert(course!!)
-                                } else if (updateCourse.attempt_id == "" || updateCourse.progress != course?.progress) {
-                                    info { "updateCourse is happening" }
-                                    courseDao.update(course!!)
+                                    runDao.insert(courseRun)
                                 }
+//                                else if (updateCourse.attempt_id == "" || updateCourse.progress != course?.progress) {
+//                                    info { "updateCourse is happening" }
+//                                    courseDao.update(course!!)
+//                                }
                                 if (ui.swipeRefreshLayout.isRefreshing) {
                                     ui.swipeRefreshLayout.isRefreshing = false
                                 }

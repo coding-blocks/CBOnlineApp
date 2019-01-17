@@ -26,17 +26,29 @@ import kotlin.concurrent.thread
 
 class HomeFragment : Fragment(), AnkoLogger {
 
-    private lateinit var database: AppDatabase
     private lateinit var courseDataAdapter: CourseDataAdapter
     private lateinit var skeletonScreen: SkeletonScreen
-    private lateinit var courseDao: CourseDao
-    private lateinit var courseWithInstructorDao: CourseWithInstructorDao
-    private lateinit var instructorDao: InstructorDao
-    private lateinit var runDao: CourseRunDao
-
 
     val ui = HomeFragmentUi<Fragment>()
     val skeletonUi = SkeletonCardUi()
+
+    private val database: AppDatabase by lazy {
+        AppDatabase.getInstance(context!!)
+    }
+
+    private val courseDao by lazy {
+        database.courseDao()
+    }
+    private val courseWithInstructorDao by lazy {
+        database.courseWithInstructorDao()
+    }
+    private val instructorDao by lazy {
+        database.instructorDao()
+    }
+
+    private val runDao by lazy {
+        database.courseRunDao()
+    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -47,16 +59,7 @@ class HomeFragment : Fragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        database = AppDatabase.getInstance(context!!)
-
-        courseDao = database.courseDao()
-        instructorDao = database.instructorDao()
-        runDao = database.courseRunDao()
-
         setHasOptionsMenu(true)
-
-
-        courseWithInstructorDao = database.courseWithInstructorDao()
 
         courseDataAdapter = CourseDataAdapter(ArrayList(), view.context, courseWithInstructorDao, "allCourses")
 
@@ -75,8 +78,7 @@ class HomeFragment : Fragment(), AnkoLogger {
                 .load(R.layout.item_skeleton_course_card)
                 .show()
         runDao.getAllRuns().observe(this, Observer<List<CourseRun>> {
-
-            info { "course runs$it" }
+            courseDataAdapter.setData(it as ArrayList<CourseRun>)
         })
 //        displayCourses()
         fetchRecommendedCourses()
@@ -84,21 +86,21 @@ class HomeFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        courseDao.getCourses().observe(this, Observer<List<Course>> {
-            //            if (ui.swipeRefreshLayout.isRefreshing) {
-//                ui.swipeRefreshLayout.isRefreshing = false
-//            }
-            courseDataAdapter.setData(it.filter { c ->
-                c.title.contains(searchQuery, true)
-            } as ArrayList<Course>)
-        })
+//        courseDao.getCourses().observe(this, Observer<List<Course>> {
+//            //            if (ui.swipeRefreshLayout.isRefreshing) {
+////                ui.swipeRefreshLayout.isRefreshing = false
+////            }
+//            courseDataAdapter.setData(it.filter { c ->
+//                c.title.contains(searchQuery, true)
+//            } as ArrayList<Course>)
+//        })
 
     }
 
     private fun fetchRecommendedCourses() {
 
 
-        Clients.onlineV2JsonApi.getRecommendedCourses().enqueue(retrofitCallback { t, resp ->
+        Clients.onlineV2JsonApi.getRecommendedCourses().enqueue(retrofitCallback { _, resp ->
             skeletonScreen.hide()
             resp?.body()?.let {
                 for (myCourses in it) {
