@@ -45,10 +45,10 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (type) {
-//            "myCourses" -> {
-//                val myCoursesViewHolder = holder as MyCoursesViewHolder
-//                myCoursesViewHolder.bindView(courseData!![position], courseWithInstructorDao, context)
-//            }
+            "myCourses" -> {
+                val myCoursesViewHolder = holder as MyCoursesViewHolder
+                myCoursesViewHolder.bindView(courseData!![position], courseWithInstructorDao, context)
+            }
             "allCourses" -> {
                 val allCoursesViewHolder = holder as AllCoursesViewHolder
                 allCoursesViewHolder.bindView(courseData!![position], courseWithInstructorDao, context)

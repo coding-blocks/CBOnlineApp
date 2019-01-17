@@ -18,9 +18,7 @@ import kotlin.concurrent.thread
 
 class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    var instructorsList: List<Instructor>? = null
-
-
+    private var instructorsList: List<Instructor>? = null
     private lateinit var courseDao: CourseDao
     private lateinit var database: AppDatabase
 
@@ -31,12 +29,8 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         thread {
             val data = courseDao.getCourse(courseRun.crCourseId)
             itemView.courseTitle.text = data.title
-//            itemView.courseDescription.text = data.subtitle
             itemView.courseRatingTv.text = data.rating.toString()
             itemView.courseRatingBar.rating = data.rating
-
-            //bind Instructors
-//        val instructorsLiveData = courseWithInstructorDao.getInstructorWithCourseId(data.id)
 
             doAsync {
                 if (instructorsList == null) {
@@ -69,7 +63,7 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             }
 
-//            //bind Runs
+           //bind Runs
             try {
                 courseRun.run {
                     itemView.coursePrice.text = "₹ $crPrice"
@@ -82,8 +76,8 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     var startDate: String? = ""
                     var endDate: String? = ""
                     try {
-                        startDate = sdf.format(Date(crStart.toLong() * 1000))
-                        endDate = sdf.format(Date(crEnd.toLong() * 1000))
+                        startDate = sdf.format(Date(crEnrollmentStart.toLong() * 1000))
+                        endDate = sdf.format(Date(crEnrollmentEnd.toLong() * 1000))
                     } catch (nfe: NumberFormatException) {
                         nfe.printStackTrace()
                     }

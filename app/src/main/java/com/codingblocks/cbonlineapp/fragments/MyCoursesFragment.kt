@@ -79,6 +79,14 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             fetchAllCourses()
 
         }
+        runDao.getMyRuns().observe(this, Observer<List<CourseRun>> {
+            info { it.size }
+            courseDataAdapter.setData(it as ArrayList<CourseRun>)
+        })
+
+        runDao.getAllRuns().observe(this, Observer<List<CourseRun>> {
+            info { it.size }
+        })
         fetchAllCourses()
     }
 
@@ -139,10 +147,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
                             doAsync {
                                 val updateCourse = courseDao.getCourse(course?.id ?: "")
-                                if (updateCourse == null) {
                                     courseDao.insert(course!!)
                                     runDao.insert(courseRun)
-                                }
 //                                else if (updateCourse.attempt_id == "" || updateCourse.progress != course?.progress) {
 //                                    info { "updateCourse is happening" }
 //                                    courseDao.update(course!!)
