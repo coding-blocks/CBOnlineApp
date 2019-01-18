@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.solver.widgets.ConstraintWidget
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -19,13 +20,15 @@ import org.jetbrains.anko.support.v4.nestedScrollView
 class HomeFragmentUi<T> : AnkoComponent<T> {
     lateinit var rvCourses: RecyclerView
     lateinit var allcourseText: TextView
+    lateinit var titleText: TextView
+    lateinit var homeImg: ImageView
 
 
     override fun createView(ui: AnkoContext<T>): View = with(ui) {
         nestedScrollView {
             constraintLayout {
 
-                val titleText = textView {
+                titleText = textView {
                     text = context.resources.getString(R.string.learn_to_code_interactively)
                     id = View.generateViewId()
                     textSize = 26f
@@ -43,7 +46,7 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                     endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
 
                 }
-                val homeImg = imageView(R.drawable.ic_home) {
+                homeImg = imageView(R.drawable.ic_home) {
                     id = View.generateViewId()
                     adjustViewBounds = true
                 }.lparams(width = matchParent, height = dip(200)) {

@@ -57,6 +57,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ui.allcourseText.text = "My Courses"
+        ui.titleText.visibility = View.GONE
+        ui.homeImg.visibility = View.GONE
         courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao, "myCourses")
         setHasOptionsMenu(true)
 

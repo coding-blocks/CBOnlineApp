@@ -62,6 +62,8 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         courseDataAdapter = CourseDataAdapter(ArrayList(), view.context, courseWithInstructorDao, "allCourses")
 
         ui.allcourseText.text = "All Courses"
+        ui.titleText.visibility = View.GONE
+        ui.homeImg.visibility = View.GONE
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
