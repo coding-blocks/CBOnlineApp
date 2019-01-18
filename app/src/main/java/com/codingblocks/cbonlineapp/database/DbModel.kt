@@ -49,7 +49,8 @@ data class CourseRun(
         var crMrp: String = "",
         var crCourseId: String = "",
         var crUpdatedAt: String = "",
-        var progress: Double = 0.0)
+        var progress: Double = 0.0,
+        var title: String = "")
 
 @Entity()
 data class Instructor(

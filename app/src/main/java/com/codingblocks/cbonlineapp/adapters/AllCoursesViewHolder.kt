@@ -76,7 +76,7 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     var startDate: String? = ""
                     var endDate: String? = ""
                     try {
-                        startDate = sdf.format(Date(crEnrollmentStart.toLong() * 1000))
+                        startDate = sdf.format(Date(crStart.toLong() * 1000))
                         endDate = sdf.format(Date(crEnrollmentEnd.toLong() * 1000))
                     } catch (nfe: NumberFormatException) {
                         nfe.printStackTrace()

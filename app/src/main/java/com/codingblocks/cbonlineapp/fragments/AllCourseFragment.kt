@@ -95,6 +95,9 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 //                c.title.contains(searchQuery, true)
 //            } as ArrayList<Course>)
 //        })
+        runDao.getAllRuns().observe(this, Observer<List<CourseRun>> {
+            courseDataAdapter.setData(it as ArrayList<CourseRun>)
+        })
 
     }
 
