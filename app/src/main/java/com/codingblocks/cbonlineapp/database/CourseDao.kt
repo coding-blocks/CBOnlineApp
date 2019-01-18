@@ -13,10 +13,10 @@ abstract class CourseDao : BaseDao<Course> {
     @Query("SElECT * FROM Course where uid = :courseId ")
     abstract fun getCourse(courseId: String): Course
 
-    @Query("SElECT * FROM Course where attempt_id = :courseId ")
+    @Query("SElECT * FROM Course where uid = :courseId ")
     abstract fun getMyCourse(courseId: String): LiveData<Course>
 
-    @Query("SElECT * FROM Course where attempt_id != " + "'" + "'")
+    @Query("SElECT * FROM Course where uid != " + "'" + "'")
     abstract fun getMyCourses(): LiveData<List<Course>>
 
 }

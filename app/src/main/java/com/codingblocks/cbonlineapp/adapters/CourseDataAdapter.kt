@@ -5,16 +5,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.Course
+import com.codingblocks.cbonlineapp.database.CourseRun
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import org.jetbrains.anko.AnkoLogger
 import java.util.*
 
 
-class CourseDataAdapter(private var courseData: ArrayList<Course>?,
+class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
                         val context: Context,
                         private val courseWithInstructorDao: CourseWithInstructorDao, var type: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AnkoLogger {
-    fun setData(courseData: ArrayList<Course>) {
+    fun setData(courseData: ArrayList<CourseRun>) {
         this.courseData = courseData
 
         notifyDataSetChanged()
