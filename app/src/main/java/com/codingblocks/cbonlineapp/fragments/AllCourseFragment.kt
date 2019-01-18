@@ -81,10 +81,10 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 
         displayCourses()
 
-//        ui.swipeRefreshLayout.setOnRefreshListener {
-//            // Your code here
-//            fetchAllCourses()
-//        }
+        ui.swipeRefreshLayout.setOnRefreshListener {
+            // Your code here
+            fetchAllCourses()
+        }
         fetchAllCourses()
 
     }
@@ -146,9 +146,9 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                         val updatedCourse = courseDao.getCourse(course.id)
                         courseDao.insert(course)
                         runDao.insert(courseRun)
-//                        if (ui.swipeRefreshLayout.isRefreshing) {
-//                            ui.swipeRefreshLayout.isRefreshing = false
-//                        }
+                        if (ui.swipeRefreshLayout.isRefreshing) {
+                            ui.swipeRefreshLayout.isRefreshing = false
+                        }
                         //Add CourseInstructors
                         for (i in myCourses.instructors!!) {
                             instructorDao.insert(Instructor(i.id ?: "", i.name ?: "",

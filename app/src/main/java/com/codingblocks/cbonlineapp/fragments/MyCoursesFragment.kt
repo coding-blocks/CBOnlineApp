@@ -12,7 +12,6 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.*
-import com.codingblocks.cbonlineapp.ui.AllCourseFragmentUi
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourse
@@ -77,13 +76,9 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 .show()
         displayCourses()
 
-//        ui.swipeRefreshLayout.setOnRefreshListener {
-//            // Your code here
-//            fetchAllCourses()
-//
-//        }
-
-
+        ui.swipeRefreshLayout.setOnRefreshListener {
+            fetchAllCourses()
+        }
         fetchAllCourses()
     }
 
@@ -147,9 +142,9 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                     runDao.update(courseRun)
                                 }
 
-//                                if (ui.swipeRefreshLayout.isRefreshing) {
-//                                    ui.swipeRefreshLayout.isRefreshing = false
-//                                }
+                                if (ui.swipeRefreshLayout.isRefreshing) {
+                                    ui.swipeRefreshLayout.isRefreshing = false
+                                }
                                 //fetch CourseInstructors
                                 myCourses.course?.instructors?.forEachIndexed { _, it ->
                                     Clients.onlineV2JsonApi.instructorsById(it.id!!).enqueue(retrofitCallback { _, response ->

@@ -72,7 +72,9 @@ class HomeFragment : Fragment(), AnkoLogger {
                 .count(4)
                 .load(R.layout.item_skeleton_course_card)
                 .show()
-
+        ui.swipeRefreshLayout.setOnRefreshListener {
+            fetchRecommendedCourses()
+        }
         displayCourses()
         fetchRecommendedCourses()
 
@@ -141,6 +143,9 @@ class HomeFragment : Fragment(), AnkoLogger {
                         courseDao.insert(course)
                         runDao.insert(courseRun)
 
+                        if (ui.swipeRefreshLayout.isRefreshing) {
+                            ui.swipeRefreshLayout.isRefreshing = false
+                        }
                         //Add CourseInstructors
                         for (i in myCourses.instructors!!) {
                             instructorDao.insert(Instructor(i.id ?: "", i.name ?: "",
