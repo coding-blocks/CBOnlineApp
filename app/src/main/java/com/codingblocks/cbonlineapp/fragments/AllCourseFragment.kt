@@ -12,7 +12,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.*
-import com.codingblocks.cbonlineapp.ui.AllCourseFragmentUi
+import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Runs
 import com.ethanhua.skeleton.Skeleton
@@ -25,12 +25,7 @@ import kotlin.concurrent.thread
 
 class AllCourseFragment : Fragment(), AnkoLogger {
 
-    val ui = AllCourseFragmentUi<Fragment>()
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return ui.createView(AnkoContext.create(ctx, this))
-    }
-
+    val ui = HomeFragmentUi<Fragment>()
     private lateinit var courseDataAdapter: CourseDataAdapter
     lateinit var skeletonScreen: SkeletonScreen
 
@@ -52,6 +47,11 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         database.courseRunDao()
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return ui.createView(AnkoContext.create(ctx, this))
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -59,8 +59,9 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         //it is important to make oncreateoptions menu work
         setHasOptionsMenu(true)
 
-        courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao, "allCourses")
+        courseDataAdapter = CourseDataAdapter(ArrayList(), view.context, courseWithInstructorDao, "allCourses")
 
+        ui.allcourseText.text = "All Courses"
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
@@ -78,25 +79,19 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 
         displayCourses()
 
-        ui.swipeRefreshLayout.setOnRefreshListener {
-            // Your code here
-            fetchAllCourses()
-        }
+//        ui.swipeRefreshLayout.setOnRefreshListener {
+//            // Your code here
+//            fetchAllCourses()
+//        }
         fetchAllCourses()
 
     }
 
     private fun displayCourses(searchQuery: String = "") {
-//        courseDao.getCourses().observe(this, Observer<List<Course>> {
-//            if (ui.swipeRefreshLayout.isRefreshing) {
-//                ui.swipeRefreshLayout.isRefreshing = false
-//            }
-//            courseDataAdapter.setData(it.filter { c ->
-//                c.title.contains(searchQuery, true)
-//            } as ArrayList<Course>)
-//        })
         runDao.getAllRuns().observe(this, Observer<List<CourseRun>> {
-            courseDataAdapter.setData(it as ArrayList<CourseRun>)
+            courseDataAdapter.setData(it.filter { c ->
+                c.title.contains(searchQuery, true)
+            } as ArrayList<CourseRun>)
         })
 
     }
@@ -114,6 +109,10 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                     for (i in 0 until myCourses.runs!!.size) {
                         if (myCourses.runs!![i].enrollmentStart!!.toLong() < (System.currentTimeMillis() / 1000) && myCourses.runs!![i].enrollmentEnd!!.toLong() > (System.currentTimeMillis() / 1000))
                             currentRuns.add(myCourses.runs!![i])
+                    }
+                    //for no current runs
+                    if (currentRuns.size == 0) {
+                        currentRuns.addAll(myCourses.runs!!)
                     }
 
                     currentRuns.sortWith(Comparator { o1, o2 -> java.lang.Long.compare(o2.price!!.toLong(), o1.price!!.toLong()) })
@@ -138,21 +137,16 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                             currentRuns[0].enrollmentEnd ?: "",
                             currentRuns[0].start ?: "", currentRuns[0].end ?: "",
                             currentRuns[0].price ?: "", currentRuns[0].mrp ?: "",
-                            myCourses.id ?: "", currentRuns[0].updatedAt ?: "")
+                            myCourses.id ?: "", currentRuns[0].updatedAt ?: "",
+                            title = myCourses.title ?: "")
 
                     thread {
                         val updatedCourse = courseDao.getCourse(course.id)
-                        //update if price does not match else insert on first time
-                        if (updatedCourse == null) {
-                            courseDao.insert(course)
-                            runDao.insert(courseRun)
-                        }
-//                        else if (updatedCourse.courseRun.crPrice != course.courseRun.crPrice) {
-//                            courseDao.update(course)
+                        courseDao.insert(course)
+                        runDao.insert(courseRun)
+//                        if (ui.swipeRefreshLayout.isRefreshing) {
+//                            ui.swipeRefreshLayout.isRefreshing = false
 //                        }
-                        if (ui.swipeRefreshLayout.isRefreshing) {
-                            ui.swipeRefreshLayout.isRefreshing = false
-                        }
                         //Add CourseInstructors
                         for (i in myCourses.instructors!!) {
                             instructorDao.insert(Instructor(i.id ?: "", i.name ?: "",
@@ -165,6 +159,19 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                 }
             }
         })
+    }
+
+    private fun insertCourseAndInstructor(course: com.codingblocks.onlineapi.models.Course, instructor: com.codingblocks.onlineapi.models.Instructor) {
+
+        thread {
+            try {
+                courseWithInstructorDao.insert(CourseWithInstructor(course.id!!, instructor.id!!))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("CRASH", "COURSE ID : ${course.id.toString()}")
+                Log.e("CRASH", "INSTRUCTOR ID : ${instructor.id.toString()}")
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -186,20 +193,6 @@ class AllCourseFragment : Fragment(), AnkoLogger {
             }
         })
         super.onCreateOptionsMenu(menu, inflater)
-    }
-
-
-    private fun insertCourseAndInstructor(course: com.codingblocks.onlineapi.models.Course, instructor: com.codingblocks.onlineapi.models.Instructor) {
-
-        thread {
-            try {
-                courseWithInstructorDao.insert(CourseWithInstructor(course.id!!, instructor.id!!))
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Log.e("CRASH", "COURSE ID : ${course.id.toString()}")
-                Log.e("CRASH", "INSTRUCTOR ID : ${instructor.id.toString()}")
-            }
-        }
     }
 
 

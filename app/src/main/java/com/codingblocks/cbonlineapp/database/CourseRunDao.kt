@@ -16,6 +16,9 @@ abstract class CourseRunDao : BaseDao<CourseRun> {
     @Query("SELECT * FROM CourseRun where crUid = :runid")
     abstract fun getRunById(runid:String): CourseRun
 
+    @Query("SELECT * FROM CourseRun where crAttemptId = :attemptId")
+    abstract fun getRunByAtemptId(attemptId:String): LiveData<CourseRun>
+
 //
 //    @Delete
 //    fun delete(course: CourseRun)

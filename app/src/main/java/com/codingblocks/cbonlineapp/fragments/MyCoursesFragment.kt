@@ -13,6 +13,7 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.ui.AllCourseFragmentUi
+import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourse
 import com.ethanhua.skeleton.Skeleton
@@ -27,7 +28,7 @@ import kotlin.concurrent.thread
 
 class MyCoursesFragment : Fragment(), AnkoLogger {
 
-    val ui = AllCourseFragmentUi<Fragment>()
+    val ui = HomeFragmentUi<Fragment>()
     private lateinit var courseDataAdapter: CourseDataAdapter
     private lateinit var skeletonScreen: SkeletonScreen
 
@@ -55,7 +56,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ui.titleText.text = "My Courses"
+        ui.allcourseText.text = "My Courses"
         courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao, "myCourses")
         setHasOptionsMenu(true)
 
@@ -74,11 +75,11 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 .show()
         displayCourses()
 
-        ui.swipeRefreshLayout.setOnRefreshListener {
-            // Your code here
-            fetchAllCourses()
-
-        }
+//        ui.swipeRefreshLayout.setOnRefreshListener {
+//            // Your code here
+//            fetchAllCourses()
+//
+//        }
 
 
         fetchAllCourses()
@@ -144,9 +145,9 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                     runDao.update(courseRun)
                                 }
 
-                                if (ui.swipeRefreshLayout.isRefreshing) {
-                                    ui.swipeRefreshLayout.isRefreshing = false
-                                }
+//                                if (ui.swipeRefreshLayout.isRefreshing) {
+//                                    ui.swipeRefreshLayout.isRefreshing = false
+//                                }
                                 //fetch CourseInstructors
                                 myCourses.course?.instructors?.forEachIndexed { _, it ->
                                     Clients.onlineV2JsonApi.instructorsById(it.id!!).enqueue(retrofitCallback { _, response ->

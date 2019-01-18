@@ -79,14 +79,6 @@ class HomeFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-//        courseDao.getCourses().observe(this, Observer<List<Course>> {
-//            //            if (ui.swipeRefreshLayout.isRefreshing) {
-////                ui.swipeRefreshLayout.isRefreshing = false
-////            }
-//            courseDataAdapter.setData(it.filter { c ->
-//                c.title.contains(searchQuery, true)
-//            } as ArrayList<Course>)
-//        })
         runDao.getAllRuns().observe(this, Observer<List<CourseRun>> {
             courseDataAdapter.setData(it.filter { c ->
                 c.title.contains(searchQuery, true)

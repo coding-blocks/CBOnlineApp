@@ -40,21 +40,21 @@ class OverviewFragment : Fragment(), AnkoLogger {
 
         }
 
-        val header = layoutInflater.inflate(R.layout.leaderboard_header, leaderboardLv, false) as ViewGroup
-        leaderboardLv.addHeaderView(header, null, false)
-        leaderboardLv.adapter = leaderboardListAdapter
-
-        Clients.api.leaderboardById(runId).enqueue(retrofitCallback { throwable, response ->
-            response?.body().let {
-                if (it != null) {
-                    leaderboardLv.visibility = View.VISIBLE
-                    leaderBoardTv.visibility = View.VISIBLE
-                    view1.visibility = View.VISIBLE
-                    list.addAll(it as ArrayList<Leaderboard>)
-                    leaderboardListAdapter.notifyDataSetChanged()
-                }
-            }
-        })
+//        val header = layoutInflater.inflate(R.layout.leaderboard_header, leaderboardLv, false) as ViewGroup
+//        leaderboardLv.addHeaderView(header, null, false)
+//        leaderboardLv.adapter = leaderboardListAdapter
+//
+//        Clients.api.leaderboardById(runId).enqueue(retrofitCallback { throwable, response ->
+//            response?.body().let {
+//                if (it != null) {
+//                    leaderboardLv.visibility = View.VISIBLE
+//                    leaderBoardTv.visibility = View.VISIBLE
+//                    view1.visibility = View.VISIBLE
+//                    list.addAll(it as ArrayList<Leaderboard>)
+//                    leaderboardListAdapter.notifyDataSetChanged()
+//                }
+//            }
+//        })
     }
 
     companion object {
