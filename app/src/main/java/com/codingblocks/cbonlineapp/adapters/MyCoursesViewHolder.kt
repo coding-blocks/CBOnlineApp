@@ -26,8 +26,8 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
         database = AppDatabase.getInstance(context)
         courseDao = database.courseDao()
         thread {
-            val data = courseDao.getCourse(courseRun.crCourseId)
             doAsync {
+                val data = courseDao.getCourse(courseRun.crCourseId)
                 uiThread {
                 data.run {
                     itemView.courseTitle.text = title
@@ -39,14 +39,17 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
                     itemView.courseCoverImgView.loadSvg(coverImage)
                     itemView.courseLogo.loadSvg(logo)
                     if (courseRun.crEnd.toLong() * 1000 > System.currentTimeMillis()) {
+
+                        itemView.courseBtn1.text = "Resume"
+                        itemView.courseBtn1.isEnabled = true
+                        itemView.courseBtn1.background = context.getDrawable(R.drawable.button_background)
                         itemView.courseBtn1.setOnClickListener {
                             it.context.startActivity(it.context.intentFor<MyCourseActivity>("course_id" to id, "attempt_id" to courseRun.crAttemptId, "courseName" to title).singleTop())
-
                         }
-                        itemView.setOnClickListener {
-                            it.context.startActivity(it.context.intentFor<MyCourseActivity>("course_id" to id, "attempt_id" to courseRun.crAttemptId, "courseName" to title).singleTop())
-
-                        }
+//                        itemView.setOnClickListener {
+//                            it.context.startActivity(it.context.intentFor<MyCourseActivity>("course_id" to id, "attempt_id" to courseRun.crAttemptId, "courseName" to title).singleTop())
+//
+//                        }
                     } else {
                         itemView.courseBtn1.text = "Expired"
                         itemView.courseBtn1.isEnabled = false

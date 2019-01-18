@@ -79,28 +79,17 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             fetchAllCourses()
 
         }
-        runDao.getMyRuns().observe(this, Observer<List<CourseRun>> {
-            info { it.size }
-            courseDataAdapter.setData(it as ArrayList<CourseRun>)
-        })
 
-        runDao.getAllRuns().observe(this, Observer<List<CourseRun>> {
-            info { it.size }
-        })
+
         fetchAllCourses()
     }
 
     private fun displayCourses(searchQuery: String = "") {
-//        courseDao.getMyCourses().observe(this, Observer<List<Course>> {
-//            if (ui.swipeRefreshLayout.isRefreshing) {
-//                ui.swipeRefreshLayout.isRefreshing = false
-//            }
-//            courseDataAdapter.setData(it.filter { c ->
-//                c.title.contains(searchQuery, true) &&
-//                        c.courseRun.crEnd.toLong() * 1000 > System.currentTimeMillis()
-//
-//            } as ArrayList<Course>)
-//        })
+        runDao.getMyRuns().observe(this, Observer<List<CourseRun>> {
+            courseDataAdapter.setData(it.filter { c ->
+                c.title.contains(searchQuery, true)
+            } as ArrayList<CourseRun>)
+        })
 
     }
 
@@ -109,9 +98,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         Clients.onlineV2JsonApi.getMyCourses().enqueue(retrofitCallback { t, resp ->
             skeletonScreen.hide()
             resp?.body()?.let {
-                info { it.toString() }
                 for (myCourses in it) {
-
                     //Add Course Progress to Course Object
                     Clients.api.getMyCourseProgress(myCourses.run_attempts?.get(0)?.id.toString()).enqueue(retrofitCallback { t, progressResponse ->
                         progressResponse?.body().let { map ->
@@ -131,28 +118,32 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                         coverImage ?: "",
                                         updatedAt)
                             }
-                                val courseRun = CourseRun(myCourses.id ?: "",
-                                        myCourses.run_attempts?.get(0)?.id ?: "",
-                                        myCourses.name ?: "",
-                                        myCourses.description ?: "",
-                                        myCourses.start ?: "",
-                                        myCourses.run_attempts!![0].end ?: "",
-                                        myCourses.start ?: "",
-                                        myCourses.run_attempts!![0].end ?: "",
-                                        myCourses.price ?: "",
-                                        myCourses.mrp ?: "",
-                                        myCourses.course?.id ?: "",
-                                        myCourses.updatedAt ?: "",
-                                        progress)
+                            val courseRun = CourseRun(myCourses.id ?: "",
+                                    myCourses.run_attempts?.get(0)?.id ?: "",
+                                    myCourses.name ?: "",
+                                    myCourses.description ?: "",
+                                    myCourses.start ?: "",
+                                    myCourses.run_attempts!![0].end ?: "",
+                                    myCourses.start ?: "",
+                                    myCourses.run_attempts!![0].end ?: "",
+                                    myCourses.price ?: "",
+                                    myCourses.mrp ?: "",
+                                    myCourses.course?.id ?: "",
+                                    myCourses.updatedAt ?: "",
+                                    progress = progress,
+                                    title = myCourses.course?.title ?: "")
 
                             doAsync {
-                                val updateCourse = courseDao.getCourse(course?.id ?: "")
+                                val updateRun = runDao.getRunById(myCourses.id ?: "")
+                                if (updateRun == null) {
                                     courseDao.insert(course!!)
                                     runDao.insert(courseRun)
-//                                else if (updateCourse.attempt_id == "" || updateCourse.progress != course?.progress) {
-//                                    info { "updateCourse is happening" }
-//                                    courseDao.update(course!!)
-//                                }
+                                } else if (updateRun.progress != progress) {
+                                    info { myCourses.course?.title + "updateCourse is happening" +progress + "  " + updateRun.progress}
+                                    courseDao.update(course!!)
+                                    runDao.update(courseRun)
+                                }
+
                                 if (ui.swipeRefreshLayout.isRefreshing) {
                                     ui.swipeRefreshLayout.isRefreshing = false
                                 }
