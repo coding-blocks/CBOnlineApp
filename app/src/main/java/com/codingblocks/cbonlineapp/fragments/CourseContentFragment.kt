@@ -48,8 +48,11 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         val sectionAdapter = SectionDetailsAdapter(sectionsList, activity!!, this)
         view.rvExpendableView.layoutManager = LinearLayoutManager(context)
         view.rvExpendableView.adapter = sectionAdapter
-
+        view.sectionProgressBar.show()
         sectionDao.getCourseSection(attemptId).observe(this, Observer<List<CourseSection>> {
+            if(it.isNotEmpty()){
+                view.sectionProgressBar.hide()
+            }
             sectionAdapter.setData(it as ArrayList<CourseSection>)
         })
 

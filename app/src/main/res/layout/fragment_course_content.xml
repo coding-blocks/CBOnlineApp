@@ -5,6 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".fragments.CourseContentFragment">
 
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/sectionProgressBar"
+        android:layout_marginTop="10dp"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.SalmonAccent"
+        android:layout_gravity="center_horizontal"
+        android:visibility="visible" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvExpendableView"
         android:layout_width="match_parent"

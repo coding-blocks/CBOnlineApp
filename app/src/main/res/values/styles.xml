@@ -43,5 +43,9 @@
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
 
+    <style name="AppTheme.SalmonAccent">
+        <item name="colorAccent">@color/salmon</item>
+    </style>
+
 
 </resources>
