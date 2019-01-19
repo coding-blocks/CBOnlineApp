@@ -24,10 +24,10 @@
         android:id="@+id/features"
         android:checkableBehavior="single"
         android:menuCategory="system">
-        <item
-            android:id="@+id/nav_preferences"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="Settings" />
+        <!--<item-->
+        <!--android:id="@+id/nav_preferences"-->
+        <!--android:icon="@drawable/ic_settings_black_24dp"-->
+        <!--android:title="Settings" />-->
 
         <item
             android:id="@+id/nav_contactUs"
@@ -39,6 +39,4 @@
             android:title="Chat on Whatsapp" />
 
     </group>
-
-
 </menu>

@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(
-        version = 3, entities = [
+        version = 4, entities = [
     CourseRun::class,
     CourseSection::class,
     CourseContent::class,

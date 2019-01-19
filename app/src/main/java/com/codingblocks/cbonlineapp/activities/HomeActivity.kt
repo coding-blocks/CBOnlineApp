@@ -188,9 +188,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     Toast.makeText(this, "Please install whatsApp", Toast.LENGTH_SHORT).show()
                 }
             }
-            R.id.nav_preferences -> {
-                startActivity(intentFor<SettingsActivity>().singleTop())
-            }
+//            R.id.nav_preferences -> {
+//                startActivity(intentFor<SettingsActivity>().singleTop())
+//            }
             R.id.nav_contactUs -> {
                 startActivity(intentFor<AboutActivity>().singleTop())
             }
