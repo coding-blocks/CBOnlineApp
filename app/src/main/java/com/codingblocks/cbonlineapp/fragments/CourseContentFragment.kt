@@ -39,24 +39,23 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_course_content, container, false)
+                              savedInstanceState: Bundle?):
+            View = inflater.inflate(R.layout.fragment_course_content, container, false).apply {
+
         database = AppDatabase.getInstance(context!!)
         val sectionDao = database.sectionDao()
         val sectionsList = ArrayList<CourseSection>()
-        val sectionAdapter = SectionDetailsAdapter(sectionsList, activity!!, this)
-        view.rvExpendableView.layoutManager = LinearLayoutManager(context)
-        view.rvExpendableView.adapter = sectionAdapter
-        view.sectionProgressBar.show()
-        sectionDao.getCourseSection(attemptId).observe(this, Observer<List<CourseSection>> {
-            if(it.isNotEmpty()){
-                view.sectionProgressBar.hide()
+        val sectionAdapter = SectionDetailsAdapter(sectionsList, activity!!, this@CourseContentFragment)
+        this.rvExpendableView.layoutManager = LinearLayoutManager(context)
+        this.rvExpendableView.adapter = sectionAdapter
+        this.sectionProgressBar.show()
+        sectionDao.getCourseSection(attemptId).observe(this@CourseContentFragment, Observer<List<CourseSection>> {
+            if (it.isNotEmpty()) {
+                this.sectionProgressBar.hide()
             }
             sectionAdapter.setData(it as ArrayList<CourseSection>)
         })
 
-        return view
     }
 
     companion object {

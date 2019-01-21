@@ -12,6 +12,7 @@ import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.fragments.AnnouncementsFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
+import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
 import com.codingblocks.cbonlineapp.fragments.OverviewFragment
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
@@ -229,13 +230,16 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         adapter.add(OverviewFragment.newInstance(attemptId, crUid), "Overview")
         adapter.add(AnnouncementsFragment.newInstance(courseId), "About")
         adapter.add(CourseContentFragment.newInstance(attemptId), "Course Content")
+        adapter.add(DoubtsFragment.newInstance(attemptId,crUid), "Doubts")
+
         htab_viewpager.adapter = adapter
         htab_tabs.setupWithViewPager(htab_viewpager)
         htab_tabs.getTabAt(0)?.setIcon(R.drawable.ic_menu)
         htab_tabs.getTabAt(1)?.setIcon(R.drawable.ic_announcement)
         htab_tabs.getTabAt(2)?.setIcon(R.drawable.ic_docs)
+        htab_tabs.getTabAt(3)?.setIcon(R.drawable.ic_announcement)
         htab_tabs.getTabAt(2)?.select()
-        htab_viewpager.offscreenPageLimit = 3
+        htab_viewpager.offscreenPageLimit = 4
 
     }
 
