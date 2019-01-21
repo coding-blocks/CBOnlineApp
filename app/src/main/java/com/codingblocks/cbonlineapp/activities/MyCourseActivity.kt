@@ -62,7 +62,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         val sectionDao = database.sectionDao()
         val contentDao = database.contentDao()
         runDao.getRunByAtemptId(attemptId).observe(this, Observer<CourseRun> {
-            setupViewPager(it.crUid)
+            setupViewPager(it.crUid,it.crCourseId)
         })
         courseDao.getMyCourse(attemptId).observe(this, Observer<Course> {
             youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
@@ -225,12 +225,12 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
     }
 
 
-    private fun setupViewPager(crUid: String) {
+    private fun setupViewPager(crUid: String, crCourseId: String) {
         val adapter = TabLayoutAdapter(supportFragmentManager)
         adapter.add(OverviewFragment.newInstance(attemptId, crUid), "Overview")
         adapter.add(AnnouncementsFragment.newInstance(courseId), "About")
         adapter.add(CourseContentFragment.newInstance(attemptId), "Course Content")
-        adapter.add(DoubtsFragment.newInstance(attemptId,crUid), "Doubts")
+        adapter.add(DoubtsFragment.newInstance(attemptId,crCourseId), "Doubts")
 
         htab_viewpager.adapter = adapter
         htab_tabs.setupWithViewPager(htab_viewpager)

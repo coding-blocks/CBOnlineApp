@@ -1,5 +1,6 @@
 package com.codingblocks.onlineapi.api
 
+import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.RatingModel
 import com.google.gson.JsonObject
@@ -46,4 +47,7 @@ interface OnlineRestApi {
     @GET("v2/runs/{runid}/leaderboard")
     fun leaderboardById(
             @Path("runid") id: String): Call<List<Leaderboard>>
+
+    @GET("v2/courses/{runid}/doubts?order=latest")
+    fun getDoubts(@Path("runid") id: String): Call<Doubts>
 }
