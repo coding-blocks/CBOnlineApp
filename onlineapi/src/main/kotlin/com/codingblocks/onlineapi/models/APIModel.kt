@@ -5,14 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.Type
-import com.google.gson.annotations.SerializedName
 
-data class RatingModel(
-        val rating: String,
-        val count: Int,
-        val stats: List<Double>,
-        val userScore: Any?
-)
 
 open class BaseModel {
     @Id
@@ -44,9 +37,7 @@ open class Instructor : BaseModel() {
 }
 
 @Type("instructor")
-class InstructorSingle : Instructor() {
-
-}
+class InstructorSingle : Instructor()
 
 class InstructorCourse : BaseModel() {
     @JvmField
@@ -54,49 +45,31 @@ class InstructorCourse : BaseModel() {
     var courseId: String? = null
 }
 
-@Type("sections")
-class Sections : BaseModel() {
-    @JvmField
-    var name: String? = null
-    @JvmField
-    var preminum: Boolean? = false
-    @JvmField
-    var status: String? = null
+
+
+@Type("run_attempts")
+open class MyRunAttempts : BaseModel() {
 
     @JvmField
-    var order: Int? = null
-
-    @Relationship("contents", resolve = true)
+    @JsonProperty("certificate-approved")
+    var certificateApproved: Boolean? = false
     @JvmField
-    var contents: ArrayList<Contents>? = null
-}
-
-@Type("contents")
-class Contents : BaseModel() {
+    var end: String? = null
     @JvmField
-    var contentable: String? = null
+    var premium: Boolean? = false
     @JvmField
-    var duration: Long? = null
+    var revoked: Boolean? = false
+    @Relationship("run", resolve = true)
     @JvmField
-    var title: String? = null
-
-    @JsonProperty("section-content")
-    @JvmField
-    val sectionContent: SectionContent? = null
+    var run: MyCourseRuns? = null
 
 }
 
-class SectionContent : BaseModel() {
-    @JvmField
-    val order: Int? = null
-    @JvmField
-    @JsonProperty("section-id")
-    val sectionId: String? = null
-}
-
+@Type("run_attempt")
+class MyRunAttempt : MyRunAttempts()
 
 @Type("runs")
-class Runs : BaseModel() {
+open class Runs : BaseModel() {
     @JvmField
     var name: String? = null
     @JvmField
@@ -121,9 +94,38 @@ class Runs : BaseModel() {
 
 }
 
+@Type("run")
+class MyCourseRuns : Runs() {
+
+    @JsonProperty("course-id")
+    @JvmField
+    var courseId: String? = null
+    @Relationship("course", resolve = true)
+    @JvmField
+    var course: MyCourse? = null
+
+    @Relationship("run-attempts", resolve = true)
+    @JvmField
+    var runAttempts: ArrayList<MyRunAttempts>? = null
+
+    @Relationship("sections", resolve = true)
+    @JvmField
+    var courseSections: ArrayList<CourseSection>? = null
+
+
+    @Relationship("announcements", resolve = true)
+    @JvmField
+    var announcements: ArrayList<Announcement>? = null
+
+    @JvmField
+    @JsonProperty("whatsapp-link")
+    var whatsappLink: String? = null
+
+
+}
 
 @Type("courses")
-class Course : BaseModel() {
+open class Course : BaseModel() {
     @JvmField
     var title: String? = null
     @JvmField
@@ -172,172 +174,58 @@ class Course : BaseModel() {
 
 }
 
+@Type("course")
+class MyCourse : Course()
 
-@Type("run_attempts")
-class MyRunAttempts : BaseModel() {
-
-    @JvmField
-    @JsonProperty("certificate-approved")
-    var certificate_approved: Boolean? = false
-    @JvmField
-    var end: String? = null
-    @JvmField
-    var premium: Boolean? = false
-    @JvmField
-    var revoked: Boolean? = false
-    @Relationship("run", resolve = true)
-    @JvmField
-    var run: MyCourseRuns? = null
-
-}
-
-@Type("run_attempt")
-class MyRunAttempt : BaseModel() {
-
-    @JvmField
-    @JsonProperty("certificate-approved")
-    var certificate_approved: Boolean? = false
-    @JvmField
-    var end: String? = null
-    @JvmField
-    var premium: Boolean? = false
-    @JvmField
-    var revoked: Boolean? = false
-    @Relationship("run", resolve = true)
-    @JvmField
-    var run: MyCourseRuns? = null
-
-
-}
-
-class Leaderboard(@JvmField
-                  var userName: String) : BaseModel() {
-
-    @JvmField
-    var collegeName: String? = null
-    @JvmField
-    var photo: String? = null
-    @JvmField
-    var score: Int? = 0
-}
-
-@Type("run")
-class MyCourseRuns : BaseModel() {
+@Type("sections")
+open class Sections : BaseModel() {
     @JvmField
     var name: String? = null
     @JvmField
-    var description: String? = null
+    var preminum: Boolean? = false
     @JvmField
-    var start: String? = null
-    @JvmField
-    var end: String? = null
-    @JvmField
-    var price: String? = null
-    @JvmField
-    var mrp: String? = null
-    @JsonProperty("course-id")
-    @JvmField
-    var courseId: String? = null
-    @JvmField
-    @JsonProperty("enrollment-start")
-    val enrollmentStart: String? = null
-    @JvmField
-    @JsonProperty("enrollment-end")
-    val enrollmentEnd: String? = null
-    @Relationship("course", resolve = true)
-    @JvmField
-    var course: MyCourse? = null
-
-    @Relationship("run-attempts", resolve = true)
-    @JvmField
-    var run_attempts: ArrayList<MyRunAttempts>? = null
-
-    @Relationship("sections", resolve = true)
-    @JvmField
-    var sections: ArrayList<CourseSection>? = null
-
-
-    @Relationship("announcements", resolve = true)
-    @JvmField
-    var announcements: ArrayList<Announcement>? = null
+    var status: String? = null
 
     @JvmField
-    @JsonProperty("whatsapp-link")
-    var whatsappLink: String? = null
+    var order: Int? = null
 
+    @Relationship("contents", resolve = true)
+    @JvmField
+    var contents: ArrayList<Contents>? = null
+}
+
+@Type("contents")
+open class Contents : BaseModel() {
+    @JvmField
+    var contentable: String? = null
+    @JvmField
+    var duration: Long? = null
+    @JvmField
+    var title: String? = null
+    @JsonProperty("section-content")
+    @JvmField
+    val sectionContent: SectionContent? = null
 
 }
 
-@Type("course")
-class MyCourse : BaseModel() {
+class SectionContent : BaseModel() {
     @JvmField
-    var title: String? = null
+    val order: Int? = null
     @JvmField
-    var subtitle: String? = null
-    @JvmField
-    var logo: String? = null
-    @JvmField
-    var summary: String? = null
-
-    @JvmField
-    @JsonProperty("category-name")
-    var categoryName: String? = null
-
-    @JvmField
-    @JsonProperty("category-id")
-    var categoryId: Int? = null
-
-    @JvmField
-    @JsonProperty("promo-video")
-    var promoVideo: String? = null
-
-    @JvmField
-    @JsonProperty("review-count")
-    var reviewCount: Int? = null
-
-    @JvmField
-    var difficulty: String? = null
-
-    @JvmField
-    var rating: Float? = null
-
-    @JvmField
-    var slug: String? = null
-
-    @JvmField
-    @JsonProperty("cover-image")
-    var coverImage: String? = null
-
-    @Relationship("instructors", resolve = false)
-    @JvmField
-    var instructors: ArrayList<Instructor>? = null
-
-//    @Relationship("runs", resolve = true)
-//    @JvmField
-//    var runs: ArrayList<Runs>? = null
-
-
+    @JsonProperty("section-id")
+    val sectionId: String? = null
 }
 
 
 @Type("section")
-class CourseSection : BaseModel() {
+class CourseSection : Sections() {
 
     @JvmField
     @JsonProperty("created-at")
     var createdAt: String? = null
 
     @JvmField
-    var name: String? = null
-
-    @JvmField
-    var order: Int? = null
-
-    @JvmField
     var premium: Boolean? = null
-
-    @JvmField
-    var status: String? = null
 
 
     @JvmField
@@ -347,21 +235,12 @@ class CourseSection : BaseModel() {
 
     @Relationship("contents", resolve = true)
     @JvmField
-    var contents: ArrayList<LectureContent>? = null
+    var courseContent: ArrayList<LectureContent>? = null
 
 }
 
 @Type("content")
-class LectureContent : BaseModel() {
-
-    @JvmField
-    var contentable: String? = null
-
-    @JvmField
-    var duration: Long? = null
-
-    @JvmField
-    var title: String? = null
+class LectureContent : Contents() {
 
     @JvmField
     @JsonProperty("section-content")
@@ -667,148 +546,6 @@ class Quizqnas : BaseModel()
 @Type("run-attempts")
 class QuizRunAttempt : BaseModel()
 
-data class Doubts(
 
-        @field:SerializedName("primary_groups")
-        val primaryGroups: List<Any?>? = null,
-
-        @field:SerializedName("topic_list")
-        val topicList: TopicList? = null
-)
-
-data class TopicList(
-
-        @field:SerializedName("can_create_topic")
-        val canCreateTopic: Boolean? = null,
-
-        @field:SerializedName("per_page")
-        val perPage: Int? = null,
-
-        @field:SerializedName("topics")
-        val topics: List<TopicsItem?>? = null,
-
-        @field:SerializedName("draft")
-        val draft: Any? = null,
-
-        @field:SerializedName("draft_sequence")
-        val draftSequence: Int? = null,
-
-        @field:SerializedName("top_tags")
-        val topTags: List<Any?>? = null,
-
-        @field:SerializedName("draft_key")
-        val draftKey: String? = null
-)
-
-data class TopicsItem(
-
-        @field:SerializedName("unpinned")
-        val unpinned: Any? = null,
-
-        @field:SerializedName("pinned")
-        val pinned: Boolean? = null,
-
-        @field:SerializedName("featured_link")
-        val featuredLink: Any? = null,
-
-        @field:SerializedName("created_at")
-        val createdAt: String? = null,
-
-        @field:SerializedName("bumped")
-        val bumped: Boolean? = null,
-
-        @field:SerializedName("title")
-        val title: String? = null,
-
-        @field:SerializedName("liked")
-        val liked: Any? = null,
-
-        @field:SerializedName("archived")
-        val archived: Boolean? = null,
-
-        @field:SerializedName("has_summary")
-        val hasSummary: Boolean? = null,
-
-        @field:SerializedName("fancy_title")
-        val fancyTitle: String? = null,
-
-        @field:SerializedName("category_id")
-        val categoryId: Int? = null,
-
-        @field:SerializedName("id")
-        val id: Int? = null,
-
-        @field:SerializedName("bumped_at")
-        val bumpedAt: String? = null,
-
-        @field:SerializedName("slug")
-        val slug: String? = null,
-
-        @field:SerializedName("views")
-        val views: Int? = null,
-
-        @field:SerializedName("last_posted_at")
-        val lastPostedAt: Any? = null,
-
-        @field:SerializedName("visible")
-        val visible: Boolean? = null,
-
-        @field:SerializedName("like_count")
-        val likeCount: Int? = null,
-
-        @field:SerializedName("image_url")
-        val imageUrl: Any? = null,
-
-        @field:SerializedName("bookmarked")
-        val bookmarked: Any? = null,
-
-        @field:SerializedName("last_poster_username")
-        val lastPosterUsername: String? = null,
-
-        @field:SerializedName("posters")
-        val posters: List<PostersItem?>? = null,
-
-        @field:SerializedName("pinned_globally")
-        val pinnedGlobally: Boolean? = null,
-
-        @field:SerializedName("reply_count")
-        val replyCount: Int? = null,
-
-        @field:SerializedName("tags")
-        val tags: List<Any?>? = null,
-
-        @field:SerializedName("archetype")
-        val archetype: String? = null,
-
-        @field:SerializedName("highest_post_number")
-        val highestPostNumber: Int? = null,
-
-        @field:SerializedName("closed")
-        val closed: Boolean? = null,
-
-        @field:SerializedName("unseen")
-        val unseen: Boolean? = null,
-
-        @field:SerializedName("posts_count")
-        val postsCount: Int? = null,
-
-        @field:SerializedName("excerpt")
-        val excerpt: Any? = null
-)
-
-data class PostersItem(
-
-        @field:SerializedName("primary_group_id")
-        val primaryGroupId: Any? = null,
-
-        @field:SerializedName("user_id")
-        val userId: Int? = null,
-
-        @field:SerializedName("extras")
-        val extras: Any? = null,
-
-        @field:SerializedName("description")
-        val description: String? = null
-)
 
 

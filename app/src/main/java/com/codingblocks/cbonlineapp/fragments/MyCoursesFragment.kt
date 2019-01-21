@@ -98,7 +98,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             resp?.body()?.let {
                 for (myCourses in it) {
                     //Add Course Progress to Course Object
-                    Clients.api.getMyCourseProgress(myCourses.run_attempts?.get(0)?.id.toString()).enqueue(retrofitCallback { t, progressResponse ->
+                    Clients.api.getMyCourseProgress(myCourses.runAttempts?.get(0)?.id.toString()).enqueue(retrofitCallback { t, progressResponse ->
                         progressResponse?.body().let { map ->
                             val progress = map!!["percent"] as Double
                             val course = myCourses.course?.run {
@@ -117,13 +117,13 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                         updatedAt)
                             }
                             val courseRun = CourseRun(myCourses.id ?: "",
-                                    myCourses.run_attempts?.get(0)?.id ?: "",
+                                    myCourses.runAttempts?.get(0)?.id ?: "",
                                     myCourses.name ?: "",
                                     myCourses.description ?: "",
                                     myCourses.start ?: "",
-                                    myCourses.run_attempts!![0].end ?: "",
+                                    myCourses.runAttempts!![0].end ?: "",
                                     myCourses.start ?: "",
-                                    myCourses.run_attempts!![0].end ?: "",
+                                    myCourses.runAttempts!![0].end ?: "",
                                     myCourses.price ?: "",
                                     myCourses.mrp ?: "",
                                     myCourses.course?.id ?: "",
@@ -155,7 +155,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                                         ?: "", instructor?.name ?: "",
                                                         instructor?.description
                                                                 ?: "", instructor?.photo ?: "",
-                                                        "", myCourses.run_attempts!![0].id!!, myCourses.course!!.id))
+                                                        "", myCourses.runAttempts!![0].id!!, myCourses.course!!.id))
                                                 Log.e("TAG", "ID : ${instructor?.id}  Name : ${instructor?.name}")
                                                 insertCourseAndInstructor(myCourses.course!!, instructor!!)
                                             }

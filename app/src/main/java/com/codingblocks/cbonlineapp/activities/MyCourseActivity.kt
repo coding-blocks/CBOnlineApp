@@ -62,7 +62,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         val sectionDao = database.sectionDao()
         val contentDao = database.contentDao()
         runDao.getRunByAtemptId(attemptId).observe(this, Observer<CourseRun> {
-            setupViewPager(it.crUid,it.crCourseId)
+            setupViewPager(it.crUid, it.crCourseId)
         })
         courseDao.getMyCourse(attemptId).observe(this, Observer<Course> {
             youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
@@ -105,13 +105,13 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
                     runDao.insert(run!!)
                     //Course Sections List
-                    for (section in it.run?.sections!!) {
+                    for (section in it.run?.courseSections!!) {
                         sectionDao.insert(CourseSection(section.id ?: "", section.name ?: "",
                                 section.order!!, section.premium!!, section.status ?: "",
                                 section.run_id ?: "", attemptId, section.updatedAt ?: ""))
 
                         //Section Contents List
-                        for (content in section.contents!!) {
+                        for (content in section.courseContent!!) {
                             var contentDocument = ContentDocument()
                             var contentLecture = ContentLecture()
                             var contentVideo = ContentVideo()
@@ -230,7 +230,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         adapter.add(OverviewFragment.newInstance(attemptId, crUid), "Overview")
         adapter.add(AnnouncementsFragment.newInstance(courseId), "About")
         adapter.add(CourseContentFragment.newInstance(attemptId), "Course Content")
-        adapter.add(DoubtsFragment.newInstance(attemptId,crCourseId), "Doubts")
+        adapter.add(DoubtsFragment.newInstance(attemptId, crCourseId), "Doubts")
 
         htab_viewpager.adapter = adapter
         htab_tabs.setupWithViewPager(htab_viewpager)
