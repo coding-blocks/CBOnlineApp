@@ -89,6 +89,7 @@ object Clients {
             .client(ClientInterceptor)
             .baseUrl("https://api-online.cb.lk/api/")
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
 
     val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)

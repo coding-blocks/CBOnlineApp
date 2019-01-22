@@ -105,7 +105,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
 
                     runDao.insert(run!!)
                     //Course Sections List
-                    for (section in it.run?.courseSections!!) {
+                    for (section in it.run?.sections!!) {
                         sectionDao.insert(CourseSection(section.id ?: "", section.name ?: "",
                                 section.order!!, section.premium!!, section.status ?: "",
                                 section.run_id ?: "", attemptId, section.updatedAt ?: ""))

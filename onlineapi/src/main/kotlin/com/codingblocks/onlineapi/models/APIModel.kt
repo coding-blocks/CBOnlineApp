@@ -45,8 +45,6 @@ class InstructorCourse : BaseModel() {
     var courseId: String? = null
 }
 
-
-
 @Type("run_attempts")
 open class MyRunAttempts : BaseModel() {
 
@@ -95,11 +93,28 @@ open class Runs : BaseModel() {
 }
 
 @Type("run")
-class MyCourseRuns : Runs() {
-
+class MyCourseRuns : BaseModel() {
+    @JvmField
+    var name: String? = null
+    @JvmField
+    var description: String? = null
+    @JvmField
+    var start: String? = null
+    @JvmField
+    var end: String? = null
+    @JvmField
+    var price: String? = null
+    @JvmField
+    var mrp: String? = null
     @JsonProperty("course-id")
     @JvmField
     var courseId: String? = null
+    @JvmField
+    @JsonProperty("enrollment-start")
+    val enrollmentStart: String? = null
+    @JvmField
+    @JsonProperty("enrollment-end")
+    val enrollmentEnd: String? = null
     @Relationship("course", resolve = true)
     @JvmField
     var course: MyCourse? = null
@@ -110,7 +125,7 @@ class MyCourseRuns : Runs() {
 
     @Relationship("sections", resolve = true)
     @JvmField
-    var courseSections: ArrayList<CourseSection>? = null
+    var sections: ArrayList<CourseSection>? = null
 
 
     @Relationship("announcements", resolve = true)
@@ -218,7 +233,18 @@ class SectionContent : BaseModel() {
 
 
 @Type("section")
-class CourseSection : Sections() {
+class CourseSection : BaseModel() {
+
+    @JvmField
+    var name: String? = null
+
+    @JvmField
+    var preminum: Boolean? = false
+    @JvmField
+    var status: String? = null
+
+    @JvmField
+    var order: Int? = null
 
     @JvmField
     @JsonProperty("created-at")

@@ -35,6 +35,14 @@ class OnlineJsonApiAuthenticatedTest {
     }
 
     @Test
+    fun `GET enrolledCourse`() {
+        val course = jsonapi.enrolledCourseById("8252").execute().body()
+        course?.let {
+            assertNotEquals(4, it.run?.sections)
+        }
+    }
+
+    @Test
     fun `SET progress`() {
         val p  = Progress()
         p.id = "316797"
