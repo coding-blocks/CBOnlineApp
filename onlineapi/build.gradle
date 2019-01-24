@@ -19,7 +19,7 @@ jacocoTestReport {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
