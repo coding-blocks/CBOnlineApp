@@ -9,14 +9,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.Utils.getPrefs
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
+import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Runs
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
@@ -28,6 +31,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     val ui = HomeFragmentUi<Fragment>()
     private lateinit var courseDataAdapter: CourseDataAdapter
     lateinit var skeletonScreen: SkeletonScreen
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(context!!)
@@ -47,8 +51,9 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         database.courseRunDao()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return ui.createView(AnkoContext.create(ctx, this))
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+            View = ui.createView(AnkoContext.create(ctx, this)).apply {
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context)
     }
 
 
@@ -195,6 +200,16 @@ class AllCourseFragment : Fragment(), AnkoLogger {
             }
         })
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            val params = Bundle()
+            params.putString("authid", getPrefs()?.SP_ONEAUTH_ID)
+            params.putString("name", "AllCourses")
+            firebaseAnalytics.logEvent("Open", params)
+        }
     }
 
 

@@ -17,13 +17,13 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.Prefs
-import com.codingblocks.cbonlineapp.Utils.getPrefs
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
 import com.codingblocks.cbonlineapp.utils.Components
+import com.codingblocks.cbonlineapp.utils.Prefs
+import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
@@ -126,6 +126,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     if (resp.isSuccessful) {
                         try {
                             val jSONObject = it.getAsJsonObject("data").getAsJsonObject("attributes")
+                            prefs.SP_USER_IMAGE = jSONObject.get("oneauth-id").asString
                             prefs.SP_USER_IMAGE = jSONObject.get("photo").asString
                         } catch (e: Exception) {
 

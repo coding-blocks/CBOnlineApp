@@ -13,8 +13,10 @@ import androidx.viewpager.widget.ViewPager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.ViewPagerAdapter
+import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.bottom_question_sheet.*
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import org.jetbrains.anko.AnkoLogger
@@ -32,6 +34,8 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     private lateinit var quizId: String
     private lateinit var attemptId: String
     private lateinit var quizAttemptId: String
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
 
     lateinit var mAdapter: ViewPagerAdapter
     var questionList = HashMap<Int, String>()
@@ -41,6 +45,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?)
             : View? = inflater.inflate(R.layout.fragment_quiz, container, false).apply {
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     }
 
@@ -188,6 +193,16 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
                     }
                 }
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            val params = Bundle()
+            params.putString("authid", getPrefs()?.SP_ONEAUTH_ID)
+            params.putString("name", "Quiz")
+            firebaseAnalytics.logEvent("Open", params)
+        }
     }
 
 

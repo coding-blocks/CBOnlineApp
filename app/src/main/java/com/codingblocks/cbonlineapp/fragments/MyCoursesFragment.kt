@@ -9,14 +9,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.Utils.getPrefs
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
+import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourse
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
@@ -30,6 +33,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     val ui = HomeFragmentUi<Fragment>()
     private lateinit var courseDataAdapter: CourseDataAdapter
     private lateinit var skeletonScreen: SkeletonScreen
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
 
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(context!!)
@@ -49,9 +54,11 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         database.courseRunDao()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return ui.createView(AnkoContext.create(ctx, this))
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+            View? = ui.createView(AnkoContext.create(ctx, this)).apply {
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context)
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -203,6 +210,15 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 Log.e("CRASH", "COURSE ID : ${course.id.toString()}")
                 Log.e("CRASH", "INSTRUCTOR ID : ${instructor.id.toString()}")
             }
+        }
+    }
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            val params = Bundle()
+            params.putString("authid", getPrefs()?.SP_ONEAUTH_ID)
+            params.putString("name", "MyCourses")
+            firebaseAnalytics.logEvent("Open", params)
         }
     }
 

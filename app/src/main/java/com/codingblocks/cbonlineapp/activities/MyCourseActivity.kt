@@ -65,6 +65,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         })
         courseDao.getMyCourse(attemptId).observe(this, Observer<Course> {
             youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
+
                 override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
                 }
 

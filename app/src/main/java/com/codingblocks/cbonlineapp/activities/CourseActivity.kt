@@ -197,5 +197,12 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
+    override fun onResume() {
+        super.onResume()
+
+    }
+
+
+
 
 }

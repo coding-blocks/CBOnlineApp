@@ -10,10 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.DownloadStarter
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.Utils.getPrefs
 import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.CourseSection
 import com.codingblocks.cbonlineapp.services.DownloadService
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_course_content.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.startService
@@ -29,6 +31,8 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
     private lateinit var database: AppDatabase
     lateinit var attemptId: String
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +72,17 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                         putString(ARG__ATTEMPT_ID, param1)
                     }
                 }
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+//            firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
+//            val params = Bundle()
+//            params.putString("authid", getPrefs()?.SP_ONEAUTH_ID)
+//            params.putString("name", "CourseContent")
+//            firebaseAnalytics.logEvent("Open", params)
+        }
     }
 
 
