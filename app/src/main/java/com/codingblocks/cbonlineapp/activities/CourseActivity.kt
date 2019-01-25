@@ -41,8 +41,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     lateinit var courseId: String
     lateinit var courseName: String
     lateinit var progressBar: Array<ProgressBar?>
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
-
 
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(this)
@@ -114,7 +112,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     if (course.runs != null)
                         Clients.api.enrollTrial(course.runs!![0].id!!).enqueue(retrofitCallback { throwable, response ->
                             if (response?.isSuccessful!!) {
-                                 Components.showconfirmation(this,"trial")
+                                Components.showconfirmation(this, "trial")
                             }
                         })
                 }
@@ -204,8 +202,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         super.onResume()
 
     }
-
-
 
 
 }
