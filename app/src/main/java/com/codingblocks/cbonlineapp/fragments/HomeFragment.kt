@@ -51,17 +51,17 @@ class HomeFragment : Fragment(), AnkoLogger {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
-            View? = ui.createView(AnkoContext.create(ctx, this)).apply {
-        firebaseAnalytics = FirebaseAnalytics.getInstance(context)
-        val params = Bundle()
-        params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
-        params.putString(FirebaseAnalytics.Param.ITEM_NAME, "Home")
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
-    }
+            View? = ui.createView(AnkoContext.create(ctx, this))
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
+        val params = Bundle()
+        params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
+        params.putString(FirebaseAnalytics.Param.ITEM_NAME, "Home")
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
 
         setHasOptionsMenu(true)
 

@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.getPrefs
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.*
@@ -52,14 +51,17 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
-            View = ui.createView(AnkoContext.create(ctx, this)).apply {
-        firebaseAnalytics = FirebaseAnalytics.getInstance(context)
-    }
+            View = ui.createView(AnkoContext.create(ctx, this))
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
+        val params = Bundle()
+        params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
+        params.putString(FirebaseAnalytics.Param.ITEM_NAME, "AllCourses")
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
 
         //it is important to make oncreateoptions menu work
         setHasOptionsMenu(true)
@@ -201,16 +203,5 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         })
         super.onCreateOptionsMenu(menu, inflater)
     }
-
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser) {
-            val params = Bundle()
-            params.putString("authid", getPrefs()?.SP_ONEAUTH_ID)
-            params.putString("name", "AllCourses")
-            firebaseAnalytics.logEvent("Open", params)
-        }
-    }
-
 
 }

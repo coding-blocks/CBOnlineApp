@@ -7,11 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.LeaderboardListAdapter
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.onlineapi.models.Leaderboard
-import kotlinx.android.synthetic.main.fragment_overview.*
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoLogger
 
 private const val ARG__ATTEMPT_ID = "attempt_id"
@@ -25,6 +24,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
     lateinit var runId: String
     private lateinit var leaderboardListAdapter: LeaderboardListAdapter
     private var list = ArrayList<Leaderboard>()
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?):
             View? = inflater.inflate(R.layout.fragment_overview, container, false).apply {
@@ -33,7 +33,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
         arguments?.let {
             attemptId = it.getString(ARG__ATTEMPT_ID)!!
             runId = it.getString(ARG__RUN_ID)!!
@@ -68,6 +68,18 @@ class OverviewFragment : Fragment(), AnkoLogger {
 
                     }
                 }
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            if (view != null) {
+                val params = Bundle()
+                params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
+                params.putString(FirebaseAnalytics.Param.ITEM_NAME, "CourseOverview")
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
+            }
+        }
     }
 
 

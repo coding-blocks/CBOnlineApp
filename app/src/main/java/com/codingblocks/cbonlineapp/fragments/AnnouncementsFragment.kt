@@ -12,6 +12,8 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.Instructor
+import com.codingblocks.cbonlineapp.utils.getPrefs
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_annoucements.view.*
 
 private const val ARG__COURSE_ID = "course_id"
@@ -19,13 +21,14 @@ private const val ARG__COURSE_ID = "course_id"
 class AnnouncementsFragment : Fragment() {
     private lateinit var database: AppDatabase
     lateinit var courseId: String
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             courseId = it.getString(ARG__COURSE_ID)!!
         }
-
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +58,17 @@ class AnnouncementsFragment : Fragment() {
                         putString(ARG__COURSE_ID, param1)
                     }
                 }
+    }
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            if (view != null) {
+                val params = Bundle()
+                params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
+                params.putString(FirebaseAnalytics.Param.ITEM_NAME, "CourseAnnouncement")
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
+            }
+        }
     }
 
 

@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.getPrefs
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.*
@@ -55,13 +54,17 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
-            View? = ui.createView(AnkoContext.create(ctx, this)).apply {
-        firebaseAnalytics = FirebaseAnalytics.getInstance(context)
-    }
+            View? = ui.createView(AnkoContext.create(ctx, this))
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
+        val params = Bundle()
+        params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
+        params.putString(FirebaseAnalytics.Param.ITEM_NAME, "MyCourses")
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
+
         ui.allcourseText.text = "My Courses"
         ui.titleText.visibility = View.GONE
         ui.homeImg.visibility = View.GONE
@@ -144,7 +147,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                     courseDao.insert(course!!)
                                     runDao.insert(courseRun)
                                 } else if (updateRun.progress != progress) {
-                                    info { myCourses.course?.title + "updateCourse is happening" +progress + "  " + updateRun.progress}
+                                    info { myCourses.course?.title + "updateCourse is happening" + progress + "  " + updateRun.progress }
                                     courseDao.update(course!!)
                                     runDao.update(courseRun)
                                 }
@@ -212,14 +215,4 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             }
         }
     }
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser) {
-            val params = Bundle()
-            params.putString("authid", getPrefs()?.SP_ONEAUTH_ID)
-            params.putString("name", "MyCourses")
-            firebaseAnalytics.logEvent("Open", params)
-        }
-    }
-
 }

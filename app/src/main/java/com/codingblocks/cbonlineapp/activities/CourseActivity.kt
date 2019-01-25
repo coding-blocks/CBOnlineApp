@@ -25,6 +25,7 @@ import com.ethanhua.skeleton.SkeletonScreen
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
+import com.google.firebase.analytics.FirebaseAnalytics
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +41,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     lateinit var courseId: String
     lateinit var courseName: String
     lateinit var progressBar: Array<ProgressBar?>
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
 
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(this)

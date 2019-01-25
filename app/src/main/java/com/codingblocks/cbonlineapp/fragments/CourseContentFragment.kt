@@ -10,11 +10,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.DownloadStarter
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.getPrefs
 import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.CourseSection
 import com.codingblocks.cbonlineapp.services.DownloadService
+import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_course_content.view.*
 import org.jetbrains.anko.AnkoLogger
@@ -36,6 +36,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
         arguments?.let {
             attemptId = it.getString(ARG__ATTEMPT_ID)!!
         }
@@ -46,6 +47,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_course_content, container, false)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
         database = AppDatabase.getInstance(context!!)
         val sectionDao = database.sectionDao()
         val sectionsList = ArrayList<CourseSection>()
@@ -54,7 +56,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         view.rvExpendableView.adapter = sectionAdapter
         view.sectionProgressBar.show()
         sectionDao.getCourseSection(attemptId).observe(this, Observer<List<CourseSection>> {
-            if(it.isNotEmpty()){
+            if (it.isNotEmpty()) {
                 view.sectionProgressBar.hide()
             }
             sectionAdapter.setData(it as ArrayList<CourseSection>)
@@ -77,11 +79,12 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
-//            firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
-//            val params = Bundle()
-//            params.putString("authid", getPrefs()?.SP_ONEAUTH_ID)
-//            params.putString("name", "CourseContent")
-//            firebaseAnalytics.logEvent("Open", params)
+            if (view != null) {
+                val params = Bundle()
+                params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
+                params.putString(FirebaseAnalytics.Param.ITEM_NAME, "CourseContent")
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
+            }
         }
     }
 
