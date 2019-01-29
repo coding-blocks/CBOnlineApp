@@ -85,8 +85,6 @@
         </activity>
         <activity
             android:name=".activities.VideoPlayerActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.PdfActivity"

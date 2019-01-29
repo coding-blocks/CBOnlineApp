@@ -9,7 +9,7 @@
     <com.devbrackets.android.exomedia.ui.widget.VideoView
         android:id="@+id/videoView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="250dp"
         app:useDefaultControls="true" />
 
     <FrameLayout

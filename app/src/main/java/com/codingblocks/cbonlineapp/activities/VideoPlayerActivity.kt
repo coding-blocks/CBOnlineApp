@@ -20,8 +20,8 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN)
+//        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_video_player)
 
         rootLayout.layoutTransition
