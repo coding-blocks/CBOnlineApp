@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -18,7 +17,7 @@
         android:paddingRight="16dp"
         android:paddingBottom="16dp"
         android:visibility="gone"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <TextView
             android:id="@+id/exomedia_controls_title"
@@ -46,59 +45,10 @@
             tools:text="The Video Artist" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:background="@drawable/exomedia_default_controls_text_background"
-        android:layout_marginRight="16dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/exomedia_controls_previous_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/exomedia_min_button_height"
-            android:background="@android:color/transparent"
-            android:minWidth="@dimen/exomedia_min_button_height"
-            android:minHeight="@dimen/exomedia_min_button_height"
-            android:visibility="gone"
-            app:srcCompat="@drawable/exomedia_ic_skip_previous_white"
-            tools:ignore="ContentDescription,RtlHardcoded"
-            tools:visibility="visible" />
-
-        <ImageButton
-            android:id="@+id/exomedia_controls_play_pause_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:minWidth="@dimen/exomedia_min_button_height"
-            android:minHeight="@dimen/exomedia_min_button_height"
-            app:srcCompat="@drawable/exomedia_ic_play_arrow_white"
-            tools:ignore="ContentDescription" />
-
-        <ImageButton
-            android:id="@+id/exomedia_controls_next_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/exomedia_min_button_height"
-            android:background="@android:color/transparent"
-            android:minWidth="@dimen/exomedia_min_button_height"
-            android:minHeight="@dimen/exomedia_min_button_height"
-            android:visibility="gone"
-            app:srcCompat="@drawable/exomedia_ic_skip_next_white"
-            tools:ignore="ContentDescription,RtlHardcoded"
-            tools:visibility="visible" />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/exomedia_controls_interactive_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
@@ -107,9 +57,102 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
 
+        <ImageView
+            android:id="@+id/playback_speed"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="top|end"
+            android:layout_margin="16dp"
+            android:background="@drawable/drawable_playback_bg"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_fast_forward"
+            android:focusable="true" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/exomedia_controls_previous_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/exomedia_min_button_height"
+                android:background="@android:color/transparent"
+                android:minWidth="@dimen/exomedia_min_button_height"
+                android:minHeight="@dimen/exomedia_min_button_height"
+                android:visibility="gone"
+                app:srcCompat="@drawable/exomedia_ic_skip_previous_white"
+                tools:ignore="ContentDescription,RtlHardcoded"
+                tools:visibility="visible" />
+
+
+            <ImageButton
+                android:id="@+id/exomedia_controls_rewind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/exomedia_min_button_height"
+                android:background="@android:color/transparent"
+                android:minWidth="@dimen/exomedia_min_button_height"
+                android:minHeight="@dimen/exomedia_min_button_height"
+                android:visibility="visible"
+                app:srcCompat="@drawable/ic_rewind"
+                tools:ignore="ContentDescription,RtlHardcoded"
+                tools:visibility="visible" />
+
+            <ImageButton
+                android:id="@+id/exomedia_controls_play_pause_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:minWidth="@dimen/exomedia_min_button_height"
+                android:minHeight="@dimen/exomedia_min_button_height"
+                app:srcCompat="@drawable/exomedia_ic_play_arrow_white"
+                tools:ignore="ContentDescription" />
+
+            <ImageButton
+                android:id="@+id/exomedia_controls_fast_forward"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/exomedia_min_button_height"
+                android:background="@android:color/transparent"
+                android:minWidth="@dimen/exomedia_min_button_height"
+                android:minHeight="@dimen/exomedia_min_button_height"
+                android:visibility="visible"
+                app:srcCompat="@drawable/ic_forward"
+                tools:ignore="ContentDescription,RtlHardcoded"
+                tools:visibility="visible" />
+
+            <ImageButton
+                android:id="@+id/exomedia_controls_next_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/exomedia_min_button_height"
+                android:background="@android:color/transparent"
+                android:minWidth="@dimen/exomedia_min_button_height"
+                android:minHeight="@dimen/exomedia_min_button_height"
+                android:visibility="gone"
+                app:srcCompat="@drawable/exomedia_ic_skip_next_white"
+                tools:ignore="ContentDescription,RtlHardcoded"
+                tools:visibility="visible" />
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:orientation="horizontal">
@@ -178,7 +221,7 @@
                 tools:ignore="ContentDescription,RtlHardcoded"
                 tools:visibility="visible" />
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/exomedia_controls_video_loading"
