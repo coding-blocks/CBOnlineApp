@@ -17,13 +17,13 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.Prefs
-import com.codingblocks.cbonlineapp.Utils.getPrefs
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
 import com.codingblocks.cbonlineapp.utils.Components
+import com.codingblocks.cbonlineapp.utils.Prefs
+import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
@@ -31,10 +31,7 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_home.*
 import kotlinx.android.synthetic.main.nav_header_home.view.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.*
 import java.util.*
 
 
@@ -126,6 +123,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     if (resp.isSuccessful) {
                         try {
                             val jSONObject = it.getAsJsonObject("data").getAsJsonObject("attributes")
+                            prefs.SP_ONEAUTH_ID = jSONObject.get("oneauth-id").asString
                             prefs.SP_USER_IMAGE = jSONObject.get("photo").asString
                         } catch (e: Exception) {
 

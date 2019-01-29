@@ -13,10 +13,12 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
+import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourse
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
@@ -30,6 +32,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     val ui = HomeFragmentUi<Fragment>()
     private lateinit var courseDataAdapter: CourseDataAdapter
     private lateinit var skeletonScreen: SkeletonScreen
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
 
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(context!!)
@@ -49,12 +53,18 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         database.courseRunDao()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return ui.createView(AnkoContext.create(ctx, this))
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+            View? = ui.createView(AnkoContext.create(ctx, this))
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
+        val params = Bundle()
+        params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
+        params.putString(FirebaseAnalytics.Param.ITEM_NAME, "MyCourses")
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
+
         ui.allcourseText.text = "My Courses"
         ui.titleText.visibility = View.GONE
         ui.homeImg.visibility = View.GONE
@@ -137,7 +147,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                     courseDao.insert(course!!)
                                     runDao.insert(courseRun)
                                 } else if (updateRun.progress != progress) {
-                                    info { myCourses.course?.title + "updateCourse is happening" +progress + "  " + updateRun.progress}
+                                    info { myCourses.course?.title + "updateCourse is happening" + progress + "  " + updateRun.progress }
                                     courseDao.update(course!!)
                                     runDao.update(courseRun)
                                 }
@@ -205,5 +215,4 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             }
         }
     }
-
 }

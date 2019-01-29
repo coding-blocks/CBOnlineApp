@@ -13,10 +13,12 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
+import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Runs
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
@@ -28,6 +30,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     val ui = HomeFragmentUi<Fragment>()
     private lateinit var courseDataAdapter: CourseDataAdapter
     lateinit var skeletonScreen: SkeletonScreen
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(context!!)
@@ -47,14 +50,18 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         database.courseRunDao()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return ui.createView(AnkoContext.create(ctx, this))
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+            View = ui.createView(AnkoContext.create(ctx, this))
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
+        val params = Bundle()
+        params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
+        params.putString(FirebaseAnalytics.Param.ITEM_NAME, "AllCourses")
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
 
         //it is important to make oncreateoptions menu work
         setHasOptionsMenu(true)
@@ -196,6 +203,5 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         })
         super.onCreateOptionsMenu(menu, inflater)
     }
-
 
 }

@@ -14,6 +14,8 @@ import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.CourseSection
 import com.codingblocks.cbonlineapp.services.DownloadService
+import com.codingblocks.cbonlineapp.utils.getPrefs
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_course_content.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.startService
@@ -29,9 +31,12 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
     private lateinit var database: AppDatabase
     lateinit var attemptId: String
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
         arguments?.let {
             attemptId = it.getString(ARG__ATTEMPT_ID)!!
         }
@@ -39,23 +44,25 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?):
-            View = inflater.inflate(R.layout.fragment_course_content, container, false).apply {
-
+                              savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_course_content, container, false)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
         database = AppDatabase.getInstance(context!!)
         val sectionDao = database.sectionDao()
         val sectionsList = ArrayList<CourseSection>()
-        val sectionAdapter = SectionDetailsAdapter(sectionsList, activity!!, this@CourseContentFragment)
-        this.rvExpendableView.layoutManager = LinearLayoutManager(context)
-        this.rvExpendableView.adapter = sectionAdapter
-        this.sectionProgressBar.show()
-        sectionDao.getCourseSection(attemptId).observe(this@CourseContentFragment, Observer<List<CourseSection>> {
+        val sectionAdapter = SectionDetailsAdapter(sectionsList, activity!!, this)
+        view.rvExpendableView.layoutManager = LinearLayoutManager(context)
+        view.rvExpendableView.adapter = sectionAdapter
+        view.sectionProgressBar.show()
+        sectionDao.getCourseSection(attemptId).observe(this, Observer<List<CourseSection>> {
             if (it.isNotEmpty()) {
-                this.sectionProgressBar.hide()
+                view.sectionProgressBar.hide()
             }
             sectionAdapter.setData(it as ArrayList<CourseSection>)
         })
 
+        return view
     }
 
     companion object {
@@ -67,6 +74,18 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                         putString(ARG__ATTEMPT_ID, param1)
                     }
                 }
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            if (view != null) {
+                val params = Bundle()
+                params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
+                params.putString(FirebaseAnalytics.Param.ITEM_NAME, "CourseContent")
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
+            }
+        }
     }
 
 

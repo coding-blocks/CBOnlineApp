@@ -5,6 +5,8 @@ import android.graphics.drawable.AnimationDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -41,6 +43,8 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
     private lateinit var sectionWithContentDao: SectionWithContentsDao
+    lateinit var arrowAnimation: RotateAnimation
+
 
     fun setData(sectionData: ArrayList<CourseSection>) {
         this.sectionData = sectionData
@@ -80,8 +84,8 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
 
             sectionWithContentDao.getContentWithSectionId(data.id).observe(activity, Observer<List<CourseContent>> { it ->
                 val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
-                if (ll.childCount != 0)
-                    showOrHide(ll, itemView)
+//                if (ll.childCount != 0)
+//                    showOrHide(ll, itemView)
                 ll.removeAllViews()
                 ll.orientation = LinearLayout.VERTICAL
                 ll.visibility = View.GONE
@@ -215,9 +219,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                         showOrHide(ll, it)
                     }
 
-//                    itemView.arrow.setOnClickListener {
-//                        showOrHide(ll, itemView)
-//                    }
+                    itemView.arrow.setOnClickListener {
+                        showOrHide(ll, itemView)
+                    }
                 }
             })
         }
@@ -227,18 +231,18 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
     fun showOrHide(ll: View, itemView: View) {
         if (ll.visibility == View.GONE) {
             ll.visibility = View.VISIBLE
-//            arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-//                    0.5f)
-//            arrowAnimation.fillAfter = true
-//            arrowAnimation.duration = 350
-//            itemView.arrow.startAnimation(arrowAnimation)
+            arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                    0.5f)
+            arrowAnimation.fillAfter = true
+            arrowAnimation.duration = 350
+            itemView.arrow.startAnimation(arrowAnimation)
         } else {
             ll.visibility = View.GONE
-//            arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-//                    0.5f)
-//            arrowAnimation.fillAfter = true
-//            arrowAnimation.duration = 350
-//            itemView.arrow.startAnimation(arrowAnimation)
+            arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                    0.5f)
+            arrowAnimation.fillAfter = true
+            arrowAnimation.duration = 350
+            itemView.arrow.startAnimation(arrowAnimation)
         }
     }
 

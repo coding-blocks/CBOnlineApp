@@ -25,6 +25,7 @@ import com.ethanhua.skeleton.SkeletonScreen
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
+import com.google.firebase.analytics.FirebaseAnalytics
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.coroutines.Dispatchers
@@ -111,7 +112,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     if (course.runs != null)
                         Clients.api.enrollTrial(course.runs!![0].id!!).enqueue(retrofitCallback { throwable, response ->
                             if (response?.isSuccessful!!) {
-                                 Components.showconfirmation(this,"trial")
+                                Components.showconfirmation(this, "trial")
                             }
                         })
                 }
@@ -195,6 +196,11 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
 

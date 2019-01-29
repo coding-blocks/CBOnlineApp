@@ -1,13 +1,12 @@
-package com.codingblocks.cbonlineapp.Utils
+package com.codingblocks.cbonlineapp.utils
 
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.fragment.app.Fragment
-import com.codingblocks.cbonlineapp.CBOnlineApp
 
-inline fun <A: Activity> A.getPrefs() = Prefs(this)
-inline fun <F: Fragment> F.getPrefs() = context?.let { Prefs(it) }
+inline fun <A : Activity> A.getPrefs() = Prefs(this)
+inline fun <F : Fragment> F.getPrefs() = context?.let { Prefs(it) }
 
 class Prefs(context: Context) {
     companion object {
@@ -16,9 +15,11 @@ class Prefs(context: Context) {
         val JWT_TOKEN = "jwt_token"
         val REFRESH_TOKEN = "refresh_token"
         val USER_IMAGE = "user_image"
+        val ONEAUTH_ID = "oneauth_id"
+
     }
 
-    val prefs: SharedPreferences = context.getSharedPreferences(PREFS_FILENAME, 0);
+    val prefs: SharedPreferences = context.getSharedPreferences(PREFS_FILENAME, 0)
 
     var SP_ACCESS_TOKEN_KEY: String
         get() = prefs.getString(ACCESS_TOKEN, ACCESS_TOKEN)
@@ -41,5 +42,10 @@ class Prefs(context: Context) {
         get() = prefs.getString(USER_IMAGE, USER_IMAGE)
         set(value) {
             prefs.edit().putString(USER_IMAGE, value).commit()
+        }
+    var SP_ONEAUTH_ID: String
+        get() = prefs.getString(ONEAUTH_ID, ONEAUTH_ID)
+        set(value) {
+            prefs.edit().putString(ONEAUTH_ID, value).commit()
         }
 }
