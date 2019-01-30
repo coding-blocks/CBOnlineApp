@@ -1,22 +1,15 @@
 package com.codingblocks.cbonlineapp.activities
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.animation.LayoutTransition
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.view.Window
-import android.view.WindowManager
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.utils.DoubleClickListener
 import com.codingblocks.cbonlineapp.utils.MediaUtils
-import com.devbrackets.android.exomedia.listener.OnPreparedListener
-import com.devbrackets.android.exomedia.ui.widget.VideoControls
-import kotlinx.android.synthetic.main.activity_video_player.*
 import com.codingblocks.cbonlineapp.utils.MyVideoControls
-
+import com.devbrackets.android.exomedia.listener.OnPreparedListener
+import kotlinx.android.synthetic.main.activity_video_player.*
 
 
 class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener {
@@ -32,12 +25,9 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener {
                 .enableTransitionType(LayoutTransition.CHANGING)
 
         val controls = MyVideoControls(this)
-        videoView.videoControlsCore as VideoControls
-
         videoView.setControls(controls)
 
     }
-
 
 
     override fun onStart() {
@@ -61,6 +51,14 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener {
     override fun onDestroy() {
         super.onDestroy()
         videoView.release()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK){
+
+            data?.getLongExtra("CURRENT_POSITION",0)?.let { videoView.seekTo(it) }
+        }
     }
 
 }

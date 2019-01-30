@@ -2,13 +2,14 @@ package com.codingblocks.cbonlineapp.utils
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
-import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.activities.FullScreenPlayerActivity
 import com.devbrackets.android.exomedia.ui.widget.VideoControlsMobile
-import kotlinx.android.synthetic.main.activity_video_player.*
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
 
 
 class MyVideoControls @JvmOverloads constructor(
@@ -17,8 +18,8 @@ class MyVideoControls @JvmOverloads constructor(
 
     private lateinit var rewind: ImageButton
     private lateinit var fastfwd: ImageButton
+    private lateinit var fullScreen: ImageButton
     private lateinit var playback: ImageView
-
 
 
     override fun setup(context: Context) {
@@ -31,6 +32,7 @@ class MyVideoControls @JvmOverloads constructor(
         rewind = findViewById(R.id.exomedia_controls_rewind)
         fastfwd = findViewById(R.id.exomedia_controls_fast_forward)
         playback = findViewById(R.id.playback_speed)
+        fullScreen = findViewById(R.id.fullscreenBtn)
 
     }
 
@@ -46,6 +48,15 @@ class MyVideoControls @JvmOverloads constructor(
         playback.setOnClickListener {
             showSpeedDialog()
         }
+        fullScreen.setOnClickListener {
+            videoView!!.let {
+                it.context.startActivity(context.intentFor<FullScreenPlayerActivity>("FOLDER_NAME" to it.videoUri.toString(), "CURRENT_POSITION" to it.currentPosition).singleTop())
+            }
+        }
+    }
+
+    fun updateFullScreenButtonDrawable(){
+        fullScreen.setImageDrawable(context.resources.getDrawable(R.drawable.ic_fullscreen_exit_black_24dp))
     }
 
     private val playbackSpeeds = floatArrayOf(0.5f, 0.75f, 1f, 1.5f, 2f)

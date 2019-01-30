@@ -210,14 +210,14 @@
                 tools:ignore="RtlHardcoded,UselessLeaf" />
 
             <ImageButton
-                android:id="@+id/notesBtn"
+                android:id="@+id/fullscreenBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:minWidth="@dimen/exomedia_min_button_height"
                 android:minHeight="@dimen/exomedia_min_button_height"
                 android:visibility="visible"
-                app:srcCompat="@drawable/ic_docs"
+                app:srcCompat="@drawable/ic_fullscreen_black_24dp"
                 tools:ignore="ContentDescription,RtlHardcoded"
                 tools:visibility="visible" />
         </LinearLayout>
