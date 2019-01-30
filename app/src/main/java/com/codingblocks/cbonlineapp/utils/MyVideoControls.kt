@@ -6,10 +6,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.activities.FullScreenPlayerActivity
 import com.devbrackets.android.exomedia.ui.widget.VideoControlsMobile
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.singleTop
 
 
 class MyVideoControls @JvmOverloads constructor(
@@ -47,11 +44,6 @@ class MyVideoControls @JvmOverloads constructor(
         }
         playback.setOnClickListener {
             showSpeedDialog()
-        }
-        fullScreen.setOnClickListener {
-            videoView!!.let {
-                it.context.startActivity(context.intentFor<FullScreenPlayerActivity>("FOLDER_NAME" to it.videoUri.toString(), "CURRENT_POSITION" to it.currentPosition).singleTop())
-            }
         }
     }
 

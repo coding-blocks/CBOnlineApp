@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_full_screen_player.*
 import kotlinx.android.synthetic.main.exomedia_default_controls_mobile.view.*
 
 
-class FullScreenPlayerActivity : AppCompatActivity(), OnPreparedListener {
+class VideoPlayerFullScreenActivity : AppCompatActivity(), OnPreparedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +68,7 @@ class FullScreenPlayerActivity : AppCompatActivity(), OnPreparedListener {
         val intent = Intent()
         intent.putExtra("CURRENT_POSITION", videoView.currentPosition)
         setResult(RESULT_OK, intent)
-        super.onBackPressed()
+        finish()
     }
 
 }
