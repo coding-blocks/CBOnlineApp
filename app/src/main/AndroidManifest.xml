@@ -90,7 +90,7 @@
         </activity>
         <activity
             android:name=".activities.VideoPlayerActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/myTheme" />
         <activity
             android:name=".activities.PdfActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

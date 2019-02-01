@@ -1,15 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:animateLayoutChanges="true"
     android:id="@+id/rootLayout"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/gradient_theme_left_to_right"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
     <com.devbrackets.android.exomedia.ui.widget.VideoView
         android:id="@+id/videoView"
         android:layout_width="match_parent"
         android:layout_height="250dp"
+        android:visibility="gone"
         app:useDefaultControls="true" />
 
-</FrameLayout>
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/displayYoutubeVideo"
+        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:visibility="gone" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/player_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_theme_left_to_right"
+        app:tabIndicatorColor="@android:color/white"
+        app:tabTextColor="#80ffffff" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/player_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff" />
+
+</LinearLayout>
