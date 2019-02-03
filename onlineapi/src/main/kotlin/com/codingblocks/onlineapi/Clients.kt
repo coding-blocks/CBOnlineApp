@@ -49,8 +49,8 @@ object Clients {
             Choice::class.java,
             QuizAttempt::class.java,
             QuizRunAttempt::class.java,
-            Quizqnas::class.java
-
+            Quizqnas::class.java,
+            DoubtsJsonApi::class.java
 
     )
     private val relationshipResolver = RelationshipResolver {

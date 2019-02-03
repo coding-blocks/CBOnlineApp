@@ -572,6 +572,30 @@ class Quizqnas : BaseModel()
 @Type("run-attempts")
 class QuizRunAttempt : BaseModel()
 
+@Type("doubts")
+class DoubtsJsonApi : BaseModel(){
+    @JvmField
+    var category: Int? = null
+
+    @JvmField
+    var body: String = ""
+
+    @JvmField
+    var title: String = ""
+
+    @JvmField
+    var status: String = "PENDING"
+
+    @Relationship("run-attempt", resolve = true)
+    @JvmField
+    var runAttempt: QuizRunAttempt? = null
+
+    @Relationship("content", resolve = true)
+    @JvmField
+    var content: Contents? = null
+
+}
+
 
 
 

@@ -42,13 +42,12 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger 
             }
 
         }
-        setupViewPager()
 
     }
 
-    private fun setupViewPager() {
+    private fun setupViewPager(attemptId: String, contentId: String) {
         val adapter = TabLayoutAdapter(supportFragmentManager)
-        adapter.add(VideoDoubtFragment.newInstance("param1", "param2"), "Doubts")
+        adapter.add(VideoDoubtFragment.newInstance(attemptId, contentId), "Doubts")
         adapter.add(NotesFragment(), "Notes")
 
         player_viewpager.adapter = adapter
@@ -61,6 +60,10 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger 
         super.onStart()
         val url = intent.getStringExtra("FOLDER_NAME")
         val youtubeUrl = intent.getStringExtra("videoUrl")
+        val attemptId = intent.getStringExtra("attemptId")
+        val contentId = intent.getStringExtra("contentId")
+
+
         if (youtubeUrl != null) {
             displayYoutubeVideo.view?.visibility = View.VISIBLE
             setupYoutubePlayer(youtubeUrl)
@@ -68,8 +71,8 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger 
             displayYoutubeVideo.view?.visibility = View.GONE
             videoView.visibility = View.VISIBLE
             setupVideoView(url)
-
         }
+        setupViewPager(attemptId,contentId)
     }
 
     private fun setupYoutubePlayer(youtubeUrl: String) {

@@ -80,6 +80,9 @@ interface OnlineJsonApi {
     fun sumbitQuizById(
             @Path("id") id: String): Call<QuizAttempt>
 
+    @POST("doubts")
+    fun createDoubt(@Body params: DoubtsJsonApi): Call<List<DoubtsJsonApi>>
+
     @POST("quiz_attempts")
     fun createQuizAttempt(@Body params: QuizAttempt): Call<QuizAttempt>
 
