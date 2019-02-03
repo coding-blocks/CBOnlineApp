@@ -5,9 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".fragments.DoubtsFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:listitem="@layout/single_doubt_item"
+        android:layout_height="match_parent" />
 
 </FrameLayout>

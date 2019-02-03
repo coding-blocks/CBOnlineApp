@@ -49,8 +49,8 @@ object Clients {
             Choice::class.java,
             QuizAttempt::class.java,
             QuizRunAttempt::class.java,
-            Quizqnas::class.java
-
+            Quizqnas::class.java,
+            DoubtsJsonApi::class.java
 
     )
     private val relationshipResolver = RelationshipResolver {
@@ -89,6 +89,7 @@ object Clients {
             .client(ClientInterceptor)
             .baseUrl("https://api-online.cb.lk/api/")
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
 
     val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)

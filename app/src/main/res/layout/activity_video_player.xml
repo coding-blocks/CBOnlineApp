@@ -1,68 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:animateLayoutChanges="true"
     android:id="@+id/rootLayout"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/gradient_theme_left_to_right"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
     <com.devbrackets.android.exomedia.ui.widget.VideoView
         android:id="@+id/videoView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="250dp"
+        android:visibility="gone"
         app:useDefaultControls="true" />
 
-    <FrameLayout
-        android:id="@+id/rewindLayout"
-        android:layout_width="200dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="39dp"
-        android:layout_height="200dp" />
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/displayYoutubeVideo"
+        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/rewind"
-        android:layout_width="96dp"
-        android:visibility="invisible"
-        android:layout_height="96dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="89dp"
-        app:srcCompat="@drawable/ic_rewind"
-        android:background="@drawable/drawable_playback_bg"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:padding="32dp"/>
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/player_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_theme_left_to_right"
+        app:tabIndicatorColor="@android:color/white"
+        app:tabTextColor="#80ffffff" />
 
-    <FrameLayout
-        android:id="@+id/fastFwLayout"
-        android:layout_width="200dp"
-        android:layout_gravity="center_vertical|end"
-        android:layout_marginEnd="39dp"
-        android:layout_height="200dp" />
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/player_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff" />
 
-    <ImageView
-        android:id="@+id/fastFw"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:visibility="invisible"
-        android:layout_gravity="center_vertical|end"
-        android:layout_marginEnd="89dp"
-        app:srcCompat="@drawable/ic_forward"
-        android:background="@drawable/drawable_playback_bg"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:padding="32dp"/>
-
-    <ImageView
-        android:id="@+id/playback_speed"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="top|end"
-        android:layout_margin="16dp"
-        android:background="@drawable/drawable_playback_bg"
-        android:clickable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:padding="8dp"
-        app:srcCompat="@drawable/ic_fast_forward" />
-
-
-
-
-</FrameLayout>
+</LinearLayout>

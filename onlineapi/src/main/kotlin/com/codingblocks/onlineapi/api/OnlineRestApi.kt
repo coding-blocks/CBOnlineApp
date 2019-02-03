@@ -1,9 +1,13 @@
 package com.codingblocks.onlineapi.api
 
+import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Leaderboard
+import com.codingblocks.onlineapi.models.PostStream
 import com.codingblocks.onlineapi.models.RatingModel
 import com.google.gson.JsonObject
+import kotlinx.coroutines.Deferred
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface OnlineRestApi {
@@ -46,4 +50,10 @@ interface OnlineRestApi {
     @GET("v2/runs/{runid}/leaderboard")
     fun leaderboardById(
             @Path("runid") id: String): Call<List<Leaderboard>>
+
+    @GET("v2/courses/{runid}/doubts?order=latest")
+    fun getDoubts(@Path("runid") id: String): Call<Doubts>
+
+    @GET("v2/courses/doubts/{doubtid}")
+    fun getDoubtById(@Path("doubtid") id: Int): Deferred<Response<PostStream>>
 }

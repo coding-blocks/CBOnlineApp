@@ -12,6 +12,7 @@ import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.fragments.AnnouncementsFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
+import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
 import com.codingblocks.cbonlineapp.fragments.OverviewFragment
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
@@ -61,7 +62,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         val sectionDao = database.sectionDao()
         val contentDao = database.contentDao()
         runDao.getRunByAtemptId(attemptId).observe(this, Observer<CourseRun> {
-            setupViewPager(it.crUid)
+            setupViewPager(it.crUid, it.crCourseId)
         })
         courseDao.getMyCourse(courseId).observe(this, Observer<Course> {
             youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
@@ -111,7 +112,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                                 section.run_id ?: "", attemptId, section.updatedAt ?: ""))
 
                         //Section Contents List
-                        for (content in section.contents!!) {
+                        for (content in section.courseContent!!) {
                             var contentDocument = ContentDocument()
                             var contentLecture = ContentLecture()
                             var contentVideo = ContentVideo()
@@ -225,18 +226,21 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
     }
 
 
-    private fun setupViewPager(crUid: String) {
+    private fun setupViewPager(crUid: String, crCourseId: String) {
         val adapter = TabLayoutAdapter(supportFragmentManager)
         adapter.add(OverviewFragment.newInstance(attemptId, crUid), "Overview")
         adapter.add(AnnouncementsFragment.newInstance(courseId), "About")
         adapter.add(CourseContentFragment.newInstance(attemptId), "Course Content")
+        adapter.add(DoubtsFragment.newInstance(attemptId, crCourseId), "Doubts")
+
         htab_viewpager.adapter = adapter
         htab_tabs.setupWithViewPager(htab_viewpager)
         htab_tabs.getTabAt(0)?.setIcon(R.drawable.ic_menu)
         htab_tabs.getTabAt(1)?.setIcon(R.drawable.ic_announcement)
         htab_tabs.getTabAt(2)?.setIcon(R.drawable.ic_docs)
+        htab_tabs.getTabAt(3)?.setIcon(R.drawable.ic_announcement)
         htab_tabs.getTabAt(2)?.select()
-        htab_viewpager.offscreenPageLimit = 3
+        htab_viewpager.offscreenPageLimit = 4
 
     }
 

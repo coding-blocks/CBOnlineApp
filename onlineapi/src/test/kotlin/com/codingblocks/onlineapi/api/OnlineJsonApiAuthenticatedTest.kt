@@ -4,11 +4,12 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Progress
 import org.junit.Assert.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
 class OnlineJsonApiAuthenticatedTest {
-    val api = Clients.onlineV2JsonApi
+    val jsonapi = Clients.onlineV2JsonApi
+    val api = Clients.api
+
 
     @Before
     fun `set JWT` () {
@@ -18,7 +19,7 @@ class OnlineJsonApiAuthenticatedTest {
     @Test
     fun `GET section`() {
         suspend {
-            val courses = api.getSections("795").await().body()
+            val courses = jsonapi.getSections("795").await().body()
             courses?.let {
                 assertEquals("Python Basics", it.name)
             }
@@ -27,9 +28,17 @@ class OnlineJsonApiAuthenticatedTest {
 
     @Test
     fun `GET myCourses`() {
-        val courses = api.getMyCourses().execute().body()
+        val courses = jsonapi.getMyCourses().execute().body()
         courses?.let {
             assertNotEquals(4, it.size)
+        }
+    }
+
+    @Test
+    fun `GET enrolledCourse`() {
+        val course = jsonapi.enrolledCourseById("8252").execute().body()
+        course?.let {
+            assertNotEquals(4, it.run?.sections)
         }
     }
 
@@ -40,7 +49,7 @@ class OnlineJsonApiAuthenticatedTest {
         p.status = "DONE"
         p.runs?.id = "8252"
         p.content?.id = "443"
-        val progress = api.updateProgress("316797",p).execute().body()
+        val progress = jsonapi.updateProgress("316797",p).execute().body()
         progress?.let {
             assertEquals(1, 1)
         }
@@ -48,23 +57,30 @@ class OnlineJsonApiAuthenticatedTest {
 
     @Test
     fun `GET Quiz`() {
-        val quizzes = api.getQuizAttempt("3").execute().body()
+        val quizzes = jsonapi.getQuizAttempt("3").execute().body()
         quizzes?.let {
             assertNotNull(it.size)
         }
     }
     @Test
     fun `GET Question`() {
-        val questions = api.getQuestionById("22").execute().body()
+        val questions = jsonapi.getQuestionById("22").execute().body()
         questions?.let {
             assertNotNull(it.title)
         }
     }
     @Test
     fun `GET Quiz Attempt`() {
-        val quizAttempt = api.getQuizAttempt("3").execute().body()
+        val quizAttempt = jsonapi.getQuizAttempt("3").execute().body()
         quizAttempt?.let {
             assertNotNull(it.size)
+        }
+    }
+    @Test
+    fun `GET Doubts `() {
+        val doubts = api.getDoubts("22").execute().body()
+        doubts?.let {
+            assertNotNull(it)
         }
     }
 }

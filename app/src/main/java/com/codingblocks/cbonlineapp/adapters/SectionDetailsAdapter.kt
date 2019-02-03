@@ -19,7 +19,6 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.activities.PdfActivity
 import com.codingblocks.cbonlineapp.activities.QuizActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.activities.YoutubePlayerActivity
 import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
@@ -27,10 +26,7 @@ import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.MyRunAttempts
 import com.codingblocks.onlineapi.models.Progress
 import kotlinx.android.synthetic.main.item_section.view.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.*
 import kotlin.concurrent.thread
 
 
@@ -91,7 +87,11 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                 ll.visibility = View.GONE
                 itemView.lectures.text = "${it.size} Lectures"
                 var duration: Long = 0
+                var sectionComplete:Int = 0
                 for (content in it) {
+                    if(content.progress == "DONE"){
+                        sectionComplete++
+                    }
                     if (content.contentable == "lecture")
                         duration += content.contentLecture.lectureDuration
                     else if (content.contentable == "video") {
@@ -106,6 +106,13 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                         itemView.lectureTime.text = ("$hour Hours")
                     } else
                         itemView.lectureTime.text = ("---")
+
+                    if(sectionComplete == it.size){
+                        itemView.title.textColor = context.resources.getColor(R.color.green)
+                        itemView.lectureTime.textColor = context.resources.getColor(R.color.green)
+                        itemView.lectures.textColor = context.resources.getColor(R.color.green)
+
+                    }
 
                     val factory = LayoutInflater.from(context)
                     val inflatedView = factory.inflate(R.layout.item_section_detailed_info, ll, false)
@@ -131,6 +138,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                 downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
                                 downloadBtn.background = null
                                 if (content.progress == "DONE") {
+                                    subTitle.textColor = context.resources.getColor(R.color.green)
                                     downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
 //                                    downloadBtn.setOnClickListener {
 //                                        updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)
@@ -143,7 +151,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                         else
                                             updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
                                     }
-                                    it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url).singleTop())
+                                    it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url, "attemptId" to content.attempt_id,"contentId" to content.id).singleTop())
                                 }
                             }
 
@@ -152,6 +160,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_document))
                             downloadBtn.background = null
                             if (content.progress == "DONE") {
+                                subTitle.textColor = context.resources.getColor(R.color.green)
                                 downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
 //                                downloadBtn.setOnClickListener {
 //                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentDocument.documentContentId)
@@ -173,7 +182,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_youtube_video))
                             downloadBtn.background = null
                             if (content.progress == "DONE") {
+                                subTitle.textColor = context.resources.getColor(R.color.green)
                                 downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
+
 //                                downloadBtn.setOnClickListener {
 //                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentVideo.videoContentId)
 //                                }
@@ -187,7 +198,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                     else
                                         updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentVideo.videoContentId)
                                 }
-                                it.context.startActivity(it.context.intentFor<YoutubePlayerActivity>("videoUrl" to content.contentVideo.videoUrl).singleTop())
+                                it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("videoUrl" to content.contentVideo.videoUrl, "attemptId" to content.attempt_id,"contentId" to content.id).singleTop())
 
                             }
                         }
@@ -195,6 +206,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_quiz))
                             downloadBtn.background = null
                             if (content.progress == "DONE") {
+                                subTitle.textColor = context.resources.getColor(R.color.green)
                                 downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
                                 downloadBtn.setOnClickListener {
                                     updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)

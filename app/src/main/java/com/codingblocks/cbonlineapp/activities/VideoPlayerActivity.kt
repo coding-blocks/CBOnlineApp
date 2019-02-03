@@ -1,109 +1,95 @@
 package com.codingblocks.cbonlineapp.activities
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.animation.LayoutTransition
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.utils.DoubleClickListener
+import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
+import com.codingblocks.cbonlineapp.fragments.NotesFragment
+import com.codingblocks.cbonlineapp.fragments.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.utils.MediaUtils
+import com.codingblocks.cbonlineapp.utils.MyVideoControls
 import com.devbrackets.android.exomedia.listener.OnPreparedListener
+import com.google.android.youtube.player.YouTubeInitializationResult
+import com.google.android.youtube.player.YouTubePlayer
+import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_video_player.*
+import kotlinx.android.synthetic.main.exomedia_default_controls_mobile.view.*
+import org.jetbrains.anko.AnkoLogger
 
-class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener {
+
+class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger {
+
+    private var pos: Long? = 0
+    private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        setContentView(R.layout.activity_video_player)
-
+        setContentView(com.codingblocks.cbonlineapp.R.layout.activity_video_player)
         rootLayout.layoutTransition
                 .enableTransitionType(LayoutTransition.CHANGING)
+        val controls = MyVideoControls(this)
+        videoView.setControls(controls)
+        (videoView.videoControls as MyVideoControls).let {
+            it.fullscreenBtn.setOnClickListener {
+                val i = Intent(this, VideoPlayerFullScreenActivity::class.java)
+                i.putExtra("FOLDER_NAME", videoView.videoUri.toString())
+                i.putExtra("CURRENT_POSITION", videoView.currentPosition)
+                startActivityForResult(i, 1)
+            }
 
-        playback_speed.setOnClickListener {
-            showSpeedDialog()
         }
 
-        fastFwLayout.setOnClickListener(object : DoubleClickListener() {
-            override fun onSingleClick(v: View) {
-
-            }
-
-            override fun onDoubleClick(v: View) {
-                videoView.seekTo(videoView.currentPosition + 10000)
-
-                fastFw.animate()
-                        .setDuration(300)
-                        .alpha(0.5f)
-                        .setListener(object : AnimatorListenerAdapter() {
-                            override fun onAnimationStart(animation: Animator?) {
-                                super.onAnimationStart(animation)
-                                fastFw.visibility = View.VISIBLE
-
-                            }
-
-                            override fun onAnimationEnd(animation: Animator?) {
-                                super.onAnimationEnd(animation)
-                                fastFw.visibility = View.INVISIBLE
-                            }
-
-                        })
-            }
-
-        })
-
-        rewindLayout.setOnClickListener(object : DoubleClickListener() {
-            override fun onSingleClick(v: View) {
-            }
-
-            override fun onDoubleClick(v: View) {
-                videoView.seekTo(videoView.currentPosition - 10000)
-
-                rewind.animate()
-                        .setDuration(300)
-                        .alpha(0.5f)
-                        .setListener(object : AnimatorListenerAdapter() {
-                            override fun onAnimationStart(animation: Animator?) {
-                                super.onAnimationStart(animation)
-                                rewind.visibility = View.VISIBLE
-
-                            }
-
-                            override fun onAnimationEnd(animation: Animator?) {
-                                super.onAnimationEnd(animation)
-                                rewind.visibility = View.INVISIBLE
-                            }
-
-                        })
-            }
-
-        })
     }
 
-    private val playbackSpeeds = floatArrayOf(0.5f, 0.75f, 1f, 1.5f, 2f)
-    private val speedString = arrayOf("0.5x", "0.75x", "1x", "1.5x", "2x")
+    private fun setupViewPager(attemptId: String, contentId: String) {
+        val adapter = TabLayoutAdapter(supportFragmentManager)
+        adapter.add(VideoDoubtFragment.newInstance(attemptId, contentId), "Doubts")
+        adapter.add(NotesFragment(), "Notes")
 
-    private fun showSpeedDialog() {
-        AlertDialog.Builder(this)
-                .setTitle("Select Playback speed")
-                .setSingleChoiceItems(speedString, playbackSpeeds.indexOf(videoView.playbackSpeed)) { it, which ->
-                    videoView.playbackSpeed = playbackSpeeds[which]
-                    it.cancel()
-                }
-                .show()
+        player_viewpager.adapter = adapter
+        player_tabs.setupWithViewPager(player_viewpager)
+        player_viewpager.offscreenPageLimit = 2
     }
+
 
     override fun onStart() {
         super.onStart()
         val url = intent.getStringExtra("FOLDER_NAME")
-        setupVideoView(url)
+        val youtubeUrl = intent.getStringExtra("videoUrl")
+        val attemptId = intent.getStringExtra("attemptId")
+        val contentId = intent.getStringExtra("contentId")
+
+
+        if (youtubeUrl != null) {
+            displayYoutubeVideo.view?.visibility = View.VISIBLE
+            setupYoutubePlayer(youtubeUrl)
+        } else {
+            displayYoutubeVideo.view?.visibility = View.GONE
+            videoView.visibility = View.VISIBLE
+            setupVideoView(url)
+        }
+        setupViewPager(attemptId,contentId)
+    }
+
+    private fun setupYoutubePlayer(youtubeUrl: String) {
+        youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
+            override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
+            }
+
+            override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
+                if (!p2) {
+                    youtubePlayerInstance?.loadVideo(youtubeUrl.substring(32))
+                }
+            }
+        }
+        val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
+        youTubePlayerSupportFragment!!.initialize(MyCourseActivity.YOUTUBE_API_KEY, youtubePlayerInit)
+
+
     }
 
     private fun setupVideoView(url: String) {
@@ -116,11 +102,24 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener {
 
     override fun onPrepared() {
         videoView.start()
+        videoView.seekTo(pos ?: 0)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        videoView.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         videoView.release()
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == -1) {
+            pos = data?.getLongExtra("CURRENT_POSITION", 0)
+        }
+    }
+
 
 }
