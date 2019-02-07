@@ -81,7 +81,7 @@ interface OnlineJsonApi {
             @Path("id") id: String): Call<QuizAttempt>
 
     @POST("doubts")
-    fun createDoubt(@Body params: DoubtsJsonApi): Call<List<DoubtsJsonApi>>
+    fun createDoubt(@Body params: DoubtsJsonApi): Call<DoubtsJsonApi>
 
     @GET("run_attempts/{runAttemptId}/relationships/doubts")
     fun getDoubtByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<DoubtsJsonApi>>

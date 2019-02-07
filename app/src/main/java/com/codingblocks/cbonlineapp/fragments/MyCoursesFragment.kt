@@ -110,67 +110,69 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                     //Add Course Progress to Course Object
                     Clients.api.getMyCourseProgress(myCourses.runAttempts?.get(0)?.id.toString()).enqueue(retrofitCallback { t, progressResponse ->
                         progressResponse?.body().let { map ->
-                            val progress = map!!["percent"] as Double
-                            val course = myCourses.course?.run {
-                                Course(
-                                        id ?: "",
-                                        title ?: "",
-                                        subtitle ?: "",
-                                        logo ?: "",
-                                        summary ?: "",
-                                        promoVideo ?: "",
-                                        difficulty ?: "",
-                                        reviewCount ?: 0,
-                                        rating ?: 0f,
-                                        slug ?: "",
-                                        coverImage ?: "",
-                                        updatedAt)
-                            }
-                            val courseRun = CourseRun(myCourses.id ?: "",
-                                    myCourses.runAttempts?.get(0)?.id ?: "",
-                                    myCourses.name ?: "",
-                                    myCourses.description ?: "",
-                                    myCourses.start ?: "",
-                                    myCourses.runAttempts!![0].end ?: "",
-                                    myCourses.start ?: "",
-                                    myCourses.runAttempts!![0].end ?: "",
-                                    myCourses.price ?: "",
-                                    myCourses.mrp ?: "",
-                                    myCourses.course?.id ?: "",
-                                    myCourses.updatedAt ?: "",
-                                    progress = progress,
-                                    title = myCourses.course?.title ?: "")
-
-                            doAsync {
-                                val updateRun = runDao.getRunById(myCourses.id ?: "")
-                                if (updateRun == null) {
-                                    courseDao.insert(course!!)
-                                    runDao.insert(courseRun)
-                                } else if (updateRun.progress != progress) {
-                                    info { myCourses.course?.title + "updateCourse is happening" + progress + "  " + updateRun.progress }
-                                    courseDao.update(course!!)
-                                    runDao.update(courseRun)
+                            if (progressResponse?.isSuccessful!!) {
+                                val progress = map!!["percent"] as Double
+                                val course = myCourses.course?.run {
+                                    Course(
+                                            id ?: "",
+                                            title ?: "",
+                                            subtitle ?: "",
+                                            logo ?: "",
+                                            summary ?: "",
+                                            promoVideo ?: "",
+                                            difficulty ?: "",
+                                            reviewCount ?: 0,
+                                            rating ?: 0f,
+                                            slug ?: "",
+                                            coverImage ?: "",
+                                            updatedAt)
                                 }
+                                val courseRun = CourseRun(myCourses.id ?: "",
+                                        myCourses.runAttempts?.get(0)?.id ?: "",
+                                        myCourses.name ?: "",
+                                        myCourses.description ?: "",
+                                        myCourses.start ?: "",
+                                        myCourses.runAttempts!![0].end ?: "",
+                                        myCourses.start ?: "",
+                                        myCourses.runAttempts!![0].end ?: "",
+                                        myCourses.price ?: "",
+                                        myCourses.mrp ?: "",
+                                        myCourses.course?.id ?: "",
+                                        myCourses.updatedAt ?: "",
+                                        progress = progress,
+                                        title = myCourses.course?.title ?: "")
 
-                                if (ui.swipeRefreshLayout.isRefreshing) {
-                                    ui.swipeRefreshLayout.isRefreshing = false
-                                }
-                                //fetch CourseInstructors
-                                myCourses.course?.instructors?.forEachIndexed { _, it ->
-                                    Clients.onlineV2JsonApi.instructorsById(it.id!!).enqueue(retrofitCallback { _, response ->
+                                doAsync {
+                                    val updateRun = runDao.getRunById(myCourses.id ?: "")
+                                    if (updateRun == null) {
+                                        courseDao.insert(course!!)
+                                        runDao.insert(courseRun)
+                                    } else if (updateRun.progress != progress) {
+                                        info { myCourses.course?.title + "updateCourse is happening" + progress + "  " + updateRun.progress }
+                                        courseDao.update(course!!)
+                                        runDao.update(courseRun)
+                                    }
 
-                                        response?.body().let { instructor ->
-                                            thread {
-                                                instructorDao.insert(Instructor(instructor?.id
-                                                        ?: "", instructor?.name ?: "",
-                                                        instructor?.description
-                                                                ?: "", instructor?.photo ?: "",
-                                                        "", myCourses.runAttempts!![0].id!!, myCourses.course!!.id))
-                                                Log.e("TAG", "ID : ${instructor?.id}  Name : ${instructor?.name}")
-                                                insertCourseAndInstructor(myCourses.course!!, instructor!!)
+                                    if (ui.swipeRefreshLayout.isRefreshing) {
+                                        ui.swipeRefreshLayout.isRefreshing = false
+                                    }
+                                    //fetch CourseInstructors
+                                    myCourses.course?.instructors?.forEachIndexed { _, it ->
+                                        Clients.onlineV2JsonApi.instructorsById(it.id!!).enqueue(retrofitCallback { _, response ->
+
+                                            response?.body().let { instructor ->
+                                                thread {
+                                                    instructorDao.insert(Instructor(instructor?.id
+                                                            ?: "", instructor?.name ?: "",
+                                                            instructor?.description
+                                                                    ?: "", instructor?.photo ?: "",
+                                                            "", myCourses.runAttempts!![0].id!!, myCourses.course!!.id))
+                                                    Log.e("TAG", "ID : ${instructor?.id}  Name : ${instructor?.name}")
+                                                    insertCourseAndInstructor(myCourses.course!!, instructor!!)
+                                                }
                                             }
-                                        }
-                                    })
+                                        })
+                                    }
                                 }
                             }
                         }

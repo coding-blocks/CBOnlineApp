@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".fragments.VideoDoubtFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:id="@+id/doubtsRv"
+        android:layout_margin="8dp"
+        tools:listitem="@layout/doubt_item"
+        android:layout_height="wrap_content" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/doubtFab"

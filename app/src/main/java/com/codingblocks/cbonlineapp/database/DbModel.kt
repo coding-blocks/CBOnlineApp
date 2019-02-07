@@ -234,6 +234,7 @@ data class ContentQna(
         ))]
 )
 data class DoubtsModel(
+        @PrimaryKey
         var dbtUid: String = "",
         var title: String = "",
         var body: String = "",

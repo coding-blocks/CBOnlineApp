@@ -6,13 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.adapters.DoubtsAdapter
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.DoubtsModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.QuizRunAttempt
 import kotlinx.android.synthetic.main.doubt_dialog.view.*
+import kotlinx.android.synthetic.main.fragment_course_content.view.*
 import kotlinx.android.synthetic.main.fragment_video_doubt.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
@@ -25,6 +31,14 @@ private const val ARG_PARAM2 = "param2"
 class VideoDoubtFragment : Fragment(), AnkoLogger {
     private var param1: String? = null
     private var param2: String? = null
+
+    private val database: AppDatabase by lazy {
+        AppDatabase.getInstance(context!!)
+    }
+
+    private val doubtsDao by lazy {
+        database.doubtsDao()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,20 +54,34 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_video_doubt, container, false)
 
-        fetchDoubts(view)
+        fetchDoubts()
 
         view.doubtFab.setOnClickListener {
             showDialog()
         }
 
+        val doubtList = ArrayList<DoubtsModel>()
+        val doubtsAdapter = DoubtsAdapter(doubtList)
+        view.doubtsRv.layoutManager = LinearLayoutManager(context)
+        view.doubtsRv.adapter = doubtsAdapter
+        view.sectionProgressBar.show()
+        doubtsDao.getDoubts(param1!!).observe(this, Observer<List<DoubtsModel>> {
+            doubtsAdapter.setData(it as ArrayList<DoubtsModel>)
+        })
+
+
         return view
     }
 
-    private fun fetchDoubts(view: View) {
+    private fun fetchDoubts() {
         Clients.onlineV2JsonApi.getDoubtByAttemptId(param1!!).enqueue(retrofitCallback { throwable, response ->
             response?.body().let {
-                if(response!!.isSuccessful){
-
+                if (response!!.isSuccessful) {
+                    it?.forEach {
+                        doubtsDao.insert(DoubtsModel(it.id ?: "", it.title, it.body, it.content?.id
+                                ?: "", it.status, it.runAttempt?.id ?: ""
+                        ))
+                    }
                 }
             }
 
@@ -90,6 +118,10 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
                     response?.body().let {
                         if (response?.isSuccessful!!) {
                             doubtDialog.dismiss()
+                            doubtsDao.insert(DoubtsModel(it!!.id
+                                    ?: "", it.title, it.body, it.content?.id
+                                    ?: "", it.status, it.runAttempt?.id ?: ""
+                            ))
                         }
                     }
                 })
