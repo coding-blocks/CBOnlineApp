@@ -15,7 +15,8 @@ import androidx.room.TypeConverters
     Course::class,
     Announcement::class,
     CourseWithInstructor::class,
-    SectionWithContent::class
+    SectionWithContent::class,
+    DoubtsModel::class
 ], exportSchema = false
 )
 @TypeConverters(AnnouncementConverter::class)
@@ -28,6 +29,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun courseDao(): CourseDao
     abstract fun courseWithInstructorDao(): CourseWithInstructorDao
     abstract fun sectionWithContentsDao(): SectionWithContentsDao
+    abstract fun doubtsDao(): DoubtsDao
 
 
 

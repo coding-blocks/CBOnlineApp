@@ -40,11 +40,24 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_video_doubt, container, false)
 
+        fetchDoubts(view)
+
         view.doubtFab.setOnClickListener {
             showDialog()
         }
 
         return view
+    }
+
+    private fun fetchDoubts(view: View) {
+        Clients.onlineV2JsonApi.getDoubtByAttemptId(param1!!).enqueue(retrofitCallback { throwable, response ->
+            response?.body().let {
+                if(response!!.isSuccessful){
+
+                }
+            }
+
+        })
     }
 
     private fun showDialog() {

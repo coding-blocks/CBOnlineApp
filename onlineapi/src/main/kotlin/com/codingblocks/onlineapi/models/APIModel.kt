@@ -572,7 +572,7 @@ class Quizqnas : BaseModel()
 @Type("run-attempts")
 class QuizRunAttempt : BaseModel()
 
-@Type("doubts")
+@Type("doubt")
 class DoubtsJsonApi : BaseModel(){
     @JvmField
     var category: Int? = null

@@ -225,6 +225,22 @@ data class ContentQna(
         var qnaUpdatedAt: String = ""
 )
 
+@Entity(
+        foreignKeys = [(ForeignKey(
+                entity = CourseRun::class,
+                parentColumns = ["crUid"],
+                childColumns = ["runAttemptId"],
+                onDelete = ForeignKey.SET_NULL //or CASCADE
+        ))]
+)
+data class DoubtsModel(
+        var dbtUid: String = "",
+        var title: String = "",
+        var body: String = "",
+        var contentId: String = "",
+        var status: String = "",
+        var runAttemptId: String = "")
+
 
 
 

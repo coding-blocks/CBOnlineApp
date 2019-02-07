@@ -13,7 +13,7 @@ class OnlineJsonApiAuthenticatedTest {
 
     @Before
     fun `set JWT` () {
-        Clients.authJwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc5NzUsImZpcnN0bmFtZSI6IlB1bGtpdCIsImxhc3RuYW1lIjoiQWdnYXJ3YWwiLCJ1c2VybmFtZSI6ImFnZ2Fyd2FscHVsa2l0NTk2LWciLCJlbWFpbCI6ImFnZ2Fyd2FscHVsa2l0NTk2QGdtYWlsLmNvbSIsIm1vYmlsZSI6Iis5MS05NTgyMDU0NjY0Iiwib25lYXV0aF9pZCI6IjEyMDM1IiwibGFzdF9yZWFkX25vdGlmaWNhdGlvbiI6IjAiLCJwaG90byI6Imh0dHBzOi8vZ3JhcGguZmFjZWJvb2suY29tLzE3ODMzODk3MzUwMjg0NjAvcGljdHVyZT90eXBlPWxhcmdlIiwiY29sbGVnZSI6IkFtaXR5IFNjaG9vbCBPZiBFbmdpbmVlcmluZyAmIFRlY2hub2xvZ3kgKE5vaWRhKSIsInJvbGVJZCI6MiwiY3JlYXRlZEF0IjoiMjAxOC0wOS0yN1QxMzoxMDo1OS4zOTZaIiwidXBkYXRlZEF0IjoiMjAxOC0xMi0yOFQxMDowNzozOS4wNDNaIiwiY2xpZW50SWQiOiJmNWFiMDFjMC03YTAwLTQ5MWMtYjI5Ni0yN2EyN2EwYjYxMDYiLCJjbGllbnQiOiJ3ZWIiLCJpc1Rva2VuRm9yQWRtaW4iOmZhbHNlLCJpYXQiOjE1NDU5OTU5OTIsImV4cCI6MTU0NTk5NzQ5Mn0.OJui9f8_adxzFnfhYKyaX_HTicym7TUEntGn0p_LOGRAzQtLKhJJEmGvXSEbI1mqSVGPUqV553xC3XHej0H1-wZTJG8x0HqWqD_tdaHxReyt9MAdFszTXflCKzwYLQvbeD2JASleFfQ2qKkIDxuDX4BvES_ChzJdcKcrPHl4yelgTW3RxfiLU17J-c2hr_RglaHWIDfu0C8rQBN9iePtHgO41Is_qzpYvoOXOmZzy8fELl23NyxVhXFXfs1u0EYz5NBaKOvW_KuaE1fNnTTg_ctEjpAS6mfBtDNulZiPlwkwRA9eTVjkGHWhFD84WbxKveO80eMSge8M6wno8rSCaA"
+        Clients.authJwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc5NzUsImZpcnN0bmFtZSI6IlB1bGtpdCIsImxhc3RuYW1lIjoiQWdnYXJ3YWwiLCJ1c2VybmFtZSI6ImFnZ2Fyd2FscHVsa2l0NTk2LWciLCJlbWFpbCI6ImFnZ2Fyd2FscHVsa2l0NTk2QGdtYWlsLmNvbSIsIm1vYmlsZSI6Iis5MS05NTgyMDU0NjY0Iiwib25lYXV0aF9pZCI6IjEyMDM1IiwibGFzdF9yZWFkX25vdGlmaWNhdGlvbiI6IjAiLCJwaG90byI6Imh0dHBzOi8vZ3JhcGguZmFjZWJvb2suY29tLzE3ODMzODk3MzUwMjg0NjAvcGljdHVyZT90eXBlPWxhcmdlIiwiY29sbGVnZSI6IkFtaXR5IFNjaG9vbCBPZiBFbmdpbmVlcmluZyAmIFRlY2hub2xvZ3kgKE5vaWRhKSIsIm9yZ2FuaXphdGlvbiI6bnVsbCwicm9sZUlkIjoyLCJjcmVhdGVkQXQiOiIyMDE4LTA5LTI3VDEzOjEwOjU5LjM5NloiLCJ1cGRhdGVkQXQiOiIyMDE5LTAyLTAzVDE1OjE3OjQwLjU2MloiLCJjbGllbnRJZCI6IjI0MTQ0MDM4LTFmMDUtNGM0ZS1hYmJlLWExYzMxZjgyNTUyMCIsImNsaWVudCI6IndlYiIsImlzVG9rZW5Gb3JBZG1pbiI6ZmFsc2UsImlhdCI6MTU0OTQ1NzE2MCwiZXhwIjoxNTQ5NDU4NjYwfQ.AEhNW3SFiUfwkafuur3GwXwdXVfIYNF7tfPqPjwGLpx-h7AcSSx0c3QLj2VHccWe8pQyr9zN5_5fiU9egC-VFLgMQqSXurPIK9UO5GS-enfH4G5QJJ_QJjIPB7IEQCK0DEY7Dpf66VYG33XegO5TdfPz_tPUyhaXPpVEsDM1AOPnWl9kjMEBGACb0KmdNX4xTg5j6qWyMwxc9pa1d4pjuVvaQjwLpF43Jws0jnmErUvj8FLKXeoE8tdByiw-Bf0RAXIC0c2xa5bfmHQLa1w2io2SsN6un04MOHsPupwJjq8umNHHiMZrGRquApMx71YZ-htTwKfmWAX_bJUMJOJFsw"
     }
 
     @Test
@@ -79,6 +79,14 @@ class OnlineJsonApiAuthenticatedTest {
     @Test
     fun `GET Doubts `() {
         val doubts = api.getDoubts("22").execute().body()
+        doubts?.let {
+            assertNotNull(it)
+        }
+    }
+
+    @Test
+    fun `GET DoubtByAttemptId `() {
+        val doubts = jsonapi.getDoubtByAttemptId("8252").execute().body()
         doubts?.let {
             assertNotNull(it)
         }

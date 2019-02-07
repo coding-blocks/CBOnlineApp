@@ -20,19 +20,7 @@ data class TopicList(
         val perPage: Int? = null,
 
         @field:SerializedName("topics")
-        val topics: List<TopicsItem?>? = null,
-
-        @field:SerializedName("draft")
-        val draft: Any? = null,
-
-        @field:SerializedName("draft_sequence")
-        val draftSequence: Int? = null,
-
-        @field:SerializedName("top_tags")
-        val topTags: List<Any?>? = null,
-
-        @field:SerializedName("draft_key")
-        val draftKey: String? = null
+        val topics: List<TopicsItem?>? = null
 )
 
 data class TopicsItem(
