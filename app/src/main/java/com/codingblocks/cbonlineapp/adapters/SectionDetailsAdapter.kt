@@ -87,9 +87,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                 ll.visibility = View.GONE
                 itemView.lectures.text = "${it.size} Lectures"
                 var duration: Long = 0
-                var sectionComplete:Int = 0
+                var sectionComplete: Int = 0
                 for (content in it) {
-                    if(content.progress == "DONE"){
+                    if (content.progress == "DONE") {
                         sectionComplete++
                     }
                     if (content.contentable == "lecture")
@@ -107,7 +107,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                     } else
                         itemView.lectureTime.text = ("---")
 
-                    if(sectionComplete == it.size){
+                    if (sectionComplete == it.size) {
                         itemView.title.textColor = context.resources.getColor(R.color.green)
                         itemView.lectureTime.textColor = context.resources.getColor(R.color.green)
                         itemView.lectures.textColor = context.resources.getColor(R.color.green)
@@ -118,113 +118,130 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                     val inflatedView = factory.inflate(R.layout.item_section_detailed_info, ll, false)
                     val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
                     val downloadBtn = inflatedView.findViewById(R.id.downloadBtn) as ImageView
-
+                    var userPremium = false
                     subTitle.text = content.title
-                    when {
-                        content.contentable == "lecture" -> {
-                            val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
-                            ll.addView(inflatedView)
-                            if (content.contentLecture.isDownloaded == "false") {
-                                inflatedView.setOnClickListener {
-                                    if (MediaUtils.checkPermission(context)) {
-                                        starter.startDownload(url, data.id, content.contentLecture.lectureContentId, content.title)
-                                        downloadBtn.isEnabled = false
-                                        (downloadBtn.background as AnimationDrawable).start()
-                                    } else {
-                                        MediaUtils.isStoragePermissionGranted(context)
+                    when (content.contentable) {
+                        "lecture" -> if (!content.contentLecture.lectureContentId.isNullOrEmpty()) {
+                            userPremium = true
+                        }
+                        "qna" -> if (!content.contentQna.qnaContentId.isNullOrEmpty()) {
+                            userPremium = true
+                        }
+                        "video" -> if (!content.contentVideo.videoContentId.isNullOrEmpty()) {
+                            userPremium = true
+                        }
+                        "document" -> if (!content.contentDocument.documentContentId.isNullOrEmpty()) {
+                            userPremium = true
+                        }
+
+                    }
+                    if (!data.premium || userPremium) {
+                        when {
+                            content.contentable == "lecture" -> {
+                                val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
+                                ll.addView(inflatedView)
+                                if (content.contentLecture.isDownloaded == "false") {
+                                    downloadBtn.background = context.getDrawable(android.R.drawable.stat_sys_download)
+                                    inflatedView.setOnClickListener {
+                                        if (MediaUtils.checkPermission(context)) {
+                                            starter.startDownload(url, data.id, content.contentLecture.lectureContentId, content.title)
+                                            downloadBtn.isEnabled = false
+                                            (downloadBtn.background as AnimationDrawable).start()
+                                        } else {
+                                            MediaUtils.isStoragePermissionGranted(context)
+                                        }
                                     }
-                                }
-                            } else {
-                                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
-                                downloadBtn.background = null
-                                if (content.progress == "DONE") {
-                                    subTitle.textColor = context.resources.getColor(R.color.green)
-                                    downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
+                                } else {
+                                    downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
+                                    if (content.progress == "DONE") {
+                                        subTitle.textColor = context.resources.getColor(R.color.green)
+                                        downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
 //                                    downloadBtn.setOnClickListener {
 //                                        updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)
 //                                    }
-                                }
-                                inflatedView.setOnClickListener {
-                                    if (content.progress == "UNDONE") {
-                                        if (content.progressId.isEmpty())
-                                            setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentLecture.lectureContentId)
-                                        else
-                                            updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
                                     }
-                                    it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url, "attemptId" to content.attempt_id,"contentId" to content.id).singleTop())
+                                    inflatedView.setOnClickListener {
+                                        if (content.progress == "UNDONE") {
+                                            if (content.progressId.isEmpty())
+                                                setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentLecture.lectureContentId)
+                                            else
+                                                updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
+                                        }
+                                        it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url, "attemptId" to content.attempt_id, "contentId" to content.id).singleTop())
+                                    }
                                 }
-                            }
 
-                        }
-                        content.contentable == "document" -> {
-                            downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_document))
-                            downloadBtn.background = null
-                            if (content.progress == "DONE") {
-                                subTitle.textColor = context.resources.getColor(R.color.green)
-                                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
+                            }
+                            content.contentable == "document" -> {
+                                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_document))
+                                if (content.progress == "DONE") {
+                                    subTitle.textColor = context.resources.getColor(R.color.green)
+                                    downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
 //                                downloadBtn.setOnClickListener {
 //                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentDocument.documentContentId)
 //                                }
-                            }
-                            ll.addView(inflatedView)
-                            inflatedView.setOnClickListener {
-                                if (content.progress == "UNDONE") {
-                                    if (content.progressId.isEmpty())
-                                        setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentDocument.documentContentId)
-                                    else
-                                        updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentDocument.documentContentId)
                                 }
-                                it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
+                                ll.addView(inflatedView)
+                                inflatedView.setOnClickListener {
+                                    if (content.progress == "UNDONE") {
+                                        if (content.progressId.isEmpty())
+                                            setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentDocument.documentContentId)
+                                        else
+                                            updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentDocument.documentContentId)
+                                    }
+                                    it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
 
+                                }
                             }
-                        }
-                        content.contentable == "video" -> {
-                            downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_youtube_video))
-                            downloadBtn.background = null
-                            if (content.progress == "DONE") {
-                                subTitle.textColor = context.resources.getColor(R.color.green)
-                                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
+                            content.contentable == "video" -> {
+                                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_youtube_video))
+                                if (content.progress == "DONE") {
+                                    subTitle.textColor = context.resources.getColor(R.color.green)
+                                    downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
 
 //                                downloadBtn.setOnClickListener {
 //                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentVideo.videoContentId)
 //                                }
-                            }
-                            ll.addView(inflatedView)
-                            inflatedView.setOnClickListener {
-                                info { "resp" + content.progress + content.progressId }
-                                if (content.progress == "UNDONE") {
-                                    if (content.progressId.isEmpty())
-                                        setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentVideo.videoContentId)
-                                    else
-                                        updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentVideo.videoContentId)
                                 }
-                                it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("videoUrl" to content.contentVideo.videoUrl, "attemptId" to content.attempt_id,"contentId" to content.id).singleTop())
+                                ll.addView(inflatedView)
+                                inflatedView.setOnClickListener {
+                                    info { "resp" + content.progress + content.progressId }
+                                    if (content.progress == "UNDONE") {
+                                        if (content.progressId.isEmpty())
+                                            setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentVideo.videoContentId)
+                                        else
+                                            updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentVideo.videoContentId)
+                                    }
+                                    it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("videoUrl" to content.contentVideo.videoUrl, "attemptId" to content.attempt_id, "contentId" to content.id).singleTop())
 
+                                }
                             }
+                            content.contentable == "qna" -> {
+                                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_quiz))
+                                if (content.progress == "DONE") {
+                                    subTitle.textColor = context.resources.getColor(R.color.green)
+                                    downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
+                                    downloadBtn.setOnClickListener {
+                                        updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)
+                                    }
+                                }
+                                ll.addView(inflatedView)
+                                inflatedView.setOnClickListener {
+                                    if (content.progress == "UNDONE") {
+                                        if (content.progressId.isEmpty())
+                                            setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentQna.qnaContentId)
+                                        else
+                                            updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
+                                    }
+                                    it.context.startActivity(it.context.intentFor<QuizActivity>("quizId" to content.contentQna.qnaQid.toString(), "attemptId" to content.attempt_id).singleTop())
+
+                                }
+                            }
+
                         }
-                        content.contentable == "qna" -> {
-                            downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_quiz))
-                            downloadBtn.background = null
-                            if (content.progress == "DONE") {
-                                subTitle.textColor = context.resources.getColor(R.color.green)
-                                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
-                                downloadBtn.setOnClickListener {
-                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)
-                                }
-                            }
-                            ll.addView(inflatedView)
-                            inflatedView.setOnClickListener {
-                                if (content.progress == "UNDONE") {
-                                    if (content.progressId.isEmpty())
-                                        setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentQna.qnaContentId)
-                                    else
-                                        updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
-                                }
-                                it.context.startActivity(it.context.intentFor<QuizActivity>("quizId" to content.contentQna.qnaQid.toString(), "attemptId" to content.attempt_id).singleTop())
-
-                            }
-                        }
-
+                    } else {
+                        downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_lock_outline_black_24dp))
+                        ll.addView(inflatedView)
                     }
 
                     itemView.setOnClickListener {

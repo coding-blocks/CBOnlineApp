@@ -188,6 +188,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                                                                     ?: "", content.section_content?.order!!,
                                                             content.section_content?.sectionId
                                                                     ?: "", attemptId,
+                                                            section.premium!!,
                                                             content.section_content?.updatedAt
                                                                     ?: "",
                                                             contentLecture,
@@ -206,6 +207,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                                                                     ?: "", content.section_content?.order!!,
                                                             content.section_content?.sectionId
                                                                     ?: "", attemptId,
+                                                            section.premium!!,
                                                             content.section_content?.updatedAt
                                                                     ?: "",
                                                             contentLecture,

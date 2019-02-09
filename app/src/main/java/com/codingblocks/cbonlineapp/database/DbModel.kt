@@ -119,6 +119,7 @@ data class CourseContent(
         var order: Int,
         var section_id: String,
         var attempt_id: String,
+        var premium: Boolean,
         var contentUpdatedAt: String,
         @Embedded
         @Nullable
