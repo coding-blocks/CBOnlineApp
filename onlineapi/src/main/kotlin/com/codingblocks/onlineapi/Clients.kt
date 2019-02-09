@@ -50,17 +50,25 @@ object Clients {
             QuizAttempt::class.java,
             QuizRunAttempt::class.java,
             Quizqnas::class.java,
-            DoubtsJsonApi::class.java
+            DoubtsJsonApi::class.java,
+            ContentCsv::class.java
 
     )
     private val relationshipResolver = RelationshipResolver {
+        var url = it
+        if (!it.contains("https")) {
+            url = "https://api-online.cb.lk$url"
+        }
+
         OkHttpClient()
-                .newCall(Request.Builder().url(it).build())
+                .newCall(Request.Builder().addHeader("Authorization", "JWT $authJwt").url(url).build())
                 .execute()
                 .body()
                 ?.bytes()
     }
 
+
+    //type resolver
     init {
         onlineApiResourceConverter.setGlobalResolver(relationshipResolver)
         onlineApiResourceConverter.disableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES)

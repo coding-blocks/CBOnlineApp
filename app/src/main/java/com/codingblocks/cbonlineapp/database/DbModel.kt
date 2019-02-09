@@ -227,9 +227,9 @@ data class ContentQna(
 
 @Entity(
         foreignKeys = [(ForeignKey(
-                entity = CourseRun::class,
-                parentColumns = ["crUid"],
-                childColumns = ["runAttemptId"],
+                entity = CourseContent::class,
+                parentColumns = ["id"],
+                childColumns = ["contentId"],
                 onDelete = ForeignKey.SET_NULL //or CASCADE
         ))]
 )

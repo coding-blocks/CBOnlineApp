@@ -1,6 +1,7 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.*
+import com.github.jasminb.jsonapi.JSONAPIDocument
 import kotlinx.coroutines.Deferred
 import retrofit2.Call
 import retrofit2.Response
@@ -53,6 +54,14 @@ interface OnlineJsonApi {
     @GET("run_attempts/{runid}")
     fun enrolledCourseById(
             @Path("runid") id: String): Call<MyRunAttempt>
+
+    @GET("sections/{sectionid}/relationships/contents")
+    fun getSectionContent(
+            @Path("sectionid") id: String): Call<ArrayList<LectureContent>>
+
+    @GET("{sectionlink}")
+    fun getSectionContents(
+            @Path("sectionlink") sectionlink: String): Call<ArrayList<LectureContent>>
 
     @GET("quizzes/{quizid}")
     fun getQuizById(

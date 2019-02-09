@@ -26,6 +26,15 @@ class OnlineJsonApiAuthenticatedTest {
         }
     }
 
+
+    @Test
+    fun `GET content`() {
+            val courses = jsonapi.getSectionContent("886").execute().body()
+            courses?.let {
+                assertEquals("Python Basics", it)
+            }
+    }
+
     @Test
     fun `GET myCourses`() {
         val courses = jsonapi.getMyCourses().execute().body()
@@ -36,9 +45,12 @@ class OnlineJsonApiAuthenticatedTest {
 
     @Test
     fun `GET enrolledCourse`() {
-        val course = jsonapi.enrolledCourseById("8252").execute().body()
-        course?.let {
-            assertNotEquals(4, it.run?.sections)
+        suspend {
+
+            val course = jsonapi.enrolledCourseById("8252").execute().body()
+            course?.let {
+                assertNotEquals(4, it.run?.sections)
+            }
         }
     }
 

@@ -2,8 +2,11 @@ package com.codingblocks.onlineapi.models
 
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.github.jasminb.jsonapi.Links
+import com.github.jasminb.jsonapi.RelType
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
+import com.github.jasminb.jsonapi.annotations.RelationshipLinks
 import com.github.jasminb.jsonapi.annotations.Type
 
 
@@ -258,10 +261,15 @@ class CourseSection : BaseModel() {
     @JsonProperty("run-id")
     var run_id: String? = null
 
+    @RelationshipLinks("contents")
+    @JvmField
+    var courseContentLinks: Links? = null
 
     @Relationship("contents", resolve = true)
     @JvmField
     var courseContent: ArrayList<LectureContent>? = null
+
+
 
 }
 
@@ -297,6 +305,10 @@ class LectureContent : Contents() {
     @JvmField
     var qna: ContentQna? = null
 
+    @Relationship("csv", resolve = true)
+    @JvmField
+    var csv: ContentQna? = null
+
 }
 
 @Type("code_challenge")
@@ -321,6 +333,20 @@ class ContentCodeChallenge : BaseModel() {
 
 @Type("qna")
 class ContentQna : BaseModel() {
+    @JvmField
+    @JsonProperty("content-id")
+    var content_id: String? = null
+
+    @JvmField
+    @JsonProperty("q-id")
+    var q_id: Int? = null
+
+    @JvmField
+    var name: String? = null
+}
+
+@Type("csv")
+class ContentCsv : BaseModel() {
     @JvmField
     @JsonProperty("content-id")
     var content_id: String? = null
@@ -573,7 +599,7 @@ class Quizqnas : BaseModel()
 class QuizRunAttempt : BaseModel()
 
 @Type("doubt")
-class DoubtsJsonApi : BaseModel(){
+class DoubtsJsonApi : BaseModel() {
     @JvmField
     var category: Int? = null
 
@@ -588,7 +614,7 @@ class DoubtsJsonApi : BaseModel(){
 
     @Relationship("run-attempt", resolve = true)
     @JvmField
-    var runAttempt: QuizRunAttempt? = null
+    var runAttempt: MyRunAttempt? = null
 
     @Relationship("content", resolve = true)
     @JvmField

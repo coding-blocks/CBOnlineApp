@@ -21,6 +21,7 @@ import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.info
 import kotlin.concurrent.thread
 
@@ -110,99 +111,120 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                         sectionDao.insert(CourseSection(section.id ?: "", section.name ?: "",
                                 section.order!!, section.premium!!, section.status ?: "",
                                 section.run_id ?: "", attemptId, section.updatedAt ?: ""))
+                        doAsync {
+                            thread {
+                                Clients.onlineV2JsonApi.getSectionContents(section.courseContentLinks!!.related.href.substring(7)).enqueue(retrofitCallback { throwable, response ->
+                                    response?.body().let {
+                                        if (response?.isSuccessful!!) {
+                                            section.courseContent = it
+                                            //Section Contents List
+                                            for (content in section.courseContent!!) {
+                                                var contentDocument = ContentDocument()
+                                                var contentLecture = ContentLecture()
+                                                var contentVideo = ContentVideo()
+                                                var contentQna = ContentQna()
+                                                var contentCodeChallenge = ContentCodeChallenge()
 
-                        //Section Contents List
-                        for (content in section.courseContent!!) {
-                            var contentDocument = ContentDocument()
-                            var contentLecture = ContentLecture()
-                            var contentVideo = ContentVideo()
-                            var contentQna = ContentQna()
-                            var contentCodeChallenge = ContentCodeChallenge()
 
 
+                                                when {
+                                                    content.contentable.equals("lecture") -> content.lecture?.let {
+                                                        contentLecture = ContentLecture(it.id ?: "",
+                                                                it.name ?: "",
+                                                                it.duration!!,
+                                                                it.video_url ?: "",
+                                                                content.section_content?.id ?: "",
+                                                                it.updatedAt ?: "")
+                                                    }
+                                                    content.contentable.equals("document") -> content.document?.let {
+                                                        contentDocument = ContentDocument(it.id
+                                                                ?: "",
+                                                                it.name ?: "",
+                                                                it.pdf_link ?: "",
+                                                                content.section_content?.id ?: "",
+                                                                it.updatedAt ?: "")
+                                                    }
+                                                    content.contentable.equals("video") -> content.video?.let {
+                                                        contentVideo = ContentVideo(it.id ?: "",
+                                                                it.name ?: "",
+                                                                it.duration!!,
+                                                                it.description ?: "",
+                                                                it.url ?: "",
+                                                                content.section_content?.id ?: "",
+                                                                it.updatedAt ?: "")
+                                                    }
+                                                    content.contentable.equals("qna") -> content.qna?.let {
+                                                        contentQna = ContentQna(it.id ?: "",
+                                                                it.name ?: "",
+                                                                it.q_id ?: 0,
+                                                                content.section_content?.id ?: "",
+                                                                it.updatedAt ?: "")
+                                                    }
+                                                    content.contentable.equals("code_challenge") -> content.code_challenge?.let {
+                                                        contentCodeChallenge = ContentCodeChallenge(it.id
+                                                                ?: "",
+                                                                it.name ?: "",
+                                                                it.hb_problem_id ?: 0,
+                                                                it.hb_contest_id ?: 0,
+                                                                content.section_content?.id ?: "",
+                                                                it.updatedAt ?: "")
+                                                    }
+                                                }
+                                                var progressId = ""
+                                                var status: String
+                                                if (content.progress != null) {
+                                                    status = content.progress?.status ?: ""
+                                                    progressId = content.progress?.id ?: ""
+                                                } else {
+                                                    status = "UNDONE"
+                                                }
+                                                val updateContent = contentDao.getContentWithId(attemptId, content.id
+                                                        ?: "")
+                                                if (updateContent == null) {
+                                                    contentDao.insert(CourseContent(
+                                                            content.id ?: "", status, progressId,
+                                                            content.title ?: "", content.duration!!,
+                                                            content.contentable
+                                                                    ?: "", content.section_content?.order!!,
+                                                            content.section_content?.sectionId
+                                                                    ?: "", attemptId,
+                                                            content.section_content?.updatedAt
+                                                                    ?: "",
+                                                            contentLecture,
+                                                            contentDocument,
+                                                            contentVideo,
+                                                            contentQna,
+                                                            contentCodeChallenge))
+                                                    insertSectionWithContent(section.id
+                                                            ?: "", content.id ?: "")
+                                                } else if (updateContent.progress != status || updateContent.title != content.title) {
+                                                    info { "update is happening" }
+                                                    contentDao.update(CourseContent(
+                                                            content.id ?: "", status, progressId,
+                                                            content.title ?: "", content.duration!!,
+                                                            content.contentable
+                                                                    ?: "", content.section_content?.order!!,
+                                                            content.section_content?.sectionId
+                                                                    ?: "", attemptId,
+                                                            content.section_content?.updatedAt
+                                                                    ?: "",
+                                                            contentLecture,
+                                                            contentDocument,
+                                                            contentVideo,
+                                                            contentQna,
+                                                            contentCodeChallenge))
+                                                }
 
-                            when {
-                                content.contentable.equals("lecture") -> content.lecture?.let {
-                                    contentLecture = ContentLecture(it.id ?: "",
-                                            it.name ?: "",
-                                            it.duration!!,
-                                            it.video_url ?: "",
-                                            content.section_content?.id ?: "",
-                                            it.updatedAt ?: "")
-                                }
-                                content.contentable.equals("document") -> content.document?.let {
-                                    contentDocument = ContentDocument(it.id ?: "",
-                                            it.name ?: "",
-                                            it.pdf_link ?: "",
-                                            content.section_content?.id ?: "",
-                                            it.updatedAt ?: "")
-                                }
-                                content.contentable.equals("video") -> content.video?.let {
-                                    contentVideo = ContentVideo(it.id ?: "",
-                                            it.name ?: "",
-                                            it.duration!!,
-                                            it.description ?: "",
-                                            it.url ?: "",
-                                            content.section_content?.id ?: "",
-                                            it.updatedAt ?: "")
-                                }
-                                content.contentable.equals("qna") -> content.qna?.let {
-                                    contentQna = ContentQna(it.id ?: "",
-                                            it.name ?: "",
-                                            it.q_id ?: 0,
-                                            content.section_content?.id ?: "",
-                                            it.updatedAt ?: "")
-                                }
-                                content.contentable.equals("code_challenge") -> content.code_challenge?.let {
-                                    contentCodeChallenge = ContentCodeChallenge(it.id ?: "",
-                                            it.name ?: "",
-                                            it.hb_problem_id ?: 0,
-                                            it.hb_contest_id ?: 0,
-                                            content.section_content?.id ?: "",
-                                            it.updatedAt ?: "")
-                                }
+
+                                            }
+
+
+                                        }
+                                    }
+                                    info { throwable?.localizedMessage }
+                                })
                             }
-                            var progressId = ""
-                            var status: String
-                            if (content.progress != null) {
-                                status = content.progress?.status ?: ""
-                                progressId = content.progress?.id ?: ""
-                            } else {
-                                status = "UNDONE"
-                            }
-                            val updateContent = contentDao.getContentWithId(attemptId, content.id
-                                    ?: "")
-                            if (updateContent == null) {
-                                contentDao.insert(CourseContent(
-                                        content.id ?: "", status, progressId,
-                                        content.title ?: "", content.duration!!,
-                                        content.contentable ?: "", content.section_content?.order!!,
-                                        content.section_content?.sectionId ?: "", attemptId,
-                                        content.section_content?.updatedAt ?: "",
-                                        contentLecture,
-                                        contentDocument,
-                                        contentVideo,
-                                        contentQna,
-                                        contentCodeChallenge))
-                                insertSectionWithContent(section.id ?: "", content.id ?: "")
-                            } else if (updateContent.progress != status || updateContent.title != content.title) {
-                                info { "update is happening" }
-                                contentDao.update(CourseContent(
-                                        content.id ?: "", status, progressId,
-                                        content.title ?: "", content.duration!!,
-                                        content.contentable ?: "", content.section_content?.order!!,
-                                        content.section_content?.sectionId ?: "", attemptId,
-                                        content.section_content?.updatedAt ?: "",
-                                        contentLecture,
-                                        contentDocument,
-                                        contentVideo,
-                                        contentQna,
-                                        contentCodeChallenge))
-                            }
-
-
                         }
-
                     }
                 }
 

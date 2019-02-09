@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +17,9 @@ import com.codingblocks.cbonlineapp.database.DoubtsModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
+import com.codingblocks.onlineapi.models.MyRunAttempt
 import com.codingblocks.onlineapi.models.QuizRunAttempt
 import kotlinx.android.synthetic.main.doubt_dialog.view.*
-import kotlinx.android.synthetic.main.fragment_course_content.view.*
 import kotlinx.android.synthetic.main.fragment_video_doubt.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
@@ -64,7 +65,6 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
         val doubtsAdapter = DoubtsAdapter(doubtList)
         view.doubtsRv.layoutManager = LinearLayoutManager(context)
         view.doubtsRv.adapter = doubtsAdapter
-        view.sectionProgressBar.show()
         doubtsDao.getDoubts(param1!!).observe(this, Observer<List<DoubtsModel>> {
             doubtsAdapter.setData(it as ArrayList<DoubtsModel>)
         })
@@ -78,9 +78,17 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
             response?.body().let {
                 if (response!!.isSuccessful) {
                     it?.forEach {
-                        doubtsDao.insert(DoubtsModel(it.id ?: "", it.title, it.body, it.content?.id
-                                ?: "", it.status, it.runAttempt?.id ?: ""
-                        ))
+                        try {
+                            info { "rundid" + it.runAttempt?.id }
+                            doubtsDao.insert(DoubtsModel(it.id
+                                    ?: "", it.title, it.body, it.content?.id
+                                    ?: "", it.status, it.runAttempt?.id ?: ""
+                            ))
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            Log.e("CRASH", "DOUBT ID : $it.id")
+                        }
+
                     }
                 }
             }
@@ -107,7 +115,7 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
                 doubt.body = doubtView.descriptionLayout.editText!!.text.toString()
                 doubt.title = doubtView.titleLayout.editText!!.text.toString()
                 doubt.category = 41
-                val runAttempts = QuizRunAttempt() // type run-attempts
+                val runAttempts = MyRunAttempt() // type run-attempts
                 val contents = Contents() // type contents
                 runAttempts.id = param1
                 contents.id = param2
