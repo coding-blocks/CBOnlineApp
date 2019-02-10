@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:paddingBottom="8dp"
     android:orientation="vertical">
 
     <TextView
@@ -49,6 +51,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
+            android:imeOptions="actionSend"
+            android:inputType="textCapSentences"
             android:textColor="@color/white"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -68,14 +72,30 @@
         android:textColor="@color/green"
         android:textSize="18sp" />
 
+    <TextView
+        android:id="@+id/showCommentsTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        android:gravity="center"
+        android:drawablePadding="5dp"
+        android:focusable="true"
+        android:visibility="gone"
+        android:text="Show Comments"
+        android:textColor="@color/green"
+        android:textSize="18sp" />
+
     <LinearLayout
         android:layout_marginTop="8dp"
         android:id="@+id/commentll"
+        android:visibility="gone"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" />
-
 
 </LinearLayout>

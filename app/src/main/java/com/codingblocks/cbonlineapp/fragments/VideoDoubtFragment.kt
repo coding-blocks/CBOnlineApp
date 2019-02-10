@@ -89,8 +89,8 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
                             info { "rundid" + it.runAttempt?.id }
                             doubtsDao.insert(DoubtsModel(it.id
                                     ?: "", it.title, it.body, it.content?.id
-                                    ?: "", it.status, it.runAttempt?.id ?: ""
-                            ))
+                                    ?: "", it.status, it.runAttempt?.id ?: "",
+                            it.discourseTopicId?: ""))
                         } catch (e: Exception) {
                             e.printStackTrace()
                             Log.e("CRASH", "DOUBT ID : $it.id")

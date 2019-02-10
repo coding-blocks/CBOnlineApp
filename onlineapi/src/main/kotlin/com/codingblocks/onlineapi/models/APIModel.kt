@@ -161,7 +161,7 @@ open class Course : BaseModel() {
 
     @JvmField
     @JsonProperty("category-id")
-    var categoryId: Int? = null
+    var categoryId: Int = 0
 
     @JvmField
     @JsonProperty("promo-video")
@@ -614,6 +614,10 @@ class DoubtsJsonApi : BaseModel() {
     @JvmField
     var status: String = "PENDING"
 
+    @JsonProperty("discourse-topic-id")
+    @JvmField
+    var discourseTopicId: String = ""
+
     @Relationship("run-attempt", resolve = true)
     @JvmField
     var runAttempt: MyRunAttempt? = null
@@ -627,6 +631,21 @@ class DoubtsJsonApi : BaseModel() {
     var content: Contents? = null
 
 }
+
+@Type("comments")
+class Comments : BaseModel() {
+    @JvmField
+    var body: String = ""
+    @JsonProperty("discourse-topic-id")
+    @JvmField
+    var discourseTopicId: String = ""
+
+    @Relationship("doubt", resolve = true)
+    @JvmField
+    var doubt: DoubtsJsonApi? = null
+
+}
+
 
 
 

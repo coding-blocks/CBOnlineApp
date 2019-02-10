@@ -92,6 +92,12 @@ interface OnlineJsonApi {
     @POST("doubts")
     fun createDoubt(@Body params: DoubtsJsonApi): Call<DoubtsJsonApi>
 
+    @POST("comments")
+    fun createComment(@Body params: Comments): Call<Comments>
+
+    @GET("sections/{sectionid}/relationships/contents")
+    fun getCommentsById(@Body params: Comments): Call<Comments>
+
     @GET("run_attempts/{runAttemptId}/relationships/doubts")
     fun getDoubtByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<DoubtsJsonApi>>
 

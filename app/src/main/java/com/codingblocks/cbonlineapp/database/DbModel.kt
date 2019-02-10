@@ -25,7 +25,9 @@ data class Course(
         var rating: Float,
         var slug: String,
         var coverImage: String,
-        var updated_at: String?
+        var updated_at: String?,
+        var categoryId: Int
+
 ) : BaseModel(uid, updated_at)
 
 
@@ -242,7 +244,8 @@ data class DoubtsModel(
         var body: String = "",
         var contentId: String = "",
         var status: String = "",
-        var runAttemptId: String = "")
+        var runAttemptId: String = "",
+        var discourseTopicId: String = "")
 
 
 

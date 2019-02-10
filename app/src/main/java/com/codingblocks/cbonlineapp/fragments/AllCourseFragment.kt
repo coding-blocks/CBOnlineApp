@@ -115,11 +115,9 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 
                     //calculate top run
                     val unsortedRuns: ArrayList<Runs> = arrayListOf()
-                    for (i in 0 until myCourses.runs!!.filter { runs ->
-                        runs.unlisted == false
-                    }.size) {
+                    for (i in 0 until myCourses.runs!!.size) {
                         if (myCourses.runs!![i].enrollmentStart!!.toLong() < (System.currentTimeMillis() / 1000)
-                                && myCourses.runs!![i].enrollmentEnd!!.toLong() > (System.currentTimeMillis() / 1000))
+                                && myCourses.runs!![i].enrollmentEnd!!.toLong() > (System.currentTimeMillis() / 1000) && !myCourses.runs!![i].unlisted!!)
                             unsortedRuns.add(myCourses.runs!![i])
                     }
                     //for no current runs
@@ -141,7 +139,9 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                                 rating ?: 0f,
                                 slug ?: "",
                                 coverImage ?: "",
-                                updated_at = updatedAt)
+                                updated_at = updatedAt,
+                                categoryId = categoryId)
+
                     }
                     val courseRun = CourseRun(currentRuns[0].id ?: "", "",
                             currentRuns[0].name ?: "", currentRuns[0].description ?: "",

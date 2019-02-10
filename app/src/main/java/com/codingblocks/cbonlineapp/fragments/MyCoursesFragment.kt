@@ -125,7 +125,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                             rating ?: 0f,
                                             slug ?: "",
                                             coverImage ?: "",
-                                            updatedAt)
+                                            updated_at = updatedAt,
+                                            categoryId = categoryId)
                                 }
                                 val courseRun = CourseRun(myCourses.id ?: "",
                                         myCourses.runAttempts?.get(0)?.id ?: "",
