@@ -50,7 +50,8 @@ data class CourseRun(
         var crCourseId: String = "",
         var crUpdatedAt: String = "",
         var progress: Double = 0.0,
-        var title: String = "")
+        var title: String = "",
+        var premium: Boolean = false)
 
 @Entity()
 data class Instructor(

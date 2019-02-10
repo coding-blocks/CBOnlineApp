@@ -38,12 +38,15 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
     private lateinit var context: Context
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
+    private var premium: Boolean = false
     private lateinit var sectionWithContentDao: SectionWithContentsDao
     lateinit var arrowAnimation: RotateAnimation
 
 
-    fun setData(sectionData: ArrayList<CourseSection>) {
+    fun setData(sectionData: ArrayList<CourseSection>, premium: Boolean) {
         this.sectionData = sectionData
+        this.premium = premium
+
         notifyDataSetChanged()
     }
 
@@ -77,11 +80,12 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
 
             itemView.title.text = data.name
             this.starter = starter
-
+            info { "data id" + data.id }
             sectionWithContentDao.getContentWithSectionId(data.id).observe(activity, Observer<List<CourseContent>> { it ->
                 val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
 //                if (ll.childCount != 0)
 //                    showOrHide(ll, itemView)
+
                 ll.removeAllViews()
                 ll.orientation = LinearLayout.VERTICAL
                 ll.visibility = View.GONE
@@ -89,6 +93,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                 var duration: Long = 0
                 var sectionComplete: Int = 0
                 for (content in it) {
+                    info { "content id" + content.id }
                     if (content.progress == "DONE") {
                         sectionComplete++
                     }
@@ -106,36 +111,19 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                         itemView.lectureTime.text = ("$hour Hours")
                     } else
                         itemView.lectureTime.text = ("---")
-
-                    if (sectionComplete == it.size) {
-                        itemView.title.textColor = context.resources.getColor(R.color.green)
-                        itemView.lectureTime.textColor = context.resources.getColor(R.color.green)
-                        itemView.lectures.textColor = context.resources.getColor(R.color.green)
-
-                    }
-
                     val factory = LayoutInflater.from(context)
                     val inflatedView = factory.inflate(R.layout.item_section_detailed_info, ll, false)
                     val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
                     val downloadBtn = inflatedView.findViewById(R.id.downloadBtn) as ImageView
-                    var userPremium = false
                     subTitle.text = content.title
-                    when (content.contentable) {
-                        "lecture" -> if (!content.contentLecture.lectureContentId.isNullOrEmpty()) {
-                            userPremium = true
-                        }
-                        "qna" -> if (!content.contentQna.qnaContentId.isNullOrEmpty()) {
-                            userPremium = true
-                        }
-                        "video" -> if (!content.contentVideo.videoContentId.isNullOrEmpty()) {
-                            userPremium = true
-                        }
-                        "document" -> if (!content.contentDocument.documentContentId.isNullOrEmpty()) {
-                            userPremium = true
-                        }
 
-                    }
-                    if (!data.premium || userPremium) {
+                    if (!data.premium || premium) {
+                        if (sectionComplete == it.size) {
+                            itemView.title.textColor = context.resources.getColor(R.color.green)
+                            itemView.lectureTime.textColor = context.resources.getColor(R.color.green)
+                            itemView.lectures.textColor = context.resources.getColor(R.color.green)
+
+                        }
                         when {
                             content.contentable == "lecture" -> {
                                 val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))

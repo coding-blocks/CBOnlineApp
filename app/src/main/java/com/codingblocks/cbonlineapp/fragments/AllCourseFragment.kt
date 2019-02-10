@@ -115,7 +115,9 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 
                     //calculate top run
                     val unsortedRuns: ArrayList<Runs> = arrayListOf()
-                    for (i in 0 until myCourses.runs!!.size) {
+                    for (i in 0 until myCourses.runs!!.filter { runs ->
+                        runs.unlisted == false
+                    }.size) {
                         if (myCourses.runs!![i].enrollmentStart!!.toLong() < (System.currentTimeMillis() / 1000)
                                 && myCourses.runs!![i].enrollmentEnd!!.toLong() > (System.currentTimeMillis() / 1000))
                             unsortedRuns.add(myCourses.runs!![i])

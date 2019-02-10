@@ -12,6 +12,7 @@ import com.codingblocks.cbonlineapp.DownloadStarter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.CourseRun
 import com.codingblocks.cbonlineapp.database.CourseSection
 import com.codingblocks.cbonlineapp.services.DownloadService
 import com.codingblocks.cbonlineapp.utils.getPrefs
@@ -29,10 +30,16 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId, "title" to title)
     }
 
-    private lateinit var database: AppDatabase
     lateinit var attemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
+    private val database: AppDatabase by lazy {
+        AppDatabase.getInstance(context!!)
+    }
+
+    private val courseDao by lazy {
+        database.courseRunDao()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +55,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_course_content, container, false)
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
-        database = AppDatabase.getInstance(context!!)
         val sectionDao = database.sectionDao()
         val sectionsList = ArrayList<CourseSection>()
         val sectionAdapter = SectionDetailsAdapter(sectionsList, activity!!, this)
@@ -59,7 +65,9 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             if (it.isNotEmpty()) {
                 view.sectionProgressBar.hide()
             }
-            sectionAdapter.setData(it as ArrayList<CourseSection>)
+            courseDao.getRunByAtemptId(attemptId).observe(this, Observer<CourseRun>{courseRun ->
+                sectionAdapter.setData(it as ArrayList<CourseSection>,courseRun.premium)
+            })
         })
 
         return view

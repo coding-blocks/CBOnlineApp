@@ -140,7 +140,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                         myCourses.course?.id ?: "",
                                         myCourses.updatedAt ?: "",
                                         progress = progress,
-                                        title = myCourses.course?.title ?: "")
+                                        title = myCourses.course?.title ?: "",
+                                        premium = myCourses.runAttempts?.get(0)?.premium!!)
 
                                 doAsync {
                                     val updateRun = runDao.getRunById(myCourses.id ?: "")
