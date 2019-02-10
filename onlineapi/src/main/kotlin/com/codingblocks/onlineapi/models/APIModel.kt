@@ -84,6 +84,8 @@ open class Runs : BaseModel() {
     @JvmField
     var mrp: String? = null
     @JvmField
+    var unlisted: Boolean? = null
+    @JvmField
     @JsonProperty("enrollment-start")
     val enrollmentStart: String? = null
     @JvmField
@@ -615,6 +617,10 @@ class DoubtsJsonApi : BaseModel() {
     @Relationship("run-attempt", resolve = true)
     @JvmField
     var runAttempt: MyRunAttempt? = null
+
+    @Relationship("run-attempt", resolve = true)
+    @JvmField
+    var postrunAttempt: QuizRunAttempt? = null
 
     @Relationship("content", resolve = true)
     @JvmField

@@ -17,13 +17,13 @@ import com.codingblocks.cbonlineapp.database.DoubtsModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
-import com.codingblocks.onlineapi.models.MyRunAttempt
 import com.codingblocks.onlineapi.models.QuizRunAttempt
 import kotlinx.android.synthetic.main.doubt_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_video_doubt.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.layoutInflater
+import kotlin.concurrent.thread
 
 
 private const val ARG_PARAM1 = "param1"
@@ -67,6 +67,13 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
         view.doubtsRv.adapter = doubtsAdapter
         doubtsDao.getDoubts(param1!!).observe(this, Observer<List<DoubtsModel>> {
             doubtsAdapter.setData(it as ArrayList<DoubtsModel>)
+            if(it.isEmpty()){
+                view.doubtsRv.visibility = View.GONE
+                view.emptyTv.visibility = View.VISIBLE
+            }else{
+                view.doubtsRv.visibility = View.VISIBLE
+                view.emptyTv.visibility = View.GONE
+            }
         })
 
 
@@ -88,7 +95,6 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
                             e.printStackTrace()
                             Log.e("CRASH", "DOUBT ID : $it.id")
                         }
-
                     }
                 }
             }
@@ -115,23 +121,24 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
                 doubt.body = doubtView.descriptionLayout.editText!!.text.toString()
                 doubt.title = doubtView.titleLayout.editText!!.text.toString()
                 doubt.category = 41
-                val runAttempts = MyRunAttempt() // type run-attempts
+                val runAttempts = QuizRunAttempt() // type run-attempts
                 val contents = Contents() // type contents
                 runAttempts.id = param1
                 contents.id = param2
                 doubt.status = "DONE"
-                doubt.runAttempt = runAttempts
+                doubt.postrunAttempt = runAttempts
                 doubt.content = contents
                 Clients.onlineV2JsonApi.createDoubt(doubt).enqueue(retrofitCallback { throwable, response ->
                     response?.body().let {
-                        if (response?.isSuccessful!!) {
-                            doubtDialog.dismiss()
+                        doubtDialog.dismiss()
+                        thread {
                             doubtsDao.insert(DoubtsModel(it!!.id
                                     ?: "", it.title, it.body, it.content?.id
                                     ?: "", it.status, it.runAttempt?.id ?: ""
                             ))
                         }
                     }
+                    info { throwable?.localizedMessage }
                 })
             }
         }

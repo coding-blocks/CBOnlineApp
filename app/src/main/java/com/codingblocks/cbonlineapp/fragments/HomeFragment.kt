@@ -105,18 +105,19 @@ class HomeFragment : Fragment(), AnkoLogger {
             resp?.body()?.let {
                 for (myCourses in it) {
                     //calculate top run
-                    val currentRuns: ArrayList<Runs> = arrayListOf()
-                    for (i in 0 until myCourses.runs!!.size) {
+                    val unsortedRuns: ArrayList<Runs> = arrayListOf()
+                    for (i in 0 until myCourses.runs!!.filter { runs ->
+                        runs.unlisted == false
+                    }.size) {
                         if (myCourses.runs!![i].enrollmentStart!!.toLong() < (System.currentTimeMillis() / 1000)
                                 && myCourses.runs!![i].enrollmentEnd!!.toLong() > (System.currentTimeMillis() / 1000))
-                            currentRuns.add(myCourses.runs!![i])
+                            unsortedRuns.add(myCourses.runs!![i])
                     }
                     //for no current runs
-                    if (currentRuns.size == 0) {
-                        currentRuns.addAll(myCourses.runs!!)
+                    if (unsortedRuns.size == 0) {
+                        unsortedRuns.addAll(myCourses.runs!!)
                     }
-                    //TODO: Sort current runs
-                    currentRuns.sortWith(Comparator { o1, o2 -> java.lang.Long.compare(o2.price!!.toLong(), o1.price!!.toLong()) })
+                    val currentRuns = unsortedRuns.sortedWith(compareBy { it.price })
 
                     val course = myCourses.run {
                         Course(

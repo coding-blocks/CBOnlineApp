@@ -20,7 +20,10 @@ import kotlinx.android.synthetic.main.exomedia_default_controls_mobile.view.*
 import org.jetbrains.anko.AnkoLogger
 
 
-class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger {
+class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger,YouTubePlayer.OnFullscreenListener {
+    override fun onFullscreen(p0: Boolean) {
+
+    }
 
     private var pos: Long? = 0
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
