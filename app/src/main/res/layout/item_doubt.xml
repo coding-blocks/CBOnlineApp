@@ -83,15 +83,15 @@
         android:gravity="center"
         android:drawablePadding="5dp"
         android:focusable="true"
-        android:visibility="gone"
+        android:visibility="visible"
         android:text="Show Comments"
-        android:textColor="@color/green"
+        android:textColor="@color/white"
         android:textSize="18sp" />
 
     <LinearLayout
         android:layout_marginTop="8dp"
         android:id="@+id/commentll"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_width="match_parent"

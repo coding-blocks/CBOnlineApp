@@ -126,36 +126,38 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                         }
                         when {
                             content.contentable == "lecture" -> {
-                                val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
-                                ll.addView(inflatedView)
-                                if (content.contentLecture.isDownloaded == "false") {
-                                    downloadBtn.background = context.getDrawable(android.R.drawable.stat_sys_download)
-                                    inflatedView.setOnClickListener {
-                                        if (MediaUtils.checkPermission(context)) {
-                                            starter.startDownload(url, data.id, content.contentLecture.lectureContentId, content.title)
-                                            downloadBtn.isEnabled = false
-                                            (downloadBtn.background as AnimationDrawable).start()
-                                        } else {
-                                            MediaUtils.isStoragePermissionGranted(context)
+                                if (!content.contentLecture.lectureUid.isNullOrEmpty()) {
+                                    val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
+                                    ll.addView(inflatedView)
+                                    if (content.contentLecture.isDownloaded == "false") {
+                                        downloadBtn.background = context.getDrawable(android.R.drawable.stat_sys_download)
+                                        inflatedView.setOnClickListener {
+                                            if (MediaUtils.checkPermission(context)) {
+                                                starter.startDownload(url, data.id, content.contentLecture.lectureContentId, content.title)
+                                                downloadBtn.isEnabled = false
+                                                (downloadBtn.background as AnimationDrawable).start()
+                                            } else {
+                                                MediaUtils.isStoragePermissionGranted(context)
+                                            }
                                         }
-                                    }
-                                } else {
-                                    downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
-                                    if (content.progress == "DONE") {
-                                        subTitle.textColor = context.resources.getColor(R.color.green)
-                                        downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
+                                    } else {
+                                        downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
+                                        if (content.progress == "DONE") {
+                                            subTitle.textColor = context.resources.getColor(R.color.green)
+                                            downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
 //                                    downloadBtn.setOnClickListener {
 //                                        updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)
 //                                    }
-                                    }
-                                    inflatedView.setOnClickListener {
-                                        if (content.progress == "UNDONE") {
-                                            if (content.progressId.isEmpty())
-                                                setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentLecture.lectureContentId)
-                                            else
-                                                updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
                                         }
-                                        it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url, "attemptId" to content.attempt_id, "contentId" to content.id).singleTop())
+                                        inflatedView.setOnClickListener {
+                                            if (content.progress == "UNDONE") {
+                                                if (content.progressId.isEmpty())
+                                                    setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentLecture.lectureContentId)
+                                                else
+                                                    updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
+                                            }
+                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url, "attemptId" to content.attempt_id, "contentId" to content.id).singleTop())
+                                        }
                                     }
                                 }
 

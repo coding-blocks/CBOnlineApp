@@ -101,11 +101,12 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                             updatedAt.toString()
                     )
                 }
+                runDao.insert(run!!)
+
                 doAsync {
 
                     thread {
 
-                        runDao.insert(run!!)
                         //Course Sections List
                         for (section in it.run?.sections!!) {
                             sectionDao.insert(CourseSection(section.id ?: "", section.name ?: "",
@@ -178,6 +179,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                                         val updateContent = contentDao.getContentWithId(attemptId, content.id
                                                 ?: "")
                                         if (updateContent == null) {
+                                            info { "insert content is happening" }
                                             contentDao.insert(CourseContent(
                                                     content.id ?: "", status, progressId,
                                                     content.title ?: "", content.duration!!,
@@ -195,7 +197,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                                                     contentCodeChallenge))
                                             insertSectionWithContent(section.id
                                                     ?: "", content.id ?: "")
-                                        } else if (updateContent.progress != status || updateContent.title != content.title) {
+                                        } else{
                                             info { "update is happening" }
                                             contentDao.update(CourseContent(
                                                     content.id ?: "", status, progressId,

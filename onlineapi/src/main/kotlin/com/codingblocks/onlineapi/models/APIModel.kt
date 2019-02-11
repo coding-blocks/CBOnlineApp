@@ -626,6 +626,10 @@ class DoubtsJsonApi : BaseModel() {
     @JvmField
     var postrunAttempt: QuizRunAttempt? = null
 
+////    @Relationship("comments", resolve = true,relType = RelType.RELATED)
+//    @JvmField
+//    var comments: List<Comments>? = null
+
     @Relationship("content", resolve = true)
     @JvmField
     var content: Contents? = null
