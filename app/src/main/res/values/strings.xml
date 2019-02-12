@@ -203,4 +203,6 @@
     <string name="hint_title">Title</string>
     <string name="doubt_title">Ask A Doubt</string>
     <string name="doubt_btn">Post Doubt</string>
+    <string name="showComments">Show Comments</string>
+    <string name="hideComments">Hide Comments</string>
 </resources>

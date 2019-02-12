@@ -110,8 +110,11 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                     //Add Course Progress to Course Object
                     Clients.api.getMyCourseProgress(myCourses.runAttempts?.get(0)?.id.toString()).enqueue(retrofitCallback { t, progressResponse ->
                         progressResponse?.body().let { map ->
-                            if (progressResponse?.isSuccessful!!) {
-                                val progress = map!!["percent"] as Double
+                                val progress: Double = try {
+                                    map!!["percent"] as Double
+                                } catch (e: Exception) {
+                                    0.0
+                                }
                                 val course = myCourses.course?.run {
                                     Course(
                                             id ?: "",
@@ -176,7 +179,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                         })
                                     }
                                 }
-                            }
+
                         }
                     })
                 }

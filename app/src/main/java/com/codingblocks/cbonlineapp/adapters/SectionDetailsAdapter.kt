@@ -39,14 +39,16 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
     private var premium: Boolean = false
+    private lateinit var courseStartDate: String
+
     private lateinit var sectionWithContentDao: SectionWithContentsDao
     lateinit var arrowAnimation: RotateAnimation
 
 
-    fun setData(sectionData: ArrayList<CourseSection>, premium: Boolean) {
+    fun setData(sectionData: ArrayList<CourseSection>, premium: Boolean, crStart: String) {
         this.sectionData = sectionData
         this.premium = premium
-
+        this.courseStartDate = crStart
         notifyDataSetChanged()
     }
 
@@ -117,7 +119,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                     val downloadBtn = inflatedView.findViewById(R.id.downloadBtn) as ImageView
                     subTitle.text = content.title
 
-                    if (!data.premium || premium) {
+                    if (!data.premium || premium && ((courseStartDate.toLong() * 1000) < System.currentTimeMillis())) {
                         if (sectionComplete == it.size) {
                             itemView.title.textColor = context.resources.getColor(R.color.green)
                             itemView.lectureTime.textColor = context.resources.getColor(R.color.green)

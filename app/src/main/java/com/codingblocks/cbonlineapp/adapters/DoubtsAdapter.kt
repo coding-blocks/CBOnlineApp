@@ -17,11 +17,9 @@ import com.codingblocks.cbonlineapp.database.DoubtsModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
-import kotlinx.android.synthetic.main.doubt_dialog.view.*
 import kotlinx.android.synthetic.main.item_doubt.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 
 class DoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : RecyclerView.Adapter<DoubtsAdapter.DoubtsViewHolder>() {
@@ -70,9 +68,9 @@ class DoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : RecyclerVi
             itemView.doubtComment.editText?.setOnEditorActionListener { textView, actionId, keyEvent ->
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
                     if (itemView.doubtComment.editText!!.text.length < 15 || itemView.doubtComment.editText!!.text.isEmpty()) {
-                        itemView.doubtComment.error = "Title length must be atleast 15 characters."
+                        itemView.doubtComment.error = "Comment length must be at-least 15 characters."
                         return@setOnEditorActionListener false
-                    }else {
+                    } else {
                         createComment(itemView.doubtComment.editText!!.text, doubt)
                         itemView.doubtComment.editText!!.text.clear()
                         return@setOnEditorActionListener true
@@ -91,11 +89,11 @@ class DoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : RecyclerVi
                             itemView.showCommentsTv.visibility = View.VISIBLE
                             itemView.setOnClickListener {
                                 if (itemView.commentll.visibility == View.VISIBLE) {
-                                    itemView.showCommentsTv.text = "Show Comments"
+                                    itemView.showCommentsTv.text = context.getString(R.string.showComments)
                                     itemView.commentll.visibility = View.GONE
                                 } else {
                                     itemView.commentll.visibility = View.VISIBLE
-                                    itemView.showCommentsTv.text = "Hide Comments"
+                                    itemView.showCommentsTv.text = context.getString(R.string.hideComments)
                                 }
                             }
                             val ll = itemView.findViewById<LinearLayout>(R.id.commentll)
@@ -135,7 +133,7 @@ class DoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : RecyclerVi
             comment.doubt = doubts
             Clients.onlineV2JsonApi.createComment(comment).enqueue(retrofitCallback { throwable, response ->
                 response?.body().let {
-
+                    notifyDataSetChanged()
                 }
             })
         }

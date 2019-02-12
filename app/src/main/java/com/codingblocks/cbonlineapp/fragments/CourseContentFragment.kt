@@ -66,7 +66,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 view.sectionProgressBar.hide()
             }
             courseDao.getRunByAtemptId(attemptId).observe(this, Observer<CourseRun>{courseRun ->
-                sectionAdapter.setData(it as ArrayList<CourseSection>,courseRun.premium)
+                sectionAdapter.setData(it as ArrayList<CourseSection>,courseRun.premium,courseRun.crStart)
             })
         })
 

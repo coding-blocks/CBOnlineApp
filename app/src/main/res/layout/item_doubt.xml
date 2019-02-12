@@ -85,7 +85,7 @@
         android:drawablePadding="5dp"
         android:focusable="true"
         android:visibility="gone"
-        android:text="Show Comments"
+        android:text="@string/showComments"
         android:textColor="@color/white"
         android:textSize="18sp" />
 
