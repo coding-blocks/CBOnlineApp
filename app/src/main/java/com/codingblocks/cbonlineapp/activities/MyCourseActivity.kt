@@ -37,6 +37,9 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
     private val courseDao by lazy {
         database.courseDao()
     }
+    private val runDao by lazy {
+        database.courseRunDao()
+    }
     private val sectionWithContentsDao by lazy {
         database.sectionWithContentsDao()
     }
@@ -59,12 +62,15 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
         title = intent.getStringExtra("courseName")
         attemptId = intent.getStringExtra("attempt_id")
 
-        val runDao = database.courseRunDao()
         val sectionDao = database.sectionDao()
         val contentDao = database.contentDao()
         runDao.getRunByAtemptId(attemptId).observe(this, Observer<CourseRun> {
             setupViewPager(it.crUid, it.crCourseId)
         })
+        //update hits
+        runDao.updateHit(attemptId)
+
+
         courseDao.getMyCourse(courseId).observe(this, Observer<Course> {
             youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
 

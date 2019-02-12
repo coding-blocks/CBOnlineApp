@@ -38,6 +38,9 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
                     itemView.courseProgress.progress = courseRun.progress.toInt()
                     itemView.courseCoverImgView.loadSvg(coverImage)
                     itemView.courseLogo.loadSvg(logo)
+                    if(!courseRun.premium){
+                        itemView.trialTv.visibility = View.VISIBLE
+                    }
                     if (courseRun.crEnd.toLong() * 1000 > System.currentTimeMillis()) {
 
                         itemView.courseBtn1.text = "Resume"

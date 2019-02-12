@@ -17,6 +17,7 @@ import com.codingblocks.cbonlineapp.database.DoubtsModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
+import kotlinx.android.synthetic.main.doubt_dialog.view.*
 import kotlinx.android.synthetic.main.item_doubt.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -68,9 +69,14 @@ class DoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : RecyclerVi
             }
             itemView.doubtComment.editText?.setOnEditorActionListener { textView, actionId, keyEvent ->
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    createComment(itemView.doubtComment.editText!!.text, doubt)
-                    itemView.doubtComment.editText!!.text.clear()
-                    return@setOnEditorActionListener true
+                    if (itemView.doubtComment.editText!!.text.length < 15 || itemView.doubtComment.editText!!.text.isEmpty()) {
+                        itemView.doubtComment.error = "Title length must be atleast 15 characters."
+                        return@setOnEditorActionListener false
+                    }else {
+                        createComment(itemView.doubtComment.editText!!.text, doubt)
+                        itemView.doubtComment.editText!!.text.clear()
+                        return@setOnEditorActionListener true
+                    }
                 }
 
                 return@setOnEditorActionListener false
