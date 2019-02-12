@@ -48,7 +48,7 @@ object Clients {
             Question::class.java,
             Choice::class.java,
             QuizAttempt::class.java,
-            QuizRunAttempt::class.java,
+            RunAttemptsModel::class.java,
             Quizqnas::class.java,
             DoubtsJsonApi::class.java,
             ContentCsv::class.java,

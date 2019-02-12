@@ -23,8 +23,8 @@ import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
-import com.codingblocks.onlineapi.models.MyRunAttempts
 import com.codingblocks.onlineapi.models.Progress
+import com.codingblocks.onlineapi.models.RunAttemptsModel
 import kotlinx.android.synthetic.main.item_section.view.*
 import org.jetbrains.anko.*
 import kotlin.concurrent.thread
@@ -269,7 +269,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
 
     fun setProgress(id: String, attempt_id: String, contentable: String, sectionId: String, contentId: String) {
         val p = Progress()
-        val runAttempts = MyRunAttempts()
+        val runAttempts = RunAttemptsModel()
         val contents = Contents()
         runAttempts.id = attempt_id
         contents.id = id
@@ -277,11 +277,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
         p.runs = runAttempts
         p.content = contents
         Clients.onlineV2JsonApi.setProgress(p).enqueue(retrofitCallback { throwable, response ->
-            info { "resp" + response?.code() }
 
-            if (response?.isSuccessful!!) {
-
-                val progressId = response.body()?.id
+            response?.body().let {
+                val progressId = it?.id
                 when (contentable) {
                     "lecture" -> thread {
                         contentDao.updateProgressLecture(sectionId, contentId, "DONE", progressId
@@ -303,6 +301,8 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             contentDao.updateProgressQna(sectionId, contentId, "DONE", progressId
                                     ?: "")
                         }
+                    else -> {
+                    }
                 }
 
             }
@@ -311,7 +311,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
 
     private fun updateProgress(id: String, attempt_id: String, progressId: String, status: String, contentable: String, sectionId: String, contentId: String) {
         val p = Progress()
-        val runAttempts = MyRunAttempts()
+        val runAttempts = RunAttemptsModel()
         val contents = Contents()
         runAttempts.id = attempt_id
         contents.id = id

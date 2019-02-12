@@ -19,7 +19,6 @@ import kotlin.concurrent.thread
 
 class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private var instructorsList: List<Instructor>? = null
     private lateinit var courseDao: CourseDao
     private lateinit var database: AppDatabase
 

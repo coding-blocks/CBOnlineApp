@@ -92,6 +92,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         fetchAllCourses()
     }
 
+
     private fun displayCourses(searchQuery: String = "") {
         runDao.getMyRuns().observe(this, Observer<List<CourseRun>> {
             courseDataAdapter.setData(it.filter { c ->

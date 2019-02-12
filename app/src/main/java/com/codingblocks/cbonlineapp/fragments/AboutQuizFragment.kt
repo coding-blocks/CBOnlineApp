@@ -12,7 +12,7 @@ import com.codingblocks.cbonlineapp.adapters.QuizAttemptListAdapter
 import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttempt
-import com.codingblocks.onlineapi.models.QuizRunAttempt
+import com.codingblocks.onlineapi.models.RunAttemptsModel
 import com.codingblocks.onlineapi.models.Quizqnas
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
@@ -102,7 +102,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         startQuiz.setOnClickListener {
 
             val quizAttempt = QuizAttempt()
-            val runAttempts = QuizRunAttempt()
+            val runAttempts = RunAttemptsModel()
             runAttempts.id = attemptId
             val qna = Quizqnas()
             qna.id = quizId

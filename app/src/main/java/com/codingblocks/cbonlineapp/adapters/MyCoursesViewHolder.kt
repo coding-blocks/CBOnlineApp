@@ -40,10 +40,15 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
                     itemView.courseLogo.loadSvg(logo)
                     if(!courseRun.premium){
                         itemView.trialTv.visibility = View.VISIBLE
+                    }else{
+                        itemView.trialTv.visibility = View.GONE
                     }
                     if (courseRun.crEnd.toLong() * 1000 > System.currentTimeMillis()) {
-
-                        itemView.courseBtn1.text = "Resume"
+                        if(courseRun.progress == 0.0){
+                            itemView.courseBtn1.text = "Start"
+                        }else{
+                            itemView.courseBtn1.text = "Resume"
+                        }
                         itemView.courseBtn1.isEnabled = true
                         itemView.courseBtn1.background = context.getDrawable(R.drawable.button_background)
                         itemView.courseBtn1.setOnClickListener {

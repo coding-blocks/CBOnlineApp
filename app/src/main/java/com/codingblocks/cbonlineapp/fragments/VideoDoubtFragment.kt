@@ -19,7 +19,7 @@ import com.codingblocks.cbonlineapp.database.DoubtsModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
-import com.codingblocks.onlineapi.models.QuizRunAttempt
+import com.codingblocks.onlineapi.models.RunAttemptsModel
 import kotlinx.android.synthetic.main.doubt_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_video_doubt.view.*
 import org.jetbrains.anko.AnkoLogger
@@ -130,7 +130,7 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
                 doubt.body = doubtView.descriptionLayout.editText!!.text.toString()
                 doubt.title = doubtView.titleLayout.editText!!.text.toString()
                 doubt.category = 41
-                val runAttempts = QuizRunAttempt() // type run-attempts
+                val runAttempts = RunAttemptsModel() // type run-attempts
                 val contents = Contents() // type contents
                 runAttempts.id = param1
                 contents.id = param2

@@ -3,7 +3,6 @@ package com.codingblocks.onlineapi.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.github.jasminb.jsonapi.Links
-import com.github.jasminb.jsonapi.RelType
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.RelationshipLinks
@@ -483,7 +482,7 @@ class Progress : BaseModel() {
 
     @Relationship("run-attempt")
     @JvmField
-    var runs: MyRunAttempts? = null
+    var runs: RunAttemptsModel? = null
 
     @Relationship("content")
     @JvmField
@@ -552,7 +551,7 @@ class QuizAttempt : BaseModel() {
 
     @Relationship("run-attempt", resolve = true)
     @JvmField
-    var runAttempt: QuizRunAttempt? = null
+    var runAttempt: RunAttemptsModel? = null
 
     @JvmField
     var submission: ArrayList<QuizSubmission> = arrayListOf()
@@ -598,7 +597,7 @@ class QuizQuestion : BaseModel() {
 class Quizqnas : BaseModel()
 
 @Type("run-attempts")
-class QuizRunAttempt : BaseModel()
+class RunAttemptsModel : BaseModel()
 
 @Type("doubt")
 class DoubtsJsonApi : BaseModel() {
@@ -624,7 +623,7 @@ class DoubtsJsonApi : BaseModel() {
 
     @Relationship("run-attempt", resolve = true)
     @JvmField
-    var postrunAttempt: QuizRunAttempt? = null
+    var postrunAttempt: RunAttemptsModel? = null
 
 ////    @Relationship("comments", resolve = true,relType = RelType.RELATED)
 //    @JvmField
