@@ -18,6 +18,10 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import kotlinx.android.synthetic.main.item_doubt.view.*
+import java.text.SimpleDateFormat
+import java.util.*
+
+
 
 class DoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : RecyclerView.Adapter<DoubtsAdapter.DoubtsViewHolder>() {
 
@@ -79,7 +83,6 @@ class DoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : RecyclerVi
                     if (it != null) {
                         if (it.isNotEmpty()) {
                             itemView.showCommentsTv.visibility = View.VISIBLE
-                            itemView.commentll.visibility = View.VISIBLE
                             itemView.setOnClickListener {
                                 if (itemView.commentll.visibility == View.VISIBLE) {
                                     itemView.showCommentsTv.text = "Show Comments"
@@ -100,7 +103,14 @@ class DoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : RecyclerVi
                                 val body = inflatedView.findViewById(R.id.bodyTv) as TextView
                                 body.text = comment.body
                                 subTitle.text = comment.username
-                                time.text = comment.updatedAt
+                                var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+                                val newDate = format.parse(comment.updatedAt)
+
+                                format = SimpleDateFormat("MMM dd,yyyy hh:mm", Locale.US)
+                                val date = format.format(newDate)
+
+
+                                time.text = date
                                 ll.addView(inflatedView)
                             }
 

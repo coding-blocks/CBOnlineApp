@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -25,6 +26,9 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.layoutInflater
 import kotlin.concurrent.thread
+
+
+
 
 
 private const val ARG_PARAM1 = "param1"
@@ -66,8 +70,9 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
         val doubtsAdapter = DoubtsAdapter(doubtList)
         view.doubtsRv.layoutManager = LinearLayoutManager(context)
         view.doubtsRv.adapter = doubtsAdapter
-        view.doubtsRv.addItemDecoration(DividerItemDecoration(context,
-                DividerItemDecoration.VERTICAL))
+        val itemDecorator = DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL)
+        itemDecorator.setDrawable(ContextCompat.getDrawable(context!!, R.drawable.divider)!!)
+        view.doubtsRv.addItemDecoration(itemDecorator)
 
         doubtsDao.getDoubts(param1!!).observe(this, Observer<List<DoubtsModel>> {
             doubtsAdapter.setData(it as ArrayList<DoubtsModel>)

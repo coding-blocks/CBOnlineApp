@@ -234,7 +234,7 @@ data class ContentQna(
                 entity = CourseContent::class,
                 parentColumns = ["id"],
                 childColumns = ["contentId"],
-                onDelete = ForeignKey.SET_NULL //or CASCADE
+                onDelete = ForeignKey.CASCADE //or CASCADE
         ))]
 )
 data class DoubtsModel(

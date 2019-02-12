@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.activities
 
 import android.animation.LayoutTransition
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -15,6 +16,7 @@ import com.devbrackets.android.exomedia.listener.OnPreparedListener
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.exomedia_default_controls_mobile.view.*
 import org.jetbrains.anko.AnkoLogger
@@ -122,6 +124,9 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger,
         if (resultCode == -1) {
             pos = data?.getLongExtra("CURRENT_POSITION", 0)
         }
+    }
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
 
