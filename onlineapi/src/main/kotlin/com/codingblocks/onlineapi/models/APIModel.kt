@@ -636,13 +636,17 @@ class DoubtsJsonApi : BaseModel() {
 
 }
 
-@Type("comments")
-class Comments : BaseModel() {
+@Type("comment")
+class Comment : BaseModel() {
     @JvmField
     var body: String = ""
+
     @JsonProperty("discourse-topic-id")
     @JvmField
     var discourseTopicId: String = ""
+
+    @JvmField
+    var username: String = ""
 
     @Relationship("doubt", resolve = true)
     @JvmField

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
@@ -65,6 +66,9 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
         val doubtsAdapter = DoubtsAdapter(doubtList)
         view.doubtsRv.layoutManager = LinearLayoutManager(context)
         view.doubtsRv.adapter = doubtsAdapter
+        view.doubtsRv.addItemDecoration(DividerItemDecoration(context,
+                DividerItemDecoration.VERTICAL))
+
         doubtsDao.getDoubts(param1!!).observe(this, Observer<List<DoubtsModel>> {
             doubtsAdapter.setData(it as ArrayList<DoubtsModel>)
             if(it.isEmpty()){

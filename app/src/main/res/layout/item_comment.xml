@@ -19,6 +19,7 @@
         <TextView
             android:id="@+id/timeTv"
             android:layout_width="0dp"
+            android:textColor="@color/white"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="end"/>
@@ -33,7 +34,7 @@
         android:textColor="@color/white"
         android:textSize="18sp" />
 
-    <view
+    <View
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_marginTop="4dp"

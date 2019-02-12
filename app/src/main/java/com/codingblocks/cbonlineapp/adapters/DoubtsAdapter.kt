@@ -15,7 +15,7 @@ import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.DoubtsModel
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Comments
+import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import kotlinx.android.synthetic.main.item_doubt.view.*
 
@@ -78,17 +78,29 @@ class DoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : RecyclerVi
                 response?.body().let {
                     if (it != null) {
                         if (it.isNotEmpty()) {
+                            itemView.showCommentsTv.visibility = View.VISIBLE
+                            itemView.commentll.visibility = View.VISIBLE
+                            itemView.setOnClickListener {
+                                if (itemView.commentll.visibility == View.VISIBLE) {
+                                    itemView.showCommentsTv.text = "Show Comments"
+                                    itemView.commentll.visibility = View.GONE
+                                } else {
+                                    itemView.commentll.visibility = View.VISIBLE
+                                    itemView.showCommentsTv.text = "Hide Comments"
+                                }
+                            }
                             val ll = itemView.findViewById<LinearLayout>(R.id.commentll)
                             ll.removeAllViews()
                             ll.orientation = LinearLayout.VERTICAL
-                            ll.visibility = View.GONE
-                            for (commnent in it) {
+                            for (comment in it) {
                                 val factory = LayoutInflater.from(context)
-                                val inflatedView = factory.inflate(R.layout.item_section_detailed_info, ll, false)
+                                val inflatedView = factory.inflate(R.layout.item_comment, ll, false)
                                 val subTitle = inflatedView.findViewById(R.id.usernameTv) as TextView
                                 val time = inflatedView.findViewById(R.id.timeTv) as TextView
                                 val body = inflatedView.findViewById(R.id.bodyTv) as TextView
-                                body.text = commnent.body
+                                body.text = comment.body
+                                subTitle.text = comment.username
+                                time.text = comment.updatedAt
                                 ll.addView(inflatedView)
                             }
 
@@ -99,7 +111,7 @@ class DoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : RecyclerVi
         }
 
         private fun createComment(text: Editable?, doubt: DoubtsModel) {
-            val comment = Comments()
+            val comment = Comment()
             comment.body = text.toString()
             comment.discourseTopicId = doubt.discourseTopicId
             val doubts = DoubtsJsonApi() // type doubts

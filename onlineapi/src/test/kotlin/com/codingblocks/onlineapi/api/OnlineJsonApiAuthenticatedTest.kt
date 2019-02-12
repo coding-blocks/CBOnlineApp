@@ -36,6 +36,14 @@ class OnlineJsonApiAuthenticatedTest {
     }
 
     @Test
+    fun `GET comment`() {
+        val comment = jsonapi.getCommentsById("428").execute().body()
+        comment?.let {
+            assertEquals(3, it.size)
+        }
+    }
+
+    @Test
     fun `GET myCourses`() {
         val courses = jsonapi.getMyCourses().execute().body()
         courses?.let {
