@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
-import com.codingblocks.cbonlineapp.adapters.DoubtsAdapter
+import com.codingblocks.cbonlineapp.adapters.VideosDoubtsAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.DoubtsModel
 import com.codingblocks.onlineapi.Clients
@@ -67,7 +67,7 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
         }
 
         val doubtList = ArrayList<DoubtsModel>()
-        val doubtsAdapter = DoubtsAdapter(doubtList)
+        val doubtsAdapter = VideosDoubtsAdapter(doubtList)
         view.doubtsRv.layoutManager = LinearLayoutManager(context)
         view.doubtsRv.adapter = doubtsAdapter
         val itemDecorator = DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL)
@@ -99,7 +99,7 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
                             doubtsDao.insert(DoubtsModel(it.id
                                     ?: "", it.title, it.body, it.content?.id
                                     ?: "", it.status, it.runAttempt?.id ?: "",
-                            it.discourseTopicId?: ""))
+                                    it.discourseTopicId))
                         } catch (e: Exception) {
                             e.printStackTrace()
                             Log.e("CRASH", "DOUBT ID : $it.id")
@@ -134,7 +134,7 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
                 val contents = Contents() // type contents
                 runAttempts.id = param1
                 contents.id = param2
-                doubt.status = "DONE"
+                doubt.status = "PENDING"
                 doubt.postrunAttempt = runAttempts
                 doubt.content = contents
                 Clients.onlineV2JsonApi.createDoubt(doubt).enqueue(retrofitCallback { throwable, response ->

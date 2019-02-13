@@ -123,6 +123,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     if (resp.isSuccessful) {
                         try {
                             val jSONObject = it.getAsJsonObject("data").getAsJsonObject("attributes")
+                            prefs.SP_USER_ID= it.getAsJsonObject("data").get("id").asString
                             prefs.SP_ONEAUTH_ID = jSONObject.get("oneauth-id").asString
                             prefs.SP_USER_IMAGE = jSONObject.get("photo").asString
                         } catch (e: Exception) {

@@ -182,6 +182,9 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                                         } else {
                                             status = "UNDONE"
                                         }
+                                        val updateContent = contentDao.getContentWithId(attemptId, content.id
+                                                ?: "")
+                                        if (updateContent == null) {
                                             contentDao.insert(CourseContent(
                                                     content.id ?: "", status, progressId,
                                                     content.title ?: "", content.duration!!,
@@ -199,6 +202,24 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                                                     contentCodeChallenge))
                                             insertSectionWithContent(section.id
                                                     ?: "", content.id ?: "")
+                                        } else if (updateContent.progress != status || updateContent.title != content.title) {
+                                            info { "content is updating" }
+                                            contentDao.update(CourseContent(
+                                                    content.id ?: "", status, progressId,
+                                                    content.title ?: "", content.duration!!,
+                                                    content.contentable
+                                                            ?: "", content.section_content?.order!!,
+                                                    content.section_content?.sectionId
+                                                            ?: "", attemptId,
+                                                    section.premium!!,
+                                                    content.section_content?.updatedAt
+                                                            ?: "",
+                                                    contentLecture,
+                                                    contentDocument,
+                                                    contentVideo,
+                                                    contentQna,
+                                                    contentCodeChallenge))
+                                        }
                                     }
                                 }
                                 info { throwable?.localizedMessage }

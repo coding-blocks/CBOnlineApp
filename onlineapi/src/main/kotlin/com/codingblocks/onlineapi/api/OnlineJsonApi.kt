@@ -92,6 +92,9 @@ interface OnlineJsonApi {
     @POST("doubts")
     fun createDoubt(@Body params: DoubtsJsonApi): Call<DoubtsJsonApi>
 
+    @PATCH("doubts/{doubtid}")
+    fun resolveDoubt(@Path("doubtid") id: String,@Body params: DoubtsJsonApi): Call<DoubtsJsonApi>
+
     @POST("comments")
     fun createComment(@Body params: Comment): Call<Comment>
 

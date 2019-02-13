@@ -16,6 +16,8 @@ class Prefs(context: Context) {
         val REFRESH_TOKEN = "refresh_token"
         val USER_IMAGE = "user_image"
         val ONEAUTH_ID = "oneauth_id"
+        val USER_ID = "user_id"
+
 
     }
 
@@ -47,5 +49,11 @@ class Prefs(context: Context) {
         get() = prefs.getString(ONEAUTH_ID, ONEAUTH_ID)
         set(value) {
             prefs.edit().putString(ONEAUTH_ID, value).commit()
+        }
+
+    var SP_USER_ID: String
+        get() = prefs.getString(USER_ID, USER_ID)
+        set(value) {
+            prefs.edit().putString(USER_ID, value).commit()
         }
 }

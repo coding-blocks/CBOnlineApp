@@ -617,6 +617,10 @@ class DoubtsJsonApi : BaseModel() {
     @JvmField
     var discourseTopicId: String = ""
 
+    @JsonProperty("resolved-by-id")
+    @JvmField
+    var resolvedById: String = ""
+
     @Relationship("run-attempt", resolve = true)
     @JvmField
     var runAttempt: MyRunAttempt? = null

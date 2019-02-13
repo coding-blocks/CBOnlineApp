@@ -124,7 +124,10 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             itemView.title.textColor = context.resources.getColor(R.color.green)
                             itemView.lectureTime.textColor = context.resources.getColor(R.color.green)
                             itemView.lectures.textColor = context.resources.getColor(R.color.green)
-
+                        }else{
+                            itemView.title.textColor = context.resources.getColor(R.color.black)
+                            itemView.lectureTime.textColor = context.resources.getColor(R.color.black)
+                            itemView.lectures.textColor = context.resources.getColor(R.color.black)
                         }
                         when {
                             content.contentable == "lecture" -> {
