@@ -154,6 +154,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                         courseDao.insert(course!!)
                                         runDao.insert(courseRun)
                                     } else if (updateRun.progress != progress) {
+                                        courseRun.hits = updateRun.hits
                                         info { myCourses.course?.title + "updateCourse is happening" + progress + "  " + updateRun.progress }
                                         courseDao.update(course!!)
                                         runDao.update(courseRun)

@@ -216,9 +216,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                 if (content.progress == "DONE") {
                                     subTitle.textColor = context.resources.getColor(R.color.green)
                                     downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
-                                    downloadBtn.setOnClickListener {
-                                        updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)
-                                    }
+//                                    downloadBtn.setOnClickListener {
+//                                        updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)
+//                                    }
                                 }
                                 ll.addView(inflatedView)
                                 inflatedView.setOnClickListener {
