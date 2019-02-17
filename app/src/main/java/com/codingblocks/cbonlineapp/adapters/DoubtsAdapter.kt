@@ -1,0 +1,72 @@
+package com.codingblocks.cbonlineapp.adapters
+
+import android.content.Context
+import android.net.Uri
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.TopicsItem
+import kotlinx.android.synthetic.main.doubt_header_item.view.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+
+class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>?) : RecyclerView.Adapter<DoubtsAdapter.DoubtsViewHolder>() {
+
+    private lateinit var context: Context
+
+    fun setData(doubtsData: ArrayList<TopicsItem?>?) {
+        this.doubtsData = doubtsData
+        notifyDataSetChanged()
+    }
+
+    override fun onBindViewHolder(holder: DoubtsViewHolder, position: Int) {
+        holder.bindView(doubtsData!![position])
+    }
+
+
+    override fun getItemCount(): Int {
+
+        return doubtsData!!.size
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoubtsViewHolder {
+        context = parent.context
+
+        return DoubtsViewHolder(LayoutInflater.from(parent.context)
+                .inflate(R.layout.doubt_header_item, parent, false))
+    }
+
+    inner class DoubtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        fun bindView(data: TopicsItem?) {
+            var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+            val newDate = format.parse(data?.createdAt)
+
+            format = SimpleDateFormat("MMM dd,yyyy hh:mm", Locale.US)
+            val date = format.format(newDate)
+            itemView.timeTv.text = date
+
+            itemView.titleTv.text = data?.title
+            itemView.usernameTv.text = data?.lastPosterUsername
+            itemView.setOnClickListener {
+                val DOUBT_ID = data?.id
+                val builder = CustomTabsIntent.Builder()
+                        .enableUrlBarHiding()
+                        .setToolbarColor(context.resources.getColor(R.color.colorPrimaryDark))
+                        .setShowTitle(true)
+                        .setSecondaryToolbarColor(context.resources.getColor(R.color.colorPrimary))
+                val customTabsIntent = builder.build()
+                customTabsIntent.launchUrl(context, Uri.parse("http://discuss.codingblocks.com/t/$DOUBT_ID"))
+
+            }
+
+
+        }
+    }
+}

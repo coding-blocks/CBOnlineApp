@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="8dp"
     android:orientation="vertical">
 
@@ -26,13 +27,15 @@
 
     </LinearLayout>
 
-    <TextView
+    <br.tiagohm.markdownview.MarkdownView
         android:id="@+id/bodyTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textColor="@color/white"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        app:escapeHtml="false" />
+
 
     <View
         android:background="@color/white"

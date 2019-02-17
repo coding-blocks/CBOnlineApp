@@ -55,6 +55,6 @@ interface OnlineRestApi {
     fun getDoubts(@Path("runid") id: String): Call<Doubts>
 
     @GET("v2/courses/doubts/{doubtid}")
-    fun getDoubtById(@Path("doubtid") id: Int): Deferred<Response<PostStream>>
+    fun getDoubtById(@Path("doubtid") id: Int): Call<PostStream>
 
 }

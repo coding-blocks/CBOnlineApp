@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import br.tiagohm.markdownview.MarkdownView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.database.AppDatabase
@@ -108,7 +109,7 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
             Clients.onlineV2JsonApi.resolveDoubt(doubt.dbtUid, solvedDoubt).enqueue(retrofitCallback { throwable, response ->
                 response?.body().let {
                     if (response?.isSuccessful!!) {
-                        doubtDao.updateStatus(doubt.dbtUid,solvedDoubt.status)
+                        doubtDao.updateStatus(doubt.dbtUid, solvedDoubt.status)
                     }
                 }
             })
@@ -138,8 +139,8 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
                                 val inflatedView = factory.inflate(R.layout.item_comment, ll, false)
                                 val subTitle = inflatedView.findViewById(R.id.usernameTv) as TextView
                                 val time = inflatedView.findViewById(R.id.timeTv) as TextView
-                                val body = inflatedView.findViewById(R.id.bodyTv) as TextView
-                                body.text = comment.body
+                                val body = inflatedView.findViewById(R.id.bodyTv) as MarkdownView
+                                body.loadMarkdown(comment.body)
                                 subTitle.text = comment.username
                                 var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
                                 val newDate = format.parse(comment.updatedAt)

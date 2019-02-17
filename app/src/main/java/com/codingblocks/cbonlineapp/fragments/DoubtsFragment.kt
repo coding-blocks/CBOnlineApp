@@ -1,27 +1,26 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.adapters.DoubtsAdapter
 import com.codingblocks.onlineapi.Clients
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.android.synthetic.main.fragment_doubts.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import org.jetbrains.anko.support.v4.toast
-import org.jetbrains.anko.toast
+
 
 private const val ARG__ATTEMPT_ID = "attempt_id"
 private const val ARG__COURSE_ID = "course_id"
 
 
-class DoubtsFragment : Fragment(),AnkoLogger {
+class DoubtsFragment : Fragment(), AnkoLogger {
 
 
     private val attemptId: String by lazy {
@@ -39,22 +38,15 @@ class DoubtsFragment : Fragment(),AnkoLogger {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val service = Clients.api
-
-
+        val doubtsAdapter = DoubtsAdapter(ArrayList())
+        doubtsRv.layoutManager = LinearLayoutManager(context)
+        doubtsRv.adapter = doubtsAdapter
+        val itemDecorator = DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL)
+        itemDecorator.setDrawable(ContextCompat.getDrawable(context!!, R.drawable.divider_black)!!)
+        doubtsRv.addItemDecoration(itemDecorator)
         Clients.api.getDoubts(courseId).enqueue(retrofitCallback { _, doubtsresponse ->
             doubtsresponse?.body().let {
-                it?.topicList?.topics?.forEach { topicItem ->
-                    GlobalScope.launch(Dispatchers.Main) {
-                        val request = service.getDoubtById(topicItem?.id?:0)
-                        val response = request.await()
-                        if (response.isSuccessful) {
-                            val value = response.body()!!
-                            info { value.replyCount }
-                        } else {
-                            toast("Error ${response.code()}")
-                        }
-                    }                }
+                doubtsAdapter.setData(it?.topicList?.topics)
             }
         })
 

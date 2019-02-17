@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_margin="8dp"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_weight="0.8"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:text="discobot"
+            android:textAlignment="center"
+            android:id="@+id/usernameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"
+            android:id="@+id/timeTv"
+            android:textColor="@color/battleship_gray"
+            android:text="discobot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_weight="1.5"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:id="@+id/titleTv"
+        android:textSize="18sp"
+        android:textColor="@color/salmon"
+        android:text="About the Doubts category"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
