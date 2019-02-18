@@ -14,6 +14,7 @@ import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.cbonlineapp.utils.getPrefs
+import com.codingblocks.cbonlineapp.utils.observe
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourse
 import com.ethanhua.skeleton.Skeleton
@@ -94,12 +95,11 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
 
     private fun displayCourses(searchQuery: String = "") {
-        runDao.getMyRuns().observe(this, Observer<List<CourseRun>> {
+        runDao.getMyRuns().observe(this) {
             courseDataAdapter.setData(it.filter { c ->
                 c.title.contains(searchQuery, true)
             } as ArrayList<CourseRun>)
-        })
-
+        }
     }
 
     private fun fetchAllCourses() {

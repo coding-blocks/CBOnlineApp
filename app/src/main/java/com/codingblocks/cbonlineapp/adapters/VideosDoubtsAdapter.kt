@@ -17,6 +17,7 @@ import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.DoubtsDao
 import com.codingblocks.cbonlineapp.database.DoubtsModel
+import com.codingblocks.cbonlineapp.utils.formatDate
 import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Comment
@@ -142,14 +143,7 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
                                 val body = inflatedView.findViewById(R.id.bodyTv) as MarkdownView
                                 body.loadMarkdown(comment.body)
                                 subTitle.text = comment.username
-                                var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
-                                val newDate = format.parse(comment.updatedAt)
-
-                                format = SimpleDateFormat("MMM dd,yyyy hh:mm", Locale.US)
-                                val date = format.format(newDate)
-
-
-                                time.text = date
+                                time.text = formatDate(comment.updatedAt!!)
                                 ll.addView(inflatedView)
                             }
 

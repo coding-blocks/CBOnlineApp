@@ -9,6 +9,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.utils.formatDate
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.TopicsItem
 import kotlinx.android.synthetic.main.doubt_header_item.view.*
@@ -45,17 +46,11 @@ class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>?) : RecyclerV
     inner class DoubtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindView(data: TopicsItem?) {
-            var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
-            val newDate = format.parse(data?.createdAt)
-
-            format = SimpleDateFormat("MMM dd,yyyy hh:mm", Locale.US)
-            val date = format.format(newDate)
-            itemView.timeTv.text = date
-
-            itemView.titleTv.text = data?.title
-            itemView.usernameTv.text = data?.lastPosterUsername
+            itemView.timeTv.text = formatDate(data?.createdAt!!)
+            itemView.titleTv.text = data.title
+            itemView.usernameTv.text = data.lastPosterUsername
             itemView.setOnClickListener {
-                val DOUBT_ID = data?.id
+                val DOUBT_ID = data.id
                 val builder = CustomTabsIntent.Builder()
                         .enableUrlBarHiding()
                         .setToolbarColor(context.resources.getColor(R.color.colorPrimaryDark))
