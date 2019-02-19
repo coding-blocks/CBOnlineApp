@@ -30,6 +30,7 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/doubtFab"
         android:layout_width="wrap_content"
+        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:layout_gravity="right|bottom"

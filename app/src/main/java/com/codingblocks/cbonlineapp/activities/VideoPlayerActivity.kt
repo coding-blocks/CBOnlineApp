@@ -5,30 +5,62 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.CourseRun
+import com.codingblocks.cbonlineapp.database.DoubtsModel
 import com.codingblocks.cbonlineapp.fragments.NotesFragment
 import com.codingblocks.cbonlineapp.fragments.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.cbonlineapp.utils.MyVideoControls
+import com.codingblocks.cbonlineapp.utils.pageChangeCallback
+import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Contents
+import com.codingblocks.onlineapi.models.DoubtsJsonApi
+import com.codingblocks.onlineapi.models.RunAttemptsModel
 import com.devbrackets.android.exomedia.listener.OnPreparedListener
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_video_player.*
+import kotlinx.android.synthetic.main.doubt_dialog.view.*
 import kotlinx.android.synthetic.main.exomedia_default_controls_mobile.view.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+import kotlin.concurrent.thread
 
 
-class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger,YouTubePlayer.OnFullscreenListener {
+class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger, YouTubePlayer.OnFullscreenListener {
     override fun onFullscreen(p0: Boolean) {
 
     }
 
     private var pos: Long? = 0
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
+    private lateinit var attemptId: String
+    private lateinit var contentId: String
+
+    private val database: AppDatabase by lazy {
+        AppDatabase.getInstance(this)
+    }
+
+    private val doubtsDao by lazy {
+        database.doubtsDao()
+    }
+
+    private val courseDao by lazy {
+        database.courseDao()
+    }
+
+    private val runDao by lazy {
+        database.courseRunDao()
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,14 +82,29 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger,
 
     }
 
-    private fun setupViewPager(attemptId: String, contentId: String) {
+    private fun setupViewPager(attemptId: String) {
         val adapter = TabLayoutAdapter(supportFragmentManager)
-        adapter.add(VideoDoubtFragment.newInstance(attemptId, contentId), "Doubts")
+        adapter.add(VideoDoubtFragment.newInstance(attemptId), "Doubts")
         adapter.add(NotesFragment(), "Notes")
 
         player_viewpager.adapter = adapter
         player_tabs.setupWithViewPager(player_viewpager)
         player_viewpager.offscreenPageLimit = 2
+        player_viewpager.addOnPageChangeListener(pageChangeCallback(fnSelected = { position ->
+            when (position) {
+                0 -> {
+                    videoFab.setOnClickListener {
+                        showDialog()
+                    }
+                }
+                1 -> {
+                    videoFab.setOnClickListener {
+
+                    }
+                }
+            }
+        }, fnState = {}, fnScrolled = { _: Int, _: Float, _: Int ->
+        }))
     }
 
 
@@ -65,8 +112,8 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger,
         super.onStart()
         val url = intent.getStringExtra("FOLDER_NAME")
         val youtubeUrl = intent.getStringExtra("videoUrl")
-        val attemptId = intent.getStringExtra("attemptId")
-        val contentId = intent.getStringExtra("contentId")
+        attemptId = intent.getStringExtra("attemptId")
+        contentId = intent.getStringExtra("contentId")
 
 
         if (youtubeUrl != null) {
@@ -77,7 +124,7 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger,
             videoView.visibility = View.VISIBLE
             setupVideoView(url)
         }
-        setupViewPager(attemptId,contentId)
+        setupViewPager(attemptId)
     }
 
     private fun setupYoutubePlayer(youtubeUrl: String) {
@@ -125,8 +172,60 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger,
             pos = data?.getLongExtra("CURRENT_POSITION", 0)
         }
     }
+
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
+    }
+
+    private fun showDialog() {
+
+        runDao.getRunByAtemptId(attemptId).observe(this, Observer<CourseRun> {
+            val categoryId = courseDao.getCourse(it?.crCourseId!!).categoryId
+            val doubtDialog = AlertDialog.Builder(this).create()
+            val doubtView = layoutInflater.inflate(R.layout.doubt_dialog, null)
+            doubtView.cancelBtn.setOnClickListener {
+                doubtDialog.dismiss()
+            }
+            doubtView.okBtn.setOnClickListener {
+                if (doubtView.titleLayout.editText!!.text.length < 15 || doubtView.titleLayout.editText!!.text.isEmpty()) {
+                    doubtView.titleLayout.error = "Title length must be atleast 15 characters."
+                    return@setOnClickListener
+                } else if (doubtView.descriptionLayout.editText!!.text.length < 20 || doubtView.descriptionLayout.editText!!.text.isEmpty()) {
+                    doubtView.descriptionLayout.error = "Description length must be atleast 20 characters."
+                    doubtView.titleLayout.error = ""
+                } else {
+                    doubtView.descriptionLayout.error = ""
+                    val doubt = DoubtsJsonApi()
+                    doubt.body = doubtView.descriptionLayout.editText!!.text.toString()
+                    doubt.title = doubtView.titleLayout.editText!!.text.toString()
+                    doubt.category = categoryId
+                    val runAttempts = RunAttemptsModel() // type run-attempts
+                    val contents = Contents() // type contents
+                    runAttempts.id = attemptId
+                    contents.id = contentId
+                    doubt.status = "PENDING"
+                    doubt.postrunAttempt = runAttempts
+                    doubt.content = contents
+                    Clients.onlineV2JsonApi.createDoubt(doubt).enqueue(retrofitCallback { throwable, response ->
+                        response?.body().let {
+                            doubtDialog.dismiss()
+                            thread {
+                                doubtsDao.insert(DoubtsModel(it!!.id
+                                        ?: "", it.title, it.body, it.content?.id
+                                        ?: "", it.status, it.runAttempt?.id ?: ""
+                                ))
+                            }
+                        }
+                        info { throwable?.localizedMessage }
+                    })
+                }
+            }
+
+            doubtDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+            doubtDialog.setView(doubtView)
+            doubtDialog.setCancelable(false)
+            doubtDialog.show()
+        })
     }
 
 
