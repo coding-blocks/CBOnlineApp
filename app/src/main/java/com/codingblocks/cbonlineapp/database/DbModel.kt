@@ -248,6 +248,24 @@ data class DoubtsModel(
         var runAttemptId: String = "",
         var discourseTopicId: String = "")
 
+@Entity(
+        foreignKeys = [(ForeignKey(
+                entity = CourseContent::class,
+                parentColumns = ["id"],
+                childColumns = ["contentId"],
+                onDelete = ForeignKey.CASCADE //or CASCADE
+        ))]
+)
+data class NotesModel(
+        @PrimaryKey
+        var dbtUid: String = "",
+        var duration: String = "",
+        var text: String = "",
+        var contentId: String = "",
+        var runAttemptId: String = "",
+        var createdAt: String = "",
+        var deletedAt: String = "")
+
 
 
 

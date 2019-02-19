@@ -30,6 +30,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun courseWithInstructorDao(): CourseWithInstructorDao
     abstract fun sectionWithContentsDao(): SectionWithContentsDao
     abstract fun doubtsDao(): DoubtsDao
+    abstract fun notesDao(): NotesDao
+
 
 
 

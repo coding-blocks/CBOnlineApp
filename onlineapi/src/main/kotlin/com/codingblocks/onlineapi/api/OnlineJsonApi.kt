@@ -104,7 +104,8 @@ interface OnlineJsonApi {
     @GET("run_attempts/{runAttemptId}/relationships/doubts")
     fun getDoubtByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<DoubtsJsonApi>>
 
-
+    @GET("run_attempts/{runAttemptId}/relationships/notes")
+    fun getNotesByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<Notes>>
 
     @POST("quiz_attempts")
     fun createQuizAttempt(@Body params: QuizAttempt): Call<QuizAttempt>

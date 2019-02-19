@@ -27,13 +27,13 @@ class OnlineJsonApiAuthenticatedTest {
     }
 
 
-    @Test
-    fun `GET content`() {
-            val courses = jsonapi.getSectionContent("886").execute().body()
-            courses?.let {
-                assertEquals("Python Basics", it)
-            }
-    }
+//    @Test
+//    fun `GET content`() {
+//            val courses = jsonapi.getSectionContent("886").execute().body()
+//            courses?.let {
+//                assertEquals("Python Basics", it)
+//            }
+//    }
 
     @Test
     fun `GET comment`() {
