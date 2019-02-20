@@ -258,7 +258,7 @@ data class DoubtsModel(
 )
 data class NotesModel(
         @PrimaryKey
-        var dbtUid: String = "",
+        var nttUid: String = "",
         var duration: String = "",
         var text: String = "",
         var contentId: String = "",
