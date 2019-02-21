@@ -18,6 +18,7 @@ import com.codingblocks.cbonlineapp.fragments.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.fragments.VideoNotesFragment
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.cbonlineapp.utils.MyVideoControls
+import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.cbonlineapp.utils.pageChangeCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
@@ -31,20 +32,14 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.doubt_dialog.view.*
 import kotlinx.android.synthetic.main.exomedia_default_controls_mobile.view.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import kotlin.concurrent.thread
 
 
-class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger, YouTubePlayer.OnFullscreenListener, VideoNotesFragment.OnNoteItemSelectedListener {
-    override fun onNoteItemClicked(position: Long) {
-        videoView.seekTo(position)
-    }
+class VideoPlayerActivity : AppCompatActivity(),
+        OnPreparedListener,
+        OnItemClickListener {
 
-    override fun onFullscreen(p0: Boolean) {
-
-    }
-
+    private var youtubePlayer: YouTubePlayer? = null
     private var pos: Long? = 0
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private lateinit var attemptId: String
@@ -66,6 +61,15 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger,
         database.courseRunDao()
     }
 
+    override fun onItemClick(position: Int, id: String) {
+        if(contentId == id) {
+            if (displayYoutubeVideo.view?.visibility == View.VISIBLE)
+                youtubePlayer?.seekToMillis(position * 1000)
+            else
+                videoView.seekTo(position.toLong() * 1000)
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +87,22 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger,
             }
 
         }
+
+        val url = intent.getStringExtra("FOLDER_NAME")
+        val youtubeUrl = intent.getStringExtra("videoUrl")
+        attemptId = intent.getStringExtra("attemptId")
+        contentId = intent.getStringExtra("contentId")
+
+
+        if (youtubeUrl != null) {
+            displayYoutubeVideo.view?.visibility = View.VISIBLE
+            setupYoutubePlayer(youtubeUrl)
+        } else {
+            displayYoutubeVideo.view?.visibility = View.GONE
+            videoView.visibility = View.VISIBLE
+            setupVideoView(url)
+        }
+        setupViewPager(attemptId)
 
     }
 
@@ -114,21 +134,7 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger,
 
     override fun onStart() {
         super.onStart()
-        val url = intent.getStringExtra("FOLDER_NAME")
-        val youtubeUrl = intent.getStringExtra("videoUrl")
-        attemptId = intent.getStringExtra("attemptId")
-        contentId = intent.getStringExtra("contentId")
 
-
-        if (youtubeUrl != null) {
-            displayYoutubeVideo.view?.visibility = View.VISIBLE
-            setupYoutubePlayer(youtubeUrl)
-        } else {
-            displayYoutubeVideo.view?.visibility = View.GONE
-            videoView.visibility = View.VISIBLE
-            setupVideoView(url)
-        }
-        setupViewPager(attemptId)
     }
 
     private fun setupYoutubePlayer(youtubeUrl: String) {
@@ -138,6 +144,7 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger,
 
             override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
                 if (!p2) {
+                    youtubePlayer = youtubePlayerInstance
                     youtubePlayerInstance?.loadVideo(youtubeUrl.substring(32))
                 }
             }
@@ -158,7 +165,6 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger,
 
     override fun onPrepared() {
         videoView.start()
-        videoView.seekTo(pos ?: 0)
     }
 
     override fun onPause() {
@@ -174,6 +180,7 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger,
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == -1) {
             pos = data?.getLongExtra("CURRENT_POSITION", 0)
+            videoView.seekTo(pos ?: 0)
         }
     }
 
@@ -220,7 +227,6 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger,
                                 ))
                             }
                         }
-                        info { throwable?.localizedMessage }
                     })
                 }
             }

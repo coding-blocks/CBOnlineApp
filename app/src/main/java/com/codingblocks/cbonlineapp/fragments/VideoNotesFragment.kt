@@ -2,13 +2,11 @@ package com.codingblocks.cbonlineapp.fragments
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
@@ -16,6 +14,7 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.VideosNotesAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.NotesModel
+import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.cbonlineapp.utils.observer
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_notes.view.*
@@ -25,7 +24,7 @@ import org.jetbrains.anko.info
 
 private const val ARG_PARAM1 = "param1"
 
-class VideoNotesFragment : Fragment(),AnkoLogger {
+class VideoNotesFragment : Fragment(), AnkoLogger {
     private var param1: String? = null
 
     private val database: AppDatabase by lazy {
@@ -50,18 +49,24 @@ class VideoNotesFragment : Fragment(),AnkoLogger {
 
         fetchNotes()
         val notesList = ArrayList<NotesModel>()
-        val notesAdapter = VideosNotesAdapter(notesList)
+        val notesAdapter = VideosNotesAdapter(notesList, object : OnItemClickListener {
+            override fun onItemClick(position: Int, id: String) {
+                try {
+                    (activity as OnItemClickListener).onItemClick(position, id)
+                } catch (cce: ClassCastException) {
+
+                }
+            }
+
+        })
         view.notesRv.layoutManager = LinearLayoutManager(context)
         view.notesRv.adapter = notesAdapter
         val itemDecorator = DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL)
         itemDecorator.setDrawable(ContextCompat.getDrawable(context!!, R.drawable.divider)!!)
         view.notesRv.addItemDecoration(itemDecorator)
 
-        notesDao.getAllNotes().observer(this){
 
-        }
-
-        notesDao.getNotes(param1!!).observer(this){
+        notesDao.getNotes(param1!!).observer(this) {
             notesAdapter.setData(it as ArrayList<NotesModel>)
             if (it.isEmpty()) {
                 view.notesRv.visibility = View.GONE
@@ -83,7 +88,7 @@ class VideoNotesFragment : Fragment(),AnkoLogger {
                     it?.forEach {
                         try {
                             notesDao.insert(NotesModel(it.id
-                                    ?: "", it.duration.toString(), it.text ?: "", it.content?.id
+                                    ?: "", it.duration ?: 0.0, it.text ?: "", it.content?.id
                                     ?: "", it.runAttempt?.id ?: "", it.createdAt ?: "", it.deletedAt
                                     ?: ""))
                         } catch (e: Exception) {
@@ -94,10 +99,6 @@ class VideoNotesFragment : Fragment(),AnkoLogger {
             }
 
         })
-    }
-
-    interface OnNoteItemSelectedListener {
-        fun onNoteItemClicked(position: Long)
     }
 
 

@@ -1,64 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <EditText
 
         android:id="@+id/bodyTv"
-        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:background="@null"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:text="This is a sample note This is a sample note This is a sample note This is a sample note This is a sample note This is a sample note This is a sample note"/>
+        android:inputType="none"
+        android:enabled="false"
+        android:background="@null"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/contentTitleTv"
-            android:textColor="@color/green"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:textColor="@color/green" />
 
         <TextView
             android:id="@+id/timeTv"
-            android:textColor="@color/green"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:textAlignment="textEnd"
+            android:textColor="@color/green" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_gravity="end"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="end">
 
         <TextView
             android:id="@+id/deleteTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/salmon"
-            android:textSize="18sp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
-            android:text="Delete"/>
+            android:text="Delete"
+            android:textColor="@color/salmon"
+            android:textSize="18sp" />
+
         <TextView
             android:id="@+id/editTv"
-            android:layout_marginStart="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/salmon"
-            android:textSize="18sp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
-            android:text="Edit"/>
+            android:text="Edit"
+            android:textColor="@color/salmon"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

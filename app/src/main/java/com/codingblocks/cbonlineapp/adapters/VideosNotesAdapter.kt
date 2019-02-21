@@ -6,26 +6,22 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import br.tiagohm.markdownview.MarkdownView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.database.*
-import com.codingblocks.cbonlineapp.utils.formatDate
+import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.RunAttemptsModel
-import kotlinx.android.synthetic.main.item_doubt.view.*
 import kotlinx.android.synthetic.main.item_notes.view.*
-import java.util.ArrayList
+import java.util.*
 
-class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>) : RecyclerView.Adapter<VideosNotesAdapter.NotesViewHolder>() {
+
+class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>,var listener: OnItemClickListener) : RecyclerView.Adapter<VideosNotesAdapter.NotesViewHolder>() {
 
 
     private lateinit var context: Context
@@ -63,8 +59,12 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>) : Recycle
         fun bindView(note: NotesModel) {
             itemView.contentTitleTv.text = contentDao.getContentWithId(note.runAttemptId, note.contentId).title
             itemView.bodyTv.setText(note.text)
-            itemView.timeTv.text = note.duration
-            
+            itemView.timeTv.text = secToTime(note.duration)
+
+            itemView.setOnClickListener {
+                listener.onItemClick(note.duration.toInt(),note.contentId)
+            }
+
             itemView.editTv.setOnClickListener {
 
             }
@@ -111,5 +111,21 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>) : Recycle
                 }
             })
         }
+    }
+
+    fun secToTime(time: Double): String {
+        val sec = time.toInt()
+        val seconds = sec % 60
+        var minutes = sec / 60
+        if (minutes >= 60) {
+            val hours = minutes / 60
+            minutes %= 60
+            if (hours >= 24) {
+                val days = hours / 24
+                return String.format("%d days %02d:%02d:%02d", days, hours % 24, minutes, seconds)
+            }
+            return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        }
+        return String.format("00:%02d:%02d", minutes, seconds)
     }
 }

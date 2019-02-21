@@ -259,7 +259,7 @@ data class DoubtsModel(
 data class NotesModel(
         @PrimaryKey
         var nttUid: String = "",
-        var duration: String = "",
+        var duration: Double = 0.0,
         var text: String = "",
         var contentId: String = "",
         var runAttemptId: String = "",
