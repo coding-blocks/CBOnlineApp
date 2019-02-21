@@ -52,7 +52,8 @@ object Clients {
             Quizqnas::class.java,
             DoubtsJsonApi::class.java,
             ContentCsv::class.java,
-            Comment::class.java
+            Comment::class.java,
+            Notes::class.java
 
     )
     private val relationshipResolver = RelationshipResolver {

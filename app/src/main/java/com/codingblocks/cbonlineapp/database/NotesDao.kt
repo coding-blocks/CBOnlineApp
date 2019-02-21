@@ -8,7 +8,10 @@ import androidx.room.Query
 abstract class NotesDao : BaseDao<NotesModel> {
 
     @Query("SElECT * FROM NotesModel where runAttemptId = :ruid")
-    abstract fun getNotess(ruid: String): LiveData<List<NotesModel>>
+    abstract fun getNotes(ruid: String): LiveData<List<NotesModel>>
+
+    @Query("SElECT * FROM NotesModel")
+    abstract fun getAllNotes(): LiveData<List<NotesModel>>
 
     @Query("UPDATE NotesModel SET text = :text where nttUid = :uid")
     abstract fun updateBody(uid: String,text:String)

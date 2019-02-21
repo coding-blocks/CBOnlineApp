@@ -3,16 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".fragments.NotesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:gravity="center"
-        android:textSize="30sp"
-        android:textColor="@color/salmon"
-        android:fontFamily="@font/cabin"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/notesRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Coming Soon" />
+        android:layout_margin="8dp"
+        tools:listitem="@layout/item_notes" />
+
+    <TextView
+        android:id="@+id/emptyTv"
+        android:layout_width="wrap_content"
+        android:textColor="@color/salmon"
+        android:text="You have no Notes."
+        android:textSize="32sp"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content" />
 
 </FrameLayout>

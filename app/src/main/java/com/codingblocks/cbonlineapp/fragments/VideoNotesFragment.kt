@@ -2,29 +2,112 @@ package com.codingblocks.cbonlineapp.fragments
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.adapters.VideosNotesAdapter
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.NotesModel
+import com.codingblocks.cbonlineapp.utils.observer
+import com.codingblocks.onlineapi.Clients
+import kotlinx.android.synthetic.main.fragment_notes.view.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
 private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- *
- */
-class NotesFragment : Fragment() {
+class VideoNotesFragment : Fragment(),AnkoLogger {
+    private var param1: String? = null
+
+    private val database: AppDatabase by lazy {
+        AppDatabase.getInstance(context!!)
+    }
+
+    private val notesDao by lazy {
+        database.notesDao()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notes, container, false)
+        val view = inflater.inflate(R.layout.fragment_notes, container, false)
+
+        fetchNotes()
+        val notesList = ArrayList<NotesModel>()
+        val notesAdapter = VideosNotesAdapter(notesList)
+        view.notesRv.layoutManager = LinearLayoutManager(context)
+        view.notesRv.adapter = notesAdapter
+        val itemDecorator = DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL)
+        itemDecorator.setDrawable(ContextCompat.getDrawable(context!!, R.drawable.divider)!!)
+        view.notesRv.addItemDecoration(itemDecorator)
+
+        notesDao.getAllNotes().observer(this){
+
+        }
+
+        notesDao.getNotes(param1!!).observer(this){
+            notesAdapter.setData(it as ArrayList<NotesModel>)
+            if (it.isEmpty()) {
+                view.notesRv.visibility = View.GONE
+                view.emptyTv.visibility = View.VISIBLE
+            } else {
+                view.notesRv.visibility = View.VISIBLE
+                view.emptyTv.visibility = View.GONE
+            }
+        }
+
+
+        return view
+    }
+
+    private fun fetchNotes() {
+        Clients.onlineV2JsonApi.getNotesByAttemptId(param1!!).enqueue(retrofitCallback { throwable, response ->
+            response?.body().let {
+                if (response!!.isSuccessful) {
+                    it?.forEach {
+                        try {
+                            notesDao.insert(NotesModel(it.id
+                                    ?: "", it.duration.toString(), it.text ?: "", it.content?.id
+                                    ?: "", it.runAttempt?.id ?: "", it.createdAt ?: "", it.deletedAt
+                                    ?: ""))
+                        } catch (e: Exception) {
+                            info { "error" + e.localizedMessage }
+                        }
+                    }
+                }
+            }
+
+        })
+    }
+
+    interface OnNoteItemSelectedListener {
+        fun onNoteItemClicked(position: Long)
     }
 
 
+    companion object {
+        @JvmStatic
+        fun newInstance(param1: String) =
+                VideoNotesFragment().apply {
+                    arguments = Bundle().apply {
+                        putString(ARG_PARAM1, param1)
+                    }
+                }
+    }
 }

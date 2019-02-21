@@ -671,7 +671,7 @@ class Notes : BaseModel() {
     @JvmField
     var deletedAt: String? = null
 
-    @Relationship("run-attempt", resolve = true)
+    @Relationship("run_attempt", resolve = true)
     @JvmField
     var runAttempt: MyRunAttempt? = null
 

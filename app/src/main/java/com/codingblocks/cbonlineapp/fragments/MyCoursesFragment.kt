@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
@@ -14,7 +13,7 @@ import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.cbonlineapp.utils.getPrefs
-import com.codingblocks.cbonlineapp.utils.observe
+import com.codingblocks.cbonlineapp.utils.observer
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourse
 import com.ethanhua.skeleton.Skeleton
@@ -95,7 +94,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
 
     private fun displayCourses(searchQuery: String = "") {
-        runDao.getMyRuns().observe(this) {
+        runDao.getMyRuns().observer(this) {
             courseDataAdapter.setData(it.filter { c ->
                 c.title.contains(searchQuery, true)
             } as ArrayList<CourseRun>)

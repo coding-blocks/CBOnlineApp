@@ -14,8 +14,8 @@ import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.CourseRun
 import com.codingblocks.cbonlineapp.database.DoubtsModel
-import com.codingblocks.cbonlineapp.fragments.NotesFragment
 import com.codingblocks.cbonlineapp.fragments.VideoDoubtFragment
+import com.codingblocks.cbonlineapp.fragments.VideoNotesFragment
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.cbonlineapp.utils.MyVideoControls
 import com.codingblocks.cbonlineapp.utils.pageChangeCallback
@@ -36,7 +36,11 @@ import org.jetbrains.anko.info
 import kotlin.concurrent.thread
 
 
-class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger, YouTubePlayer.OnFullscreenListener {
+class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger, YouTubePlayer.OnFullscreenListener, VideoNotesFragment.OnNoteItemSelectedListener {
+    override fun onNoteItemClicked(position: Long) {
+        videoView.seekTo(position)
+    }
+
     override fun onFullscreen(p0: Boolean) {
 
     }
@@ -85,7 +89,7 @@ class VideoPlayerActivity : AppCompatActivity(), OnPreparedListener, AnkoLogger,
     private fun setupViewPager(attemptId: String) {
         val adapter = TabLayoutAdapter(supportFragmentManager)
         adapter.add(VideoDoubtFragment.newInstance(attemptId), "Doubts")
-        adapter.add(NotesFragment(), "Notes")
+        adapter.add(VideoNotesFragment.newInstance(attemptId), "Notes")
 
         player_viewpager.adapter = adapter
         player_tabs.setupWithViewPager(player_viewpager)

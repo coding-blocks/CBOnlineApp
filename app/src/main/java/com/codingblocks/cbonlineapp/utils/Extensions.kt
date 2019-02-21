@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.NoSuchElementException
 
-fun <T> LiveData<T>.observe(owner: LifecycleOwner, onEmission: (T) -> Unit) {
+fun <T> LiveData<T>.observer(owner: LifecycleOwner, onEmission: (T) -> Unit) {
     return observe(owner, Observer<T> {
         if (it != null) {
             onEmission(it)
