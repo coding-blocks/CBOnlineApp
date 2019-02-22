@@ -1,8 +1,8 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.*
-import com.github.jasminb.jsonapi.JSONAPIDocument
 import kotlinx.coroutines.Deferred
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -93,18 +93,31 @@ interface OnlineJsonApi {
     fun createDoubt(@Body params: DoubtsJsonApi): Call<DoubtsJsonApi>
 
     @PATCH("doubts/{doubtid}")
-    fun resolveDoubt(@Path("doubtid") id: String,@Body params: DoubtsJsonApi): Call<DoubtsJsonApi>
+    fun resolveDoubt(@Path("doubtid") id: String, @Body params: DoubtsJsonApi): Call<DoubtsJsonApi>
 
     @POST("comments")
     fun createComment(@Body params: Comment): Call<Comment>
 
     @GET("doubts/{comentid}/relationships/comments")
-    fun getCommentsById(@Path("comentid") id: String):Call<List<Comment>>
+    fun getCommentsById(@Path("comentid") id: String): Call<List<Comment>>
 
     @GET("run_attempts/{runAttemptId}/relationships/doubts")
     fun getDoubtByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<DoubtsJsonApi>>
 
+    @GET("run_attempts/{runAttemptId}/relationships/notes")
+    fun getNotesByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<Note>>
 
+    @DELETE("notes/{noteid}/undo")
+    fun undoDelete(@Path("noteid") id: String): Call<Note>
+
+    @DELETE("notes/{noteid}")
+    fun deleteNoteById(@Path("noteid") id: String): Call<ResponseBody>
+
+    @PATCH("notes/{noteid}")
+    fun updateNoteById(@Path("noteid") id: String, @Body params: Note)
+
+    @POST("notes")
+    fun createNote(@Body params: Notes): Call<Note>
 
     @POST("quiz_attempts")
     fun createQuizAttempt(@Body params: QuizAttempt): Call<QuizAttempt>

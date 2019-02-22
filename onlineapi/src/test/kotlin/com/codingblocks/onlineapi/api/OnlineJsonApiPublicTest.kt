@@ -45,7 +45,7 @@ class OnlineJsonApiPublicTest {
     fun `GET recommended`() {
         val courses = api.getRecommendedCourses().execute().body()
         courses?.let {
-            assertEquals(12, it.size)
+            assertEquals(14, it.size)
         }
     }
 

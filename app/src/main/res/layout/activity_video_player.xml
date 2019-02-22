@@ -9,6 +9,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
+
     <com.devbrackets.android.exomedia.ui.widget.VideoView
         android:id="@+id/videoView"
         android:layout_width="match_parent"
@@ -31,11 +32,24 @@
         app:tabIndicatorColor="@android:color/white"
         app:tabSelectedTextColor="@color/white"
         app:tabTextColor="#80ffffff" />
-
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/player_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#fff" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/videoFab"
+        android:elevation="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_gravity="right|bottom"
+        android:src="@android:drawable/ic_input_add" />
+    </FrameLayout>
+
 
 </LinearLayout>

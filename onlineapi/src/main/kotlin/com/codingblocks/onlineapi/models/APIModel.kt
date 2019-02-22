@@ -657,6 +657,56 @@ class Comment : BaseModel() {
 
 }
 
+@Type("note")
+class Note : BaseModel() {
+    @JvmField
+    var duration: Double? = null
+
+    @JvmField
+    var text: String? = null
+
+    @JvmField
+    var createdAt: String? = null
+
+    @JvmField
+    var deletedAt: String? = null
+
+    @Relationship("run_attempt", resolve = true)
+    @JvmField
+    var runAttempt: MyRunAttempt? = null
+
+    @Relationship("content", resolve = true)
+    @JvmField
+    var content: Contents? = null
+
+}
+
+@Type("notes")
+class Notes : BaseModel() {
+    @JvmField
+    var duration: Double? = null
+
+    @JvmField
+    var text: String? = null
+
+    @JvmField
+    var createdAt: String? = null
+
+    @JvmField
+    var deletedAt: String? = null
+
+    @Relationship("run-attempt", resolve = true)
+    @JvmField
+    var runAttempt: RunAttemptsModel? = null
+
+    @Relationship("content", resolve = true)
+    @JvmField
+    var content: Contents? = null
+
+}
+
+
+
 
 
 
