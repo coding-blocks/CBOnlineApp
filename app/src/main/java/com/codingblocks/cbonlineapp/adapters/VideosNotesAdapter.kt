@@ -1,8 +1,6 @@
 package com.codingblocks.cbonlineapp.adapters
 
-import android.app.Activity
 import android.content.Context
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +9,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.utils.OnItemClickListener
-import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Comment
-import com.codingblocks.onlineapi.models.Contents
-import com.codingblocks.onlineapi.models.DoubtsJsonApi
-import com.codingblocks.onlineapi.models.RunAttemptsModel
 import kotlinx.android.synthetic.main.item_notes.view.*
 import java.util.*
 
@@ -27,7 +20,7 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
     private lateinit var context: Context
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
-    private lateinit var doubtDao: DoubtsDao
+    private lateinit var notesDao: NotesDao
 
 
     fun setData(notesData: ArrayList<NotesModel>) {
@@ -39,7 +32,7 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
         context = parent.context
         database = AppDatabase.getInstance(context)
         contentDao = database.contentDao()
-        doubtDao = database.doubtsDao()
+        notesDao = database.notesDao()
 
 
         return NotesViewHolder(LayoutInflater.from(parent.context)
@@ -51,12 +44,12 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
     }
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-        holder.bindView(notesData[position])
+        holder.bindView(notesData[position],position)
     }
 
     inner class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindView(note: NotesModel) {
+        fun bindView(note: NotesModel, position: Int) {
             itemView.contentTitleTv.text = contentDao.getContentWithId(note.runAttemptId, note.contentId).title
             itemView.bodyTv.setText(note.text)
             itemView.timeTv.text = secToTime(note.duration)
@@ -70,46 +63,41 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
             }
 
             itemView.deleteTv.setOnClickListener {
+                Clients.onlineV2JsonApi.deleteNoteById(note.nttUid).enqueue(retrofitCallback { throwable, response ->
+                    response.let {
+                        if(it?.isSuccessful!!){
+                            notesDao.deleteNoteByID(note.nttUid)
+//                            notesData.removeAt(position)
+//                            notifyDataSetChanged()
 
+                        }
+                    }
+                })
             }
         }
 
         private fun resolveDoubt(doubt: DoubtsModel) {
-            val solvedDoubt = DoubtsJsonApi()
-            solvedDoubt.body = doubt.body
-            solvedDoubt.title = doubt.title
-            val runAttempts = RunAttemptsModel() // type run-attempts
-            val contents = Contents() // type contents
-            runAttempts.id = doubt.runAttemptId
-            contents.id = doubt.contentId
-            solvedDoubt.status = "RESOLVED"
-            solvedDoubt.discourseTopicId = doubt.discourseTopicId
-            solvedDoubt.id = doubt.dbtUid
-            solvedDoubt.resolvedById = (context as Activity).getPrefs().SP_USER_ID
-            solvedDoubt.postrunAttempt = runAttempts
-            solvedDoubt.content = contents
-            Clients.onlineV2JsonApi.resolveDoubt(doubt.dbtUid, solvedDoubt).enqueue(retrofitCallback { throwable, response ->
-                response?.body().let {
-                    if (response?.isSuccessful!!) {
-                        doubtDao.updateStatus(doubt.dbtUid, solvedDoubt.status)
-                    }
-                }
-            })
+//            val solvedDoubt = DoubtsJsonApi()
+//            solvedDoubt.body = doubt.body
+//            solvedDoubt.title = doubt.title
+//            val runAttempts = RunAttemptsModel() // type run-attempts
+//            val contents = Contents() // type contents
+//            runAttempts.id = doubt.runAttemptId
+//            contents.id = doubt.contentId
+//            solvedDoubt.status = "RESOLVED"
+//            solvedDoubt.discourseTopicId = doubt.discourseTopicId
+//            solvedDoubt.id = doubt.dbtUid
+//            solvedDoubt.resolvedById = (context as Activity).getPrefs().SP_USER_ID
+//            solvedDoubt.postrunAttempt = runAttempts
+//            solvedDoubt.content = contents
+//            Clients.onlineV2JsonApi.resolveDoubt(doubt.dbtUid, solvedDoubt).enqueue(retrofitCallback { throwable, response ->
+//                response?.body().let {
+//                    if (response?.isSuccessful!!) {
+//                        doubtDao.updateStatus(doubt.dbtUid, solvedDoubt.status)
+//                    }
+//                }
+//            })
 
-        }
-
-        private fun createComment(text: Editable?, doubt: DoubtsModel) {
-            val comment = Comment()
-            comment.body = text.toString()
-            comment.discourseTopicId = doubt.discourseTopicId
-            val doubts = DoubtsJsonApi() // type doubts
-            doubts.id = doubt.dbtUid
-            comment.doubt = doubts
-            Clients.onlineV2JsonApi.createComment(comment).enqueue(retrofitCallback { throwable, response ->
-                response?.body().let {
-                    notifyDataSetChanged()
-                }
-            })
         }
     }
 

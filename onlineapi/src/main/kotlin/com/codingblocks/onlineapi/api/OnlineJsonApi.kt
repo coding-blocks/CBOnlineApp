@@ -2,6 +2,7 @@ package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.*
 import kotlinx.coroutines.Deferred
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -110,7 +111,7 @@ interface OnlineJsonApi {
     fun undoDelete(@Path("noteid") id: String): Call<Note>
 
     @DELETE("notes/{noteid}")
-    fun deleteNoteById(@Path("noteid") id: String)
+    fun deleteNoteById(@Path("noteid") id: String): Call<ResponseBody>
 
     @PATCH("notes/{noteid}")
     fun updateNoteById(@Path("noteid") id: String, @Body params: Note)

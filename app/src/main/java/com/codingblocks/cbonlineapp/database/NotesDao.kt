@@ -19,4 +19,10 @@ abstract class NotesDao : BaseDao<NotesModel> {
     @Query("SElECT * FROM NotesModel where nttUid = :uid")
     abstract fun getNoteById(uid: String): LiveData<NotesModel>
 
+    @Query("DELETE FROM NotesModel where nttUid = :uid")
+    abstract fun deleteNoteByID(uid: String)
+
+
+
+
 }
