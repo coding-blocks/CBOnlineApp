@@ -53,6 +53,7 @@ object Clients {
             DoubtsJsonApi::class.java,
             ContentCsv::class.java,
             Comment::class.java,
+            Note::class.java,
             Notes::class.java
 
     )

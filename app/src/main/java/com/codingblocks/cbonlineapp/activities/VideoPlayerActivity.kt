@@ -14,6 +14,7 @@ import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.CourseRun
 import com.codingblocks.cbonlineapp.database.DoubtsModel
+import com.codingblocks.cbonlineapp.database.NotesModel
 import com.codingblocks.cbonlineapp.fragments.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.fragments.VideoNotesFragment
 import com.codingblocks.cbonlineapp.utils.MediaUtils
@@ -21,9 +22,7 @@ import com.codingblocks.cbonlineapp.utils.MyVideoControls
 import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.cbonlineapp.utils.pageChangeCallback
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Contents
-import com.codingblocks.onlineapi.models.DoubtsJsonApi
-import com.codingblocks.onlineapi.models.RunAttemptsModel
+import com.codingblocks.onlineapi.models.*
 import com.devbrackets.android.exomedia.listener.OnPreparedListener
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
@@ -32,12 +31,14 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.doubt_dialog.view.*
 import kotlinx.android.synthetic.main.exomedia_default_controls_mobile.view.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import kotlin.concurrent.thread
 
 
 class VideoPlayerActivity : AppCompatActivity(),
         OnPreparedListener,
-        OnItemClickListener {
+        OnItemClickListener, AnkoLogger {
 
     private var youtubePlayer: YouTubePlayer? = null
     private var pos: Long? = 0
@@ -53,6 +54,10 @@ class VideoPlayerActivity : AppCompatActivity(),
         database.doubtsDao()
     }
 
+    private val notesDao by lazy {
+        database.notesDao()
+    }
+
     private val courseDao by lazy {
         database.courseDao()
     }
@@ -62,7 +67,7 @@ class VideoPlayerActivity : AppCompatActivity(),
     }
 
     override fun onItemClick(position: Int, id: String) {
-        if(contentId == id) {
+        if (contentId == id) {
             if (displayYoutubeVideo.view?.visibility == View.VISIBLE)
                 youtubePlayer?.seekToMillis(position * 1000)
             else
@@ -109,7 +114,7 @@ class VideoPlayerActivity : AppCompatActivity(),
     private fun setupViewPager(attemptId: String) {
         val adapter = TabLayoutAdapter(supportFragmentManager)
         adapter.add(VideoDoubtFragment.newInstance(attemptId), "Doubts")
-        adapter.add(VideoNotesFragment.newInstance(attemptId), "Notes")
+        adapter.add(VideoNotesFragment.newInstance(attemptId), "Note")
 
         player_viewpager.adapter = adapter
         player_tabs.setupWithViewPager(player_viewpager)
@@ -118,12 +123,16 @@ class VideoPlayerActivity : AppCompatActivity(),
             when (position) {
                 0 -> {
                     videoFab.setOnClickListener {
-                        showDialog()
+                        createDoubt()
                     }
                 }
                 1 -> {
                     videoFab.setOnClickListener {
-
+                        val notePos: Double = if (displayYoutubeVideo.view?.visibility == View.VISIBLE)
+                            (youtubePlayer?.currentTimeMillis!! / 1000).toDouble()
+                        else
+                            (videoView.currentPosition.toInt() / 1000).toDouble()
+                        createNote(notePos)
                     }
                 }
             }
@@ -131,10 +140,55 @@ class VideoPlayerActivity : AppCompatActivity(),
         }))
     }
 
+    private fun createNote(notePos: Double) {
+        val noteDialog = AlertDialog.Builder(this).create()
+        val noteView = layoutInflater.inflate(R.layout.doubt_dialog, null)
+        noteView.descriptionLayout.visibility = View.GONE
+        noteView.title.text = "Create A Note"
+        noteView.okBtn.text = "Create Note"
 
-    override fun onStart() {
-        super.onStart()
 
+        noteView.cancelBtn.setOnClickListener {
+            noteDialog.dismiss()
+        }
+        noteView.okBtn.setOnClickListener {
+            if (noteView.titleLayout.editText!!.text.isEmpty()) {
+                noteView.titleLayout.error = "Note Cannot Be Empty."
+                return@setOnClickListener
+            } else {
+                noteView.descriptionLayout.error = ""
+                val note = Notes()
+                note.text = noteView.titleLayout.editText!!.text.toString()
+                note.duration = notePos
+                val runAttempts = RunAttemptsModel() // type run_attempts
+                val contents = Contents() // type contents
+                runAttempts.id = attemptId
+                contents.id = contentId
+                note.runAttempt = runAttempts
+                note.content = contents
+                Clients.onlineV2JsonApi.createNote(note).enqueue(retrofitCallback { throwable, response ->
+                    response?.body().let {
+                        noteDialog.dismiss()
+                        thread {
+                            try {
+                                notesDao.insert(NotesModel(it!!.id
+                                        ?: "", it.duration ?: 0.0, it.text ?: "", it.content?.id
+                                        ?: "", it.runAttempt?.id ?: "", it.createdAt
+                                        ?: "", it.deletedAt
+                                        ?: ""))
+                            } catch (e: Exception) {
+                                info { "error" + e.localizedMessage }
+                            }
+                        }
+                    }
+                })
+            }
+        }
+
+        noteDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+        noteDialog.setView(noteView)
+        noteDialog.setCancelable(false)
+        noteDialog.show()
     }
 
     private fun setupYoutubePlayer(youtubeUrl: String) {
@@ -188,7 +242,7 @@ class VideoPlayerActivity : AppCompatActivity(),
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
-    private fun showDialog() {
+    private fun createDoubt() {
 
         runDao.getRunByAtemptId(attemptId).observe(this, Observer<CourseRun> {
             val categoryId = courseDao.getCourse(it?.crCourseId!!).categoryId

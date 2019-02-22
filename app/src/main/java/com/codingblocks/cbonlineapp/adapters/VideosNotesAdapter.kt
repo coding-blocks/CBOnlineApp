@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.item_notes.view.*
 import java.util.*
 
 
-class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>,var listener: OnItemClickListener) : RecyclerView.Adapter<VideosNotesAdapter.NotesViewHolder>() {
+class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var listener: OnItemClickListener) : RecyclerView.Adapter<VideosNotesAdapter.NotesViewHolder>() {
 
 
     private lateinit var context: Context
@@ -62,7 +62,7 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>,var listen
             itemView.timeTv.text = secToTime(note.duration)
 
             itemView.setOnClickListener {
-                listener.onItemClick(note.duration.toInt(),note.contentId)
+                listener.onItemClick(note.duration.toInt(), note.contentId)
             }
 
             itemView.editTv.setOnClickListener {
