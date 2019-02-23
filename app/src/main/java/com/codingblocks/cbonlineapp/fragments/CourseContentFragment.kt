@@ -22,7 +22,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.startService
 
 
-private const val ARG__ATTEMPT_ID = "attempt_id"
+private const val ARG_ATTEMPT_ID = "attempt_id"
 
 class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     override fun startDownload(url: String, id: String, lectureContentId: String, title: String) {
@@ -45,7 +45,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         super.onCreate(savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
         arguments?.let {
-            attemptId = it.getString(ARG__ATTEMPT_ID)!!
+            attemptId = it.getString(ARG_ATTEMPT_ID)!!
         }
 
     }
@@ -79,7 +79,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         fun newInstance(param1: String) =
                 CourseContentFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG__ATTEMPT_ID, param1)
+                        putString(ARG_ATTEMPT_ID, param1)
                     }
                 }
     }

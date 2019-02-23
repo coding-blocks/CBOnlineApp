@@ -13,7 +13,7 @@ import com.codingblocks.onlineapi.models.Leaderboard
 import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoLogger
 
-private const val ARG__ATTEMPT_ID = "attempt_id"
+private const val ARG_ATTEMPT_ID = "attempt_id"
 private const val ARG__RUN_ID = "run_id"
 
 
@@ -35,7 +35,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
         super.onActivityCreated(savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
         arguments?.let {
-            attemptId = it.getString(ARG__ATTEMPT_ID)!!
+            attemptId = it.getString(ARG_ATTEMPT_ID)!!
             runId = it.getString(ARG__RUN_ID)!!
 
         }
@@ -63,7 +63,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
         fun newInstance(param1: String, crUid: String) =
                 OverviewFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG__ATTEMPT_ID, param1)
+                        putString(ARG_ATTEMPT_ID, param1)
                         putString(ARG__RUN_ID, crUid)
 
                     }

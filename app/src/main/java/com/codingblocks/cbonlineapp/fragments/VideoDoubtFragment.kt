@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,21 +14,13 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.VideosDoubtsAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.CourseRun
 import com.codingblocks.cbonlineapp.database.DoubtsModel
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Contents
-import com.codingblocks.onlineapi.models.DoubtsJsonApi
-import com.codingblocks.onlineapi.models.RunAttemptsModel
-import kotlinx.android.synthetic.main.doubt_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_video_doubt.view.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import org.jetbrains.anko.layoutInflater
-import kotlin.concurrent.thread
 
 
-private const val ARG_PARAM1 = "param1"
+private const val ARG_ATTEMPT_ID = "param1"
 
 class VideoDoubtFragment : Fragment(), AnkoLogger {
     private var param1: String? = null
@@ -44,7 +35,7 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
+            param1 = it.getString(ARG_ATTEMPT_ID)
         }
     }
 
@@ -106,7 +97,7 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
             fun newInstance(param1: String) =
                     VideoDoubtFragment().apply {
                         arguments = Bundle().apply {
-                            putString(ARG_PARAM1, param1)
+                            putString(ARG_ATTEMPT_ID, param1)
                         }
                     }
         }

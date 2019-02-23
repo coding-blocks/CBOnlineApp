@@ -21,9 +21,9 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 
 
-private const val ARG__QUIZ_ID = "quiz_id"
-private const val ARG__ATTEMPT_ID = "attempt_id"
 
+private const val ARG_QUIZ_ID = "quiz_id"
+private const val ARG_ATTEMPT_ID = "attempt_id"
 
 class AboutQuizFragment : Fragment(), AnkoLogger {
 
@@ -72,8 +72,8 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
                 .load(R.layout.item_skeleton_course)
                 .show()
         arguments?.let {
-            quizId = it.getString(ARG__QUIZ_ID)!!
-            attemptId = it.getString(ARG__ATTEMPT_ID)!!
+            quizId = it.getString(ARG_QUIZ_ID)!!
+            attemptId = it.getString(ARG_ATTEMPT_ID)!!
 
         }
         val header = layoutInflater.inflate(R.layout.quiz_attempt_header, quizAttemptLv, false) as ViewGroup
@@ -127,8 +127,8 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         fun newInstance(quizId: String, attemptId: String) =
                 AboutQuizFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG__QUIZ_ID, quizId)
-                        putString(ARG__ATTEMPT_ID, attemptId)
+                        putString(ARG_QUIZ_ID, quizId)
+                        putString(ARG_ATTEMPT_ID, attemptId)
 
                     }
                 }

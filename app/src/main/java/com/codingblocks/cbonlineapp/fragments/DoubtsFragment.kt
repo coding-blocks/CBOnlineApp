@@ -16,18 +16,18 @@ import kotlinx.android.synthetic.main.fragment_doubts.*
 import org.jetbrains.anko.AnkoLogger
 
 
-private const val ARG__ATTEMPT_ID = "attempt_id"
-private const val ARG__COURSE_ID = "course_id"
+private const val ARG_ATTEMPT_ID = "attempt_id"
+private const val ARG_COURSE_ID = "course_id"
 
 
 class DoubtsFragment : Fragment(), AnkoLogger {
 
 
     private val attemptId: String by lazy {
-        arguments?.getString(ARG__ATTEMPT_ID) ?: ""
+        arguments?.getString(ARG_ATTEMPT_ID) ?: ""
     }
     private val courseId: String by lazy {
-        arguments?.getString(ARG__COURSE_ID) ?: ""
+        arguments?.getString(ARG_COURSE_ID) ?: ""
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -58,8 +58,8 @@ class DoubtsFragment : Fragment(), AnkoLogger {
         fun newInstance(param1: String, crUid: String) =
                 DoubtsFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG__ATTEMPT_ID, param1)
-                        putString(ARG__COURSE_ID, crUid)
+                        putString(ARG_ATTEMPT_ID, param1)
+                        putString(ARG_COURSE_ID, crUid)
 
                     }
                 }
