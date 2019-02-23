@@ -22,6 +22,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
+import org.jetbrains.anko.support.v4.runOnUiThread
 import kotlin.concurrent.thread
 
 class HomeFragment : Fragment(), AnkoLogger {
@@ -153,7 +154,9 @@ class HomeFragment : Fragment(), AnkoLogger {
                         runDao.insert(courseRun)
 
                         if (ui.swipeRefreshLayout.isRefreshing) {
-                            ui.swipeRefreshLayout.isRefreshing = false
+                            runOnUiThread {
+                                ui.swipeRefreshLayout.isRefreshing = false
+                            }
                         }
                         //Add CourseInstructors
                         for (i in myCourses.instructors!!) {
