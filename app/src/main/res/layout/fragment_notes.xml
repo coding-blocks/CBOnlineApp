@@ -17,8 +17,8 @@
         android:id="@+id/emptyTv"
         android:layout_width="wrap_content"
         android:textColor="@color/salmon"
-        android:text="You have no notes."
-        android:textSize="32sp"
+        android:text="@string/empty_notes_text"
+        android:textSize="20sp"
         android:visibility="gone"
         android:layout_gravity="center"
         android:layout_height="wrap_content" />
