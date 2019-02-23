@@ -12,8 +12,8 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 12
-        versionName "0.1.1"
+        versionCode 14
+        versionName "0.2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
@@ -87,15 +87,15 @@ dependencies {
         implementation "org.jetbrains.anko:anko-$name:$ankoVersion"
     }
     //Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.6'
-    implementation 'com.google.firebase:firebase-messaging:17.3.4'
-    implementation 'com.google.firebase:firebase-invites:16.0.6'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.google.firebase:firebase-messaging:17.4.0'
+    implementation 'com.google.firebase:firebase-invites:16.1.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
 
     implementation project(':onlineapi')
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
     // Test Deps
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
