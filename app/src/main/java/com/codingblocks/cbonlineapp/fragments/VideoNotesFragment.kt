@@ -82,17 +82,33 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
     }
 
     private fun fetchNotes() {
+        val networkList: ArrayList<NotesModel> = ArrayList()
         Clients.onlineV2JsonApi.getNotesByAttemptId(param1!!).enqueue(retrofitCallback { throwable, response ->
-            response?.body().let {
+            response?.body().let { notesList ->
                 if (response!!.isSuccessful) {
-                    it?.forEach {
+                    notesList?.forEach {
                         try {
-                            notesDao.insert(NotesModel(it.id
+                            networkList.add(NotesModel(it.id
                                     ?: "", it.duration ?: 0.0, it.text ?: "", it.content?.id
                                     ?: "", it.runAttempt?.id ?: "", it.createdAt ?: "", it.deletedAt
                                     ?: ""))
                         } catch (e: Exception) {
                             info { "error" + e.localizedMessage }
+                        }
+                    }
+                    if (networkList.size == notesList?.size) {
+                        notesDao.insertAll(networkList)
+
+                        notesDao.getNotes(param1!!).observer(this) { list ->
+
+                            // remove items which are deleted
+                            val sum = list + networkList
+                            sum.groupBy { it.nttUid }
+                                    .filter { it.value.size == 1 }
+                                    .flatMap { it.value }
+                                    .forEach {
+                                        notesDao.deleteNoteByID(it.nttUid)
+                                    }
                         }
                     }
                 }
