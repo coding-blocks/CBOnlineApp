@@ -16,7 +16,7 @@ import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_annoucements.view.*
 
-private const val ARG__COURSE_ID = "course_id"
+private const val ARG_COURSE_ID = "course_id"
 
 class AnnouncementsFragment : Fragment() {
     private lateinit var database: AppDatabase
@@ -26,7 +26,7 @@ class AnnouncementsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            courseId = it.getString(ARG__COURSE_ID)!!
+            courseId = it.getString(ARG_COURSE_ID)!!
         }
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
     }
@@ -50,12 +50,11 @@ class AnnouncementsFragment : Fragment() {
     }
 
     companion object {
-
         @JvmStatic
         fun newInstance(param1: String) =
                 AnnouncementsFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG__COURSE_ID, param1)
+                        putString(ARG_COURSE_ID, param1)
                     }
                 }
     }

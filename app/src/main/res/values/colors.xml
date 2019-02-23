@@ -4,6 +4,7 @@
     <color name="colorPrimary">#ff6666</color>
     <color name="colorAccent">#666666</color>
     <color name="black">#000</color>
+    <color name="grey850">#343434</color>
     <color name="salmon">#ff6666</color>
     <color name="holo_orange_light">#ffffbb33</color>
     <color name="white_transparency">#b9ffffff</color>

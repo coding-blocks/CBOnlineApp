@@ -32,8 +32,7 @@ class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>?) : RecyclerV
 
 
     override fun getItemCount(): Int {
-
-        return doubtsData!!.size
+        return doubtsData?.size ?: 0
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoubtsViewHolder {

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/grey850"
     tools:context=".fragments.NotesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -17,8 +17,8 @@
         android:id="@+id/emptyTv"
         android:layout_width="wrap_content"
         android:textColor="@color/salmon"
-        android:text="You have no notes."
-        android:textSize="32sp"
+        android:text="@string/empty_notes_text"
+        android:textSize="20sp"
         android:visibility="gone"
         android:layout_gravity="center"
         android:layout_height="wrap_content" />

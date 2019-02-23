@@ -205,4 +205,6 @@
     <string name="doubt_btn">Post Doubt</string>
     <string name="showComments">Show Comments</string>
     <string name="hideComments">Hide Comments</string>
+    <string name="empty_doubts_text">No doubts yet. Ask one?</string>
+    <string name="empty_notes_text">No notes yet. Write one?</string>
 </resources>

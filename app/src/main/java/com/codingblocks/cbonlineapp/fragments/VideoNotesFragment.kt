@@ -22,7 +22,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
 
-private const val ARG_PARAM1 = "param1"
+private const val ARG_ATTEMPT_ID = "param1"
 
 class VideoNotesFragment : Fragment(), AnkoLogger {
     private var param1: String? = null
@@ -38,7 +38,7 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
+            param1 = it.getString(ARG_ATTEMPT_ID)
         }
     }
 
@@ -123,7 +123,7 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
         fun newInstance(param1: String) =
                 VideoNotesFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
+                        putString(ARG_ATTEMPT_ID, param1)
                     }
                 }
     }

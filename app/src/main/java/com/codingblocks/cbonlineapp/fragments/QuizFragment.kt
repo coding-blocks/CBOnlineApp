@@ -23,9 +23,9 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor
 
 
-private const val ARG__QUIZ_ID = "quiz_id"
-private const val ARG__ATTEMPT_ID = "attempt_id"
-private const val ARG__QUIZ_ATTEMPT_ID = "quiz_attempt_id"
+private const val ARG_QUIZ_ID = "quiz_id"
+private const val ARG_ATTEMPT_ID = "attempt_id"
+private const val ARG_QUIZ_ATTEMPT_ID = "quiz_attempt_id"
 
 
 class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener {
@@ -52,9 +52,9 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         arguments?.let {
-            quizId = it.getString(ARG__QUIZ_ID)!!
-            attemptId = it.getString(ARG__ATTEMPT_ID)!!
-            quizAttemptId = it.getString(ARG__QUIZ_ATTEMPT_ID)!!
+            quizId = it.getString(ARG_QUIZ_ID)!!
+            attemptId = it.getString(ARG_ATTEMPT_ID)!!
+            quizAttemptId = it.getString(ARG_QUIZ_ATTEMPT_ID)!!
         }
 
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
@@ -186,9 +186,9 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
         fun newInstance(quizId: String, attemptId: String, quizAttemptId: String) =
                 QuizFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG__QUIZ_ID, quizId)
-                        putString(ARG__ATTEMPT_ID, attemptId)
-                        putString(ARG__QUIZ_ATTEMPT_ID, quizAttemptId)
+                        putString(ARG_QUIZ_ID, quizId)
+                        putString(ARG_ATTEMPT_ID, attemptId)
+                        putString(ARG_QUIZ_ATTEMPT_ID, quizAttemptId)
 
 
                     }

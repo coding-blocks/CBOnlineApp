@@ -114,7 +114,7 @@ class VideoPlayerActivity : AppCompatActivity(),
     private fun setupViewPager(attemptId: String) {
         val adapter = TabLayoutAdapter(supportFragmentManager)
         adapter.add(VideoDoubtFragment.newInstance(attemptId), "Doubts")
-        adapter.add(VideoNotesFragment.newInstance(attemptId), "Note")
+        adapter.add(VideoNotesFragment.newInstance(attemptId), "Notes")
 
         player_viewpager.adapter = adapter
         player_tabs.setupWithViewPager(player_viewpager)
