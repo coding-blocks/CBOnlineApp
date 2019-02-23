@@ -16,8 +16,11 @@ import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.cbonlineapp.utils.observer
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourse
+import com.crashlytics.android.Crashlytics
+import com.crashlytics.android.core.CrashlyticsCore
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
+import com.google.firebase.FirebaseException
 import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
@@ -174,7 +177,15 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                                                     ?: "", instructor?.photo ?: "",
                                                             "", myCourses.runAttempts!![0].id!!, myCourses.course!!.id))
                                                     Log.e("TAG", "ID : ${instructor?.id}  Name : ${instructor?.name}")
-                                                    insertCourseAndInstructor(myCourses.course!!, instructor!!)
+
+                                                    myCourses.course?.let { c ->
+                                                        instructor?.let { i ->
+                                                            insertCourseAndInstructor(c, i)
+                                                        } ?: CrashlyticsCore.getInstance().apply {
+                                                            setString("course", c.id)
+                                                            log("Instructor is NULL")
+                                                        }
+                                                    }
                                                 }
                                             }
                                         })
