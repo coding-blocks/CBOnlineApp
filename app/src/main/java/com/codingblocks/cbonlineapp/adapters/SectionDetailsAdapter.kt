@@ -124,7 +124,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             itemView.title.textColor = context.resources.getColor(R.color.green)
                             itemView.lectureTime.textColor = context.resources.getColor(R.color.green)
                             itemView.lectures.textColor = context.resources.getColor(R.color.green)
-                        }else{
+                        } else {
                             itemView.title.textColor = context.resources.getColor(R.color.black)
                             itemView.lectureTime.textColor = context.resources.getColor(R.color.black)
                             itemView.lectures.textColor = context.resources.getColor(R.color.black)
@@ -134,9 +134,17 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                 if (!content.contentLecture.lectureUid.isNullOrEmpty()) {
                                     val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
                                     ll.addView(inflatedView)
+                                    if (content.progress == "DONE") {
+                                        subTitle.textColor = context.resources.getColor(R.color.green)
+                                        downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
+                                    }
                                     if (content.contentLecture.isDownloaded == "false") {
                                         downloadBtn.background = context.getDrawable(android.R.drawable.stat_sys_download)
                                         inflatedView.setOnClickListener {
+                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to content.contentLecture.lectureUrl, "attemptId" to content.attempt_id, "contentId" to content.id,"downloaded" to false).singleTop())
+
+                                        }
+                                        downloadBtn.setOnClickListener {
                                             if (MediaUtils.checkPermission(context)) {
                                                 starter.startDownload(url, data.id, content.contentLecture.lectureContentId, content.title)
                                                 downloadBtn.isEnabled = false
@@ -147,13 +155,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                         }
                                     } else {
                                         downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
-                                        if (content.progress == "DONE") {
-                                            subTitle.textColor = context.resources.getColor(R.color.green)
-                                            downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
-//                                    downloadBtn.setOnClickListener {
-//                                        updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)
-//                                    }
-                                        }
                                         inflatedView.setOnClickListener {
                                             if (content.progress == "UNDONE") {
                                                 if (content.progressId.isEmpty())
@@ -161,7 +162,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                                 else
                                                     updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
                                             }
-                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url, "attemptId" to content.attempt_id, "contentId" to content.id).singleTop())
+                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url, "attemptId" to content.attempt_id, "contentId" to content.id,"downloaded" to true).singleTop())
                                         }
                                     }
                                 }

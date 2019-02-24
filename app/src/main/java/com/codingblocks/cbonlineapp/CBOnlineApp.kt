@@ -45,6 +45,7 @@ class CBOnlineApp : Application() {
                     // Updates the network data source to use the OKHttp implementation
                     val interceptor = CustomResponseInterceptor()
                     val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
                     val upstreamFactory = OkHttpDataSourceFactory(client, userAgent, listener)
 
                     // Adds a cache around the upstreamFactory
