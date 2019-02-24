@@ -207,4 +207,7 @@
     <string name="hideComments">Hide Comments</string>
     <string name="empty_doubts_text">No doubts yet. Ask one?</string>
     <string name="empty_notes_text">No notes yet. Write one?</string>
+    <string name="verify_desc">You need to verify your account first before continuing</string>
+    <string name="verify_title">Verify Now</string>
+    <string name="enroll_desc">You have been successfully enrolled into this course</string>
 </resources>

@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.adapters.VideosNotesAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.NotesModel
 import com.codingblocks.cbonlineapp.utils.OnItemClickListener
+import com.codingblocks.cbonlineapp.utils.observeOnce
 import com.codingblocks.cbonlineapp.utils.observer
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_notes.view.*
@@ -98,9 +99,7 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
                     }
                     if (networkList.size == notesList?.size) {
                         notesDao.insertAll(networkList)
-
-                        notesDao.getNotes(param1!!).observer(this) { list ->
-
+                        notesDao.getNotes(param1!!).observeOnce { list ->
                             // remove items which are deleted
                             val sum = list + networkList
                             sum.groupBy { it.nttUid }

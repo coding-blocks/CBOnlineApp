@@ -117,7 +117,7 @@ interface OnlineJsonApi {
     fun updateNoteById(@Path("noteid") id: String, @Body params: Note)
 
     @POST("notes")
-    fun createNote(@Body params: Notes): Call<Note>
+    fun createNote(@Body params: Notes): Call<Notes>
 
     @POST("quiz_attempts")
     fun createQuizAttempt(@Body params: QuizAttempt): Call<QuizAttempt>

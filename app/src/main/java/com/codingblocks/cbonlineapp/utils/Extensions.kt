@@ -16,6 +16,16 @@ fun <T> LiveData<T>.observer(owner: LifecycleOwner, onEmission: (T) -> Unit) {
     })
 }
 
+fun <T> LiveData<T>.observeOnce(onEmission: (T) -> Unit) {
+    val observer = object : Observer<T> {
+        override fun onChanged(value: T) {
+            onEmission(value)
+            removeObserver(this)
+        }
+    }
+    observeForever(observer)
+}
+
 fun formatDate(date: String): String {
     var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
     if (date.isEmpty()){

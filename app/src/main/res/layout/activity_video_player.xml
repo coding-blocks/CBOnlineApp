@@ -44,6 +44,7 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/videoFab"
         android:elevation="10dp"
+        app:hideMotionSpec=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

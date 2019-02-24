@@ -169,17 +169,16 @@ class VideoPlayerActivity : AppCompatActivity(),
                 Clients.onlineV2JsonApi.createNote(note).enqueue(retrofitCallback { throwable, response ->
                     response?.body().let {
                         noteDialog.dismiss()
-                        thread {
+                        if(response?.isSuccessful!!)
                             try {
                                 notesDao.insert(NotesModel(it!!.id
                                         ?: "", it.duration ?: 0.0, it.text ?: "", it.content?.id
-                                        ?: "", it.runAttempt?.id ?: "", it.createdAt
+                                        ?: "", attemptId, it.createdAt
                                         ?: "", it.deletedAt
                                         ?: ""))
                             } catch (e: Exception) {
                                 info { "error" + e.localizedMessage }
                             }
-                        }
                     }
                 })
             }

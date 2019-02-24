@@ -19,12 +19,12 @@ object Components {
         val updateView = context.layoutInflater.inflate(R.layout.custom_dialog, null)
         when(type){
             "verify" -> {
-                updateView.okBtn.text = "Verify Now"
-                updateView.description.text = "You need to verify your account first before continuing"
+                updateView.okBtn.text = context.getString(R.string.verify_title)
+                updateView.description.text = context.getString(R.string.verify_desc)
             }
             "trial" ->{
                 updateView.okBtn.text = "Explore Now"
-                updateView.description.text = "You have been successfully enrolled into this course"
+                updateView.description.text = context.getString(R.string.enroll_desc)
             }
             "exit" ->{
                 updateView.okBtn.text = "Okay"
@@ -44,7 +44,6 @@ object Components {
                     customTabsIntent.launchUrl(context, Uri.parse("https://account.codingblocks.com/users/me"))
                 }
                 "exit" -> {
-                    updateView.okBtn.text = "Yes"
                     (context as Activity).finish()
                 }
 
