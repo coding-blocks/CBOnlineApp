@@ -108,10 +108,10 @@ interface OnlineJsonApi {
     fun getNotesByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<Note>>
 
     @DELETE("notes/{noteid}")
-    fun deleteNoteById(@Path("noteid") id: String): Call<ResponseBody>
+    fun deleteNoteById(@Path("noteid") id: String): Call<Notes>
 
     @PATCH("notes/{noteid}")
-    fun updateNoteById(@Path("noteid") id: String, @Body params: Note)
+    fun updateNoteById(@Path("noteid") id: String, @Body params: Notes): Call<ResponseBody>
 
     @POST("notes")
     fun createNote(@Body params: Notes): Call<Notes>
