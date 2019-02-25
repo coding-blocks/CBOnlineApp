@@ -7,10 +7,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
-import com.codingblocks.cbonlineapp.database.*
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.ContentDao
+import com.codingblocks.cbonlineapp.database.NotesDao
+import com.codingblocks.cbonlineapp.database.NotesModel
 import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.onlineapi.Clients
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.item_notes.view.*
+import org.jetbrains.anko.design.snackbar
 import java.util.*
 
 
@@ -44,7 +49,7 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
     }
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-        holder.bindView(notesData[position],position)
+        holder.bindView(notesData[position], position)
     }
 
     inner class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -60,45 +65,32 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
 
             itemView.editTv.setOnClickListener {
 
+
             }
 
             itemView.deleteTv.setOnClickListener {
-                Clients.onlineV2JsonApi.deleteNoteById(note.nttUid).enqueue(retrofitCallback { throwable, response ->
-                    response.let {
-                        if(it?.isSuccessful!!){
-                            notesDao.deleteNoteByID(note.nttUid)
-//                            notesData.removeAt(position)
-//                            notifyDataSetChanged()
-
+                notesData.removeAt(position)
+                notifyItemRemoved(position)
+                itemView.snackbar("Deleted Accidentally ??", "Undo") {
+                    notesData.add(position, note)
+                    notifyItemInserted(position)
+                }.addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                        if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                            Clients.onlineV2JsonApi.deleteNoteById(note.nttUid).enqueue(retrofitCallback { throwable, response ->
+                                response.let {
+                                    if (it?.isSuccessful!!) {
+                                        notesDao.deleteNoteByID(note.nttUid)
+                                    }
+                                }
+                            })
                         }
                     }
-                })
+                }).setActionTextColor(context.resources.getColor(R.color.salmon))
+
             }
         }
 
-        private fun resolveDoubt(doubt: DoubtsModel) {
-//            val solvedDoubt = DoubtsJsonApi()
-//            solvedDoubt.body = doubt.body
-//            solvedDoubt.title = doubt.title
-//            val runAttempts = RunAttemptsModel() // type run-attempts
-//            val contents = Contents() // type contents
-//            runAttempts.id = doubt.runAttemptId
-//            contents.id = doubt.contentId
-//            solvedDoubt.status = "RESOLVED"
-//            solvedDoubt.discourseTopicId = doubt.discourseTopicId
-//            solvedDoubt.id = doubt.dbtUid
-//            solvedDoubt.resolvedById = (context as Activity).getPrefs().SP_USER_ID
-//            solvedDoubt.postrunAttempt = runAttempts
-//            solvedDoubt.content = contents
-//            Clients.onlineV2JsonApi.resolveDoubt(doubt.dbtUid, solvedDoubt).enqueue(retrofitCallback { throwable, response ->
-//                response?.body().let {
-//                    if (response?.isSuccessful!!) {
-//                        doubtDao.updateStatus(doubt.dbtUid, solvedDoubt.status)
-//                    }
-//                }
-//            })
-
-        }
     }
 
     fun secToTime(time: Double): String {

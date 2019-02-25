@@ -107,9 +107,6 @@ interface OnlineJsonApi {
     @GET("run_attempts/{runAttemptId}/relationships/notes")
     fun getNotesByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<Note>>
 
-    @DELETE("notes/{noteid}/undo")
-    fun undoDelete(@Path("noteid") id: String): Call<Note>
-
     @DELETE("notes/{noteid}")
     fun deleteNoteById(@Path("noteid") id: String): Call<ResponseBody>
 
