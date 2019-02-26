@@ -55,42 +55,51 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
     private fun initDownload(intent: Intent) {
         notificationManager.notify(0, notificationBuilder.build())
         var downloadCount = 0
-        val url = intent.getStringExtra("url")
-        Clients.initiateDownload(url, "index.m3u8").enqueue(retrofitCallback { _, response ->
-            response?.body()?.let { indexResponse ->
-                writeResponseBodyToDisk(indexResponse, url, "index.m3u8")
-            }
-        })
+        val downloadUrl = intent.getStringExtra("url")
+        val url = downloadUrl.substring(38, (downloadUrl.length - 11))
 
-        Clients.initiateDownload(url, "video.key").enqueue(retrofitCallback { throwable, response ->
-            response?.body()?.let { videoResponse ->
-                writeResponseBodyToDisk(videoResponse, url, "video.key")
-            }
-        })
+        Clients.api.getVideoDownloadKey(downloadUrl).enqueue(retrofitCallback { throwable, downloadKey ->
+            downloadKey?.body().let {
+                val keyId = it?.get("keyId")?.asString ?: ""
+                val signature = it?.get("signature")?.asString ?: ""
+                val policy = it?.get("policyString")?.asString ?: ""
+                Clients.initiateDownload(url, "index.m3u8", keyId, signature, policy).enqueue(retrofitCallback { _, response ->
+                    response?.body()?.let { indexResponse ->
+                        writeResponseBodyToDisk(indexResponse, url, "index.m3u8")
+                    }
+                })
 
-        Clients.initiateDownload(url, "video.m3u8").enqueue(retrofitCallback { throwable, response ->
-            response?.body()?.let { keyResponse ->
-                writeResponseBodyToDisk(keyResponse, url, "video.m3u8")
-                val videoChunks = MediaUtils.getCourseDownloadUrls(url, this)
-                videoChunks.forEach { videoName: String ->
-                    Clients.initiateDownload(url, videoName).enqueue(retrofitCallback { throwable, response ->
-                        val isDownloaded = writeResponseBodyToDisk(response?.body()!!, url, videoName)
-                        if (isDownloaded) {
-                            if (videoName == "video00000.ts") {
-                                thread {
-                                    contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "inprogress")
+                Clients.initiateDownload(url, "video.key", keyId, signature, policy).enqueue(retrofitCallback { throwable, response ->
+                    response?.body()?.let { videoResponse ->
+                        writeResponseBodyToDisk(videoResponse, url, "video.key")
+                    }
+                })
+
+                Clients.initiateDownload(url, "video.m3u8", keyId, signature, policy).enqueue(retrofitCallback { throwable, response ->
+                    response?.body()?.let { keyResponse ->
+                        writeResponseBodyToDisk(keyResponse, url, "video.m3u8")
+                        val videoChunks = MediaUtils.getCourseDownloadUrls(url, this)
+                        videoChunks.forEach { videoName: String ->
+                            Clients.initiateDownload(url, videoName, keyId, signature, policy).enqueue(retrofitCallback { throwable, response ->
+                                val isDownloaded = writeResponseBodyToDisk(response?.body()!!, url, videoName)
+                                if (isDownloaded) {
+                                    if (videoName == "video00000.ts") {
+                                        thread {
+                                            contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "inprogress")
+                                        }
+                                    }
+                                    downloadCount++
                                 }
-                            }
-                            downloadCount++
+                                if (downloadCount == videoChunks.size) {
+                                    onDownloadComplete(url)
+                                    thread {
+                                        contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "true")
+                                    }
+                                }
+                            })
                         }
-                        if (downloadCount == videoChunks.size) {
-                            onDownloadComplete(url)
-                            thread {
-                                contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "true")
-                            }
-                        }
-                    })
-                }
+                    }
+                })
             }
         })
     }

@@ -92,23 +92,6 @@ class VideoPlayerActivity : AppCompatActivity(),
             }
 
         }
-
-        val url = intent.getStringExtra("FOLDER_NAME")
-        val youtubeUrl = intent.getStringExtra("videoUrl")
-        attemptId = intent.getStringExtra("attemptId")
-        contentId = intent.getStringExtra("contentId")
-
-
-        if (youtubeUrl != null) {
-            displayYoutubeVideo.view?.visibility = View.VISIBLE
-            setupYoutubePlayer(youtubeUrl)
-        } else {
-            displayYoutubeVideo.view?.visibility = View.GONE
-            videoView.visibility = View.VISIBLE
-            setupVideoView(url)
-        }
-        setupViewPager(attemptId)
-
     }
 
     private fun setupViewPager(attemptId: String) {
@@ -228,6 +211,25 @@ class VideoPlayerActivity : AppCompatActivity(),
     override fun onDestroy() {
         super.onDestroy()
         videoView.release()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val url = intent.getStringExtra("FOLDER_NAME")
+        val youtubeUrl = intent.getStringExtra("videoUrl")
+        attemptId = intent.getStringExtra("attemptId")
+        contentId = intent.getStringExtra("contentId")
+
+
+        if (youtubeUrl != null) {
+            displayYoutubeVideo.view?.visibility = View.VISIBLE
+            setupYoutubePlayer(youtubeUrl)
+        } else {
+            displayYoutubeVideo.view?.visibility = View.GONE
+            videoView.visibility = View.VISIBLE
+            setupVideoView(url)
+        }
+        setupViewPager(attemptId)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
