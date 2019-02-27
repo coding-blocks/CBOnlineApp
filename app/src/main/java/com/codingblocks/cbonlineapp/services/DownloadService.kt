@@ -17,7 +17,6 @@ import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
 import okhttp3.ResponseBody
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
 import java.io.*
 import kotlin.concurrent.thread
@@ -60,6 +59,8 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
         var downloadCount = 0
         val downloadUrl = intent.getStringExtra("url")
         val url = downloadUrl.substring(38, (downloadUrl.length - 11))
+        val attemptId = intent.getStringExtra("attemptId")
+
 
         Clients.api.getVideoDownloadKey(downloadUrl).enqueue(retrofitCallback { throwable, downloadKey ->
             downloadKey?.body().let {
@@ -97,7 +98,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
                                         sendNotification(downloadProgress)
                                     }
                                     if (downloadCount == videoChunks.size) {
-                                        onDownloadComplete(url)
+                                        onDownloadComplete(url,attemptId,intent.getStringExtra("contentId"))
                                         thread {
                                             contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "true")
                                         }
@@ -173,9 +174,12 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
     }
 
 
-    private fun onDownloadComplete(url: String) {
+    private fun onDownloadComplete(url: String, attemptId: String, contentId: String) {
         val intent = Intent(this, VideoPlayerActivity::class.java)
         intent.putExtra("FOLDER_NAME", url)
+        intent.putExtra("attemptId", attemptId)
+        intent.putExtra("contentId", contentId)
+
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT)

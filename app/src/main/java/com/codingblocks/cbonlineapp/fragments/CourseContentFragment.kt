@@ -47,9 +47,9 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 //        }
 //    }
 
-    override fun startDownload(url: String, id: String, lectureContentId: String, title: String) {
+    override fun startDownload(url: String, id: String, lectureContentId: String, title: String, attemptId: String, contentId: String) {
 //        downloadBinder?.startDownload(url,0, id, lectureContentId, title)
-        startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId, "title" to title)
+        startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId, "title" to title, "attemptId" to attemptId,"contentId" to contentId)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
