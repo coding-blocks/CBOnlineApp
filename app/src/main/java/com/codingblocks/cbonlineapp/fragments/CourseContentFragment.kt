@@ -1,12 +1,7 @@
 package com.codingblocks.cbonlineapp.fragments
 
 
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +14,6 @@ import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.CourseRun
 import com.codingblocks.cbonlineapp.database.CourseSection
-import com.codingblocks.cbonlineapp.services.DownloadBinder
 import com.codingblocks.cbonlineapp.services.DownloadService
 import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -53,9 +47,9 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 //        }
 //    }
 
-    override fun startDownload(url: String, id: String, lectureContentId: String, title: String) {
+    override fun startDownload(url: String, id: String, lectureContentId: String, title: String, attemptId: String, contentId: String) {
 //        downloadBinder?.startDownload(url,0, id, lectureContentId, title)
-        startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId, "title" to title)
+        startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId, "title" to title, "attemptId" to attemptId,"contentId" to contentId)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,7 +113,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             }
         }
     }
-
 
 
 }
