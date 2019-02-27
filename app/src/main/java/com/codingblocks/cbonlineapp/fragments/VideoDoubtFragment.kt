@@ -71,7 +71,7 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
     private fun fetchDoubts() {
         Clients.onlineV2JsonApi.getDoubtByAttemptId(param1!!).enqueue(retrofitCallback { throwable, response ->
             response?.body().let {
-                if (response!!.isSuccessful) {
+                if (response != null && response.isSuccessful) {
                     it?.forEach {
                         try {
                             doubtsDao.insert(DoubtsModel(it.id
