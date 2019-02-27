@@ -7,10 +7,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
-import com.codingblocks.cbonlineapp.database.*
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.ContentDao
+import com.codingblocks.cbonlineapp.database.NotesDao
+import com.codingblocks.cbonlineapp.database.NotesModel
 import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Contents
+import com.codingblocks.onlineapi.models.Notes
+import com.codingblocks.onlineapi.models.RunAttemptsModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.item_notes.view.*
+import org.jetbrains.anko.design.snackbar
 import java.util.*
 
 
@@ -44,7 +52,7 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
     }
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-        holder.bindView(notesData[position],position)
+        holder.bindView(notesData[position], position)
     }
 
     inner class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -59,61 +67,84 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
             }
 
             itemView.editTv.setOnClickListener {
+                if (itemView.editTv.text == "Edit") {
+                    itemView.editTv.text = "Save"
+                    itemView.deleteTv.text = "Cancel"
+                    itemView.bodyTv.isEnabled = true
+                } else {
+                    createNote(note)
+                }
 
             }
 
             itemView.deleteTv.setOnClickListener {
-                Clients.onlineV2JsonApi.deleteNoteById(note.nttUid).enqueue(retrofitCallback { throwable, response ->
-                    response.let {
-                        if(it?.isSuccessful!!){
-                            notesDao.deleteNoteByID(note.nttUid)
-//                            notesData.removeAt(position)
-//                            notifyDataSetChanged()
+                if (itemView.deleteTv.text == "Delete") {
+                    notesData.removeAt(position)
+                    notifyItemRemoved(position)
+                    itemView.snackbar("Deleted Accidentally ??", "Undo") {
+                        notesData.add(position, note)
+                        notifyItemInserted(position)
+                    }.addCallback(object : Snackbar.Callback() {
+                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                            if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                                Clients.onlineV2JsonApi.deleteNoteById(note.nttUid).enqueue(retrofitCallback { throwable, response ->
+                                    response.let {
+                                        if (it?.isSuccessful!!) {
+                                            notesDao.deleteNoteByID(note.nttUid)
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                    }).setActionTextColor(context.resources.getColor(R.color.salmon))
+                } else {
+                    itemView.editTv.text = "Edit"
+                    itemView.deleteTv.text = "Delete"
+                    itemView.bodyTv.isEnabled = false
+                }
+            }
+        }
+
+        private fun createNote(notesModel: NotesModel) {
+            val note = Notes()
+            note.text = itemView.bodyTv.text.toString()
+            note.duration = notesModel.duration
+            val runAttempts = RunAttemptsModel() // type run_attempts
+            val contents = Contents() // type contents
+            runAttempts.id = notesModel.runAttemptId
+            contents.id = notesModel.contentId
+            note.runAttempt = runAttempts
+            note.content = contents
+            notesModel.text = itemView.bodyTv.text.toString()
+            Clients.onlineV2JsonApi.updateNoteById(notesModel.nttUid, note).enqueue(retrofitCallback { _, response ->
+                response?.body().let {
+                    if (response?.isSuccessful!!)
+                        try {
+                            itemView.editTv.text = "Edit"
+                            itemView.deleteTv.text = "Delete"
+                            itemView.bodyTv.isEnabled = false
+                            notesDao.update(notesModel)
+                        } catch (e: Exception) {
 
                         }
-                    }
-                })
+                }
+            })
+        }
+
+        private fun secToTime(time: Double): String {
+            val sec = time.toInt()
+            val seconds = sec % 60
+            var minutes = sec / 60
+            if (minutes >= 60) {
+                val hours = minutes / 60
+                minutes %= 60
+                if (hours >= 24) {
+                    val days = hours / 24
+                    return String.format("%d days %02d:%02d:%02d", days, hours % 24, minutes, seconds)
+                }
+                return String.format("%02d:%02d:%02d", hours, minutes, seconds)
             }
+            return String.format("00:%02d:%02d", minutes, seconds)
         }
-
-        private fun resolveDoubt(doubt: DoubtsModel) {
-//            val solvedDoubt = DoubtsJsonApi()
-//            solvedDoubt.body = doubt.body
-//            solvedDoubt.title = doubt.title
-//            val runAttempts = RunAttemptsModel() // type run-attempts
-//            val contents = Contents() // type contents
-//            runAttempts.id = doubt.runAttemptId
-//            contents.id = doubt.contentId
-//            solvedDoubt.status = "RESOLVED"
-//            solvedDoubt.discourseTopicId = doubt.discourseTopicId
-//            solvedDoubt.id = doubt.dbtUid
-//            solvedDoubt.resolvedById = (context as Activity).getPrefs().SP_USER_ID
-//            solvedDoubt.postrunAttempt = runAttempts
-//            solvedDoubt.content = contents
-//            Clients.onlineV2JsonApi.resolveDoubt(doubt.dbtUid, solvedDoubt).enqueue(retrofitCallback { throwable, response ->
-//                response?.body().let {
-//                    if (response?.isSuccessful!!) {
-//                        doubtDao.updateStatus(doubt.dbtUid, solvedDoubt.status)
-//                    }
-//                }
-//            })
-
-        }
-    }
-
-    fun secToTime(time: Double): String {
-        val sec = time.toInt()
-        val seconds = sec % 60
-        var minutes = sec / 60
-        if (minutes >= 60) {
-            val hours = minutes / 60
-            minutes %= 60
-            if (hours >= 24) {
-                val days = hours / 24
-                return String.format("%d days %02d:%02d:%02d", days, hours % 24, minutes, seconds)
-            }
-            return String.format("%02d:%02d:%02d", hours, minutes, seconds)
-        }
-        return String.format("00:%02d:%02d", minutes, seconds)
     }
 }

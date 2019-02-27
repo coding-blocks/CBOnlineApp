@@ -17,6 +17,8 @@ import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
 import okhttp3.ResponseBody
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+import org.jetbrains.anko.toast
 import java.io.*
 import kotlin.concurrent.thread
 
@@ -30,9 +32,10 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
         NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_file_download)
                 .setContentTitle("Download")
+                .setOnlyAlertOnce(true)
                 .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.mipmap.ic_launcher))
                 .setContentText("Downloading File")
-                .setProgress(0, 0, true)
+                .setProgress(100, 0, false)
                 .setColor(resources.getColor(R.color.colorPrimaryDark))
                 .setOngoing(true) // THIS is the important line
                 .setAutoCancel(false)
@@ -55,42 +58,58 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
     private fun initDownload(intent: Intent) {
         notificationManager.notify(0, notificationBuilder.build())
         var downloadCount = 0
-        val url = intent.getStringExtra("url")
-        Clients.initiateDownload(url, "index.m3u8").enqueue(retrofitCallback { _, response ->
-            response?.body()?.let { indexResponse ->
-                writeResponseBodyToDisk(indexResponse, url, "index.m3u8")
-            }
-        })
+        val downloadUrl = intent.getStringExtra("url")
+        val url = downloadUrl.substring(38, (downloadUrl.length - 11))
 
-        Clients.initiateDownload(url, "video.key").enqueue(retrofitCallback { throwable, response ->
-            response?.body()?.let { videoResponse ->
-                writeResponseBodyToDisk(videoResponse, url, "video.key")
-            }
-        })
+        Clients.api.getVideoDownloadKey(downloadUrl).enqueue(retrofitCallback { throwable, downloadKey ->
+            downloadKey?.body().let {
+                val keyId = it?.get("keyId")?.asString ?: ""
+                val signature = it?.get("signature")?.asString ?: ""
+                val policy = it?.get("policyString")?.asString ?: ""
+                Clients.initiateDownload(url, "index.m3u8", keyId, signature, policy).enqueue(retrofitCallback { _, response ->
+                    response?.body()?.let { indexResponse ->
+                        writeResponseBodyToDisk(indexResponse, url, "index.m3u8")
+                    }
+                })
 
-        Clients.initiateDownload(url, "video.m3u8").enqueue(retrofitCallback { throwable, response ->
-            response?.body()?.let { keyResponse ->
-                writeResponseBodyToDisk(keyResponse, url, "video.m3u8")
-                val videoChunks = MediaUtils.getCourseDownloadUrls(url, this)
-                videoChunks.forEach { videoName: String ->
-                    Clients.initiateDownload(url, videoName).enqueue(retrofitCallback { throwable, response ->
-                        val isDownloaded = writeResponseBodyToDisk(response?.body()!!, url, videoName)
-                        if (isDownloaded) {
-                            if (videoName == "video00000.ts") {
-                                thread {
-                                    contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "inprogress")
+                Clients.initiateDownload(url, "video.key", keyId, signature, policy).enqueue(retrofitCallback { throwable, response ->
+                    response?.body()?.let { videoResponse ->
+                        writeResponseBodyToDisk(videoResponse, url, "video.key")
+                    }
+                })
+
+                Clients.initiateDownload(url, "video.m3u8", keyId, signature, policy).enqueue(retrofitCallback { throwable, response ->
+                    response?.body()?.let { keyResponse ->
+                        writeResponseBodyToDisk(keyResponse, url, "video.m3u8")
+                        val videoChunks = MediaUtils.getCourseDownloadUrls(url, this)
+                        videoChunks.forEach { videoName: String ->
+                            Clients.initiateDownload(url, videoName, keyId, signature, policy).enqueue(retrofitCallback { throwable, response ->
+                                try {
+                                    val isDownloaded = writeResponseBodyToDisk(response?.body()!!, url, videoName)
+                                    if (isDownloaded) {
+                                        if (videoName == "video00000.ts") {
+                                            thread {
+                                                contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "inprogress")
+                                            }
+                                        }
+                                        downloadCount++
+                                        val downloadProgress = ((downloadCount.toDouble() / videoChunks.size) * 100).toInt()
+                                        sendNotification(downloadProgress)
+                                    }
+                                    if (downloadCount == videoChunks.size) {
+                                        onDownloadComplete(url)
+                                        thread {
+                                            contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "true")
+                                        }
+                                    }
+                                } catch (e: Exception) {
+                                    contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "false")
+                                    toast("There was some issue with your network.Please Try Again !!")
                                 }
-                            }
-                            downloadCount++
+                            })
                         }
-                        if (downloadCount == videoChunks.size) {
-                            onDownloadComplete(url)
-                            thread {
-                                contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "true")
-                            }
-                        }
-                    })
-                }
+                    }
+                })
             }
         })
     }
@@ -149,7 +168,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
     //function to update progress according to download progress
     private fun sendNotification(download: Int) {
         notificationBuilder.setProgress(100, download, false)
-        notificationBuilder.setContentText(String.format("Downloaded (%d/%d) MB", download, download))
+        notificationBuilder.setContentText("Downloaded $download %")
         notificationManager.notify(0, notificationBuilder.build())
     }
 
@@ -174,3 +193,4 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
     }
 
 }
+

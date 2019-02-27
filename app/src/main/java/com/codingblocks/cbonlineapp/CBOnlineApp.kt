@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp
 
 import android.app.Application
+import android.content.Context
 import com.codingblocks.onlineapi.CustomResponseInterceptor
 import com.devbrackets.android.exomedia.ExoMedia
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
@@ -16,6 +17,7 @@ class CBOnlineApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        mInstance = this
         Picasso.setSingletonInstance(Picasso.Builder(this).build())
         ViewPump.init(ViewPump.builder()
                 .addInterceptor(CalligraphyInterceptor(
@@ -27,6 +29,13 @@ class CBOnlineApp : Application() {
         configureExoMedia()
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
 //            shortcutAction(::updateShortcuts)
+    }
+
+    companion object {
+        lateinit var mInstance: CBOnlineApp
+        fun getContext(): Context? {
+            return mInstance.applicationContext
+        }
     }
 
     private fun configureExoMedia() {
