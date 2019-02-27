@@ -1,7 +1,12 @@
 package com.codingblocks.cbonlineapp.fragments
 
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +19,7 @@ import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.CourseRun
 import com.codingblocks.cbonlineapp.database.CourseSection
+import com.codingblocks.cbonlineapp.services.DownloadBinder
 import com.codingblocks.cbonlineapp.services.DownloadService
 import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -25,11 +31,6 @@ import org.jetbrains.anko.support.v4.startService
 private const val ARG_ATTEMPT_ID = "attempt_id"
 
 class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
-    override fun startDownload(url: String, id: String, lectureContentId: String, title: String) {
-
-        startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId, "title" to title)
-    }
-
     lateinit var attemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -41,14 +42,37 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         database.courseRunDao()
     }
 
+//    private var downloadBinder: DownloadBinder? = null
+//
+//    private val serviceConnection = object : ServiceConnection {
+//        override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
+//            downloadBinder = iBinder as DownloadBinder
+//        }
+//
+//        override fun onServiceDisconnected(componentName: ComponentName) {
+//        }
+//    }
+
+    override fun startDownload(url: String, id: String, lectureContentId: String, title: String) {
+//        downloadBinder?.startDownload(url,0, id, lectureContentId, title)
+        startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId, "title" to title)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
         arguments?.let {
             attemptId = it.getString(ARG_ATTEMPT_ID)!!
         }
+//        startAndBindDownloadService()
 
     }
+
+//    private fun startAndBindDownloadService() {
+//        val downloadIntent = Intent(context, DownloadService::class.java)
+//        context!!.startService(downloadIntent)
+//        context!!.bindService(downloadIntent, serviceConnection, Context.BIND_AUTO_CREATE)
+//    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -65,8 +89,8 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             if (it.isNotEmpty()) {
                 view.sectionProgressBar.hide()
             }
-            courseDao.getRunByAtemptId(attemptId).observe(this, Observer<CourseRun>{courseRun ->
-                sectionAdapter.setData(it as ArrayList<CourseSection>,courseRun.premium,courseRun.crStart)
+            courseDao.getRunByAtemptId(attemptId).observe(this, Observer<CourseRun> { courseRun ->
+                sectionAdapter.setData(it as ArrayList<CourseSection>, courseRun.premium, courseRun.crStart)
             })
         })
 
@@ -95,6 +119,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             }
         }
     }
+
 
 
 }
