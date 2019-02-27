@@ -55,6 +55,11 @@ class VideoPlayerFullScreenActivity : AppCompatActivity(), OnPreparedListener {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        videoView.pause()
+    }
+
     override fun onPrepared() {
         videoView.start()
     }
