@@ -2,11 +2,17 @@ package com.codingblocks.cbonlineapp.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.CourseRun
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.ui.MyCourseCardUi
+import com.codingblocks.cbonlineapp.utils.loadSvg
+import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import java.util.*
 
@@ -14,6 +20,9 @@ import java.util.*
 class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
                         val context: Context,
                         private val courseWithInstructorDao: CourseWithInstructorDao, var type: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AnkoLogger {
+
+    val ui = MyCourseCardUi()
+
     fun setData(courseData: ArrayList<CourseRun>) {
         this.courseData = courseData
 
@@ -35,7 +44,7 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
                 viewHolder = MyCoursesViewHolder(myCoursesView) // view holder for normal items
             }
             "allCourses" -> {
-                val allCoursesView = LayoutInflater.from(parent.context).inflate(R.layout.single_course_card_horizontal, parent, false)
+                val allCoursesView = ui.createView(AnkoContext.create(parent.context, parent))
                 viewHolder = AllCoursesViewHolder(allCoursesView) // view holder for normal items
             }
         }
@@ -53,6 +62,94 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
                 val allCoursesViewHolder = holder as AllCoursesViewHolder
                 allCoursesViewHolder.bindView(courseData!![position], courseWithInstructorDao, context)
             }
+        }
+    }
+
+    inner class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        private lateinit var courseDao: CourseDao
+        private lateinit var database: AppDatabase
+
+        fun bindView(courseRun: CourseRun, courseWithInstructorDao: CourseWithInstructorDao, context: Context) {
+
+            database = AppDatabase.getInstance(context)
+            courseDao = database.courseDao()
+            val data = courseDao.getCourse(courseRun.crCourseId)
+            ui.courseTitle.text = data.title
+            ui.courseCoverImageView.loadSvg(data.coverImage)
+            ui.courselogo.loadSvg(data.logo)
+
+            ui.courseRatingTv.text = data.rating.toString()
+            ui.courseRatingBar.rating = data.rating
+//
+//
+//                    val instructorsLiveData = courseWithInstructorDao.getInstructorWithCourseId(data.id)
+//
+//                    instructorsLiveData.observe({ (context as LifecycleOwner).lifecycle }, {
+//                        val instructorsList = it
+//
+//                        var instructors = ""
+//                        for (i in 0 until instructorsList!!.size) {
+//                            if (i == 0) {
+//                                Picasso.get().load(instructorsList[i].photo)
+//                                        .fit().into(itemView.courseInstrucImgView1)
+//                                instructors += instructorsList[i].name
+//                            } else if (i == 1) {
+//                                itemView.courseInstrucImgView2.visibility = View.VISIBLE
+//                                Picasso.get().load(instructorsList[i].photo)
+//                                        .fit().into(itemView.courseInstrucImgView2)
+//                                instructors += ", ${instructorsList[i].name}"
+//                            } else if (i >= 2) {
+//                                instructors += "+ " + (instructorsList.size - 2) + " more"
+//                                break
+//                            }
+//                        }
+//                        if (instructorsList.size < 2) {
+//                            itemView.courseInstrucImgView2.visibility = View.INVISIBLE
+//                        }
+//                        itemView.courseInstructors.text = instructors
+//
+//                    })
+//                    //bind Runs
+//                    courseRun.run {
+//                        itemView.coursePrice.text = "₹ $crPrice"
+//                        if (crPrice != crMrp && crMrp != "") {
+//                            itemView.courseActualPrice.text = "₹ $crMrp"
+//                            itemView.courseActualPrice.paintFlags = itemView.courseActualPrice.paintFlags or
+//                                    Paint.STRIKE_THRU_TEXT_FLAG
+//                        }
+//                        val sdf = SimpleDateFormat("MMM dd ")
+//                        var startDate: String? = ""
+//                        var endDate: String? = ""
+//                        try {
+//                            startDate = sdf.format(Date(crStart.toLong() * 1000))
+//                            endDate = sdf.format(Date(crEnrollmentEnd.toLong() * 1000))
+//                        } catch (nfe: NumberFormatException) {
+//                            nfe.printStackTrace()
+//                        }
+//                        itemView.courseRun.text = "Batches Starting $startDate"
+//                        itemView.enrollmentTv.text = "Hurry Up! Enrollment ends $endDate"
+//                    }
+
+            // TODO: Prefer to cache the created drawables
+
+
+//                        itemView.setOnClickListener {
+//                            val textPair: Pair<View, String> = Pair(itemView.courseTitle, "textTrans")
+//                            val imagePair: Pair<View, String> = Pair(itemView.courseLogo, "imageTrans")
+//
+//                            //TODO fix transition
+////                    val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity, textPair, imagePair)
+//                            it.context.startActivity(
+//                                    it.context.intentFor<CourseActivity>(
+//                                            "courseId" to data.id,
+//                                            "courseName" to data.title,
+//                                            "courseLogo" to data.logo
+//                                    )
+//                            )
+//                        }
+
+
         }
     }
 }
