@@ -10,19 +10,21 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import com.codingblocks.cbonlineapp.R
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
 import org.jetbrains.anko.custom.ankoView
-import org.jetbrains.anko.custom.style
 
 class MyCourseCardUi : AnkoComponent<ViewGroup> {
-    //custom views using anko
     inline fun ViewManager.circleImageView(theme: Int = 0, init: CircleImageView.() -> Unit) = ankoView({ CircleImageView(it) }, theme, init)
-
     lateinit var courseTitle: TextView
-    lateinit var courseDescription: TextView
+
+    lateinit var courseRun: TextView
+    lateinit var enrollment: TextView
+    lateinit var coursePrice: TextView
+    lateinit var courseMrp: TextView
     lateinit var courselogo: CircleImageView
     lateinit var courseRatingBar: RatingBar
     lateinit var courseRatingTv: TextView
@@ -30,12 +32,12 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
     lateinit var courseInstrucImgView2: CircleImageView
     lateinit var courseInstructors: TextView
     lateinit var courseCoverImageView: ImageView
-    lateinit var font: Typeface
+    var font: Typeface? = null
 
 
     override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui) {
         frameLayout {
-            font = Typeface.createFromAsset(context.assets, "fonts/Cabin-Medium.ttf")
+            font = ResourcesCompat.getFont(ctx, R.font.cabin_medium)
             cardView {
                 cardElevation = dip(4).toFloat()
                 radius = dip(15).toFloat()
@@ -63,69 +65,116 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                                 marginStart = dip(4)
                                 topMargin = dip(8)
                                 marginEnd = dip(4)
+                                bottomMargin = dip(12)
                             }
-                            linearLayout {
-                                courseRatingBar = themedRatingBar(the) {
-                                    numStars = 5
-                                    setIsIndicator(true)
-                                }.lparams(wrapContent, wrapContent)
-                                courseRatingTv = textView {
-                                    textSize = 12f
-                                    typeface = font
-                                }.lparams(wrapContent, wrapContent) {
-                                    marginStart = dip(14)
-                                }
-                            }
+//                            linearLayout {
+//                                courseRatingBar = ratingBar{
+//                                    numStars = 5
+//                                    setIsIndicator(true)
+//                                }.lparams(wrapContent, dip(40))
+//                                courseRatingTv = textView {
+//                                    textSize = 12f
+//                                    typeface = font
+//                                }.lparams(wrapContent, wrapContent) {
+//                                    marginStart = dip(14)
+//                                }
+//                            }.lparams(matchParent, wrapContent) {
+//                                marginStart = dip(8)
+//                                marginEnd = dip(8)
+//
+//                            }
                         }.lparams(matchParent, matchParent)
 
                         courseCoverImageView = imageView {
-                            scaleType = ImageView.ScaleType.CENTER_CROP
-                            background = context.resources.getDrawable(R.drawable.bck_rounded)
+                            scaleType = ImageView.ScaleType.FIT_XY
+                            adjustViewBounds = true
                         }.lparams(width = matchParent, height = matchParent)
 
 
                     }.lparams(width = 0, height = matchParent) {
-                        weight = 1.2f //not support value
+                        weight = 1.4f
                     }
                     linearLayout {
                         orientation = LinearLayout.VERTICAL
-                        view {
-                            backgroundResource = R.drawable.skeleton_bg_rounded
-                        }.lparams(width = matchParent, height = dip(20)) {
-                            marginStart = dip(12)
+                        linearLayout {
+                            orientation = LinearLayout.HORIZONTAL
+                            frameLayout {
+                                courseInstrucImgView1 = circleImageView {}.lparams(dip(45), dip(45)) {
+                                    topMargin = dip(8)
+                                }
+                                courseInstrucImgView2 = circleImageView {
+                                    elevation = dip(2).toFloat()
+                                    visibility = View.GONE
+                                }.lparams(dip(45), dip(45)) {
+                                    marginStart = dip(35)
+                                    topMargin = dip(8)
+                                }
+                            }.lparams(wrapContent, wrapContent)
+                            linearLayout {
+                                orientation = LinearLayout.VERTICAL
+                                textView("Instructors") {
+                                    typeface = font
+                                    textSize = 12f
+                                    textColor = Color.parseColor("#000000")
+                                }
+                                courseInstructors = textView {
+                                    typeface = font
+                                    textSize = 12f
+                                    textColor = Color.parseColor("#000000")
+                                }
+                            }.lparams(matchParent, wrapContent) {
+                                topMargin = dip(4)
+                                marginStart = dip(4)
+                                marginEnd = dip(12)
+                            }
+                        }.lparams(matchParent, wrapContent)
+                        linearLayout {
+                            coursePrice = textView {
+                                textSize = 18f
+                                textColor = context.resources.getColor(R.color.salmon)
+                                typeface = font
+
+                            }
+                            courseMrp = textView {
+                                textSize = 16f
+                                textColor = Color.parseColor("#666666")
+                                typeface = font
+                            }.lparams {
+                                gravity = Gravity.CENTER_VERTICAL
+                                marginStart = dip(8)
+                            }
+
+
+                        }.lparams(width = matchParent, height = dip(wrapContent)) {
                             topMargin = dip(12)
                             marginEnd = dip(12)
                         }
-                        view {
-                            backgroundResource = R.drawable.skeleton_bg_rounded
-                        }.lparams(width = matchParent, height = dip(15)) {
-                            marginStart = dip(12)
+                        courseRun = textView {
+                            textSize = 12f
+                            textColor = Color.parseColor("#666666")
+                            typeface = font
+                        }.lparams(matchParent, wrapContent) {
                             topMargin = dip(4)
-                            marginEnd = dip(24)
-                        }
-                        view {
-                            backgroundResource = R.drawable.skeleton_bg_rounded
-                        }.lparams(width = matchParent, height = dip(20)) {
-                            marginStart = dip(12)
-                            topMargin = dip(12)
                             marginEnd = dip(12)
                         }
                         view {
-                            backgroundResource = R.drawable.skeleton_bg_rounded
-                        }.lparams(width = matchParent, height = dip(15)) {
-                            marginStart = dip(12)
-                            topMargin = dip(4)
-                            marginEnd = dip(24)
+                            backgroundColor = Color.parseColor("#e8e8e8")
+                        }.lparams(width = matchParent, height = dip(2)) {
+                            topMargin = dip(8)
+                            marginEnd = dip(12)
                         }
-                        view {
-                            backgroundResource = R.drawable.skeleton_bg_rounded
-                        }.lparams(width = matchParent, height = dip(35)) {
-                            marginStart = dip(24)
-                            topMargin = dip(24)
-                            marginEnd = dip(24)
+                        enrollment = textView {
+                            textSize = 14f
+                            textColor = Color.parseColor("#000000")
+                            typeface = font
+                            textAlignment = View.TEXT_ALIGNMENT_CENTER
+                        }.lparams(matchParent, wrapContent) {
+                            topMargin = dip(4)
+                            marginEnd = dip(12)
                         }
                     }.lparams(width = 0, height = matchParent) {
-                        weight = 1.8f //not support value
+                        weight = 1.6f //not support value
+                        marginStart = dip(8)
                     }
                 }.lparams(width = matchParent)
             }.lparams(matchParent, matchParent) {

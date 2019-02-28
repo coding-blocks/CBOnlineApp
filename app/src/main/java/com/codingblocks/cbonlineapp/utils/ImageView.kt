@@ -12,9 +12,11 @@ import org.jetbrains.anko.uiThread
 fun ImageView.loadSvg(svgUrl: String, onDrawableCreated: ((Drawable) -> Unit)?) {
     setLayerType(View.LAYER_TYPE_SOFTWARE, null)
 
+
     doAsync {
         MediaUtils.okHttpClient.newCall((Request.Builder().url(svgUrl).build()))
                 .execute().body()?.let {
+
                     with(SVG.getFromInputStream(it.byteStream())) {
                         uiThread {
                             val picDrawable = PictureDrawable(renderToPicture(
