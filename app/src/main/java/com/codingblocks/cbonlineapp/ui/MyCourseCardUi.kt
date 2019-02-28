@@ -42,8 +42,6 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                 cardElevation = dip(4).toFloat()
                 radius = dip(15).toFloat()
                 preventCornerOverlap = false
-
-                //app:cardCornerRadius = 12dp //not support attribute
                 linearLayout {
                     weightSum = 3.0f
                     frameLayout {
@@ -88,6 +86,7 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                         courseCoverImageView = imageView {
                             scaleType = ImageView.ScaleType.FIT_XY
                             adjustViewBounds = true
+                            background = context.resources.getDrawable(R.drawable.placeholder_course_cover)
                         }.lparams(width = matchParent, height = matchParent)
 
 
