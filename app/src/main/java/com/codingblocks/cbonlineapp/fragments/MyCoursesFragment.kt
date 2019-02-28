@@ -98,12 +98,9 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
     private fun displayCourses(searchQuery: String = "") {
         runDao.getMyRuns().observer(this) {
-            if (!it.isEmpty()) {
-                skeletonScreen.hide()
-                courseDataAdapter.setData(it.filter { c ->
-                    c.title.contains(searchQuery, true)
-                } as ArrayList<CourseRun>)
-            }
+            courseDataAdapter.setData(it.filter { c ->
+                c.title.contains(searchQuery, true)
+            } as ArrayList<CourseRun>)
         }
     }
 
