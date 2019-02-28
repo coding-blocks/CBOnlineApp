@@ -12,10 +12,13 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
@@ -41,6 +44,8 @@ import java.util.*
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, AnkoLogger {
     private var doubleBackToExitPressedOnce = false
     lateinit var prefs: Prefs
+    var mFragmentToSet: Fragment? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +56,22 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toggle = ActionBarDrawerToggle(
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
+        drawer_layout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerStateChanged(newState: Int) {}
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+            override fun onDrawerClosed(drawerView: View) {
+                if (mFragmentToSet != null) {
+                    supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.fragment_holder, mFragmentToSet!!)
+                            .commit()
+                    mFragmentToSet = null
+                }
+            }
+
+            override fun onDrawerOpened(drawerView: View) {}
+
+        })
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
         val transaction = supportFragmentManager.beginTransaction()
@@ -127,7 +148,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     if (resp.isSuccessful) {
                         try {
                             val jSONObject = it.getAsJsonObject("data").getAsJsonObject("attributes")
-                            prefs.SP_USER_ID= it.getAsJsonObject("data").get("id").asString
+                            prefs.SP_USER_ID = it.getAsJsonObject("data").get("id").asString
                             prefs.SP_ONEAUTH_ID = jSONObject.get("oneauth-id").asString
                             prefs.SP_USER_IMAGE = jSONObject.get("photo").asString
                         } catch (e: Exception) {
@@ -208,14 +229,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun changeFragment(filter: String) {
-        val transaction = supportFragmentManager.beginTransaction()
         when (filter) {
-            "All Courses" -> transaction.replace(R.id.fragment_holder, AllCourseFragment())
-            "Home" -> transaction.replace(R.id.fragment_holder, HomeFragment())
-            "My Courses" -> transaction.replace(R.id.fragment_holder, MyCoursesFragment())
+            "All Courses" -> mFragmentToSet = AllCourseFragment()
+            "Home" -> mFragmentToSet = HomeFragment()
+            "My Courses" -> mFragmentToSet = MyCoursesFragment()
         }
-
-        transaction.commit()
         onBackPressed()
     }
 
