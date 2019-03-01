@@ -20,6 +20,9 @@ import com.codingblocks.cbonlineapp.activities.PdfActivity
 import com.codingblocks.cbonlineapp.activities.QuizActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.database.*
+import com.codingblocks.cbonlineapp.utils.Animations
+import com.codingblocks.cbonlineapp.utils.Animations.collapse
+import com.codingblocks.cbonlineapp.utils.Animations.expand
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
@@ -91,9 +94,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                 ll.removeAllViews()
                 ll.orientation = LinearLayout.VERTICAL
                 ll.visibility = View.GONE
-                itemView.lectures.text = "${it.size} Lectures"
+                itemView.lectures.text = "0/${it.size} Lectures Completed"
                 var duration: Long = 0
-                var sectionComplete: Int = 0
+                var sectionComplete = 0
                 for (content in it) {
                     info { "content id" + content.id }
                     if (content.progress == "DONE") {
@@ -117,20 +120,25 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                     val inflatedView = factory.inflate(R.layout.item_section_detailed_info, ll, false)
                     val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
                     val downloadBtn = inflatedView.findViewById(R.id.downloadBtn) as ImageView
+                    val contentType = inflatedView.findViewById(R.id.contentType) as ImageView
+
                     subTitle.text = content.title
 
                     if (!data.premium || premium && ((courseStartDate.toLong() * 1000) < System.currentTimeMillis())) {
                         if (sectionComplete == it.size) {
-                            itemView.title.textColor = context.resources.getColor(R.color.green)
-                            itemView.lectureTime.textColor = context.resources.getColor(R.color.green)
+//                            itemView.title.textColor = context.resources.getColor(R.color.green)
+//                            itemView.lectureTime.textColor = context.resources.getColor(R.color.green)
+                            itemView.lectures.text = "$sectionComplete/${it.size} Lectures Completed"
                             itemView.lectures.textColor = context.resources.getColor(R.color.green)
                         } else {
-                            itemView.title.textColor = context.resources.getColor(R.color.black)
-                            itemView.lectureTime.textColor = context.resources.getColor(R.color.black)
+//                            itemView.title.textColor = context.resources.getColor(R.color.black)
+//                            itemView.lectureTime.textColor = context.resources.getColor(R.color.black)
+                            itemView.lectures.text = "$sectionComplete/${it.size} Lectures Completed"
                             itemView.lectures.textColor = context.resources.getColor(R.color.black)
                         }
                         when {
                             content.contentable == "lecture" -> {
+                                contentType.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
                                 if (!content.contentLecture.lectureUid.isNullOrEmpty()) {
                                     val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
                                     ll.addView(inflatedView)
@@ -141,7 +149,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                     if (content.contentLecture.isDownloaded == "false") {
                                         downloadBtn.background = context.getDrawable(android.R.drawable.stat_sys_download)
                                         inflatedView.setOnClickListener {
-                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to content.contentLecture.lectureUrl, "attemptId" to content.attempt_id, "contentId" to content.id,"downloaded" to false).singleTop())
+                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to content.contentLecture.lectureUrl, "attemptId" to content.attempt_id, "contentId" to content.id, "downloaded" to false).singleTop())
 
                                         }
                                         downloadBtn.setOnClickListener {
@@ -162,14 +170,14 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                                 else
                                                     updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
                                             }
-                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url, "attemptId" to content.attempt_id, "contentId" to content.id,"downloaded" to true).singleTop())
+                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url, "attemptId" to content.attempt_id, "contentId" to content.id, "downloaded" to true).singleTop())
                                         }
                                     }
                                 }
 
                             }
                             content.contentable == "document" -> {
-                                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_document))
+                                contentType.setImageDrawable(context.getDrawable(R.drawable.ic_document))
                                 if (content.progress == "DONE") {
                                     subTitle.textColor = context.resources.getColor(R.color.green)
                                     downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
@@ -190,7 +198,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                 }
                             }
                             content.contentable == "video" -> {
-                                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_youtube_video))
+                                contentType.setImageDrawable(context.getDrawable(R.drawable.ic_youtube_video))
                                 if (content.progress == "DONE") {
                                     subTitle.textColor = context.resources.getColor(R.color.green)
                                     downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
@@ -213,7 +221,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                 }
                             }
                             content.contentable == "qna" -> {
-                                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_quiz))
+                                contentType.setImageDrawable(context.getDrawable(R.drawable.ic_quiz))
                                 if (content.progress == "DONE") {
                                     subTitle.textColor = context.resources.getColor(R.color.green)
                                     downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
@@ -236,6 +244,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
 
                         }
                     } else {
+                        contentType.visibility = View.GONE
                         downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_lock_outline_black_24dp))
                         ll.addView(inflatedView)
                     }
@@ -245,7 +254,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                     }
 
                     itemView.arrow.setOnClickListener {
-                        showOrHide(ll, itemView)
+                        showOrHide(ll, it)
                     }
                 }
             })
@@ -255,14 +264,14 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
 
     fun showOrHide(ll: View, itemView: View) {
         if (ll.visibility == View.GONE) {
-            ll.visibility = View.VISIBLE
+            expand(ll)
             arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                     0.5f)
             arrowAnimation.fillAfter = true
             arrowAnimation.duration = 350
             itemView.arrow.startAnimation(arrowAnimation)
         } else {
-            ll.visibility = View.GONE
+            collapse(ll)
             arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                     0.5f)
             arrowAnimation.fillAfter = true
@@ -350,4 +359,5 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
             }
         })
     }
+
 }

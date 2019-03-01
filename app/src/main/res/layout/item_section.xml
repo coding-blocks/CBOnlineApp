@@ -1,72 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/sectionRoot"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_margin="2dp"
+    app:cardCornerRadius="8dp">
 
-    <RelativeLayout
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:minHeight="60dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="8dp"
-            android:layout_toStartOf="@id/arrow"
-            android:fontFamily="@font/cabin_medium"
-            android:textColor="@android:color/primary_text_light"
-            android:textSize="16sp"
-            tools:text="Introduction And Logistics" />
-
-        <ImageButton
-        android:id="@+id/arrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="20dp"
-        android:background="?selectableItemBackgroundBorderless"
-        android:src="@drawable/plus" />
-
-        <TextView
-            android:id="@+id/lectures"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/title"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="@font/cabin_medium"
-            android:maxLines="1"
-            android:textColor="@android:color/primary_text_light"
-            android:textSize="13sp"
-            tools:text="3 Lectures" />
-
-        <TextView
-            android:id="@+id/lectureTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/title"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="8dp"
-            android:layout_toEndOf="@id/lectures"
-            android:fontFamily="@font/cabin_medium"
-            android:maxLines="1"
-            android:textColor="@android:color/primary_text_light"
-            android:textSize="13sp"
-            tools:text="30 Mins" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/sectionContents"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/sectionRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
-</LinearLayout>
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="60dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_toStartOf="@id/arrow"
+                android:fontFamily="@font/cabin_medium"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="16sp"
+                tools:text="Introduction And Logistics" />
+
+            <ImageButton
+                android:id="@+id/arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:src="@drawable/plus" />
+
+            <TextView
+                android:id="@+id/lectures"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="@font/cabin_medium"
+                android:maxLines="1"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="13sp"
+                tools:text="3 Lectures" />
+
+            <TextView
+                android:id="@+id/lectureTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="8dp"
+                android:layout_toEndOf="@id/lectures"
+                android:fontFamily="@font/cabin_medium"
+                android:maxLines="1"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="13sp"
+                tools:text="30 Mins" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/sectionContents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
