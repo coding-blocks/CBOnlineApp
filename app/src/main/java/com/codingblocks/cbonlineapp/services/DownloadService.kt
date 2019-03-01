@@ -105,6 +105,10 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
                                     }
                                 } catch (e: Exception) {
                                     contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "false")
+                                    notificationManager.cancel(0)
+                                    notificationBuilder.setOngoing(false)
+                                    notificationBuilder.setContentText("Download Failed")
+
                                     toast("There was some issue with your network.Please Try Again !!")
                                 }
                             })

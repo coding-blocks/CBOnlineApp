@@ -37,7 +37,6 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                         text = context.resources.getString(R.string.learn_to_code_interactively)
                         id = View.generateViewId()
                         textSize = 26f
-                        textColor = Color.BLACK
                         val typefaceValue = ResourcesCompat.getFont(ctx, R.font.cabin_semibold)
                         typeface = typefaceValue
                         textColor = context.resources.getColor(R.color.salmon)

@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.ProgressBarAnimation
@@ -134,6 +136,9 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     val sectionAdapter = SectionsDataAdapter(ArrayList())
                     rvExpendableView.layoutManager = LinearLayoutManager(this)
                     rvExpendableView.adapter = sectionAdapter
+                    val itemDecorator = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+                    itemDecorator.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider_black)!!)
+                    rvExpendableView.addItemDecoration(itemDecorator)
                     sections!!.forEachIndexed { index, section ->
                         GlobalScope.launch(Dispatchers.Main) {
                             val request = service.getSections(section.id!!)

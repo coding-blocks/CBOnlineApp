@@ -34,6 +34,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
+                android:background="@drawable/placeholder_course_cover"
                 android:scaleType="centerCrop" />
         </RelativeLayout>
 
@@ -44,6 +45,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_placeholder_logo"
             app:civ_border_color="#fff"
             app:civ_border_width="2dp"
             app:layout_constraintEnd_toEndOf="@+id/relativeLayout2"
@@ -247,9 +249,9 @@
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/cabin"
             android:text="Free Trial"
-            android:visibility="gone"
             android:textColor="@color/salmon"
             android:textSize="16sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
