@@ -84,9 +84,8 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                         }.lparams(matchParent, matchParent)
 
                         courseCoverImageView = imageView {
-                            scaleType = ImageView.ScaleType.FIT_XY
-                            adjustViewBounds = true
-                            background = context.resources.getDrawable(R.drawable.placeholder_course_cover)
+                            scaleType = ImageView.ScaleType.CENTER_CROP
+                            setImageResource(R.drawable.placeholder_course_cover)
                         }.lparams(width = matchParent, height = matchParent)
 
 
@@ -113,17 +112,17 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                                 orientation = LinearLayout.VERTICAL
                                 textView("Instructors") {
                                     typeface = font
-                                    textSize = 12f
+                                    textSize = 14f
                                     textColor = Color.parseColor("#000000")
                                 }
                                 courseInstructors = textView {
                                     typeface = font
-                                    textSize = 12f
+                                    textSize = 14f
                                     textColor = Color.parseColor("#000000")
                                 }
                             }.lparams(matchParent, wrapContent) {
-                                topMargin = dip(4)
-                                marginStart = dip(4)
+                                topMargin = dip(8)
+                                marginStart = dip(8)
                                 marginEnd = dip(12)
                             }
                         }.lparams(matchParent, wrapContent)
