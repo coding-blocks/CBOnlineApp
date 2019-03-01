@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.DownloadStarter
 import com.codingblocks.cbonlineapp.R
@@ -49,7 +51,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
     override fun startDownload(url: String, id: String, lectureContentId: String, title: String, attemptId: String, contentId: String) {
 //        downloadBinder?.startDownload(url,0, id, lectureContentId, title)
-        startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId, "title" to title, "attemptId" to attemptId,"contentId" to contentId)
+        startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId, "title" to title, "attemptId" to attemptId, "contentId" to contentId)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +80,10 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         val sectionAdapter = SectionDetailsAdapter(sectionsList, activity!!, this)
         view.rvExpendableView.layoutManager = LinearLayoutManager(context)
         view.rvExpendableView.adapter = sectionAdapter
+        val itemDecorator = DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL)
+        itemDecorator.setDrawable(ContextCompat.getDrawable(context!!, R.drawable.divider_black)!!)
+        view.rvExpendableView.addItemDecoration(itemDecorator)
+
         view.sectionProgressBar.show()
         sectionDao.getCourseSection(attemptId).observe(this, Observer<List<CourseSection>> {
             if (it.isNotEmpty()) {
