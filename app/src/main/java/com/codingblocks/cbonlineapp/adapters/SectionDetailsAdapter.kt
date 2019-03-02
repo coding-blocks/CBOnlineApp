@@ -20,16 +20,19 @@ import com.codingblocks.cbonlineapp.activities.PdfActivity
 import com.codingblocks.cbonlineapp.activities.QuizActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.database.*
-import com.codingblocks.cbonlineapp.utils.Animations
 import com.codingblocks.cbonlineapp.utils.Animations.collapse
 import com.codingblocks.cbonlineapp.utils.Animations.expand
 import com.codingblocks.cbonlineapp.utils.MediaUtils
+import com.codingblocks.cbonlineapp.utils.getDistinct
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.RunAttemptsModel
 import kotlinx.android.synthetic.main.item_section.view.*
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.textColor
 import kotlin.concurrent.thread
 
 
@@ -78,28 +81,33 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
 
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private var starter: DownloadStarter? = null
-
-
         fun bindView(data: CourseSection, starter: DownloadStarter) {
 
             itemView.title.text = data.name
-            this.starter = starter
-            info { "data id" + data.id }
-            sectionWithContentDao.getContentWithSectionId(data.id).observe(activity, Observer<List<CourseContent>> { it ->
-                val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
-//                if (ll.childCount != 0)
-//                    showOrHide(ll, itemView)
+            sectionWithContentDao.getContentWithSectionId(data.id).getDistinct().observe(activity, Observer<List<CourseContent>> { it ->
 
-                ll.removeAllViews()
-                ll.orientation = LinearLayout.VERTICAL
-                ll.visibility = View.GONE
+                val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
+                if (ll.visibility == View.VISIBLE) {
+                    ll.removeAllViews()
+                    expand(ll)
+                } else {
+                    ll.removeAllViews()
+                    ll.visibility = View.GONE
+                }
                 itemView.lectures.text = "0/${it.size} Lectures Completed"
                 var duration: Long = 0
                 var sectionComplete = 0
                 for (content in it) {
-                    info { "content id" + content.id }
+
+                    val factory = LayoutInflater.from(context)
+                    val inflatedView = factory.inflate(R.layout.item_section_detailed_info, ll, false)
+                    val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
+                    val downloadBtn = inflatedView.findViewById(R.id.downloadBtn) as ImageView
+                    val contentType = inflatedView.findViewById(R.id.contentType) as ImageView
+
                     if (content.progress == "DONE") {
+                        subTitle.textColor = context.resources.getColor(R.color.green)
+                        downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
                         sectionComplete++
                     }
                     if (content.contentable == "lecture")
@@ -111,28 +119,18 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                     val minute = duration / (1000 * 60) % 60
 
                     if (minute >= 1 && hour == 0L)
-                        itemView.lectureTime.text = ("$minute Min")
+                        itemView.lectureTime.text = ("$minute Mins")
                     else if (hour >= 1) {
                         itemView.lectureTime.text = ("$hour Hours")
                     } else
                         itemView.lectureTime.text = ("---")
-                    val factory = LayoutInflater.from(context)
-                    val inflatedView = factory.inflate(R.layout.item_section_detailed_info, ll, false)
-                    val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
-                    val downloadBtn = inflatedView.findViewById(R.id.downloadBtn) as ImageView
-                    val contentType = inflatedView.findViewById(R.id.contentType) as ImageView
-
                     subTitle.text = content.title
 
                     if (!data.premium || premium && ((courseStartDate.toLong() * 1000) < System.currentTimeMillis())) {
                         if (sectionComplete == it.size) {
-//                            itemView.title.textColor = context.resources.getColor(R.color.green)
-//                            itemView.lectureTime.textColor = context.resources.getColor(R.color.green)
                             itemView.lectures.text = "$sectionComplete/${it.size} Lectures Completed"
                             itemView.lectures.textColor = context.resources.getColor(R.color.green)
                         } else {
-//                            itemView.title.textColor = context.resources.getColor(R.color.black)
-//                            itemView.lectureTime.textColor = context.resources.getColor(R.color.black)
                             itemView.lectures.text = "$sectionComplete/${it.size} Lectures Completed"
                             itemView.lectures.textColor = context.resources.getColor(R.color.black)
                         }
@@ -142,10 +140,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                 if (!content.contentLecture.lectureUid.isNullOrEmpty()) {
                                     val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
                                     ll.addView(inflatedView)
-                                    if (content.progress == "DONE") {
-                                        subTitle.textColor = context.resources.getColor(R.color.green)
-                                        downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
-                                    }
                                     if (content.contentLecture.isDownloaded == "false") {
                                         downloadBtn.background = context.getDrawable(android.R.drawable.stat_sys_download)
                                         inflatedView.setOnClickListener {
@@ -162,7 +156,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                             }
                                         }
                                     } else {
-                                        downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
                                         inflatedView.setOnClickListener {
                                             if (content.progress == "UNDONE") {
                                                 if (content.progressId.isEmpty())
@@ -178,13 +171,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             }
                             content.contentable == "document" -> {
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_document))
-                                if (content.progress == "DONE") {
-                                    subTitle.textColor = context.resources.getColor(R.color.green)
-                                    downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
-//                                downloadBtn.setOnClickListener {
-//                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentDocument.documentContentId)
-//                                }
-                                }
                                 ll.addView(inflatedView)
                                 inflatedView.setOnClickListener {
                                     if (content.progress == "UNDONE") {
@@ -199,17 +185,8 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             }
                             content.contentable == "video" -> {
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_youtube_video))
-                                if (content.progress == "DONE") {
-                                    subTitle.textColor = context.resources.getColor(R.color.green)
-                                    downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
-
-//                                downloadBtn.setOnClickListener {
-//                                    updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentVideo.videoContentId)
-//                                }
-                                }
                                 ll.addView(inflatedView)
                                 inflatedView.setOnClickListener {
-                                    info { "resp" + content.progress + content.progressId }
                                     if (content.progress == "UNDONE") {
                                         if (content.progressId.isEmpty())
                                             setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentVideo.videoContentId)
@@ -222,13 +199,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             }
                             content.contentable == "qna" -> {
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_quiz))
-                                if (content.progress == "DONE") {
-                                    subTitle.textColor = context.resources.getColor(R.color.green)
-                                    downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
-//                                    downloadBtn.setOnClickListener {
-//                                        updateProgress(content.id, content.attempt_id, content.progressId, "UNDONE", content.contentable, data.id, content.contentLecture.lectureContentId)
-//                                    }
-                                }
                                 ll.addView(inflatedView)
                                 inflatedView.setOnClickListener {
                                     if (content.progress == "UNDONE") {
