@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.adapters
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import android.os.Environment
@@ -159,7 +160,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                     } else {
                                         downloadBtn.setOnClickListener {
 
-                                            CBOnlineApp.mInstance.alert("This lecture will be deleted !!!") {
+                                            (context as Activity).alert("This lecture will be deleted !!!") {
                                                 yesButton {
                                                     val file = context.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
                                                     val folderFile = File(file, "/$url")
@@ -167,7 +168,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                                     contentDao.updateContent(data.id, content.contentLecture.lectureContentId, "false")
                                                 }
                                                 noButton { it.dismiss() }
-                                            }
+                                            }.show()
 
                                         }
                                         inflatedView.setOnClickListener {

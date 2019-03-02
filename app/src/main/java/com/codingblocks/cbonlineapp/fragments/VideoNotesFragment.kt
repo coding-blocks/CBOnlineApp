@@ -86,7 +86,7 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
         val networkList: ArrayList<NotesModel> = ArrayList()
         Clients.onlineV2JsonApi.getNotesByAttemptId(param1!!).enqueue(retrofitCallback { throwable, response ->
             response?.body().let { notesList ->
-                if (response!!.isSuccessful) {
+                if (response?.isSuccessful == true) {
                     notesList?.forEach {
                         try {
                             networkList.add(NotesModel(it.id

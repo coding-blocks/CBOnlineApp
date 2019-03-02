@@ -121,18 +121,20 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun fetchToken(data: Uri) {
         val grantCode = data.getQueryParameter("code")
         Clients.api.getToken(grantCode).enqueue(retrofitCallback { error, response ->
-            if (response!!.isSuccessful) {
+            response.let {
+                if (response?.isSuccessful == true) {
 
-                val jwt = response.body()?.asJsonObject?.get("jwt")?.asString!!
-                val rt = response.body()?.asJsonObject?.get("refresh_token")?.asString!!
-                prefs.SP_ACCESS_TOKEN_KEY = grantCode
-                prefs.SP_JWT_TOKEN_KEY = jwt
-                prefs.SP_JWT_REFRESH_TOKEN = rt
-                Clients.authJwt = jwt
-                fetchUser()
-                Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
-            } else if (response.code() == 500 && prefs.SP_ACCESS_TOKEN_KEY == "access_token") {
-                Components.showconfirmation(this, "verify")
+                    val jwt = response.body()?.asJsonObject?.get("jwt")?.asString!!
+                    val rt = response.body()?.asJsonObject?.get("refresh_token")?.asString!!
+                    prefs.SP_ACCESS_TOKEN_KEY = grantCode
+                    prefs.SP_JWT_TOKEN_KEY = jwt
+                    prefs.SP_JWT_REFRESH_TOKEN = rt
+                    Clients.authJwt = jwt
+                    fetchUser()
+                    Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
+                } else if (response?.code() == 500 && prefs.SP_ACCESS_TOKEN_KEY == "access_token") {
+                    Components.showconfirmation(this, "verify")
+                }
             }
 
         })
