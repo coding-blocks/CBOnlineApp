@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.adapters
 
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.DownloadStarter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
@@ -29,10 +31,8 @@ import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.RunAttemptsModel
 import kotlinx.android.synthetic.main.item_section.view.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.singleTop
-import org.jetbrains.anko.textColor
+import org.jetbrains.anko.*
+import java.io.File
 import kotlin.concurrent.thread
 
 
@@ -141,6 +141,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                     val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
                                     ll.addView(inflatedView)
                                     if (content.contentLecture.isDownloaded == "false") {
+                                        downloadBtn.setImageDrawable(null)
                                         downloadBtn.background = context.getDrawable(android.R.drawable.stat_sys_download)
                                         inflatedView.setOnClickListener {
                                             it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to content.contentLecture.lectureUrl, "attemptId" to content.attempt_id, "contentId" to content.id, "downloaded" to false).singleTop())
@@ -148,7 +149,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                         }
                                         downloadBtn.setOnClickListener {
                                             if (MediaUtils.checkPermission(context)) {
-                                                starter.startDownload(content.contentLecture.lectureUrl, data.id, content.contentLecture.lectureContentId, content.title,content.attempt_id,content.id)
+                                                starter.startDownload(content.contentLecture.lectureUrl, data.id, content.contentLecture.lectureContentId, content.title, content.attempt_id, content.id)
                                                 downloadBtn.isEnabled = false
                                                 (downloadBtn.background as AnimationDrawable).start()
                                             } else {
@@ -156,6 +157,19 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                             }
                                         }
                                     } else {
+                                        downloadBtn.setOnClickListener {
+
+                                            CBOnlineApp.mInstance.alert("This lecture will be deleted !!!") {
+                                                yesButton {
+                                                    val file = context.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+                                                    val folderFile = File(file, "/$url")
+                                                    deleteRecursive(folderFile)
+                                                    contentDao.updateContent(data.id, content.contentLecture.lectureContentId, "false")
+                                                }
+                                                noButton { it.dismiss() }
+                                            }
+
+                                        }
                                         inflatedView.setOnClickListener {
                                             if (content.progress == "UNDONE") {
                                                 if (content.progressId.isEmpty())
@@ -328,6 +342,17 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                 }
             }
         })
+    }
+
+    fun deleteRecursive(fileOrDirectory: File) {
+
+        if (fileOrDirectory.isDirectory) {
+            for (child in fileOrDirectory.listFiles()) {
+                deleteRecursive(child)
+            }
+        }
+
+        fileOrDirectory.delete()
     }
 
 }
