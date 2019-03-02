@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.activities
 import android.animation.LayoutTransition
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -22,7 +23,10 @@ import com.codingblocks.cbonlineapp.utils.MyVideoControls
 import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.cbonlineapp.utils.pageChangeCallback
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.*
+import com.codingblocks.onlineapi.models.Contents
+import com.codingblocks.onlineapi.models.DoubtsJsonApi
+import com.codingblocks.onlineapi.models.Notes
+import com.codingblocks.onlineapi.models.RunAttemptsModel
 import com.devbrackets.android.exomedia.listener.OnPreparedListener
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
@@ -92,6 +96,24 @@ class VideoPlayerActivity : AppCompatActivity(),
             }
 
         }
+
+        val url = intent.getStringExtra("FOLDER_NAME")
+        val youtubeUrl = intent.getStringExtra("videoUrl")
+        attemptId = intent.getStringExtra("attemptId")
+        contentId = intent.getStringExtra("contentId")
+        val downloaded = intent.getBooleanExtra("downloaded", false)
+
+
+
+        if (youtubeUrl != null) {
+            displayYoutubeVideo.view?.visibility = View.VISIBLE
+            setupYoutubePlayer(youtubeUrl)
+        } else {
+            displayYoutubeVideo.view?.visibility = View.GONE
+            videoView.visibility = View.VISIBLE
+            setupVideoView(url, downloaded)
+        }
+        setupViewPager(attemptId)
     }
 
     private fun setupViewPager(attemptId: String) {
@@ -152,7 +174,7 @@ class VideoPlayerActivity : AppCompatActivity(),
                 Clients.onlineV2JsonApi.createNote(note).enqueue(retrofitCallback { throwable, response ->
                     response?.body().let {
                         noteDialog.dismiss()
-                        if(response?.isSuccessful!!)
+                        if (response?.isSuccessful!!)
                             try {
                                 notesDao.insert(NotesModel(it!!.id
                                         ?: "", it.duration ?: 0.0, it.text ?: "", it.content?.id
@@ -191,9 +213,13 @@ class VideoPlayerActivity : AppCompatActivity(),
 
     }
 
-    private fun setupVideoView(url: String) {
+    private fun setupVideoView(url: String, downloaded: Boolean) {
         videoView.setOnPreparedListener(this)
-        videoView.setVideoURI(MediaUtils.getCourseVideoUri(url, this))
+        if (downloaded) {
+            videoView.setVideoURI(MediaUtils.getCourseVideoUri(url, this))
+        } else {
+            videoView.setVideoURI(Uri.parse(url))
+        }
         videoView.setOnCompletionListener {
             finish()
         }
@@ -213,24 +239,6 @@ class VideoPlayerActivity : AppCompatActivity(),
         videoView.release()
     }
 
-    override fun onStart() {
-        super.onStart()
-        val url = intent.getStringExtra("FOLDER_NAME")
-        val youtubeUrl = intent.getStringExtra("videoUrl")
-        attemptId = intent.getStringExtra("attemptId")
-        contentId = intent.getStringExtra("contentId")
-
-
-        if (youtubeUrl != null) {
-            displayYoutubeVideo.view?.visibility = View.VISIBLE
-            setupYoutubePlayer(youtubeUrl)
-        } else {
-            displayYoutubeVideo.view?.visibility = View.GONE
-            videoView.visibility = View.VISIBLE
-            setupVideoView(url)
-        }
-        setupViewPager(attemptId)
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == -1) {

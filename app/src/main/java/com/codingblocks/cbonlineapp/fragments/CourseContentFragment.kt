@@ -80,10 +80,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         val sectionAdapter = SectionDetailsAdapter(sectionsList, activity!!, this)
         view.rvExpendableView.layoutManager = LinearLayoutManager(context)
         view.rvExpendableView.adapter = sectionAdapter
-        val itemDecorator = DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL)
-        itemDecorator.setDrawable(ContextCompat.getDrawable(context!!, R.drawable.divider_black)!!)
-        view.rvExpendableView.addItemDecoration(itemDecorator)
-
         view.sectionProgressBar.show()
         sectionDao.getCourseSection(attemptId).observe(this, Observer<List<CourseSection>> {
             if (it.isNotEmpty()) {

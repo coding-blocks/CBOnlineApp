@@ -34,10 +34,7 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_home.*
 import kotlinx.android.synthetic.main.nav_header_home.view.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.*
 import java.util.*
 
 
@@ -90,6 +87,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             startActivity(intentFor<LoginActivity>().singleTop())
         }
         fetchUser()
+        alert {  }
     }
 
     private fun setUser() {
