@@ -44,8 +44,9 @@ class OnlineJsonApiPublicTest {
     @Test
     fun `GET recommended`() {
         val courses = api.getRecommendedCourses().execute().body()
+        assertNotNull(courses)
         courses?.let {
-            assertEquals(14, it.size)
+            assertEquals(true, it.size > 1)
         }
     }
 
