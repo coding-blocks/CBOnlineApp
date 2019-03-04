@@ -3,7 +3,9 @@ package com.codingblocks.cbonlineapp.activities
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.R
@@ -20,9 +22,8 @@ import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_my_course.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.info
+import org.jetbrains.anko.*
+import java.util.concurrent.Future
 import kotlin.concurrent.thread
 
 
@@ -228,7 +229,21 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                     }
                 }
 
+            } ?: run {
+                alert {
+                    title = "Error Fetching Course"
+                    message = """
+                        There was an error downloading course contents.
+                        Please contact support@codingblocks.com
+                        """.trimIndent()
+                    yesButton {
+                        it.dismiss()
+                        finish()
+                    }
+                    isCancelable = false
+                }.show()
             }
+
             info { "error ${throwable?.localizedMessage}" }
 
         })
