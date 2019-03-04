@@ -6,18 +6,11 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3871ba02cd654b9585f1d9c8bc0f4365)](https://www.codacy.com/app/championswimmer/CBOnlineApp?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=coding-blocks/CBOnlineApp&amp;utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.org/coding-blocks/CBOnlineApp.svg?branch=development)](https://travis-ci.org/coding-blocks/CBOnlineApp)
 
-## Development Tips
+An app to consume online courses available at https://online.codingblocks.com
 
-### Anko Layout Previews (with 3.3 Canary)
-Anko Layout previews will work with Android Studio 3.2 officially.
+Application is available here:
 
-To make it work with Android Studio 3.3
-
- - Get latest release https://github.com/Kotlin/anko/releases
- - Download the zip, unzip and extract the jar
- - Inside the jar edit `META-INF/plugin.xml`
- - Edit `181.*` in version range to `182.*`
- - Install as jar into the Android Studio
+<a href='https://play.google.com/store/apps/details?id=com.codingblocks.cbonlineapp'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="80"/></a>
 
 ### Libraries used and their documentation
 
@@ -25,5 +18,4 @@ To make it work with Android Studio 3.3
 - Picasso [Docs](http://square.github.io/picasso/)
 - JSON API Converter [Docs](https://github.com/jasminb/jsonapi-converter)
 - ExoMedia [Docs](https://devbrackets.com/dev/libs/docs/exomedia/4.0.0/index.html)
-
 - Room Persistence Library [Docs](https://developer.android.com/topic/libraries/architecture/room)
