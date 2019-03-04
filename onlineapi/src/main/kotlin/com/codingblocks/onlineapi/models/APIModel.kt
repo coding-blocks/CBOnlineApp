@@ -131,6 +131,9 @@ class MyCourseRuns : BaseModel() {
     @JvmField
     var sections: ArrayList<CourseSection>? = null
 
+    @Relationship("ratings", resolve = true)
+    @JvmField
+    var rating: ArrayList<Rating>? = null
 
     @Relationship("announcements", resolve = true)
     @JvmField
@@ -142,6 +145,8 @@ class MyCourseRuns : BaseModel() {
 
 
 }
+@Type("rating")
+class Rating : BaseModel()
 
 @Type("courses")
 open class Course : BaseModel() {
