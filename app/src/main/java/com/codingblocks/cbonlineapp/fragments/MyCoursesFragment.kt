@@ -71,6 +71,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         ui.allcourseText.text = "My Courses"
         ui.titleText.visibility = View.GONE
         ui.homeImg.visibility = View.GONE
+        ui.viewPager.visibility = View.GONE
+
         courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao, "myCourses")
         setHasOptionsMenu(true)
 

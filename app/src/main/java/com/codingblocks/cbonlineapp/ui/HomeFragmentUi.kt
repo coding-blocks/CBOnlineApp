@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.solver.widgets.ConstraintWidget
@@ -12,18 +13,28 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.utils.ViewPagerCustomDuration
+import com.google.android.material.tabs.TabLayout
+import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.constraint.layout.constraintLayout
+import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.nestedScrollView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
 
 class HomeFragmentUi<T> : AnkoComponent<T> {
+
+    inline fun ViewManager.customViewPager(theme: Int = 0, init: ViewPagerCustomDuration.() -> Unit) = ankoView({ ViewPagerCustomDuration(it) }, theme, init)
+
     lateinit var rvCourses: RecyclerView
     lateinit var allcourseText: TextView
     lateinit var titleText: TextView
+    lateinit var viewPager: ViewPagerCustomDuration
+    lateinit var tabLayout: TabLayout
     lateinit var homeImg: ImageView
+
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
 
@@ -50,6 +61,19 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                         endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
 
                     }
+                    viewPager = customViewPager {
+                        id = View.generateViewId()
+
+                    }.lparams(width = matchParent, height = dip(155)) {
+                        marginStart = dip(8)
+                        marginEnd = dip(8)
+                        topMargin = dip(8)
+                        startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                        horizontalBias = 0.0f
+                        topToBottom = titleText.id
+                        endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+
+                    }
                     homeImg = imageView(R.drawable.ic_home) {
                         id = View.generateViewId()
                         adjustViewBounds = true
@@ -71,7 +95,7 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                     }.lparams(width = wrapContent, height = wrapContent) {
                         topMargin = dip(8)
                         marginStart = dip(16)
-                        topToBottom = homeImg.id
+                        topToBottom = viewPager.id
                         startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                         horizontalBias = 0.0f
 

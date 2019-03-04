@@ -54,7 +54,8 @@ object Clients {
             ContentCsv::class.java,
             Comment::class.java,
             Note::class.java,
-            Notes::class.java
+            Notes::class.java,
+            CarouselCards::class.java
 
     )
     private val relationshipResolver = RelationshipResolver {

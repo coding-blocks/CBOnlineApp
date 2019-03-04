@@ -71,7 +71,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         ui.allcourseText.text = "All Courses"
         ui.titleText.visibility = View.GONE
         ui.homeImg.visibility = View.GONE
-
+        ui.viewPager.visibility = View.GONE
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
 
