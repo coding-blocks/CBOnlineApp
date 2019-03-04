@@ -87,7 +87,8 @@ object Clients {
         Notes::class.java,
         Rating::class.java,
         Tags::class.java,
-        Certificate::class.java
+        Certificate::class.java,
+        CarouselCards::class.java
     )
     private val relationshipResolver = RelationshipResolver {
         var url = it

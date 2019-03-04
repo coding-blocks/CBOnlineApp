@@ -147,5 +147,8 @@ interface OnlineJsonApi {
     @PATCH("progresses/{id}")
     fun updateProgress(@Path("id") id: String, @Body params: Progress): Call<ContentProgress>
 
+    @get:GET("carousel_cards?sort=order")
+    val carouselCards : Call<ArrayList<CarouselCards>>
+
 
 }

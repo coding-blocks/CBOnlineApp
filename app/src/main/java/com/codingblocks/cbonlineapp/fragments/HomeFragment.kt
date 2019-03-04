@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.fragments
 
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -20,6 +21,10 @@ import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
 import com.codingblocks.cbonlineapp.database.models.Instructor
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
+import com.codingblocks.cbonlineapp.utils.CarouselSliderAdapter
+import com.codingblocks.cbonlineapp.utils.ZoomOutPageTransformer
+import com.codingblocks.cbonlineapp.utils.getPrefs
+import com.codingblocks.cbonlineapp.utils.observer
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.onlineapi.Clients
@@ -31,6 +36,7 @@ import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.runOnUiThread
+import java.util.*
 import kotlin.concurrent.thread
 
 class HomeFragment : Fragment(), AnkoLogger {
@@ -39,6 +45,8 @@ class HomeFragment : Fragment(), AnkoLogger {
     private lateinit var skeletonScreen: SkeletonScreen
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     val ui = HomeFragmentUi<Fragment>()
+    var currentPage = 0
+
 
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(context!!)
@@ -79,6 +87,8 @@ class HomeFragment : Fragment(), AnkoLogger {
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
+        ui.homeImg.visibility = View.GONE
+
 
 
         skeletonScreen = Skeleton.bind(ui.rvCourses)
@@ -95,7 +105,34 @@ class HomeFragment : Fragment(), AnkoLogger {
         }
         displayCourses()
         fetchRecommendedCourses()
+        fetchCards()
 
+    }
+
+    private fun fetchCards() {
+        Clients.onlineV2JsonApi.carouselCards.enqueue(retrofitCallback { _, response ->
+            response?.body().let {
+                val carouselSliderAdapter = CarouselSliderAdapter(it!!, context!!)
+                ui.viewPager.adapter = carouselSliderAdapter
+                ui.viewPager.currentItem = 0
+//                if (categories.size > 1)
+//                    view.tabDots.setupWithViewPager(view.imageViewPager, true)
+                ui.viewPager.setPageTransformer(true, ZoomOutPageTransformer())
+                val handler = Handler()
+                val update = Runnable {
+                    if (currentPage == it.size) {
+                        currentPage = 0
+                    }
+                    ui.viewPager.setCurrentItem(currentPage++, true)
+                }
+                val swipeTimer = Timer()
+                swipeTimer.schedule(object : TimerTask() {
+                    override fun run() {
+                        handler.post(update)
+                    }
+                }, 5000, 5000)
+            }
+        })
     }
 
     private fun displayCourses(searchQuery: String = "") {

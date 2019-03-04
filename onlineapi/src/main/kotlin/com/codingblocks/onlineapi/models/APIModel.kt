@@ -736,6 +736,28 @@ class Notes : BaseModel() {
 
 }
 
+@Type("carousel_cards")
+class CarouselCards : BaseModel() {
+    @JvmField
+    var title: String? = null
+
+    @JvmField
+    var subtitle: String? = null
+
+    @JvmField
+    var img: String? = null
+
+    @JsonProperty("button-text")
+    @JvmField
+    var buttonText: String? = null
+
+    @JsonProperty("button-link")
+    @JvmField
+    var buttonLink: String? = null
+
+
+}
+
 
 
 
