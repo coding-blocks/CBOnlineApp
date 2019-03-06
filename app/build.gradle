@@ -16,15 +16,21 @@ android {
         versionName "0.3.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     lintOptions {
         abortOnError false
     }
     buildTypes {
+        debug {
+            versionNameSuffix '-debug-version'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
@@ -34,6 +40,7 @@ android {
 ext {
     ankoVersion = '0.10.6'
     room_version = "2.1.0-alpha04"
+    versionsWork = "1.0.0"
     ankoLibs = [
             // commons
             'commons',
@@ -80,6 +87,9 @@ dependencies {
     //exomedia library
     implementation 'com.devbrackets.android:exomedia:4.3.0'
     implementation 'com.google.android.exoplayer:extension-okhttp:2.9.1'
+
+    implementation "android.arch.work:work-runtime-ktx:$versionsWork"
+
 
     //gson
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'

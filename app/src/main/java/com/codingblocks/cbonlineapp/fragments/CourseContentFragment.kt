@@ -5,11 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.codingblocks.cbonlineapp.DownloadStarter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
@@ -17,6 +18,7 @@ import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.CourseRun
 import com.codingblocks.cbonlineapp.database.CourseSection
 import com.codingblocks.cbonlineapp.services.DownloadService
+import com.codingblocks.cbonlineapp.services.DownloadWorker
 import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_course_content.view.*
@@ -38,6 +40,9 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         database.courseRunDao()
     }
 
+    private val workManager: WorkManager = WorkManager.getInstance()
+
+
 //    private var downloadBinder: DownloadBinder? = null
 //
 //    private val serviceConnection = object : ServiceConnection {
@@ -50,8 +55,24 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 //    }
 
     override fun startDownload(url: String, id: String, lectureContentId: String, title: String, attemptId: String, contentId: String) {
-//        downloadBinder?.startDownload(url,0, id, lectureContentId, title)
-        startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId, "title" to title, "attemptId" to attemptId, "contentId" to contentId)
+
+        val builder = Data.Builder().apply {
+            putString("id", id)
+            putString("url", url)
+            putString("lectureContentId", lectureContentId)
+            putString("title", title)
+            putString("attemptId", attemptId)
+            putString("contentId", contentId)
+        }
+        val downloadRequest = OneTimeWorkRequest.Builder(DownloadWorker::class.java)
+                .setInputData(builder.build())
+                .build()
+
+        workManager.enqueue(downloadRequest)
+
+//        workManager.cancelAllWork()
+
+//        startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId, "title" to title, "attemptId" to attemptId, "contentId" to contentId)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
