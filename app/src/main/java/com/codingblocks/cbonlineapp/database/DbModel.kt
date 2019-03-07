@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.database
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.room.*
+import java.sql.Date
 
 
 open class BaseModel(
@@ -31,7 +32,7 @@ data class Course(
 ) : BaseModel(uid, updated_at)
 
 
-@Entity(
+@Entity(indices = [Index("crCourseId")],
         foreignKeys = [
             ForeignKey(entity = Course::class,
                     parentColumns = ["id"],
@@ -86,7 +87,7 @@ data class CourseWithInstructor(
         @ColumnInfo(name = "course_id") val courseId: String,
         @ColumnInfo(name = "instructor_id") val instructorId: String)
 
-@Entity(
+@Entity(indices = [Index("run_id")],
         foreignKeys = [(ForeignKey(
                 entity = CourseRun::class,
                 parentColumns = ["crUid"],
@@ -105,7 +106,7 @@ data class CourseSection(
         var updated_at: String
 ) : BaseModel(uid, updated_at)
 
-@Entity(
+@Entity(indices = [Index("section_id")],
         foreignKeys = [(ForeignKey(
                 entity = CourseSection::class,
                 parentColumns = ["id"],
@@ -161,24 +162,6 @@ data class SectionWithContent(
         @ColumnInfo(name = "section_id") val sectionId: String,
         @ColumnInfo(name = "content_id") val contentId: String)
 
-@Entity(
-        foreignKeys = [(ForeignKey(
-                entity = CourseRun::class,
-                parentColumns = ["crUid"],
-                childColumns = ["run_id"],
-                onDelete = ForeignKey.SET_NULL //or CASCADE
-        ))]
-)
-data class Announcement(
-        var uid: String,
-        var text: String,
-        var title: String,
-        var user_id: String,
-        var createdAt: String,
-        var run_id: String,
-        var updated_at: String
-) : BaseModel(uid, updated_at)
-
 @Entity()
 data class ContentLecture(
         var lectureUid: String = "",
@@ -187,7 +170,8 @@ data class ContentLecture(
         var lectureUrl: String = "",
         var lectureContentId: String = "",
         var lectureUpdatedAt: String = "",
-        var isDownloaded: String = "false"
+        var isDownloaded: String = "false",
+        var date: Date = Date(0L)
 )
 
 @Entity()
@@ -230,7 +214,7 @@ data class ContentQna(
         var qnaUpdatedAt: String = ""
 )
 
-@Entity(
+@Entity(indices = [Index("contentId")],
         foreignKeys = [(ForeignKey(
                 entity = CourseContent::class,
                 parentColumns = ["id"],
@@ -248,23 +232,23 @@ data class DoubtsModel(
         var runAttemptId: String = "",
         var discourseTopicId: String = "")
 
-@Entity(
-        foreignKeys = [(ForeignKey(
-                entity = CourseContent::class,
-                parentColumns = ["id"],
-                childColumns = ["contentId"],
-                onDelete = ForeignKey.CASCADE //or CASCADE
-        ))]
-)
-data class NotesModel(
-        @PrimaryKey
-        var nttUid: String = "",
-        var duration: Double = 0.0,
-        var text: String = "",
-        var contentId: String = "",
-        var runAttemptId: String = "",
-        var createdAt: String = "",
-        var deletedAt: String = "")
+@Entity(indices = [Index("contentId")],
+    foreignKeys = [(ForeignKey(
+            entity = CourseContent::class,
+            parentColumns = ["id"],
+            childColumns = ["contentId"],
+            onDelete = ForeignKey.CASCADE //or CASCADE
+    ))]
+    )
+    data class NotesModel(
+            @PrimaryKey
+            var nttUid: String = "",
+            var duration: Double = 0.0,
+            var text: String = "",
+            var contentId: String = "",
+            var runAttemptId: String = "",
+            var createdAt: String = "",
+            var deletedAt: String = "")
 
 
 

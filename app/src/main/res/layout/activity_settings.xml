@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_theme_left_to_right"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/settings_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        app:theme="@style/ToolBarStyle"
+        app:title="@string/title_activity_settings" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/framelayout_quiz"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:background="@color/white">
+
+        <Switch
+            android:id="@+id/switch1"
+            android:textSize="18sp"
+            android:fontFamily="@font/cabin"
+            app:theme="@style/ColorSwitchStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Download via Wi-Fi only" />
+
+        <SeekBar
+            android:max="5"
+            android:layout_marginTop="8dp"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>
