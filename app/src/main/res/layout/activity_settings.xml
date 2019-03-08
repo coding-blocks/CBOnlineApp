@@ -25,20 +25,27 @@
         android:padding="16dp"
         android:background="@color/white">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Video download options"
+            android:layout_height="wrap_content" />
+
         <Switch
-            android:id="@+id/switch1"
+            android:id="@+id/wifiSwitch"
             android:textSize="18sp"
             android:fontFamily="@font/cabin"
+            android:layout_marginTop="8dp"
             app:theme="@style/ColorSwitchStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Download via Wi-Fi only" />
 
-        <SeekBar
-            android:max="5"
-            android:layout_marginTop="8dp"
-            style="@style/Widget.AppCompat.SeekBar.Discrete"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <!--<SeekBar-->
+            <!--android:max="5"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:progress="3"-->
+            <!--android:progressDrawable="@drawable/progress_bar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
     </LinearLayout>
 </LinearLayout>

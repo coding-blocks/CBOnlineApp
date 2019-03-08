@@ -17,6 +17,8 @@ class Prefs(context: Context) {
         val USER_IMAGE = "user_image"
         val ONEAUTH_ID = "oneauth_id"
         val USER_ID = "user_id"
+        val WIFI = "wifi"
+        val WIFI_VALUE = false
 
 
     }
@@ -55,5 +57,10 @@ class Prefs(context: Context) {
         get() = prefs.getString(USER_ID, USER_ID)
         set(value) {
             prefs.edit().putString(USER_ID, value).commit()
+        }
+    var SP_WIFI: Boolean
+        get() = prefs.getBoolean(WIFI,WIFI_VALUE)
+        set(value) {
+            prefs.edit().putBoolean(WIFI, value).commit()
         }
 }
