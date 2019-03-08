@@ -2,7 +2,9 @@ package com.codingblocks.cbonlineapp.utils
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabsIntent
 import com.codingblocks.cbonlineapp.R
@@ -30,6 +32,10 @@ object Components {
                 updateView.okBtn.text = "Okay"
                 updateView.description.text = "Do you want to exit?"
             }
+            "wifi" ->{
+                updateView.okBtn.text = "Enable"
+                updateView.description.text = "WIFI is disabled in your device. Would you like to enable it?"
+            }
         }
         updateView.okBtn.setOnClickListener {
             when (type) {
@@ -45,7 +51,10 @@ object Components {
                 }
                 "exit" -> {
                     (context as Activity).finish()
-                }
+                }"wifi" ->{
+                context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
+
+            }
 
             }
         }

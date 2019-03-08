@@ -16,8 +16,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 import okhttp3.CacheControl
-
-
+import java.text.DecimalFormat
 
 
 object MediaUtils {
@@ -37,13 +36,24 @@ object MediaUtils {
         return Interceptor { chain ->
             val response = chain.proceed(chain.request())
             val cacheControl = CacheControl.Builder()
-                    .maxAge(1, TimeUnit.DAYS)
+                    .maxAge(7, TimeUnit.DAYS)
                     .build()
 
             response.newBuilder()
                     .header("Cache-Control", cacheControl.toString())
                     .build()
         }
+    }
+
+    fun deleteRecursive(fileOrDirectory: File) {
+
+        if (fileOrDirectory.isDirectory) {
+            for (child in fileOrDirectory.listFiles()) {
+                deleteRecursive(child)
+            }
+        }
+
+        fileOrDirectory.delete()
     }
 
 

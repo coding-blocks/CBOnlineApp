@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_theme_left_to_right"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/settings_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        app:theme="@style/ToolBarStyle"
+        app:title="@string/title_activity_settings" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/framelayout_quiz"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Video download options"
+            android:layout_height="wrap_content" />
+
+        <Switch
+            android:id="@+id/wifiSwitch"
+            android:textSize="18sp"
+            android:background="@drawable/ripple"
+            android:fontFamily="@font/cabin"
+            android:layout_marginTop="8dp"
+            app:theme="@style/ColorSwitchStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Download via Wi-Fi only" />
+
+        <View
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#eeeeee" />
+
+        <TextView
+            android:id="@+id/deleteAllTv"
+            android:textColor="@color/black"
+            android:layout_width="match_parent"
+            android:background="@drawable/ripple"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/cabin"
+            android:text="Delete all downloads"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#eeeeee" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Available Storage"
+            android:layout_height="wrap_content" />
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:progressTint="@color/salmon"
+            android:scaleY="1.5"
+            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+
+            <View
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:background="@color/salmon"/>
+
+            <TextView
+                android:textSize="12sp"
+                android:id="@+id/spaceUsedTv"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/spaceFreeTv"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:layout_marginEnd="4dp"
+                android:textAlignment="textEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:background="@color/battleship_gray"/>
+
+        </LinearLayout>
+
+        <!--<SeekBar-->
+            <!--android:max="5"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:progress="3"-->
+            <!--android:progressDrawable="@drawable/progress_bar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
+    </LinearLayout>
+</LinearLayout>

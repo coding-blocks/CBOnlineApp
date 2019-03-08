@@ -6,6 +6,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
+            android:checked="true"
             android:icon="@drawable/ic_home_black_24dp"
             android:title="Home" />
         <item
@@ -24,10 +25,10 @@
         android:id="@+id/features"
         android:checkableBehavior="single"
         android:menuCategory="system">
-        <!--<item-->
-        <!--android:id="@+id/nav_preferences"-->
-        <!--android:icon="@drawable/ic_settings_black_24dp"-->
-        <!--android:title="Settings" />-->
+        <item
+            android:icon="@drawable/ic_settings_black_24dp"
+        android:id="@+id/nav_preferences"
+        android:title="@string/title_activity_settings" />
 
         <item
             android:id="@+id/nav_contactUs"

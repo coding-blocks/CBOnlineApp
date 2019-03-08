@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
+import java.io.File
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.NoSuchElementException
@@ -45,6 +47,23 @@ fun <T> LiveData<T>.getDistinct(): LiveData<T> {
         }
     })
     return distinctLiveData
+}
+fun folderSize(directory: File): Long {
+    var length: Long = 0
+    for (file in directory.listFiles()) {
+        length += if (file.isFile)
+            file.length()
+        else
+            folderSize(file)
+    }
+    return length
+}
+
+fun Long.readableFileSize(): String {
+    if (this <= 0) return "0 MB"
+    val units = arrayOf("B", "kB", "MB", "GB", "TB")
+    val digitGroups = (Math.log10(this.toDouble()) / Math.log10(1024.0)).toInt()
+    return DecimalFormat("#,##0.#").format(this / Math.pow(1024.0, digitGroups.toDouble())) + " " + units[digitGroups]
 }
 
 fun formatDate(date: String): String {

@@ -2,8 +2,11 @@ package com.codingblocks.cbonlineapp.adapters
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
+import android.net.ConnectivityManager
 import android.os.Environment
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +18,6 @@ import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.DownloadStarter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
@@ -25,8 +27,10 @@ import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.utils.Animations.collapse
 import com.codingblocks.cbonlineapp.utils.Animations.expand
+import com.codingblocks.cbonlineapp.utils.Components
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.cbonlineapp.utils.getDistinct
+import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.Progress
@@ -150,9 +154,19 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                         }
                                         downloadBtn.setOnClickListener {
                                             if (MediaUtils.checkPermission(context)) {
-                                                starter.startDownload(content.contentLecture.lectureUrl, data.id, content.contentLecture.lectureContentId, content.title, content.attempt_id, content.id)
-                                                downloadBtn.isEnabled = false
-                                                (downloadBtn.background as AnimationDrawable).start()
+                                                if ((context as Activity).getPrefs().SP_WIFI) {
+                                                    if (connectedToWifi(context)) {
+                                                        starter.startDownload(content.contentLecture.lectureUrl, data.id, content.contentLecture.lectureContentId, content.title, content.attempt_id, content.id)
+                                                        downloadBtn.isEnabled = false
+                                                        (downloadBtn.background as AnimationDrawable).start()
+                                                    } else {
+                                                        Components.showconfirmation(context,"wifi")
+                                                    }
+                                                } else {
+                                                    starter.startDownload(content.contentLecture.lectureUrl, data.id, content.contentLecture.lectureContentId, content.title, content.attempt_id, content.id)
+                                                    downloadBtn.isEnabled = false
+                                                    (downloadBtn.background as AnimationDrawable).start()
+                                                }
                                             } else {
                                                 MediaUtils.isStoragePermissionGranted(context)
                                             }
@@ -164,7 +178,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                                 yesButton {
                                                     val file = context.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
                                                     val folderFile = File(file, "/$url")
-                                                    deleteRecursive(folderFile)
+                                                    MediaUtils.deleteRecursive(folderFile)
                                                     contentDao.updateContent(data.id, content.contentLecture.lectureContentId, "false")
                                                 }
                                                 noButton { it.dismiss() }
@@ -243,6 +257,13 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                     }
                 }
             })
+        }
+
+        private fun connectedToWifi(context: Context): Boolean {
+            val connManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+            val mWifi = connManager!!.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+            return mWifi.isConnected
+
         }
     }
 
@@ -344,16 +365,4 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
             }
         })
     }
-
-    fun deleteRecursive(fileOrDirectory: File) {
-
-        if (fileOrDirectory.isDirectory) {
-            for (child in fileOrDirectory.listFiles()) {
-                deleteRecursive(child)
-            }
-        }
-
-        fileOrDirectory.delete()
-    }
-
 }

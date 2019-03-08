@@ -87,7 +87,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             startActivity(intentFor<LoginActivity>().singleTop())
         }
         fetchUser()
-        alert {  }
+        //adding label to nav drawer items
+        nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
     }
 
     private fun setUser() {
@@ -212,9 +213,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     Toast.makeText(this, "Please install whatsApp", Toast.LENGTH_SHORT).show()
                 }
             }
-//            R.id.nav_preferences -> {
-//                startActivity(intentFor<SettingsActivity>().singleTop())
-//            }
+            R.id.nav_preferences -> {
+                startActivity(intentFor<SettingsActivity>().singleTop())
+            }
             R.id.nav_contactUs -> {
                 startActivity(intentFor<AboutActivity>().singleTop())
             }
