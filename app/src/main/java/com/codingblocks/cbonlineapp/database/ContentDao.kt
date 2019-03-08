@@ -22,7 +22,7 @@ abstract class ContentDao : BaseDao<CourseContent> {
     abstract fun getContentWithId(attempt_id: String,id:String): CourseContent
 
     @Query("SElECT * FROM CourseContent where isDownloaded = :progress ORDER BY date")
-    abstract fun getDownloads(progress: String): LiveData<List<CourseContent>>
+    abstract fun getDownloads(progress: String): List<CourseContent>
 
     @Query("SElECT * FROM CourseContent where attempt_id = :attempt AND section_id = :section")
     abstract fun getCourseSectionContents(attempt: String, section: String): LiveData<List<CourseContent>>

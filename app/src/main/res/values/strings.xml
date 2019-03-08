@@ -54,4 +54,5 @@
     <string name="verify_desc">You need to verify your account first before continuing</string>
     <string name="verify_title">Verify Now</string>
     <string name="enroll_desc">You have been successfully enrolled into this course</string>
+    <string name="free">free</string>
 </resources>

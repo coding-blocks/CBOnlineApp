@@ -178,7 +178,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                                 yesButton {
                                                     val file = context.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
                                                     val folderFile = File(file, "/$url")
-                                                    deleteRecursive(folderFile)
+                                                    MediaUtils.deleteRecursive(folderFile)
                                                     contentDao.updateContent(data.id, content.contentLecture.lectureContentId, "false")
                                                 }
                                                 noButton { it.dismiss() }
@@ -365,16 +365,4 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
             }
         })
     }
-
-    fun deleteRecursive(fileOrDirectory: File) {
-
-        if (fileOrDirectory.isDirectory) {
-            for (child in fileOrDirectory.listFiles()) {
-                deleteRecursive(child)
-            }
-        }
-
-        fileOrDirectory.delete()
-    }
-
 }
