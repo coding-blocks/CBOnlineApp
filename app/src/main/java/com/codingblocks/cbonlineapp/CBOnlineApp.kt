@@ -7,6 +7,9 @@ import com.devbrackets.android.exomedia.ExoMedia
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.TransferListener
+import com.onesignal.OSNotification
+import com.onesignal.OSNotificationOpenResult
+import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
 import io.github.inflationx.calligraphy3.CalligraphyConfig
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor
@@ -26,9 +29,17 @@ class CBOnlineApp : Application() {
                                 .setFontAttrId(R.attr.fontPath)
                                 .build()))
                 .build())
+
+        // OneSignal Initialization
+        OneSignal.startInit(this)
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                .unsubscribeWhenNotificationsAreDisabled(true)
+                .setNotificationReceivedHandler(NotificationReceivedHandler())
+                .setNotificationOpenedHandler(NotificationOpenedHandler())
+                .init()
+
         configureExoMedia()
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
-//            shortcutAction(::updateShortcuts)
+
     }
 
     companion object {
@@ -60,5 +71,19 @@ class CBOnlineApp : Application() {
                 return instance!!
             }
         })
+    }
+
+    class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
+        override fun notificationReceived(notification: OSNotification?) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+    }
+
+    class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
+        override fun notificationOpened(result: OSNotificationOpenResult?) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
     }
 }
