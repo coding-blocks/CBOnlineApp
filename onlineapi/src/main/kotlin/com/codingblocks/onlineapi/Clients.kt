@@ -55,7 +55,8 @@ object Clients {
             Comment::class.java,
             Note::class.java,
             Notes::class.java,
-            Rating::class.java
+            Rating::class.java,
+            Tags::class.java
 
     )
     private val relationshipResolver = RelationshipResolver {
