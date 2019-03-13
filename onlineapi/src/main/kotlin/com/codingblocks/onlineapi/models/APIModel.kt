@@ -196,6 +196,15 @@ open class Course : BaseModel() {
     @JvmField
     var runs: ArrayList<Runs>? = null
 
+    @JvmField
+    var tags: ArrayList<Tags>? = null
+
+}
+
+@Type("tags")
+class Tags : BaseModel(){
+    @JvmField
+    var name: String? = null
 }
 
 @Type("course")

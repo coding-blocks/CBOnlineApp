@@ -1,18 +1,18 @@
 package com.codingblocks.cbonlineapp.activities
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.content.ContextCompat
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.ProgressBarAnimation
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.adapters.BatchesAdapter
 import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
@@ -47,13 +47,16 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(this)
     }
+    private lateinit var batchAdapter: BatchesAdapter
+    private lateinit var instructorAdapter: InstructorDataAdapter
+
 
     private val courseWithInstructorDao by lazy {
         database.courseWithInstructorDao()
     }
 
     companion object {
-        val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
+        const val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
     }
 
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
@@ -72,9 +75,35 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         title = courseName
         coursePageTitle.text = courseName
 
-        //fetch instructors
-        val instructorList = ArrayList<Instructor>()
-        val instructorAdapter = InstructorDataAdapter(instructorList)
+        progressBar = arrayOf(courseProgress1, courseProgress2, courseProgress3, courseProgress4, courseProgress5)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        skeletonScreen = Skeleton.bind(courseRootView)
+                .shimmer(true)
+                .angle(20)
+                .duration(1200)
+                .load(R.layout.item_skeleton_course)
+                .show()
+
+
+        batchAdapter = BatchesAdapter(ArrayList())
+
+
+        batchRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        batchRv.adapter = batchAdapter
+
+
+        fetchInstructors()
+
+        fetchCourse()
+
+
+    }
+
+    private fun fetchInstructors() {
+        instructorAdapter = InstructorDataAdapter(ArrayList())
+
         instructorRv.layoutManager = LinearLayoutManager(this)
         instructorRv.adapter = instructorAdapter
 
@@ -93,21 +122,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 coursePageMentors.text = instructors
             }
         })
+    }
 
-        progressBar = arrayOf(courseProgress1, courseProgress2, courseProgress3, courseProgress4, courseProgress5)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        skeletonScreen = Skeleton.bind(courseRootView)
-                .shimmer(true)
-                .angle(20)
-                .duration(1200)
-                .load(R.layout.item_skeleton_course)
-                .show()
-
-
+    private fun fetchCourse() {
         val service = Clients.onlineV2JsonApi
-
         Clients.onlineV2JsonApi.courseById(courseId).enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let { course ->
                 skeletonScreen.hide()
@@ -121,13 +139,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                             }
                         })
                 }
+                batchAdapter.setData(course.runs!!)
                 buyBtn.setOnClickListener {
                     if (course.runs != null) {
-                        Clients.api.addToCart(course.runs!![0].id!!).enqueue(retrofitCallback { throwable, response ->
-                            val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
-                            val customTabsIntent = builder.build()
-                            customTabsIntent.launchUrl(this, Uri.parse("https://dukaan.codingblocks.com/mycart"))
-                        })
+                        focusOnView(scrollView, batchRv)
                     } else {
                         toast("No available runs right now ! Please check back later")
                     }
@@ -140,9 +155,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     val sectionAdapter = SectionsDataAdapter(ArrayList())
                     rvExpendableView.layoutManager = LinearLayoutManager(this)
                     rvExpendableView.adapter = sectionAdapter
-                    val itemDecorator = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-                    itemDecorator.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider_black)!!)
-                    rvExpendableView.addItemDecoration(itemDecorator)
                     sections!!.forEachIndexed { index, section ->
                         GlobalScope.launch(Dispatchers.Main) {
                             val request = service.getSections(section.id!!)
@@ -206,10 +218,13 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
-    override fun onResume() {
-        super.onResume()
-
+    private fun focusOnView(scroll: NestedScrollView, view: View) {
+        Handler().post {
+            val vTop = view.top
+            val vBottom = view.bottom
+            val sWidth = scroll.width
+            scroll.smoothScrollTo(0, (vTop + vBottom - sWidth) / 2)
+        }
     }
-
 
 }

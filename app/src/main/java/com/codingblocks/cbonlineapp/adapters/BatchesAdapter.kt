@@ -1,0 +1,78 @@
+package com.codingblocks.cbonlineapp.adapters
+
+import android.graphics.Paint
+import android.net.Uri
+import android.view.View
+import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.ui.BatchesCardUi
+import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Runs
+import org.jetbrains.anko.AnkoContext
+import java.text.SimpleDateFormat
+import java.util.*
+
+class BatchesAdapter(private var batchesData: ArrayList<Runs>?) : RecyclerView.Adapter<BatchesAdapter.BatchViewHolder>() {
+
+    val ui = BatchesCardUi()
+
+    fun setData(batchesData: ArrayList<Runs>) {
+        this.batchesData = batchesData
+        notifyDataSetChanged()
+    }
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BatchViewHolder {
+        return BatchViewHolder(ui.createView(AnkoContext.create(parent.context, parent)))
+    }
+
+    override fun getItemCount(): Int {
+        return batchesData?.size ?: 0
+    }
+
+    override fun onBindViewHolder(holder: BatchViewHolder, position: Int) {
+        holder.bindView(batchesData!![position])
+    }
+
+    inner class BatchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        fun bindView(runs: Runs) {
+            runs.run {
+                ui.runTitle.text = description
+                ui.coursePrice.text = "₹ $price"
+                if (price != mrp && mrp != "") {
+                    ui.courseMrp.text = "₹ $mrp"
+                    ui.courseMrp.paintFlags = ui.courseMrp.paintFlags or
+                            Paint.STRIKE_THRU_TEXT_FLAG
+                }
+                val sdf = SimpleDateFormat("MMM dd yyyy")
+                var startDate: String? = ""
+                var endDate: String? = ""
+                var enrollmentDate: String? = ""
+                try {
+                    startDate = sdf.format(Date(start!!.toLong() * 1000))
+                    endDate = sdf.format(Date(end!!.toLong() * 1000))
+                    enrollmentDate = sdf.format(Date(enrollmentEnd!!.toLong() * 1000))
+                } catch (nfe: NumberFormatException) {
+                    nfe.printStackTrace()
+                }
+                ui.startTv.text = startDate
+                ui.endTv.text = endDate
+                ui.enrollmentTv.text = "Enrollment ends $enrollmentDate"
+                ui.enrollBtn.setOnClickListener {
+//                    Clients.api.addToCart(id!!).enqueue(retrofitCallback { throwable, response ->
+//                        val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+//                        val customTabsIntent = builder.build()
+//                        customTabsIntent.launchUrl(this, Uri.parse("https://dukaan.codingblocks.com/mycart"))
+//                    })
+                }
+
+            }
+        }
+
+    }
+
+}
