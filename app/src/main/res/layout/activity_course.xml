@@ -1,98 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/gradient_theme_left_to_right">
+    android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:elevation="4dp"
-        android:gravity="center_vertical"
-        app:theme="@style/ToolBarStyle" />
-
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:background="#fff"
-        android:id="@+id/scrollView"
-        android:fillViewport="true"
-        android:overScrollMode="never"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".activities.CourseActivity">
+        android:background="@drawable/gradient_theme_left_to_right"
+        android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:elevation="4dp"
+            android:gravity="center_vertical"
+            app:theme="@style/ToolBarStyle" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/coursePageLogo"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:transitionName="imageTrans"
-                app:civ_border_color="#fff"
-                app:civ_border_width="2dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".activities.CourseActivity">
 
-            <TextView
-                android:id="@+id/coursePageTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/cabin_semibold"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:transitionName="textTrans"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/coursePageLogo"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/coursePageMentors"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:fontFamily="@font/cabin_medium"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toTopOf="@+id/courseRootView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/coursePageLogo"
-                app:layout_constraintTop_toBottomOf="@+id/coursePageTitle" />
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/courseRootView"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/coursePageLogo">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/coursePageLogo"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:transitionName="imageTrans"
+                        app:civ_border_color="#fff"
+                        app:civ_border_width="2dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/coursePageTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:fontFamily="@font/cabin_semibold"
+                            android:textColor="@color/black"
+                            android:textSize="24sp"
+                            android:transitionName="textTrans" />
+
+                        <TextView
+                            android:id="@+id/coursePageMentors"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="8dp"
+                            android:fontFamily="@font/cabin_medium"
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/coursePageSubtitle"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/cabin_medium"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/coursePageTv1"
@@ -102,25 +105,20 @@
                     android:fontFamily="@font/cabin_semibold"
                     android:text="@string/summary"
                     android:textColor="@color/black"
-                    android:textSize="22sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coursePageSubtitle" />
+                    android:textSize="22sp"/>
 
                 <View
                     android:id="@+id/coursePagev1"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="110dp"
-                    android:background="@color/black"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coursePageTv1" />
+                    android:background="@color/black" />
 
                 <com.codingblocks.cbonlineapp.widgets.ExpandableTextView
                     android:id="@+id/coursePageSummary"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="14dp"
@@ -128,10 +126,7 @@
                     android:fontFamily="@font/cabin_medium"
                     android:textAlignment="viewStart"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coursePagev1" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/coursePageTv2"
@@ -142,35 +137,28 @@
                     android:fontFamily="@font/cabin_semibold"
                     android:text="@string/student_feedback"
                     android:textColor="@color/black"
-                    android:textSize="22sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coursePageSummary" />
+                    android:textSize="22sp" />
 
                 <View
                     android:id="@+id/coursePagev2"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="110dp"
-                    android:background="@color/black"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coursePageTv2" />
+                    android:background="@color/black" />
 
 
                 <RatingBar
                     android:id="@+id/coursePageRatingBar"
                     style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="14dp"
                     android:isIndicator="true"
                     android:numStars="5"
-                    android:progressTint="@android:color/holo_orange_light"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coursePagev2" />
+                    android:progressTint="@android:color/holo_orange_light" />
 
                 <TextView
                     android:id="@+id/coursePageRatingCountTv"
@@ -179,10 +167,7 @@
                     android:layout_marginStart="8dp"
                     android:fontFamily="@font/cabin"
                     android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/coursePageRatingBar"
-                    app:layout_constraintStart_toEndOf="@+id/coursePageRatingBar"
-                    app:layout_constraintTop_toTopOf="@+id/coursePageRatingBar" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/coursePageRatingTv"
@@ -192,14 +177,12 @@
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/cabin"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coursePageRatingCountTv" />
+                    android:textSize="18sp" />
 
                 <RatingBar
                     android:id="@+id/courseRating5"
                     style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="14dp"
@@ -214,7 +197,7 @@
                 <ProgressBar
                     android:id="@+id/courseProgress5"
                     style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="12dp"
                     android:layout_marginStart="13dp"
                     android:layout_marginEnd="16dp"
@@ -230,7 +213,7 @@
                 <RatingBar
                     android:id="@+id/courseRating4"
                     style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="14dp"
@@ -245,7 +228,7 @@
                 <ProgressBar
                     android:id="@+id/courseProgress4"
                     style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="12dp"
                     android:layout_marginStart="13dp"
                     android:layout_marginEnd="16dp"
@@ -261,7 +244,7 @@
                 <RatingBar
                     android:id="@+id/courseRating3"
                     style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="14dp"
@@ -283,25 +266,19 @@
                     android:indeterminate="false"
                     android:padding="0dp"
                     android:progressDrawable="@drawable/progress_bar"
-                    android:scaleY="1.2"
-                    app:layout_constraintBottom_toBottomOf="@+id/courseRating3"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/courseRating3"
-                    app:layout_constraintTop_toTopOf="@+id/courseRating3" />
+                    android:scaleY="1.2" />
 
                 <RatingBar
                     android:id="@+id/courseRating2"
                     style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="14dp"
                     android:isIndicator="true"
                     android:numStars="5"
                     android:progressTint="@android:color/holo_orange_light"
-                    android:rating="2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/courseRating3" />
+                    android:rating="2" />
 
 
                 <ProgressBar
@@ -314,11 +291,7 @@
                     android:indeterminate="false"
                     android:padding="0dp"
                     android:progressDrawable="@drawable/progress_bar"
-                    android:scaleY="1.2"
-                    app:layout_constraintBottom_toBottomOf="@+id/courseRating2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/courseRating2"
-                    app:layout_constraintTop_toTopOf="@+id/courseRating2" />
+                    android:scaleY="1.2" />
 
                 <RatingBar
                     android:id="@+id/courseRating1"
@@ -330,9 +303,7 @@
                     android:isIndicator="true"
                     android:numStars="5"
                     android:progressTint="@android:color/holo_orange_light"
-                    android:rating="1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/courseRating2" />
+                    android:rating="1" />
 
 
                 <ProgressBar
@@ -345,11 +316,7 @@
                     android:indeterminate="false"
                     android:padding="0dp"
                     android:progressDrawable="@drawable/progress_bar"
-                    android:scaleY="1.2"
-                    app:layout_constraintBottom_toBottomOf="@+id/courseRating1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/courseRating1"
-                    app:layout_constraintTop_toTopOf="@+id/courseRating1" />
+                    android:scaleY="1.2" />
 
                 <fragment
                     android:id="@+id/displayYoutubeVideo"
@@ -358,9 +325,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="12dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/courseRating1" />
+                    android:layout_marginEnd="8dp" />
 
 
                 <LinearLayout
@@ -513,32 +478,26 @@
                     android:fontFamily="@font/cabin_semibold"
                     android:text="What will you learn"
                     android:textColor="@color/black"
-                    android:textSize="22sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/circleImageView3" />
+                    android:textSize="22sp" />
 
                 <View
                     android:id="@+id/coursePagev3"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="110dp"
                     android:background="@color/black"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coursePageTv3" />
+                    />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvExpendableView"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coursePagev3" />
+                    android:layout_marginEnd="16dp" />
+
                 <TextView
                     android:id="@+id/coursePageTv4"
                     android:layout_width="wrap_content"
@@ -549,32 +508,26 @@
                     android:text="About Instructors"
                     android:textColor="@color/black"
                     android:textSize="22sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rvExpendableView" />
+                    />
 
                 <View
                     android:id="@+id/coursePagev4"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="110dp"
-                    android:background="@color/black"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coursePageTv4" />
+                    android:background="@color/black" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/instructorRv"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coursePagev4" />
+                    android:layout_marginBottom="16dp" />
+
                 <TextView
                     android:id="@+id/coursePageTv5"
                     android:layout_width="wrap_content"
@@ -584,40 +537,35 @@
                     android:fontFamily="@font/cabin_semibold"
                     android:text="Choose from Available Batches"
                     android:textColor="@color/black"
-                    android:textSize="22sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/instructorRv" />
+                    android:textSize="22sp" />
 
                 <View
                     android:id="@+id/coursePagev5"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="110dp"
-                    android:background="@color/black"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coursePageTv5" />
+                    android:background="@color/black" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/batchRv"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:overScrollMode="never"
                     android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coursePagev5" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:overScrollMode="never" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
 
-    </androidx.core.widget.NestedScrollView>
-</RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+    <include layout="@layout/bottom_cart_sheet" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

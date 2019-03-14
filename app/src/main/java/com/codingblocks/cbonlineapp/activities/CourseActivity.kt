@@ -1,11 +1,13 @@
 package com.codingblocks.cbonlineapp.activities
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,17 +21,20 @@ import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.Instructor
 import com.codingblocks.cbonlineapp.utils.Components
 import com.codingblocks.cbonlineapp.utils.MediaUtils
+import com.codingblocks.cbonlineapp.utils.OnCartItemClickListener
 import com.codingblocks.cbonlineapp.utils.loadSvg
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Sections
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_course.*
+import kotlinx.android.synthetic.main.bottom_cart_sheet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -43,6 +48,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     lateinit var courseId: String
     lateinit var courseName: String
     lateinit var progressBar: Array<ProgressBar?>
+    var sheetBehavior: BottomSheetBehavior<*>? = null
+
 
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(this)
@@ -75,6 +82,12 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         title = courseName
         coursePageTitle.text = courseName
 
+        init()
+
+
+    }
+
+    private fun init() {
         progressBar = arrayOf(courseProgress1, courseProgress2, courseProgress3, courseProgress4, courseProgress5)
         setSupportActionBar(toolbar)
         supportActionBar?.setHomeButtonEnabled(true)
@@ -86,19 +99,37 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 .load(R.layout.item_skeleton_course)
                 .show()
 
-
-        batchAdapter = BatchesAdapter(ArrayList())
-
+        sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
 
         batchRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        batchAdapter = BatchesAdapter(ArrayList(), object : OnCartItemClickListener {
+            override fun onItemClick(id: String, name: String) {
+                Clients.api.addToCart(id).enqueue(retrofitCallback { throwable, response ->
+                    response.let {
+                        if (it?.code() == 400) {
+                            showBottomSheet(id, name)
+                        } else if (it?.isSuccessful!!) {
+                            val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+                            val customTabsIntent = builder.build()
+                            customTabsIntent.launchUrl(this@CourseActivity, Uri.parse("https://dukaan.codingblocks.com/mycart"))
+                        }
+                    }
+
+                })
+            }
+
+        })
+
         batchRv.adapter = batchAdapter
 
 
         fetchInstructors()
 
         fetchCourse()
+    }
 
-
+    private fun showBottomSheet(id: String, name: String) {
     }
 
     private fun fetchInstructors() {

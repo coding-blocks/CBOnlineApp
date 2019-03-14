@@ -1,21 +1,18 @@
 package com.codingblocks.cbonlineapp.adapters
 
 import android.graphics.Paint
-import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.RecyclerView
-import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.ui.BatchesCardUi
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.cbonlineapp.utils.OnCartItemClickListener
+import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.onlineapi.models.Runs
 import org.jetbrains.anko.AnkoContext
 import java.text.SimpleDateFormat
 import java.util.*
 
-class BatchesAdapter(private var batchesData: ArrayList<Runs>?) : RecyclerView.Adapter<BatchesAdapter.BatchViewHolder>() {
+class BatchesAdapter(private var batchesData: ArrayList<Runs>?, var listener: OnCartItemClickListener) : RecyclerView.Adapter<BatchesAdapter.BatchViewHolder>() {
 
     val ui = BatchesCardUi()
 
@@ -63,11 +60,7 @@ class BatchesAdapter(private var batchesData: ArrayList<Runs>?) : RecyclerView.A
                 ui.endTv.text = endDate
                 ui.enrollmentTv.text = "Enrollment ends $enrollmentDate"
                 ui.enrollBtn.setOnClickListener {
-//                    Clients.api.addToCart(id!!).enqueue(retrofitCallback { throwable, response ->
-//                        val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
-//                        val customTabsIntent = builder.build()
-//                        customTabsIntent.launchUrl(this, Uri.parse("https://dukaan.codingblocks.com/mycart"))
-//                    })
+                    listener.onItemClick(id!!,description!!)
                 }
 
             }
