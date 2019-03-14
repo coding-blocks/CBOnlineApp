@@ -101,30 +101,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
 
-        batchRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
-        batchAdapter = BatchesAdapter(ArrayList(), object : OnCartItemClickListener {
-            override fun onItemClick(id: String, name: String) {
-                Clients.api.addToCart(id).enqueue(retrofitCallback { throwable, response ->
-                    response.let {
-                        if (it?.code() == 400) {
-                            showBottomSheet(id, name)
-                        } else if (it?.isSuccessful!!) {
-                            val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
-                            val customTabsIntent = builder.build()
-                            customTabsIntent.launchUrl(this@CourseActivity, Uri.parse("https://dukaan.codingblocks.com/mycart"))
-                        }
-                    }
-
-                })
-            }
-
-        })
-
-        batchRv.adapter = batchAdapter
-
-
-        fetchInstructors()
 
         fetchCourse()
     }
@@ -160,6 +136,27 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         Clients.onlineV2JsonApi.courseById(courseId).enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let { course ->
                 skeletonScreen.hide()
+                fetchInstructors()
+                batchAdapter = BatchesAdapter(ArrayList(), object : OnCartItemClickListener {
+                    override fun onItemClick(id: String, name: String) {
+                        Clients.api.addToCart(id).enqueue(retrofitCallback { throwable, response ->
+                            response.let {
+                                if (it?.code() == 400) {
+                                    showBottomSheet(id, name)
+                                } else if (it?.isSuccessful!!) {
+                                    val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+                                    val customTabsIntent = builder.build()
+                                    customTabsIntent.launchUrl(this@CourseActivity, Uri.parse("https://dukaan.codingblocks.com/mycart"))
+                                }
+                            }
+
+                        })
+                    }
+
+                })
+                batchRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                batchRv.adapter = batchAdapter
+
                 coursePageSubtitle.text = course.subtitle
                 coursePageSummary.text = course.summary
                 trialBtn.setOnClickListener {
