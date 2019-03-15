@@ -10,6 +10,9 @@ abstract class CourseRunDao : BaseDao<CourseRun> {
     @Query("SELECT * FROM CourseRun where crAttemptId ==" + "'" + "'")
     abstract fun getAllRuns(): LiveData<List<CourseRun>>
 
+    @Query("SELECT * FROM CourseRun where recommended == 1 AND crAttemptId ==" + "'" + "'")
+    abstract fun getRecommendedRuns(): LiveData<List<CourseRun>>
+
     @Query("SELECT * FROM CourseRun where crAttemptId != " + "'" + "' ORDER BY hits DESC")
     abstract fun getMyRuns(): LiveData<List<CourseRun>>
 

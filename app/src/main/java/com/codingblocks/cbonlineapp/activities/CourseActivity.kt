@@ -1,11 +1,13 @@
 package com.codingblocks.cbonlineapp.activities
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,17 +21,20 @@ import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.Instructor
 import com.codingblocks.cbonlineapp.utils.Components
 import com.codingblocks.cbonlineapp.utils.MediaUtils
+import com.codingblocks.cbonlineapp.utils.OnCartItemClickListener
 import com.codingblocks.cbonlineapp.utils.loadSvg
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Sections
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_course.*
+import kotlinx.android.synthetic.main.bottom_cart_sheet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -43,6 +48,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     lateinit var courseId: String
     lateinit var courseName: String
     lateinit var progressBar: Array<ProgressBar?>
+    var sheetBehavior: BottomSheetBehavior<*>? = null
+
 
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(this)
@@ -75,6 +82,12 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         title = courseName
         coursePageTitle.text = courseName
 
+        init()
+
+
+    }
+
+    private fun init() {
         progressBar = arrayOf(courseProgress1, courseProgress2, courseProgress3, courseProgress4, courseProgress5)
         setSupportActionBar(toolbar)
         supportActionBar?.setHomeButtonEnabled(true)
@@ -86,17 +99,50 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 .load(R.layout.item_skeleton_course)
                 .show()
 
+        sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
+        sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
 
-        batchAdapter = BatchesAdapter(ArrayList())
-
-
-        batchRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        batchRv.adapter = batchAdapter
-
-
-        fetchInstructors()
 
         fetchCourse()
+    }
+
+    private fun showBottomSheet(newId: String, newName: String) {
+
+        Clients.api.getCart().enqueue(retrofitCallback { throwable, response ->
+            response?.body().let {
+                it?.getAsJsonArray("cartItems")!![0].asJsonObject.let { it ->
+                    val image = it.get("image_url").asString
+                    val name = it.get("productName").asString
+                    if (image.takeLast(3) == "png")
+                        Picasso.get().load(image).into(newImage)
+                    else
+                        newImage.loadSvg(image)
+                    oldTitle.text = name
+                    newTitle.text = newName
+                    sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+
+                    checkoutBtn.setOnClickListener {
+                        sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+                        val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+                        val customTabsIntent = builder.build()
+                        customTabsIntent.launchUrl(this@CourseActivity, Uri.parse("https://dukaan.codingblocks.com/mycart"))
+                    }
+                    continueBtn.setOnClickListener {
+                        sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+                        Clients.api.clearCart().enqueue(retrofitCallback { throwable, response ->
+                            response?.body().let {
+                                if (response?.isSuccessful!!) {
+                                    addtocart(newId, newName)
+                                }
+                            }
+                        })
+                    }
+
+
+                }
+
+            }
+        })
 
 
     }
@@ -129,6 +175,16 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         Clients.onlineV2JsonApi.courseById(courseId).enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let { course ->
                 skeletonScreen.hide()
+                fetchInstructors()
+                batchAdapter = BatchesAdapter(ArrayList(), object : OnCartItemClickListener {
+                    override fun onItemClick(id: String, name: String) {
+                        addtocart(id, name)
+                    }
+
+                })
+                batchRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                batchRv.adapter = batchAdapter
+
                 coursePageSubtitle.text = course.subtitle
                 coursePageSummary.text = course.summary
                 trialBtn.setOnClickListener {
@@ -178,6 +234,22 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         })
     }
 
+    private fun addtocart(id: String, name: String) {
+        Clients.api.addToCart(id).enqueue(retrofitCallback { throwable, response ->
+            response.let {
+                if (it?.code() == 400) {
+                    showBottomSheet(id, name)
+                } else if (it?.isSuccessful!!) {
+                    val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+                    val customTabsIntent = builder.build()
+                    customTabsIntent.launchUrl(this@CourseActivity, Uri.parse("https://dukaan.codingblocks.com/mycart"))
+                }
+            }
+
+        })
+
+    }
+
     private fun showPromoVideo(promoVideo: String?) {
 
         youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
@@ -224,6 +296,14 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
             val vBottom = view.bottom
             val sWidth = scroll.width
             scroll.smoothScrollTo(0, (vTop + vBottom - sWidth) / 2)
+        }
+    }
+
+    override fun onBackPressed() {
+        if(sheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED){
+            sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+        }else{
+            super.onBackPressed()
         }
     }
 

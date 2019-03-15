@@ -41,7 +41,7 @@ class BatchesCardUi : AnkoComponent<ViewGroup> {
                     linearLayout {
                         verticalLayout {
                             textView("Batch Starts") {
-                                textColor = context.resources.getColor(R.color.grey850)
+                                textColor = context.resources.getColor(R.color.battleship_gray)
                                 typeface = font
                             }
                             startTv = textView {
@@ -60,7 +60,7 @@ class BatchesCardUi : AnkoComponent<ViewGroup> {
                         }
                         verticalLayout {
                             textView("Batch Ends") {
-                                textColor = context.resources.getColor(R.color.grey850)
+                                textColor = context.resources.getColor(R.color.battleship_gray)
                                 typeface = font
 
                             }
