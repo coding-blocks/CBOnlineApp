@@ -51,8 +51,8 @@ class SettingsActivity : AppCompatActivity() {
             getPrefs().SP_WIFI = wifiSwitch.isChecked
         }
         val bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
-        spaceFreeTv.text = String.format("%s used",bytesAvailable.readableFileSize())
-        spaceUsedTv.text = String.format("%s free",folderSize(file).readableFileSize())
+        spaceFreeTv.text = String.format("%s free",bytesAvailable.readableFileSize())
+        spaceUsedTv.text = String.format("%s used",folderSize(file).readableFileSize())
 
 
         deleteAllTv.setOnClickListener {

@@ -100,12 +100,51 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 .show()
 
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
+        sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
 
 
         fetchCourse()
     }
 
-    private fun showBottomSheet(id: String, name: String) {
+    private fun showBottomSheet(newId: String, newName: String) {
+
+        Clients.api.getCart().enqueue(retrofitCallback { throwable, response ->
+            response?.body().let {
+                it?.getAsJsonArray("cartItems")!![0].asJsonObject.let { it ->
+                    val image = it.get("image_url").asString
+                    val name = it.get("productName").asString
+                    if (image.takeLast(3) == "png")
+                        Picasso.get().load(image).into(newImage)
+                    else
+                        newImage.loadSvg(image)
+                    oldTitle.text = name
+                    newTitle.text = newName
+                    sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+
+                    checkoutBtn.setOnClickListener {
+                        sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+                        val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+                        val customTabsIntent = builder.build()
+                        customTabsIntent.launchUrl(this@CourseActivity, Uri.parse("https://dukaan.codingblocks.com/mycart"))
+                    }
+                    continueBtn.setOnClickListener {
+                        sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+                        Clients.api.clearCart().enqueue(retrofitCallback { throwable, response ->
+                            response?.body().let {
+                                if (response?.isSuccessful!!) {
+                                    addtocart(newId, newName)
+                                }
+                            }
+                        })
+                    }
+
+
+                }
+
+            }
+        })
+
+
     }
 
     private fun fetchInstructors() {
@@ -139,18 +178,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 fetchInstructors()
                 batchAdapter = BatchesAdapter(ArrayList(), object : OnCartItemClickListener {
                     override fun onItemClick(id: String, name: String) {
-                        Clients.api.addToCart(id).enqueue(retrofitCallback { throwable, response ->
-                            response.let {
-                                if (it?.code() == 400) {
-                                    showBottomSheet(id, name)
-                                } else if (it?.isSuccessful!!) {
-                                    val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
-                                    val customTabsIntent = builder.build()
-                                    customTabsIntent.launchUrl(this@CourseActivity, Uri.parse("https://dukaan.codingblocks.com/mycart"))
-                                }
-                            }
-
-                        })
+                        addtocart(id, name)
                     }
 
                 })
@@ -206,6 +234,22 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         })
     }
 
+    private fun addtocart(id: String, name: String) {
+        Clients.api.addToCart(id).enqueue(retrofitCallback { throwable, response ->
+            response.let {
+                if (it?.code() == 400) {
+                    showBottomSheet(id, name)
+                } else if (it?.isSuccessful!!) {
+                    val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+                    val customTabsIntent = builder.build()
+                    customTabsIntent.launchUrl(this@CourseActivity, Uri.parse("https://dukaan.codingblocks.com/mycart"))
+                }
+            }
+
+        })
+
+    }
+
     private fun showPromoVideo(promoVideo: String?) {
 
         youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
@@ -252,6 +296,14 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
             val vBottom = view.bottom
             val sWidth = scroll.width
             scroll.smoothScrollTo(0, (vTop + vBottom - sWidth) / 2)
+        }
+    }
+
+    override fun onBackPressed() {
+        if(sheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED){
+            sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+        }else{
+            super.onBackPressed()
         }
     }
 

@@ -57,4 +57,11 @@ interface OnlineRestApi {
     @GET("v2/courses/doubts/{doubtid}")
     fun getDoubtById(@Path("doubtid") id: Int): Call<PostStream>
 
+    @GET("v2/runs/cart")
+    fun getCart(): Call<JsonObject>
+
+    @GET("v2/runs/clear_cart")
+    fun clearCart(): Call<JsonObject>
+
+
 }

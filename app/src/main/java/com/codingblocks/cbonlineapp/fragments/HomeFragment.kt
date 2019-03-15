@@ -91,7 +91,7 @@ class HomeFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        runDao.getAllRuns().observer(this) {
+        runDao.getRecommendedRuns().observer(this) {
             if (!it.isEmpty()) {
                 skeletonScreen.hide()
                 courseDataAdapter.setData(it.filter { c ->
@@ -151,11 +151,18 @@ class HomeFragment : Fragment(), AnkoLogger {
                             currentRuns[0].mrp ?: "",
                             myCourses.id ?: "",
                             currentRuns[0].updatedAt ?: "",
-                            title = myCourses.title ?: "")
+                            title = myCourses.title ?: "",
+                            recommended = true)
 
                     thread {
                         courseDao.insert(course)
-                        runDao.insert(courseRun)
+
+                        val oldRun = runDao.getRunById(currentRuns[0].id!!)
+                        if (oldRun == null)
+                            runDao.insert(courseRun)
+                        else if(oldRun.recommended != courseRun.recommended || oldRun.crPrice != courseRun.crPrice){
+                            runDao.update(courseRun)
+                        }
 
                         if (ui.swipeRefreshLayout.isRefreshing) {
                             runOnUiThread {

@@ -93,6 +93,9 @@ open class Runs : BaseModel() {
     @Relationship("sections", resolve = true)
     @JvmField
     var sections: ArrayList<Sections>? = null
+    @Relationship("tags", resolve = true)
+    @JvmField
+    var tags: ArrayList<Tags>? = null
 
 }
 
@@ -195,9 +198,6 @@ open class Course : BaseModel() {
     @Relationship("runs", resolve = true)
     @JvmField
     var runs: ArrayList<Runs>? = null
-
-    @JvmField
-    var tags: ArrayList<Tags>? = null
 
 }
 

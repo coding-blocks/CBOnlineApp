@@ -150,21 +150,21 @@
                     android:background="@color/black" />
 
 
-                <RatingBar
-                    android:id="@+id/coursePageRatingBar"
-                    style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="14dp"
-                    android:isIndicator="true"
-                    android:numStars="5"
-                    android:progressTint="@android:color/holo_orange_light" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:orientation="horizontal"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="14dp"
                     android:layout_height="wrap_content">
+                    <RatingBar
+                        android:id="@+id/coursePageRatingBar"
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:isIndicator="true"
+                        android:numStars="5"
+                        android:progressTint="@android:color/holo_orange_light" />
                     <TextView
                         android:id="@+id/coursePageRatingCountTv"
                         android:layout_width="wrap_content"
@@ -174,16 +174,16 @@
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
 
-                    <TextView
-                        android:id="@+id/coursePageRatingTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="25dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:fontFamily="@font/cabin"
-                        android:textColor="@android:color/black"
-                        android:textSize="18sp" />
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/coursePageRatingTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -377,7 +377,7 @@
                         android:layout_marginBottom="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/button_background"
-                        android:fontFamily="@font/cabin_medium"
+
                         android:paddingTop="15dp"
                         android:paddingBottom="15dp"
                         android:text="@string/buy_text"
@@ -420,7 +420,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:fontFamily="@font/cabin_medium"
+
                         android:text="100 + lecture\n Video Content"
                         android:textColor="@android:color/black" />
 
@@ -434,7 +434,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:fontFamily="@font/cabin_medium"
+
                         android:text="Revisit and\nRevise Topics"
                         android:textColor="@android:color/black"/>
 
@@ -458,7 +458,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:fontFamily="@font/cabin_medium"
+
                         android:text="Certificate of\nCompletion"
                         android:textColor="@android:color/black" />
 
@@ -472,7 +472,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:fontFamily="@font/cabin_medium"
+
                         android:text="24x7 Mentor\nSupport"
                         android:textColor="@android:color/black" />
 
@@ -484,7 +484,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    android:fontFamily="@font/cabin_semibold"
+
                     android:text="What will you learn"
                     android:textColor="@color/black"
                     android:textSize="22sp" />
@@ -513,7 +513,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    android:fontFamily="@font/cabin_semibold"
+
                     android:text="About Instructors"
                     android:textColor="@color/black"
                     android:textSize="22sp"
@@ -543,7 +543,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    android:fontFamily="@font/cabin_semibold"
                     android:text="Choose from Available Batches"
                     android:textColor="@color/black"
                     android:textSize="22sp" />

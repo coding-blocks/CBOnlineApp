@@ -5,6 +5,40 @@
     android:layout_height="match_parent"
     android:layout_marginTop="24dp">
 
+    <View
+        android:id="@+id/courseImgView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/skeleton_bg_rounded"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/textView5"
+        android:layout_width="0dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/skeleton_bg_rounded"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/courseImgView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/textView6"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/skeleton_bg_rounded"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/courseImgView"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
 
     <TextView
         android:id="@+id/textView7"
@@ -16,7 +50,7 @@
         android:background="@drawable/skeleton_bg_rounded"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/courseImgView" />
 
 
     <TextView
