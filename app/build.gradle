@@ -23,6 +23,8 @@ android {
         debug {
             versionNameSuffix '-debug-version'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            ext.enableCrashlytics = false
+            ext.alwaysUpdateBuildId = false
         }
         release {
             minifyEnabled false
