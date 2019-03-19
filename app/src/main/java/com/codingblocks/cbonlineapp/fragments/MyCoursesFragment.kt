@@ -16,17 +16,21 @@ import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.cbonlineapp.utils.observer
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourse
-import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
-import com.google.firebase.FirebaseException
 import com.google.firebase.analytics.FirebaseAnalytics
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.ctx
+import org.jetbrains.anko.support.v4.runOnUiThread
+import java.util.*
 import kotlin.concurrent.thread
 
 
@@ -56,7 +60,11 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         database.courseRunDao()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ):
             View? = ui.createView(AnkoContext.create(ctx, this))
 
 
@@ -68,10 +76,11 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         params.putString(FirebaseAnalytics.Param.ITEM_NAME, "MyCourses")
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
 
-        ui.allcourseText.text = "My Courses"
+        ui.allcourseText.text = getString(R.string.my_courses)
         ui.titleText.visibility = View.GONE
         ui.homeImg.visibility = View.GONE
-        courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao, "myCourses")
+        courseDataAdapter =
+            CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao, "myCourses")
         setHasOptionsMenu(true)
 
 
@@ -79,14 +88,14 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         ui.rvCourses.adapter = courseDataAdapter
 
         skeletonScreen = Skeleton.bind(ui.rvCourses)
-                .adapter(courseDataAdapter)
-                .shimmer(true)
-                .angle(20)
-                .frozen(true)
-                .duration(1200)
-                .count(4)
-                .load(R.layout.item_skeleton_course_card)
-                .show()
+            .adapter(courseDataAdapter)
+            .shimmer(true)
+            .angle(20)
+            .frozen(true)
+            .duration(1200)
+            .count(4)
+            .load(R.layout.item_skeleton_course_card)
+            .show()
         displayCourses()
 
         ui.swipeRefreshLayout.setOnRefreshListener {
@@ -98,9 +107,19 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
     private fun displayCourses(searchQuery: String = "") {
         runDao.getMyRuns().observer(this) {
-            courseDataAdapter.setData(it.filter { c ->
-                c.title.contains(searchQuery, true)
-            } as ArrayList<CourseRun>)
+
+            GlobalScope.launch(Dispatchers.Main) {
+
+                val list = withContext(Dispatchers.Default) {
+                    (it.filter { c ->
+                        (c.crEnd.toLong() * 1000) > System.currentTimeMillis() &&
+                                c.title.contains(searchQuery, true)
+                    } as ArrayList<CourseRun>)
+                }
+
+                courseDataAdapter.setData(list)
+
+            }
         }
     }
 
@@ -111,8 +130,9 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             resp?.body()?.let {
                 for (myCourses in it) {
                     //Add Course Progress to Course Object
-                    Clients.api.getMyCourseProgress(myCourses.runAttempts?.get(0)?.id.toString()).enqueue(retrofitCallback { t, progressResponse ->
-                        progressResponse?.body().let { map ->
+                    Clients.api.getMyCourseProgress(myCourses.runAttempts?.get(0)?.id.toString())
+                        .enqueue(retrofitCallback { t, progressResponse ->
+                            progressResponse?.body().let { map ->
                                 val progress: Double = try {
                                     map!!["percent"] as Double
                                 } catch (e: Exception) {
@@ -120,35 +140,38 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                 }
                                 val course = myCourses.course?.run {
                                     Course(
-                                            id ?: "",
-                                            title ?: "",
-                                            subtitle ?: "",
-                                            logo ?: "",
-                                            summary ?: "",
-                                            promoVideo ?: "",
-                                            difficulty ?: "",
-                                            reviewCount ?: 0,
-                                            rating ?: 0f,
-                                            slug ?: "",
-                                            coverImage ?: "",
-                                            updated_at = updatedAt,
-                                            categoryId = categoryId)
+                                        id ?: "",
+                                        title ?: "",
+                                        subtitle ?: "",
+                                        logo ?: "",
+                                        summary ?: "",
+                                        promoVideo ?: "",
+                                        difficulty ?: "",
+                                        reviewCount ?: 0,
+                                        rating ?: 0f,
+                                        slug ?: "",
+                                        coverImage ?: "",
+                                        updated_at = updatedAt,
+                                        categoryId = categoryId
+                                    )
                                 }
-                                val courseRun = CourseRun(myCourses.id ?: "",
-                                        myCourses.runAttempts?.get(0)?.id ?: "",
-                                        myCourses.name ?: "",
-                                        myCourses.description ?: "",
-                                        myCourses.start ?: "",
-                                        myCourses.runAttempts!![0].end ?: "",
-                                        myCourses.start ?: "",
-                                        myCourses.runAttempts!![0].end ?: "",
-                                        myCourses.price ?: "",
-                                        myCourses.mrp ?: "",
-                                        myCourses.course?.id ?: "",
-                                        myCourses.updatedAt ?: "",
-                                        progress = progress,
-                                        title = myCourses.course?.title ?: "",
-                                        premium = myCourses.runAttempts?.get(0)?.premium!!)
+                                val courseRun = CourseRun(
+                                    myCourses.id ?: "",
+                                    myCourses.runAttempts?.get(0)?.id ?: "",
+                                    myCourses.name ?: "",
+                                    myCourses.description ?: "",
+                                    myCourses.start ?: "",
+                                    myCourses.runAttempts!![0].end ?: "",
+                                    myCourses.start ?: "",
+                                    myCourses.runAttempts!![0].end ?: "",
+                                    myCourses.price ?: "",
+                                    myCourses.mrp ?: "",
+                                    myCourses.course?.id ?: "",
+                                    myCourses.updatedAt ?: "",
+                                    progress = progress,
+                                    title = myCourses.course?.title ?: "",
+                                    premium = myCourses.runAttempts?.get(0)?.premium!!
+                                )
 
                                 doAsync {
                                     val updateRun = runDao.getRunById(myCourses.id ?: "")
@@ -167,33 +190,46 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                     }
                                     //fetch CourseInstructors
                                     myCourses.course?.instructors?.forEachIndexed { _, it ->
-                                        Clients.onlineV2JsonApi.instructorsById(it.id!!).enqueue(retrofitCallback { _, response ->
+                                        Clients.onlineV2JsonApi.instructorsById(it.id!!)
+                                            .enqueue(retrofitCallback { _, response ->
 
-                                            response?.body().let { instructor ->
-                                                thread {
-                                                    instructorDao.insert(Instructor(instructor?.id
-                                                            ?: "", instructor?.name ?: "",
-                                                            instructor?.description
-                                                                    ?: "", instructor?.photo ?: "",
-                                                            "", myCourses.runAttempts!![0].id!!, myCourses.course!!.id))
-                                                    Log.e("TAG", "ID : ${instructor?.id}  Name : ${instructor?.name}")
+                                                response?.body().let { instructor ->
+                                                    thread {
+                                                        instructorDao.insert(
+                                                            Instructor(
+                                                                instructor?.id
+                                                                    ?: "",
+                                                                instructor?.name ?: "",
+                                                                instructor?.description
+                                                                    ?: "",
+                                                                instructor?.photo ?: "",
+                                                                "",
+                                                                myCourses.runAttempts!![0].id!!,
+                                                                myCourses.course!!.id
+                                                            )
+                                                        )
+                                                        Log.e(
+                                                            "TAG",
+                                                            "ID : ${instructor?.id}  Name : ${instructor?.name}"
+                                                        )
 
-                                                    myCourses.course?.let { c ->
-                                                        instructor?.let { i ->
-                                                            insertCourseAndInstructor(c, i)
-                                                        } ?: CrashlyticsCore.getInstance().apply {
-                                                            setString("course", c.id)
-                                                            log("Instructor is NULL")
+                                                        myCourses.course?.let { c ->
+                                                            instructor?.let { i ->
+                                                                insertCourseAndInstructor(c, i)
+                                                            }
+                                                                ?: CrashlyticsCore.getInstance().apply {
+                                                                    setString("course", c.id)
+                                                                    log("Instructor is NULL")
+                                                                }
                                                         }
                                                     }
                                                 }
-                                            }
-                                        })
+                                            })
                                     }
                                 }
 
-                        }
-                    })
+                            }
+                        })
                 }
             }
         })
@@ -222,7 +258,10 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     }
 
 
-    private fun insertCourseAndInstructor(course: MyCourse, instructor: com.codingblocks.onlineapi.models.Instructor) {
+    private fun insertCourseAndInstructor(
+        course: MyCourse,
+        instructor: com.codingblocks.onlineapi.models.Instructor
+    ) {
 
         thread {
             try {
