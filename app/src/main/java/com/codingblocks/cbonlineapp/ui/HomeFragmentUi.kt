@@ -67,7 +67,7 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                         id = View.generateViewId()
                         textSize = 24f
                         textColor = Color.BLACK
-                        typeface = Typeface.createFromAsset(context.assets, "fonts/Cabin-Medium.ttf")
+                        typeface = Typeface.createFromAsset(context.assets, "fonts/NunitoSans-Regular.ttf")
                     }.lparams(width = wrapContent, height = wrapContent) {
                         topMargin = dip(8)
                         marginStart = dip(16)

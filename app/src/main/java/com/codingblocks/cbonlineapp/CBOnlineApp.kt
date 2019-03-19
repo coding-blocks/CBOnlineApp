@@ -27,7 +27,7 @@ class CBOnlineApp : Application() {
                 .addInterceptor(
                     CalligraphyInterceptor(
                         CalligraphyConfig.Builder()
-                            .setDefaultFontPath("fonts/Cabin-Medium.ttf")
+                            .setDefaultFontPath("fonts/NunitoSans-Regular.ttf")
                             .setFontAttrId(R.attr.fontPath)
                             .build()
                     )
