@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:fontFamily="@font/cabin"
+        android:fontFamily="@font/nunitosans_regular"
         android:textSize="16sp"
         android:textColor="@color/black" />
 

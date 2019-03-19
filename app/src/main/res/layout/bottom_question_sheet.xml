@@ -23,7 +23,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
-            android:fontFamily="@font/cabin"
+            android:fontFamily="@font/nunitosans_regular"
             android:text="Previous"
             android:textColor="#808080"
             android:textSize="22sp" />
@@ -50,7 +50,7 @@
             android:layout_gravity="center"
             android:layout_marginEnd="16dp"
             android:layout_weight="1"
-            android:fontFamily="@font/cabin"
+            android:fontFamily="@font/nunitosans_regular"
             android:gravity="end"
             android:text="Next"
             android:textColor="@color/black"
