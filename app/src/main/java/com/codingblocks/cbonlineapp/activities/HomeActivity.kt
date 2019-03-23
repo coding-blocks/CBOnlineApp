@@ -1,8 +1,10 @@
 package com.codingblocks.cbonlineapp.activities
 
 import android.annotation.TargetApi
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
@@ -42,6 +44,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var doubleBackToExitPressedOnce = false
     lateinit var prefs: Prefs
     var mFragmentToSet: Fragment? = null
+    private var updateUIReciver: BroadcastReceiver? = null
+    private var filter: IntentFilter? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,6 +93,17 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fetchUser()
         //adding label to nav drawer items
         nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
+
+        filter = IntentFilter()
+
+        filter!!.addAction("com.codingblocks.notification")
+
+        updateUIReciver = object : BroadcastReceiver() {
+
+            override fun onReceive(context: Context, intent: Intent) {
+                invalidateOptionsMenu()
+            }
+        }
     }
 
     private fun setUser() {
@@ -261,6 +276,27 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .build()
 
         sM.dynamicShortcuts = Arrays.asList(shortcut1)
+    }
+    override fun onResume() {
+        super.onResume()
+        registerReceiver(updateUIReciver, filter)
+        invalidateOptionsMenu()
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_notifications -> {
+//                startActivity(intentFor<NotificationsActivity>())
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(updateUIReciver)
     }
 
     @TargetApi(25)

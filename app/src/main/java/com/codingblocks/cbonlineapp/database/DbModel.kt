@@ -250,6 +250,26 @@ data class DoubtsModel(
             var createdAt: String = "",
             var deletedAt: String = "")
 
+@Entity(tableName = "notificationsData")
+data class NotificationData(@PrimaryKey(autoGenerate = true) var id: Long?,
+                            @ColumnInfo(name = "thumbnailUrl") var thumbnailUrl: String,
+                            @ColumnInfo(name = "title") var title: String,
+                            @ColumnInfo(name = "seen") var seen: Boolean,
+                            @ColumnInfo(name = "type") var type: String,
+                            @Nullable @ColumnInfo(name = "externalLink") var url: String,
+                            @Nullable @ColumnInfo(name = "topic") var topic: String,
+                            @Nullable @ColumnInfo(name = "course") var course: String,
+                            @Nullable @ColumnInfo(name = "videotitle") var videotitle: String,
+                            @Nullable @ColumnInfo(name = "videoId") var videoId: String,
+                            @Nullable @ColumnInfo(name = "description") var description: String,
+                            @Nullable @ColumnInfo(name = "fragmentPosition") var fragmentPosition: Int
+
+
+) {
+    constructor() : this(null, "", "", false, "", "", "",
+            "", "", "", "", 0)
+
+}
 
 
 

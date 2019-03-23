@@ -8,4 +8,10 @@
         android:title="Search Courses"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always|collapseActionView" />
+    <item
+        android:id="@+id/action_notifications"
+        android:icon="@drawable/ic_os_notification_fallback_white_24dp"
+        android:orderInCategory="100"
+        android:title="Notifications"
+        app:showAsAction="ifRoom" />
 </menu>

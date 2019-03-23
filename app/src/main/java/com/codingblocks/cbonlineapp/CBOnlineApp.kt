@@ -1,7 +1,13 @@
 package com.codingblocks.cbonlineapp
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.content.Intent
+import android.os.AsyncTask
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.NotificationDao
+import com.codingblocks.cbonlineapp.database.NotificationData
 import com.codingblocks.onlineapi.CustomResponseInterceptor
 import com.devbrackets.android.exomedia.ExoMedia
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
@@ -17,6 +23,11 @@ import io.github.inflationx.viewpump.ViewPump
 import okhttp3.OkHttpClient
 
 class CBOnlineApp : Application() {
+
+    lateinit var database: AppDatabase
+    lateinit var dao: NotificationDao
+    var notificationData = NotificationData()
+    var position: Long? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -73,12 +84,67 @@ class CBOnlineApp : Application() {
         })
     }
 
-    class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
-        override fun notificationReceived(notification: OSNotification?) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    inner class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
+        override fun notificationReceived(notification: OSNotification) {
+            val data = notification.payload.additionalData
+            val title = notification.payload.title
+            val body = notification.payload.body
+            var imgurl = data.optString("thumbnail")
+            if (imgurl == null) {
+                imgurl = "default"
+            }
+            val type = data.optString("type")
+            when (type) {
+                "video" -> {
+                    notificationData.title = title
+                    notificationData.thumbnailUrl = imgurl
+                    notificationData.type = type
+                    notificationData.videoId = data.optString("videoId")
+                    notificationData.videotitle = data.optString("title")
+                    notificationData.description = data.optString("description")
+                    addtoDatabase()
+                }
+                "external" -> {
+
+                    notificationData.title = title
+                    notificationData.thumbnailUrl = imgurl
+                    notificationData.type = type
+                    notificationData.url = data.optString("url")
+                    addtoDatabase()
+
+
+                }
+
+                "quiz" -> {
+                    notificationData.title = title
+                    notificationData.thumbnailUrl = imgurl
+                    notificationData.type = type
+                    addtoDatabase()
+                }
+
+            }
         }
 
+        @SuppressLint("StaticFieldLeak")
+        private fun addtoDatabase() {
+            object : AsyncTask<Void, Void, Long>() {
+                override fun onPostExecute(result: Long?) {
+                    position = result
+
+                    val local = Intent()
+
+                    local.action = "com.codingblocks.notification"
+
+                    mInstance.sendBroadcast(local)
+                }
+
+                override fun doInBackground(vararg p0: Void?): Long {
+                    return dao.addtolist(notificationData)
+                }
+            }.execute()
+        }
     }
+
 
     class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
         override fun notificationOpened(result: OSNotificationOpenResult?) {
