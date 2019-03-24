@@ -17,7 +17,7 @@ android {
         versionName "0.3.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [
-                onesignal_app_id: 'PUT YOUR ONESIGNAL APP ID HERE',
+                onesignal_app_id               : 'PUT YOUR ONESIGNAL APP ID HERE',
                 // Project number pulled from dashboard, local value is ignored.
                 onesignal_google_project_number: 'REMOTE'
         ]
@@ -79,8 +79,6 @@ dependencies {
     implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
     implementation 'com.onesignal:OneSignal:3.10.6'
-
-
 
     // Image view libraries
     implementation 'com.squareup.picasso:picasso:2.71828'

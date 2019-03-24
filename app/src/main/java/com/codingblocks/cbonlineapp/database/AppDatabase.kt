@@ -16,7 +16,8 @@ import androidx.room.TypeConverters
     CourseWithInstructor::class,
     SectionWithContent::class,
     DoubtsModel::class,
-    NotesModel::class
+    NotesModel::class,
+    NotificationData::class
 ], exportSchema = false
 )
 @TypeConverters(TimestampConverter::class)
@@ -32,7 +33,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun doubtsDao(): DoubtsDao
     abstract fun notesDao(): NotesDao
     abstract fun notificationDao(): NotificationDao
-
 
 
     companion object {

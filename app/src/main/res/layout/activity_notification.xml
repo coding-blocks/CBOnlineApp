@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_theme_left_to_right"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        app:theme="@style/ToolBarStyle" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:overScrollMode="never"
+        android:id="@+id/notificationRv"
+        android:visibility="visible"
+        tools:listitem="@layout/single_notification_item"/>
+
+    <TextView
+        android:id="@+id/emptyTv"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:textColor="@color/salmon"
+        android:gravity="center"
+        android:text="Nothing here"
+        android:textSize="20sp"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
