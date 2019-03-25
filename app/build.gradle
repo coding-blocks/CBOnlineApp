@@ -1,3 +1,7 @@
+plugins {
+    id "com.diffplug.gradle.spotless" version "3.16.0"
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -38,6 +42,14 @@ android {
     compileOptions {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
+    }
+}
+
+spotless {
+    kotlin {
+        ktlint().userData(['android': 'true', 'color': 'true',
+                           'max_line_length': '120', 'reporter': 'checkstyle'])
+        target '**/*.kt'
     }
 }
 
