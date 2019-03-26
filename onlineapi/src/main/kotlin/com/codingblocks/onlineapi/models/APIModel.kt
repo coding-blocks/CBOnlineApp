@@ -96,6 +96,14 @@ open class Runs : BaseModel() {
     @Relationship("tags", resolve = true)
     @JvmField
     var tags: ArrayList<Tags>? = null
+    @Relationship("certificate", resolve = true)
+    @JvmField
+    var certificate: Certificate? = null
+
+}
+
+@Type("certificate")
+class Certificate : BaseModel(){
 
 }
 

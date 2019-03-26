@@ -17,22 +17,22 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>?) : RecyclerView.Adapter<DoubtsAdapter.DoubtsViewHolder>() {
+class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>) : RecyclerView.Adapter<DoubtsAdapter.DoubtsViewHolder>() {
 
     private lateinit var context: Context
 
-    fun setData(doubtsData: ArrayList<TopicsItem?>?) {
+    fun setData(doubtsData: ArrayList<TopicsItem?>) {
         this.doubtsData = doubtsData
         notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: DoubtsViewHolder, position: Int) {
-        holder.bindView(doubtsData!![position])
+        holder.bindView(doubtsData[position])
     }
 
 
     override fun getItemCount(): Int {
-        return doubtsData?.size ?: 0
+        return doubtsData.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoubtsViewHolder {
