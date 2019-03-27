@@ -142,7 +142,8 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                         when {
                             content.contentable == "lecture" -> {
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
-                                if (!content.contentLecture.lectureUid.isNullOrEmpty()) {
+                                if (!content.contentLecture.lectureUid.isNullOrEmpty() && !content.contentLecture.lectureUrl.isNullOrEmpty()) {
+                                    info{"promo"+content.contentLecture.lectureUrl}
                                     val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
                                     ll.addView(inflatedView)
                                     if (content.contentLecture.isDownloaded == "false") {
@@ -201,43 +202,46 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             content.contentable == "document" -> {
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_document))
                                 ll.addView(inflatedView)
-                                inflatedView.setOnClickListener {
-                                    if (content.progress == "UNDONE") {
-                                        if (content.progressId.isEmpty())
-                                            setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentDocument.documentContentId)
-                                        else
-                                            updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentDocument.documentContentId)
+                                if (!content.contentDocument.documentContentId.isEmpty() && !content.contentDocument.documentPdfLink.isEmpty()) {
+                                    inflatedView.setOnClickListener {
+                                        if (content.progress == "UNDONE") {
+                                            if (content.progressId.isEmpty())
+                                                setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentDocument.documentContentId)
+                                            else
+                                                updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentDocument.documentContentId)
+                                        }
+                                        it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
                                     }
-                                    it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
-
                                 }
                             }
                             content.contentable == "video" -> {
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_youtube_video))
                                 ll.addView(inflatedView)
-                                inflatedView.setOnClickListener {
-                                    if (content.progress == "UNDONE") {
-                                        if (content.progressId.isEmpty())
-                                            setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentVideo.videoContentId)
-                                        else
-                                            updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentVideo.videoContentId)
+                                if (!content.contentVideo.videoContentId.isEmpty() && !content.contentVideo.videoUrl.isEmpty()) {
+                                    inflatedView.setOnClickListener {
+                                        if (content.progress == "UNDONE") {
+                                            if (content.progressId.isEmpty())
+                                                setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentVideo.videoContentId)
+                                            else
+                                                updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentVideo.videoContentId)
+                                        }
+                                        it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("videoUrl" to content.contentVideo.videoUrl, "attemptId" to content.attempt_id, "contentId" to content.id).singleTop())
                                     }
-                                    it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("videoUrl" to content.contentVideo.videoUrl, "attemptId" to content.attempt_id, "contentId" to content.id).singleTop())
-
                                 }
                             }
                             content.contentable == "qna" -> {
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_quiz))
                                 ll.addView(inflatedView)
-                                inflatedView.setOnClickListener {
-                                    if (content.progress == "UNDONE") {
-                                        if (content.progressId.isEmpty())
-                                            setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentQna.qnaContentId)
-                                        else
-                                            updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
+                                if (!content.contentQna.qnaContentId.isEmpty() && !content.contentQna.qnaQid.toString().isEmpty()) {
+                                    inflatedView.setOnClickListener {
+                                        if (content.progress == "UNDONE") {
+                                            if (content.progressId.isEmpty())
+                                                setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentQna.qnaContentId)
+                                            else
+                                                updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentQna.qnaContentId)
+                                        }
+                                        it.context.startActivity(it.context.intentFor<QuizActivity>("quizId" to content.contentQna.qnaQid.toString(), "attemptId" to content.attempt_id).singleTop())
                                     }
-                                    it.context.startActivity(it.context.intentFor<QuizActivity>("quizId" to content.contentQna.qnaQid.toString(), "attemptId" to content.attempt_id).singleTop())
-
                                 }
                             }
 
