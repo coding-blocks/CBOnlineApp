@@ -19,8 +19,7 @@ buildscript {
         classpath 'com.google.gms:google-services:4.2.0'
         classpath 'io.fabric.tools:gradle:1.26.1'
         classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.11.0, 0.99.99]'
-
-
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

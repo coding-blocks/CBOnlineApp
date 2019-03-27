@@ -9,6 +9,8 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+apply plugin: 'android-apt'
+
 
 
 android {
@@ -113,6 +115,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:17.4.0'
     implementation 'com.google.firebase:firebase-invites:16.1.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+
+    //router
+    implementation 'com.github.campusappcn.AndRouter:router:1.2.8'
+    apt 'com.github.campusappcn.AndRouter:compiler:1.2.8'
 
     implementation project(':onlineapi')
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
