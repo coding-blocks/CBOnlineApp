@@ -34,7 +34,10 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_home.*
 import kotlinx.android.synthetic.main.nav_header_home.view.*
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
 import java.util.*
 
 
@@ -51,7 +54,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         title = "Coding Blocks"
         val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+            this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         drawer_layout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {}
@@ -59,9 +62,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onDrawerClosed(drawerView: View) {
                 if (mFragmentToSet != null) {
                     supportFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.fragment_holder, mFragmentToSet!!)
-                            .commit()
+                        .beginTransaction()
+                        .replace(R.id.fragment_holder, mFragmentToSet!!)
+                        .commit()
                     mFragmentToSet = null
                 }
             }
@@ -101,7 +104,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.getHeaderView(0).login_button.setOnClickListener {
             prefs.SP_ACCESS_TOKEN_KEY = Prefs.ACCESS_TOKEN
             prefs.SP_JWT_TOKEN_KEY = Prefs.JWT_TOKEN
-            removeShortcuts()
+            if (nav_view.getHeaderView(0).login_button.text == "Logout")
+                removeShortcuts()
             startActivity(intentFor<LoginActivity>().singleTop())
             finish()
         }
@@ -247,19 +251,15 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     @TargetApi(25)
     private fun createShortcut() {
         val sM = getSystemService(ShortcutManager::class.java)
-
         val intent1 = Intent(applicationContext, HomeActivity::class.java)
         intent1.action = Intent.ACTION_VIEW
-        intent1.putExtra("course", "mycourses")
-
         val shortcut1 = ShortcutInfo.Builder(this, "shortcut1")
-                .setIntent(intent1)
-                .setLongLabel("My Courses")
-                .setShortLabel("Open My Courses")
-                .setDisabledMessage("Login to open this")
-                .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
-                .build()
-
+            .setIntent(intent1)
+            .setLongLabel("My Tickets")
+            .setShortLabel("Open to show all tickets")
+            .setDisabledMessage("Login to open this")
+            .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
+            .build()
         sM.dynamicShortcuts = Arrays.asList(shortcut1)
     }
 

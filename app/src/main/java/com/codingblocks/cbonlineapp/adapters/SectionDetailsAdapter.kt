@@ -2,11 +2,9 @@ package com.codingblocks.cbonlineapp.adapters
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.net.ConnectivityManager
 import android.os.Environment
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +42,7 @@ import kotlin.concurrent.thread
 class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             private var activity: LifecycleOwner,
                             private var starter: DownloadStarter
-) : RecyclerView.Adapter<SectionDetailsAdapter.CourseViewHolder>(), AnkoLogger {
+) : RecyclerView.Adapter<SectionDetailsAdapter.CourseViewHolder>() {
 
     private lateinit var context: Context
     private lateinit var database: AppDatabase
@@ -81,7 +79,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
 
 
         return CourseViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_section, parent, false))
+            .inflate(R.layout.item_section, parent, false))
     }
 
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -143,15 +141,19 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             content.contentable == "lecture" -> {
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
                                 if (!content.contentLecture.lectureUid.isNullOrEmpty() && !content.contentLecture.lectureUrl.isNullOrEmpty()) {
-                                    info{"promo"+content.contentLecture.lectureUrl}
                                     val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
                                     ll.addView(inflatedView)
                                     if (content.contentLecture.isDownloaded == "false") {
                                         downloadBtn.setImageDrawable(null)
                                         downloadBtn.background = context.getDrawable(android.R.drawable.stat_sys_download)
                                         inflatedView.setOnClickListener {
+                                            if (content.progress == "UNDONE") {
+                                                if (content.progressId.isEmpty())
+                                                    setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentLecture.lectureContentId)
+                                                else
+                                                    updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
+                                            }
                                             it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to content.contentLecture.lectureUrl, "attemptId" to content.attempt_id, "contentId" to content.id, "downloaded" to false).singleTop())
-
                                         }
                                         downloadBtn.setOnClickListener {
                                             if (MediaUtils.checkPermission(context)) {
@@ -161,7 +163,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                                         downloadBtn.isEnabled = false
                                                         (downloadBtn.background as AnimationDrawable).start()
                                                     } else {
-                                                        Components.showconfirmation(context,"wifi")
+                                                        Components.showconfirmation(context, "wifi")
                                                     }
                                                 } else {
                                                     starter.startDownload(content.contentLecture.lectureUrl, data.id, content.contentLecture.lectureContentId, content.title, content.attempt_id, content.id)
@@ -276,14 +278,14 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
         if (ll.visibility == View.GONE) {
             expand(ll)
             arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                    0.5f)
+                0.5f)
             arrowAnimation.fillAfter = true
             arrowAnimation.duration = 350
             itemView.arrow.startAnimation(arrowAnimation)
         } else {
             collapse(ll)
             arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                    0.5f)
+                0.5f)
             arrowAnimation.fillAfter = true
             arrowAnimation.duration = 350
             itemView.arrow.startAnimation(arrowAnimation)
@@ -291,82 +293,86 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
     }
 
     fun setProgress(id: String, attempt_id: String, contentable: String, sectionId: String, contentId: String) {
-        val p = Progress()
-        val runAttempts = RunAttemptsModel()
-        val contents = Contents()
-        runAttempts.id = attempt_id
-        contents.id = id
-        p.status = "DONE"
-        p.runs = runAttempts
-        p.content = contents
-        Clients.onlineV2JsonApi.setProgress(p).enqueue(retrofitCallback { throwable, response ->
+        doAsync {
+            val p = Progress()
+            val runAttempts = RunAttemptsModel()
+            val contents = Contents()
+            runAttempts.id = attempt_id
+            contents.id = id
+            p.status = "DONE"
+            p.runs = runAttempts
+            p.content = contents
+            Clients.onlineV2JsonApi.setProgress(p).enqueue(retrofitCallback { throwable, response ->
 
-            response?.body().let {
-                val progressId = it?.id
-                when (contentable) {
-                    "lecture" -> thread {
-                        contentDao.updateProgressLecture(sectionId, contentId, "DONE", progressId
-                                ?: "")
-                    }
-
-                    "document" ->
-                        thread {
-                            contentDao.updateProgressDocuemnt(sectionId, contentId, "DONE", progressId
-                                    ?: "")
-                        }
-                    "video" ->
-                        thread {
-                            contentDao.updateProgressVideo(sectionId, contentId, "DONE", progressId
-                                    ?: "")
-                        }
-                    "qna" ->
-                        thread {
-                            contentDao.updateProgressQna(sectionId, contentId, "DONE", progressId
-                                    ?: "")
-                        }
-                    else -> {
-                    }
-                }
-
-            }
-        })
-    }
-
-    private fun updateProgress(id: String, attempt_id: String, progressId: String, status: String, contentable: String, sectionId: String, contentId: String) {
-        val p = Progress()
-        val runAttempts = RunAttemptsModel()
-        val contents = Contents()
-        runAttempts.id = attempt_id
-        contents.id = id
-        p.id = progressId
-        p.status = status
-        p.runs = runAttempts
-        p.content = contents
-        Clients.onlineV2JsonApi.updateProgress(progressId, p).enqueue(retrofitCallback { throwable, response ->
-            if (response != null) {
-                if (response.isSuccessful) {
+                response?.body().let {
+                    val progressId = it?.id
                     when (contentable) {
                         "lecture" -> thread {
-                            contentDao.updateProgressLecture(sectionId, contentId, status, progressId)
+                            contentDao.updateProgressLecture(sectionId, contentId, "DONE", progressId
+                                ?: "")
                         }
 
                         "document" ->
                             thread {
-                                contentDao.updateProgressDocuemnt(sectionId, contentId, status, progressId)
+                                contentDao.updateProgressDocuemnt(sectionId, contentId, "DONE", progressId
+                                    ?: "")
                             }
                         "video" ->
                             thread {
-                                contentDao.updateProgressVideo(sectionId, contentId, status, progressId)
+                                contentDao.updateProgressVideo(sectionId, contentId, "DONE", progressId
+                                    ?: "")
                             }
                         "qna" ->
                             thread {
-                                contentDao.updateProgressQna(sectionId, contentId, status, progressId)
+                                contentDao.updateProgressQna(sectionId, contentId, "DONE", progressId
+                                    ?: "")
                             }
+                        else -> {
+                        }
                     }
 
-
                 }
-            }
-        })
+            })
+        }
+    }
+
+    private fun updateProgress(id: String, attempt_id: String, progressId: String, status: String, contentable: String, sectionId: String, contentId: String) {
+        doAsync {
+            val p = Progress()
+            val runAttempts = RunAttemptsModel()
+            val contents = Contents()
+            runAttempts.id = attempt_id
+            contents.id = id
+            p.id = progressId
+            p.status = status
+            p.runs = runAttempts
+            p.content = contents
+            Clients.onlineV2JsonApi.updateProgress(progressId, p).enqueue(retrofitCallback { throwable, response ->
+                if (response != null) {
+                    if (response.isSuccessful) {
+                        when (contentable) {
+                            "lecture" -> thread {
+                                contentDao.updateProgressLecture(sectionId, contentId, status, progressId)
+                            }
+
+                            "document" ->
+                                thread {
+                                    contentDao.updateProgressDocuemnt(sectionId, contentId, status, progressId)
+                                }
+                            "video" ->
+                                thread {
+                                    contentDao.updateProgressVideo(sectionId, contentId, status, progressId)
+                                }
+                            "qna" ->
+                                thread {
+                                    contentDao.updateProgressQna(sectionId, contentId, status, progressId)
+                                }
+                        }
+
+
+                    }
+                }
+            })
+        }
     }
 }

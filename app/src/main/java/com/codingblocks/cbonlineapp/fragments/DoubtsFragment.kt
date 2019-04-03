@@ -46,7 +46,7 @@ class DoubtsFragment : Fragment(), AnkoLogger {
         doubtsRv.addItemDecoration(itemDecorator)
         Clients.api.getDoubts(courseId).enqueue(retrofitCallback { _, doubtsresponse ->
             doubtsresponse?.body().let {
-                doubtsAdapter.setData(it?.topicList?.topics!!)
+                it?.topicList?.topics?.let { it1 -> doubtsAdapter.setData(it1) }
             }
         })
 
