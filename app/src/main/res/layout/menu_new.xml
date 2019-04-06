@@ -11,7 +11,7 @@
         android:layout_marginStart="9dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/new_chip"
-        android:fontFamily="@font/cabin_bold"
+        android:fontFamily="@font/nunitosans_bold"
         android:gravity="center"
         android:paddingStart="16dp"
         android:paddingTop="5dp"

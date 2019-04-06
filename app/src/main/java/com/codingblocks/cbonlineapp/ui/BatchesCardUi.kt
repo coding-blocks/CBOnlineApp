@@ -27,7 +27,7 @@ class BatchesCardUi : AnkoComponent<ViewGroup> {
 
     override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui) {
         frameLayout {
-            font = ResourcesCompat.getFont(ctx, R.font.cabin_medium)
+            font = ResourcesCompat.getFont(ctx, R.font.nunitosans_semibold)
             cardView {
                 cardElevation = dip(4).toFloat()
                 radius = dip(15).toFloat()

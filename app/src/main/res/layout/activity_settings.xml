@@ -34,7 +34,7 @@
             android:id="@+id/wifiSwitch"
             android:textSize="18sp"
             android:background="@drawable/ripple"
-            android:fontFamily="@font/cabin"
+            android:fontFamily="@font/nunitosans_regular"
             android:layout_marginTop="8dp"
             app:theme="@style/ColorSwitchStyle"
             android:layout_width="match_parent"
@@ -54,7 +54,7 @@
             android:layout_width="match_parent"
             android:background="@drawable/ripple"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/cabin"
+            android:fontFamily="@font/nunitosans_regular"
             android:text="Delete all downloads"
             android:textSize="18sp" />
 
