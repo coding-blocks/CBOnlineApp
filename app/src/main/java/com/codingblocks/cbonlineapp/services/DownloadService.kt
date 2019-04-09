@@ -11,7 +11,7 @@ import androidx.core.app.NotificationCompat
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.VideosNotesAdapter
-import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.AppDatabase
 import com.codingblocks.cbonlineapp.database.NotesModel
 import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.cbonlineapp.utils.observeOnce

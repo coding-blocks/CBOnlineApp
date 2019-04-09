@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
-import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.AppDatabase
 import com.codingblocks.cbonlineapp.database.CourseRun
 import com.codingblocks.cbonlineapp.database.DoubtsModel
 import com.codingblocks.cbonlineapp.database.NotesModel

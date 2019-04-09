@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
-import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.AppDatabase
 import com.codingblocks.cbonlineapp.database.Instructor
 import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.google.firebase.analytics.FirebaseAnalytics

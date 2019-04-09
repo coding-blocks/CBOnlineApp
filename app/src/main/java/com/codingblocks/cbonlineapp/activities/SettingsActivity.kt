@@ -6,7 +6,7 @@ import android.os.Environment
 import android.os.StatFs
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.AppDatabase
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.cbonlineapp.utils.folderSize
 import com.codingblocks.cbonlineapp.utils.getPrefs

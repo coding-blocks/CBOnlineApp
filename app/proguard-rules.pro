@@ -59,7 +59,7 @@
 
 -dontwarn com.google.errorprone.**
 
--keep class org.fossasia.openevent.general.** {
+-keep class com.codingblocks.cbonlineapp.** {
   *;
 }
 

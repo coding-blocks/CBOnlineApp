@@ -6,7 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.codingblocks.cbonlineapp.R
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.activities.MyCourseActivity
-import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.AppDatabase
 import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.CourseRun
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao

@@ -11,13 +11,14 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.ProgressBarAnimation
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.BatchesAdapter
 import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
-import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.AppDatabase
 import com.codingblocks.cbonlineapp.database.Instructor
 import com.codingblocks.cbonlineapp.utils.Components
 import com.codingblocks.cbonlineapp.utils.MediaUtils
@@ -60,10 +61,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     private val courseWithInstructorDao by lazy {
         database.courseWithInstructorDao()
-    }
-
-    companion object {
-        const val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
     }
 
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
@@ -263,7 +260,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
             }
         }
         val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
-        youTubePlayerSupportFragment!!.initialize(YOUTUBE_API_KEY, youtubePlayerInit)
+        youTubePlayerSupportFragment!!.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
     }
 
     private fun fetchRating() {
