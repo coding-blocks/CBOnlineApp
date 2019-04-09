@@ -3,10 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/CBOnlineApp.iml" filepath="$PROJECT_DIR$/.idea/CBOnlineApp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/CBOnlineApp.iml" filepath="$PROJECT_DIR$/.idea/CBOnlineApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/onlineapi/onlineapi.iml" filepath="$PROJECT_DIR$/onlineapi/onlineapi.iml" />
       <module fileurl="file://$PROJECT_DIR$/onlineapi/onlineapi.iml" filepath="$PROJECT_DIR$/onlineapi/onlineapi.iml" />
     </modules>
   </component>
