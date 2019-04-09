@@ -85,7 +85,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindView(data: CourseSection, starter: DownloadStarter) {
-
             itemView.title.text = data.name
             sectionWithContentDao.getContentWithSectionId(data.id).getDistinct().observe(activity, Observer<List<CourseContent>> { it ->
 
@@ -246,7 +245,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                     }
                                 }
                             }
-
                         }
                     } else {
                         contentType.visibility = View.GONE
@@ -255,11 +253,17 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                     }
 
                     itemView.setOnClickListener {
-                        showOrHide(ll, it)
+                        if (itemView.title.text.contains("Challenges"))
+                            Components.showconfirmation(activity as Context, "unavailable")
+                        else
+                            showOrHide(ll, it)
                     }
 
                     itemView.arrow.setOnClickListener {
-                        showOrHide(ll, it)
+                        if (itemView.title.text.contains("Challenges"))
+                            Components.showconfirmation(activity as Context, "unavailable")
+                        else
+                            showOrHide(ll, it)
                     }
                 }
             })
@@ -269,7 +273,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
             val connManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
             val mWifi = connManager!!.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
             return mWifi.isConnected
-
         }
     }
 
