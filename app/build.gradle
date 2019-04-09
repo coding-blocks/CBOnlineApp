@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
+apply plugin: 'androidx.navigation.safeargs'
+
 
 def YOUTUBE_KEY = System.getenv('YOUTUBE_KEY') ?: "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
 
@@ -46,6 +48,7 @@ android {
 ext {
     ankoVersion = '0.10.6'
     room_version = "2.1.0-alpha06"
+    nav_version = "1.0.0-alpha06"
     ankoLibs = [
             // commons
             'commons',
@@ -92,6 +95,10 @@ dependencies {
     //exomedia library
     implementation 'com.devbrackets.android:exomedia:4.3.0'
     implementation 'com.google.android.exoplayer:extension-okhttp:2.9.1'
+
+    // Navigation components
+    implementation "android.arch.navigation:navigation-fragment:$nav_version"
+    implementation "android.arch.navigation:navigation-ui:$nav_version"
 
     //gson
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'

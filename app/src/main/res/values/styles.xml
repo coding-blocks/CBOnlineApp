@@ -8,6 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
         <item name="android:textColor">@color/black</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:fontFamily">@font/nunitosans_semibold</item>
+        <item name="windowNoTitle">true</item>
 
     </style>
 
