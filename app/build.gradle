@@ -92,9 +92,10 @@ dependencies {
     //database
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
-    //exomedia library
-    implementation 'com.devbrackets.android:exomedia:4.3.0'
-    implementation 'com.google.android.exoplayer:extension-okhttp:2.9.1'
+
+    //videocipher library
+    implementation 'com.vdocipher.aegis:vdocipher-android:1.0.0-beta5'
+
 
     //gson
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
