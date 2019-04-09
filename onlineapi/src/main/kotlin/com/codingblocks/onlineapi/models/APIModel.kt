@@ -330,7 +330,7 @@ class LectureContent : Contents() {
 
     @Relationship("csv", resolve = true)
     @JvmField
-    var csv: ContentQna? = null
+    var csv: ContentCsv? = null
 
 }
 
@@ -373,13 +373,22 @@ class ContentCsv : BaseModel() {
     @JvmField
     @JsonProperty("content-id")
     var content_id: String? = null
-
-    @JvmField
-    @JsonProperty("q-id")
-    var q_id: Int? = null
-
     @JvmField
     var name: String? = null
+    @JvmField
+    var description: String? = null
+    @JvmField
+    @JsonProperty("ref-csv")
+    var ref_csv: String? = null
+    @JvmField
+    @JsonProperty("dataset-url")
+    var dataset_url: String? = null
+    @JvmField
+    @JsonProperty("testcases-url")
+    var testcases_url: String? = null
+    @JvmField
+    @JsonProperty("judge-script")
+    var judge_script: String? = null
 }
 
 @Type("document")

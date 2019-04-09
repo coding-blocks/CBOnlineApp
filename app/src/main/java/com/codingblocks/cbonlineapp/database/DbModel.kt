@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.database
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.room.*
+import com.codingblocks.onlineapi.models.ContentCsv
 import java.sql.Date
 
 
@@ -141,7 +142,10 @@ data class CourseContent(
         var contentQna: ContentQna = ContentQna(),
         @Embedded
         @Nullable
-        var contentCode: ContentCodeChallenge = ContentCodeChallenge()
+        var contentCode: ContentCodeChallenge = ContentCodeChallenge(),
+        @Embedded
+        @Nullable
+        var contentCsv: ContentCsvModel = ContentCsvModel()
 ) : BaseModel(uid, contentUpdatedAt)
 
 @Entity(
@@ -184,7 +188,7 @@ data class ContentDocument(
         var documentUpdatedAt: String = ""
 )
 
-@Entity()
+@Entity
 data class ContentVideo(
         var videoUid: String = "",
         var videoName: String = "",
@@ -196,7 +200,7 @@ data class ContentVideo(
 )
 
 
-@Entity()
+@Entity
 data class ContentCodeChallenge(
         var codeUid: String = "",
         var codeName: String = "",
@@ -206,13 +210,21 @@ data class ContentCodeChallenge(
         var codeUpdatedAt: String = ""
 )
 
-@Entity()
+@Entity
 data class ContentQna(
         var qnaUid: String = "",
         var qnaName: String = "",
         var qnaQid: Int = 0,
         var qnaContentId: String = "",
         var qnaUpdatedAt: String = ""
+)
+@Entity
+data class ContentCsvModel(
+    var csvUid: String= "",
+    var csvName: String="",
+    var csvDescription: String="",
+    var csvContentId: String="",
+    var qnaUpdatedAt: String=""
 )
 
 @Entity(indices = [Index("contentId")],

@@ -18,6 +18,7 @@ import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
 import com.codingblocks.cbonlineapp.fragments.OverviewFragment
 import com.codingblocks.cbonlineapp.utils.MediaUtils
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.ContentCsv
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
@@ -129,6 +130,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                                         var contentVideo = ContentVideo()
                                         var contentQna = ContentQna()
                                         var contentCodeChallenge = ContentCodeChallenge()
+                                        var contentCsv = ContentCsvModel()
 
 
 
@@ -174,6 +176,14 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                                                         content.section_content?.id ?: "",
                                                         it.updatedAt ?: "")
                                             }
+                                            content.contentable.equals("csv") -> content.csv?.let {
+                                                contentCsv = ContentCsvModel(it.id
+                                                    ?: "",
+                                                    it.name ?: "",
+                                                    it.description ?: "",
+                                                    it.content_id ?: "",
+                                                    it.updatedAt ?: "")
+                                            }
                                         }
                                         var progressId = ""
                                         val status: String
@@ -200,7 +210,8 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger {
                                                     contentDocument,
                                                     contentVideo,
                                                     contentQna,
-                                                    contentCodeChallenge))
+                                                    contentCodeChallenge,
+                                                    contentCsv))
                                             insertSectionWithContent(section.id
                                                     ?: "", content.id ?: "")
                                         } else if (updateContent.progress != status || updateContent.title != content.title) {
