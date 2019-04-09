@@ -224,7 +224,7 @@ data class ContentCsvModel(
     var csvName: String="",
     var csvDescription: String="",
     var csvContentId: String="",
-    var qnaUpdatedAt: String=""
+    var csvUpdatedAt: String=""
 )
 
 @Entity(indices = [Index("contentId")],
