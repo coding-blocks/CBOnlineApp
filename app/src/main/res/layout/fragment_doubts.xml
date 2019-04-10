@@ -6,9 +6,9 @@
     tools:context=".fragments.DoubtsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
         android:id="@+id/doubtsRv"
-        tools:listitem="@layout/single_doubt_item"
-        android:layout_height="match_parent" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/single_doubt_item" />
 
 </FrameLayout>

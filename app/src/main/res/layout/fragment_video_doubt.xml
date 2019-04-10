@@ -1,39 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey850"
     android:animateLayoutChanges="true"
+    android:background="@color/grey850"
     android:fitsSystemWindows="true"
     tools:context=".fragments.VideoDoubtFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
         android:id="@+id/doubtsRv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_margin="8dp"
-        tools:listitem="@layout/item_doubt"
-        android:layout_height="match_parent" />
+        tools:listitem="@layout/item_doubt" />
 
     <TextView
         android:id="@+id/emptyTv"
         android:layout_width="wrap_content"
-        android:textColor="@color/salmon"
-        android:text="@string/empty_doubts_text"
-        android:textSize="20sp"
-        android:visibility="gone"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_height="wrap_content" />
+        android:text="@string/empty_doubts_text"
+        android:textColor="@color/salmon"
+        android:textSize="20sp"
+        android:visibility="gone" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/doubtFab"
         android:layout_width="wrap_content"
-        android:visibility="gone"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         android:layout_gravity="right|bottom"
-        android:src="@android:drawable/ic_input_add" />
+        android:layout_margin="16dp"
+        android:src="@android:drawable/ic_input_add"
+        android:visibility="gone" />
 
 </FrameLayout>

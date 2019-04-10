@@ -5,10 +5,13 @@ import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.PostStream
 import com.codingblocks.onlineapi.models.RatingModel
 import com.google.gson.JsonObject
-import kotlinx.coroutines.Deferred
 import retrofit2.Call
-import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface OnlineRestApi {
     @GET("v2/run_attempts/{runid}/progress")

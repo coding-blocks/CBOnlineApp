@@ -104,9 +104,10 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".services.DownloadService"
+        <service
+            android:name=".services.DownloadService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
 
         <activity
             android:name=".activities.SettingsActivity"

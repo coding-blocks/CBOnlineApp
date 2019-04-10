@@ -19,8 +19,8 @@
         android:id="@+id/nameTv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_weight="1.0"
+        android:gravity="center"
         android:text="User"
         android:textColor="@color/salmon" />
 

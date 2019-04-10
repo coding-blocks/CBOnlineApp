@@ -6,17 +6,16 @@
     <group android:name="background">
         <path
             android:name="circle"
-            android:strokeColor="@color/white"
-            android:strokeWidth="0.2"
             android:fillColor="@color/green"
-            android:pathData="M12,12m-10,0a10,10 0,1 1,20 0a10,10 0,1 1,-20 0" />
+            android:pathData="M12,12m-10,0a10,10 0,1 1,20 0a10,10 0,1 1,-20 0"
+            android:strokeWidth="0.2"
+            android:strokeColor="@color/white" />
     </group>
     <group android:name="check">
 
         <path
             android:fillColor="@color/white"
-            android:pathData="M9,16.17L4.83,12l-1.52,1.41L9,19 19,7l-1.41,-1.41z"
-            />
+            android:pathData="M9,16.17L4.83,12l-1.52,1.41L9,19 19,7l-1.41,-1.41z" />
     </group>
 
 </vector>

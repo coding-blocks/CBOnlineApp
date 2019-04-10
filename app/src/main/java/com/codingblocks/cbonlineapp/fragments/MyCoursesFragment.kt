@@ -3,14 +3,22 @@ package com.codingblocks.cbonlineapp.fragments
 
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
-import com.codingblocks.cbonlineapp.database.*
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.Course
+import com.codingblocks.cbonlineapp.database.CourseRun
+import com.codingblocks.cbonlineapp.database.CourseWithInstructor
+import com.codingblocks.cbonlineapp.database.Instructor
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.cbonlineapp.utils.observer
@@ -29,7 +37,6 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.ctx
-import org.jetbrains.anko.support.v4.runOnUiThread
 import java.util.*
 import kotlin.concurrent.thread
 

@@ -12,12 +12,20 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.constraint.layout.constraintLayout
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.imageView
+import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.nestedScrollView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
-
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.view
+import org.jetbrains.anko.wrapContent
 
 class HomeFragmentUi<T> : AnkoComponent<T> {
     lateinit var rvCourses: RecyclerView
@@ -25,14 +33,11 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
     lateinit var titleText: TextView
     lateinit var homeImg: ImageView
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
-
-
     override fun createView(ui: AnkoContext<T>): View = with(ui) {
         swipeRefreshLayout {
             swipeRefreshLayout = this
             nestedScrollView {
                 constraintLayout {
-
                     titleText = textView {
                         text = context.resources.getString(R.string.learn_to_code_interactively)
                         id = View.generateViewId()
@@ -48,7 +53,6 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                         startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                         horizontalBias = 0.0f
                         endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-
                     }
                     homeImg = imageView(R.drawable.ic_home) {
                         id = View.generateViewId()
@@ -60,7 +64,6 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                         horizontalBias = 0.0f
                         topToBottom = titleText.id
                         endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-
                     }
                     allcourseText = textView {
                         text = context.resources.getString(R.string.recommended_courses)
@@ -74,9 +77,7 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                         topToBottom = homeImg.id
                         startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                         horizontalBias = 0.0f
-
                     }
-
                     val view = view {
                         id = View.generateViewId()
                         backgroundColor = Color.BLACK
@@ -87,9 +88,7 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                         endToEnd = allcourseText.id
                         startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                         topToBottom = allcourseText.id
-
                     }
-
 
                     rvCourses = recyclerView {
                         id = View.generateViewId()
@@ -103,10 +102,7 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                         startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                         endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
                         topToBottom = view.id
-
                     }
-
-
                 }.lparams(width = matchParent, height = matchParent) {
                     isFocusableInTouchMode = true
                     descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
@@ -114,6 +110,4 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
             }
         }
     }
-
-
 }

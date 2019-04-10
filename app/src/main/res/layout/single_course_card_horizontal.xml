@@ -15,16 +15,16 @@
 
         <ImageView
             android:id="@+id/courseCoverImgView"
-            android:background="@drawable/bck_rounded"
-            android:src="@drawable/placeholder_course_cover"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginEnd="8dp"
+            android:background="@drawable/bck_rounded"
             android:scaleType="centerCrop"
+            android:src="@drawable/placeholder_course_cover"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/courseInstrucImgView1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -110,10 +110,10 @@
             android:id="@+id/courseInstrucImgView2"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:visibility="invisible"
             android:layout_marginStart="75dp"
             android:layout_marginTop="12dp"
             android:elevation="1dp"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -11,7 +11,6 @@ import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.cbonlineapp.utils.formatDate
 import com.codingblocks.onlineapi.models.QuizAttempt
 import org.jetbrains.anko.AnkoLogger
-import java.text.SimpleDateFormat
 import java.util.*
 
 class QuizAttemptListAdapter(internal var context: Context,

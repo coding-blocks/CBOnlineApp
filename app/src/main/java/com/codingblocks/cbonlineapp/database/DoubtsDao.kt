@@ -11,9 +11,8 @@ abstract class DoubtsDao : BaseDao<DoubtsModel> {
     abstract fun getDoubts(ruid: String): LiveData<List<DoubtsModel>>
 
     @Query("UPDATE DoubtsModel SET status = :status where dbtUid = :uid")
-    abstract fun updateStatus(uid: String,status:String)
+    abstract fun updateStatus(uid: String, status: String)
 
     @Query("SElECT * FROM DoubtsModel where dbtUid = :uid")
     abstract fun getDoubtById(uid: String): LiveData<DoubtsModel>
-
 }

@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_weight="4"
+    android:orientation="horizontal"
     android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:orientation="horizontal">
+    android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/numberTv"
@@ -32,9 +32,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="0.8"
-        android:textColor="@color/green"
         android:gravity="center"
-        android:text="100" />
+        android:text="100"
+        android:textColor="@color/green" />
 
     <TextView
         android:id="@+id/statusTv"

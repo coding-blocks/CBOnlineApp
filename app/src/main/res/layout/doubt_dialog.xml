@@ -35,16 +35,16 @@
                 android:textSize="14sp" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/titleLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/titleLayout"
-                android:theme="@style/TextInputLayoutAppearance"
-                android:hint="@string/hint_title"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                app:errorEnabled="true"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
+                android:hint="@string/hint_title"
+                android:theme="@style/TextInputLayoutAppearance"
+                app:errorEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintEnabled="true">
 
@@ -54,15 +54,15 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/descriptionLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/descriptionLayout"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                app:errorEnabled="true"
                 android:layout_marginBottom="8dp"
-                android:theme="@style/TextInputLayoutAppearance"
                 android:hint="@string/hint_description"
+                android:theme="@style/TextInputLayoutAppearance"
+                app:errorEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintEnabled="true">
 

@@ -25,7 +25,6 @@ import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.RunAttemptsModel
 import kotlinx.android.synthetic.main.item_doubt.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 

@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.services
 
 import android.os.AsyncTask
-import java.io.File
 
 class DownloadTask(downloadListener: DownloadNotification) : AsyncTask<String, Int, Int>() {
 

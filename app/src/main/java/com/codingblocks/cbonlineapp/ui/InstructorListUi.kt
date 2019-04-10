@@ -9,9 +9,14 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet.MATCH_CONSTRAINT_WRAP
 import de.hdodenhof.circleimageview.CircleImageView
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.custom.ankoView
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.wrapContent
 
 class InstructorListUi : AnkoComponent<ViewGroup> {
     //custom views using anko
@@ -47,7 +52,6 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
                 topToTop = ConstraintLayout.LayoutParams.PARENT_ID
                 startToEnd = instructorImgView.id
                 matchConstraintDefaultWidth = MATCH_CONSTRAINT_WRAP
-
             }
             val instructorTextView = textView("Mentor,Coding Blocks") {
                 id = View.generateViewId()

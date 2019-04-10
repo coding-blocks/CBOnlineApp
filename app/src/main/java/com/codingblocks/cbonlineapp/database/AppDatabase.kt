@@ -32,7 +32,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun doubtsDao(): DoubtsDao
     abstract fun notesDao(): NotesDao
 
-
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
@@ -50,5 +49,4 @@ abstract class AppDatabase : RoomDatabase() {
                     .build()
         }
     }
-
 }

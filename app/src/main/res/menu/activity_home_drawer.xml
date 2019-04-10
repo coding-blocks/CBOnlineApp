@@ -26,9 +26,9 @@
         android:checkableBehavior="single"
         android:menuCategory="system">
         <item
+            android:id="@+id/nav_preferences"
             android:icon="@drawable/ic_settings_black_24dp"
-        android:id="@+id/nav_preferences"
-        android:title="@string/title_activity_settings" />
+            android:title="@string/title_activity_settings" />
 
         <item
             android:id="@+id/nav_contactUs"

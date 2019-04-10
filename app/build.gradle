@@ -1,3 +1,7 @@
+plugins {
+    id "com.diffplug.gradle.spotless" version "3.16.0"
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -25,7 +29,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -48,6 +53,13 @@ ext {
             'design',
             // 'percent',
     ]
+}
+spotless {
+    kotlin {
+        ktlint().userData(['android'        : 'true', 'color': 'tr/gradue',
+                           'max_line_length': '250', 'reporter': 'checkstyle'])
+        target '**/*.kt'
+    }
 }
 
 
@@ -72,7 +84,6 @@ dependencies {
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
     implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
     implementation 'com.github.jasminb:jsonapi-converter:0.9'
-
 
     // Image view libraries
     implementation 'com.squareup.picasso:picasso:2.71828'

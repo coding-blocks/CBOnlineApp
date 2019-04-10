@@ -19,7 +19,7 @@ abstract class ContentDao : BaseDao<CourseContent> {
     abstract fun getCourseContents(attempt_id: String): LiveData<List<CourseContent>>
 
     @Query("SElECT * FROM CourseContent where attempt_id = :attempt_id AND uid = :id")
-    abstract fun getContentWithId(attempt_id: String,id:String): CourseContent
+    abstract fun getContentWithId(attempt_id: String, id: String): CourseContent
 
     @Query("SElECT * FROM CourseContent where isDownloaded = :progress ORDER BY date")
     abstract fun getDownloads(progress: String): List<CourseContent>
@@ -34,16 +34,14 @@ abstract class ContentDao : BaseDao<CourseContent> {
     //Dynamic paramters not working
 
     @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE lectureContentId = :contentid AND section_id = :section")
-    abstract fun updateProgressLecture(section: String, contentid: String, progress: String,progressId: String)
+    abstract fun updateProgressLecture(section: String, contentid: String, progress: String, progressId: String)
 
     @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE documentContentId = :contentid AND section_id = :section")
-    abstract fun updateProgressDocuemnt(section: String, contentid: String, progress: String,progressId: String)
+    abstract fun updateProgressDocuemnt(section: String, contentid: String, progress: String, progressId: String)
 
     @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE videoContentId = :contentid AND section_id = :section")
-    abstract fun updateProgressVideo(section: String, contentid: String, progress: String,progressId: String)
+    abstract fun updateProgressVideo(section: String, contentid: String, progress: String, progressId: String)
 
     @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE qnaContentId = :contentid AND section_id = :section")
-    abstract fun updateProgressQna(section: String, contentid: String, progress: String,progressId: String)
-
-
+    abstract fun updateProgressQna(section: String, contentid: String, progress: String, progressId: String)
 }

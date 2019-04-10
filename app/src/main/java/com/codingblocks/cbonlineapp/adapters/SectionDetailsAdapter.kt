@@ -22,7 +22,11 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.activities.PdfActivity
 import com.codingblocks.cbonlineapp.activities.QuizActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.database.*
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.ContentDao
+import com.codingblocks.cbonlineapp.database.CourseContent
+import com.codingblocks.cbonlineapp.database.CourseSection
+import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.utils.Animations.collapse
 import com.codingblocks.cbonlineapp.utils.Animations.expand
 import com.codingblocks.cbonlineapp.utils.Components
@@ -34,7 +38,13 @@ import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.RunAttemptsModel
 import kotlinx.android.synthetic.main.item_section.view.*
-import org.jetbrains.anko.*
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.noButton
+import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.yesButton
 import java.io.File
 import kotlin.concurrent.thread
 

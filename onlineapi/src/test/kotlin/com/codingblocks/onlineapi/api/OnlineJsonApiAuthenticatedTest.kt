@@ -2,7 +2,9 @@ package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Progress
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 

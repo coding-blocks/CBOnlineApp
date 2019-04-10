@@ -7,10 +7,7 @@ import okhttp3.Response
 import java.io.IOException
 import java.net.URL
 
-
 class CustomResponseInterceptor : Interceptor {
-
-
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response? {
         val request = chain.request()
@@ -47,11 +44,10 @@ class CustomResponseInterceptor : Interceptor {
         val newParams = Clients.api.getVideoDownloadKey(oldUrl.toString()).execute().body()   /* make a new request which is same as the original one, except that its headers now contain a refreshed query params */
         // pass new policy-string as query param for the request
         return oldUrl.newBuilder()
-                .addQueryParameter("Key-Pair-Id", newParams?.get("keyId")?.asString)
-                .addQueryParameter("Signature", newParams?.get("signature")?.asString)
-                .addQueryParameter("Policy", newParams?.get("policyString")?.asString)
-                .build()
+            .addQueryParameter("Key-Pair-Id", newParams?.get("keyId")?.asString)
+            .addQueryParameter("Signature", newParams?.get("signature")?.asString)
+            .addQueryParameter("Policy", newParams?.get("policyString")?.asString)
+            .build()
     }
-
 }
 

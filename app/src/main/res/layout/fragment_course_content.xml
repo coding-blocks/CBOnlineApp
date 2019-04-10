@@ -7,12 +7,12 @@
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/sectionProgressBar"
-        android:layout_marginTop="10dp"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.SalmonAccent"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:theme="@style/AppTheme.SalmonAccent"
         android:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView

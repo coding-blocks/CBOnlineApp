@@ -8,14 +8,9 @@ import android.view.ViewGroup
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.utils.formatDate
-import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.TopicsItem
 import kotlinx.android.synthetic.main.doubt_header_item.view.*
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>) : RecyclerView.Adapter<DoubtsAdapter.DoubtsViewHolder>() {
 

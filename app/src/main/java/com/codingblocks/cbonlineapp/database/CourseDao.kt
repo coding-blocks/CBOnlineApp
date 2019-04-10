@@ -18,5 +18,4 @@ abstract class CourseDao : BaseDao<Course> {
 
     @Query("SElECT * FROM Course where uid != " + "'" + "'")
     abstract fun getMyCourses(): LiveData<List<Course>>
-
 }

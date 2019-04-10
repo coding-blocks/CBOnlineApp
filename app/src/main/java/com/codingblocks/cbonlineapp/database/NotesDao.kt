@@ -14,15 +14,11 @@ abstract class NotesDao : BaseDao<NotesModel> {
     abstract fun getAllNotes(): LiveData<List<NotesModel>>
 
     @Query("UPDATE NotesModel SET text = :text where nttUid = :uid")
-    abstract fun updateBody(uid: String,text:String)
+    abstract fun updateBody(uid: String, text: String)
 
     @Query("SElECT * FROM NotesModel where nttUid = :uid")
     abstract fun getNoteById(uid: String): LiveData<NotesModel>
 
     @Query("DELETE FROM NotesModel where nttUid = :uid")
     abstract fun deleteNoteByID(uid: String)
-
-
-
-
 }
