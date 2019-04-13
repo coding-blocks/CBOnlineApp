@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/player_region"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ProgressBar
+        android:id="@+id/loading_icon"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ImageButton
+        android:id="@+id/play_pause_button"
+        android:src="@drawable/ic_play_arrow_white_48dp"
+        android:background="@android:color/transparent"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ImageButton
+        android:id="@+id/replay_button"
+        android:src="@drawable/ic_replay_white_48dp"
+        android:background="@android:color/transparent"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ImageButton
+        android:id="@+id/error_icon"
+        android:src="@drawable/ic_error_white_48dp"
+        android:background="@android:color/transparent"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:id="@+id/bottom_panel"
+        android:orientation="horizontal"
+        android:background="@color/black_transparent"
+        android:layout_alignParentBottom="true"
+        android:clickable="true"
+        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/current_time"
+            android:text="00:00"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:paddingRight="8dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <SeekBar
+            android:id="@+id/seekbar"
+            android:layout_gravity="center_vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/duration"
+            android:text="00:00"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:paddingLeft="8dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/speed_control_button"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:layout_marginLeft="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:minWidth="0dp"
+            android:textAllCaps="false"
+            android:text="1x"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/quality_button"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_high_quality_white_24dp"
+            android:background="@android:color/transparent"
+            android:layout_marginLeft="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/captions_button"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_closed_caption_white_24dp"
+            android:background="@android:color/transparent"
+            android:layout_marginLeft="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/fullscreen_toggle_button"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_fullscreen_white_24dp"
+            android:background="@android:color/transparent"
+            android:layout_marginLeft="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</RelativeLayout>
