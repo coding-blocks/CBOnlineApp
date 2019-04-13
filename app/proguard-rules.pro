@@ -66,6 +66,10 @@
 -dontwarn kotlin.reflect.**
 -keep class kotlin.** { *; }
 
+#video cipher
+-keep class com.vdocipher.aegis.* { ;  }
+
+
 # Jackson
 -keepattributes *Annotation*,EnclosingMethod,Signature
 -keepnames class com.fasterxml.jackson.** { *; }
