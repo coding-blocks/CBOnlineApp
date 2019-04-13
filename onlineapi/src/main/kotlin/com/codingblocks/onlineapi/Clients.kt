@@ -50,6 +50,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object Clients {
+
+    //TODO check this for api changes
     private val om = ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false)
@@ -135,9 +137,12 @@ object Clients {
     private var client = OkHttpClient.Builder().addInterceptor(interceptor).build()
     //This client will download the video and m3u8 files from the server
     private val videoDownloadClient = Retrofit.Builder()
-        .baseUrl("https://d1qf0ozss494xv.cloudfront.net/")
+        .baseUrl("https://dev.vdocipher.com/api/videos/{videoID}/otp")
         .client(client)
         .build()
     private val apiVideo: OnlineVideosApi = videoDownloadClient.create(OnlineVideosApi::class.java)
+
+    fun initiateCipherDownload(videoId:String) = apiVideo.getVideos(videoId)
+
     fun initiateDownload(url: String, fileName: String, keyPairId: String, signature: String, policy: String) = apiVideo.getVideoFiles(url, fileName, keyPairId, signature, policy)
 }
