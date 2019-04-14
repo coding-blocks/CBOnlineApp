@@ -11,6 +11,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.ProgressBarAnimation
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
@@ -203,7 +204,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                         toast("No available runs right now ! Please check back later")
                     }
                 }
-                showPromoVideo(course.promoVideo)
+                showPromoVideo(course.promoVideo?:"")
                 fetchRating()
                 if (!course.runs.isNullOrEmpty()) {
                     val sections = course.runs?.get(0)?.sections
@@ -250,7 +251,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     }
 
-    private fun showPromoVideo(promoVideo: String?) {
+    private fun showPromoVideo(promoVideo: String) {
 
         youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
             override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
@@ -263,7 +264,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
             }
         }
         val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
-        youTubePlayerSupportFragment!!.initialize(YOUTUBE_API_KEY, youtubePlayerInit)
+        youTubePlayerSupportFragment!!.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
     }
 
     private fun fetchRating() {

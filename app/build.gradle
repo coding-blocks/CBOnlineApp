@@ -9,6 +9,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 
+def YOUTUBE_KEY = System.getenv('YOUTUBE_KEY') ?: "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
 
 android {
     compileSdkVersion 28
@@ -27,11 +28,15 @@ android {
         debug {
             versionNameSuffix '-debug-version'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'
+
         }
         release {
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'
+
         }
     }
     compileOptions {
