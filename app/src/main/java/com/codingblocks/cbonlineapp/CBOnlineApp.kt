@@ -50,5 +50,4 @@ class CBOnlineApp : Application() {
             return mInstance.applicationContext
         }
     }
-
 }

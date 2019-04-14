@@ -10,7 +10,6 @@ import androidx.core.app.NotificationCompat
 import com.codingblocks.cbonlineapp.util.MediaUtils
 
 class DownloadNotification {
-
     //        NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID)
 //                .setSmallIcon(R.drawable.ic_file_download)
 //                .setContentTitle("Download")
@@ -28,12 +27,10 @@ class DownloadNotification {
             pendingIntent = PendingIntent.getActivity(downloadService, 0, intent, 0)
             notifyBuilder = NotificationCompat.Builder(downloadService!!, MediaUtils.DOWNLOAD_CHANNEL_ID)
         }
-
     private var lastProgress = 0
     private var intent: Intent? = null
     private var pendingIntent: PendingIntent? = null
     private var notifyBuilder: NotificationCompat.Builder? = null
-
     fun onSuccess() {
         this.downloadService?.stopForeground(true)
         sendDownloadNotification("Downloaded successfully.", "finalized", -1)
@@ -57,13 +54,11 @@ class DownloadNotification {
 
     private fun sendDownloadNotification(title: String, text: String?, progress: Int) {
         val notification = getDownloadNotification(title, text, progress)
-
         val notificationManager = this.downloadService!!.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(1, notification)
     }
 
     fun getDownloadNotification(title: String, text: String?, progress: Int): Notification {
-
         if (progress == 0) {
             val bitmap = BitmapFactory.decodeResource(this.downloadService!!.resources, android.R.drawable.stat_sys_download)
             notifyBuilder?.setLargeIcon(bitmap)
@@ -74,7 +69,6 @@ class DownloadNotification {
             if (text != null) notifyBuilder?.setContentText(text)
             notifyBuilder?.priority = NotificationCompat.PRIORITY_HIGH
             notifyBuilder?.setOngoing(true)
-
         }
 
         if (progress in 1..99) {

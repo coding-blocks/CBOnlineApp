@@ -11,7 +11,6 @@ import com.codingblocks.cbonlineapp.database.models.SectionWithContent
 
 @Dao
 interface SectionWithContentsDao {
-
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("""
         SELECT * FROM CourseContent

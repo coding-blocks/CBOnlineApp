@@ -26,9 +26,7 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
     lateinit var instructorDescription: TextView
     lateinit var instructorImgView: CircleImageView
     lateinit var font: Typeface
-
     override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui) {
-
         constraintLayout {
             font = Typeface.createFromAsset(context.assets, "fonts/NunitoSans-Regular.ttf")
             //write this before using its id on another layout

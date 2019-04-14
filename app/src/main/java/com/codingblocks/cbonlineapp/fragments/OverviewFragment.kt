@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,10 +15,7 @@ import org.jetbrains.anko.AnkoLogger
 private const val ARG_ATTEMPT_ID = "attempt_id"
 private const val ARG__RUN_ID = "run_id"
 
-
 class OverviewFragment : Fragment(), AnkoLogger {
-
-
     lateinit var attemptId: String
     lateinit var runId: String
     private lateinit var leaderboardListAdapter: LeaderboardListAdapter
@@ -27,7 +23,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?):
-            View? = inflater.inflate(R.layout.fragment_overview, container, false).apply {
+        View? = inflater.inflate(R.layout.fragment_overview, container, false).apply {
         leaderboardListAdapter = LeaderboardListAdapter(context, list)
     }
 
@@ -37,9 +33,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
         arguments?.let {
             attemptId = it.getString(ARG_ATTEMPT_ID)!!
             runId = it.getString(ARG__RUN_ID)!!
-
         }
-
 //        val header = layoutInflater.inflate(R.layout.leaderboard_header, leaderboardLv, false) as ViewGroup
 //        leaderboardLv.addHeaderView(header, null, false)
 //        leaderboardLv.adapter = leaderboardListAdapter
@@ -58,16 +52,14 @@ class OverviewFragment : Fragment(), AnkoLogger {
     }
 
     companion object {
-
         @JvmStatic
         fun newInstance(param1: String, crUid: String) =
-                OverviewFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_ATTEMPT_ID, param1)
-                        putString(ARG__RUN_ID, crUid)
-
-                    }
+            OverviewFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_ATTEMPT_ID, param1)
+                    putString(ARG__RUN_ID, crUid)
                 }
+            }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -81,6 +73,4 @@ class OverviewFragment : Fragment(), AnkoLogger {
             }
         }
     }
-
-
 }

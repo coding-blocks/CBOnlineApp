@@ -16,17 +16,16 @@ import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.QuizResult
 import com.codingblocks.onlineapi.models.QuizSubmission
 import com.codingblocks.onlineapi.models.Quizqnas
-import kotlinx.android.synthetic.main.quizlayout.view.*
+import kotlinx.android.synthetic.main.quizlayout.view.questionDescription
+import kotlinx.android.synthetic.main.quizlayout.view.questionRv
+import kotlinx.android.synthetic.main.quizlayout.view.questionTitle
+import kotlinx.android.synthetic.main.quizlayout.view.submitButton
 import org.jetbrains.anko.AnkoLogger
-
 
 class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: String, var attemptId: String, private var questionList: HashMap<Int, String>, submission: List<QuizSubmission>?, var result: QuizResult?) : PagerAdapter(), AnkoLogger {
     private lateinit var choiceDataAdapter: QuizChoiceAdapter
     var submissionList: ArrayList<QuizSubmission> = submission as ArrayList<QuizSubmission>
-
-
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-
         container.removeView(`object` as ScrollView)
     }
 
@@ -52,7 +51,6 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                         if (result == null) {
                             //marking correct option in the list
                             it.choices!![position].marked = true
-
                             //unmarking rest of the options
                             it.choices!!.forEachIndexed { index, choice ->
                                 if (index != position) {
@@ -78,11 +76,9 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                             qna.id = quizId
                             quizAttempt.qna = qna
                             Clients.onlineV2JsonApi.updateQuizAttempt(qaId, quizAttempt).enqueue(retrofitCallback { throwable, response ->
-
                             })
                         }
                     }
-
                 })
                 submissionList.forEach { quizSumbission ->
                     if (quizSumbission.id == questionList[pos]!!) {
@@ -103,7 +99,7 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                                 if (answers.contains(choice.id!!)) {
                                     choice.correct = true
                                     choiceDataAdapter.notifyDataSetChanged()
-                                }else{
+                                } else {
                                     choice.correct = false
                                     choiceDataAdapter.notifyDataSetChanged()
                                 }
@@ -113,7 +109,6 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                 }
                 view.questionRv.layoutManager = LinearLayoutManager(mContext)
                 view.questionRv.adapter = choiceDataAdapter
-
             }
         })
         view.submitButton.setOnClickListener {
@@ -121,12 +116,10 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                 (mContext as Activity).finish()
             })
         }
-
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
         return view == `object`
-
     }
 
     override fun getCount(): Int {

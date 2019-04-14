@@ -24,19 +24,20 @@ import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.RunAttemptsModel
-import kotlinx.android.synthetic.main.item_doubt.view.*
+import kotlinx.android.synthetic.main.item_doubt.view.commentll
+import kotlinx.android.synthetic.main.item_doubt.view.doubtComment
+import kotlinx.android.synthetic.main.item_doubt.view.doubtDescription
+import kotlinx.android.synthetic.main.item_doubt.view.doubtTitle
+import kotlinx.android.synthetic.main.item_doubt.view.doubtTopic
+import kotlinx.android.synthetic.main.item_doubt.view.resolveDoubtTv
+import kotlinx.android.synthetic.main.item_doubt.view.showCommentsTv
 import java.util.*
 
-
 class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : RecyclerView.Adapter<VideosDoubtsAdapter.DoubtsViewHolder>() {
-
-
     private lateinit var context: Context
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
     private lateinit var doubtDao: DoubtsDao
-
-
     fun setData(doubtsData: ArrayList<DoubtsModel>) {
         this.doubtsData = doubtsData
         notifyDataSetChanged()
@@ -50,7 +51,7 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
 
 
         return DoubtsViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_doubt, parent, false))
+            .inflate(R.layout.item_doubt, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -62,7 +63,6 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
     }
 
     inner class DoubtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         fun bindView(doubt: DoubtsModel) {
             fetchComments(doubt.dbtUid)
             itemView.doubtTopic.text = contentDao.getContentWithId(doubt.runAttemptId, doubt.contentId).title
@@ -113,7 +113,6 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
                     }
                 }
             })
-
         }
 
         private fun fetchComments(dbtUid: String) {
@@ -146,7 +145,6 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
                                     formatDate(comment.updatedAt!!)
                                 ll.addView(inflatedView)
                             }
-
                         }
                     }
                 }

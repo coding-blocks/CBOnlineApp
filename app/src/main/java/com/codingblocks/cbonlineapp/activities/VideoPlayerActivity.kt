@@ -28,38 +28,40 @@ import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_video_player.*
-import kotlinx.android.synthetic.main.doubt_dialog.view.*
+import kotlinx.android.synthetic.main.activity_video_player.displayYoutubeVideo
+import kotlinx.android.synthetic.main.activity_video_player.player_tabs
+import kotlinx.android.synthetic.main.activity_video_player.player_viewpager
+import kotlinx.android.synthetic.main.activity_video_player.rootLayout
+import kotlinx.android.synthetic.main.activity_video_player.videoFab
+import kotlinx.android.synthetic.main.activity_video_player.videoView
+import kotlinx.android.synthetic.main.doubt_dialog.view.cancelBtn
+import kotlinx.android.synthetic.main.doubt_dialog.view.descriptionLayout
+import kotlinx.android.synthetic.main.doubt_dialog.view.okBtn
+import kotlinx.android.synthetic.main.doubt_dialog.view.title
+import kotlinx.android.synthetic.main.doubt_dialog.view.titleLayout
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import kotlin.concurrent.thread
 
-
 class VideoPlayerActivity : AppCompatActivity(),
     OnItemClickListener, AnkoLogger {
-
     private var youtubePlayer: YouTubePlayer? = null
     private var pos: Long? = 0
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private lateinit var attemptId: String
     private lateinit var contentId: String
-
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(this)
     }
-
     private val doubtsDao by lazy {
         database.doubtsDao()
     }
-
     private val notesDao by lazy {
         database.notesDao()
     }
-
     private val courseDao by lazy {
         database.courseDao()
     }
-
     private val runDao by lazy {
         database.courseRunDao()
     }
@@ -68,9 +70,7 @@ class VideoPlayerActivity : AppCompatActivity(),
         if (contentId == id) {
             if (displayYoutubeVideo.view?.visibility == View.VISIBLE)
                 youtubePlayer?.seekToMillis(position * 1000)
-
 //                videoView.seekTo(position.toLong() * 1000)
-
         }
     }
 
@@ -79,8 +79,6 @@ class VideoPlayerActivity : AppCompatActivity(),
         setContentView(com.codingblocks.cbonlineapp.R.layout.activity_video_player)
         rootLayout.layoutTransition
             .enableTransitionType(LayoutTransition.CHANGING)
-
-
         val url = intent.getStringExtra("FOLDER_NAME")
         val youtubeUrl = intent.getStringExtra("videoUrl")
         attemptId = intent.getStringExtra("attemptId")
@@ -192,14 +190,10 @@ class VideoPlayerActivity : AppCompatActivity(),
         }
         val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
         youTubePlayerSupportFragment!!.initialize(MyCourseActivity.YOUTUBE_API_KEY, youtubePlayerInit)
-
-
     }
 
     private fun setupVideoView(url: String, downloaded: Boolean) {
-
     }
-
 
     override fun onPause() {
         super.onPause()
@@ -208,7 +202,6 @@ class VideoPlayerActivity : AppCompatActivity(),
     override fun onDestroy() {
         super.onDestroy()
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == -1) {
@@ -222,7 +215,6 @@ class VideoPlayerActivity : AppCompatActivity(),
     }
 
     private fun createDoubt() {
-
         runDao.getRunByAtemptId(attemptId).observe(this, Observer<CourseRun> {
             val categoryId = courseDao.getCourse(it?.crCourseId!!).categoryId
             val doubtDialog = AlertDialog.Builder(this).create()
@@ -270,6 +262,4 @@ class VideoPlayerActivity : AppCompatActivity(),
             doubtDialog.show()
         })
     }
-
-
 }

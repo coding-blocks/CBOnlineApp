@@ -20,15 +20,12 @@ import java.io.InputStream
 import java.io.OutputStream
 
 object FileUtil {
-
     private val okHttpClient = OkHttpClient()
-
     fun downloadFileFromUrl(downloadFileUrl: String): Int {
         var ret = DOWNLOAD_SUCCESS
         var downloadCount = 0
 
         try {
-
             val url = downloadFileUrl.substring(38, (downloadFileUrl.length - 11))
             Clients.api.getVideoDownloadKey(downloadFileUrl).enqueue(retrofitCallback { throwable, response ->
                 response?.body().let {
@@ -73,10 +70,8 @@ object FileUtil {
                             }
                         }
                     })
-
                 }
             })
-
 //            //assign file size
 //            val downloadFileLength = getRequestFileSize(downloadFileUrl)
 //            //check if the file size is the same as the local file
@@ -126,7 +121,6 @@ object FileUtil {
 //                    }
 //                }
 //            }
-
         } catch (ex: Exception) {
             Log.e(TAG_DOWNLOAD, ex.message, ex)
         } finally {
@@ -139,11 +133,9 @@ object FileUtil {
 
         try {
             if (downloadUrl != null && !TextUtils.isEmpty(downloadUrl)) {
-
                 var builder = Request.Builder()
                 builder = builder.url(downloadUrl)
                 val request = builder.build()
-
                 val call = okHttpClient.newCall(request)
                 val response = call.execute()
 
@@ -170,8 +162,6 @@ object FileUtil {
                 val lastIndex = downloadFileUrl.lastIndexOf("/")
                 if (lastIndex > -1) {
                     val downloadFileName = downloadFileUrl.substring(lastIndex + 1)
-
-
                     /** TODO Pointing to the Download Directory **/
                     val downloadDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                     val downloadDirectoryPath = downloadDirectory.path
@@ -192,7 +182,6 @@ object FileUtil {
 
     private fun writeResponseBodyToDisk(body: ResponseBody, videoUrl: String?, fileName: String): Boolean {
         try {
-
             val file = CBOnlineApp.mInstance.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
             val folderFile = File(file, "/$videoUrl")
             val dataFile = File(file, "/$videoUrl/$fileName")
@@ -200,13 +189,11 @@ object FileUtil {
                 folderFile.mkdir()
             }
             // todo change the file location/name according to your needs
-
             var inputStream: InputStream? = null
             var outputStream: OutputStream? = null
 
             try {
                 val fileReader = ByteArray(4096)
-
                 val fileSize = body.contentLength()
                 var fileSizeDownloaded: Long = 0
 
@@ -224,7 +211,6 @@ object FileUtil {
                     outputStream.write(fileReader, 0, read)
 
                     fileSizeDownloaded += read.toLong()
-
                 }
 
                 outputStream.flush()
@@ -325,7 +311,6 @@ object FileUtil {
 //        })
 //    }
 //
-
 //
 //    //function to update progress according to download progress
 //    private fun sendNotification(download: Int) {

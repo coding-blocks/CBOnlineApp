@@ -40,7 +40,7 @@ fun <T> LiveData<T>.getDistinct(): LiveData<T> {
                 lastObj = obj
                 distinctLiveData.postValue(lastObj)
             } else if ((obj == null && lastObj != null)
-                    || obj != lastObj) {
+                || obj != lastObj) {
                 lastObj = obj
                 distinctLiveData.postValue(lastObj)
             }
@@ -48,6 +48,7 @@ fun <T> LiveData<T>.getDistinct(): LiveData<T> {
     })
     return distinctLiveData
 }
+
 fun folderSize(directory: File): Long {
     var length: Long = 0
     for (file in directory.listFiles()) {
@@ -94,14 +95,14 @@ fun secToTime(time: Double): String {
 }
 
 fun pageChangeCallback(
-        fnState: (Int) -> Unit,
-        fnSelected: (Int) -> Unit,
-        fnScrolled: (Int, Float, Int) -> Unit
+    fnState: (Int) -> Unit,
+    fnSelected: (Int) -> Unit,
+    fnScrolled: (Int, Float, Int) -> Unit
 ): ViewPager.OnPageChangeListener {
     return object : ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) = fnState(state)
         override fun onPageSelected(position: Int) = fnSelected(position)
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) =
-                fnScrolled(position, positionOffset, positionOffsetPixels)
+            fnScrolled(position, positionOffset, positionOffsetPixels)
     }
 }

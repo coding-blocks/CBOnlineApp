@@ -37,7 +37,10 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.RunAttemptsModel
-import kotlinx.android.synthetic.main.item_section.view.*
+import kotlinx.android.synthetic.main.item_section.view.arrow
+import kotlinx.android.synthetic.main.item_section.view.lectureTime
+import kotlinx.android.synthetic.main.item_section.view.lectures
+import kotlinx.android.synthetic.main.item_section.view.title
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
@@ -48,22 +51,17 @@ import org.jetbrains.anko.yesButton
 import java.io.File
 import kotlin.concurrent.thread
 
-
 class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             private var activity: LifecycleOwner,
                             private var starter: DownloadStarter
 ) : RecyclerView.Adapter<SectionDetailsAdapter.CourseViewHolder>() {
-
     private lateinit var context: Context
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
     private var premium: Boolean = false
     private lateinit var courseStartDate: String
-
     private lateinit var sectionWithContentDao: SectionWithContentsDao
     lateinit var arrowAnimation: RotateAnimation
-
-
     fun setData(sectionData: ArrayList<CourseSection>, premium: Boolean, crStart: String) {
         this.sectionData = sectionData
         this.premium = premium
@@ -75,9 +73,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
         holder.bindView(sectionData!![position], starter)
     }
 
-
     override fun getItemCount(): Int {
-
         return sectionData!!.size
     }
 
@@ -93,11 +89,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
     }
 
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         fun bindView(data: CourseSection, starter: DownloadStarter) {
             itemView.title.text = data.name
             sectionWithContentDao.getContentWithSectionId(data.id).getDistinct().observe(activity, Observer<List<CourseContent>> { it ->
-
                 val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
                 if (ll.visibility == View.VISIBLE) {
                     ll.removeAllViews()
@@ -110,7 +104,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                 var duration: Long = 0
                 var sectionComplete = 0
                 for (content in it) {
-
                     val factory = LayoutInflater.from(context)
                     val inflatedView = factory.inflate(R.layout.item_section_detailed_info, ll, false)
                     val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
@@ -185,7 +178,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                         }
                                     } else {
                                         downloadBtn.setOnClickListener {
-
                                             (context as Activity).alert("This lecture will be deleted !!!") {
                                                 yesButton {
                                                     val file = context.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
@@ -195,7 +187,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                                 }
                                                 noButton { it.dismiss() }
                                             }.show()
-
                                         }
                                         inflatedView.setOnClickListener {
                                             if (content.progress == "UNDONE") {
@@ -208,7 +199,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                         }
                                     }
                                 }
-
                             }
                             content.contentable == "document" -> {
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_document))
@@ -286,7 +276,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
         }
     }
 
-
     fun showOrHide(ll: View, itemView: View) {
         if (ll.visibility == View.GONE) {
             expand(ll)
@@ -316,7 +305,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
             p.runs = runAttempts
             p.content = contents
             Clients.onlineV2JsonApi.setProgress(p).enqueue(retrofitCallback { throwable, response ->
-
                 response?.body().let {
                     val progressId = it?.id
                     when (contentable) {
@@ -324,7 +312,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             contentDao.updateProgressLecture(sectionId, contentId, "DONE", progressId
                                 ?: "")
                         }
-
                         "document" ->
                             thread {
                                 contentDao.updateProgressDocuemnt(sectionId, contentId, "DONE", progressId
@@ -343,7 +330,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                         else -> {
                         }
                     }
-
                 }
             })
         }
@@ -367,7 +353,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             "lecture" -> thread {
                                 contentDao.updateProgressLecture(sectionId, contentId, status, progressId)
                             }
-
                             "document" ->
                                 thread {
                                     contentDao.updateProgressDocuemnt(sectionId, contentId, status, progressId)
@@ -381,8 +366,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                     contentDao.updateProgressQna(sectionId, contentId, status, progressId)
                                 }
                         }
-
-
                     }
                 }
             })

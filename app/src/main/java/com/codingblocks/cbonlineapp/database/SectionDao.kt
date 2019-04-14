@@ -7,7 +7,6 @@ import com.codingblocks.cbonlineapp.database.models.CourseSection
 
 @Dao
 abstract class SectionDao : BaseDao<CourseSection> {
-
     @Query("SElECT * FROM CourseSection ")
     abstract fun getSections(): LiveData<List<CourseSection>>
 

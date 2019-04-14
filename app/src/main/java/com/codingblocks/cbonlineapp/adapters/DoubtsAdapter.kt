@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.formatDate
 import com.codingblocks.onlineapi.models.TopicsItem
-import kotlinx.android.synthetic.main.doubt_header_item.view.*
+import kotlinx.android.synthetic.main.doubt_header_item.view.timeTv
+import kotlinx.android.synthetic.main.doubt_header_item.view.titleTv
+import kotlinx.android.synthetic.main.doubt_header_item.view.usernameTv
 
 class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>) : RecyclerView.Adapter<DoubtsAdapter.DoubtsViewHolder>() {
-
     private lateinit var context: Context
-
     fun setData(doubtsData: ArrayList<TopicsItem?>) {
         this.doubtsData = doubtsData
         notifyDataSetChanged()
@@ -25,7 +25,6 @@ class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>) : RecyclerVi
         holder.bindView(doubtsData[position])
     }
 
-
     override fun getItemCount(): Int {
         return doubtsData.size
     }
@@ -34,11 +33,10 @@ class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>) : RecyclerVi
         context = parent.context
 
         return DoubtsViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.doubt_header_item, parent, false))
+            .inflate(R.layout.doubt_header_item, parent, false))
     }
 
     inner class DoubtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         fun bindView(data: TopicsItem?) {
             itemView.timeTv.text =
                 formatDate(data?.createdAt!!)
@@ -47,16 +45,13 @@ class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>) : RecyclerVi
             itemView.setOnClickListener {
                 val DOUBT_ID = data.id
                 val builder = CustomTabsIntent.Builder()
-                        .enableUrlBarHiding()
-                        .setToolbarColor(context.resources.getColor(R.color.colorPrimaryDark))
-                        .setShowTitle(true)
-                        .setSecondaryToolbarColor(context.resources.getColor(R.color.colorPrimary))
+                    .enableUrlBarHiding()
+                    .setToolbarColor(context.resources.getColor(R.color.colorPrimaryDark))
+                    .setShowTitle(true)
+                    .setSecondaryToolbarColor(context.resources.getColor(R.color.colorPrimary))
                 val customTabsIntent = builder.build()
                 customTabsIntent.launchUrl(context, Uri.parse("http://discuss.codingblocks.com/t/$DOUBT_ID"))
-
             }
-
-
         }
     }
 }

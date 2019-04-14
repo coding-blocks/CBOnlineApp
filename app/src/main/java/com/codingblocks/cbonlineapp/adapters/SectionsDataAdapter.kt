@@ -11,15 +11,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.onlineapi.models.Sections
-import kotlinx.android.synthetic.main.item_section.view.*
+import kotlinx.android.synthetic.main.item_section.view.lectureTime
+import kotlinx.android.synthetic.main.item_section.view.lectures
+import kotlinx.android.synthetic.main.item_section.view.title
 import java.util.*
 
-
 class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : RecyclerView.Adapter<SectionsDataAdapter.CourseViewHolder>() {
-
     private lateinit var context: Context
     private lateinit var arrowAnimation: RotateAnimation
-
     fun setData(sectionData: ArrayList<Sections>) {
         this.sectionData = sectionData
         notifyDataSetChanged()
@@ -29,9 +28,7 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
         holder.bindView(sectionData!![position])
     }
 
-
     override fun getItemCount(): Int {
-
         return sectionData!!.size
     }
 
@@ -39,13 +36,11 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
         context = parent.context
 
         return CourseViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_section, parent, false))
+            .inflate(R.layout.item_section, parent, false))
     }
 
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         fun bindView(data: Sections) {
-
             itemView.title.text = data.name
             itemView.lectures.text = ("${data.contents?.size} Lectures")
             var duration: Long = 0
@@ -61,7 +56,6 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
                 itemView.lectureTime.text = ("$hour Hours")
             } else
                 itemView.lectureTime.text = ("---")
-
             val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
             ll.orientation = LinearLayout.VERTICAL
             ll.visibility = View.GONE
@@ -84,7 +78,6 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
                     }
                 } else if (i.contentable == "document") {
                     contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_document))
-
                 } else if (i.contentable == "code-challenge") {
                     contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
                 }
@@ -97,11 +90,9 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
             itemView.setOnClickListener {
                 showOrHide(ll, it)
             }
-
 //            itemView.arrow.setOnClickListener {
 //                showOrHide(ll, itemView)
 //            }
-
         }
 
         private fun showOrHide(ll: View, itemView: View) {
@@ -111,7 +102,6 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
 //                        0.5f)
 //                arrowAnimation.fillAfter = true
 //                arrowAnimation.duration = 350
-
 //                itemView.arrow.startAnimation(arrowAnimation)
             } else {
                 ll.visibility = View.GONE
@@ -122,6 +112,5 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
 //                itemView.arrow.startAnimation(arrowAnimation)
             }
         }
-
     }
 }

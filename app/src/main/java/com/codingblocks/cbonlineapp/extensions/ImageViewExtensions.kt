@@ -16,19 +16,17 @@ fun ImageView.loadSvg(svgUrl: String, onDrawableCreated: ((Drawable) -> Unit)?) 
 
     doAsync {
         MediaUtils.okHttpClient.newCall((Request.Builder().url(svgUrl).build()))
-                .execute().body()?.let {
-
-                    with(SVG.getFromInputStream(it.byteStream())) {
-                        uiThread {
-                            val picDrawable = PictureDrawable(renderToPicture(
-                                    400, 400
-                            ))
-                            setImageDrawable(picDrawable)
-                            onDrawableCreated?.let { it(picDrawable) }
-                        }
-
+            .execute().body()?.let {
+                with(SVG.getFromInputStream(it.byteStream())) {
+                    uiThread {
+                        val picDrawable = PictureDrawable(renderToPicture(
+                            400, 400
+                        ))
+                        setImageDrawable(picDrawable)
+                        onDrawableCreated?.let { it(picDrawable) }
                     }
                 }
+            }
     }
 }
 

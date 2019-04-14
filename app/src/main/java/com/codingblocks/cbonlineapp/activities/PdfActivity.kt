@@ -14,12 +14,11 @@ import com.codingblocks.cbonlineapp.util.DownloadBroadcastReceiver
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import es.voghdev.pdfviewpager.library.PDFViewPager
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter
-import kotlinx.android.synthetic.main.activity_pdf.*
+import kotlinx.android.synthetic.main.activity_pdf.root
 import org.jetbrains.anko.AnkoLogger
 import java.io.File
 
 class PdfActivity : AppCompatActivity(), AnkoLogger {
-
     lateinit var pdfViewPager: PDFViewPager
     lateinit var url: String
     lateinit var fileName: String
@@ -27,8 +26,6 @@ class PdfActivity : AppCompatActivity(), AnkoLogger {
     var isDownloaded: Boolean = false
     lateinit var receiver: DownloadBroadcastReceiver
     lateinit var intentFilter: IntentFilter
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pdf)
@@ -37,7 +34,6 @@ class PdfActivity : AppCompatActivity(), AnkoLogger {
         fileName = intent.getStringExtra("fileName")
 
         if (MediaUtils.checkPermission(this)) {
-
             path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()
             var downloadedFile: File? = null
             val file = File("$path/$fileName")
@@ -77,47 +73,36 @@ class PdfActivity : AppCompatActivity(), AnkoLogger {
                 downloadManager.addCompletedDownload(fileName, " ", false, "application/pdf", path, file.length(), true)
                 showpdf(file)
             }
-
         }
 
         this@PdfActivity.registerReceiver(receiver, intentFilter)
-
     }
 
     private fun showpdf(downloadedFile: File) {
-
         pdfViewPager = PDFViewPager(this, downloadedFile.absolutePath)
 
         root.addView(pdfViewPager, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
     }
 
     private fun downloadFile() {
-
         val request = DownloadManager.Request(Uri.parse(url))
         request.setTitle(fileName)
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
-
         // get download service and enqueue file
         val manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         manager.enqueue(request)
-
-
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
         if (MediaUtils.checkPermission(this)) {
             try {
                 (pdfViewPager.adapter as PDFPagerAdapter).close()
-
             } catch (e: Exception) {
                 onBackPressed()
             }
         } else {
-
         }
         this@PdfActivity.unregisterReceiver(receiver)
-
     }
 }

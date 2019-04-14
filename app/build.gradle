@@ -111,7 +111,6 @@ dependencies {
     //videocipher library
     implementation 'com.vdocipher.aegis:vdocipher-android:1.0.0-beta5'
 
-
     //gson
     implementation 'com.github.campusappcn.AndRouter:router:1.2.8'
     annotationProcessor 'com.github.campusappcn.AndRouter:compiler:1.2.8'

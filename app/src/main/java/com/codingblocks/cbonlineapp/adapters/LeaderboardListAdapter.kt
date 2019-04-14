@@ -14,7 +14,6 @@ import java.util.*
 class LeaderboardListAdapter(internal var context: Context,
                              var list: ArrayList<Leaderboard>?
 ) : ArrayAdapter<Leaderboard>(context, 0), AnkoLogger {
-
     override fun getCount(): Int {
         return if (list == null) 0 else list!!.size
     }
@@ -31,12 +30,10 @@ class LeaderboardListAdapter(internal var context: Context,
         var view = convertView
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.quiz_attempt_list, parent, false)
-
             val pos = view!!.findViewById<TextView>(R.id.numberTv)
             val name = view.findViewById<TextView>(R.id.statusTv)
             val college = view.findViewById<TextView>(R.id.dateTv)
             val score = view.findViewById<TextView>(R.id.scoreTv)
-
             val attemptViewHolder = ViewHolder(pos, name, college, score)
             view.tag = attemptViewHolder
         }
@@ -45,7 +42,7 @@ class LeaderboardListAdapter(internal var context: Context,
         attemptViewHolder.posTextView.text = (position + 1).toString() + ""
         attemptViewHolder.nameTextView.text = e?.userName!!
         attemptViewHolder.collegeTextView.text = e.collegeName
-        attemptViewHolder.scoreTextView.text = e.score.toString() ?:"N/a"
+        attemptViewHolder.scoreTextView.text = e.score.toString() ?: "N/a"
 
         return view
     }

@@ -7,7 +7,6 @@ import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 
 @Dao
 abstract class DoubtsDao : BaseDao<DoubtsModel> {
-
     @Query("SElECT * FROM DoubtsModel where runAttemptId = :ruid")
     abstract fun getDoubts(ruid: String): LiveData<List<DoubtsModel>>
 

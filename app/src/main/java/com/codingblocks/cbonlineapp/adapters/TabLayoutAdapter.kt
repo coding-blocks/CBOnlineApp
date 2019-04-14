@@ -5,10 +5,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
 class TabLayoutAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-
     private val tabNames: ArrayList<String> = ArrayList()
     private val fragments: ArrayList<Fragment> = ArrayList()
-
     fun add(fragment: Fragment, title: String) {
         tabNames.add(title)
         fragments.add(fragment)
