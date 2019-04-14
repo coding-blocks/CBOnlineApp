@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -32,18 +31,14 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
 import kotlin.concurrent.thread
 
-
 class AllCourseFragment : Fragment(), AnkoLogger {
-
     val ui = HomeFragmentUi<Fragment>()
     private lateinit var courseDataAdapter: CourseDataAdapter
     lateinit var skeletonScreen: SkeletonScreen
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(context!!)
     }
-
     private val courseDao by lazy {
         database.courseDao()
     }
@@ -53,14 +48,12 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     private val instructorDao by lazy {
         database.instructorDao()
     }
-
     private val runDao by lazy {
         database.courseRunDao()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
-            View = ui.createView(AnkoContext.create(ctx, this))
-
+        View = ui.createView(AnkoContext.create(ctx, this))
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,7 +63,6 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
         params.putString(FirebaseAnalytics.Param.ITEM_NAME, "AllCourses")
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
-
         //it is important to make oncreateoptions menu work
         setHasOptionsMenu(true)
 
@@ -85,14 +77,14 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 
 
         skeletonScreen = Skeleton.bind(ui.rvCourses)
-                .adapter(courseDataAdapter)
-                .shimmer(true)
-                .angle(20)
-                .frozen(true)
-                .duration(1200)
-                .count(4)
-                .load(R.layout.item_skeleton_course_card)
-                .show()
+            .adapter(courseDataAdapter)
+            .shimmer(true)
+            .angle(20)
+            .frozen(true)
+            .duration(1200)
+            .count(4)
+            .load(R.layout.item_skeleton_course_card)
+            .show()
 
         displayCourses()
 
@@ -101,7 +93,6 @@ class AllCourseFragment : Fragment(), AnkoLogger {
             fetchAllCourses()
         }
         fetchAllCourses()
-
     }
 
     private fun displayCourses(searchQuery: String = "") {
@@ -113,22 +104,18 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                 } as ArrayList<CourseRun>)
             }
         }
-
     }
 
     private fun fetchAllCourses() {
-
-
         Clients.onlineV2JsonApi.getAllCourses().enqueue(retrofitCallback { t, resp ->
             skeletonScreen.hide()
             resp?.body()?.let {
                 for (myCourses in it) {
-
                     //calculate top run
                     val unsortedRuns: ArrayList<Runs> = arrayListOf()
                     for (i in 0 until myCourses.runs!!.size) {
                         if (myCourses.runs!![i].enrollmentStart!!.toLong() < (System.currentTimeMillis() / 1000)
-                                && myCourses.runs!![i].enrollmentEnd!!.toLong() > (System.currentTimeMillis() / 1000) && !myCourses.runs!![i].unlisted!!)
+                            && myCourses.runs!![i].enrollmentEnd!!.toLong() > (System.currentTimeMillis() / 1000) && !myCourses.runs!![i].unlisted!!)
                             unsortedRuns.add(myCourses.runs!![i])
                     }
                     //for no current runs
@@ -136,32 +123,30 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                         unsortedRuns.addAll(myCourses.runs!!)
                     }
                     val currentRuns = unsortedRuns.sortedWith(compareBy { it.price })
-
                     val course = myCourses.run {
                         Course(
-                                id ?: "",
-                                title ?: "",
-                                subtitle ?: "",
-                                logo ?: "",
-                                summary ?: "",
-                                promoVideo ?: "",
-                                difficulty ?: "",
-                                reviewCount ?: 0,
-                                rating ?: 0f,
-                                slug ?: "",
-                                coverImage ?: "",
-                                updated_at = updatedAt,
-                                categoryId = categoryId)
-
+                            id ?: "",
+                            title ?: "",
+                            subtitle ?: "",
+                            logo ?: "",
+                            summary ?: "",
+                            promoVideo ?: "",
+                            difficulty ?: "",
+                            reviewCount ?: 0,
+                            rating ?: 0f,
+                            slug ?: "",
+                            coverImage ?: "",
+                            updated_at = updatedAt,
+                            categoryId = categoryId)
                     }
                     val courseRun = CourseRun(currentRuns[0].id ?: "", "",
-                            currentRuns[0].name ?: "", currentRuns[0].description ?: "",
-                            currentRuns[0].enrollmentStart ?: "",
-                            currentRuns[0].enrollmentEnd ?: "",
-                            currentRuns[0].start ?: "", currentRuns[0].end ?: "",
-                            currentRuns[0].price ?: "", currentRuns[0].mrp ?: "",
-                            myCourses.id ?: "", currentRuns[0].updatedAt ?: "",
-                            title = myCourses.title ?: "")
+                        currentRuns[0].name ?: "", currentRuns[0].description ?: "",
+                        currentRuns[0].enrollmentStart ?: "",
+                        currentRuns[0].enrollmentEnd ?: "",
+                        currentRuns[0].start ?: "", currentRuns[0].end ?: "",
+                        currentRuns[0].price ?: "", currentRuns[0].mrp ?: "",
+                        myCourses.id ?: "", currentRuns[0].updatedAt ?: "",
+                        title = myCourses.title ?: "")
 
                     thread {
                         val updatedCourse = courseDao.getCourse(course.id)
@@ -173,19 +158,17 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                         //Add CourseInstructors
                         for (i in myCourses.instructors!!) {
                             instructorDao.insert(Instructor(i.id ?: "", i.name ?: "",
-                                    i.description ?: "", i.photo ?: "",
-                                    "", "", myCourses.id))
+                                i.description ?: "", i.photo ?: "",
+                                "", "", myCourses.id))
                             insertCourseAndInstructor(myCourses, i)
                         }
                     }
-
                 }
             }
         })
     }
 
     private fun insertCourseAndInstructor(course: com.codingblocks.onlineapi.models.Course, instructor: com.codingblocks.onlineapi.models.Instructor) {
-
         thread {
             try {
                 courseWithInstructorDao.insert(CourseWithInstructor(course.id!!, instructor.id!!))
@@ -217,5 +200,4 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         })
         super.onCreateOptionsMenu(menu, inflater)
     }
-
 }

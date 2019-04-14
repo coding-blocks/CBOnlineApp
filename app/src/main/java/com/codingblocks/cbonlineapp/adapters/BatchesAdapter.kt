@@ -12,14 +12,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class BatchesAdapter(private var batchesData: ArrayList<Runs>?, var listener: OnCartItemClickListener) : RecyclerView.Adapter<BatchesAdapter.BatchViewHolder>() {
-
     val ui = BatchesCardUi()
-
     fun setData(batchesData: ArrayList<Runs>) {
         this.batchesData = batchesData
         notifyDataSetChanged()
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BatchViewHolder {
         return BatchViewHolder(ui.createView(AnkoContext.create(parent.context, parent)))
@@ -34,7 +31,6 @@ class BatchesAdapter(private var batchesData: ArrayList<Runs>?, var listener: On
     }
 
     inner class BatchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         fun bindView(runs: Runs) {
             runs.run {
                 ui.runTitle.text = description
@@ -42,7 +38,7 @@ class BatchesAdapter(private var batchesData: ArrayList<Runs>?, var listener: On
                 if (price != mrp && mrp != "") {
                     ui.courseMrp.text = "₹ $mrp"
                     ui.courseMrp.paintFlags = ui.courseMrp.paintFlags or
-                            Paint.STRIKE_THRU_TEXT_FLAG
+                        Paint.STRIKE_THRU_TEXT_FLAG
                 }
                 val sdf = SimpleDateFormat("MMM dd yyyy")
                 var startDate: String? = ""
@@ -59,12 +55,9 @@ class BatchesAdapter(private var batchesData: ArrayList<Runs>?, var listener: On
                 ui.endTv.text = endDate
                 ui.enrollmentTv.text = "Enrollment ends $enrollmentDate"
                 ui.enrollBtn.setOnClickListener {
-                    listener.onItemClick(id!!,description!!)
+                    listener.onItemClick(id!!, description!!)
                 }
-
             }
         }
-
     }
-
 }

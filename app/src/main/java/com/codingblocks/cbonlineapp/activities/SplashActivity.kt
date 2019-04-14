@@ -8,7 +8,6 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 
-
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +17,6 @@ class SplashActivity : AppCompatActivity() {
     }
 
     suspend fun getAccessToken() = getPrefs().SP_ACCESS_TOKEN_KEY
-
     suspend fun finishSplashScreen() {
         // After the splash screen duration, route to the right activities
         if (getAccessToken() == "access_token") {

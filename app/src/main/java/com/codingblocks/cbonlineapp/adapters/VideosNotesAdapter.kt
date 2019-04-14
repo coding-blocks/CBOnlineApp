@@ -18,20 +18,19 @@ import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.RunAttemptsModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.item_notes.view.*
+import kotlinx.android.synthetic.main.item_notes.view.bodyTv
+import kotlinx.android.synthetic.main.item_notes.view.contentTitleTv
+import kotlinx.android.synthetic.main.item_notes.view.deleteTv
+import kotlinx.android.synthetic.main.item_notes.view.editTv
+import kotlinx.android.synthetic.main.item_notes.view.timeTv
 import org.jetbrains.anko.design.snackbar
 import java.util.*
 
-
 class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var listener: OnItemClickListener) : RecyclerView.Adapter<VideosNotesAdapter.NotesViewHolder>() {
-
-
     private lateinit var context: Context
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
     private lateinit var notesDao: NotesDao
-
-
     fun setData(notesData: ArrayList<NotesModel>) {
         this.notesData = notesData
         notifyDataSetChanged()
@@ -45,7 +44,7 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
 
 
         return NotesViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_notes, parent, false))
+            .inflate(R.layout.item_notes, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -57,7 +56,6 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
     }
 
     inner class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         fun bindView(note: NotesModel, position: Int) {
             itemView.contentTitleTv.text = contentDao.getContentWithId(note.runAttemptId, note.contentId).title
             itemView.bodyTv.setText(note.text)
@@ -75,7 +73,6 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
                 } else {
                     createNote(note)
                 }
-
             }
 
             itemView.deleteTv.setOnClickListener {
@@ -126,11 +123,9 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
                             itemView.bodyTv.isEnabled = false
                             notesDao.update(notesModel)
                         } catch (e: Exception) {
-
                         }
                 }
             })
         }
-
     }
 }

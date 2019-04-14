@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,36 +16,31 @@ import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.analytics.FirebaseAnalytics
-import kotlinx.android.synthetic.main.bottom_question_sheet.*
-import kotlinx.android.synthetic.main.fragment_quiz.*
+import kotlinx.android.synthetic.main.bottom_question_sheet.bottom_sheet
+import kotlinx.android.synthetic.main.bottom_question_sheet.nextBtn
+import kotlinx.android.synthetic.main.bottom_question_sheet.numberLayout
+import kotlinx.android.synthetic.main.bottom_question_sheet.prevBtn
+import kotlinx.android.synthetic.main.bottom_question_sheet.questionBtn
+import kotlinx.android.synthetic.main.fragment_quiz.quizViewPager
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor
-
 
 private const val ARG_QUIZ_ID = "quiz_id"
 private const val ARG_ATTEMPT_ID = "attempt_id"
 private const val ARG_QUIZ_ATTEMPT_ID = "quiz_attempt_id"
 
-
 class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener {
-
-
     private lateinit var quizId: String
     private lateinit var attemptId: String
     private lateinit var quizAttemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-
-
     lateinit var mAdapter: ViewPagerAdapter
     var questionList = HashMap<Int, String>()
     var sheetBehavior: BottomSheetBehavior<*>? = null
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?)
-            : View? = inflater.inflate(R.layout.fragment_quiz, container, false).apply {
+        : View? = inflater.inflate(R.layout.fragment_quiz, container, false).apply {
         firebaseAnalytics = FirebaseAnalytics.getInstance(context)
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -78,18 +72,14 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                                 quizViewPager.offscreenPageLimit = 3
                             }
                         })
-
                     }
                 }
-
             }
         })
-
     }
 
     private fun setUpQuestionBottomSheet(size: Int) {
         var count = 0
-
         val dpValue = 60 // margin in dips
         val d = context!!.resources.displayMetrics.density
         val buttonSize = (dpValue * d).toInt() // margin in pixels
@@ -122,17 +112,14 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     }
 
     override fun onPageScrollStateChanged(state: Int) {
-
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
     }
 
     override fun onPageSelected(position: Int) {
-
         when {
             position + 1 == questionList.size -> {
-
                 nextBtn.text = "End"
                 prevBtn.setTextColor(Color.parseColor("#000000"))
             }
@@ -145,7 +132,6 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                 nextBtn.text = "Next"
                 nextBtn.setTextColor(Color.parseColor("#000000"))
                 prevBtn.setTextColor(Color.parseColor("#000000"))
-
             }
         }
     }
@@ -157,8 +143,8 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                 val fragmentTransaction = fragmentManager.beginTransaction()
                 fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                 fragmentTransaction.replace(R.id.framelayout_quiz,
-                        AboutQuizFragment.newInstance(quizId,
-                                attemptId), "quiz")
+                    AboutQuizFragment.newInstance(quizId,
+                        attemptId), "quiz")
 //            fragmentTransaction.addToBackStack("quiz")
                 fragmentTransaction.commit()
             } else
@@ -166,7 +152,6 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                     quizViewPager.currentItem + 1
                 else
                     0
-
             R.id.prevBtn -> quizViewPager.currentItem = if (quizViewPager.currentItem > 0)
                 quizViewPager.currentItem - 1
             else
@@ -184,15 +169,13 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     companion object {
         @JvmStatic
         fun newInstance(quizId: String, attemptId: String, quizAttemptId: String) =
-                QuizFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_QUIZ_ID, quizId)
-                        putString(ARG_ATTEMPT_ID, attemptId)
-                        putString(ARG_QUIZ_ATTEMPT_ID, quizAttemptId)
-
-
-                    }
+            QuizFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_QUIZ_ID, quizId)
+                    putString(ARG_ATTEMPT_ID, attemptId)
+                    putString(ARG_QUIZ_ATTEMPT_ID, quizAttemptId)
                 }
+            }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -204,6 +187,4 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             firebaseAnalytics.logEvent("Open", params)
         }
     }
-
-
 }

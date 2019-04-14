@@ -6,7 +6,6 @@ import androidx.room.Query
 
 @Dao
 abstract class CourseRunDao : BaseDao<CourseRun> {
-
     @Query("SELECT * FROM CourseRun where crAttemptId ==" + "'" + "'")
     abstract fun getAllRuns(): LiveData<List<CourseRun>>
 
@@ -24,7 +23,6 @@ abstract class CourseRunDao : BaseDao<CourseRun> {
 
     @Query("SELECT * FROM CourseRun where crAttemptId = :attemptId")
     abstract fun getRunByAtemptId(attemptId: String): LiveData<CourseRun>
-
 //
 //    @Delete
 //    fun delete(course: CourseRun)

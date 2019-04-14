@@ -6,7 +6,6 @@ import androidx.room.Query
 
 @Dao
 abstract class NotesDao : BaseDao<NotesModel> {
-
     @Query("SElECT * FROM NotesModel where runAttemptId = :ruid")
     abstract fun getNotes(ruid: String): LiveData<List<NotesModel>>
 

@@ -7,11 +7,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomWarnings
 
-
 @Dao
 interface CourseWithInstructorDao {
-
-
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("""
         SELECT * FROM instructor
@@ -30,8 +27,6 @@ interface CourseWithInstructorDao {
         """)
     fun getInstructorWithCourseIdNonLive(courseID: String): List<Instructor>
 
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(join: CourseWithInstructor)
-
 }

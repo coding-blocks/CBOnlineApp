@@ -11,24 +11,26 @@
 
 
     <RelativeLayout
-        android:layout_width="match_parent"
         android:id="@+id/videoView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <fragment
-            android:name="com.vdocipher.aegis.player.VdoPlayerFragment"
             android:id="@+id/online_vdo_player_fragment"
+            android:name="com.vdocipher.aegis.player.VdoPlayerFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:keepScreenOn="true"/>
+            android:keepScreenOn="true" />
+
         <include
-            android:layout_alignTop="@id/online_vdo_player_fragment"
-            android:layout_alignBottom="@id/online_vdo_player_fragment"
-            android:layout_alignLeft="@id/online_vdo_player_fragment"
-            android:layout_alignRight="@id/online_vdo_player_fragment"
+            layout="@layout/player_controller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/player_controller" />
+            android:layout_alignLeft="@id/online_vdo_player_fragment"
+            android:layout_alignTop="@id/online_vdo_player_fragment"
+            android:layout_alignRight="@id/online_vdo_player_fragment"
+            android:layout_alignBottom="@id/online_vdo_player_fragment" />
     </RelativeLayout>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"

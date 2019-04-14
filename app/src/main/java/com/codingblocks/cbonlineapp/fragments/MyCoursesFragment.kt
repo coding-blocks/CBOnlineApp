@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -40,19 +39,14 @@ import org.jetbrains.anko.support.v4.ctx
 import java.util.*
 import kotlin.concurrent.thread
 
-
 class MyCoursesFragment : Fragment(), AnkoLogger {
-
     val ui = HomeFragmentUi<Fragment>()
     private lateinit var courseDataAdapter: CourseDataAdapter
     private lateinit var skeletonScreen: SkeletonScreen
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-
-
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(context!!)
     }
-
     private val courseDao by lazy {
         database.courseDao()
     }
@@ -62,7 +56,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     private val instructorDao by lazy {
         database.instructorDao()
     }
-
     private val runDao by lazy {
         database.courseRunDao()
     }
@@ -72,8 +65,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ):
-            View? = ui.createView(AnkoContext.create(ctx, this))
-
+        View? = ui.createView(AnkoContext.create(ctx, this))
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -111,27 +103,22 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         fetchAllCourses()
     }
 
-
     private fun displayCourses(searchQuery: String = "") {
         runDao.getMyRuns().observer(this) {
-
             GlobalScope.launch(Dispatchers.Main) {
-
                 val list = withContext(Dispatchers.Default) {
                     (it.filter { c ->
                         (c.crEnd.toLong() * 1000) > System.currentTimeMillis() &&
-                                c.title.contains(searchQuery, true)
+                            c.title.contains(searchQuery, true)
                     } as ArrayList<CourseRun>)
                 }
 
                 courseDataAdapter.setData(list)
-
             }
         }
     }
 
     private fun fetchAllCourses() {
-
         Clients.onlineV2JsonApi.getMyCourses().enqueue(retrofitCallback { t, resp ->
             skeletonScreen.hide()
             resp?.body()?.let {
@@ -199,7 +186,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                     myCourses.course?.instructors?.forEachIndexed { _, it ->
                                         Clients.onlineV2JsonApi.instructorsById(it.id!!)
                                             .enqueue(retrofitCallback { _, response ->
-
                                                 response?.body().let { instructor ->
                                                     thread {
                                                         instructorDao.insert(
@@ -234,14 +220,12 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                             })
                                     }
                                 }
-
                             }
                         })
                 }
             }
         })
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.home, menu)
@@ -264,12 +248,10 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     private fun insertCourseAndInstructor(
         course: MyCourse,
         instructor: com.codingblocks.onlineapi.models.Instructor
     ) {
-
         thread {
             try {
                 courseWithInstructorDao.insert(CourseWithInstructor(course.id!!, instructor.id!!))

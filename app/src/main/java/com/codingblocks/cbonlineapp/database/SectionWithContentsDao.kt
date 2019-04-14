@@ -9,7 +9,6 @@ import androidx.room.RoomWarnings
 
 @Dao
 interface SectionWithContentsDao {
-
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("""
         SELECT * FROM CourseContent

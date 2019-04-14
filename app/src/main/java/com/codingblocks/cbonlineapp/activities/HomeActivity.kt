@@ -31,22 +31,21 @@ import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.app_bar_home.*
-import kotlinx.android.synthetic.main.nav_header_home.view.*
+import kotlinx.android.synthetic.main.activity_home.drawer_layout
+import kotlinx.android.synthetic.main.activity_home.nav_view
+import kotlinx.android.synthetic.main.app_bar_home.toolbar
+import kotlinx.android.synthetic.main.nav_header_home.view.login_button
+import kotlinx.android.synthetic.main.nav_header_home.view.nav_header_imageView
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import java.util.*
 
-
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, AnkoLogger {
     private var doubleBackToExitPressedOnce = false
     lateinit var prefs: Prefs
     var mFragmentToSet: Fragment? = null
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prefs = getPrefs()
@@ -70,7 +69,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             override fun onDrawerOpened(drawerView: View) {}
-
         })
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
@@ -128,7 +126,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Clients.api.getToken(grantCode).enqueue(retrofitCallback { error, response ->
             response.let {
                 if (response?.isSuccessful == true) {
-
                     val jwt = response.body()?.asJsonObject?.get("jwt")?.asString!!
                     val rt = response.body()?.asJsonObject?.get("refresh_token")?.asString!!
                     prefs.SP_ACCESS_TOKEN_KEY = grantCode
@@ -141,7 +138,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     Components.showconfirmation(this, "verify")
                 }
             }
-
         })
     }
 
@@ -157,19 +153,15 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             prefs.SP_ONEAUTH_ID = jSONObject.get("oneauth-id").asString
                             prefs.SP_USER_IMAGE = jSONObject.get("photo").asString
                         } catch (e: Exception) {
-
                         }
                         setUser()
                     } else {
                         nav_view.getHeaderView(0).login_button.setOnClickListener {
                             startActivity(intentFor<LoginActivity>().singleTop())
-
                         }
                     }
-
                 }
                 info { "login error ${t?.localizedMessage}" }
-
             })
         } else {
             nav_view.getHeaderView(0).login_button.setOnClickListener {
@@ -202,7 +194,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_home -> {
                 changeFragment("Home")
-
             }
             R.id.nav_my_courses -> {
                 changeFragment("My Courses")

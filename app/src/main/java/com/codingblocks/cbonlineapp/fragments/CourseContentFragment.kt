@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,25 +16,22 @@ import com.codingblocks.cbonlineapp.database.CourseSection
 import com.codingblocks.cbonlineapp.services.DownloadService
 import com.codingblocks.cbonlineapp.utils.getPrefs
 import com.google.firebase.analytics.FirebaseAnalytics
-import kotlinx.android.synthetic.main.fragment_course_content.view.*
+import kotlinx.android.synthetic.main.fragment_course_content.view.rvExpendableView
+import kotlinx.android.synthetic.main.fragment_course_content.view.sectionProgressBar
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.startService
-
 
 private const val ARG_ATTEMPT_ID = "attempt_id"
 
 class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     lateinit var attemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(context!!)
     }
-
     private val courseDao by lazy {
         database.courseRunDao()
     }
-
 //    private var downloadBinder: DownloadBinder? = null
 //
 //    private val serviceConnection = object : ServiceConnection {
@@ -46,7 +42,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 //        override fun onServiceDisconnected(componentName: ComponentName) {
 //        }
 //    }
-
     override fun startDownload(url: String, id: String, lectureContentId: String, title: String, attemptId: String, contentId: String) {
 //        downloadBinder?.startDownload(url,0, id, lectureContentId, title)
         startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId, "title" to title, "attemptId" to attemptId, "contentId" to contentId)
@@ -59,15 +54,12 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             attemptId = it.getString(ARG_ATTEMPT_ID)!!
         }
 //        startAndBindDownloadService()
-
     }
-
 //    private fun startAndBindDownloadService() {
 //        val downloadIntent = Intent(context, DownloadService::class.java)
 //        context!!.startService(downloadIntent)
 //        context!!.bindService(downloadIntent, serviceConnection, Context.BIND_AUTO_CREATE)
 //    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -92,14 +84,13 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     }
 
     companion object {
-
         @JvmStatic
         fun newInstance(param1: String) =
-                CourseContentFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_ATTEMPT_ID, param1)
-                    }
+            CourseContentFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_ATTEMPT_ID, param1)
                 }
+            }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -113,6 +104,4 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             }
         }
     }
-
-
 }

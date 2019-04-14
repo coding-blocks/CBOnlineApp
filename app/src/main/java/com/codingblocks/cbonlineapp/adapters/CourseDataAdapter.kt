@@ -21,27 +21,21 @@ import org.jetbrains.anko.intentFor
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
                         val context: Context,
                         private val courseWithInstructorDao: CourseWithInstructorDao, var type: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AnkoLogger {
-
     val ui = MyCourseCardUi()
-
     fun setData(courseData: ArrayList<CourseRun>) {
         this.courseData = courseData
 
         notifyDataSetChanged()
     }
 
-
     override fun getItemCount(): Int {
-
         return courseData?.size ?: 0
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-
         var viewHolder: RecyclerView.ViewHolder? = null
         when (type) {
             "myCourses" -> {
@@ -71,12 +65,9 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
     }
 
     inner class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         private lateinit var courseDao: CourseDao
         private lateinit var database: AppDatabase
-
         fun bindView(courseRun: CourseRun, courseWithInstructorDao: CourseWithInstructorDao, context: Context) {
-
             database = AppDatabase.getInstance(context)
             courseDao = database.courseDao()
             val data = courseDao.getCourse(courseRun.crCourseId)
@@ -84,9 +75,9 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
             data.subtitle
             if (data.coverImage.takeLast(3) == "png") {
                 Picasso.get().load(data.coverImage)
-                        .fit().into(ui.courseCoverImageView)
+                    .fit().into(ui.courseCoverImageView)
                 Picasso.get().load(data.logo)
-                        .fit().into(ui.courselogo)
+                    .fit().into(ui.courselogo)
             } else {
                 ui.courseCoverImageView.loadSvg(data.coverImage)
                 ui.courselogo.loadSvg(data.logo)
@@ -96,12 +87,12 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
             for (i in 0 until instructorsList.size) {
                 if (i == 0) {
                     Picasso.get().load(instructorsList[i].photo)
-                            .fit().into(ui.courseInstrucImgView1)
+                        .fit().into(ui.courseInstrucImgView1)
                     instructors += instructorsList[i].name
                 } else if (i == 1) {
                     ui.courseInstrucImgView2.visibility = View.VISIBLE
                     Picasso.get().load(instructorsList[i].photo)
-                            .fit().into(ui.courseInstrucImgView2)
+                        .fit().into(ui.courseInstrucImgView2)
                     instructors += ", ${instructorsList[i].name}"
                 } else if (i >= 2) {
                     instructors += "+ " + (instructorsList.size - 2) + " more"
@@ -112,14 +103,13 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
                 ui.courseInstrucImgView2.visibility = View.GONE
             }
             ui.courseInstructors.text = instructors
-
 //                    //bind Runs
             courseRun.run {
                 ui.coursePrice.text = "₹ $crPrice"
                 if (crPrice != crMrp && crMrp != "") {
                     ui.courseMrp.text = "₹ $crMrp"
                     ui.courseMrp.paintFlags = ui.courseMrp.paintFlags or
-                            Paint.STRIKE_THRU_TEXT_FLAG
+                        Paint.STRIKE_THRU_TEXT_FLAG
                 }
                 val sdf = SimpleDateFormat("MMM dd ")
                 var startDate: String? = ""
@@ -141,15 +131,13 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
                 //TODO fix transition
 //                    val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity, textPair, imagePair)
                 it.context.startActivity(
-                        it.context.intentFor<CourseActivity>(
-                                "courseId" to data.id,
-                                "courseName" to data.title,
-                                "courseLogo" to data.logo
-                        )
+                    it.context.intentFor<CourseActivity>(
+                        "courseId" to data.id,
+                        "courseName" to data.title,
+                        "courseLogo" to data.logo
+                    )
                 )
             }
-
-
         }
     }
 }

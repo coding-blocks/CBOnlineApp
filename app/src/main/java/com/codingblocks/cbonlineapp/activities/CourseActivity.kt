@@ -33,31 +33,50 @@ import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_course.*
-import kotlinx.android.synthetic.main.bottom_cart_sheet.*
+import kotlinx.android.synthetic.main.activity_course.batchRv
+import kotlinx.android.synthetic.main.activity_course.buyBtn
+import kotlinx.android.synthetic.main.activity_course.coursePageLogo
+import kotlinx.android.synthetic.main.activity_course.coursePageMentors
+import kotlinx.android.synthetic.main.activity_course.coursePageRatingBar
+import kotlinx.android.synthetic.main.activity_course.coursePageRatingCountTv
+import kotlinx.android.synthetic.main.activity_course.coursePageRatingTv
+import kotlinx.android.synthetic.main.activity_course.coursePageSubtitle
+import kotlinx.android.synthetic.main.activity_course.coursePageSummary
+import kotlinx.android.synthetic.main.activity_course.coursePageTitle
+import kotlinx.android.synthetic.main.activity_course.courseProgress1
+import kotlinx.android.synthetic.main.activity_course.courseProgress2
+import kotlinx.android.synthetic.main.activity_course.courseProgress3
+import kotlinx.android.synthetic.main.activity_course.courseProgress4
+import kotlinx.android.synthetic.main.activity_course.courseProgress5
+import kotlinx.android.synthetic.main.activity_course.courseRootView
+import kotlinx.android.synthetic.main.activity_course.instructorRv
+import kotlinx.android.synthetic.main.activity_course.rvExpendableView
+import kotlinx.android.synthetic.main.activity_course.scrollView
+import kotlinx.android.synthetic.main.activity_course.toolbar
+import kotlinx.android.synthetic.main.activity_course.trialBtn
+import kotlinx.android.synthetic.main.bottom_cart_sheet.bottom_sheet
+import kotlinx.android.synthetic.main.bottom_cart_sheet.checkoutBtn
+import kotlinx.android.synthetic.main.bottom_cart_sheet.continueBtn
+import kotlinx.android.synthetic.main.bottom_cart_sheet.newImage
+import kotlinx.android.synthetic.main.bottom_cart_sheet.newTitle
+import kotlinx.android.synthetic.main.bottom_cart_sheet.oldTitle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.toast
 
-
 class CourseActivity : AppCompatActivity(), AnkoLogger {
-
     lateinit var skeletonScreen: SkeletonScreen
     lateinit var courseId: String
     lateinit var courseName: String
     lateinit var progressBar: Array<ProgressBar?>
     var sheetBehavior: BottomSheetBehavior<*>? = null
-
-
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(this)
     }
     private lateinit var batchAdapter: BatchesAdapter
     private lateinit var instructorAdapter: InstructorDataAdapter
-
-
     private val courseWithInstructorDao by lazy {
         database.courseWithInstructorDao()
     }
@@ -67,8 +86,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     }
 
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course)
@@ -83,8 +100,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         coursePageTitle.text = courseName
 
         init()
-
-
     }
 
     private fun init() {
@@ -93,11 +108,11 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         skeletonScreen = Skeleton.bind(courseRootView)
-                .shimmer(true)
-                .angle(20)
-                .duration(1200)
-                .load(R.layout.item_skeleton_course)
-                .show()
+            .shimmer(true)
+            .angle(20)
+            .duration(1200)
+            .load(R.layout.item_skeleton_course)
+            .show()
 
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
         sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
@@ -107,7 +122,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     }
 
     private fun showBottomSheet(newId: String, newName: String) {
-
         Clients.api.getCart().enqueue(retrofitCallback { throwable, response ->
             response?.body().let {
                 it?.getAsJsonArray("cartItems")!![0].asJsonObject.let { it ->
@@ -137,14 +151,9 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                             }
                         })
                     }
-
-
                 }
-
             }
         })
-
-
     }
 
     private fun fetchInstructors() {
@@ -180,7 +189,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     override fun onItemClick(id: String, name: String) {
                         addtocart(id, name)
                     }
-
                 })
                 batchRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                 batchRv.adapter = batchAdapter
@@ -222,7 +230,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                                 if (sectionsList.size == sections.size) {
                                     sectionsList.sortBy { it.order }
                                     sectionAdapter.setData(sectionsList)
-
                                 }
                             } else {
                                 toast("Error ${response.code()}")
@@ -245,13 +252,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     customTabsIntent.launchUrl(this@CourseActivity, Uri.parse("https://dukaan.codingblocks.com/mycart"))
                 }
             }
-
         })
-
     }
 
     private fun showPromoVideo(promoVideo: String?) {
-
         youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
             override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
             }
@@ -281,7 +285,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                         progressBar[i]?.startAnimation(anim)
                     }
                 }
-
             }
         })
     }
@@ -300,11 +303,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     }
 
     override fun onBackPressed() {
-        if(sheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED){
+        if (sheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED) {
             sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-        }else{
+        } else {
             super.onBackPressed()
         }
     }
-
 }

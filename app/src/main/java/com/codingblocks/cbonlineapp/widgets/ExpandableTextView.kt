@@ -7,19 +7,16 @@ import android.widget.TextView
 import com.codingblocks.cbonlineapp.R
 
 class ExpandableTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : TextView(context, attrs) {
-
     var originalText: CharSequence? = null
         private set
     private var trimmedText: CharSequence? = null
     private var bufferType: TextView.BufferType? = null
     private var trim = true
     private var trimLength: Int = 0
-
     private val displayableText: CharSequence?
         get() = if (trim) trimmedText else originalText
 
     init {
-
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.ExpandableTextView)
         this.trimLength = typedArray.getInt(R.styleable.ExpandableTextView_trimLength, DEFAULT_TRIM_LENGTH)
         typedArray.recycle()

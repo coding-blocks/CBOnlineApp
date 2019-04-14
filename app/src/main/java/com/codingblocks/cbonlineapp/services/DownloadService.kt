@@ -26,29 +26,24 @@ import java.io.OutputStream
 import kotlin.concurrent.thread
 
 class DownloadService : IntentService("Download Service"), AnkoLogger {
-
     private val notificationManager by lazy {
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
-
     private val notificationBuilder by lazy {
         NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_file_download)
-                .setContentTitle("Download")
-                .setOnlyAlertOnce(true)
-                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.mipmap.ic_launcher))
-                .setContentText("Downloading File")
-                .setProgress(100, 0, false)
-                .setColor(resources.getColor(R.color.colorPrimaryDark))
-                .setOngoing(true) // THIS is the important line
-                .setAutoCancel(false)
+            .setSmallIcon(R.drawable.ic_file_download)
+            .setContentTitle("Download")
+            .setOnlyAlertOnce(true)
+            .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.mipmap.ic_launcher))
+            .setContentText("Downloading File")
+            .setProgress(100, 0, false)
+            .setColor(resources.getColor(R.color.colorPrimaryDark))
+            .setOngoing(true) // THIS is the important line
+            .setAutoCancel(false)
     }
-
     private var totalFileSize: Int = 0
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
-
-
     override fun onHandleIntent(intent: Intent) {
         val title = intent.getStringExtra("title")
         notificationBuilder.setContentTitle(title)
@@ -102,7 +97,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
                                         sendNotification(downloadProgress)
                                     }
                                     if (downloadCount == videoChunks.size) {
-                                        onDownloadComplete(url,attemptId,intent.getStringExtra("contentId"))
+                                        onDownloadComplete(url, attemptId, intent.getStringExtra("contentId"))
                                         thread {
                                             contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "true")
                                         }
@@ -125,7 +120,6 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
 
     private fun writeResponseBodyToDisk(body: ResponseBody, videoUrl: String?, fileName: String): Boolean {
         try {
-
             val file = this.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
             val folderFile = File(file, "/$videoUrl")
             val dataFile = File(file, "/$videoUrl/$fileName")
@@ -133,13 +127,11 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
                 folderFile.mkdir()
             }
             // todo change the file location/name according to your needs
-
             var inputStream: InputStream? = null
             var outputStream: OutputStream? = null
 
             try {
                 val fileReader = ByteArray(4096)
-
                 val fileSize = body.contentLength()
                 var fileSizeDownloaded: Long = 0
 
@@ -157,7 +149,6 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
                     outputStream.write(fileReader, 0, read)
 
                     fileSizeDownloaded += read.toLong()
-
                 }
 
                 outputStream.flush()
@@ -181,7 +172,6 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
         notificationManager.notify(0, notificationBuilder.build())
     }
 
-
     private fun onDownloadComplete(url: String, attemptId: String, contentId: String) {
         val intent = Intent(this, VideoPlayerActivity::class.java)
         intent.putExtra("FOLDER_NAME", url)
@@ -190,7 +180,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT)
+            PendingIntent.FLAG_ONE_SHOT)
         notificationManager.cancel(0)
         notificationBuilder.setProgress(0, 0, false)
         notificationBuilder.setContentText("File Downloaded")
@@ -203,6 +193,5 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
     override fun onTaskRemoved(rootIntent: Intent) {
         notificationManager.cancel(0)
     }
-
 }
 

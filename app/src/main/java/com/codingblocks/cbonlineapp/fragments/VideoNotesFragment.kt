@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,20 +17,18 @@ import com.codingblocks.cbonlineapp.utils.OnItemClickListener
 import com.codingblocks.cbonlineapp.utils.observeOnce
 import com.codingblocks.cbonlineapp.utils.observer
 import com.codingblocks.onlineapi.Clients
-import kotlinx.android.synthetic.main.fragment_notes.view.*
+import kotlinx.android.synthetic.main.fragment_notes.view.emptyTv
+import kotlinx.android.synthetic.main.fragment_notes.view.notesRv
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
-
 
 private const val ARG_ATTEMPT_ID = "param1"
 
 class VideoNotesFragment : Fragment(), AnkoLogger {
     private var param1: String? = null
-
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(context!!)
     }
-
     private val notesDao by lazy {
         database.notesDao()
     }
@@ -55,10 +52,8 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
                 try {
                     (activity as OnItemClickListener).onItemClick(position, id)
                 } catch (cce: ClassCastException) {
-
                 }
             }
-
         })
         view.notesRv.layoutManager = LinearLayoutManager(context)
         view.notesRv.adapter = notesAdapter
@@ -90,9 +85,9 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
                     notesList?.forEach {
                         try {
                             networkList.add(NotesModel(it.id
-                                    ?: "", it.duration ?: 0.0, it.text ?: "", it.content?.id
-                                    ?: "", it.runAttempt?.id ?: "", it.createdAt ?: "", it.deletedAt
-                                    ?: ""))
+                                ?: "", it.duration ?: 0.0, it.text ?: "", it.content?.id
+                                ?: "", it.runAttempt?.id ?: "", it.createdAt ?: "", it.deletedAt
+                                ?: ""))
                         } catch (e: Exception) {
                             info { "error" + e.localizedMessage }
                         }
@@ -103,27 +98,25 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
                             // remove items which are deleted
                             val sum = list + networkList
                             sum.groupBy { it.nttUid }
-                                    .filter { it.value.size == 1 }
-                                    .flatMap { it.value }
-                                    .forEach {
-                                        notesDao.deleteNoteByID(it.nttUid)
-                                    }
+                                .filter { it.value.size == 1 }
+                                .flatMap { it.value }
+                                .forEach {
+                                    notesDao.deleteNoteByID(it.nttUid)
+                                }
                         }
                     }
                 }
             }
-
         })
     }
-
 
     companion object {
         @JvmStatic
         fun newInstance(param1: String) =
-                VideoNotesFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_ATTEMPT_ID, param1)
-                    }
+            VideoNotesFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_ATTEMPT_ID, param1)
                 }
+            }
     }
 }

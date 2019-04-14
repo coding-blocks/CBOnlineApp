@@ -6,7 +6,6 @@ import androidx.room.Query
 
 @Dao
 abstract class CourseDao : BaseDao<Course> {
-
     @Query("SElECT * FROM Course ")
     abstract fun getCourses(): LiveData<List<Course>>
 

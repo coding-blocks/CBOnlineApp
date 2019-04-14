@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -34,16 +33,13 @@ import org.jetbrains.anko.support.v4.runOnUiThread
 import kotlin.concurrent.thread
 
 class HomeFragment : Fragment(), AnkoLogger {
-
     private lateinit var courseDataAdapter: CourseDataAdapter
     private lateinit var skeletonScreen: SkeletonScreen
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     val ui = HomeFragmentUi<Fragment>()
-
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(context!!)
     }
-
     private val courseDao by lazy {
         database.courseDao()
     }
@@ -53,15 +49,12 @@ class HomeFragment : Fragment(), AnkoLogger {
     private val instructorDao by lazy {
         database.instructorDao()
     }
-
     private val runDao by lazy {
         database.courseRunDao()
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
-            View? = ui.createView(AnkoContext.create(ctx, this))
-
+        View? = ui.createView(AnkoContext.create(ctx, this))
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -82,20 +75,19 @@ class HomeFragment : Fragment(), AnkoLogger {
 
 
         skeletonScreen = Skeleton.bind(ui.rvCourses)
-                .adapter(courseDataAdapter)
-                .shimmer(true)
-                .angle(20)
-                .frozen(true)
-                .duration(1200)
-                .count(4)
-                .load(R.layout.item_skeleton_course_card)
-                .show()
+            .adapter(courseDataAdapter)
+            .shimmer(true)
+            .angle(20)
+            .frozen(true)
+            .duration(1200)
+            .count(4)
+            .load(R.layout.item_skeleton_course_card)
+            .show()
         ui.swipeRefreshLayout.setOnRefreshListener {
             fetchRecommendedCourses()
         }
         displayCourses()
         fetchRecommendedCourses()
-
     }
 
     private fun displayCourses(searchQuery: String = "") {
@@ -106,13 +98,10 @@ class HomeFragment : Fragment(), AnkoLogger {
                     c.title.contains(searchQuery, true)
                 } as ArrayList<CourseRun>)
             }
-
         }
     }
 
     private fun fetchRecommendedCourses() {
-
-
         Clients.onlineV2JsonApi.getRecommendedCourses().enqueue(retrofitCallback { _, resp ->
             skeletonScreen.hide()
             resp?.body()?.let {
@@ -121,7 +110,7 @@ class HomeFragment : Fragment(), AnkoLogger {
                     val unsortedRuns: ArrayList<Runs> = arrayListOf()
                     for (i in 0 until myCourses.runs!!.size) {
                         if (myCourses.runs!![i].enrollmentStart!!.toLong() < (System.currentTimeMillis() / 1000)
-                                && myCourses.runs!![i].enrollmentEnd!!.toLong() > (System.currentTimeMillis() / 1000) && !myCourses.runs!![i].unlisted!!)
+                            && myCourses.runs!![i].enrollmentEnd!!.toLong() > (System.currentTimeMillis() / 1000) && !myCourses.runs!![i].unlisted!!)
                             unsortedRuns.add(myCourses.runs!![i])
                     }
                     //for no current runs
@@ -129,46 +118,43 @@ class HomeFragment : Fragment(), AnkoLogger {
                         unsortedRuns.addAll(myCourses.runs!!)
                     }
                     val currentRuns = unsortedRuns.sortedWith(compareBy { it.price })
-
                     val course = myCourses.run {
                         Course(
-                                id ?: "",
-                                title ?: "",
-                                subtitle ?: "",
-                                logo ?: "",
-                                summary ?: "",
-                                promoVideo ?: "",
-                                difficulty ?: "",
-                                reviewCount ?: 0,
-                                rating ?: 0f,
-                                slug ?: "",
-                                coverImage ?: "",
-                                updated_at = updatedAt,
-                                categoryId = categoryId)
+                            id ?: "",
+                            title ?: "",
+                            subtitle ?: "",
+                            logo ?: "",
+                            summary ?: "",
+                            promoVideo ?: "",
+                            difficulty ?: "",
+                            reviewCount ?: 0,
+                            rating ?: 0f,
+                            slug ?: "",
+                            coverImage ?: "",
+                            updated_at = updatedAt,
+                            categoryId = categoryId)
                     }
-
                     val courseRun = CourseRun(currentRuns[0].id ?: "",
-                            "",
-                            currentRuns[0].name ?: "",
-                            currentRuns[0].description ?: "",
-                            currentRuns[0].enrollmentStart ?: "",
-                            currentRuns[0].enrollmentEnd ?: "",
-                            currentRuns[0].start ?: "",
-                            currentRuns[0].end ?: "",
-                            currentRuns[0].price ?: "",
-                            currentRuns[0].mrp ?: "",
-                            myCourses.id ?: "",
-                            currentRuns[0].updatedAt ?: "",
-                            title = myCourses.title ?: "",
-                            recommended = true)
+                        "",
+                        currentRuns[0].name ?: "",
+                        currentRuns[0].description ?: "",
+                        currentRuns[0].enrollmentStart ?: "",
+                        currentRuns[0].enrollmentEnd ?: "",
+                        currentRuns[0].start ?: "",
+                        currentRuns[0].end ?: "",
+                        currentRuns[0].price ?: "",
+                        currentRuns[0].mrp ?: "",
+                        myCourses.id ?: "",
+                        currentRuns[0].updatedAt ?: "",
+                        title = myCourses.title ?: "",
+                        recommended = true)
 
                     thread {
                         courseDao.insert(course)
-
                         val oldRun = runDao.getRunById(currentRuns[0].id!!)
                         if (oldRun == null)
                             runDao.insert(courseRun)
-                        else if(oldRun.recommended != courseRun.recommended || oldRun.crPrice != courseRun.crPrice){
+                        else if (oldRun.recommended != courseRun.recommended || oldRun.crPrice != courseRun.crPrice) {
                             runDao.update(courseRun)
                         }
 
@@ -180,19 +166,17 @@ class HomeFragment : Fragment(), AnkoLogger {
                         //Add CourseInstructors
                         for (i in myCourses.instructors!!) {
                             instructorDao.insert(Instructor(i.id ?: "", i.name ?: "",
-                                    i.description ?: "", i.photo ?: "",
-                                    "", "", myCourses.id))
+                                i.description ?: "", i.photo ?: "",
+                                "", "", myCourses.id))
                             insertCourseAndInstructor(myCourses, i)
                         }
                     }
-
                 }
             }
         })
     }
 
     private fun insertCourseAndInstructor(course: com.codingblocks.onlineapi.models.Course, instructor: com.codingblocks.onlineapi.models.Instructor) {
-
         thread {
             try {
                 courseWithInstructorDao.insert(CourseWithInstructor(course.id!!, instructor.id!!))
@@ -203,7 +187,6 @@ class HomeFragment : Fragment(), AnkoLogger {
             }
         }
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.home, menu)
@@ -225,5 +208,4 @@ class HomeFragment : Fragment(), AnkoLogger {
         })
         super.onCreateOptionsMenu(menu, inflater)
     }
-
 }

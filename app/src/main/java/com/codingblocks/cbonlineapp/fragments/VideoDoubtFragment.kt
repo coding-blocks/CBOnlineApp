@@ -16,22 +16,21 @@ import com.codingblocks.cbonlineapp.adapters.VideosDoubtsAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.DoubtsModel
 import com.codingblocks.onlineapi.Clients
-import kotlinx.android.synthetic.main.fragment_video_doubt.view.*
+import kotlinx.android.synthetic.main.fragment_video_doubt.view.doubtsRv
+import kotlinx.android.synthetic.main.fragment_video_doubt.view.emptyTv
 import org.jetbrains.anko.AnkoLogger
-
 
 private const val ARG_ATTEMPT_ID = "param1"
 
 class VideoDoubtFragment : Fragment(), AnkoLogger {
     private var param1: String? = null
-
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(context!!)
     }
-
     private val doubtsDao by lazy {
         database.doubtsDao()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -75,9 +74,9 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
                     it?.forEach {
                         try {
                             doubtsDao.insert(DoubtsModel(it.id
-                                    ?: "", it.title, it.body, it.content?.id
-                                    ?: "", it.status, it.runAttempt?.id ?: "",
-                                    it.discourseTopicId))
+                                ?: "", it.title, it.body, it.content?.id
+                                ?: "", it.status, it.runAttempt?.id ?: "",
+                                it.discourseTopicId))
                         } catch (e: Exception) {
                             e.printStackTrace()
                             Log.e("CRASH", "DOUBT ID : $it.id")
@@ -85,20 +84,16 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
                     }
                 }
             }
-
         })
     }
 
-
-
-
-        companion object {
-            @JvmStatic
-            fun newInstance(param1: String) =
-                    VideoDoubtFragment().apply {
-                        arguments = Bundle().apply {
-                            putString(ARG_ATTEMPT_ID, param1)
-                        }
-                    }
-        }
+    companion object {
+        @JvmStatic
+        fun newInstance(param1: String) =
+            VideoDoubtFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_ATTEMPT_ID, param1)
+                }
+            }
     }
+}

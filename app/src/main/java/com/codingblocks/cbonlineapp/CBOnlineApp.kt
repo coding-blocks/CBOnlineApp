@@ -29,8 +29,6 @@ class CBOnlineApp : Application() {
         )
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
 //            shortcutAction(::updateShortcuts)
-
-
         val crashlyticsKit = Crashlytics.Builder()
             .core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
             .build()
@@ -43,5 +41,4 @@ class CBOnlineApp : Application() {
             return mInstance.applicationContext
         }
     }
-
 }
