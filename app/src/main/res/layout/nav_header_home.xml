@@ -51,7 +51,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
 
-        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintEnd_toStartOf="@+id/login_button"
         app:layout_constraintStart_toEndOf="@+id/nav_header_imageView"
         app:layout_constraintTop_toBottomOf="@+id/nav_header_username_textView" />
 
