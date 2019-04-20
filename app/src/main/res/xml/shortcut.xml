@@ -6,7 +6,7 @@
         android:enabled="true"
         android:icon="@mipmap/ic_launcher"
         android:shortcutId="shortcut_name"
-        android:shortcutShortLabel="@string/my_courses">
+        android:shortcutShortLabel="@string/all_courses">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetClass="com.codingblocks.cbonlineapp.activities.HomeActivity"
