@@ -1,10 +1,11 @@
-package com.codingblocks.cbonlineapp.utils
+package com.codingblocks.cbonlineapp.extensions
 
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
 import android.view.View
 import android.widget.ImageView
 import com.caverock.androidsvg.SVG
+import com.codingblocks.cbonlineapp.util.MediaUtils
 import okhttp3.Request
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread

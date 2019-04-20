@@ -8,7 +8,7 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.services.DownloadUtil.DOWNLOAD_SUCCESS
 import com.codingblocks.cbonlineapp.services.DownloadUtil.TAG_DOWNLOAD
 import com.codingblocks.cbonlineapp.services.DownloadUtil.downloadManager
-import com.codingblocks.cbonlineapp.utils.MediaUtils
+import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.onlineapi.Clients
 import okhttp3.OkHttpClient
 import okhttp3.Request

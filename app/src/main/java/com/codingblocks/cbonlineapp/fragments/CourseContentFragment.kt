@@ -12,12 +12,11 @@ import com.codingblocks.cbonlineapp.DownloadStarter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.CourseRun
-import com.codingblocks.cbonlineapp.database.CourseSection
+import com.codingblocks.cbonlineapp.database.models.CourseRun
+import com.codingblocks.cbonlineapp.database.models.CourseSection
 import com.codingblocks.cbonlineapp.services.DownloadService
-import com.codingblocks.cbonlineapp.utils.getPrefs
+import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.google.firebase.analytics.FirebaseAnalytics
-import kotlinx.android.synthetic.main.fragment_course_content.swiperefresh
 import kotlinx.android.synthetic.main.fragment_course_content.view.rvExpendableView
 import kotlinx.android.synthetic.main.fragment_course_content.view.sectionProgressBar
 import kotlinx.android.synthetic.main.fragment_course_content.view.swiperefresh

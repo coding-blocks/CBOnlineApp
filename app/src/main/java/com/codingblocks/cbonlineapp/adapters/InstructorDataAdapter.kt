@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.Instructor
+import com.codingblocks.cbonlineapp.database.models.Instructor
 import com.codingblocks.cbonlineapp.ui.InstructorListUi
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.AnkoContext

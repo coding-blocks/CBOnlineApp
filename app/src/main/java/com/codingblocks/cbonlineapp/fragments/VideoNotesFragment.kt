@@ -13,10 +13,10 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.VideosNotesAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.NotesModel
-import com.codingblocks.cbonlineapp.utils.OnItemClickListener
-import com.codingblocks.cbonlineapp.utils.observeOnce
-import com.codingblocks.cbonlineapp.utils.observer
+import com.codingblocks.cbonlineapp.database.models.NotesModel
+import com.codingblocks.cbonlineapp.util.OnItemClickListener
+import com.codingblocks.cbonlineapp.extensions.observeOnce
+import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_notes.view.*
 import org.jetbrains.anko.AnkoLogger
@@ -89,10 +89,20 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
                 if (response?.isSuccessful == true) {
                     notesList?.forEach {
                         try {
-                            networkList.add(NotesModel(it.id
-                                    ?: "", it.duration ?: 0.0, it.text ?: "", it.content?.id
-                                    ?: "", it.runAttempt?.id ?: "", it.createdAt ?: "", it.deletedAt
-                                    ?: ""))
+                            networkList.add(
+                                NotesModel(
+                                    it.id
+                                        ?: "",
+                                    it.duration ?: 0.0,
+                                    it.text ?: "",
+                                    it.content?.id
+                                        ?: "",
+                                    it.runAttempt?.id ?: "",
+                                    it.createdAt ?: "",
+                                    it.deletedAt
+                                        ?: ""
+                                )
+                            )
                         } catch (e: Exception) {
                             info { "error" + e.localizedMessage }
                         }

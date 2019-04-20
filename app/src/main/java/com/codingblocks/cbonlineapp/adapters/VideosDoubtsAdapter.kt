@@ -16,9 +16,9 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.DoubtsDao
-import com.codingblocks.cbonlineapp.database.DoubtsModel
-import com.codingblocks.cbonlineapp.utils.formatDate
-import com.codingblocks.cbonlineapp.utils.getPrefs
+import com.codingblocks.cbonlineapp.database.models.DoubtsModel
+import com.codingblocks.cbonlineapp.extensions.formatDate
+import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Contents
@@ -142,7 +142,8 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
                                 val body = inflatedView.findViewById(R.id.bodyTv) as MarkdownView
                                 body.loadMarkdown(comment.body)
                                 subTitle.text = comment.username
-                                time.text = formatDate(comment.updatedAt!!)
+                                time.text =
+                                    formatDate(comment.updatedAt!!)
                                 ll.addView(inflatedView)
                             }
 

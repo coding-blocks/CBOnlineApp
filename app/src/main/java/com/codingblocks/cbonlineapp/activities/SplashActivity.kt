@@ -5,7 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.BuildConfig
-import com.codingblocks.cbonlineapp.utils.getPrefs
+import com.codingblocks.cbonlineapp.extensions.getPrefs
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.intentFor
@@ -52,12 +52,13 @@ class SplashActivity : AppCompatActivity() {
     fun clearData() {
         try {
             val mCurrentVersion = BuildConfig.VERSION_CODE
-            val mSharedPreferences = getSharedPreferences("com.codingblocks.cbonlineapp.prefs", Context.MODE_PRIVATE)
+            val mSharedPreferences =
+                getSharedPreferences("com.codingblocks.cbonlineapp.prefs", Context.MODE_PRIVATE)
             val mEditor = mSharedPreferences.edit()
             mEditor.apply()
             val last_version = mSharedPreferences.getInt("last_version", -1)
             if (last_version != mCurrentVersion) {
-                deleteDatabaseFile(this,"app-database")
+                deleteDatabaseFile(this, "app-database")
             }
             mEditor.putInt("last_version", mCurrentVersion)
             mEditor.commit()

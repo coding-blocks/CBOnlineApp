@@ -19,11 +19,11 @@ import com.codingblocks.cbonlineapp.adapters.BatchesAdapter
 import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.Instructor
-import com.codingblocks.cbonlineapp.utils.Components
-import com.codingblocks.cbonlineapp.utils.MediaUtils
-import com.codingblocks.cbonlineapp.utils.OnCartItemClickListener
-import com.codingblocks.cbonlineapp.utils.loadSvg
+import com.codingblocks.cbonlineapp.database.models.Instructor
+import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.OnCartItemClickListener
+import com.codingblocks.cbonlineapp.extensions.loadSvg
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Sections
 import com.ethanhua.skeleton.Skeleton

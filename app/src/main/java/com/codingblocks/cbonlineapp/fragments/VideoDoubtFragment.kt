@@ -14,7 +14,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.VideosDoubtsAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.DoubtsModel
+import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_video_doubt.view.*
 import org.jetbrains.anko.AnkoLogger
@@ -74,10 +74,14 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
                 if (response != null && response.isSuccessful) {
                     it?.forEach {
                         try {
-                            doubtsDao.insert(DoubtsModel(it.id
-                                    ?: "", it.title, it.body, it.content?.id
-                                    ?: "", it.status, it.runAttempt?.id ?: "",
-                                    it.discourseTopicId))
+                            doubtsDao.insert(
+                                DoubtsModel(
+                                    it.id
+                                        ?: "", it.title, it.body, it.content?.id
+                                        ?: "", it.status, it.runAttempt?.id ?: "",
+                                    it.discourseTopicId
+                                )
+                            )
                         } catch (e: Exception) {
                             e.printStackTrace()
                             Log.e("CRASH", "DOUBT ID : $it.id")

@@ -3,11 +3,7 @@ package com.codingblocks.cbonlineapp.fragments
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,13 +11,13 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.Course
-import com.codingblocks.cbonlineapp.database.CourseRun
-import com.codingblocks.cbonlineapp.database.CourseWithInstructor
-import com.codingblocks.cbonlineapp.database.Instructor
+import com.codingblocks.cbonlineapp.database.models.Course
+import com.codingblocks.cbonlineapp.database.models.CourseRun
+import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
+import com.codingblocks.cbonlineapp.database.models.Instructor
+import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
-import com.codingblocks.cbonlineapp.utils.getPrefs
-import com.codingblocks.cbonlineapp.utils.observer
+import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourse
 import com.crashlytics.android.core.CrashlyticsCore
@@ -72,7 +68,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ):
-            View? = ui.createView(AnkoContext.create(ctx, this))
+        View? = ui.createView(AnkoContext.create(ctx, this))
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -120,7 +116,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 val list = withContext(Dispatchers.Default) {
                     (it.filter { c ->
                         (c.crEnd.toLong() * 1000) > System.currentTimeMillis() &&
-                                c.title.contains(searchQuery, true)
+                            c.title.contains(searchQuery, true)
                     } as ArrayList<CourseRun>)
                 }
 
@@ -162,23 +158,24 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                         categoryId = categoryId
                                     )
                                 }
-                                val courseRun = CourseRun(
-                                    myCourses.id ?: "",
-                                    myCourses.runAttempts?.get(0)?.id ?: "",
-                                    myCourses.name ?: "",
-                                    myCourses.description ?: "",
-                                    myCourses.start ?: "",
-                                    myCourses.runAttempts!![0].end ?: "",
-                                    myCourses.start ?: "",
-                                    myCourses.runAttempts!![0].end ?: "",
-                                    myCourses.price ?: "",
-                                    myCourses.mrp ?: "",
-                                    myCourses.course?.id ?: "",
-                                    myCourses.updatedAt ?: "",
-                                    progress = progress,
-                                    title = myCourses.course?.title ?: "",
-                                    premium = myCourses.runAttempts?.get(0)?.premium!!
-                                )
+                                val courseRun =
+                                    CourseRun(
+                                        myCourses.id ?: "",
+                                        myCourses.runAttempts?.get(0)?.id ?: "",
+                                        myCourses.name ?: "",
+                                        myCourses.description ?: "",
+                                        myCourses.start ?: "",
+                                        myCourses.runAttempts!![0].end ?: "",
+                                        myCourses.start ?: "",
+                                        myCourses.runAttempts!![0].end ?: "",
+                                        myCourses.price ?: "",
+                                        myCourses.mrp ?: "",
+                                        myCourses.course?.id ?: "",
+                                        myCourses.updatedAt ?: "",
+                                        progress = progress,
+                                        title = myCourses.course?.title ?: "",
+                                        premium = myCourses.runAttempts?.get(0)?.premium!!
+                                    )
 
                                 doAsync {
                                     val updateRun = runDao.getRunById(myCourses.id ?: "")
@@ -272,7 +269,12 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
         thread {
             try {
-                courseWithInstructorDao.insert(CourseWithInstructor(course.id!!, instructor.id!!))
+                courseWithInstructorDao.insert(
+                    CourseWithInstructor(
+                        course.id!!,
+                        instructor.id!!
+                    )
+                )
             } catch (e: Exception) {
                 e.printStackTrace()
                 Log.e("CRASH", "COURSE ID : ${course.id.toString()}")

@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.codingblocks.cbonlineapp.database.models.*
 
 @Database(
         version = 10, entities = [

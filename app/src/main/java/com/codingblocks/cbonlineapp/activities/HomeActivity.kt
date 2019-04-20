@@ -24,9 +24,9 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
-import com.codingblocks.cbonlineapp.utils.Components
-import com.codingblocks.cbonlineapp.utils.Prefs
-import com.codingblocks.cbonlineapp.utils.getPrefs
+import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
@@ -41,9 +41,10 @@ import org.jetbrains.anko.singleTop
 import java.util.*
 
 
-class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, AnkoLogger {
+class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+    AnkoLogger {
     private var doubleBackToExitPressedOnce = false
-    lateinit var prefs: Prefs
+    lateinit var prefs: PreferenceHelper
     var mFragmentToSet: Fragment? = null
 
 
@@ -54,7 +55,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         title = "Coding Blocks"
         val toggle = ActionBarDrawerToggle(
-            this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+            this,
+            drawer_layout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
         drawer_layout.addDrawerListener(toggle)
         drawer_layout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {}
@@ -83,8 +89,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             transaction.replace(R.id.fragment_holder, HomeFragment())
         }
         when {
-            intent.getStringExtra("course") == "mycourses" -> transaction.replace(R.id.fragment_holder, MyCoursesFragment())
-            intent.getStringExtra("course") == "allcourses" -> transaction.replace(R.id.fragment_holder, AllCourseFragment())
+            intent.getStringExtra("course") == "mycourses" -> transaction.replace(
+                R.id.fragment_holder,
+                MyCoursesFragment()
+            )
+            intent.getStringExtra("course") == "allcourses" -> transaction.replace(
+                R.id.fragment_holder,
+                AllCourseFragment()
+            )
         }
         nav_view.getHeaderView(0).login_button.setOnClickListener {
             startActivity(intentFor<LoginActivity>().singleTop())
@@ -96,14 +108,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setUser() {
         if (!prefs.SP_USER_IMAGE.isEmpty())
-            Picasso.get().load(prefs.SP_USER_IMAGE).placeholder(R.drawable.defaultavatar).fit().into(nav_view.getHeaderView(0).nav_header_imageView)
+            Picasso.get().load(prefs.SP_USER_IMAGE).placeholder(R.drawable.defaultavatar).fit().into(
+                nav_view.getHeaderView(0).nav_header_imageView
+            )
         nav_view.getHeaderView(0).login_button.text = "Logout"
         if (Build.VERSION.SDK_INT >= 25) {
             createShortcut()
         }
         nav_view.getHeaderView(0).login_button.setOnClickListener {
-            prefs.SP_ACCESS_TOKEN_KEY = Prefs.ACCESS_TOKEN
-            prefs.SP_JWT_TOKEN_KEY = Prefs.JWT_TOKEN
+            prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
+            prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
             if (nav_view.getHeaderView(0).login_button.text == "Logout")
                 removeShortcuts()
             startActivity(intentFor<LoginActivity>().singleTop())
@@ -152,7 +166,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 resp?.body()?.let { it ->
                     if (resp.isSuccessful) {
                         try {
-                            val jSONObject = it.getAsJsonObject("data").getAsJsonObject("attributes")
+                            val jSONObject =
+                                it.getAsJsonObject("data").getAsJsonObject("attributes")
                             prefs.SP_USER_ID = it.getAsJsonObject("data").get("id").asString
                             prefs.SP_ONEAUTH_ID = jSONObject.get("oneauth-id").asString
                             prefs.SP_USER_IMAGE = jSONObject.get("photo").asString
@@ -271,7 +286,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun isNetworkAvailable(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo.isConnected
     }
 }

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.utils.formatDate
+import com.codingblocks.cbonlineapp.extensions.formatDate
 import com.codingblocks.onlineapi.models.TopicsItem
 import kotlinx.android.synthetic.main.doubt_header_item.view.*
 
@@ -40,7 +40,8 @@ class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>) : RecyclerVi
     inner class DoubtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindView(data: TopicsItem?) {
-            itemView.timeTv.text = formatDate(data?.createdAt!!)
+            itemView.timeTv.text =
+                formatDate(data?.createdAt!!)
             itemView.titleTv.text = data.title
             itemView.usernameTv.text = data.lastPosterUsername
             itemView.setOnClickListener {

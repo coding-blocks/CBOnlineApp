@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.fragments.AboutQuizFragment
-import com.codingblocks.cbonlineapp.utils.Components
+import com.codingblocks.cbonlineapp.util.Components
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_quiz.*
 

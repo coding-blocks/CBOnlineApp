@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.database
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
+import com.codingblocks.cbonlineapp.database.models.NotesModel
 
 @Dao
 abstract class NotesDao : BaseDao<NotesModel> {
