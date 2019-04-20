@@ -33,7 +33,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:layout_weight="0.6"
-        android:fontFamily="@font/cabin_medium"
+        android:fontFamily="@font/nunitosans_semibold"
         android:textSize="16sp" />
 
 
@@ -43,7 +43,6 @@
         android:layout_height="36dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/colorPrimary"
         android:visibility="visible" />

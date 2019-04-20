@@ -13,14 +13,26 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import com.codingblocks.cbonlineapp.R
 import de.hdodenhof.circleimageview.CircleImageView
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.cardview.v7.cardView
 import org.jetbrains.anko.custom.ankoView
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.frameLayout
+import org.jetbrains.anko.imageView
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.margin
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.topPadding
+import org.jetbrains.anko.view
+import org.jetbrains.anko.wrapContent
 
 class MyCourseCardUi : AnkoComponent<ViewGroup> {
     inline fun ViewManager.circleImageView(theme: Int = 0, init: CircleImageView.() -> Unit) = ankoView({ CircleImageView(it) }, theme, init)
     lateinit var courseTitle: TextView
-
     lateinit var courseRun: TextView
     lateinit var enrollment: TextView
     lateinit var coursePrice: TextView
@@ -33,11 +45,9 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
     lateinit var courseInstructors: TextView
     lateinit var courseCoverImageView: ImageView
     var font: Typeface? = null
-
-
     override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui) {
         frameLayout {
-            font = ResourcesCompat.getFont(ctx, R.font.cabin_medium)
+            font = ResourcesCompat.getFont(ctx, R.font.nunitosans_semibold)
             cardView {
                 cardElevation = dip(4).toFloat()
                 radius = dip(15).toFloat()
@@ -87,8 +97,6 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                             scaleType = ImageView.ScaleType.CENTER_CROP
                             setImageResource(R.drawable.placeholder_course_cover)
                         }.lparams(width = matchParent, height = matchParent)
-
-
                     }.lparams(width = 0, height = matchParent) {
                         weight = 1.4f
                     }
@@ -131,7 +139,6 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                                 textSize = 18f
                                 textColor = context.resources.getColor(R.color.salmon)
                                 typeface = font
-
                             }
                             courseMrp = textView {
                                 textSize = 16f
@@ -141,8 +148,6 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                                 gravity = Gravity.CENTER_VERTICAL
                                 marginStart = dip(8)
                             }
-
-
                         }.lparams(width = matchParent, height = dip(wrapContent)) {
                             topMargin = dip(12)
                             marginEnd = dip(12)
@@ -179,6 +184,5 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                 margin = dip(6)
             }
         }
-
     }
 }

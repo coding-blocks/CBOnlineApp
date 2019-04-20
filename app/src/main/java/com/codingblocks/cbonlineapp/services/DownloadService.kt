@@ -13,12 +13,16 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
-import com.codingblocks.cbonlineapp.utils.MediaUtils
+import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.onlineapi.Clients
 import okhttp3.ResponseBody
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.toast
-import java.io.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import kotlin.concurrent.thread
 
 class DownloadService : IntentService("Download Service"), AnkoLogger {

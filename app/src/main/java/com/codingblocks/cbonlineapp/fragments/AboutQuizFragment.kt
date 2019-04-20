@@ -9,17 +9,16 @@ import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.QuizAttemptListAdapter
-import com.codingblocks.cbonlineapp.utils.OnItemClickListener
+import com.codingblocks.cbonlineapp.util.OnItemClickListener
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttempt
-import com.codingblocks.onlineapi.models.RunAttemptsModel
 import com.codingblocks.onlineapi.models.Quizqnas
+import com.codingblocks.onlineapi.models.RunAttemptsModel
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import kotlinx.android.synthetic.main.fragment_about_quiz.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
-
 
 
 private const val ARG_QUIZ_ID = "quiz_id"

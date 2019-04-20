@@ -1,7 +1,13 @@
 package com.codingblocks.cbonlineapp.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.RoomWarnings
+import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
+import com.codingblocks.cbonlineapp.database.models.Instructor
 
 
 @Dao

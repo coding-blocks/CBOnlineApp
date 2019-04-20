@@ -12,9 +12,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:inputType="none"
-        android:enabled="false"
         android:background="@null"
+        android:enabled="false"
+        android:inputType="none"
         android:textColor="@color/white"
         android:textSize="18sp" />
 
@@ -22,8 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:orientation="horizontal">
 
         <TextView
@@ -45,9 +45,9 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="end">
+        android:layout_marginBottom="8dp">
 
         <TextView
             android:id="@+id/deleteTv"

@@ -3,7 +3,7 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="my_courses">All Courses</string>
+    <string name="all_courses">All Courses</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="learn_to_code_interactively"><![CDATA[<Learn to code interactively/>]]></string>
     <string name="recommended_courses">Recommended Courses</string>
@@ -59,4 +59,5 @@
     <string name="cart_title">Replace Cart Items?</string>
     <string name="yes_continue">Yes,Continue</string>
     <string name="checkout">Checkout with Existing</string>
+    <string name="my_courses">My Courses</string>
 </resources>

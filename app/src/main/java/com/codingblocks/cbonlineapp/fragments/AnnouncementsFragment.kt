@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.Instructor
-import com.codingblocks.cbonlineapp.utils.getPrefs
+import com.codingblocks.cbonlineapp.database.models.Instructor
+import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_annoucements.view.*
 

@@ -26,7 +26,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:fontFamily">@font/cabin_medium</item>
+        <item name="android:fontFamily">@font/nunitosans_semibold</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="android:textColor">@color/black</item>

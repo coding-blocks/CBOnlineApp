@@ -8,31 +8,26 @@ import android.view.ViewGroup
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.retrofitCallback
-import com.codingblocks.cbonlineapp.utils.formatDate
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.cbonlineapp.extensions.formatDate
 import com.codingblocks.onlineapi.models.TopicsItem
 import kotlinx.android.synthetic.main.doubt_header_item.view.*
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
-class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>?) : RecyclerView.Adapter<DoubtsAdapter.DoubtsViewHolder>() {
+class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>) : RecyclerView.Adapter<DoubtsAdapter.DoubtsViewHolder>() {
 
     private lateinit var context: Context
 
-    fun setData(doubtsData: ArrayList<TopicsItem?>?) {
+    fun setData(doubtsData: ArrayList<TopicsItem?>) {
         this.doubtsData = doubtsData
         notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: DoubtsViewHolder, position: Int) {
-        holder.bindView(doubtsData!![position])
+        holder.bindView(doubtsData[position])
     }
 
 
     override fun getItemCount(): Int {
-        return doubtsData?.size ?: 0
+        return doubtsData.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoubtsViewHolder {
@@ -45,7 +40,8 @@ class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>?) : RecyclerV
     inner class DoubtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindView(data: TopicsItem?) {
-            itemView.timeTv.text = formatDate(data?.createdAt!!)
+            itemView.timeTv.text =
+                formatDate(data?.createdAt!!)
             itemView.titleTv.text = data.title
             itemView.usernameTv.text = data.lastPosterUsername
             itemView.setOnClickListener {

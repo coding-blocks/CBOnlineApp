@@ -5,8 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.ui.BatchesCardUi
-import com.codingblocks.cbonlineapp.utils.OnCartItemClickListener
-import com.codingblocks.cbonlineapp.utils.OnItemClickListener
+import com.codingblocks.cbonlineapp.util.OnCartItemClickListener
 import com.codingblocks.onlineapi.models.Runs
 import org.jetbrains.anko.AnkoContext
 import java.text.SimpleDateFormat

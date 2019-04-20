@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.LeaderboardListAdapter
-import com.codingblocks.cbonlineapp.utils.getPrefs
+import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.onlineapi.models.Leaderboard
 import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoLogger

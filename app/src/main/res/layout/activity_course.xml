@@ -65,7 +65,7 @@
                             android:layout_marginStart="14dp"
                             android:layout_marginTop="16dp"
                             android:layout_marginEnd="16dp"
-                            android:fontFamily="@font/cabin_semibold"
+                            android:fontFamily="@font/nunitosans_bold"
                             android:textColor="@color/black"
                             android:textSize="24sp"
                             android:transitionName="textTrans" />
@@ -78,7 +78,7 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginBottom="8dp"
-                            android:fontFamily="@font/cabin_medium"
+                            android:fontFamily="@font/nunitosans_semibold"
                             android:textColor="@color/black"
                             android:textSize="20sp" />
                     </LinearLayout>
@@ -92,9 +92,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
                     android:layout_marginTop="8dp"
-                    android:fontFamily="@font/cabin_medium"
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="@font/nunitosans_semibold"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
 
@@ -103,10 +103,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:fontFamily="@font/cabin_semibold"
+                    android:fontFamily="@font/nunitosans_bold"
                     android:text="@string/summary"
                     android:textColor="@color/black"
-                    android:textSize="22sp"/>
+                    android:textSize="22sp" />
 
                 <View
                     android:id="@+id/coursePagev1"
@@ -124,7 +124,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="14dp"
                     android:layout_marginEnd="16dp"
-                    android:fontFamily="@font/cabin_medium"
+                    android:fontFamily="@font/nunitosans_semibold"
                     android:textAlignment="viewStart"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
@@ -135,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="12dp"
-                    android:fontFamily="@font/cabin_semibold"
+                    android:fontFamily="@font/nunitosans_bold"
                     android:text="@string/student_feedback"
                     android:textColor="@color/black"
                     android:textSize="22sp" />
@@ -150,13 +150,13 @@
                     android:background="@color/black" />
 
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="14dp"
-                    android:layout_height="wrap_content">
+                    android:orientation="horizontal">
+
                     <RatingBar
                         android:id="@+id/coursePageRatingBar"
                         style="@style/Widget.AppCompat.RatingBar.Small"
@@ -165,12 +165,13 @@
                         android:isIndicator="true"
                         android:numStars="5"
                         android:progressTint="@android:color/holo_orange_light" />
+
                     <TextView
                         android:id="@+id/coursePageRatingCountTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:fontFamily="@font/cabin"
+                        android:fontFamily="@font/nunitosans_regular"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
 
@@ -187,10 +188,11 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="14dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_height="wrap_content">
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal">
+
                     <RatingBar
                         android:id="@+id/courseRating5"
                         style="@style/Widget.AppCompat.RatingBar.Small"
@@ -205,24 +207,26 @@
 
                     <ProgressBar
                         android:id="@+id/courseProgress5"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="0dp"
                         android:layout_height="12dp"
+                        android:layout_gravity="center"
                         android:layout_marginStart="13dp"
                         android:layout_marginEnd="16dp"
+                        android:layout_weight="1"
                         android:indeterminate="false"
                         android:padding="0dp"
                         android:progressDrawable="@drawable/progress_bar"
                         android:scaleY="1.2" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="14dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_height="wrap_content">
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal">
+
                     <RatingBar
                         android:id="@+id/courseRating4"
                         style="@style/Widget.AppCompat.RatingBar.Small"
@@ -237,24 +241,26 @@
 
                     <ProgressBar
                         android:id="@+id/courseProgress4"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="0dp"
                         android:layout_height="12dp"
+                        android:layout_gravity="center"
                         android:layout_marginStart="13dp"
                         android:layout_marginEnd="16dp"
+                        android:layout_weight="1"
                         android:indeterminate="false"
                         android:padding="0dp"
                         android:progressDrawable="@drawable/progress_bar"
                         android:scaleY="1.2" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="14dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_height="wrap_content">
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal">
+
                     <RatingBar
                         android:id="@+id/courseRating3"
                         style="@style/Widget.AppCompat.RatingBar.Small"
@@ -269,13 +275,13 @@
 
                     <ProgressBar
                         android:id="@+id/courseProgress3"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="0dp"
                         android:layout_height="12dp"
+                        android:layout_gravity="center"
                         android:layout_marginStart="13dp"
                         android:layout_marginEnd="16dp"
+                        android:layout_weight="1"
                         android:indeterminate="false"
                         android:padding="0dp"
                         android:progressDrawable="@drawable/progress_bar"
@@ -284,10 +290,11 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="14dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_height="wrap_content">
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal">
+
                     <RatingBar
                         android:id="@+id/courseRating2"
                         style="@style/Widget.AppCompat.RatingBar.Small"
@@ -302,13 +309,13 @@
 
                     <ProgressBar
                         android:id="@+id/courseProgress2"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="0dp"
                         android:layout_height="12dp"
+                        android:layout_gravity="center"
                         android:layout_marginStart="13dp"
                         android:layout_marginEnd="16dp"
+                        android:layout_weight="1"
                         android:indeterminate="false"
                         android:padding="0dp"
                         android:progressDrawable="@drawable/progress_bar"
@@ -317,10 +324,11 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="14dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_height="wrap_content">
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal">
+
                     <RatingBar
                         android:id="@+id/courseRating1"
                         style="@style/Widget.AppCompat.RatingBar.Small"
@@ -335,13 +343,13 @@
 
                     <ProgressBar
                         android:id="@+id/courseProgress1"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="0dp"
                         android:layout_height="12dp"
+                        android:layout_gravity="center"
                         android:layout_marginStart="13dp"
                         android:layout_marginEnd="16dp"
+                        android:layout_weight="1"
                         android:indeterminate="false"
                         android:padding="0dp"
                         android:progressDrawable="@drawable/progress_bar"
@@ -404,12 +412,12 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
-                    android:gravity="center_vertical"
                     android:layout_marginEnd="24dp"
-                    android:layout_height="wrap_content">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:layout_width="72dp"
@@ -436,18 +444,18 @@
                         android:layout_marginStart="4dp"
 
                         android:text="Revisit and\nRevise Topics"
-                        android:textColor="@android:color/black"/>
+                        android:textColor="@android:color/black" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
-                    android:gravity="center_vertical"
                     android:layout_marginEnd="24dp"
-                    android:layout_height="wrap_content">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:layout_width="72dp"
@@ -496,8 +504,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="110dp"
-                    android:background="@color/black"
-                    />
+                    android:background="@color/black" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvExpendableView"
@@ -516,8 +523,7 @@
 
                     android:text="About Instructors"
                     android:textColor="@color/black"
-                    android:textSize="22sp"
-                    />
+                    android:textSize="22sp" />
 
                 <View
                     android:id="@+id/coursePagev4"

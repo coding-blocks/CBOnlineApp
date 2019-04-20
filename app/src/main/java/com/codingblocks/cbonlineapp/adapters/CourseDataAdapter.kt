@@ -10,10 +10,10 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.CourseActivity
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.CourseDao
-import com.codingblocks.cbonlineapp.database.CourseRun
+import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.ui.MyCourseCardUi
-import com.codingblocks.cbonlineapp.utils.loadSvg
+import com.codingblocks.cbonlineapp.extensions.loadSvg
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger

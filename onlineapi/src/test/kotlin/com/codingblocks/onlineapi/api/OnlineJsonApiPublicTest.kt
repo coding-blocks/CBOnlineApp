@@ -8,13 +8,13 @@ import org.junit.Test
 class OnlineJsonApiPublicTest {
     val api = Clients.onlineV2JsonApi
 
-    @Test
-    fun `GET courses`() {
-        val courses = api.courses.execute().body()
-        courses?.let {
-            assertEquals(20, it.size)
-        }
-    }
+//    @Test
+//    fun `GET courses`() {
+//        val courses = api.courses.execute().body()
+//        courses?.let {
+//            assertEquals(20, it.size)
+//        }
+//    }
 
 
     @Test
@@ -33,13 +33,13 @@ class OnlineJsonApiPublicTest {
         }
     }
 
-    @Test
-    fun `GET instructors?include=courses`() {
-        val courses = api.instructors(arrayOf("courses")).execute().body()
-        courses?.let {
-            assertNotNull(it.size)
-        }
-    }
+//    @Test
+//    fun `GET instructors?include=courses`() {
+//        val courses = api.instructors(arrayOf("courses")).execute().body()
+//        courses?.let {
+//            assertNotNull(it.size)
+//        }
+//    }
 
     @Test
     fun `GET recommended`() {

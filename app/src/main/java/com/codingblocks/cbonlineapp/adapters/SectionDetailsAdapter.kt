@@ -2,11 +2,9 @@ package com.codingblocks.cbonlineapp.adapters
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.net.ConnectivityManager
 import android.os.Environment
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,19 +22,29 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.activities.PdfActivity
 import com.codingblocks.cbonlineapp.activities.QuizActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.database.*
-import com.codingblocks.cbonlineapp.utils.Animations.collapse
-import com.codingblocks.cbonlineapp.utils.Animations.expand
-import com.codingblocks.cbonlineapp.utils.Components
-import com.codingblocks.cbonlineapp.utils.MediaUtils
-import com.codingblocks.cbonlineapp.utils.getDistinct
-import com.codingblocks.cbonlineapp.utils.getPrefs
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.ContentDao
+import com.codingblocks.cbonlineapp.database.models.CourseContent
+import com.codingblocks.cbonlineapp.database.models.CourseSection
+import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
+import com.codingblocks.cbonlineapp.util.Animations.collapse
+import com.codingblocks.cbonlineapp.util.Animations.expand
+import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.extensions.getDistinct
+import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.RunAttemptsModel
 import kotlinx.android.synthetic.main.item_section.view.*
-import org.jetbrains.anko.*
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.noButton
+import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.yesButton
 import java.io.File
 import kotlin.concurrent.thread
 
@@ -44,7 +52,7 @@ import kotlin.concurrent.thread
 class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             private var activity: LifecycleOwner,
                             private var starter: DownloadStarter
-) : RecyclerView.Adapter<SectionDetailsAdapter.CourseViewHolder>(), AnkoLogger {
+) : RecyclerView.Adapter<SectionDetailsAdapter.CourseViewHolder>() {
 
     private lateinit var context: Context
     private lateinit var database: AppDatabase
@@ -81,13 +89,12 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
 
 
         return CourseViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_section, parent, false))
+            .inflate(R.layout.item_section, parent, false))
     }
 
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindView(data: CourseSection, starter: DownloadStarter) {
-
             itemView.title.text = data.name
             sectionWithContentDao.getContentWithSectionId(data.id).getDistinct().observe(activity, Observer<List<CourseContent>> { it ->
 
@@ -142,15 +149,20 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                         when {
                             content.contentable == "lecture" -> {
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
-                                if (!content.contentLecture.lectureUid.isNullOrEmpty()) {
+                                if (!content.contentLecture.lectureUid.isNullOrEmpty() && !content.contentLecture.lectureUrl.isNullOrEmpty()) {
                                     val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
                                     ll.addView(inflatedView)
                                     if (content.contentLecture.isDownloaded == "false") {
                                         downloadBtn.setImageDrawable(null)
                                         downloadBtn.background = context.getDrawable(android.R.drawable.stat_sys_download)
                                         inflatedView.setOnClickListener {
+                                            if (content.progress == "UNDONE") {
+                                                if (content.progressId.isEmpty())
+                                                    setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentLecture.lectureContentId)
+                                                else
+                                                    updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
+                                            }
                                             it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to content.contentLecture.lectureUrl, "attemptId" to content.attempt_id, "contentId" to content.id, "downloaded" to false).singleTop())
-
                                         }
                                         downloadBtn.setOnClickListener {
                                             if (MediaUtils.checkPermission(context)) {
@@ -160,7 +172,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                                         downloadBtn.isEnabled = false
                                                         (downloadBtn.background as AnimationDrawable).start()
                                                     } else {
-                                                        Components.showconfirmation(context,"wifi")
+                                                        Components.showconfirmation(context, "wifi")
                                                     }
                                                 } else {
                                                     starter.startDownload(content.contentLecture.lectureUrl, data.id, content.contentLecture.lectureContentId, content.title, content.attempt_id, content.id)
@@ -201,46 +213,48 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                             content.contentable == "document" -> {
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_document))
                                 ll.addView(inflatedView)
-                                inflatedView.setOnClickListener {
-                                    if (content.progress == "UNDONE") {
-                                        if (content.progressId.isEmpty())
-                                            setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentDocument.documentContentId)
-                                        else
-                                            updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentDocument.documentContentId)
+                                if (!content.contentDocument.documentContentId.isEmpty() && !content.contentDocument.documentPdfLink.isEmpty()) {
+                                    inflatedView.setOnClickListener {
+                                        if (content.progress == "UNDONE") {
+                                            if (content.progressId.isEmpty())
+                                                setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentDocument.documentContentId)
+                                            else
+                                                updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentDocument.documentContentId)
+                                        }
+                                        it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
                                     }
-                                    it.context.startActivity(it.context.intentFor<PdfActivity>("fileUrl" to content.contentDocument.documentPdfLink, "fileName" to content.contentDocument.documentName + ".pdf").singleTop())
-
                                 }
                             }
                             content.contentable == "video" -> {
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_youtube_video))
                                 ll.addView(inflatedView)
-                                inflatedView.setOnClickListener {
-                                    if (content.progress == "UNDONE") {
-                                        if (content.progressId.isEmpty())
-                                            setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentVideo.videoContentId)
-                                        else
-                                            updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentVideo.videoContentId)
+                                if (!content.contentVideo.videoContentId.isEmpty() && !content.contentVideo.videoUrl.isEmpty()) {
+                                    inflatedView.setOnClickListener {
+                                        if (content.progress == "UNDONE") {
+                                            if (content.progressId.isEmpty())
+                                                setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentVideo.videoContentId)
+                                            else
+                                                updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentVideo.videoContentId)
+                                        }
+                                        it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("videoUrl" to content.contentVideo.videoUrl, "attemptId" to content.attempt_id, "contentId" to content.id).singleTop())
                                     }
-                                    it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("videoUrl" to content.contentVideo.videoUrl, "attemptId" to content.attempt_id, "contentId" to content.id).singleTop())
-
                                 }
                             }
                             content.contentable == "qna" -> {
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_quiz))
                                 ll.addView(inflatedView)
-                                inflatedView.setOnClickListener {
-                                    if (content.progress == "UNDONE") {
-                                        if (content.progressId.isEmpty())
-                                            setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentQna.qnaContentId)
-                                        else
-                                            updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
+                                if (!content.contentQna.qnaContentId.isEmpty() && !content.contentQna.qnaQid.toString().isEmpty()) {
+                                    inflatedView.setOnClickListener {
+                                        if (content.progress == "UNDONE") {
+                                            if (content.progressId.isEmpty())
+                                                setProgress(content.id, content.attempt_id, content.contentable, data.id, content.contentQna.qnaContentId)
+                                            else
+                                                updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentQna.qnaContentId)
+                                        }
+                                        it.context.startActivity(it.context.intentFor<QuizActivity>("quizId" to content.contentQna.qnaQid.toString(), "attemptId" to content.attempt_id).singleTop())
                                     }
-                                    it.context.startActivity(it.context.intentFor<QuizActivity>("quizId" to content.contentQna.qnaQid.toString(), "attemptId" to content.attempt_id).singleTop())
-
                                 }
                             }
-
                         }
                     } else {
                         contentType.visibility = View.GONE
@@ -249,11 +263,17 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                     }
 
                     itemView.setOnClickListener {
-                        showOrHide(ll, it)
+                        if (itemView.title.text.contains("Challenges"))
+                            Components.showconfirmation(activity as Context, "unavailable")
+                        else
+                            showOrHide(ll, it)
                     }
 
                     itemView.arrow.setOnClickListener {
-                        showOrHide(ll, it)
+                        if (itemView.title.text.contains("Challenges"))
+                            Components.showconfirmation(activity as Context, "unavailable")
+                        else
+                            showOrHide(ll, it)
                     }
                 }
             })
@@ -263,7 +283,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
             val connManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
             val mWifi = connManager!!.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
             return mWifi.isConnected
-
         }
     }
 
@@ -272,14 +291,14 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
         if (ll.visibility == View.GONE) {
             expand(ll)
             arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                    0.5f)
+                0.5f)
             arrowAnimation.fillAfter = true
             arrowAnimation.duration = 350
             itemView.arrow.startAnimation(arrowAnimation)
         } else {
             collapse(ll)
             arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                    0.5f)
+                0.5f)
             arrowAnimation.fillAfter = true
             arrowAnimation.duration = 350
             itemView.arrow.startAnimation(arrowAnimation)
@@ -287,82 +306,86 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
     }
 
     fun setProgress(id: String, attempt_id: String, contentable: String, sectionId: String, contentId: String) {
-        val p = Progress()
-        val runAttempts = RunAttemptsModel()
-        val contents = Contents()
-        runAttempts.id = attempt_id
-        contents.id = id
-        p.status = "DONE"
-        p.runs = runAttempts
-        p.content = contents
-        Clients.onlineV2JsonApi.setProgress(p).enqueue(retrofitCallback { throwable, response ->
+        doAsync {
+            val p = Progress()
+            val runAttempts = RunAttemptsModel()
+            val contents = Contents()
+            runAttempts.id = attempt_id
+            contents.id = id
+            p.status = "DONE"
+            p.runs = runAttempts
+            p.content = contents
+            Clients.onlineV2JsonApi.setProgress(p).enqueue(retrofitCallback { throwable, response ->
 
-            response?.body().let {
-                val progressId = it?.id
-                when (contentable) {
-                    "lecture" -> thread {
-                        contentDao.updateProgressLecture(sectionId, contentId, "DONE", progressId
-                                ?: "")
-                    }
-
-                    "document" ->
-                        thread {
-                            contentDao.updateProgressDocuemnt(sectionId, contentId, "DONE", progressId
-                                    ?: "")
-                        }
-                    "video" ->
-                        thread {
-                            contentDao.updateProgressVideo(sectionId, contentId, "DONE", progressId
-                                    ?: "")
-                        }
-                    "qna" ->
-                        thread {
-                            contentDao.updateProgressQna(sectionId, contentId, "DONE", progressId
-                                    ?: "")
-                        }
-                    else -> {
-                    }
-                }
-
-            }
-        })
-    }
-
-    private fun updateProgress(id: String, attempt_id: String, progressId: String, status: String, contentable: String, sectionId: String, contentId: String) {
-        val p = Progress()
-        val runAttempts = RunAttemptsModel()
-        val contents = Contents()
-        runAttempts.id = attempt_id
-        contents.id = id
-        p.id = progressId
-        p.status = status
-        p.runs = runAttempts
-        p.content = contents
-        Clients.onlineV2JsonApi.updateProgress(progressId, p).enqueue(retrofitCallback { throwable, response ->
-            if (response != null) {
-                if (response.isSuccessful) {
+                response?.body().let {
+                    val progressId = it?.id
                     when (contentable) {
                         "lecture" -> thread {
-                            contentDao.updateProgressLecture(sectionId, contentId, status, progressId)
+                            contentDao.updateProgressLecture(sectionId, contentId, "DONE", progressId
+                                ?: "")
                         }
 
                         "document" ->
                             thread {
-                                contentDao.updateProgressDocuemnt(sectionId, contentId, status, progressId)
+                                contentDao.updateProgressDocuemnt(sectionId, contentId, "DONE", progressId
+                                    ?: "")
                             }
                         "video" ->
                             thread {
-                                contentDao.updateProgressVideo(sectionId, contentId, status, progressId)
+                                contentDao.updateProgressVideo(sectionId, contentId, "DONE", progressId
+                                    ?: "")
                             }
                         "qna" ->
                             thread {
-                                contentDao.updateProgressQna(sectionId, contentId, status, progressId)
+                                contentDao.updateProgressQna(sectionId, contentId, "DONE", progressId
+                                    ?: "")
                             }
+                        else -> {
+                        }
                     }
 
-
                 }
-            }
-        })
+            })
+        }
+    }
+
+    private fun updateProgress(id: String, attempt_id: String, progressId: String, status: String, contentable: String, sectionId: String, contentId: String) {
+        doAsync {
+            val p = Progress()
+            val runAttempts = RunAttemptsModel()
+            val contents = Contents()
+            runAttempts.id = attempt_id
+            contents.id = id
+            p.id = progressId
+            p.status = status
+            p.runs = runAttempts
+            p.content = contents
+            Clients.onlineV2JsonApi.updateProgress(progressId, p).enqueue(retrofitCallback { throwable, response ->
+                if (response != null) {
+                    if (response.isSuccessful) {
+                        when (contentable) {
+                            "lecture" -> thread {
+                                contentDao.updateProgressLecture(sectionId, contentId, status, progressId)
+                            }
+
+                            "document" ->
+                                thread {
+                                    contentDao.updateProgressDocuemnt(sectionId, contentId, status, progressId)
+                                }
+                            "video" ->
+                                thread {
+                                    contentDao.updateProgressVideo(sectionId, contentId, status, progressId)
+                                }
+                            "qna" ->
+                                thread {
+                                    contentDao.updateProgressQna(sectionId, contentId, status, progressId)
+                                }
+                        }
+
+
+                    }
+                }
+            })
+        }
     }
 }

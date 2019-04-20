@@ -3,17 +3,21 @@ package com.codingblocks.cbonlineapp.adapters
 import android.content.Context
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
-import com.codingblocks.cbonlineapp.R
 import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.CourseDao
-import com.codingblocks.cbonlineapp.database.CourseRun
+import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
-import com.codingblocks.cbonlineapp.utils.loadSvg
+import com.codingblocks.cbonlineapp.extensions.loadSvg
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.my_course_card_horizontal.view.*
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.uiThread
 import kotlin.concurrent.thread
 
 class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), AnkoLogger {

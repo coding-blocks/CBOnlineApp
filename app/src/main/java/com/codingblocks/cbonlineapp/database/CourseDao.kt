@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.database
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
+import com.codingblocks.cbonlineapp.database.models.Course
 
 @Dao
 abstract class CourseDao : BaseDao<Course> {
@@ -18,5 +19,4 @@ abstract class CourseDao : BaseDao<Course> {
 
     @Query("SElECT * FROM Course where uid != " + "'" + "'")
     abstract fun getMyCourses(): LiveData<List<Course>>
-
 }

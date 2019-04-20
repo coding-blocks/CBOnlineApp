@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/aboutQuiz"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/aboutQuiz"
     android:orientation="vertical"
     tools:context=".fragments.AboutQuizFragment">
 
@@ -22,7 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2.5"
-            android:fontFamily="@font/cabin_bold"
+            android:fontFamily="@font/nunitosans_bold"
             android:textColor="@color/black"
             android:textSize="22sp" />
 
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.5"
             android:background="@drawable/button_background"
-            android:fontFamily="@font/cabin_medium"
+            android:fontFamily="@font/nunitosans_semibold"
             android:text="Start Quiz"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
-        android:fontFamily="@font/cabin_bold"
+        android:fontFamily="@font/nunitosans_bold"
         android:text="About Quiz"
         android:textColor="@color/black"
         android:textSize="22sp" />
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
-        android:fontFamily="@font/cabin_medium"
+        android:fontFamily="@font/nunitosans_semibold"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
@@ -74,7 +74,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/cabin_medium"
+                android:fontFamily="@font/nunitosans_semibold"
                 android:text="Total:"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -82,7 +82,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/cabin_medium"
+                android:fontFamily="@font/nunitosans_semibold"
                 android:text="Maximum Marks:"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -90,7 +90,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/cabin_medium"
+                android:fontFamily="@font/nunitosans_semibold"
                 android:text="Question Type:"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -108,7 +108,7 @@
                 android:id="@+id/quizQuestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/cabin_medium"
+                android:fontFamily="@font/nunitosans_semibold"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -117,7 +117,7 @@
                 android:id="@+id/quizMarks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/cabin_medium"
+                android:fontFamily="@font/nunitosans_semibold"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -125,7 +125,7 @@
                 android:id="@+id/quizType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/cabin_medium"
+                android:fontFamily="@font/nunitosans_semibold"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -137,7 +137,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
-        android:fontFamily="@font/cabin_bold"
+        android:fontFamily="@font/nunitosans_bold"
         android:text="Previous Attempts"
         android:textColor="@color/black"
         android:textSize="22sp" />

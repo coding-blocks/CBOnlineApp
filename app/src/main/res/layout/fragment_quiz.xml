@@ -8,9 +8,9 @@
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/quizViewPager"
-        android:layout_marginBottom="56dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp" />
 
     <include layout="@layout/bottom_question_sheet" />
 

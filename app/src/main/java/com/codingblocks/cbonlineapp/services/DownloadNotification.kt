@@ -7,7 +7,7 @@ import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.BitmapFactory
 import androidx.core.app.NotificationCompat
-import com.codingblocks.cbonlineapp.utils.MediaUtils
+import com.codingblocks.cbonlineapp.util.MediaUtils
 
 class DownloadNotification {
 

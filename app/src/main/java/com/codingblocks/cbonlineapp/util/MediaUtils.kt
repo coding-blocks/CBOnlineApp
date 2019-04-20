@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.utils
+package com.codingblocks.cbonlineapp.util
 
 import android.Manifest
 import android.app.Activity
@@ -11,12 +11,13 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.codingblocks.cbonlineapp.CBOnlineApp
-import okhttp3.*
+import okhttp3.Cache
+import okhttp3.CacheControl
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
 import java.io.File
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
-import okhttp3.CacheControl
-import java.text.DecimalFormat
 
 
 object MediaUtils {

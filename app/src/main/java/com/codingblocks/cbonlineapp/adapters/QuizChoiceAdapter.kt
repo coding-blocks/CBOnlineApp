@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.utils.OnItemClickListener
+import com.codingblocks.cbonlineapp.util.OnItemClickListener
 import com.codingblocks.onlineapi.models.Choice
 import kotlinx.android.synthetic.main.quiz_single_option.view.*
 import org.jetbrains.anko.AnkoLogger

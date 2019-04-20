@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.utils
+package com.codingblocks.cbonlineapp.extensions
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData

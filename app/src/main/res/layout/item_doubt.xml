@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-    android:paddingBottom="8dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="8dp">
 
     <TextView
         android:id="@+id/doubtTitle"
@@ -51,10 +51,10 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:imeOptions="actionSend"
             android:inputType="textCapSentences"
-            android:textColor="@color/white"
-            android:layout_height="wrap_content" />
+            android:textColor="@color/white" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -67,11 +67,11 @@
         android:clickable="true"
         android:drawableStart="@drawable/ic_status_done"
         android:drawablePadding="5dp"
-        android:visibility="gone"
         android:focusable="true"
         android:text="Mark Resolved"
         android:textColor="@color/green"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/showCommentsTv"
@@ -81,22 +81,22 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:clickable="true"
-        android:gravity="center"
         android:drawablePadding="5dp"
         android:focusable="true"
-        android:visibility="gone"
+        android:gravity="center"
         android:text="@string/showComments"
         android:textColor="@color/white"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="gone" />
 
     <LinearLayout
-        android:layout_marginTop="8dp"
         android:id="@+id/commentll"
-        android:visibility="gone"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical"
+        android:visibility="gone" />
 
 </LinearLayout>

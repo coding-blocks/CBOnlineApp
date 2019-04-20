@@ -96,6 +96,14 @@ open class Runs : BaseModel() {
     @Relationship("tags", resolve = true)
     @JvmField
     var tags: ArrayList<Tags>? = null
+    @Relationship("certificate", resolve = true)
+    @JvmField
+    var certificate: Certificate? = null
+
+}
+
+@Type("certificate")
+class Certificate : BaseModel(){
 
 }
 
@@ -322,7 +330,7 @@ class LectureContent : Contents() {
 
     @Relationship("csv", resolve = true)
     @JvmField
-    var csv: ContentQna? = null
+    var csv: ContentCsv? = null
 
 }
 
@@ -365,13 +373,22 @@ class ContentCsv : BaseModel() {
     @JvmField
     @JsonProperty("content-id")
     var content_id: String? = null
-
-    @JvmField
-    @JsonProperty("q-id")
-    var q_id: Int? = null
-
     @JvmField
     var name: String? = null
+    @JvmField
+    var description: String? = null
+    @JvmField
+    @JsonProperty("ref-csv")
+    var ref_csv: String? = null
+    @JvmField
+    @JsonProperty("dataset-url")
+    var dataset_url: String? = null
+    @JvmField
+    @JsonProperty("testcases-url")
+    var testcases_url: String? = null
+    @JvmField
+    @JsonProperty("judge-script")
+    var judge_script: String? = null
 }
 
 @Type("document")
@@ -716,6 +733,28 @@ class Notes : BaseModel() {
     @Relationship("content", resolve = true)
     @JvmField
     var content: Contents? = null
+
+}
+
+@Type("carousel_cards")
+class CarouselCards : BaseModel() {
+    @JvmField
+    var title: String? = null
+
+    @JvmField
+    var subtitle: String? = null
+
+    @JvmField
+    var img: String? = null
+
+    @JsonProperty("button-text")
+    @JvmField
+    var buttonText: String? = null
+
+    @JsonProperty("button-link")
+    @JvmField
+    var buttonLink: String? = null
+
 
 }
 

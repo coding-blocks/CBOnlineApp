@@ -10,8 +10,21 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import com.codingblocks.cbonlineapp.R
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.button
 import org.jetbrains.anko.cardview.v7.cardView
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.frameLayout
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.margin
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.view
+import org.jetbrains.anko.wrapContent
 
 class BatchesCardUi : AnkoComponent<ViewGroup> {
     lateinit var runTitle: TextView
@@ -23,11 +36,9 @@ class BatchesCardUi : AnkoComponent<ViewGroup> {
     lateinit var trialBtn: Button
     lateinit var enrollBtn: Button
     var font: Typeface? = null
-
-
     override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui) {
         frameLayout {
-            font = ResourcesCompat.getFont(ctx, R.font.cabin_medium)
+            font = ResourcesCompat.getFont(ctx, R.font.nunitosans_semibold)
             cardView {
                 cardElevation = dip(4).toFloat()
                 radius = dip(15).toFloat()
@@ -47,7 +58,6 @@ class BatchesCardUi : AnkoComponent<ViewGroup> {
                             startTv = textView {
                                 textColor = context.resources.getColor(R.color.black)
                                 typeface = font
-
                             }
                         }
                         view {
@@ -62,12 +72,10 @@ class BatchesCardUi : AnkoComponent<ViewGroup> {
                             textView("Batch Ends") {
                                 textColor = context.resources.getColor(R.color.battleship_gray)
                                 typeface = font
-
                             }
                             endTv = textView {
                                 textColor = context.resources.getColor(R.color.black)
                                 typeface = font
-
                             }
                         }
                     }
@@ -77,8 +85,6 @@ class BatchesCardUi : AnkoComponent<ViewGroup> {
                             textSize = 18f
                             textColor = context.resources.getColor(R.color.salmon)
                             typeface = font
-
-
                         }
                         courseMrp = textView {
                             textSize = 16f
@@ -90,19 +96,15 @@ class BatchesCardUi : AnkoComponent<ViewGroup> {
                         }
                     }
                     linearLayout {
-
                         verticalLayout {
                             textView("HURRY UP!") {
                                 textColor = context.resources.getColor(R.color.black)
                                 typeface = font
-
                             }
                             enrollmentTv = textView {
                                 textColor = context.resources.getColor(R.color.salmon)
                                 typeface = font
-
                             }
-
                         }.lparams {
                             weight = 1f
                         }
@@ -110,7 +112,7 @@ class BatchesCardUi : AnkoComponent<ViewGroup> {
                             textColor = resources.getColor(R.color.white)
                             typeface = font
                             background = resources.getDrawable(R.drawable.button_background)
-                        }.lparams{
+                        }.lparams {
                             marginStart = dip(4)
                             bottomMargin = dip(4)
                         }
@@ -146,6 +148,5 @@ class BatchesCardUi : AnkoComponent<ViewGroup> {
                 margin = dip(6)
             }
         }
-
     }
 }

@@ -1,11 +1,32 @@
 package com.codingblocks.onlineapi.api
 
-import com.codingblocks.onlineapi.models.*
+import com.codingblocks.onlineapi.models.CarouselCards
+import com.codingblocks.onlineapi.models.Comment
+import com.codingblocks.onlineapi.models.ContentProgress
+import com.codingblocks.onlineapi.models.Course
+import com.codingblocks.onlineapi.models.DoubtsJsonApi
+import com.codingblocks.onlineapi.models.Instructor
+import com.codingblocks.onlineapi.models.LectureContent
+import com.codingblocks.onlineapi.models.MyCourseRuns
+import com.codingblocks.onlineapi.models.MyRunAttempt
+import com.codingblocks.onlineapi.models.Note
+import com.codingblocks.onlineapi.models.Notes
+import com.codingblocks.onlineapi.models.Progress
+import com.codingblocks.onlineapi.models.Question
+import com.codingblocks.onlineapi.models.QuizAttempt
+import com.codingblocks.onlineapi.models.Quizzes
+import com.codingblocks.onlineapi.models.Sections
 import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface OnlineJsonApi {
 
@@ -126,6 +147,9 @@ interface OnlineJsonApi {
 
     @PATCH("progresses/{id}")
     fun updateProgress(@Path("id") id: String, @Body params: Progress): Call<ContentProgress>
+
+    @get:GET("carousel_cards?sort=order")
+    val carouselCards : Call<ArrayList<CarouselCards>>
 
 
 }

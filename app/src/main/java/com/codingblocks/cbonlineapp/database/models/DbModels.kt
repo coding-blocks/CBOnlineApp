@@ -1,8 +1,13 @@
-package com.codingblocks.cbonlineapp.database
+package com.codingblocks.cbonlineapp.database.models
 
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import java.sql.Date
 
 
@@ -116,32 +121,35 @@ data class CourseSection(
         ))]
 )
 data class CourseContent(
-        var uid: String,
-        var progress: String,
-        var progressId: String,
-        var title: String,
-        var contentDuration: Long,
-        var contentable: String,
-        var order: Int,
-        var section_id: String,
-        var attempt_id: String,
-        var premium: Boolean,
-        var contentUpdatedAt: String,
-        @Embedded
+    var uid: String,
+    var progress: String,
+    var progressId: String,
+    var title: String,
+    var contentDuration: Long,
+    var contentable: String,
+    var order: Int,
+    var section_id: String,
+    var attempt_id: String,
+    var premium: Boolean,
+    var contentUpdatedAt: String,
+    @Embedded
         @Nullable
         var contentLecture: ContentLecture = ContentLecture(),
-        @Embedded
+    @Embedded
         @Nullable
         var contentDocument: ContentDocument = ContentDocument(),
-        @Embedded
+    @Embedded
         @Nullable
         var contentVideo: ContentVideo = ContentVideo(),
-        @Embedded
+    @Embedded
         @Nullable
         var contentQna: ContentQna = ContentQna(),
-        @Embedded
+    @Embedded
         @Nullable
-        var contentCode: ContentCodeChallenge = ContentCodeChallenge()
+        var contentCode: ContentCodeChallenge = ContentCodeChallenge(),
+    @Embedded
+        @Nullable
+        var contentCsv: ContentCsvModel = ContentCsvModel()
 ) : BaseModel(uid, contentUpdatedAt)
 
 @Entity(
@@ -184,7 +192,7 @@ data class ContentDocument(
         var documentUpdatedAt: String = ""
 )
 
-@Entity()
+@Entity
 data class ContentVideo(
         var videoUid: String = "",
         var videoName: String = "",
@@ -196,7 +204,7 @@ data class ContentVideo(
 )
 
 
-@Entity()
+@Entity
 data class ContentCodeChallenge(
         var codeUid: String = "",
         var codeName: String = "",
@@ -206,13 +214,21 @@ data class ContentCodeChallenge(
         var codeUpdatedAt: String = ""
 )
 
-@Entity()
+@Entity
 data class ContentQna(
         var qnaUid: String = "",
         var qnaName: String = "",
         var qnaQid: Int = 0,
         var qnaContentId: String = "",
         var qnaUpdatedAt: String = ""
+)
+@Entity
+data class ContentCsvModel(
+    var csvUid: String= "",
+    var csvName: String="",
+    var csvDescription: String="",
+    var csvContentId: String="",
+    var csvUpdatedAt: String=""
 )
 
 @Entity(indices = [Index("contentId")],

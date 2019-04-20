@@ -5,13 +5,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.codingblocks.cbonlineapp.R
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.backgroundResource
+import org.jetbrains.anko.bottomPadding
 import org.jetbrains.anko.cardview.v7.cardView
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.topPadding
+import org.jetbrains.anko.view
 
 class SkeletonCardUi : AnkoComponent<ViewGroup> {
     //custom views using anko
     override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui) {
-
         cardView {
             backgroundResource = R.drawable.bck_rounded
             //app:cardCornerRadius = 12dp //not support attribute

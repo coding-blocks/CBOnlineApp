@@ -63,17 +63,19 @@
         android:padding="10dp"
         android:text="Reply Now"
         android:textColor="@color/salmon" />
+
     <ImageView
         android:id="@+id/doubtImgView"
         android:layout_width="match_parent"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/userImgView"
-        android:layout_height="wrap_content" />
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
     <TextView
         android:layout_width="match_parent"
-        android:layout_below="@+id/doubtImgView"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/doubtImgView" />
 
 
 </RelativeLayout>

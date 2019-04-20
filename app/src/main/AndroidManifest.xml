@@ -98,15 +98,16 @@
             android:name=".activities.PdfActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
-        <receiver android:name=".utils.DownloadBroadcastReceiver">
+        <receiver android:name=".util.DownloadBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".services.DownloadService"
+        <service
+            android:name=".services.DownloadService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
 
         <activity
             android:name=".activities.SettingsActivity"

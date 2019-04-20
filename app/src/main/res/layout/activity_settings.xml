@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_theme_left_to_right"
@@ -18,105 +17,106 @@
         app:title="@string/title_activity_settings" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:id="@+id/framelayout_quiz"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
             android:layout_width="match_parent"
-            android:text="Video download options"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Video download options" />
 
         <Switch
             android:id="@+id/wifiSwitch"
-            android:textSize="18sp"
-            android:background="@drawable/ripple"
-            android:fontFamily="@font/cabin"
-            android:layout_marginTop="8dp"
-            app:theme="@style/ColorSwitchStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Download via Wi-Fi only" />
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ripple"
+            android:fontFamily="@font/nunitosans_regular"
+            android:text="Download via Wi-Fi only"
+            android:textSize="18sp"
+            app:theme="@style/ColorSwitchStyle" />
 
         <View
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="2dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:background="#eeeeee" />
 
         <TextView
             android:id="@+id/deleteAllTv"
-            android:textColor="@color/black"
             android:layout_width="match_parent"
-            android:background="@drawable/ripple"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/cabin"
+            android:background="@drawable/ripple"
+            android:fontFamily="@font/nunitosans_regular"
             android:text="Delete all downloads"
+            android:textColor="@color/black"
             android:textSize="18sp" />
 
         <View
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="32dp"
             android:layout_width="match_parent"
             android:layout_height="2dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
             android:background="#eeeeee" />
 
         <TextView
             android:layout_width="match_parent"
-            android:text="Available Storage"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Available Storage" />
 
         <ProgressBar
-            android:layout_width="match_parent"
-            android:progressTint="@color/salmon"
-            android:scaleY="1.5"
             style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/salmon"
+            android:scaleY="1.5" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_height="wrap_content">
+            android:orientation="horizontal">
 
             <View
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:background="@color/salmon"/>
+                android:background="@color/salmon" />
 
             <TextView
-                android:textSize="12sp"
                 android:id="@+id/spaceUsedTv"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/spaceFreeTv"
-                android:layout_weight="1"
-                android:textSize="12sp"
-                android:layout_marginEnd="4dp"
-                android:textAlignment="textEnd"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:textAlignment="textEnd"
+                android:textSize="12sp" />
+
             <View
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:background="@color/battleship_gray"/>
+                android:background="@color/battleship_gray" />
 
         </LinearLayout>
 
         <!--<SeekBar-->
-            <!--android:max="5"-->
-            <!--android:layout_marginTop="16dp"-->
-            <!--android:progress="3"-->
-            <!--android:progressDrawable="@drawable/progress_bar"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content" />-->
+        <!--android:max="5"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:progress="3"-->
+        <!--android:progressDrawable="@drawable/progress_bar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
     </LinearLayout>
 </LinearLayout>

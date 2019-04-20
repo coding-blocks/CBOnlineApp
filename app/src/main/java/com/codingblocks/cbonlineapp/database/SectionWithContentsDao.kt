@@ -1,11 +1,16 @@
 package com.codingblocks.cbonlineapp.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.RoomWarnings
+import com.codingblocks.cbonlineapp.database.models.CourseContent
+import com.codingblocks.cbonlineapp.database.models.SectionWithContent
 
 @Dao
 interface SectionWithContentsDao {
-
 
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("""
@@ -18,5 +23,4 @@ interface SectionWithContentsDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(join: SectionWithContent)
-
 }
