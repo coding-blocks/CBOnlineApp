@@ -15,13 +15,13 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.Course
-import com.codingblocks.cbonlineapp.database.CourseRun
-import com.codingblocks.cbonlineapp.database.CourseWithInstructor
-import com.codingblocks.cbonlineapp.database.Instructor
+import com.codingblocks.cbonlineapp.database.models.Course
+import com.codingblocks.cbonlineapp.database.models.CourseRun
+import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
+import com.codingblocks.cbonlineapp.database.models.Instructor
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
-import com.codingblocks.cbonlineapp.utils.getPrefs
-import com.codingblocks.cbonlineapp.utils.observer
+import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Runs
 import com.ethanhua.skeleton.Skeleton
@@ -132,35 +132,38 @@ class HomeFragment : Fragment(), AnkoLogger {
 
                     val course = myCourses.run {
                         Course(
-                                id ?: "",
-                                title ?: "",
-                                subtitle ?: "",
-                                logo ?: "",
-                                summary ?: "",
-                                promoVideo ?: "",
-                                difficulty ?: "",
-                                reviewCount ?: 0,
-                                rating ?: 0f,
-                                slug ?: "",
-                                coverImage ?: "",
-                                updated_at = updatedAt,
-                                categoryId = categoryId)
+                            id ?: "",
+                            title ?: "",
+                            subtitle ?: "",
+                            logo ?: "",
+                            summary ?: "",
+                            promoVideo ?: "",
+                            difficulty ?: "",
+                            reviewCount ?: 0,
+                            rating ?: 0f,
+                            slug ?: "",
+                            coverImage ?: "",
+                            updated_at = updatedAt,
+                            categoryId = categoryId
+                        )
                     }
 
-                    val courseRun = CourseRun(currentRuns[0].id ?: "",
-                            "",
-                            currentRuns[0].name ?: "",
-                            currentRuns[0].description ?: "",
-                            currentRuns[0].enrollmentStart ?: "",
-                            currentRuns[0].enrollmentEnd ?: "",
-                            currentRuns[0].start ?: "",
-                            currentRuns[0].end ?: "",
-                            currentRuns[0].price ?: "",
-                            currentRuns[0].mrp ?: "",
-                            myCourses.id ?: "",
-                            currentRuns[0].updatedAt ?: "",
-                            title = myCourses.title ?: "",
-                            recommended = true)
+                    val courseRun = CourseRun(
+                        currentRuns[0].id ?: "",
+                        "",
+                        currentRuns[0].name ?: "",
+                        currentRuns[0].description ?: "",
+                        currentRuns[0].enrollmentStart ?: "",
+                        currentRuns[0].enrollmentEnd ?: "",
+                        currentRuns[0].start ?: "",
+                        currentRuns[0].end ?: "",
+                        currentRuns[0].price ?: "",
+                        currentRuns[0].mrp ?: "",
+                        myCourses.id ?: "",
+                        currentRuns[0].updatedAt ?: "",
+                        title = myCourses.title ?: "",
+                        recommended = true
+                    )
 
                     thread {
                         courseDao.insert(course)
@@ -179,9 +182,13 @@ class HomeFragment : Fragment(), AnkoLogger {
                         }
                         //Add CourseInstructors
                         for (i in myCourses.instructors!!) {
-                            instructorDao.insert(Instructor(i.id ?: "", i.name ?: "",
+                            instructorDao.insert(
+                                Instructor(
+                                    i.id ?: "", i.name ?: "",
                                     i.description ?: "", i.photo ?: "",
-                                    "", "", myCourses.id))
+                                    "", "", myCourses.id
+                                )
+                            )
                             insertCourseAndInstructor(myCourses, i)
                         }
                     }
@@ -195,7 +202,12 @@ class HomeFragment : Fragment(), AnkoLogger {
 
         thread {
             try {
-                courseWithInstructorDao.insert(CourseWithInstructor(course.id!!, instructor.id!!))
+                courseWithInstructorDao.insert(
+                    CourseWithInstructor(
+                        course.id!!,
+                        instructor.id!!
+                    )
+                )
             } catch (e: Exception) {
                 e.printStackTrace()
                 Log.e("CRASH", "COURSE ID : ${course.id}")

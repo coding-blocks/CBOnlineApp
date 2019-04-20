@@ -14,15 +14,15 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.CourseRun
-import com.codingblocks.cbonlineapp.database.DoubtsModel
-import com.codingblocks.cbonlineapp.database.NotesModel
+import com.codingblocks.cbonlineapp.database.models.CourseRun
+import com.codingblocks.cbonlineapp.database.models.DoubtsModel
+import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.fragments.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.fragments.VideoNotesFragment
-import com.codingblocks.cbonlineapp.utils.MediaUtils
-import com.codingblocks.cbonlineapp.utils.MyVideoControls
-import com.codingblocks.cbonlineapp.utils.OnItemClickListener
-import com.codingblocks.cbonlineapp.utils.pageChangeCallback
+import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.MyVideoControls
+import com.codingblocks.cbonlineapp.util.OnItemClickListener
+import com.codingblocks.cbonlineapp.extensions.pageChangeCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
@@ -125,25 +125,31 @@ class VideoPlayerActivity : AppCompatActivity(),
         player_viewpager.adapter = adapter
         player_tabs.setupWithViewPager(player_viewpager)
         player_viewpager.offscreenPageLimit = 2
-        player_viewpager.addOnPageChangeListener(pageChangeCallback(fnSelected = { position ->
-            when (position) {
-                0 -> {
-                    videoFab.setOnClickListener {
-                        createDoubt()
+        player_viewpager.addOnPageChangeListener(
+            pageChangeCallback(
+                fnSelected = { position ->
+                    when (position) {
+                        0 -> {
+                            videoFab.setOnClickListener {
+                                createDoubt()
+                            }
+                        }
+                        1 -> {
+                            videoFab.setOnClickListener {
+                                val notePos: Double =
+                                    if (displayYoutubeVideo.view?.visibility == View.VISIBLE)
+                                        (youtubePlayer?.currentTimeMillis!! / 1000).toDouble()
+                                    else
+                                        (videoView.currentPosition.toInt() / 1000).toDouble()
+                                createNote(notePos)
+                            }
+                        }
                     }
-                }
-                1 -> {
-                    videoFab.setOnClickListener {
-                        val notePos: Double = if (displayYoutubeVideo.view?.visibility == View.VISIBLE)
-                            (youtubePlayer?.currentTimeMillis!! / 1000).toDouble()
-                        else
-                            (videoView.currentPosition.toInt() / 1000).toDouble()
-                        createNote(notePos)
-                    }
-                }
-            }
-        }, fnState = {}, fnScrolled = { _: Int, _: Float, _: Int ->
-        }))
+                },
+                fnState = {},
+                fnScrolled = { _: Int, _: Float, _: Int ->
+                })
+        )
     }
 
     private fun createNote(notePos: Double) {
@@ -177,11 +183,15 @@ class VideoPlayerActivity : AppCompatActivity(),
                         noteDialog.dismiss()
                         if (response?.isSuccessful!!)
                             try {
-                                notesDao.insert(NotesModel(it!!.id
-                                        ?: "", it.duration ?: 0.0, it.text ?: "", it.content?.id
-                                        ?: "", attemptId, it.createdAt
-                                        ?: "", it.deletedAt
-                                        ?: ""))
+                                notesDao.insert(
+                                    NotesModel(
+                                        it!!.id
+                                            ?: "", it.duration ?: 0.0, it.text ?: "", it.content?.id
+                                            ?: "", attemptId, it.createdAt
+                                            ?: "", it.deletedAt
+                                            ?: ""
+                                    )
+                                )
                             } catch (e: Exception) {
                                 info { "error" + e.localizedMessage }
                             }
@@ -285,10 +295,13 @@ class VideoPlayerActivity : AppCompatActivity(),
                         response?.body().let {
                             doubtDialog.dismiss()
                             thread {
-                                doubtsDao.insert(DoubtsModel(it!!.id
-                                        ?: "", it.title, it.body, it.content?.id
-                                        ?: "", it.status, it.runAttempt?.id ?: ""
-                                ))
+                                doubtsDao.insert(
+                                    DoubtsModel(
+                                        it!!.id
+                                            ?: "", it.title, it.body, it.content?.id
+                                            ?: "", it.status, it.runAttempt?.id ?: ""
+                                    )
+                                )
                             }
                         }
                     })

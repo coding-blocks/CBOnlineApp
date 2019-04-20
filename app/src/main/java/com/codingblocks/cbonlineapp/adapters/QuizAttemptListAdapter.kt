@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.utils.OnItemClickListener
-import com.codingblocks.cbonlineapp.utils.formatDate
+import com.codingblocks.cbonlineapp.util.OnItemClickListener
+import com.codingblocks.cbonlineapp.extensions.formatDate
 import com.codingblocks.onlineapi.models.QuizAttempt
 import org.jetbrains.anko.AnkoLogger
 import java.util.*
@@ -47,7 +47,8 @@ class QuizAttemptListAdapter(internal var context: Context,
         val attemptViewHolder = view.tag as AttemptViewHolder
         attemptViewHolder.posTextView.text = (position + 1).toString() + ""
         attemptViewHolder.statusTextView.text = e?.status!!
-        attemptViewHolder.timeTextView.text = formatDate(e.createdAt!!)
+        attemptViewHolder.timeTextView.text =
+            formatDate(e.createdAt!!)
 
         if (e.result?.score != null) {
             attemptViewHolder.scoreTextView.text = e.result?.score.toString()

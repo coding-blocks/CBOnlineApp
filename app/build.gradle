@@ -25,20 +25,21 @@ android {
         // 0 spare for betas/RCs
         versionName "0.4.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
+        multiDexEnabled false
     }
     lintOptions {
         abortOnError false
     }
     buildTypes {
         debug {
+            minifyEnabled true
             versionNameSuffix '-debug-version'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'
 
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'
 
@@ -47,6 +48,10 @@ android {
     compileOptions {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
+    }
+
+    packagingOptions {
+        exclude 'META-INF/atomicfu.kotlin_module'
     }
 }
 
@@ -68,7 +73,7 @@ spotless {
     kotlin {
         ktlint().userData(['android'        : 'true', 'color': 'tr/gradue',
                            'max_line_length': '250', 'reporter': 'checkstyle'])
-        target '**/*.kt'
+        target 'app/src/**/*.kt', 'onlineapi/src/**/*.kt'
     }
 }
 

@@ -13,7 +13,7 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
-import com.codingblocks.cbonlineapp.utils.MediaUtils
+import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.onlineapi.Clients
 import okhttp3.ResponseBody
 import org.jetbrains.anko.AnkoLogger

@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.database
+package com.codingblocks.cbonlineapp.database.models
 
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
@@ -121,33 +121,33 @@ data class CourseSection(
         ))]
 )
 data class CourseContent(
-        var uid: String,
-        var progress: String,
-        var progressId: String,
-        var title: String,
-        var contentDuration: Long,
-        var contentable: String,
-        var order: Int,
-        var section_id: String,
-        var attempt_id: String,
-        var premium: Boolean,
-        var contentUpdatedAt: String,
-        @Embedded
+    var uid: String,
+    var progress: String,
+    var progressId: String,
+    var title: String,
+    var contentDuration: Long,
+    var contentable: String,
+    var order: Int,
+    var section_id: String,
+    var attempt_id: String,
+    var premium: Boolean,
+    var contentUpdatedAt: String,
+    @Embedded
         @Nullable
         var contentLecture: ContentLecture = ContentLecture(),
-        @Embedded
+    @Embedded
         @Nullable
         var contentDocument: ContentDocument = ContentDocument(),
-        @Embedded
+    @Embedded
         @Nullable
         var contentVideo: ContentVideo = ContentVideo(),
-        @Embedded
+    @Embedded
         @Nullable
         var contentQna: ContentQna = ContentQna(),
-        @Embedded
+    @Embedded
         @Nullable
         var contentCode: ContentCodeChallenge = ContentCodeChallenge(),
-        @Embedded
+    @Embedded
         @Nullable
         var contentCsv: ContentCsvModel = ContentCsvModel()
 ) : BaseModel(uid, contentUpdatedAt)

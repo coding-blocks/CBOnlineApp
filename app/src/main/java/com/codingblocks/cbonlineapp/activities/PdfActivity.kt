@@ -10,8 +10,8 @@ import android.os.Environment
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.utils.DownloadBroadcastReceiver
-import com.codingblocks.cbonlineapp.utils.MediaUtils
+import com.codingblocks.cbonlineapp.util.DownloadBroadcastReceiver
+import com.codingblocks.cbonlineapp.util.MediaUtils
 import es.voghdev.pdfviewpager.library.PDFViewPager
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter
 import kotlinx.android.synthetic.main.activity_pdf.*

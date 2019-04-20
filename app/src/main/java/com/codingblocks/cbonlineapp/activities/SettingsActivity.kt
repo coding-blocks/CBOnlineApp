@@ -7,10 +7,10 @@ import android.os.StatFs
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.utils.MediaUtils
-import com.codingblocks.cbonlineapp.utils.folderSize
-import com.codingblocks.cbonlineapp.utils.getPrefs
-import com.codingblocks.cbonlineapp.utils.readableFileSize
+import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.extensions.folderSize
+import com.codingblocks.cbonlineapp.extensions.readableFileSize
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.io.File
@@ -51,17 +51,26 @@ class SettingsActivity : AppCompatActivity() {
             getPrefs().SP_WIFI = wifiSwitch.isChecked
         }
         val bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
-        spaceFreeTv.text = String.format("%s free",bytesAvailable.readableFileSize())
-        spaceUsedTv.text = String.format("%s used",folderSize(file).readableFileSize())
+        spaceFreeTv.text = String.format("%s free", bytesAvailable.readableFileSize())
+        spaceUsedTv.text = String.format("%s used", folderSize(
+            file
+        ).readableFileSize())
 
 
         deleteAllTv.setOnClickListener {
             contentDao.getDownloads("true").let { list ->
                 list.forEach { content ->
-                    val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
+                    val url = content.contentLecture.lectureUrl.substring(
+                        38,
+                        (content.contentLecture.lectureUrl.length - 11)
+                    )
                     val folderFile = File(file, "/$url")
                     MediaUtils.deleteRecursive(folderFile)
-                    contentDao.updateContent(content.section_id, content.contentLecture.lectureContentId, "false")
+                    contentDao.updateContent(
+                        content.section_id,
+                        content.contentLecture.lectureContentId,
+                        "false"
+                    )
                 }
 
             }

@@ -6,6 +6,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomWarnings
+import com.codingblocks.cbonlineapp.database.models.CourseContent
+import com.codingblocks.cbonlineapp.database.models.SectionWithContent
 
 @Dao
 interface SectionWithContentsDao {

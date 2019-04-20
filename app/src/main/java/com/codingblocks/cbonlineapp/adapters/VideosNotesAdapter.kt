@@ -10,9 +10,9 @@ import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.NotesDao
-import com.codingblocks.cbonlineapp.database.NotesModel
-import com.codingblocks.cbonlineapp.utils.OnItemClickListener
-import com.codingblocks.cbonlineapp.utils.secToTime
+import com.codingblocks.cbonlineapp.database.models.NotesModel
+import com.codingblocks.cbonlineapp.util.OnItemClickListener
+import com.codingblocks.cbonlineapp.extensions.secToTime
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.Notes

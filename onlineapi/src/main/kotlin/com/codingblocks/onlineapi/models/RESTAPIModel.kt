@@ -70,7 +70,6 @@ class Leaderboard(@JvmField
     @JvmField
     var score: Int? = 0
 }
-
 data class PostStream(
         val unpinned: Any? = null,
         val hasDeleted: Boolean? = null,

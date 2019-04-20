@@ -8,7 +8,7 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.utils.MyVideoControls
+import com.codingblocks.cbonlineapp.util.MyVideoControls
 import com.devbrackets.android.exomedia.listener.OnPreparedListener
 import kotlinx.android.synthetic.main.activity_full_screen_player.*
 import kotlinx.android.synthetic.main.exomedia_default_controls_mobile.view.*
