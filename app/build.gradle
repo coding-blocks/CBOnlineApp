@@ -17,13 +17,13 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1004030
+        versionCode 1004041
         // 10 (versioning scheme)
         // 0 (major version)
         // 4 (minor version)
-        // 03 (patch version)
-        // 0 spare for betas/RCs
-        versionName "0.4.3"
+        // 04 (patch version)
+        // 1 spare for betas/RCs
+        versionName "0.4.4-beta1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false
     }
