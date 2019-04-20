@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import androidx.cardview.widget.CardView
 import androidx.viewpager.widget.PagerAdapter
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.extensions.loadSvg
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_carousel.view.*

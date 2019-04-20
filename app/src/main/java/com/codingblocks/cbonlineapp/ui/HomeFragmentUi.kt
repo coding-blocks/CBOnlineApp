@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.ui
 import android.graphics.Color
 import android.graphics.Typeface
 import android.view.View
+import android.view.View.TEXT_ALIGNMENT_CENTER
 import android.view.ViewGroup
 import android.view.ViewManager
 import android.widget.ImageView
@@ -56,11 +57,10 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                         textSize = 26f
                         val typefaceValue = ResourcesCompat.getFont(ctx, R.font.nunitosans_bold)
                         typeface = typefaceValue
+                        textAlignment = TEXT_ALIGNMENT_CENTER
                         textColor = context.resources.getColor(R.color.salmon)
-                    }.lparams(width = wrapContent, height = wrapContent) {
+                    }.lparams(width = matchParent, height = wrapContent) {
                         topMargin = dip(16)
-                        marginStart = dip(43)
-                        marginEnd = dip(43)
                         topToTop = ConstraintLayout.LayoutParams.PARENT_ID
                         startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                         horizontalBias = 0.0f

@@ -19,13 +19,12 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <ImageView
                 android:id="@+id/imgView"
-                android:layout_centerVertical="true"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="16dp" />
 
             <TextView
                 android:id="@+id/title"
@@ -36,8 +35,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_toEndOf="@id/imgView"
-                android:fontFamily="@font/cabin_bold"
-                android:textAlignment="center"
+                android:fontFamily="@font/nunitosans_bold"
+                android:textAlignment="viewStart"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -46,13 +45,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="4dp"
                 android:layout_toEndOf="@id/imgView"
-                android:fontFamily="@font/cabin_semibold"
-                android:textAlignment="center"
+                android:fontFamily="@font/nunitosans_semibold"
+                android:textAlignment="viewStart"
                 android:textColor="@color/grey850" />
 
             <Button
@@ -60,10 +59,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/subTitle"
-                android:layout_centerHorizontal="true"
+                android:layout_alignParentEnd="true"
                 android:layout_marginBottom="8dp"
+                android:layout_marginEnd="16dp"
                 android:background="@drawable/button_background"
-                android:fontFamily="@font/cabin_semibold"
+                android:fontFamily="@font/nunitosans_semibold"
                 android:paddingStart="24dp"
                 android:paddingEnd="24dp"
                 android:textColor="#fff"

@@ -23,8 +23,7 @@ import com.codingblocks.cbonlineapp.database.models.Instructor
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.cbonlineapp.utils.CarouselSliderAdapter
 import com.codingblocks.cbonlineapp.utils.ZoomOutPageTransformer
-import com.codingblocks.cbonlineapp.utils.getPrefs
-import com.codingblocks.cbonlineapp.utils.observer
+
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.onlineapi.Clients
