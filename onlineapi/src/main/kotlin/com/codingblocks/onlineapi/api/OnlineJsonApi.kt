@@ -1,5 +1,6 @@
 package com.codingblocks.onlineapi.api
 
+import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.ContentProgress
 import com.codingblocks.onlineapi.models.Course
@@ -146,6 +147,9 @@ interface OnlineJsonApi {
 
     @PATCH("progresses/{id}")
     fun updateProgress(@Path("id") id: String, @Body params: Progress): Call<ContentProgress>
+
+    @get:GET("carousel_cards?sort=order")
+    val carouselCards : Call<ArrayList<CarouselCards>>
 
 
 }
