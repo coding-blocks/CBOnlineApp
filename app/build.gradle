@@ -112,7 +112,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:extension-okhttp:2.9.1'
 
     //gson
-    implementation 'com.github.campusappcn.AndRouter:router:1.2.8'
+    implementation 'com.github.campusappcn.AndRouter:router:1.2.10'
     annotationProcessor 'com.github.campusappcn.AndRouter:compiler:1.2.8'
     ankoLibs.each { name ->
         implementation "org.jetbrains.anko:anko-$name:$ankoVersion"
