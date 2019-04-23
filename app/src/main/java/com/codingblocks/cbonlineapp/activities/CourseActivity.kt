@@ -166,7 +166,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
         courseWithInstructorDao.getInstructorWithCourseId(id).observe(this, Observer<List<Instructor>> {
             instructorAdapter.setData(it as ArrayList<Instructor>)
-            var instructors = "Mentors:"
+            var instructors = "Mentors: "
             for (i in 0 until it.size) {
                 if (i == 0) {
                     instructors += it[i].name
@@ -214,7 +214,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     }
                 }
                 showPromoVideo(course.promoVideo ?: "")
-                fetchRating()
+                fetchRating(course.id!!)
                 if (!course.runs.isNullOrEmpty()) {
                     val sections = course.runs?.get(0)?.sections
                     val sectionsList = ArrayList<Sections>()
@@ -272,8 +272,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         youTubePlayerSupportFragment!!.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
     }
 
-    private fun fetchRating() {
-        Clients.api.getCourseRating(courseId).enqueue(retrofitCallback { throwable, response ->
+    private fun fetchRating(id: String) {
+        Clients.api.getCourseRating(id).enqueue(retrofitCallback { throwable, response ->
             response?.body().let {
                 it?.apply {
                     coursePageRatingCountTv.text = "$count Rating"
