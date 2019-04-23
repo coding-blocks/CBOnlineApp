@@ -21,8 +21,8 @@ import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
 import com.codingblocks.cbonlineapp.database.models.Instructor
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
-import com.codingblocks.cbonlineapp.utils.CarouselSliderAdapter
-import com.codingblocks.cbonlineapp.utils.ZoomOutPageTransformer
+import com.codingblocks.cbonlineapp.adapters.CarouselSliderAdapter
+import com.codingblocks.cbonlineapp.util.ZoomOutPageTransformer
 
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer

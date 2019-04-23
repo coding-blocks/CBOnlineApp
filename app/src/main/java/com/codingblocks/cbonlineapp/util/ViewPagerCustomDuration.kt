@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.utils
+package com.codingblocks.cbonlineapp.util
 
 import android.content.Context
 import android.util.AttributeSet
