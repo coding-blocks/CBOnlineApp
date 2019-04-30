@@ -113,7 +113,7 @@ dependencies {
 
     //gson
     implementation 'com.github.campusappcn.AndRouter:router:1.2.10'
-    annotationProcessor 'com.github.campusappcn.AndRouter:compiler:1.2.8'
+    annotationProcessor 'com.github.campusappcn.AndRouter:compiler:1.2.10'
     ankoLibs.each { name ->
         implementation "org.jetbrains.anko:anko-$name:$ankoVersion"
     }
