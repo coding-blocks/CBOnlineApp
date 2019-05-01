@@ -5,10 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.codingblocks.cbonlineapp.database.models.*
 
 @Database(
-        version = 10, entities = [
+    version = 9, entities = [
     CourseRun::class,
     CourseSection::class,
     CourseContent::class,
@@ -22,7 +21,6 @@ import com.codingblocks.cbonlineapp.database.models.*
 )
 @TypeConverters(TimestampConverter::class)
 abstract class AppDatabase : RoomDatabase() {
-
     abstract fun courseRunDao(): CourseRunDao
     abstract fun sectionDao(): SectionDao
     abstract fun contentDao(): ContentDao
@@ -45,9 +43,9 @@ abstract class AppDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, "app-database")
-                    .fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()
-                    .build()
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
+                .build()
         }
     }
 }

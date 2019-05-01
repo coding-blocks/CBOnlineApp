@@ -2,11 +2,6 @@ package com.codingblocks.cbonlineapp
 
 import android.app.Application
 import android.content.Context
-import cn.campusapp.router.Router
-import cn.campusapp.router.router.IActivityRouteTableInitializer
-import com.codingblocks.cbonlineapp.activities.CourseActivity
-import com.codingblocks.cbonlineapp.activities.MyCourseActivity
-import com.codingblocks.onlineapi.CustomResponseInterceptor
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import com.squareup.picasso.Picasso
@@ -32,12 +27,8 @@ class CBOnlineApp : Application() {
                 )
                 .build()
         )
-        Router.initActivityRouter(applicationContext, IActivityRouteTableInitializer { router ->
-            router["activity://course/classroom/course/:s{course_id}/run/:s{runId}/overview"] = MyCourseActivity::class.java
-            router["activity://course/https://online.codingblocks.com/courses/:s{courseId}"] = CourseActivity::class.java
-
-        })
-
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
+//            shortcutAction(::updateShortcuts)
         val crashlyticsKit = Crashlytics.Builder()
             .core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
             .build()

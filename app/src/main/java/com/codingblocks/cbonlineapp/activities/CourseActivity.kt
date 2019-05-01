@@ -11,7 +11,6 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.ProgressBarAnimation
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
@@ -19,11 +18,11 @@ import com.codingblocks.cbonlineapp.adapters.BatchesAdapter
 import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.models.Instructor
-import com.codingblocks.cbonlineapp.extensions.loadSvg
-import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.OnCartItemClickListener
+import com.codingblocks.cbonlineapp.database.Instructor
+import com.codingblocks.cbonlineapp.utils.Components
+import com.codingblocks.cbonlineapp.utils.MediaUtils
+import com.codingblocks.cbonlineapp.utils.OnCartItemClickListener
+import com.codingblocks.cbonlineapp.utils.loadSvg
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Sections
 import com.ethanhua.skeleton.Skeleton
@@ -72,36 +71,35 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     lateinit var courseId: String
     lateinit var courseName: String
     lateinit var progressBar: Array<ProgressBar?>
-    private lateinit var batchAdapter: BatchesAdapter
-    private lateinit var instructorAdapter: InstructorDataAdapter
-    private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     var sheetBehavior: BottomSheetBehavior<*>? = null
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(this)
     }
+    private lateinit var batchAdapter: BatchesAdapter
+    private lateinit var instructorAdapter: InstructorDataAdapter
     private val courseWithInstructorDao by lazy {
         database.courseWithInstructorDao()
     }
 
+    companion object {
+        const val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
+    }
+
+    private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course)
         courseId = intent.getStringExtra("courseId")
-        courseName = intent.getStringExtra("courseName") ?: ""
-        val image = intent.getStringExtra("courseLogo") ?: ""
-        setImageAndTitle(image, courseName)
-
-
-        init()
-    }
-
-    private fun setImageAndTitle(image: String, courseName: String) {
+        courseName = intent.getStringExtra("courseName")
+        val image = intent.getStringExtra("courseLogo")
         if (image.takeLast(3) == "png")
             Picasso.get().load(image).into(coursePageLogo)
         else
             coursePageLogo.loadSvg(image)
         title = courseName
         coursePageTitle.text = courseName
+
+        init()
     }
 
     private fun init() {
@@ -158,15 +156,15 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         })
     }
 
-    private fun fetchInstructors(id: String) {
+    private fun fetchInstructors() {
         instructorAdapter = InstructorDataAdapter(ArrayList())
 
         instructorRv.layoutManager = LinearLayoutManager(this)
         instructorRv.adapter = instructorAdapter
 
-        courseWithInstructorDao.getInstructorWithCourseId(id).observe(this, Observer<List<Instructor>> {
+        courseWithInstructorDao.getInstructorWithCourseId(courseId).observe(this, Observer<List<Instructor>> {
             instructorAdapter.setData(it as ArrayList<Instructor>)
-            var instructors = "Mentors: "
+            var instructors = "Mentors:"
             for (i in 0 until it.size) {
                 if (i == 0) {
                     instructors += it[i].name
@@ -186,7 +184,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         Clients.onlineV2JsonApi.courseById(courseId).enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let { course ->
                 skeletonScreen.hide()
-                fetchInstructors(course.id!!)
+                fetchInstructors()
                 batchAdapter = BatchesAdapter(ArrayList(), object : OnCartItemClickListener {
                     override fun onItemClick(id: String, name: String) {
                         addtocart(id, name)
@@ -194,7 +192,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 })
                 batchRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                 batchRv.adapter = batchAdapter
-                setImageAndTitle(course.logo!!, course.title!!)
+
                 coursePageSubtitle.text = course.subtitle
                 coursePageSummary.text = course.summary
                 trialBtn.setOnClickListener {
@@ -213,8 +211,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                         toast("No available runs right now ! Please check back later")
                     }
                 }
-                showPromoVideo(course.promoVideo ?: "")
-                fetchRating(course.id!!)
+                showPromoVideo(course.promoVideo)
+                fetchRating()
                 if (!course.runs.isNullOrEmpty()) {
                     val sections = course.runs?.get(0)?.sections
                     val sectionsList = ArrayList<Sections>()
@@ -257,7 +255,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         })
     }
 
-    private fun showPromoVideo(promoVideo: String) {
+    private fun showPromoVideo(promoVideo: String?) {
         youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
             override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
             }
@@ -269,11 +267,11 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
             }
         }
         val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
-        youTubePlayerSupportFragment!!.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
+        youTubePlayerSupportFragment!!.initialize(YOUTUBE_API_KEY, youtubePlayerInit)
     }
 
-    private fun fetchRating(id: String) {
-        Clients.api.getCourseRating(id).enqueue(retrofitCallback { throwable, response ->
+    private fun fetchRating() {
+        Clients.api.getCourseRating(courseId).enqueue(retrofitCallback { throwable, response ->
             response?.body().let {
                 it?.apply {
                     coursePageRatingCountTv.text = "$count Rating"

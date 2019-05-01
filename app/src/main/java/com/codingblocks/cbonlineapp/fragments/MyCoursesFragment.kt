@@ -1,9 +1,12 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,13 +14,13 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.models.Course
-import com.codingblocks.cbonlineapp.database.models.CourseRun
-import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
-import com.codingblocks.cbonlineapp.database.models.Instructor
-import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.database.Course
+import com.codingblocks.cbonlineapp.database.CourseRun
+import com.codingblocks.cbonlineapp.database.CourseWithInstructor
+import com.codingblocks.cbonlineapp.database.Instructor
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
-import com.codingblocks.cbonlineapp.extensions.observer
+import com.codingblocks.cbonlineapp.utils.getPrefs
+import com.codingblocks.cbonlineapp.utils.observer
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.MyCourse
 import com.crashlytics.android.core.CrashlyticsCore
@@ -36,19 +39,14 @@ import org.jetbrains.anko.support.v4.ctx
 import java.util.*
 import kotlin.concurrent.thread
 
-
 class MyCoursesFragment : Fragment(), AnkoLogger {
-
     val ui = HomeFragmentUi<Fragment>()
     private lateinit var courseDataAdapter: CourseDataAdapter
     private lateinit var skeletonScreen: SkeletonScreen
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-
-
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(context!!)
     }
-
     private val courseDao by lazy {
         database.courseDao()
     }
@@ -58,7 +56,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     private val instructorDao by lazy {
         database.instructorDao()
     }
-
     private val runDao by lazy {
         database.courseRunDao()
     }
@@ -69,7 +66,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         savedInstanceState: Bundle?
     ):
         View? = ui.createView(AnkoContext.create(ctx, this))
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -84,9 +80,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         ui.homeImg.visibility = View.GONE
         courseDataAdapter =
             CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao, "myCourses")
-        ui.viewPager.visibility = View.GONE
-
-        courseDataAdapter = CourseDataAdapter(ArrayList(), activity!!, courseWithInstructorDao, "myCourses")
         setHasOptionsMenu(true)
 
 
@@ -110,12 +103,9 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         fetchAllCourses()
     }
 
-
     private fun displayCourses(searchQuery: String = "") {
         runDao.getMyRuns().observer(this) {
-
             GlobalScope.launch(Dispatchers.Main) {
-
                 val list = withContext(Dispatchers.Default) {
                     (it.filter { c ->
                         (c.crEnd.toLong() * 1000) > System.currentTimeMillis() &&
@@ -124,13 +114,11 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 }
 
                 courseDataAdapter.setData(list)
-
             }
         }
     }
 
     private fun fetchAllCourses() {
-
         Clients.onlineV2JsonApi.getMyCourses().enqueue(retrofitCallback { t, resp ->
             skeletonScreen.hide()
             resp?.body()?.let {
@@ -161,24 +149,23 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                         categoryId = categoryId
                                     )
                                 }
-                                val courseRun =
-                                    CourseRun(
-                                        myCourses.id ?: "",
-                                        myCourses.runAttempts?.get(0)?.id ?: "",
-                                        myCourses.name ?: "",
-                                        myCourses.description ?: "",
-                                        myCourses.start ?: "",
-                                        myCourses.runAttempts!![0].end ?: "",
-                                        myCourses.start ?: "",
-                                        myCourses.runAttempts!![0].end ?: "",
-                                        myCourses.price ?: "",
-                                        myCourses.mrp ?: "",
-                                        myCourses.course?.id ?: "",
-                                        myCourses.updatedAt ?: "",
-                                        progress = progress,
-                                        title = myCourses.course?.title ?: "",
-                                        premium = myCourses.runAttempts?.get(0)?.premium!!
-                                    )
+                                val courseRun = CourseRun(
+                                    myCourses.id ?: "",
+                                    myCourses.runAttempts?.get(0)?.id ?: "",
+                                    myCourses.name ?: "",
+                                    myCourses.description ?: "",
+                                    myCourses.start ?: "",
+                                    myCourses.runAttempts!![0].end ?: "",
+                                    myCourses.start ?: "",
+                                    myCourses.runAttempts!![0].end ?: "",
+                                    myCourses.price ?: "",
+                                    myCourses.mrp ?: "",
+                                    myCourses.course?.id ?: "",
+                                    myCourses.updatedAt ?: "",
+                                    progress = progress,
+                                    title = myCourses.course?.title ?: "",
+                                    premium = myCourses.runAttempts?.get(0)?.premium!!
+                                )
 
                                 doAsync {
                                     val updateRun = runDao.getRunById(myCourses.id ?: "")
@@ -199,7 +186,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                     myCourses.course?.instructors?.forEachIndexed { _, it ->
                                         Clients.onlineV2JsonApi.instructorsById(it.id!!)
                                             .enqueue(retrofitCallback { _, response ->
-
                                                 response?.body().let { instructor ->
                                                     thread {
                                                         instructorDao.insert(
@@ -234,14 +220,12 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                             })
                                     }
                                 }
-
                             }
                         })
                 }
             }
         })
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.home, menu)
@@ -264,20 +248,13 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     private fun insertCourseAndInstructor(
         course: MyCourse,
         instructor: com.codingblocks.onlineapi.models.Instructor
     ) {
-
         thread {
             try {
-                courseWithInstructorDao.insert(
-                    CourseWithInstructor(
-                        course.id!!,
-                        instructor.id!!
-                    )
-                )
+                courseWithInstructorDao.insert(CourseWithInstructor(course.id!!, instructor.id!!))
             } catch (e: Exception) {
                 e.printStackTrace()
                 Log.e("CRASH", "COURSE ID : ${course.id.toString()}")
