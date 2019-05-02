@@ -41,7 +41,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.jasminb.jsonapi.RelationshipResolver
 import com.github.jasminb.jsonapi.ResourceConverter
-import com.github.jasminb.jsonapi.SerializationFeature
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
@@ -52,7 +51,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 object Clients {
     private val om = ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false)
     var authJwt = ""
     private val onlineApiResourceConverter = ResourceConverter(
         om,
@@ -107,7 +105,7 @@ object Clients {
     //type resolver
     init {
         onlineApiResourceConverter.setGlobalResolver(relationshipResolver)
-        onlineApiResourceConverter.disableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES)
+        onlineApiResourceConverter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_INCLUSIONS)
     }
 
     private val ClientInterceptor = OkHttpClient.Builder()
