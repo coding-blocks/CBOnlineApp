@@ -77,4 +77,10 @@
         <item name="android:colorForeground">@color/battleship_gray</item>
     </style>
 
+    <style name="VdoMediaButton">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:layout_width">54dp</item>
+        <item name="android:layout_height">40dp</item>
+    </style>
+
 </resources>

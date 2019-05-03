@@ -9,15 +9,30 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-
-    <com.devbrackets.android.exomedia.ui.widget.VideoView
-        android:id="@+id/videoView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:id="@+id/videoContainer"
         android:visibility="gone"
-        app:useDefaultControls="true" />
+        android:layout_height="wrap_content">
+        <fragment
+            android:name="com.vdocipher.aegis.player.VdoPlayerFragment"
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:keepScreenOn="true"/>
+        <com.vdocipher.sampleapp.VdoPlayerControlView
+            android:id="@+id/player_control_view"
+            android:layout_alignTop="@id/videoView"
+            android:layout_alignBottom="@id/videoView"
+            android:layout_alignStart="@id/videoView"
+            android:layout_alignEnd="@id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <fragment
         android:id="@+id/displayYoutubeVideo"
         android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
         android:layout_width="match_parent"

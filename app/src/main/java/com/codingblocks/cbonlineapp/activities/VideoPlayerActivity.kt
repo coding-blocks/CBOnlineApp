@@ -2,8 +2,6 @@ package com.codingblocks.cbonlineapp.activities
 
 import android.animation.LayoutTransition
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -17,56 +15,63 @@ import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
+import com.codingblocks.cbonlineapp.extensions.pageChangeCallback
 import com.codingblocks.cbonlineapp.fragments.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.fragments.VideoNotesFragment
-import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.MyVideoControls
 import com.codingblocks.cbonlineapp.util.OnItemClickListener
-import com.codingblocks.cbonlineapp.extensions.pageChangeCallback
+import com.codingblocks.cbonlineapp.util.VdoPlayerControlView
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.RunAttemptsModel
-import com.devbrackets.android.exomedia.listener.OnPreparedListener
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
+import com.vdocipher.aegis.media.ErrorDescription
+import com.vdocipher.aegis.player.VdoPlayer
+import com.vdocipher.aegis.player.VdoPlayerFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_video_player.*
-import kotlinx.android.synthetic.main.doubt_dialog.view.*
-import kotlinx.android.synthetic.main.exomedia_default_controls_mobile.view.*
+import kotlinx.android.synthetic.main.activity_video_player.displayYoutubeVideo
+import kotlinx.android.synthetic.main.activity_video_player.player_control_view
+import kotlinx.android.synthetic.main.activity_video_player.player_tabs
+import kotlinx.android.synthetic.main.activity_video_player.player_viewpager
+import kotlinx.android.synthetic.main.activity_video_player.rootLayout
+import kotlinx.android.synthetic.main.activity_video_player.videoContainer
+import kotlinx.android.synthetic.main.activity_video_player.videoFab
+import kotlinx.android.synthetic.main.activity_video_player.videoView
+import kotlinx.android.synthetic.main.doubt_dialog.view.cancelBtn
+import kotlinx.android.synthetic.main.doubt_dialog.view.descriptionLayout
+import kotlinx.android.synthetic.main.doubt_dialog.view.okBtn
+import kotlinx.android.synthetic.main.doubt_dialog.view.title
+import kotlinx.android.synthetic.main.doubt_dialog.view.titleLayout
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import kotlin.concurrent.thread
 
 
-class VideoPlayerActivity : AppCompatActivity(),
-        OnPreparedListener,
-        OnItemClickListener, AnkoLogger {
 
+class VideoPlayerActivity : AppCompatActivity(),
+    OnItemClickListener, AnkoLogger {
     private var youtubePlayer: YouTubePlayer? = null
     private var pos: Long? = 0
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
+    private lateinit var videoPlayerPlayerInit: VdoPlayer.InitializationListener
+    private val playerControlView: VdoPlayerControlView? = null
     private lateinit var attemptId: String
     private lateinit var contentId: String
-
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(this)
     }
-
     private val doubtsDao by lazy {
         database.doubtsDao()
     }
-
     private val notesDao by lazy {
         database.notesDao()
     }
-
     private val courseDao by lazy {
         database.courseDao()
     }
-
     private val runDao by lazy {
         database.courseRunDao()
     }
@@ -78,26 +83,13 @@ class VideoPlayerActivity : AppCompatActivity(),
             else
                 videoView.seekTo(position.toLong() * 1000)
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.codingblocks.cbonlineapp.R.layout.activity_video_player)
         rootLayout.layoutTransition
-                .enableTransitionType(LayoutTransition.CHANGING)
-        val controls = MyVideoControls(this)
-        videoView.setControls(controls)
-        (videoView.videoControls as MyVideoControls).let {
-            it.fullscreenBtn.setOnClickListener {
-                val i = Intent(this, VideoPlayerFullScreenActivity::class.java)
-                i.putExtra("FOLDER_NAME", videoView.videoUri.toString())
-                i.putExtra("CURRENT_POSITION", videoView.currentPosition)
-                startActivityForResult(i, 1)
-            }
-
-        }
-
+            .enableTransitionType(LayoutTransition.CHANGING)
         val url = intent.getStringExtra("FOLDER_NAME")
         val youtubeUrl = intent.getStringExtra("videoUrl")
         attemptId = intent.getStringExtra("attemptId")
@@ -111,7 +103,7 @@ class VideoPlayerActivity : AppCompatActivity(),
             setupYoutubePlayer(youtubeUrl)
         } else {
             displayYoutubeVideo.view?.visibility = View.GONE
-            videoView.visibility = View.VISIBLE
+            videoContainer.visibility = View.VISIBLE
             setupVideoView(url, downloaded)
         }
         setupViewPager(attemptId)
@@ -152,60 +144,6 @@ class VideoPlayerActivity : AppCompatActivity(),
         )
     }
 
-    private fun createNote(notePos: Double) {
-        val noteDialog = AlertDialog.Builder(this).create()
-        val noteView = layoutInflater.inflate(R.layout.doubt_dialog, null)
-        noteView.descriptionLayout.visibility = View.GONE
-        noteView.title.text = "Create A Note"
-        noteView.okBtn.text = "Create Note"
-
-
-        noteView.cancelBtn.setOnClickListener {
-            noteDialog.dismiss()
-        }
-        noteView.okBtn.setOnClickListener {
-            if (noteView.titleLayout.editText!!.text.isEmpty()) {
-                noteView.titleLayout.error = "Note Cannot Be Empty."
-                return@setOnClickListener
-            } else {
-                noteView.descriptionLayout.error = ""
-                val note = Notes()
-                note.text = noteView.titleLayout.editText!!.text.toString()
-                note.duration = notePos
-                val runAttempts = RunAttemptsModel() // type run_attempts
-                val contents = Contents() // type contents
-                runAttempts.id = attemptId
-                contents.id = contentId
-                note.runAttempt = runAttempts
-                note.content = contents
-                Clients.onlineV2JsonApi.createNote(note).enqueue(retrofitCallback { throwable, response ->
-                    response?.body().let {
-                        noteDialog.dismiss()
-                        if (response?.isSuccessful!!)
-                            try {
-                                notesDao.insert(
-                                    NotesModel(
-                                        it!!.id
-                                            ?: "", it.duration ?: 0.0, it.text ?: "", it.content?.id
-                                            ?: "", attemptId, it.createdAt
-                                            ?: "", it.deletedAt
-                                            ?: ""
-                                    )
-                                )
-                            } catch (e: Exception) {
-                                info { "error" + e.localizedMessage }
-                            }
-                    }
-                })
-            }
-        }
-
-        noteDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
-        noteDialog.setView(noteView)
-        noteDialog.setCancelable(false)
-        noteDialog.show()
-    }
-
     private fun setupYoutubePlayer(youtubeUrl: String) {
         youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
             override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
@@ -220,41 +158,33 @@ class VideoPlayerActivity : AppCompatActivity(),
         }
         val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
         youTubePlayerSupportFragment!!.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
-
-
     }
 
     private fun setupVideoView(url: String, downloaded: Boolean) {
-        videoView.setOnPreparedListener(this)
-        if (downloaded) {
-            videoView.setVideoURI(MediaUtils.getCourseVideoUri(url, this))
+        val playerFragment = supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerFragment?
+        val
+
+
+
+        videoPlayerPlayerInit = object : VdoPlayer.InitializationListener {
+            override fun onInitializationSuccess(playerHost: VdoPlayer.PlayerHost?, player: VdoPlayer?, wasRestored: Boolean) {
+                player.addPlaybackEventListener(playbackListener);
+                player_control_view.(player);
+                showControls(true);
+            }
+
+            override fun onInitializationFailure(p0: VdoPlayer.PlayerHost?, p1: ErrorDescription?) {
+            }
+        }
+
+        playerFragment?.initialize(videoPlayerPlayerInit)
+    }
+
+    private fun showControls(show: Boolean) {
+        if (show) {
+            playerControlView.show()
         } else {
-            videoView.setVideoURI(Uri.parse(url))
-        }
-        videoView.setOnCompletionListener {
-            finish()
-        }
-    }
-
-    override fun onPrepared() {
-        videoView.start()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        videoView.pause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        videoView.release()
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == -1) {
-            pos = data?.getLongExtra("CURRENT_POSITION", 0)
-            videoView.seekTo(pos ?: 0)
+            playerControlView.hide()
         }
     }
 
@@ -263,7 +193,6 @@ class VideoPlayerActivity : AppCompatActivity(),
     }
 
     private fun createDoubt() {
-
         runDao.getRunByAtemptId(attemptId).observe(this, Observer<CourseRun> {
             val categoryId = courseDao.getCourse(it?.crCourseId!!).categoryId
             val doubtDialog = AlertDialog.Builder(this).create()
@@ -299,7 +228,7 @@ class VideoPlayerActivity : AppCompatActivity(),
                                     DoubtsModel(
                                         it!!.id
                                             ?: "", it.title, it.body, it.content?.id
-                                            ?: "", it.status, it.runAttempt?.id ?: ""
+                                        ?: "", it.status, it.runAttempt?.id ?: ""
                                     )
                                 )
                             }
@@ -315,5 +244,57 @@ class VideoPlayerActivity : AppCompatActivity(),
         })
     }
 
+    private fun createNote(notePos: Double) {
+        val noteDialog = AlertDialog.Builder(this).create()
+        val noteView = layoutInflater.inflate(R.layout.doubt_dialog, null)
+        noteView.descriptionLayout.visibility = View.GONE
+        noteView.title.text = "Create A Note"
+        noteView.okBtn.text = "Create Note"
 
+
+        noteView.cancelBtn.setOnClickListener {
+            noteDialog.dismiss()
+        }
+        noteView.okBtn.setOnClickListener {
+            if (noteView.titleLayout.editText!!.text.isEmpty()) {
+                noteView.titleLayout.error = "Note Cannot Be Empty."
+                return@setOnClickListener
+            } else {
+                noteView.descriptionLayout.error = ""
+                val note = Notes()
+                note.text = noteView.titleLayout.editText!!.text.toString()
+                note.duration = notePos
+                val runAttempts = RunAttemptsModel() // type run_attempts
+                val contents = Contents() // type contents
+                runAttempts.id = attemptId
+                contents.id = contentId
+                note.runAttempt = runAttempts
+                note.content = contents
+                Clients.onlineV2JsonApi.createNote(note).enqueue(retrofitCallback { throwable, response ->
+                    response?.body().let {
+                        noteDialog.dismiss()
+                        if (response?.isSuccessful!!)
+                            try {
+                                notesDao.insert(
+                                    NotesModel(
+                                        it!!.id
+                                            ?: "", it.duration ?: 0.0, it.text ?: "", it.content?.id
+                                        ?: "", attemptId, it.createdAt
+                                        ?: "", it.deletedAt
+                                        ?: ""
+                                    )
+                                )
+                            } catch (e: Exception) {
+                                info { "error" + e.localizedMessage }
+                            }
+                    }
+                })
+            }
+        }
+
+        noteDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+        noteDialog.setView(noteView)
+        noteDialog.setCancelable(false)
+        noteDialog.show()
+    }
 }

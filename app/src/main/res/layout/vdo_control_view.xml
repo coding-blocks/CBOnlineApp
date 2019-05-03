@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/vdo_controller_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <ImageButton
+            android:id="@+id/vdo_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_error_white_36dp"/>
+        <TextView
+            android:id="@+id/vdo_error_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:gravity="center_horizontal"
+            android:textAlignment="gravity"
+            android:text="Tap to retry"/>
+    </LinearLayout>
+    <ProgressBar
+        android:id="@+id/vdo_loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+    <LinearLayout
+        android:id="@+id/vdo_control_panel"
+        android:background="#be000000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/vdo_position"
+                android:text="00:00"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <SeekBar
+                android:id="@+id/vdo_seekbar"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/vdo_duration"
+                android:text="00:00"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <ImageButton android:id="@+id/vdo_rewind"
+                style="@style/VdoMediaButton"
+                android:src="@drawable/ic_replay_10_white_24dp"/>
+            <ImageButton android:id="@+id/vdo_play"
+                style="@style/VdoMediaButton"
+                android:src="@drawable/ic_play_arrow_white_24dp"/>
+            <ImageButton android:id="@+id/vdo_pause"
+                style="@style/VdoMediaButton"
+                android:src="@drawable/ic_pause_white_24dp"/>
+            <ImageButton android:id="@+id/vdo_ffwd"
+                style="@style/VdoMediaButton"
+                android:src="@drawable/ic_forward_10_white_24dp"/>
+            <Button
+                android:id="@+id/vdo_speed"
+                style="@style/VdoMediaButton"
+                android:minWidth="0dp"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:text="1x"/>
+            <ImageButton android:id="@+id/vdo_captions"
+                style="@style/VdoMediaButton"
+                android:src="@drawable/ic_closed_caption_white_24dp"/>
+            <ImageButton android:id="@+id/vdo_quality"
+                style="@style/VdoMediaButton"
+                android:src="@drawable/ic_high_quality_white_24dp"/>
+            <ImageButton android:id="@+id/vdo_enter_fullscreen"
+                style="@style/VdoMediaButton"
+                android:src="@drawable/ic_fullscreen_white_24dp"/>
+            <ImageButton android:id="@+id/vdo_exit_fullscreen"
+                style="@style/VdoMediaButton"
+                android:src="@drawable/ic_fullscreen_exit_white_24dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

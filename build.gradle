@@ -27,6 +27,9 @@ allprojects {
         jcenter()
         maven { url 'https://jitpack.io' }
         maven { url 'https://maven.google.com/' }
+        maven {
+            url "https://github.com/VdoCipher/maven-repo/raw/master/repo"
+        }
     }
 }
 
