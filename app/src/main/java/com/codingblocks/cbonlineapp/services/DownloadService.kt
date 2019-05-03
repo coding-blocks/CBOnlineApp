@@ -65,62 +65,6 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
         val url = downloadUrl.substring(38, (downloadUrl.length - 11))
         val attemptId = intent.getStringExtra("attemptId")
 
-
-        Clients.api.getVideoDownloadKey(downloadUrl).enqueue(retrofitCallback { throwable, downloadKey ->
-            downloadKey?.body().let {
-                val keyId = it?.get("keyId")?.asString ?: ""
-                val signature = it?.get("signature")?.asString ?: ""
-                val policy = it?.get("policyString")?.asString ?: ""
-                Clients.initiateDownload(url, "index.m3u8", keyId, signature, policy).enqueue(retrofitCallback { _, response ->
-                    response?.body()?.let { indexResponse ->
-                        writeResponseBodyToDisk(indexResponse, url, "index.m3u8")
-                    }
-                })
-
-                Clients.initiateDownload(url, "video.key", keyId, signature, policy).enqueue(retrofitCallback { throwable, response ->
-                    response?.body()?.let { videoResponse ->
-                        writeResponseBodyToDisk(videoResponse, url, "video.key")
-                    }
-                })
-
-                Clients.initiateDownload(url, "video.m3u8", keyId, signature, policy).enqueue(retrofitCallback { throwable, response ->
-                    response?.body()?.let { keyResponse ->
-                        writeResponseBodyToDisk(keyResponse, url, "video.m3u8")
-                        val videoChunks = MediaUtils.getCourseDownloadUrls(url, this)
-                        videoChunks.forEach { videoName: String ->
-                            Clients.initiateDownload(url, videoName, keyId, signature, policy).enqueue(retrofitCallback { throwable, response ->
-                                try {
-                                    val isDownloaded = writeResponseBodyToDisk(response?.body()!!, url, videoName)
-                                    if (isDownloaded) {
-                                        if (videoName == "video00000.ts") {
-                                            thread {
-                                                contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "inprogress")
-                                            }
-                                        }
-                                        downloadCount++
-                                        val downloadProgress = ((downloadCount.toDouble() / videoChunks.size) * 100).toInt()
-                                        sendNotification(downloadProgress)
-                                    }
-                                    if (downloadCount == videoChunks.size) {
-                                        onDownloadComplete(url,attemptId,intent.getStringExtra("contentId"))
-                                        thread {
-                                            contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "true")
-                                        }
-                                    }
-                                } catch (e: Exception) {
-                                    contentDao.updateContent(intent.getStringExtra("id"), intent.getStringExtra("lectureContentId"), "false")
-                                    notificationManager.cancel(0)
-                                    notificationBuilder.setOngoing(false)
-                                    notificationBuilder.setContentText("Download Failed")
-
-                                    toast("There was some issue with your network.Please Try Again !!")
-                                }
-                            })
-                        }
-                    }
-                })
-            }
-        })
     }
 
     private fun writeResponseBodyToDisk(body: ResponseBody, videoUrl: String?, fileName: String): Boolean {

@@ -32,7 +32,7 @@ android {
     }
     buildTypes {
         debug {
-            minifyEnabled true
+            minifyEnabled false
             versionNameSuffix '-debug-version'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'

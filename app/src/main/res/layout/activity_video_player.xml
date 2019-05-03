@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@drawable/gradient_theme_left_to_right"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -15,13 +14,13 @@
         android:visibility="gone"
         android:layout_height="wrap_content">
         <fragment
-            android:name="com.vdocipher.aegis.player.VdoPlayerFragment"
             android:id="@+id/videoView"
+            android:name="com.vdocipher.aegis.player.VdoPlayerFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:keepScreenOn="true"/>
-        <com.vdocipher.sampleapp.VdoPlayerControlView
+        <com.codingblocks.cbonlineapp.util.VdoPlayerControlView
             android:id="@+id/player_control_view"
             android:layout_alignTop="@id/videoView"
             android:layout_alignBottom="@id/videoView"
