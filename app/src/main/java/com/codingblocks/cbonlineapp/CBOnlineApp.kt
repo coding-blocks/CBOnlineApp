@@ -37,11 +37,14 @@ class CBOnlineApp : Application() {
                 )
                 .build()
         )
-        Router.initActivityRouter(applicationContext, IActivityRouteTableInitializer { router ->
-            router["activity://course/classroom/course/:s{course_id}/run/:s{runId}/overview"] = MyCourseActivity::class.java
-            router["activity://course/https://online.codingblocks.com/courses/:s{courseId}"] = CourseActivity::class.java
+        try {
+            Router.initActivityRouter(applicationContext, IActivityRouteTableInitializer { router ->
+                router["activity://course/classroom/course/:s{course_id}/run/:s{runId}/overview"] = MyCourseActivity::class.java
+                router["activity://course/https://online.codingblocks.com/courses/:s{courseId}"] = CourseActivity::class.java
+            })
+        } catch(e:ConcurrentModificationException){
 
-        })
+        }
 
 
         configureExoMedia()

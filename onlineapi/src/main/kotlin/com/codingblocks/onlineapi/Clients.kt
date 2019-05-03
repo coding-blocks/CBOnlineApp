@@ -106,6 +106,7 @@ object Clients {
     init {
         onlineApiResourceConverter.setGlobalResolver(relationshipResolver)
         onlineApiResourceConverter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_INCLUSIONS)
+        onlineApiResourceConverter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_TYPE_IN_RELATIONSHIP)
     }
 
     private val ClientInterceptor = OkHttpClient.Builder()
