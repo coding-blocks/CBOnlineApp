@@ -21,33 +21,34 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
-import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.app_bar_home.*
-import kotlinx.android.synthetic.main.nav_header_home.view.*
+import kotlinx.android.synthetic.main.activity_home.drawer_layout
+import kotlinx.android.synthetic.main.activity_home.nav_view
+import kotlinx.android.synthetic.main.app_bar_home.toolbar
+import kotlinx.android.synthetic.main.nav_header_home.view.login_button
+import kotlinx.android.synthetic.main.nav_header_home.view.nav_header_imageView
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
+import java.io.File
 import java.util.*
-
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     AnkoLogger {
     private var doubleBackToExitPressedOnce = false
     lateinit var prefs: PreferenceHelper
     var mFragmentToSet: Fragment? = null
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prefs = getPrefs()
@@ -76,7 +77,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             override fun onDrawerOpened(drawerView: View) {}
-
         })
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
@@ -118,13 +118,27 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.getHeaderView(0).login_button.setOnClickListener {
             prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
             prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
-            if (nav_view.getHeaderView(0).login_button.text == "Logout")
+            if (nav_view.getHeaderView(0).login_button.text == "Logout") {
                 removeShortcuts()
+                invalidateToken()
+            }
             startActivity(intentFor<LoginActivity>().singleTop())
             finish()
         }
         val nav_menu = nav_view.menu
         nav_menu.findItem(R.id.nav_my_courses).isVisible = true
+    }
+
+    private fun invalidateToken() {
+        doAsync {
+            Clients.api.logout().enqueue(retrofitCallback { throwable, response ->
+                response?.let {
+                    if(it.isSuccessful){
+                        deleteDatabaseFile(this@HomeActivity,"app-database")
+                    }
+                }
+            })
+        }
     }
 
     override fun onStart() {
@@ -142,7 +156,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Clients.api.getToken(grantCode).enqueue(retrofitCallback { error, response ->
             response.let {
                 if (response?.isSuccessful == true) {
-
                     val jwt = response.body()?.asJsonObject?.get("jwt")?.asString!!
                     val rt = response.body()?.asJsonObject?.get("refresh_token")?.asString!!
                     prefs.SP_ACCESS_TOKEN_KEY = grantCode
@@ -155,7 +168,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     Components.showconfirmation(this, "verify")
                 }
             }
-
         })
     }
 
@@ -172,19 +184,15 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             prefs.SP_ONEAUTH_ID = jSONObject.get("oneauth-id").asString
                             prefs.SP_USER_IMAGE = jSONObject.get("photo").asString
                         } catch (e: Exception) {
-
                         }
                         setUser()
                     } else {
                         nav_view.getHeaderView(0).login_button.setOnClickListener {
                             startActivity(intentFor<LoginActivity>().singleTop())
-
                         }
                     }
-
                 }
                 info { "login error ${t?.localizedMessage}" }
-
             })
         } else {
             nav_view.getHeaderView(0).login_button.setOnClickListener {
@@ -217,7 +225,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_home -> {
                 changeFragment("Home")
-
             }
             R.id.nav_my_courses -> {
                 changeFragment("My Courses")
@@ -289,5 +296,20 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo.isConnected
+    }
+    fun deleteDatabaseFile(context: Context, databaseName: String) {
+        val databases = File(context.applicationInfo.dataDir + "/databases")
+        val db = File(databases, databaseName)
+        if (db.delete())
+            println("Database deleted")
+        else
+            println("Failed to delete database")
+        val journal = File(databases, "$databaseName-journal")
+        if (journal.exists()) {
+            if (journal.delete())
+                println("Database journal deleted")
+            else
+                println("Failed to delete database journal")
+        }
     }
 }
