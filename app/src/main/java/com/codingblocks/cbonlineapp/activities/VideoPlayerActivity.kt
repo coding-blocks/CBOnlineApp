@@ -57,7 +57,9 @@ class VideoPlayerActivity : AppCompatActivity(),
     private var pos: Long? = 0
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private lateinit var videoPlayerPlayerInit: VdoPlayer.InitializationListener
-    private val playerControlView: VdoPlayerControlView? = null
+    private var playerControlView: VdoPlayerControlView? = null
+    private val playerFragment: VdoPlayerFragment? = null
+
     private lateinit var attemptId: String
     private lateinit var contentId: String
     private val database: AppDatabase by lazy {
@@ -161,15 +163,19 @@ class VideoPlayerActivity : AppCompatActivity(),
     }
 
     private fun setupVideoView(url: String, downloaded: Boolean) {
-        val playerFragment = supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerFragment?
-        val
+        playerFragment = supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerFragment?
+        playerControlView = findViewById(R.id.player_control_view)
 
+        showControls(false)
 
+        initializePlayer()
 
+    }
+    private fun initializePlayer() {
         videoPlayerPlayerInit = object : VdoPlayer.InitializationListener {
             override fun onInitializationSuccess(playerHost: VdoPlayer.PlayerHost?, player: VdoPlayer?, wasRestored: Boolean) {
-                player.addPlaybackEventListener(playbackListener);
-                player_control_view.(player);
+                player.addPlaybackEventListener(playbackListener)
+                player_control_view.(player)
                 showControls(true);
             }
 
@@ -177,14 +183,13 @@ class VideoPlayerActivity : AppCompatActivity(),
             }
         }
 
-        playerFragment?.initialize(videoPlayerPlayerInit)
-    }
+        playerFragment?.initialize(videoPlayerPlayerInit)    }
 
     private fun showControls(show: Boolean) {
         if (show) {
-            playerControlView.show()
+            playerControlView?.show()
         } else {
-            playerControlView.hide()
+            playerControlView?.hide()
         }
     }
 
