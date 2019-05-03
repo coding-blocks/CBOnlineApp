@@ -15,12 +15,17 @@ import io.github.inflationx.calligraphy3.CalligraphyInterceptor
 import io.github.inflationx.viewpump.ViewPump
 
 class CBOnlineApp : Application() {
+
+    companion object {
+        lateinit var mInstance: CBOnlineApp
+    }
+
     override fun onCreate() {
         super.onCreate()
         mInstance = this
         Picasso.setSingletonInstance(Picasso.Builder(this).build())
 
-        //Intitate Calligraphy
+        //Initiate Calligraphy
         ViewPump.init(
             ViewPump.builder()
                 .addInterceptor(
@@ -40,14 +45,11 @@ class CBOnlineApp : Application() {
             router["activity://course/https://online.codingblocks.com/courses/:s{courseId}"] = CourseActivity::class.java
         })
 
-
         val crashlyticsKit = Crashlytics.Builder()
             .core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
             .build()
+
         Fabric.with(this, crashlyticsKit)
     }
 
-    companion object {
-        lateinit var mInstance: CBOnlineApp
-    }
 }

@@ -2,8 +2,12 @@ package com.codingblocks.cbonlineapp.activities
 
 import android.animation.LayoutTransition
 import android.content.Context
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -33,13 +37,12 @@ import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayerFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_video_player.displayYoutubeVideo
-import kotlinx.android.synthetic.main.activity_video_player.player_control_view
+import kotlinx.android.synthetic.main.activity_video_player.pagerFrame
 import kotlinx.android.synthetic.main.activity_video_player.player_tabs
 import kotlinx.android.synthetic.main.activity_video_player.player_viewpager
 import kotlinx.android.synthetic.main.activity_video_player.rootLayout
 import kotlinx.android.synthetic.main.activity_video_player.videoContainer
 import kotlinx.android.synthetic.main.activity_video_player.videoFab
-import kotlinx.android.synthetic.main.activity_video_player.videoView
 import kotlinx.android.synthetic.main.doubt_dialog.view.cancelBtn
 import kotlinx.android.synthetic.main.doubt_dialog.view.descriptionLayout
 import kotlinx.android.synthetic.main.doubt_dialog.view.okBtn
@@ -48,20 +51,23 @@ import kotlinx.android.synthetic.main.doubt_dialog.view.titleLayout
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import kotlin.concurrent.thread
+import com.vdocipher.aegis.media.Track
 
 
 
 class VideoPlayerActivity : AppCompatActivity(),
     OnItemClickListener, AnkoLogger {
     private var youtubePlayer: YouTubePlayer? = null
-    private var pos: Long? = 0
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private lateinit var videoPlayerPlayerInit: VdoPlayer.InitializationListener
     private var playerControlView: VdoPlayerControlView? = null
-    private val playerFragment: VdoPlayerFragment? = null
-
+    private var playerFragment: VdoPlayerFragment? = null
+    private var videoPlayer: VdoPlayer? = null
     private lateinit var attemptId: String
     private lateinit var contentId: String
+    private var pos: Long? = 0
+    private var playWhenReady = false
+    private var currentOrientation: Int = 0
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(this)
     }
@@ -78,27 +84,20 @@ class VideoPlayerActivity : AppCompatActivity(),
         database.courseRunDao()
     }
 
-    override fun onItemClick(position: Int, id: String) {
-        if (contentId == id) {
-            if (displayYoutubeVideo.view?.visibility == View.VISIBLE)
-                youtubePlayer?.seekToMillis(position * 1000)
-            else
-                videoView.seekTo(position.toLong() * 1000)
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.codingblocks.cbonlineapp.R.layout.activity_video_player)
         rootLayout.layoutTransition
             .enableTransitionType(LayoutTransition.CHANGING)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        window.decorView.setOnSystemUiVisibilityChangeListener(uiVisibilityListener)
+
+        currentOrientation = resources.configuration.orientation
         val url = intent.getStringExtra("FOLDER_NAME")
         val youtubeUrl = intent.getStringExtra("videoUrl")
         attemptId = intent.getStringExtra("attemptId")
         contentId = intent.getStringExtra("contentId")
         val downloaded = intent.getBooleanExtra("downloaded", false)
-
-
 
         if (youtubeUrl != null) {
             displayYoutubeVideo.view?.visibility = View.VISIBLE
@@ -107,7 +106,10 @@ class VideoPlayerActivity : AppCompatActivity(),
             displayYoutubeVideo.view?.visibility = View.GONE
             videoContainer.visibility = View.VISIBLE
             setupVideoView(url, downloaded)
+            playerFragment = supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerFragment?
+            playerControlView = findViewById(R.id.player_control_view)
         }
+
         setupViewPager(attemptId)
     }
 
@@ -134,7 +136,7 @@ class VideoPlayerActivity : AppCompatActivity(),
                                     if (displayYoutubeVideo.view?.visibility == View.VISIBLE)
                                         (youtubePlayer?.currentTimeMillis!! / 1000).toDouble()
                                     else
-                                        (videoView.currentPosition.toInt() / 1000).toDouble()
+                                        (videoPlayer?.currentTime!! / 1000).toDouble()
                                 createNote(notePos)
                             }
                         }
@@ -162,28 +164,44 @@ class VideoPlayerActivity : AppCompatActivity(),
         youTubePlayerSupportFragment!!.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
     }
 
-    private fun setupVideoView(url: String, downloaded: Boolean) {
-        playerFragment = supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerFragment?
-        playerControlView = findViewById(R.id.player_control_view)
-
+    private fun setupVideoView(videoId: String, downloaded: Boolean) {
         showControls(false)
-
-        initializePlayer()
-
+        Clients.api.getVideoDownloadKey(videoId, contentId, attemptId).enqueue(retrofitCallback { throwable, response ->
+            response?.let {
+                if (it.isSuccessful) {
+                    val otp = it.body()?.get("otp") as String
+                    val playbackInfo = it.body()?.get("playbackInfo") as String
+                    initializePlayer(otp, playbackInfo)
+                }
+            }
+        })
     }
-    private fun initializePlayer() {
+
+    private fun initializePlayer(mOtp: String, mPlaybackInfo: String) {
         videoPlayerPlayerInit = object : VdoPlayer.InitializationListener {
             override fun onInitializationSuccess(playerHost: VdoPlayer.PlayerHost?, player: VdoPlayer?, wasRestored: Boolean) {
-                player.addPlaybackEventListener(playbackListener)
-                player_control_view.(player)
-                showControls(true);
+                videoPlayer = player
+                player?.addPlaybackEventListener(playbackListener)
+                playerControlView?.setPlayer(player)
+                showControls(true)
+
+                playerControlView?.setFullscreenActionListener(fullscreenToggleListener)
+                playerControlView?.setControllerVisibilityListener(visibilityListener)
+                // load a media to the player
+                val vdoParams = VdoPlayer.VdoInitParams.Builder()
+                    .setOtp(mOtp)
+                    .setPlaybackInfo(mPlaybackInfo)
+                    .setPreferredCaptionsLanguage("en")
+                    .build()
+                player?.load(vdoParams)
             }
 
             override fun onInitializationFailure(p0: VdoPlayer.PlayerHost?, p1: ErrorDescription?) {
             }
         }
 
-        playerFragment?.initialize(videoPlayerPlayerInit)    }
+        playerFragment?.initialize(videoPlayerPlayerInit)
+    }
 
     private fun showControls(show: Boolean) {
         if (show) {
@@ -195,6 +213,15 @@ class VideoPlayerActivity : AppCompatActivity(),
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
+    }
+
+    override fun onItemClick(position: Int, id: String) {
+        if (contentId == id) {
+            if (displayYoutubeVideo.view?.visibility == View.VISIBLE)
+                youtubePlayer?.seekToMillis(position * 1000)
+            else
+                videoPlayer?.seekTo(position.toLong() * 1000)
+        }
     }
 
     private fun createDoubt() {
@@ -301,5 +328,119 @@ class VideoPlayerActivity : AppCompatActivity(),
         noteDialog.setView(noteView)
         noteDialog.setCancelable(false)
         noteDialog.show()
+    }
+
+
+    override fun onBackPressed() {
+        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            showFullScreen(false)
+            playerControlView?.setFullscreenState(false)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    private fun showFullScreen(show: Boolean) {
+        requestedOrientation = if (show) {
+            // go to landscape orientation for fullscreen mode
+            ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+        } else {
+            // go to portrait orientation
+            ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+        }
+    }
+
+    private fun showSystemUi(show: Boolean) {
+        if (!show) {
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+        } else {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        }
+    }
+    private val playbackListener = object : VdoPlayer.PlaybackEventListener {
+        override fun onTracksChanged(p0: Array<out Track>?, p1: Array<out Track>?) {
+        }
+        override fun onSeekTo(p0: Long) {
+        }
+        override fun onLoading(p0: VdoPlayer.VdoInitParams?) {
+        }
+        override fun onLoaded(p0: VdoPlayer.VdoInitParams?) {
+        }
+        override fun onBufferUpdate(p0: Long) {
+        }
+        override fun onProgress(p0: Long) {
+        }
+        override fun onPlaybackSpeedChanged(p0: Float) {
+        }
+        override fun onLoadError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
+        }
+        override fun onMediaEnded(p0: VdoPlayer.VdoInitParams?) {
+        }
+        override fun onError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
+        }
+        override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+            this@VideoPlayerActivity.playWhenReady = playWhenReady
+        }
+
+
+    }
+    private val uiVisibilityListener = View.OnSystemUiVisibilityChangeListener { visibility ->
+        // show player controls when system ui is showing
+        if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+            showControls(true)
+        }
+    }
+    private val fullscreenToggleListener = VdoPlayerControlView.FullscreenActionListener { enterFullscreen ->
+        showFullScreen(enterFullscreen)
+        true
+    }
+    private val visibilityListener = VdoPlayerControlView.ControllerVisibilityListener { visibility ->
+        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (visibility != View.VISIBLE) {
+                showSystemUi(false)
+            }
+        }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        val newOrientation = newConfig.orientation
+        val oldOrientation = currentOrientation
+        currentOrientation = newOrientation
+        info {
+            "new orientation " + if (newOrientation == Configuration.ORIENTATION_PORTRAIT)
+                "PORTRAIT"
+            else if (newOrientation == Configuration.ORIENTATION_LANDSCAPE) "LANDSCAPE" else "UNKNOWN"
+        }
+        super.onConfigurationChanged(newConfig)
+        when (newOrientation) {
+            oldOrientation -> {
+            }
+            Configuration.ORIENTATION_LANDSCAPE -> {
+                // hide other views
+                player_tabs.visibility = View.GONE
+                pagerFrame.visibility = View.GONE
+                findViewById<View>(R.id.videoContainer).layoutParams = RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
+                playerControlView?.fitsSystemWindows = true
+                // hide system windows
+                showSystemUi(false)
+                showControls(false)
+            }
+            else -> {
+                // show other views
+                player_tabs.visibility = View.VISIBLE
+                pagerFrame.visibility = View.VISIBLE
+                videoContainer.layoutParams = RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+                playerControlView?.fitsSystemWindows = false
+                playerControlView?.setPadding(0, 0, 0, 0)
+                // show system windows
+                showSystemUi(true)
+            }
+        }
     }
 }

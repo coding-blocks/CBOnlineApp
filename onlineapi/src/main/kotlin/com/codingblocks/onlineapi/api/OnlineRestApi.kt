@@ -17,22 +17,11 @@ interface OnlineRestApi {
     @GET("v2/run_attempts/{runid}/progress")
     fun getMyCourseProgress(@Path("runid") id: String): Call<HashMap<Any, Any>>
 
-    /*
-    Hit this endpoint to get the API KEY for downloading video and the m3u8 files
-    The videoUrl param contains the URL of the file that you're trying to download.
-    In case you get a 403, hit this endpoint again and fetch a fresh api
 
-    response :
-    {
-        policyString : "",
-        signature : "",
-        keyId : ""
-    }
-
-    Send this response as a query param to the API endpoint that lets you download the video
-     */
-    @GET("v2/aws/cookie")
-    fun getVideoDownloadKey(@Query("url") videoUrl: String): Call<JsonObject>
+    @GET("v2/lectures/otp")
+    fun getVideoDownloadKey(@Query("videoId") videoId: String,
+                            @Query("sectionId") sectionId: String,
+                            @Query("runAttemptId") runAttemptId: String): Call<JsonObject>
 
     @POST("jwt/login?android=true")
     @FormUrlEncoded
