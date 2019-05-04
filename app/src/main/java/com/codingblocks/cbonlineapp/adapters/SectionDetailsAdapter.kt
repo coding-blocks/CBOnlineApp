@@ -18,7 +18,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.DownloadStarter
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.activities.PdfActivity
 import com.codingblocks.cbonlineapp.activities.QuizActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
@@ -33,6 +33,10 @@ import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.extensions.getDistinct
 import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.Progress
@@ -149,8 +153,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                         when {
                             content.contentable == "lecture" -> {
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
-                                if (!content.contentLecture.lectureUid.isNullOrEmpty() && !content.contentLecture.lectureUrl.isNullOrEmpty()) {
-                                    val url = content.contentLecture.lectureUrl.substring(38, (content.contentLecture.lectureUrl.length - 11))
+                                if (!content.contentLecture.lectureUid.isNullOrEmpty()) {
                                     ll.addView(inflatedView)
                                     if (content.contentLecture.isDownloaded == "false") {
                                         downloadBtn.setImageDrawable(null)
@@ -162,20 +165,20 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                                 else
                                                     updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
                                             }
-                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to content.contentLecture.lectureUrl, "attemptId" to content.attempt_id, "contentId" to content.id, "downloaded" to false).singleTop())
+                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>(VIDEO_ID to content.contentLecture.lectureId, RUN_ATTEMPT_ID to content.attempt_id, CONTENT_ID to content.id, SECTION_ID to content.section_id, "downloaded" to false).singleTop())
                                         }
                                         downloadBtn.setOnClickListener {
                                             if (MediaUtils.checkPermission(context)) {
                                                 if ((context as Activity).getPrefs().SP_WIFI) {
                                                     if (connectedToWifi(context)) {
-                                                        starter.startDownload(content.contentLecture.lectureUrl, data.id, content.contentLecture.lectureContentId, content.title, content.attempt_id, content.id)
+                                                        starter.startDownload(content.contentLecture.lectureId, data.id, content.contentLecture.lectureContentId, content.title, content.attempt_id, content.id)
                                                         downloadBtn.isEnabled = false
                                                         (downloadBtn.background as AnimationDrawable).start()
                                                     } else {
                                                         Components.showconfirmation(context, "wifi")
                                                     }
                                                 } else {
-                                                    starter.startDownload(content.contentLecture.lectureUrl, data.id, content.contentLecture.lectureContentId, content.title, content.attempt_id, content.id)
+                                                    starter.startDownload(content.contentLecture.lectureId, data.id, content.contentLecture.lectureContentId, content.title, content.attempt_id, content.id)
                                                     downloadBtn.isEnabled = false
                                                     (downloadBtn.background as AnimationDrawable).start()
                                                 }
@@ -189,7 +192,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                             (context as Activity).alert("This lecture will be deleted !!!") {
                                                 yesButton {
                                                     val file = context.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
-                                                    val folderFile = File(file, "/$url")
+                                                    val folderFile = File(file, "/${content.contentLecture.lectureId}")
                                                     MediaUtils.deleteRecursive(folderFile)
                                                     contentDao.updateContent(data.id, content.contentLecture.lectureContentId, "false")
                                                 }
@@ -204,7 +207,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                                 else
                                                     updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
                                             }
-                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("FOLDER_NAME" to url, "attemptId" to content.attempt_id, "contentId" to content.id, "downloaded" to true).singleTop())
+                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>(VIDEO_ID to content.contentLecture.lectureId, RUN_ATTEMPT_ID to content.attempt_id, CONTENT_ID to content.id, SECTION_ID to data.id, "downloaded" to true).singleTop())
                                         }
                                     }
                                 }

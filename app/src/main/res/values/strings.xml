@@ -60,4 +60,6 @@
     <string name="yes_continue">Yes,Continue</string>
     <string name="checkout">Checkout with Existing</string>
     <string name="my_courses">My Courses</string>
+    <string name="doubt_description_error">Description length must be atleast 20 characters.</string>
+    <string name="doubt_title_error">Title length must be atleast 15 characters.</string>
 </resources>

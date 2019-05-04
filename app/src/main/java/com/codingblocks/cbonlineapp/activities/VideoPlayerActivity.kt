@@ -6,15 +6,13 @@ import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
-import android.view.Window
 import android.view.WindowManager
-import android.widget.RelativeLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.models.CourseRun
@@ -23,7 +21,11 @@ import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.extensions.pageChangeCallback
 import com.codingblocks.cbonlineapp.fragments.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.fragments.VideoNotesFragment
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.OnItemClickListener
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.VdoPlayerControlView
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
@@ -58,10 +60,6 @@ import kotlin.concurrent.thread
 class VideoPlayerActivity : AppCompatActivity(),
     OnItemClickListener, AnkoLogger,
     VdoPlayer.InitializationListener {
-    override fun onInitializationFailure(p0: VdoPlayer.PlayerHost?, p1: ErrorDescription?) {
-        toast(p1?.errorMsg+"")
-    }
-
     private var youtubePlayer: YouTubePlayer? = null
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private var playerControlView: VdoPlayerControlView? = null
@@ -71,7 +69,7 @@ class VideoPlayerActivity : AppCompatActivity(),
     private var mPlaybackInfo: String? = null
     private lateinit var attemptId: String
     private lateinit var contentId: String
-    private var pos: Long? = 0
+    private lateinit var sectionId: String
     private var playWhenReady = false
     private var currentOrientation: Int = 0
     private val database: AppDatabase by lazy {
@@ -96,15 +94,13 @@ class VideoPlayerActivity : AppCompatActivity(),
         rootLayout.layoutTransition
             .enableTransitionType(LayoutTransition.CHANGING)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN)
-
-
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         currentOrientation = resources.configuration.orientation
-        val url = intent.getStringExtra("VIDEO_ID")
+        val videoId = intent.getStringExtra(VIDEO_ID)
         val youtubeUrl = intent.getStringExtra("videoUrl")
-        attemptId = intent.getStringExtra("ATTEMPT_ID")
-        contentId = intent.getStringExtra("SECTION_ID")
-        val downloaded = intent.getBooleanExtra("DOWNLOADED", false)
+        attemptId = intent.getStringExtra(RUN_ATTEMPT_ID)
+        contentId = intent.getStringExtra(CONTENT_ID)
+        sectionId = intent.getStringExtra(SECTION_ID)
 
         if (youtubeUrl != null) {
             displayYoutubeVideo.view?.visibility = View.VISIBLE
@@ -112,12 +108,11 @@ class VideoPlayerActivity : AppCompatActivity(),
         } else {
             displayYoutubeVideo.view?.visibility = View.GONE
             videoContainer.visibility = View.VISIBLE
-            setupVideoView(url, downloaded)
+            setupVideoView(videoId)
 
             playerFragment = fragmentManager.findFragmentById(R.id.videoView) as VdoPlayerFragment
             playerControlView = findViewById(R.id.player_control_view)
             showControls(false)
-
         }
         setupViewPager(attemptId)
     }
@@ -173,9 +168,8 @@ class VideoPlayerActivity : AppCompatActivity(),
         youTubePlayerSupportFragment!!.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
     }
 
-    private fun setupVideoView(videoId: String, downloaded: Boolean) {
-        showControls(false)
-        Clients.api.getVideoDownloadKey(videoId, contentId, attemptId).enqueue(retrofitCallback { throwable, response ->
+    private fun setupVideoView(videoId: String) {
+        Clients.api.getVideoDownloadKey(videoId, sectionId, attemptId).enqueue(retrofitCallback { throwable, response ->
             response?.let {
                 if (it.isSuccessful) {
                     it.body()?.let {
@@ -209,13 +203,17 @@ class VideoPlayerActivity : AppCompatActivity(),
         player?.load(vdoParams)
     }
 
+    override fun onInitializationFailure(p0: VdoPlayer.PlayerHost?, p1: ErrorDescription?) {
+        toast(p1?.errorMsg + "")
+    }
+
     private fun showControls(show: Boolean) {
         if (show) {
             playerControlView?.let {
                 it.show()
             }
         } else {
-            playerControlView?.let{
+            playerControlView?.let {
                 it.hide()
             }
         }
@@ -244,10 +242,10 @@ class VideoPlayerActivity : AppCompatActivity(),
             }
             doubtView.okBtn.setOnClickListener {
                 if (doubtView.titleLayout.editText!!.text.length < 15 || doubtView.titleLayout.editText!!.text.isEmpty()) {
-                    doubtView.titleLayout.error = "Title length must be atleast 15 characters."
+                    doubtView.titleLayout.error = getString(R.string.doubt_title_error)
                     return@setOnClickListener
                 } else if (doubtView.descriptionLayout.editText!!.text.length < 20 || doubtView.descriptionLayout.editText!!.text.isEmpty()) {
-                    doubtView.descriptionLayout.error = "Description length must be atleast 20 characters."
+                    doubtView.descriptionLayout.error = getString(R.string.doubt_description_error)
                     doubtView.titleLayout.error = ""
                 } else {
                     doubtView.descriptionLayout.error = ""
@@ -397,6 +395,7 @@ class VideoPlayerActivity : AppCompatActivity(),
         }
 
         override fun onMediaEnded(p0: VdoPlayer.VdoInitParams?) {
+            onBackPressed()
         }
 
         override fun onError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
@@ -406,7 +405,6 @@ class VideoPlayerActivity : AppCompatActivity(),
             this@VideoPlayerActivity.playWhenReady = playWhenReady
         }
     }
-
     private val fullscreenToggleListener = VdoPlayerControlView.FullscreenActionListener { enterFullscreen ->
         showFullScreen(enterFullscreen)
         true
@@ -431,8 +429,6 @@ class VideoPlayerActivity : AppCompatActivity(),
                 // hide other views
                 player_tabs.visibility = View.GONE
                 pagerFrame.visibility = View.GONE
-//                findViewById<View>(R.id.videoContainer).layoutParams = RelativeLayout.LayoutParams(
-//                    RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
                 playerControlView?.fitsSystemWindows = true
                 // hide system windows
                 showSystemUi(false)

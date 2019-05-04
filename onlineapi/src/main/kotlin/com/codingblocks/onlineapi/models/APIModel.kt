@@ -434,8 +434,8 @@ class ContentLectureType : BaseModel() {
     var status: String? = null
 
     @JvmField
-    @JsonProperty("video-url")
-    var video_url: String? = null
+    @JsonProperty("video-id")
+    var videoId: String? = null
 
 }
 
