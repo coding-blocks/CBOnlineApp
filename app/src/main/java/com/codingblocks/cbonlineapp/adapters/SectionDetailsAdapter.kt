@@ -171,14 +171,14 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                             if (MediaUtils.checkPermission(context)) {
                                                 if ((context as Activity).getPrefs().SP_WIFI) {
                                                     if (connectedToWifi(context)) {
-                                                        starter.startDownload(content.contentLecture.lectureId, data.id, content.contentLecture.lectureContentId, content.title, content.attempt_id, content.id)
+                                                        starter.startDownload(content.contentLecture.lectureId, data.id, content.contentLecture.lectureContentId, content.title, content.attempt_id, content.id,content.section_id)
                                                         downloadBtn.isEnabled = false
                                                         (downloadBtn.background as AnimationDrawable).start()
                                                     } else {
                                                         Components.showconfirmation(context, "wifi")
                                                     }
                                                 } else {
-                                                    starter.startDownload(content.contentLecture.lectureId, data.id, content.contentLecture.lectureContentId, content.title, content.attempt_id, content.id)
+                                                    starter.startDownload(content.contentLecture.lectureId, data.id, content.contentLecture.lectureContentId, content.title, content.attempt_id, content.id,content.section_id)
                                                     downloadBtn.isEnabled = false
                                                     (downloadBtn.background as AnimationDrawable).start()
                                                 }
@@ -239,7 +239,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                             else
                                                 updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentVideo.videoContentId)
                                         }
-                                        it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("videoUrl" to content.contentVideo.videoUrl, "attemptId" to content.attempt_id, "contentId" to content.id).singleTop())
+                                        it.context.startActivity(it.context.intentFor<VideoPlayerActivity>("videoUrl" to content.contentVideo.videoUrl, RUN_ATTEMPT_ID to content.attempt_id, CONTENT_ID to content.id).singleTop())
                                     }
                                 }
                             }

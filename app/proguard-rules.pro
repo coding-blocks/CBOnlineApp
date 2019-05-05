@@ -83,7 +83,7 @@
 # ===== GMS ====
 
 # ===== VIDEO CIPHER =====
--keep class com.vdocipher.aegis.* { ;  }
+-keep class com.vdocipher.aegis.* { *; }
 
 
 
