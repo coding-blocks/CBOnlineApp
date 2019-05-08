@@ -48,16 +48,18 @@ interface OnlineJsonApi {
     fun instructorsById(@Path("id") id: String): Call<Instructor>
 
     @GET("courses")
-    fun getRecommendedCourses(@Query("exclude") query: String = "ratings",
+    fun getRecommendedCourses(@Query("exclude") query: String = "ratings,instructors.*,feedbacks,runs.*",
                               @Query("filter[recommended]") recommended: String = "true",
                               @Query("filter[unlisted]") unlisted: String = "false",
+                              @Query("page[limit]") page: String = "12",
                               @Query("include") include: String = "instructors,runs",
                               @Query("sort") sort: String = "difficulty"): Call<ArrayList<Course>>
-
     @GET("courses")
-    fun getAllCourses(@Query("exclude") query: String = "ratings",
+    fun getAllCourses(@Query("exclude") query: String = "ratings,instructors.*",
                       @Query("filter[unlisted]") unlisted: String = "false",
                       @Query("include") include: String = "instructors,runs",
+                      @Query("page[limit]") page: String = "8",
+                      @Query("page[offset]") offset: String = "0",
                       @Query("sort") sort: String = "difficulty"): Call<ArrayList<Course>>
 
     @GET("sections/{id}")
