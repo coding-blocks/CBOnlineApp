@@ -33,6 +33,7 @@ import com.ethanhua.skeleton.SkeletonScreen
 import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.runOnUiThread
 import java.util.*
@@ -44,7 +45,6 @@ class HomeFragment : Fragment(), AnkoLogger {
     private lateinit var skeletonScreen: SkeletonScreen
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     val ui = HomeFragmentUi<Fragment>()
-    var currentPage = 0
 
 
     private val database: AppDatabase by lazy {
@@ -109,20 +109,18 @@ class HomeFragment : Fragment(), AnkoLogger {
     }
 
     private fun fetchCards() {
-        Clients.onlineV2JsonApi.carouselCards.enqueue(retrofitCallback { _, response ->
-            response?.body().let {
-                val carouselSliderAdapter = CarouselSliderAdapter(it!!, context!!)
+        Clients.onlineV2JsonApi.carouselCards.enqueue(retrofitCallback { fallback, response ->
+            response?.body()?.let {
+                val carouselSliderAdapter = CarouselSliderAdapter(it, context)
                 ui.viewPager.adapter = carouselSliderAdapter
                 ui.viewPager.currentItem = 0
-//                if (categories.size > 1)
-//                    view.tabDots.setupWithViewPager(view.imageViewPager, true)
                 ui.viewPager.setPageTransformer(true, ZoomOutPageTransformer())
                 val handler = Handler()
                 val update = Runnable {
-                    if (currentPage == it.size) {
-                        currentPage = 0
+                    if (ui.viewPager.currentItem+1 == it.size) {
+                        ui.viewPager.setCurrentItem(0, true)
                     }
-                    ui.viewPager.setCurrentItem(currentPage++, true)
+                    ui.viewPager.setCurrentItem(++ui.viewPager.currentItem, true)
                 }
                 val swipeTimer = Timer()
                 swipeTimer.schedule(object : TimerTask() {
@@ -130,6 +128,10 @@ class HomeFragment : Fragment(), AnkoLogger {
                         handler.post(update)
                     }
                 }, 5000, 5000)
+            }
+            fallback?.let {
+                ui.viewPager.visibility = View.GONE
+                ui.homeImg.visibility = View.VISIBLE
             }
         })
     }
@@ -155,7 +157,7 @@ class HomeFragment : Fragment(), AnkoLogger {
                 for (myCourses in it) {
                     //calculate top run
                     val unsortedRuns: ArrayList<Runs> = arrayListOf()
-                    for (i in 0 until myCourses.runs!!.size) {
+                    for (i in 0 until (myCourses.runs?.size ?: 0)) {
                         if (myCourses.runs!![i].enrollmentStart!!.toLong() < (System.currentTimeMillis() / 1000)
                                 && myCourses.runs!![i].enrollmentEnd!!.toLong() > (System.currentTimeMillis() / 1000) && !myCourses.runs!![i].unlisted!!)
                             unsortedRuns.add(myCourses.runs!![i])
