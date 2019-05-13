@@ -101,13 +101,13 @@ class VideoPlayerActivity : AppCompatActivity(),
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
+        currentOrientation = resources.configuration.orientation
 
-        setupViewPager(attemptId)
+        setupUI()
+
     }
 
-    override fun onStart() {
-        super.onStart()
-        currentOrientation = resources.configuration.orientation
+    private fun setupUI() {
         videoId = intent.getStringExtra(VIDEO_ID)
         val youtubeUrl = intent.getStringExtra("videoUrl")
         attemptId = intent.getStringExtra(RUN_ATTEMPT_ID)
@@ -121,17 +121,19 @@ class VideoPlayerActivity : AppCompatActivity(),
             sectionId = intent.getStringExtra(SECTION_ID)?:""
             displayYoutubeVideo.view?.visibility = View.GONE
             videoContainer.visibility = View.VISIBLE
+            playerFragment = fragmentManager.findFragmentById(R.id.videoView) as VdoPlayerFragment
+            playerControlView = findViewById(R.id.player_control_view)
+            showControls(false)
+
             if (download) {
                 initializePlayer()
             } else {
                 setupVideoView()
             }
-
-            playerFragment = fragmentManager.findFragmentById(R.id.videoView) as VdoPlayerFragment
-            playerControlView = findViewById(R.id.player_control_view)
-            showControls(false)
         }
+        setupViewPager(attemptId)
     }
+
 
     private fun setupViewPager(attemptId: String) {
         val adapter = TabLayoutAdapter(supportFragmentManager)

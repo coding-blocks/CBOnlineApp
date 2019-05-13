@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.LECTURE_CONTENT_ID
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
@@ -71,6 +72,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger,
         videoId = intent.getStringExtra(VIDEO_ID)
         attemptId = intent.getStringExtra(ATTEMPT_ID)
         sectionId = intent.getStringExtra(SECTION_ID)
+        contentId = intent.getStringExtra(CONTENT_ID)
         lectureContentId = intent.getStringExtra(LECTURE_CONTENT_ID)
 
         Clients.api.getOtp(videoId, sectionId, attemptId, true)
@@ -138,6 +140,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger,
         intent.putExtra(VIDEO_ID,videoId)
         intent.putExtra(RUN_ATTEMPT_ID, attemptId)
         intent.putExtra(CONTENT_ID, contentId)
+        intent.putExtra(DOWNLOADED, true)
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(

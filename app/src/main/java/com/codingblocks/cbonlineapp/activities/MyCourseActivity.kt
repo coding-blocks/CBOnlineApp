@@ -41,7 +41,7 @@ import org.jetbrains.anko.info
 import org.jetbrains.anko.yesButton
 import kotlin.concurrent.thread
 
-class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
+class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     override fun onRefresh() {
         fetchCourse(attemptId)
     }
@@ -281,14 +281,15 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
                                                 attemptId, content.id
                                                     ?: ""
                                             )
-                                            if (updateContent == null) {
+                                            if (updateContent == null ) {
+
                                                 contentDao.insert(oldContent)
                                                 insertSectionWithContent(
                                                     section.id
                                                         ?: "", content.id ?: ""
                                                 )
                                             } else if (updateContent != oldContent) {
-                                                info { "content is updating" }
+                                                contentLecture.isDownloaded =  "true"
                                                 contentDao.update(
                                                     CourseContent(
                                                         content.id ?: "", status, progressId,
@@ -310,7 +311,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
                                             }
                                         }
                                     }
-                                    info { throwable?.localizedMessage }
                                 })
                             }
                         }
@@ -331,7 +331,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
                             isCancelable = false
                         }.show()
                 }
-                info { "error ${throwable?.localizedMessage}" }
             })
     }
 
