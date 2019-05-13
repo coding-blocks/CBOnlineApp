@@ -17,6 +17,12 @@ jacocoTestReport {
     }
     dependsOn(test)
 }
+jar.dependsOn test
+
+test {
+    useJUnit()
+    maxHeapSize = '1G'
+}
 
 dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.0'
