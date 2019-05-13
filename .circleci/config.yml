@@ -36,12 +36,14 @@ jobs:
           command: ./gradlew lintDebug spotlessCheck
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: app/build/reports
-          destination: reports
+          destination: reports-app
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: onlineapi/build/reports
-          destination: reports
+          destination: reports-onlineapi
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: app/build/test-results
+          destination: tests-app
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: onlineapi/build/test-results
+          destination: tests-onlineapi
       # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
