@@ -27,6 +27,7 @@ jobs:
           paths:
             - ~/code/app/build
             - ~/code/onlineapi/build
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
           name: Run Tests
           command: ./gradlew lint test spotlessCheck
