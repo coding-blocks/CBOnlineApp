@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.models.ContentCodeChallenge
@@ -189,7 +189,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
                                                             it.id ?: "",
                                                             it.name ?: "",
                                                             it.duration!!,
-                                                            it.video_url ?: "",
+                                                            it.videoId ?: "",
                                                             content.section_content?.id ?: "",
                                                             it.updatedAt ?: ""
                                                         )

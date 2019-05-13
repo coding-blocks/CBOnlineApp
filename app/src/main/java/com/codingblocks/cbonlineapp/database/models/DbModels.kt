@@ -171,19 +171,19 @@ data class SectionWithContent(
         @ColumnInfo(name = "section_id") val sectionId: String,
         @ColumnInfo(name = "content_id") val contentId: String)
 
-@Entity()
+@Entity
 data class ContentLecture(
         var lectureUid: String = "",
         var lectureName: String = "",
         var lectureDuration: Long = 0L,
-        var lectureUrl: String = "",
+        var lectureId: String = "",
         var lectureContentId: String = "",
         var lectureUpdatedAt: String = "",
         var isDownloaded: String = "false",
         var date: Date = Date(0L)
 )
 
-@Entity()
+@Entity
 data class ContentDocument(
         var documentUid: String = "",
         var documentName: String = "",

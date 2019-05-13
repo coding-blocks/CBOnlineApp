@@ -2,7 +2,6 @@ package com.codingblocks.onlineapi
 
 import com.codingblocks.onlineapi.api.OnlineJsonApi
 import com.codingblocks.onlineapi.api.OnlineRestApi
-import com.codingblocks.onlineapi.api.OnlineVideosApi
 import com.codingblocks.onlineapi.models.Announcement
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Certificate
@@ -89,6 +88,7 @@ object Clients {
         Certificate::class.java,
         CarouselCards::class.java
     )
+
     private val relationshipResolver = RelationshipResolver {
         var url = it
         if (!it.contains("https")) {
@@ -114,6 +114,8 @@ object Clients {
             chain.proceed(chain.request().newBuilder().addHeader("Authorization", "JWT $authJwt").build())
         }
         .build()
+
+
     private val onlineV2JsonRetrofit = Retrofit.Builder()
         .client(ClientInterceptor)
         .baseUrl("https://api-online.cb.lk/api/v2/")
@@ -123,6 +125,9 @@ object Clients {
     val onlineV2JsonApi: OnlineJsonApi
         get() = onlineV2JsonRetrofit
             .create(OnlineJsonApi::class.java)
+
+
+
     private val retrofit = Retrofit.Builder()
         .client(ClientInterceptor)
         .baseUrl("https://api-online.cb.lk/api/")
@@ -130,13 +135,4 @@ object Clients {
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .build()
     val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)
-    var interceptor = CustomResponseInterceptor()
-    private var client = OkHttpClient.Builder().addInterceptor(interceptor).build()
-    //This client will download the video and m3u8 files from the server
-    private val videoDownloadClient = Retrofit.Builder()
-        .baseUrl("https://d1qf0ozss494xv.cloudfront.net/")
-        .client(client)
-        .build()
-    private val apiVideo: OnlineVideosApi = videoDownloadClient.create(OnlineVideosApi::class.java)
-    fun initiateDownload(url: String, fileName: String, keyPairId: String, signature: String, policy: String) = apiVideo.getVideoFiles(url, fileName, keyPairId, signature, policy)
 }

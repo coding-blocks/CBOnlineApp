@@ -59,17 +59,6 @@ object MediaUtils {
 
 
 
-//    fun provideCacheInterceptor(): Interceptor {
-//        return Interceptor {
-//            val response = it.proceed(it.request())
-//            val cacheControl = CacheControl.Builder()
-//                    .maxAge(2, TimeUnit.MINUTES)
-//                    .build()
-//            return response.newBuilder()
-//                    .header("Cache-Control", cacheControl.toString())
-//                    .build()
-//        }
-// }
 
 
     //Call this when you want to play a video and pass the return type to exoplayer

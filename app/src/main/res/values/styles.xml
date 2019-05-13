@@ -15,6 +15,8 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -46,6 +48,7 @@
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
 
+
     <style name="AppTheme.SalmonAccent">
         <item name="colorAccent">@color/salmon</item>
     </style>
@@ -75,6 +78,12 @@
         <item name="colorControlActivated">@color/colorPrimary</item>
         <item name="colorSwitchThumbNormal">@color/white</item>
         <item name="android:colorForeground">@color/battleship_gray</item>
+    </style>
+
+    <style name="VdoMediaButton">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:layout_width">54dp</item>
+        <item name="android:layout_height">40dp</item>
     </style>
 
 </resources>

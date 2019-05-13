@@ -14,8 +14,13 @@ import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.database.models.CourseSection
-import com.codingblocks.cbonlineapp.services.DownloadService
 import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.services.DownloadService
+import com.codingblocks.cbonlineapp.util.ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.LECTURE_CONTENT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_course_content.view.rvExpendableView
 import kotlinx.android.synthetic.main.fragment_course_content.view.sectionProgressBar
@@ -23,9 +28,17 @@ import kotlinx.android.synthetic.main.fragment_course_content.view.swiperefresh
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.startService
 
-private const val ARG_ATTEMPT_ID = "attempt_id"
-
 class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
+    companion object {
+        @JvmStatic
+        fun newInstance(param1: String) =
+            CourseContentFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ATTEMPT_ID, param1)
+                }
+            }
+    }
+
     lateinit var attemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private val database: AppDatabase by lazy {
@@ -35,20 +48,31 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         database.courseRunDao()
     }
 
-    override fun startDownload(url: String, id: String, lectureContentId: String, title: String, attemptId: String, contentId: String) {
-        startService<DownloadService>("id" to id, "url" to url, "lectureContentId" to lectureContentId, "title" to title, "attemptId" to attemptId, "contentId" to contentId)
+    override fun startDownload(
+        videoId: String,
+        id: String,
+        lectureContentId: String,
+        title: String,
+        attemptId: String,
+        contentId: String,
+        sectionId: String
+    ) {
+        startService<DownloadService>("id" to id, VIDEO_ID to videoId, LECTURE_CONTENT_ID to lectureContentId, "title" to title, ATTEMPT_ID to attemptId, CONTENT_ID to contentId,
+            SECTION_ID to sectionId)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
         arguments?.let {
-            attemptId = it.getString(ARG_ATTEMPT_ID)!!
+            attemptId = it.getString(ATTEMPT_ID)!!
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_course_content, container, false)
         view.swiperefresh.setOnRefreshListener {
@@ -69,7 +93,11 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 view.sectionProgressBar.hide()
             }
             courseDao.getRunByAtemptId(attemptId).observe(this, Observer<CourseRun> { courseRun ->
-                sectionAdapter.setData(it as ArrayList<CourseSection>, courseRun.premium, courseRun.crStart)
+                sectionAdapter.setData(
+                    it as ArrayList<CourseSection>,
+                    courseRun.premium,
+                    courseRun.crStart
+                )
             })
             if (view.swiperefresh.isRefreshing) {
                 view.swiperefresh.isRefreshing = false
@@ -77,16 +105,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         })
 
         return view
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String) =
-            CourseContentFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_ATTEMPT_ID, param1)
-                }
-            }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
