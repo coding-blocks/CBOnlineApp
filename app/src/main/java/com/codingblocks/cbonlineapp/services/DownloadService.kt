@@ -12,106 +12,115 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
+import com.codingblocks.cbonlineapp.util.ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.LECTURE_CONTENT_ID
 import com.codingblocks.cbonlineapp.util.MediaUtils
-import okhttp3.ResponseBody
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.VIDEO_ID
+import com.codingblocks.onlineapi.Clients
+import com.vdocipher.aegis.media.ErrorDescription
+import com.vdocipher.aegis.offline.DownloadOptions
+import com.vdocipher.aegis.offline.DownloadRequest
+import com.vdocipher.aegis.offline.DownloadSelections
+import com.vdocipher.aegis.offline.DownloadStatus
+import com.vdocipher.aegis.offline.OptionsDownloader
+import com.vdocipher.aegis.offline.VdoDownloadManager
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
 import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
 
-class DownloadService : IntentService("Download Service"), AnkoLogger {
+class DownloadService : IntentService("Download Service"), AnkoLogger,
+    VdoDownloadManager.EventListener {
+
+    lateinit var attemptId: String
+    lateinit var contentId: String
+    lateinit var sectionId: String
+    private lateinit var videoId: String
+    lateinit var lectureContentId: String
+    lateinit var dataId: String
+
 
     private val notificationManager by lazy {
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
-
     private val notificationBuilder by lazy {
         NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_file_download)
-                .setContentTitle("Download")
-                .setOnlyAlertOnce(true)
-                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.mipmap.ic_launcher))
-                .setContentText("Downloading File")
-                .setProgress(100, 0, false)
-                .setColor(resources.getColor(R.color.colorPrimaryDark))
-                .setOngoing(true) // THIS is the important line
-                .setAutoCancel(false)
+            .setSmallIcon(R.drawable.ic_file_download)
+            .setContentTitle("Download")
+            .setOnlyAlertOnce(true)
+            .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.mipmap.ic_launcher))
+            .setContentText("Downloading File")
+            .setProgress(100, 0, false)
+            .setColor(resources.getColor(R.color.colorPrimaryDark))
+            .setOngoing(true) // THIS is the important line
+            .setAutoCancel(false)
     }
-
-    private var totalFileSize: Int = 0
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
 
-
     override fun onHandleIntent(intent: Intent) {
         val title = intent.getStringExtra("title")
+        dataId = intent.getStringExtra("id")
         notificationBuilder.setContentTitle(title)
         database = AppDatabase.getInstance(this)
         contentDao = database.contentDao()
-
-        initDownload(intent)
-    }
-
-    private fun initDownload(intent: Intent) {
         notificationManager.notify(0, notificationBuilder.build())
-        var downloadCount = 0
-        val downloadUrl = intent.getStringExtra("url")
-        val url = downloadUrl.substring(38, (downloadUrl.length - 11))
-        val attemptId = intent.getStringExtra("attemptId")
+        videoId = intent.getStringExtra(VIDEO_ID)
+        attemptId = intent.getStringExtra(ATTEMPT_ID)
+        sectionId = intent.getStringExtra(SECTION_ID)
+        lectureContentId = intent.getStringExtra(LECTURE_CONTENT_ID)
 
+        Clients.api.getOtp(videoId, sectionId, attemptId, true)
+            .enqueue(retrofitCallback { _, response ->
+                response?.let {
+                    if (it.isSuccessful) {
+                        it.body()?.let {
+                            val mOtp = it.get("otp").asString
+                            val mPlaybackInfo = it.get("playbackInfo").asString
+                            initializeDownload(mOtp, mPlaybackInfo, videoId)
+                        }
+                    }
+                }
+            })
     }
 
-    private fun writeResponseBodyToDisk(body: ResponseBody, videoUrl: String?, fileName: String): Boolean {
-        try {
-
-            val file = this.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
-            val folderFile = File(file, "/$videoUrl")
-            val dataFile = File(file, "/$videoUrl/$fileName")
-            if (!folderFile.exists()) {
-                folderFile.mkdir()
-            }
-            // todo change the file location/name according to your needs
-
-            var inputStream: InputStream? = null
-            var outputStream: OutputStream? = null
-
-            try {
-                val fileReader = ByteArray(4096)
-
-                val fileSize = body.contentLength()
-                var fileSizeDownloaded: Long = 0
-
-
-                inputStream = body.byteStream()
-                outputStream = FileOutputStream(dataFile)
-
-                while (true) {
-                    val read = inputStream!!.read(fileReader)
-
-                    if (read == -1) {
-                        break
+    private fun initializeDownload(mOtp: String?, mPlaybackInfo: String?, videoId: String) {
+        val optionsDownloader = OptionsDownloader()
+        // assuming we have otp and playbackInfo
+        optionsDownloader.downloadOptionsWithOtp(
+            mOtp,
+            mPlaybackInfo,
+            object : OptionsDownloader.Callback {
+                override fun onOptionsReceived(options: DownloadOptions) {
+                    // we have received the available download options
+                    val selectionIndices = intArrayOf(0, 1)
+                    val downloadSelections = DownloadSelections(options, selectionIndices)
+                    val file =
+                        this@DownloadService.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+                    val folderFile = File(file, "/$videoId")
+                    if (!folderFile.exists()) {
+                        folderFile.mkdir()
                     }
-
-                    outputStream.write(fileReader, 0, read)
-
-                    fileSizeDownloaded += read.toLong()
-
+                    val request =
+                        DownloadRequest.Builder(downloadSelections, folderFile.absolutePath).build()
+                    val vdoDownloadManager = VdoDownloadManager.getInstance(applicationContext)
+                    // enqueue request to VdoDownloadManager for download
+                    try {
+                        vdoDownloadManager.enqueue(request)
+                        vdoDownloadManager.addEventListener(this@DownloadService)
+                    } catch (e: IllegalArgumentException) {
+                    } catch (e: IllegalStateException) {
+                    }
                 }
 
-                outputStream.flush()
-
-                return true
-            } catch (e: IOException) {
-                return false
-            } finally {
-                inputStream?.close()
-                outputStream?.close()
-            }
-        } catch (e: IOException) {
-            return false
-        }
+                override fun onOptionsNotReceived(errDesc: ErrorDescription) {
+                    // there was an error downloading the available options
+                    val errMsg = "onOptionsNotReceived : $errDesc"
+                }
+            })
     }
 
     //function to update progress according to download progress
@@ -121,16 +130,20 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
         notificationManager.notify(0, notificationBuilder.build())
     }
 
-
-    private fun onDownloadComplete(url: String, attemptId: String, contentId: String) {
+    private fun onDownloadComplete() {
+        doAsync {
+            contentDao.updateContent(dataId, lectureContentId, "true")
+        }
         val intent = Intent(this, VideoPlayerActivity::class.java)
-        intent.putExtra("FOLDER_NAME", url)
-        intent.putExtra("attemptId", attemptId)
-        intent.putExtra("contentId", contentId)
+        intent.putExtra(VIDEO_ID,videoId)
+        intent.putExtra(RUN_ATTEMPT_ID, attemptId)
+        intent.putExtra(CONTENT_ID, contentId)
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0 /* Request code */, intent,
+            PendingIntent.FLAG_ONE_SHOT
+        )
         notificationManager.cancel(0)
         notificationBuilder.setProgress(0, 0, false)
         notificationBuilder.setContentText("File Downloaded")
@@ -140,9 +153,25 @@ class DownloadService : IntentService("Download Service"), AnkoLogger {
         notificationManager.notify(0, notificationBuilder.build())
     }
 
+    override fun onChanged(p0: String?, downloadStatus: DownloadStatus?) {
+        downloadStatus?.downloadPercent?.let { sendNotification(it) }
+    }
+
+    override fun onDeleted(p0: String?) {
+    }
+
+    override fun onFailed(p0: String?, p1: DownloadStatus?) {
+    }
+
+    override fun onQueued(p0: String?, p1: DownloadStatus?) {
+    }
+
+    override fun onCompleted(p0: String?, p1: DownloadStatus?) {
+        onDownloadComplete()
+    }
+
     override fun onTaskRemoved(rootIntent: Intent) {
         notificationManager.cancel(0)
     }
-
 }
 

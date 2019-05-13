@@ -17,12 +17,12 @@ interface OnlineRestApi {
     @GET("v2/run_attempts/{runid}/progress")
     fun getMyCourseProgress(@Path("runid") id: String): Call<HashMap<Any, Any>>
 
-
     @GET("v2/lectures/otp")
-    fun getVideoDownloadKey(@Query("videoId") videoId: String,
-                            @Query("sectionId") sectionId: String,
-                            @Query("runAttemptId") runAttemptId: String): Call<JsonObject>
-
+    fun getOtp(
+        @Query("videoId") videoId: String,
+        @Query("sectionId") sectionId: String,
+        @Query("runAttemptId") runAttemptId: String,
+        @Query("offline") offline: Boolean = false): Call<JsonObject>
     @POST("jwt/login?android=true")
     @FormUrlEncoded
     fun getToken(@Field("code") code: String): Call<JsonObject>
@@ -44,7 +44,8 @@ interface OnlineRestApi {
 
     @GET("v2/runs/{runid}/leaderboard")
     fun leaderboardById(
-            @Path("runid") id: String): Call<List<Leaderboard>>
+        @Path("runid") id: String
+    ): Call<List<Leaderboard>>
 
     @GET("v2/courses/{runid}/doubts?order=latest")
     fun getDoubts(@Path("runid") id: String): Call<Doubts>
@@ -57,6 +58,4 @@ interface OnlineRestApi {
 
     @GET("v2/runs/clear_cart")
     fun clearCart(): Call<JsonObject>
-
-
 }

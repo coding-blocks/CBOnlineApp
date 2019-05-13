@@ -34,6 +34,7 @@ import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.extensions.getDistinct
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
@@ -169,7 +170,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                                 else
                                                     updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
                                             }
-                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>(VIDEO_ID to content.contentLecture.lectureId, RUN_ATTEMPT_ID to content.attempt_id, CONTENT_ID to content.id, SECTION_ID to content.section_id, "downloaded" to false).singleTop())
+                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>(VIDEO_ID to content.contentLecture.lectureId, RUN_ATTEMPT_ID to content.attempt_id, CONTENT_ID to content.id, SECTION_ID to content.section_id, DOWNLOADED to false).singleTop())
                                         }
                                         downloadBtn.setOnClickListener {
                                             if (MediaUtils.checkPermission(context)) {
@@ -211,7 +212,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                                 else
                                                     updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentLecture.lectureContentId)
                                             }
-                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>(VIDEO_ID to content.contentLecture.lectureId, RUN_ATTEMPT_ID to content.attempt_id, CONTENT_ID to content.id, SECTION_ID to data.id, "downloaded" to true).singleTop())
+                                            it.context.startActivity(it.context.intentFor<VideoPlayerActivity>(VIDEO_ID to content.contentLecture.lectureId, RUN_ATTEMPT_ID to content.attempt_id, CONTENT_ID to content.id, SECTION_ID to data.id, DOWNLOADED to true).singleTop())
                                         }
                                     }
                                 }
@@ -300,14 +301,14 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
             arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                 0.5f)
             arrowAnimation.fillAfter = true
-            arrowAnimation.duration = 350
+            arrowAnimation.duration = 200
             itemView.arrow.startAnimation(arrowAnimation)
         } else {
             collapse(ll)
             arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                 0.5f)
             arrowAnimation.fillAfter = true
-            arrowAnimation.duration = 350
+            arrowAnimation.duration = 200
             itemView.arrow.startAnimation(arrowAnimation)
         }
     }

@@ -12,16 +12,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.extensions.pageChangeCallback
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.fragments.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.OnItemClickListener
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
@@ -70,6 +71,8 @@ class VideoPlayerActivity : AppCompatActivity(),
     private lateinit var attemptId: String
     private lateinit var contentId: String
     private lateinit var sectionId: String
+    private lateinit var videoId: String
+    private var download: Boolean = false
     private var playWhenReady = false
     private var currentOrientation: Int = 0
     private val database: AppDatabase by lazy {
@@ -94,27 +97,40 @@ class VideoPlayerActivity : AppCompatActivity(),
         rootLayout.layoutTransition
             .enableTransitionType(LayoutTransition.CHANGING)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+
+        setupViewPager(attemptId)
+    }
+
+    override fun onStart() {
+        super.onStart()
         currentOrientation = resources.configuration.orientation
-        val videoId = intent.getStringExtra(VIDEO_ID)
+        videoId = intent.getStringExtra(VIDEO_ID)
         val youtubeUrl = intent.getStringExtra("videoUrl")
         attemptId = intent.getStringExtra(RUN_ATTEMPT_ID)
         contentId = intent.getStringExtra(CONTENT_ID)
-        sectionId = intent.getStringExtra(SECTION_ID)
+        download = intent.getBooleanExtra(DOWNLOADED, false)
 
         if (youtubeUrl != null) {
             displayYoutubeVideo.view?.visibility = View.VISIBLE
             setupYoutubePlayer(youtubeUrl)
         } else {
+            sectionId = intent.getStringExtra(SECTION_ID)?:""
             displayYoutubeVideo.view?.visibility = View.GONE
             videoContainer.visibility = View.VISIBLE
-            setupVideoView(videoId)
+            if (download) {
+                initializePlayer()
+            } else {
+                setupVideoView()
+            }
 
             playerFragment = fragmentManager.findFragmentById(R.id.videoView) as VdoPlayerFragment
             playerControlView = findViewById(R.id.player_control_view)
             showControls(false)
         }
-        setupViewPager(attemptId)
     }
 
     private fun setupViewPager(attemptId: String) {
@@ -154,39 +170,52 @@ class VideoPlayerActivity : AppCompatActivity(),
 
     private fun setupYoutubePlayer(youtubeUrl: String) {
         youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
-            override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
+            override fun onInitializationFailure(
+                p0: YouTubePlayer.Provider?,
+                p1: YouTubeInitializationResult?
+            ) {
             }
 
-            override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
+            override fun onInitializationSuccess(
+                p0: YouTubePlayer.Provider?,
+                youtubePlayerInstance: YouTubePlayer?,
+                p2: Boolean
+            ) {
                 if (!p2) {
                     youtubePlayer = youtubePlayerInstance
                     youtubePlayerInstance?.loadVideo(youtubeUrl.substring(32))
                 }
             }
         }
-        val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
+        val youTubePlayerSupportFragment =
+            supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
         youTubePlayerSupportFragment!!.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
     }
 
-    private fun setupVideoView(videoId: String) {
-        Clients.api.getVideoDownloadKey(videoId, sectionId, attemptId).enqueue(retrofitCallback { throwable, response ->
-            response?.let {
-                if (it.isSuccessful) {
-                    it.body()?.let {
-                        mOtp = it.get("otp")?.asString
-                        mPlaybackInfo = it.get("playbackInfo")?.asString
-                        initializePlayer()
+    private fun setupVideoView() {
+        Clients.api.getOtp(videoId, sectionId, attemptId)
+            .enqueue(retrofitCallback { throwable, response ->
+                response?.let {
+                    if (it.isSuccessful) {
+                        it.body()?.let {
+                            mOtp = it.get("otp")?.asString
+                            mPlaybackInfo = it.get("playbackInfo")?.asString
+                            initializePlayer()
+                        }
                     }
                 }
-            }
-        })
+            })
     }
 
     private fun initializePlayer() {
         playerFragment.initialize(this)
     }
 
-    override fun onInitializationSuccess(playerHost: VdoPlayer.PlayerHost?, player: VdoPlayer?, wasRestored: Boolean) {
+    override fun onInitializationSuccess(
+        playerHost: VdoPlayer.PlayerHost?,
+        player: VdoPlayer?,
+        wasRestored: Boolean
+    ) {
         videoPlayer = player
         player?.addPlaybackEventListener(playbackListener)
         playerControlView?.setPlayer(player)
@@ -195,11 +224,15 @@ class VideoPlayerActivity : AppCompatActivity(),
         playerControlView?.setFullscreenActionListener(fullscreenToggleListener)
         playerControlView?.setControllerVisibilityListener(visibilityListener)
         // load a media to the player
-        val vdoParams = VdoPlayer.VdoInitParams.Builder()
-            .setOtp(mOtp)
-            .setPlaybackInfo(mPlaybackInfo)
-            .setPreferredCaptionsLanguage("en")
-            .build()
+        val vdoParams: VdoPlayer.VdoInitParams? = if (download) {
+            VdoPlayer.VdoInitParams.createParamsForOffline(videoId)
+        } else {
+            VdoPlayer.VdoInitParams.Builder()
+                .setOtp(mOtp)
+                .setPlaybackInfo(mPlaybackInfo)
+                .setPreferredCaptionsLanguage("en")
+                .build()
+        }
         player?.load(vdoParams)
     }
 
@@ -209,9 +242,7 @@ class VideoPlayerActivity : AppCompatActivity(),
 
     private fun showControls(show: Boolean) {
         if (show) {
-            playerControlView?.let {
-                it.show()
-            }
+            playerControlView?.show()
         } else {
             playerControlView?.let {
                 it.hide()
@@ -260,20 +291,21 @@ class VideoPlayerActivity : AppCompatActivity(),
                     doubt.status = "PENDING"
                     doubt.postrunAttempt = runAttempts
                     doubt.content = contents
-                    Clients.onlineV2JsonApi.createDoubt(doubt).enqueue(retrofitCallback { throwable, response ->
-                        response?.body().let {
-                            doubtDialog.dismiss()
-                            thread {
-                                doubtsDao.insert(
-                                    DoubtsModel(
-                                        it!!.id
-                                            ?: "", it.title, it.body, it.content?.id
-                                        ?: "", it.status, it.runAttempt?.id ?: ""
+                    Clients.onlineV2JsonApi.createDoubt(doubt)
+                        .enqueue(retrofitCallback { throwable, response ->
+                            response?.body().let {
+                                doubtDialog.dismiss()
+                                thread {
+                                    doubtsDao.insert(
+                                        DoubtsModel(
+                                            it!!.id
+                                                ?: "", it.title, it.body, it.content?.id
+                                                ?: "", it.status, it.runAttempt?.id ?: ""
+                                        )
                                     )
-                                )
+                                }
                             }
-                        }
-                    })
+                        })
                 }
             }
 
@@ -310,25 +342,32 @@ class VideoPlayerActivity : AppCompatActivity(),
                 contents.id = contentId
                 note.runAttempt = runAttempts
                 note.content = contents
-                Clients.onlineV2JsonApi.createNote(note).enqueue(retrofitCallback { throwable, response ->
-                    response?.body().let {
-                        noteDialog.dismiss()
-                        if (response?.isSuccessful!!)
-                            try {
-                                notesDao.insert(
-                                    NotesModel(
-                                        it!!.id
-                                            ?: "", it.duration ?: 0.0, it.text ?: "", it.content?.id
-                                        ?: "", attemptId, it.createdAt
-                                        ?: "", it.deletedAt
-                                        ?: ""
+                Clients.onlineV2JsonApi.createNote(note)
+                    .enqueue(retrofitCallback { throwable, response ->
+                        response?.body().let {
+                            noteDialog.dismiss()
+                            if (response?.isSuccessful!!)
+                                try {
+                                    notesDao.insert(
+                                        NotesModel(
+                                            it!!.id
+                                                ?: "",
+                                            it.duration ?: 0.0,
+                                            it.text ?: "",
+                                            it.content?.id
+                                                ?: "",
+                                            attemptId,
+                                            it.createdAt
+                                                ?: "",
+                                            it.deletedAt
+                                                ?: ""
+                                        )
                                     )
-                                )
-                            } catch (e: Exception) {
-                                info { "error" + e.localizedMessage }
-                            }
-                    }
-                })
+                                } catch (e: Exception) {
+                                    info { "error" + e.localizedMessage }
+                                }
+                        }
+                    })
             }
         }
 
@@ -405,17 +444,19 @@ class VideoPlayerActivity : AppCompatActivity(),
             this@VideoPlayerActivity.playWhenReady = playWhenReady
         }
     }
-    private val fullscreenToggleListener = VdoPlayerControlView.FullscreenActionListener { enterFullscreen ->
-        showFullScreen(enterFullscreen)
-        true
-    }
-    private val visibilityListener = VdoPlayerControlView.ControllerVisibilityListener { visibility ->
-        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (visibility != View.VISIBLE) {
-                showSystemUi(false)
+    private val fullscreenToggleListener =
+        VdoPlayerControlView.FullscreenActionListener { enterFullscreen ->
+            showFullScreen(enterFullscreen)
+            true
+        }
+    private val visibilityListener =
+        VdoPlayerControlView.ControllerVisibilityListener { visibility ->
+            if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                if (visibility != View.VISIBLE) {
+                    showSystemUi(false)
+                }
             }
         }
-    }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         val newOrientation = newConfig.orientation

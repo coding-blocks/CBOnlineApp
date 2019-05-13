@@ -1,5 +1,5 @@
 package com.codingblocks.cbonlineapp
 
 interface DownloadStarter {
-    fun startDownload(url: String, id: String, lectureContentId: String, title: String, attemptId: String, id1: String, section_id: String)
+    fun startDownload(videoId: String, id: String, lectureContentId: String, title: String, attemptId: String, contentId: String, sectionId: String)
 }
