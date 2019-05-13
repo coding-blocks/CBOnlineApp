@@ -40,10 +40,14 @@ class CBOnlineApp : Application() {
         )
 
         //Configure Routers
-        Router.initActivityRouter(applicationContext, IActivityRouteTableInitializer { router ->
-            router["activity://course/classroom/course/:s{course_id}/run/:s{runId}/overview"] = MyCourseActivity::class.java
-            router["activity://course/https://online.codingblocks.com/courses/:s{courseId}"] = CourseActivity::class.java
-        })
+        try {
+            Router.initActivityRouter(applicationContext, IActivityRouteTableInitializer { router ->
+                router["activity://course/classroom/course/:s{course_id}/run/:s{runId}/overview"] = MyCourseActivity::class.java
+                router["activity://course/https://online.codingblocks.com/courses/:s{courseId}"] = CourseActivity::class.java
+            })
+        } catch(e:ConcurrentModificationException){
+
+        }
 
         val crashlyticsKit = Crashlytics.Builder()
             .core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())

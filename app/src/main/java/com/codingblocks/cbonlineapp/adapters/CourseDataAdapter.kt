@@ -40,6 +40,10 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
         return courseData?.size ?: 0
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         var viewHolder: RecyclerView.ViewHolder? = null

@@ -91,10 +91,17 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
 
         courseDao.getMyCourse(courseId).observe(this, Observer<Course> {
             youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
-                override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
+                override fun onInitializationFailure(
+                    p0: YouTubePlayer.Provider?,
+                    p1: YouTubeInitializationResult?
+                ) {
                 }
 
-                override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
+                override fun onInitializationSuccess(
+                    p0: YouTubePlayer.Provider?,
+                    youtubePlayerInstance: YouTubePlayer?,
+                    p2: Boolean
+                ) {
                     if (!p2) {
                         it?.let {
                             youtubePlayerInstance?.cueVideo(MediaUtils.getYotubeVideoId(it.promoVideo))
@@ -102,7 +109,8 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
                     }
                 }
             }
-            val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
+            val youTubePlayerSupportFragment =
+                supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
             youTubePlayerSupportFragment!!.initialize(YOUTUBE_API_KEY, youtubePlayerInit)
         })
 
@@ -111,168 +119,147 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
     }
 
     private fun fetchCourse(attemptId: String) {
-        Clients.onlineV2JsonApi.enrolledCourseById(attemptId).enqueue(retrofitCallback { throwable, response ->
-            response?.body()?.let { it ->
-                val run = it.run?.run {
-                    CourseRun(
-                        id.toString(),
-                        attemptId,
-                        name.toString(),
-                        description.toString(),
-                        start.toString(),
-                        end.toString(),
-                        price.toString(),
-                        mrp.toString(),
-                        courseId.toString(),
-                        updatedAt.toString()
-                    )
-                }
-                val oldRun = runDao.getRunById(run?.crUid!!)
+        Clients.onlineV2JsonApi.enrolledCourseById(attemptId)
+            .enqueue(retrofitCallback { throwable, response ->
+                response?.body()?.let { it ->
+                    val run = it.run?.run {
+                        CourseRun(
+                            id.toString(),
+                            attemptId,
+                            name.toString(),
+                            description.toString(),
+                            start.toString(),
+                            end.toString(),
+                            price.toString(),
+                            mrp.toString(),
+                            courseId.toString(),
+                            updatedAt.toString()
+                        )
+                    }
+                    val oldRun = runDao.getRunById(run?.crUid!!)
 //                if (oldRun == null) {
 //                    runDao.insert(run)
 //                } else if (oldRun != run) {
 //                    runDao.update(run)
 //                }
-                runDao.insert(run)
+                    runDao.insert(run)
 
-                doAsync {
-                    thread {
-                        //Course Sections List
-                        for (section in it.run?.sections!!) {
-                            val newSection =
-                                CourseSection(
-                                    section.id ?: "", section.name ?: "",
-                                    section.order!!, section.premium!!, section.status ?: "",
-                                    section.run_id ?: "", attemptId, section.updatedAt ?: ""
-                                )
-                            val oldSection = sectionDao.getSectionWithId(section.id!!)
-                            if (oldSection == null)
-                                sectionDao.insert(newSection)
-                            else if (oldSection == newSection) {
-                                sectionDao.update(newSection)
-                            }
-                            Clients.onlineV2JsonApi.getSectionContents(section.courseContentLinks!!.related.href.substring(7)).enqueue(retrofitCallback { throwable, response ->
-                                response?.body().let {
-                                    section.courseContent = it
-                                    //Section Contents List
-                                    section.courseContent?.forEach { content ->
-                                        var contentDocument =
-                                            ContentDocument()
-                                        var contentLecture =
-                                            ContentLecture()
-                                        var contentVideo =
-                                            ContentVideo()
-                                        var contentQna =
-                                            ContentQna()
-                                        var contentCodeChallenge =
-                                            ContentCodeChallenge()
-                                        var contentCsv =
-                                            ContentCsvModel()
+                    doAsync {
+                        thread {
+                            //Course Sections List
+                            for (section in it.run?.sections!!) {
+                                val newSection =
+                                    CourseSection(
+                                        section.id ?: "", section.name ?: "",
+                                        section.order!!, section.premium!!, section.status ?: "",
+                                        section.run_id ?: "", attemptId, section.updatedAt ?: ""
+                                    )
+                                val oldSection = sectionDao.getSectionWithId(section.id!!)
+                                if (oldSection == null)
+                                    sectionDao.insert(newSection)
+                                else if (oldSection == newSection) {
+                                    sectionDao.update(newSection)
+                                }
+                                Clients.onlineV2JsonApi.getSectionContents(
+                                    section.courseContentLinks!!.related.href.substring(
+                                        7
+                                    )
+                                ).enqueue(retrofitCallback { throwable, response ->
+                                    response?.body().let {
+                                        section.courseContent = it
+                                        //Section Contents List
+                                        section.courseContent?.forEach { content ->
+                                            var contentDocument =
+                                                ContentDocument()
+                                            var contentLecture =
+                                                ContentLecture()
+                                            var contentVideo =
+                                                ContentVideo()
+                                            var contentQna =
+                                                ContentQna()
+                                            var contentCodeChallenge =
+                                                ContentCodeChallenge()
+                                            var contentCsv =
+                                                ContentCsvModel()
 
-                                        when {
-                                            content.contentable.equals("lecture") -> content.lecture?.let {
-                                                contentLecture =
-                                                    ContentLecture(
-                                                        it.id ?: "",
-                                                        it.name ?: "",
-                                                        it.duration!!,
-                                                        it.videoId ?: "",
-                                                        content.section_content?.id ?: "",
-                                                        it.updatedAt ?: ""
-                                                    )
+                                            when {
+                                                content.contentable.equals("lecture") -> content.lecture?.let {
+                                                    contentLecture =
+                                                        ContentLecture(
+                                                            it.id ?: "",
+                                                            it.name ?: "",
+                                                            it.duration!!,
+                                                            it.videoId ?: "",
+                                                            content.section_content?.id ?: "",
+                                                            it.updatedAt ?: ""
+                                                        )
+                                                }
+                                                content.contentable.equals("document") -> content.document?.let {
+                                                    contentDocument =
+                                                        ContentDocument(
+                                                            it.id
+                                                                ?: "",
+                                                            it.name ?: "",
+                                                            it.pdf_link ?: "",
+                                                            content.section_content?.id ?: "",
+                                                            it.updatedAt ?: ""
+                                                        )
+                                                }
+                                                content.contentable.equals("video") -> content.video?.let {
+                                                    contentVideo =
+                                                        ContentVideo(
+                                                            it.id ?: "",
+                                                            it.name ?: "",
+                                                            it.duration!!,
+                                                            it.description ?: "",
+                                                            it.url ?: "",
+                                                            content.section_content?.id ?: "",
+                                                            it.updatedAt ?: ""
+                                                        )
+                                                }
+                                                content.contentable.equals("qna") -> content.qna?.let {
+                                                    contentQna =
+                                                        ContentQna(
+                                                            it.id ?: "",
+                                                            it.name ?: "",
+                                                            it.q_id ?: 0,
+                                                            content.section_content?.id ?: "",
+                                                            it.updatedAt ?: ""
+                                                        )
+                                                }
+                                                content.contentable.equals("code_challenge") -> content.code_challenge?.let {
+                                                    contentCodeChallenge =
+                                                        ContentCodeChallenge(
+                                                            it.id
+                                                                ?: "",
+                                                            it.name ?: "",
+                                                            it.hb_problem_id ?: 0,
+                                                            it.hb_contest_id ?: 0,
+                                                            content.section_content?.id ?: "",
+                                                            it.updatedAt ?: ""
+                                                        )
+                                                }
+                                                content.contentable.equals("csv") -> content.csv?.let {
+                                                    contentCsv =
+                                                        ContentCsvModel(
+                                                            it.id
+                                                                ?: "",
+                                                            it.name ?: "",
+                                                            it.description ?: "",
+                                                            it.content_id ?: "",
+                                                            it.updatedAt ?: ""
+                                                        )
+                                                }
                                             }
-                                            content.contentable.equals("document") -> content.document?.let {
-                                                contentDocument =
-                                                    ContentDocument(
-                                                        it.id
-                                                            ?: "",
-                                                        it.name ?: "",
-                                                        it.pdf_link ?: "",
-                                                        content.section_content?.id ?: "",
-                                                        it.updatedAt ?: ""
-                                                    )
+                                            var progressId = ""
+                                            val status: String
+                                            if (content.progress != null) {
+                                                status = content.progress?.status ?: ""
+                                                progressId = content.progress?.id ?: ""
+                                            } else {
+                                                status = "UNDONE"
                                             }
-                                            content.contentable.equals("video") -> content.video?.let {
-                                                contentVideo =
-                                                    ContentVideo(
-                                                        it.id ?: "",
-                                                        it.name ?: "",
-                                                        it.duration!!,
-                                                        it.description ?: "",
-                                                        it.url ?: "",
-                                                        content.section_content?.id ?: "",
-                                                        it.updatedAt ?: ""
-                                                    )
-                                            }
-                                            content.contentable.equals("qna") -> content.qna?.let {
-                                                contentQna =
-                                                    ContentQna(
-                                                        it.id ?: "",
-                                                        it.name ?: "",
-                                                        it.q_id ?: 0,
-                                                        content.section_content?.id ?: "",
-                                                        it.updatedAt ?: ""
-                                                    )
-                                            }
-                                            content.contentable.equals("code_challenge") -> content.code_challenge?.let {
-                                                contentCodeChallenge =
-                                                    ContentCodeChallenge(
-                                                        it.id
-                                                            ?: "",
-                                                        it.name ?: "",
-                                                        it.hb_problem_id ?: 0,
-                                                        it.hb_contest_id ?: 0,
-                                                        content.section_content?.id ?: "",
-                                                        it.updatedAt ?: ""
-                                                    )
-                                            }
-                                            content.contentable.equals("csv") -> content.csv?.let {
-                                                contentCsv =
-                                                    ContentCsvModel(
-                                                        it.id
-                                                            ?: "",
-                                                        it.name ?: "",
-                                                        it.description ?: "",
-                                                        it.content_id ?: "",
-                                                        it.updatedAt ?: ""
-                                                    )
-                                            }
-                                        }
-                                        var progressId = ""
-                                        val status: String
-                                        if (content.progress != null) {
-                                            status = content.progress?.status ?: ""
-                                            progressId = content.progress?.id ?: ""
-                                        } else {
-                                            status = "UNDONE"
-                                        }
-                                        val oldContent =
-                                            CourseContent(
-                                                content.id ?: "", status, progressId,
-                                                content.title ?: "", content.duration!!,
-                                                content.contentable
-                                                    ?: "", content.section_content?.order!!,
-                                                content.section_content?.sectionId
-                                                    ?: "", attemptId,
-                                                section.premium!!,
-                                                content.section_content?.updatedAt
-                                                    ?: "",
-                                                contentLecture,
-                                                contentDocument,
-                                                contentVideo,
-                                                contentQna,
-                                                contentCodeChallenge,
-                                                contentCsv
-                                            )
-                                        val updateContent = contentDao.getContentWithId(attemptId, content.id
-                                            ?: "")
-                                        if (updateContent == null) {
-                                            contentDao.insert(oldContent)
-                                            insertSectionWithContent(section.id
-                                                ?: "", content.id ?: "")
-                                        } else if (updateContent != oldContent) {
-                                            info { "content is updating" }
-                                            contentDao.update(
+                                            val oldContent =
                                                 CourseContent(
                                                     content.id ?: "", status, progressId,
                                                     content.title ?: "", content.duration!!,
@@ -287,34 +274,65 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
                                                     contentDocument,
                                                     contentVideo,
                                                     contentQna,
-                                                    contentCodeChallenge
+                                                    contentCodeChallenge,
+                                                    contentCsv
                                                 )
+                                            val updateContent = contentDao.getContentWithId(
+                                                attemptId, content.id
+                                                    ?: ""
                                             )
+                                            if (updateContent == null) {
+                                                contentDao.insert(oldContent)
+                                                insertSectionWithContent(
+                                                    section.id
+                                                        ?: "", content.id ?: ""
+                                                )
+                                            } else if (updateContent != oldContent) {
+                                                info { "content is updating" }
+                                                contentDao.update(
+                                                    CourseContent(
+                                                        content.id ?: "", status, progressId,
+                                                        content.title ?: "", content.duration!!,
+                                                        content.contentable
+                                                            ?: "", content.section_content?.order!!,
+                                                        content.section_content?.sectionId
+                                                            ?: "", attemptId,
+                                                        section.premium!!,
+                                                        content.section_content?.updatedAt
+                                                            ?: "",
+                                                        contentLecture,
+                                                        contentDocument,
+                                                        contentVideo,
+                                                        contentQna,
+                                                        contentCodeChallenge
+                                                    )
+                                                )
+                                            }
                                         }
                                     }
-                                }
-                                info { throwable?.localizedMessage }
-                            })
+                                    info { throwable?.localizedMessage }
+                                })
+                            }
                         }
                     }
                 }
-            } ?: run {
-                alert {
-                    title = "Error Fetching Course"
-                    message = """
+                throwable?.let {
+                    if (!it.localizedMessage.contains("Unable to resolve"))
+                        alert {
+                            title = "Error Fetching Course"
+                            message = """
                         There was an error downloading course contents.
                         Please contact support@codingblocks.com
                         """.trimIndent()
-                    yesButton {
-                        it.dismiss()
-                        finish()
-                    }
-                    isCancelable = false
-                }.show()
-            }
-
-            info { "error ${throwable?.localizedMessage}" }
-        })
+                            yesButton {
+                                it.dismiss()
+                                finish()
+                            }
+                            isCancelable = false
+                        }.show()
+                }
+                info { "error ${throwable?.localizedMessage}" }
+            })
     }
 
     private fun insertSectionWithContent(sectionId: String, contentId: String) {

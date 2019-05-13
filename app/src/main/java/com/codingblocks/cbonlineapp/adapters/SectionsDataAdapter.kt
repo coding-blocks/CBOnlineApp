@@ -34,6 +34,9 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
 
         return sectionData!!.size
     }
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
         context = parent.context

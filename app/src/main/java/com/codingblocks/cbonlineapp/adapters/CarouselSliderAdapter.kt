@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.adapters
 
 import android.content.Context
-import android.graphics.Color
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,7 @@ import com.codingblocks.onlineapi.models.CarouselCards
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_carousel.view.*
 
-class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Context) : PagerAdapter() {
+class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Context?) : PagerAdapter() {
 
 
     override fun isViewFromObject(p0: View, p1: Any): Boolean {
@@ -41,7 +40,10 @@ class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Co
         view.button.setOnClickListener {
             when {
                 list[position].buttonLink == "http://cb.lk/ss" -> {
-                    val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(mContext.resources.getColor(R.color.colorPrimaryDark))
+                    val builder = CustomTabsIntent.Builder().enableUrlBarHiding()
+                        mContext?.let {
+                           builder.enableUrlBarHiding().setToolbarColor(it.resources.getColor(R.color.colorPrimaryDark))
+                        }
                     val customTabsIntent = builder.build()
                     customTabsIntent.launchUrl(mContext, Uri.parse(list[position].buttonLink))
                 }
