@@ -289,7 +289,7 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
                                                         ?: "", content.id ?: ""
                                                 )
                                             } else if (updateContent != oldContent) {
-                                                contentLecture.isDownloaded =  "true"
+                                                contentLecture.isDownloaded =  updateContent.contentLecture.isDownloaded
                                                 contentDao.update(
                                                     CourseContent(
                                                         content.id ?: "", status, progressId,

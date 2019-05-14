@@ -164,6 +164,11 @@ class DownloadService : IntentService("Download Service"), AnkoLogger,
     }
 
     override fun onFailed(p0: String?, p1: DownloadStatus?) {
+        notificationManager.cancel(0)
+        notificationBuilder.setOngoing(false)
+        notificationBuilder.setContentText("Download Failed")
+        notificationManager.notify(0, notificationBuilder.build())
+
     }
 
     override fun onQueued(p0: String?, p1: DownloadStatus?) {
