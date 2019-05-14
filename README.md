@@ -13,6 +13,17 @@ Application is available here:
 
 <a href='https://play.google.com/store/apps/details?id=com.codingblocks.cbonlineapp'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="80"/></a>
 
+## Screenshots
+<table>
+        <tr>
+          <td><img src = "app/screenshots/home.png" height = "480" width="270"></td>
+          <td><img src = "app/screenshots/course-details.png" height = "480" width="270"></td>
+          <td><img src = "app/screenshots/my-courses.png" height = "480" width="270"></td>
+          <td><img src = "app/screenshots/nav-drawer.png" height = "480" width="270"></td>
+          <td><img src = "app/screenshots/player.png" height = "480" width="270"></td>
+        </tr>
+</table>    
+
 ### Libraries used and their documentation
 
 - Retrofit [Docs](http://square.github.io/retrofit/2.x/retrofit/)
