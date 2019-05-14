@@ -44,7 +44,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?)
-            : View? = inflater.inflate(R.layout.fragment_quiz, container, false).apply {
+        : View? = inflater.inflate(R.layout.fragment_quiz, container, false).apply {
         firebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     }
@@ -157,8 +157,9 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                 val fragmentTransaction = fragmentManager.beginTransaction()
                 fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                 fragmentTransaction.replace(R.id.framelayout_quiz,
-                        AboutQuizFragment.newInstance(quizId,
-                                attemptId), "quiz")
+                    // AboutQuizFragment.newInstance(quizId,
+                    //        attemptId), "quiz")
+                    QuizResultFragment())
 //            fragmentTransaction.addToBackStack("quiz")
                 fragmentTransaction.commit()
             } else
@@ -184,15 +185,15 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     companion object {
         @JvmStatic
         fun newInstance(quizId: String, attemptId: String, quizAttemptId: String) =
-                QuizFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_QUIZ_ID, quizId)
-                        putString(ARG_ATTEMPT_ID, attemptId)
-                        putString(ARG_QUIZ_ATTEMPT_ID, quizAttemptId)
+            QuizFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_QUIZ_ID, quizId)
+                    putString(ARG_ATTEMPT_ID, attemptId)
+                    putString(ARG_QUIZ_ATTEMPT_ID, quizAttemptId)
 
 
-                    }
                 }
+            }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
