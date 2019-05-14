@@ -152,7 +152,7 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
                                     CourseSection(
                                         section.id ?: "", section.name ?: "",
                                         section.order!!, section.premium!!, section.status ?: "",
-                                        section.run_id ?: "", attemptId, section.updatedAt ?: ""
+                                        section.runId ?: "", attemptId, section.updatedAt ?: ""
                                     )
                                 val oldSection = sectionDao.getSectionWithId(section.id!!)
                                 if (oldSection == null)
@@ -190,7 +190,7 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
                                                             it.name ?: "",
                                                             it.duration!!,
                                                             it.videoId ?: "",
-                                                            content.section_content?.id ?: "",
+                                                            content.sectionContent?.id ?: "",
                                                             it.updatedAt ?: ""
                                                         )
                                                 }
@@ -200,8 +200,8 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
                                                             it.id
                                                                 ?: "",
                                                             it.name ?: "",
-                                                            it.pdf_link ?: "",
-                                                            content.section_content?.id ?: "",
+                                                            it.pdfLink ?: "",
+                                                            content.sectionContent?.id ?: "",
                                                             it.updatedAt ?: ""
                                                         )
                                                 }
@@ -213,7 +213,7 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
                                                             it.duration!!,
                                                             it.description ?: "",
                                                             it.url ?: "",
-                                                            content.section_content?.id ?: "",
+                                                            content.sectionContent?.id ?: "",
                                                             it.updatedAt ?: ""
                                                         )
                                                 }
@@ -222,20 +222,20 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
                                                         ContentQna(
                                                             it.id ?: "",
                                                             it.name ?: "",
-                                                            it.q_id ?: 0,
-                                                            content.section_content?.id ?: "",
+                                                            it.qId ?: 0,
+                                                            content.sectionContent?.id ?: "",
                                                             it.updatedAt ?: ""
                                                         )
                                                 }
-                                                content.contentable.equals("code_challenge") -> content.code_challenge?.let {
+                                                content.contentable.equals("code_challenge") -> content.codeChallenge?.let {
                                                     contentCodeChallenge =
                                                         ContentCodeChallenge(
                                                             it.id
                                                                 ?: "",
                                                             it.name ?: "",
-                                                            it.hb_problem_id ?: 0,
-                                                            it.hb_contest_id ?: 0,
-                                                            content.section_content?.id ?: "",
+                                                            it.hbProblemId ?: 0,
+                                                            it.hbContestId ?: 0,
+                                                            content.sectionContent?.id ?: "",
                                                             it.updatedAt ?: ""
                                                         )
                                                 }
@@ -246,7 +246,7 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
                                                                 ?: "",
                                                             it.name ?: "",
                                                             it.description ?: "",
-                                                            it.content_id ?: "",
+                                                            it.contentId ?: "",
                                                             it.updatedAt ?: ""
                                                         )
                                                 }
@@ -264,11 +264,11 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
                                                     content.id ?: "", status, progressId,
                                                     content.title ?: "", content.duration!!,
                                                     content.contentable
-                                                        ?: "", content.section_content?.order!!,
-                                                    content.section_content?.sectionId
+                                                        ?: "", content.sectionContent?.order!!,
+                                                    content.sectionContent?.sectionId
                                                         ?: "", attemptId,
                                                     section.premium!!,
-                                                    content.section_content?.updatedAt
+                                                    content.sectionContent?.updatedAt
                                                         ?: "",
                                                     contentLecture,
                                                     contentDocument,
@@ -295,11 +295,11 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
                                                         content.id ?: "", status, progressId,
                                                         content.title ?: "", content.duration!!,
                                                         content.contentable
-                                                            ?: "", content.section_content?.order!!,
-                                                        content.section_content?.sectionId
+                                                            ?: "", content.sectionContent?.order!!,
+                                                        content.sectionContent?.sectionId
                                                             ?: "", attemptId,
                                                         section.premium!!,
-                                                        content.section_content?.updatedAt
+                                                        content.sectionContent?.updatedAt
                                                             ?: "",
                                                         contentLecture,
                                                         contentDocument,
