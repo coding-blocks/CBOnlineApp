@@ -14,7 +14,7 @@
         android:elevation="4dp"
         android:gravity="center_vertical"
         app:theme="@style/ToolBarStyle"
-        app:title="About Us" />
+        app:title="Contact Us" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -115,7 +115,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="32dp"
                     android:lineSpacingExtra="3dp"
-                    android:text="1st Floor, 47, Nishant Kunj, Main Pitampura Road, New Delhi  Near Kohat Enclave Metro Station (Exit from Gate # 2) (Opposite Pillar 337)"
+                    android:text="1st Floor, 47, Nishant Kunj, Main Pitampura Road, New Delhi Near Kohat Enclave Metro Station(Exit from Gate # 2)(Opposite Pillar 337)"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -154,7 +154,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
                 <TextView
-                    android:id="@+id/textView24"
+                    android:id="@+id/phone1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
@@ -167,18 +167,18 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
                 <TextView
-                    android:id="@+id/textView25"
+                    android:id="@+id/phone2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="011 - 27354126"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="@+id/textView24"
-                    app:layout_constraintStart_toStartOf="@+id/textView24"
-                    app:layout_constraintTop_toBottomOf="@+id/textView24" />
+                    app:layout_constraintEnd_toEndOf="@+id/phone1"
+                    app:layout_constraintStart_toStartOf="@+id/phone1"
+                    app:layout_constraintTop_toBottomOf="@+id/phone1" />
 
                 <TextView
-                    android:id="@+id/textView26"
+                    android:id="@+id/email1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
@@ -191,7 +191,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView25" />
+                    app:layout_constraintTop_toBottomOf="@+id/phone2" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
