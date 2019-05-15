@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
 
         createDownloadChannel(MediaUtils.DOWNLOAD_CHANNEL_ID)
 
-        login_button.setOnClickListener {
+        loginBtn.setOnClickListener {
             val builder = CustomTabsIntent.Builder()
                     .enableUrlBarHiding()
                     .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
