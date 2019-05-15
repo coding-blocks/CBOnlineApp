@@ -14,7 +14,7 @@
         android:elevation="4dp"
         android:gravity="center_vertical"
         app:theme="@style/ToolBarStyle"
-        app:title="About Us" />
+        app:title="Contact Us" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -30,16 +30,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
             <TextView
                 android:id="@+id/textView18"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="@dimen/centre_container_textviews_horizontal"
                 android:layout_marginEnd="16dp"
                 android:letterSpacing="0.25"
-                android:text="OUR CENTRES"
+                android:text="@string/our_centres"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="22sp"
@@ -55,7 +54,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:letterSpacing="0.5"
-                android:text="+1800 274 4504"
+                android:text="@string/tollfree_number"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="26sp"
@@ -68,9 +67,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/centre_container_s_vertical"
                 android:layout_marginEnd="16dp"
-                android:text="Admissions@Codingblocks.com"
+                android:text="@string/email_cb"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/salmon"
@@ -80,121 +79,449 @@
                 app:layout_constraintTop_toBottomOf="@+id/callTv" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="@dimen/centre_container_margin"
+                android:layout_marginTop="@dimen/centre_container_margin"
+                android:layout_marginEnd="@dimen/centre_container_margin"
                 android:background="#fc4f4f"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mailTv">
 
                 <TextView
-                    android:id="@+id/textView20"
+                    android:id="@+id/textView1_20"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_el_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
                     android:letterSpacing="0.1"
-                    android:text="Pitampura(Corporate Office)"
+                    android:text="@string/pitampura"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/white"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/centre_name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView21"
+                    android:id="@+id/textView1_21"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_el_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
                     android:lineSpacingExtra="3dp"
-                    android:text="1st Floor, 47, Nishant Kunj, Main Pitampura Road, New Delhi  Near Kohat Enclave Metro Station (Exit from Gate # 2) (Opposite Pillar 337)"
+                    android:text="@string/pitampura_address"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView20" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView1_20" />
 
                 <TextView
-                    android:id="@+id/textView22"
+                    android:id="@+id/textView1_22"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="32dp"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_l_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
                     android:letterSpacing="0.5"
-                    android:text="Contact"
+                    android:text="@string/contact"
                     android:textAllCaps="true"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView21" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView1_21" />
 
                 <TextView
-                    android:id="@+id/textView23"
+                    android:id="@+id/textView1_23"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="32dp"
-                    android:text="Mrs. Priyanka Dagar"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_s_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:text="@string/pitampura_head"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/centre_head_name"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView22" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView1_22" />
 
                 <TextView
-                    android:id="@+id/textView24"
+                    android:id="@+id/phone1_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="32dp"
-                    android:text="011 - 47052584"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_xs_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:text="@string/phone1_1"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView23" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView1_23" />
 
                 <TextView
-                    android:id="@+id/textView25"
+                    android:id="@+id/phone1_2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="011 - 27354126"
+                    android:text="@string/phone1_2"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="@+id/textView24"
-                    app:layout_constraintStart_toStartOf="@+id/textView24"
-                    app:layout_constraintTop_toBottomOf="@+id/textView24" />
+                    app:layout_constraintEnd_toEndOf="@+id/phone1_1"
+                    app:layout_constraintStart_toStartOf="@+id/phone1_1"
+                    app:layout_constraintTop_toBottomOf="@+id/phone1_1" />
 
                 <TextView
-                    android:id="@+id/textView26"
+                    android:id="@+id/email1_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginBottom="12dp"
-                    android:text="priyanka.dagar@codingblocks.com"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_l_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginBottom="@dimen/centre_container_l_vertical"
+                    android:text="@string/email1_1"
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView25" />
+                    app:layout_constraintTop_toBottomOf="@+id/phone1_2" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/centre_container_margin"
+                android:layout_marginTop="@dimen/centre_container_margin"
+                android:layout_marginEnd="@dimen/centre_container_margin"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_1">
+
+                <TextView
+                    android:id="@+id/textView2_20"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_el_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:letterSpacing="0.1"
+                    android:text="@string/noida_center"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/centre_name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView2_21"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_el_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:lineSpacingExtra="3dp"
+                    android:text="@string/noida_address"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2_20" />
+
+                <TextView
+                    android:id="@+id/textView2_22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:letterSpacing="0.5"
+                    android:text="@string/contact"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2_21" />
+
+                <TextView
+                    android:id="@+id/textView2_23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_s_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:text="@string/noida_head"
+                    android:textSize="@dimen/centre_head_name"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2_22" />
+
+                <TextView
+                    android:id="@+id/phone2_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_xs_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:text="@string/phone2_1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2_23" />
+
+                <TextView
+                    android:id="@+id/phone2_2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/phone2_2"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="@+id/phone2_1"
+                    app:layout_constraintStart_toStartOf="@+id/phone2_1"
+                    app:layout_constraintTop_toBottomOf="@+id/phone2_1" />
+
+                <TextView
+                    android:id="@+id/email2_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_l_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginBottom="@dimen/centre_container_l_vertical"
+                    android:text="@string/email2_1"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/phone2_2" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/centre_container_margin"
+                android:layout_marginTop="@dimen/centre_container_margin"
+                android:layout_marginEnd="@dimen/centre_container_margin"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_2">
+
+                <TextView
+                    android:id="@+id/textView3_20"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_el_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:letterSpacing="0.1"
+                    android:text="@string/dwarka_center"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/centre_name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView3_21"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_el_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:lineSpacingExtra="3dp"
+                    android:text="@string/dwarda_address"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3_20" />
+
+                <TextView
+                    android:id="@+id/textView3_22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_l_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:letterSpacing="0.5"
+                    android:text="@string/contact"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3_21" />
+
+                <TextView
+                    android:id="@+id/textView3_23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_s_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:text="@string/dwarka_head"
+                    android:textSize="@dimen/centre_head_name"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3_22" />
+
+                <TextView
+                    android:id="@+id/phone3_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_xs_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:text="@string/phone3_1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3_23" />
+
+                <TextView
+                    android:id="@+id/phone3_2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/phone3_2"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="@+id/phone3_1"
+                    app:layout_constraintStart_toStartOf="@+id/phone3_1"
+                    app:layout_constraintTop_toBottomOf="@+id/phone3_1" />
+
+                <TextView
+                    android:id="@+id/email3_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_l_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginBottom="@dimen/centre_container_l_vertical"
+                    android:text="@string/email3_1"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/phone3_2" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/centre_container_margin"
+                android:layout_marginTop="@dimen/centre_container_margin"
+                android:layout_marginEnd="@dimen/centre_container_margin"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_3">
+
+                <TextView
+                    android:id="@+id/textView4_20"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_el_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:letterSpacing="0.1"
+                    android:text="@string/dehradun_center"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/centre_name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView4_21"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_el_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:lineSpacingExtra="3dp"
+                    android:text="@string/dehradun_address"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4_20" />
+
+                <TextView
+                    android:id="@+id/textView4_22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_l_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:letterSpacing="0.5"
+                    android:text="@string/contact"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4_21" />
+
+                <TextView
+                    android:id="@+id/textView4_23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_s_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:text="@string/dehradun_head"
+                    android:textSize="@dimen/centre_head_name"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4_22" />
+
+                <TextView
+                    android:id="@+id/phone4_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_xs_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:text="@string/phone4_1"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4_23" />
+
+                <TextView
+                    android:id="@+id/phone4_2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/phone4_2"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="@+id/phone4_1"
+                    app:layout_constraintStart_toStartOf="@+id/phone4_1"
+                    app:layout_constraintTop_toBottomOf="@+id/phone4_1" />
+
+                <TextView
+                    android:id="@+id/email4_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginTop="@dimen/centre_container_l_vertical"
+                    android:layout_marginEnd="@dimen/centre_container_textviews_horizontal"
+                    android:layout_marginBottom="@dimen/centre_container_l_vertical"
+                    android:text="@string/email4_1"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/phone4_2" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </androidx.core.widget.NestedScrollView>
 </RelativeLayout>
