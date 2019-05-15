@@ -62,4 +62,7 @@
     <string name="my_courses">My Courses</string>
     <string name="doubt_description_error">Description length must be atleast 20 characters.</string>
     <string name="doubt_title_error">Title length must be atleast 15 characters.</string>
+    <!--Strings For Layouts !-->
+    <string name="login_now">Login Now</string>
+    <string name="skip">Skip</string>
 </resources>
