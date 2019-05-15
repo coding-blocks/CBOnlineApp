@@ -1,25 +1,31 @@
 package com.codingblocks.cbonlineapp.fragments
 
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.adapters.ChoicesAdapter
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.ViewPagerAdapter
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Question
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.bottom_question_sheet.*
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.childrenSequence
 import org.jetbrains.anko.textColor
 
 
@@ -28,7 +34,7 @@ private const val ARG_ATTEMPT_ID = "attempt_id"
 private const val ARG_QUIZ_ATTEMPT_ID = "quiz_attempt_id"
 
 
-class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener {
+class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener, ViewPagerAdapter.choiceMarkedInteractor, ChoicesAdapter.ChoiceClickListener {
 
 
     private lateinit var quizId: String
@@ -36,10 +42,13 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     private lateinit var quizAttemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-
     lateinit var mAdapter: ViewPagerAdapter
     var questionList = HashMap<Int, String>()
     var sheetBehavior: BottomSheetBehavior<*>? = null
+    var markedpositions = ArrayList<Int>()
+    lateinit var numberBtn: Button
+    lateinit var rowLayout: LinearLayout
+    lateinit var choiceNumberAdapter: ChoicesAdapter
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -65,13 +74,13 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
         Clients.onlineV2JsonApi.getQuizById(quizId).enqueue(retrofitCallback { _, response ->
             response?.body()?.let { quiz ->
-                setUpQuestionBottomSheet(quiz.questions?.size ?: 0)
+                setUpQuestionBottomSheet(quiz.questions!!)
                 quiz.questions?.forEachIndexed { index, question ->
                     questionList[index] = question.id ?: ""
                     if (index == quiz.questions!!.size - 1) {
                         Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, attemptResponse ->
                             attemptResponse?.body().let {
-                                mAdapter = ViewPagerAdapter(context!!, quizId, quizAttemptId, attemptId, questionList, it?.submission, it?.result)
+                                mAdapter = ViewPagerAdapter(this,context!!, quizId, quizAttemptId, attemptId, questionList, it?.submission, it?.result)
                                 quizViewPager.adapter = mAdapter
                                 quizViewPager.currentItem = 0
                                 quizViewPager.setOnPageChangeListener(this)
@@ -81,44 +90,61 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
                     }
                 }
-
             }
         })
 
     }
 
-    private fun setUpQuestionBottomSheet(size: Int) {
-        var count = 0
+    override fun markedPosition(pos: Int) {
+        markedpositions.add(quizViewPager.currentItem)
+        choiceNumberAdapter.notifyDataSetChanged()
+    }
 
-        val dpValue = 60 // margin in dips
-        val d = context!!.resources.displayMetrics.density
-        val buttonSize = (dpValue * d).toInt() // margin in pixels
-        val buttonParams = LinearLayout.LayoutParams(buttonSize, buttonSize)
-        buttonParams.setMargins(buttonSize / 6, buttonSize / 12, buttonSize / 6, buttonSize / 12)
-        var rowLayout: LinearLayout
-        rowLayout = LinearLayout(context)
-        rowLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        rowLayout.orientation = LinearLayout.HORIZONTAL
-        numberLayout.addView(rowLayout)
-        for (i in 0 until size) {
-            if (count == 3) {
-                count = 0
-                rowLayout = LinearLayout(context)
-                rowLayout.orientation = LinearLayout.HORIZONTAL
-                rowLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                numberLayout.addView(rowLayout)
-            }
-            val numberBtn = Button(context)
-            numberBtn.background = context!!.getDrawable(R.drawable.button_rounded_background)
-            numberBtn.textColor = context!!.resources.getColor(R.color.white)
-            numberBtn.layoutParams = buttonParams
-            numberBtn.text = (i + 1).toString()
-            numberBtn.setOnClickListener {
-                quizViewPager.currentItem = i
-            }
-            count++
-            rowLayout.addView(numberBtn)
-        }
+    override fun onChoiceClicked(pos: Int) {
+        quizViewPager.currentItem = pos
+    }
+
+    private fun setUpQuestionBottomSheet(questions: ArrayList<Question>) {
+//        var count = 0
+//
+//        val dpValue = 60 // margin in dips
+//        val d = context!!.resources.displayMetrics.density
+//        val buttonSize = (dpValue * d).toInt() // margin in pixels
+//        val buttonParams = LinearLayout.LayoutParams(buttonSize, buttonSize)
+//        buttonParams.setMargins(buttonSize / 6, buttonSize / 12, buttonSize / 6, buttonSize / 12)
+//        rowLayout = LinearLayout(context)
+//        rowLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+//        rowLayout.orientation = LinearLayout.HORIZONTAL
+//        numberLayout.addView(rowLayout)
+//        for (i in 0 until questions.size) {
+//            if (count == 3) {
+//                count = 0
+//                rowLayout = LinearLayout(context)
+//                rowLayout.orientation = LinearLayout.HORIZONTAL
+//                rowLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+//                numberLayout.addView(rowLayout)
+//            }
+//            numberBtn = Button(context)
+//            numberBtn.background = context!!.getDrawable(R.drawable.button_rounded_background)
+//            numberBtn.textColor = context!!.resources.getColor(R.color.white)
+//            numberBtn.layoutParams = buttonParams
+//            numberBtn.text = (i + 1).toString()
+//            numberBtn.setOnClickListener {
+//                quizViewPager.currentItem = i
+//            }
+//            count++
+//            rowLayout.addView(numberBtn)
+//        }
+
+
+        //recyclerview implementation
+        choiceNumberAdapter = ChoicesAdapter(this)
+        numbersRv.layoutManager = GridLayoutManager(context,3)
+        numbersRv.adapter = choiceNumberAdapter
+        choiceNumberAdapter.setdata(questions, markedpositions)
+        choiceNumberAdapter.notifyDataSetChanged()
+
+
     }
 
     override fun onPageScrollStateChanged(state: Int) {

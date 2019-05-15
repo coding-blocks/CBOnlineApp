@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.adapters
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,10 +21,9 @@ import kotlinx.android.synthetic.main.quizlayout.view.*
 import org.jetbrains.anko.AnkoLogger
 
 
-class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: String, var attemptId: String, private var questionList: HashMap<Int, String>, submission: List<QuizSubmission>?, var result: QuizResult?) : PagerAdapter(), AnkoLogger {
+class ViewPagerAdapter(private val interactor: choiceMarkedInteractor,var mContext: Context, var quizId: String, var qaId: String, var attemptId: String, private var questionList: HashMap<Int, String>, submission: List<QuizSubmission>?, var result: QuizResult?) : PagerAdapter(), AnkoLogger {
     private lateinit var choiceDataAdapter: QuizChoiceAdapter
     var submissionList: ArrayList<QuizSubmission> = submission as ArrayList<QuizSubmission>
-
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
 
@@ -52,6 +52,8 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                         if (result == null) {
                             //marking correct option in the list
                             it.choices!![position].marked = true
+//                            Log.d("marks_pager","${getItemPosition(this@ViewPagerAdapter)}")
+                            interactor.markedPosition(getItemPosition(this@ViewPagerAdapter))
 
                             //unmarking rest of the options
                             it.choices!!.forEachIndexed { index, choice ->
@@ -131,5 +133,9 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
 
     override fun getCount(): Int {
         return questionList.size
+    }
+
+    interface choiceMarkedInteractor{
+        fun markedPosition(pos: Int)
     }
 }
