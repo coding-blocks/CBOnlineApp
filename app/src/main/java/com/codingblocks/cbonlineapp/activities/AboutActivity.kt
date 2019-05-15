@@ -20,26 +20,29 @@ class AboutActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         callTv.setOnClickListener {
-            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:18002744504"))
-            startActivity(intent)
+            dialPhone(callTv.text.toString());
         }
         mailTv.setOnClickListener {
             email(mailTv.text.toString())
         }
 
-        phone1.setOnClickListener {
-            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${phone1.text}"))
-            startActivity(intent)
+        phone1_1.setOnClickListener {
+            dialPhone(phone1_1.text.toString());
         }
 
-        phone2.setOnClickListener {
-            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${phone2.text}"))
-            startActivity(intent)
+        phone1_2.setOnClickListener {
+            dialPhone(phone1_2.text.toString());
         }
 
-        email1.setOnClickListener {
+        email1_1.setOnClickListener {
             email(mailTv.text.toString())
+
         }
+    }
+
+    fun dialPhone(s: String) {
+        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${s}"))
+        startActivity(intent)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

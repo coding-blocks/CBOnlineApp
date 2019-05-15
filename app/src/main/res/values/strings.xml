@@ -65,4 +65,32 @@
     <!--Strings For Layouts !-->
     <string name="login_now">Login Now</string>
     <string name="skip">Skip</string>
+    <string name="tollfree_number">+1800 274 4504</string>
+    <string name="email_cb">Admissions@Codingblocks.com</string>
+    <string name="pitampura_address">1st Floor, 47, Nishant Kunj, Main Pitampura Road, New Delhi Near Kohat Enclave Metro Station(Exit from Gate # 2)(Opposite Pillar 337)</string>
+    <string name="phone1_1">011 - 47052584</string>
+    <string name="phone1_2">011 - 27354126</string>
+    <string name="email1_1">priyanka.dagar@codingblocks.com</string>
+    <string name="noida_address">Coding Blocks Noida, First Floor, A-73, Sector-2 (50m from Sector-15 Metro Station), Noida - 201301</string>
+    <string name="phone2_1">9999579111</string>
+    <string name="phone2_2">9999579222</string>
+    <string name="email2_1">varun@codingblocks.com</string>
+    <string name="dwarda_address">2nd Floor, Plot No. 3, Sector 11, Dwarka, New Delhi (Near Dwarka Sec-11 Metro)</string>
+    <string name="phone3_1">8588801217</string>
+    <string name="phone3_2">9811228053</string>
+    <string name="email3_1">rajesh@codingblocks.com</string>
+    <string name="dehradun_address">Second Floor, Suvidha Supermarket, 220/105, Saharanpur Road, Patel Nagar, Dehradun - 248001</string>
+    <string name="phone4_1">7830031872</string>
+    <string name="phone4_2">9540613790</string>
+    <string name="email4_1">raj.saini@codingblocks.com</string>
+    <string name="dehradun_head">Mr. Raj Kumar Saini</string>
+    <string name="dwarka_head">Mr. Rajesh Sachdev</string>
+    <string name="noida_head">Varun Kohli</string>
+    <string name="pitampura_head">Mrs. Priyanka Dagar</string>
+    <string name="pitampura">Pitampura\n(Corporate Office)</string>
+    <string name="noida_center">NOIDA CENTER</string>
+    <string name="dwarka_center">DWARKA CENTER</string>
+    <string name="dehradun_center">DEHRADUN CENTER</string>
+    <string name="our_centres">OUR CENTRES</string>
+    <string name="contact">Contact</string>
 </resources>
