@@ -159,7 +159,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                 fragmentTransaction.replace(R.id.framelayout_quiz,
                     // AboutQuizFragment.newInstance(quizId,
                     //        attemptId), "quiz")
-                    QuizResultFragment())
+                    QuizResultFragment.newInstance(quizAttemptId))
 //            fragmentTransaction.addToBackStack("quiz")
                 fragmentTransaction.commit()
             } else
