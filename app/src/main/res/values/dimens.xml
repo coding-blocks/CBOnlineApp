@@ -14,5 +14,13 @@
 
     <!-- text size -->
     <dimen name="text_size_moderate">18sp</dimen>
+    <dimen name="centre_container_margin">8dp</dimen>
+    <dimen name="centre_container_textviews_horizontal">32dp</dimen>
+    <dimen name="centre_container_el_vertical">16dp</dimen>
+    <dimen name="centre_container_l_vertical">12dp</dimen>
+    <dimen name="centre_name">24sp</dimen>
+    <dimen name="centre_head_name">18sp</dimen>
+    <dimen name="centre_container_s_vertical">8dp</dimen>
+    <dimen name="centre_container_xs_vertical">4dp</dimen>
 
 </resources>
