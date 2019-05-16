@@ -40,12 +40,17 @@ class ViewPagerAdapter(private val interactor: choiceMarkedInteractor,var mConte
             view.submitButton.visibility = View.VISIBLE
         }
         Clients.onlineV2JsonApi.getQuestionById(questionList[pos]!!).enqueue(retrofitCallback { throwable, response ->
-            response?.body().let { it ->
+            response?.body().let {
                 view.questionTitle.text = "Q${pos + 1}. ${it?.title}"
                 if (it?.title.equals(it?.description)) {
                     view.questionDescription.visibility = View.GONE
                 } else {
-                    view.questionDescription.loadMarkdown(it?.description)
+                    it?.description?.let {
+                        view.questionDescription.loadMarkdown(it)
+                    } ?: run{
+                        view.questionDescription.visibility = View.GONE
+
+                    }
                 }
                 choiceDataAdapter = QuizChoiceAdapter(it?.choices!!, object : OnItemClickListener {
                     override fun onItemClick(position: Int, id: String) {

@@ -30,8 +30,10 @@ import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.VdoPlayerControlView
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Contents
+import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
+import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.codingblocks.onlineapi.models.RunAttemptsModel
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
@@ -68,11 +70,22 @@ class VideoPlayerActivity : AppCompatActivity(),
     private var videoPlayer: VdoPlayer? = null
     private var mOtp: String? = null
     private var mPlaybackInfo: String? = null
-    private lateinit var attemptId: String
-    private lateinit var contentId: String
-    private lateinit var sectionId: String
-    private lateinit var videoId: String
-    private var download: Boolean = false
+
+    private val attemptId by lazy {
+        intent.getStringExtra(RUN_ATTEMPT_ID)
+    }
+    private val contentId by lazy {
+        intent.getStringExtra(CONTENT_ID)
+    }
+    private val sectionId by lazy {
+        intent.getStringExtra(SECTION_ID) ?: ""
+    }
+    private val videoId by lazy {
+        intent.getStringExtra(VIDEO_ID)
+    }
+    private val download: Boolean by lazy {
+        intent.getBooleanExtra(DOWNLOADED, false)
+    }
     private var playWhenReady = false
     private var currentOrientation: Int = 0
     private val database: AppDatabase by lazy {
@@ -108,17 +121,12 @@ class VideoPlayerActivity : AppCompatActivity(),
     }
 
     private fun setupUI() {
-        videoId = intent.getStringExtra(VIDEO_ID)
         val youtubeUrl = intent.getStringExtra("videoUrl")
-        attemptId = intent.getStringExtra(RUN_ATTEMPT_ID)
-        contentId = intent.getStringExtra(CONTENT_ID)
-        download = intent.getBooleanExtra(DOWNLOADED, false)
 
         if (youtubeUrl != null) {
             displayYoutubeVideo.view?.visibility = View.VISIBLE
             setupYoutubePlayer(youtubeUrl)
         } else {
-            sectionId = intent.getStringExtra(SECTION_ID)?:""
             displayYoutubeVideo.view?.visibility = View.GONE
             videoContainer.visibility = View.VISIBLE
             playerFragment = fragmentManager.findFragmentById(R.id.videoView) as VdoPlayerFragment
@@ -337,36 +345,31 @@ class VideoPlayerActivity : AppCompatActivity(),
                 noteView.descriptionLayout.error = ""
                 val note = Notes()
                 note.text = noteView.titleLayout.editText!!.text.toString()
+                note.content = ContentsId(contentId)
+                note.runAttempt = RunAttemptsId(attemptId)
                 note.duration = notePos
-                val runAttempts = RunAttemptsModel() // type run_attempts
-                val contents = Contents() // type contents
-                runAttempts.id = attemptId
-                contents.id = contentId
-                note.runAttempt = runAttempts
-                note.content = contents
                 Clients.onlineV2JsonApi.createNote(note)
-                    .enqueue(retrofitCallback { throwable, response ->
-                        response?.body().let {
+                    .enqueue(retrofitCallback { _, response ->
+                        response?.let {
                             noteDialog.dismiss()
-                            if (response?.isSuccessful!!)
-                                try {
-                                    notesDao.insert(
-                                        NotesModel(
-                                            it!!.id
-                                                ?: "",
-                                            it.duration ?: 0.0,
-                                            it.text ?: "",
-                                            it.content?.id
-                                                ?: "",
-                                            attemptId,
-                                            it.createdAt
-                                                ?: "",
-                                            it.deletedAt
-                                                ?: ""
+                            if (it.isSuccessful)
+                                it.body().let {
+
+                                    try {
+                                        notesDao.insert(
+                                            NotesModel(
+                                                it!!.id ?: "",
+                                                it.duration ?: 0.0,
+                                                it.text ?: "",
+                                                it.content?.id ?: "",
+                                                attemptId,
+                                                it.createdAt ?: "",
+                                                it.deletedAt ?: ""
+                                            )
                                         )
-                                    )
-                                } catch (e: Exception) {
-                                    info { "error" + e.localizedMessage }
+                                    } catch (e: Exception) {
+                                        info { "error" + e.localizedMessage }
+                                    }
                                 }
                         }
                     })
