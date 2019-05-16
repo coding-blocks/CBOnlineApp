@@ -27,6 +27,7 @@ import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
 import kotlin.concurrent.thread
+import org.jetbrains.anko.support.v4.runOnUiThread
 
 
 class AllCourseFragment : Fragment(), AnkoLogger {
@@ -173,7 +174,9 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                         courseDao.insert(course)
                         runDao.insert(courseRun)
                         if (ui.swipeRefreshLayout.isRefreshing) {
-                            ui.swipeRefreshLayout.isRefreshing = false
+                            runOnUiThread {
+                                ui.swipeRefreshLayout.isRefreshing = false
+                            }
                         }
                         //Add CourseInstructors
                         for (i in myCourses.instructors!!) {
