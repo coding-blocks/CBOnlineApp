@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
+import com.codingblocks.cbonlineapp.util.QUIZ_ATTEMPT_ID
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_quiz_result.*
-
-private const val ARG_QUIZ_ATTEMPT_ID = "quiz_attempt_id"
 
 class QuizResultFragment : Fragment() {
 
@@ -22,7 +21,7 @@ class QuizResultFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         arguments?.let {
-            quizAttemptId = it.getString(ARG_QUIZ_ATTEMPT_ID)!!
+            quizAttemptId = it.getString(QUIZ_ATTEMPT_ID)!!
         }
 
         Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, response ->
@@ -45,7 +44,7 @@ class QuizResultFragment : Fragment() {
         fun newInstance(attemptID: String) =
             QuizResultFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_QUIZ_ATTEMPT_ID, attemptID)
+                    putString(QUIZ_ATTEMPT_ID, attemptID)
                 }
             }
     }
