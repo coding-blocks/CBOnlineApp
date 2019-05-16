@@ -10,11 +10,13 @@ import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.ContentCodeChallenge
 import com.codingblocks.onlineapi.models.ContentCsv
 import com.codingblocks.onlineapi.models.ContentDocumentType
+import com.codingblocks.onlineapi.models.ContentId
 import com.codingblocks.onlineapi.models.ContentLectureType
 import com.codingblocks.onlineapi.models.ContentProgress
 import com.codingblocks.onlineapi.models.ContentQna
 import com.codingblocks.onlineapi.models.ContentVideoType
 import com.codingblocks.onlineapi.models.Contents
+import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.CourseSection
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
@@ -33,12 +35,15 @@ import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizqnas
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.Rating
+import com.codingblocks.onlineapi.models.RunAttemptId
+import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.codingblocks.onlineapi.models.RunAttemptsModel
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Tags
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jasminb.jsonapi.RelationshipResolver
 import com.github.jasminb.jsonapi.ResourceConverter
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
@@ -49,7 +54,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object Clients {
-    private val om = ObjectMapper()
+    private val om = jacksonObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
 
@@ -89,8 +94,12 @@ object Clients {
         Rating::class.java,
         Tags::class.java,
         Certificate::class.java,
-        CarouselCards::class.java
-    )
+        CarouselCards::class.java,
+        RunAttemptId::class.java,
+        RunAttemptsId::class.java,
+        ContentId::class.java,
+        ContentsId::class.java
+        )
 
     private val relationshipResolver = RelationshipResolver {
         var url = it
@@ -114,7 +123,12 @@ object Clients {
 
     private val ClientInterceptor = OkHttpClient.Builder()
         .addInterceptor { chain ->
-            chain.proceed(chain.request().newBuilder().addHeader("Authorization", "JWT $authJwt").build())
+            chain.proceed(
+                chain.request().newBuilder().addHeader(
+                    "Authorization",
+                    "JWT $authJwt"
+                ).build()
+            )
         }
         .build()
 
@@ -128,7 +142,6 @@ object Clients {
     val onlineV2JsonApi: OnlineJsonApi
         get() = onlineV2JsonRetrofit
             .create(OnlineJsonApi::class.java)
-
 
 
     private val retrofit = Retrofit.Builder()

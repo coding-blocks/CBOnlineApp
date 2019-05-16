@@ -14,13 +14,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.ProgressBarAnimation
-import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.BatchesAdapter
 import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.models.Instructor
 import com.codingblocks.cbonlineapp.extensions.loadSvg
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.OnCartItemClickListener
@@ -105,7 +105,13 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     }
 
     private fun init() {
-        progressBar = arrayOf(courseProgress1, courseProgress2, courseProgress3, courseProgress4, courseProgress5)
+        progressBar = arrayOf(
+            courseProgress1,
+            courseProgress2,
+            courseProgress3,
+            courseProgress4,
+            courseProgress5
+        )
         setSupportActionBar(toolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -139,9 +145,13 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
                     checkoutBtn.setOnClickListener {
                         sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-                        val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+                        val builder = CustomTabsIntent.Builder().enableUrlBarHiding()
+                            .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
                         val customTabsIntent = builder.build()
-                        customTabsIntent.launchUrl(this@CourseActivity, Uri.parse("https://dukaan.codingblocks.com/mycart"))
+                        customTabsIntent.launchUrl(
+                            this@CourseActivity,
+                            Uri.parse("https://dukaan.codingblocks.com/mycart")
+                        )
                     }
                     continueBtn.setOnClickListener {
                         sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
@@ -164,21 +174,22 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         instructorRv.layoutManager = LinearLayoutManager(this)
         instructorRv.adapter = instructorAdapter
 
-        courseWithInstructorDao.getInstructorWithCourseId(id).observe(this, Observer<List<Instructor>> {
-            instructorAdapter.setData(it as ArrayList<Instructor>)
-            var instructors = "Mentors: "
-            for (i in 0 until it.size) {
-                if (i == 0) {
-                    instructors += it[i].name
-                } else if (i == 1) {
-                    instructors += ", ${it[i].name}"
-                } else if (i >= 2) {
-                    instructors += "+ " + (it.size - 2) + " more"
-                    break
+        courseWithInstructorDao.getInstructorWithCourseId(id)
+            .observe(this, Observer<List<Instructor>> {
+                instructorAdapter.setData(it as ArrayList<Instructor>)
+                var instructors = "Mentors: "
+                for (i in 0 until it.size) {
+                    if (i == 0) {
+                        instructors += it[i].name
+                    } else if (i == 1) {
+                        instructors += ", ${it[i].name}"
+                    } else if (i >= 2) {
+                        instructors += "+ " + (it.size - 2) + " more"
+                        break
+                    }
+                    coursePageMentors.text = instructors
                 }
-                coursePageMentors.text = instructors
-            }
-        })
+            })
     }
 
     private fun fetchCourse() {
@@ -192,7 +203,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                         addtocart(id, name)
                     }
                 })
-                batchRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                batchRv.layoutManager =
+                    LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                 batchRv.adapter = batchAdapter
                 setImageAndTitle(course.logo!!, course.title!!)
                 coursePageSubtitle.text = course.subtitle
@@ -249,9 +261,13 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 if (it?.code() == 400) {
                     showBottomSheet(id, name)
                 } else if (it?.isSuccessful!!) {
-                    val builder = CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+                    val builder = CustomTabsIntent.Builder().enableUrlBarHiding()
+                        .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
                     val customTabsIntent = builder.build()
-                    customTabsIntent.launchUrl(this@CourseActivity, Uri.parse("https://dukaan.codingblocks.com/mycart"))
+                    customTabsIntent.launchUrl(
+                        this@CourseActivity,
+                        Uri.parse("https://dukaan.codingblocks.com/mycart")
+                    )
                 }
             }
         })
@@ -259,16 +275,24 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     private fun showPromoVideo(promoVideo: String) {
         youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
-            override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
+            override fun onInitializationFailure(
+                p0: YouTubePlayer.Provider?,
+                p1: YouTubeInitializationResult?
+            ) {
             }
 
-            override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayerInstance: YouTubePlayer?, p2: Boolean) {
+            override fun onInitializationSuccess(
+                p0: YouTubePlayer.Provider?,
+                youtubePlayerInstance: YouTubePlayer?,
+                p2: Boolean
+            ) {
                 if (!p2) {
                     youtubePlayerInstance?.loadVideo(MediaUtils.getYotubeVideoId(promoVideo!!))
                 }
             }
         }
-        val youTubePlayerSupportFragment = supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
+        val youTubePlayerSupportFragment =
+            supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
         youTubePlayerSupportFragment!!.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
     }
 
@@ -282,7 +306,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     for (i in 0 until progressBar.size) {
                         progressBar[i]?.max = it.count * 1000
                         progressBar[i]?.progress = it.stats[i].toInt() * 1000
-                        val anim = ProgressBarAnimation(progressBar[i], 0F, it.stats[i].toInt() * 1000F)
+                        val anim =
+                            ProgressBarAnimation(progressBar[i], 0F, it.stats[i].toInt() * 1000F)
                         anim.duration = 1500
                         progressBar[i]?.startAnimation(anim)
                     }
@@ -312,3 +337,4 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         }
     }
 }
+

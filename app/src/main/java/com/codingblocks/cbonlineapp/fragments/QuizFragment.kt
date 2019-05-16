@@ -14,6 +14,10 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.ViewPagerAdapter
 import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.QUIZ_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.QUIZ_ID
+import com.codingblocks.cbonlineapp.util.QUIZ_QNA
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.QuizSubmission
@@ -25,15 +29,12 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor
 
 
-private const val ARG_QUIZ_ID = "quiz_id"
-private const val ARG_ATTEMPT_ID = "attempt_id"
-private const val ARG_QUIZ_ATTEMPT_ID = "quiz_attempt_id"
-
 
 class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener {
 
 
     private lateinit var quizId: String
+    private lateinit var qnaId: String
     private lateinit var attemptId: String
     private lateinit var quizAttemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -55,9 +56,10 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         arguments?.let {
-            quizId = it.getString(ARG_QUIZ_ID)!!
-            attemptId = it.getString(ARG_ATTEMPT_ID)!!
-            quizAttemptId = it.getString(ARG_QUIZ_ATTEMPT_ID)!!
+            quizId = it.getString(QUIZ_ID)!!
+            qnaId = it.getString(QUIZ_QNA)!!
+            attemptId = it.getString(RUN_ATTEMPT_ID)!!
+            quizAttemptId = it.getString(QUIZ_ATTEMPT_ID)!!
         }
 
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
@@ -74,7 +76,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                     if (index == quiz.questions!!.size - 1) {
                         Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, attemptResponse ->
                             attemptResponse?.body().let {
-                                mAdapter = ViewPagerAdapter(context!!, quizId, quizAttemptId, attemptId, questionList, it?.submission, it?.result)
+                                mAdapter = ViewPagerAdapter(context!!, qnaId, quizAttemptId, attemptId, questionList, it?.submission, it?.result)
                                 quizViewPager.adapter = mAdapter
                                 quizViewPager.currentItem = 0
                                 quizViewPager.setOnPageChangeListener(this)
@@ -156,14 +158,13 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     override fun onClick(v: View) {
         when (v.id) {
             R.id.nextBtn -> if (nextBtn.text == "End") {
-                Clients.onlineV2JsonApi.sumbitQuizById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
-                    val fragmentManager = fragmentManager!!
-                    val fragmentTransaction = fragmentManager.beginTransaction()
-                    fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                    fragmentTransaction.replace(R.id.framelayout_quiz,
-                        QuizResultFragment.newInstance(quizAttemptId))
-                    fragmentTransaction.commit()
-                })
+                val fragmentManager = fragmentManager!!
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                fragmentTransaction.replace(R.id.framelayout_quiz,
+                        AboutQuizFragment.newInstance(quizId,
+                                attemptId,qnaId), "quiz")
+                fragmentTransaction.commit()
             } else
                 quizViewPager.currentItem = if (quizViewPager.currentItem < questionList.size - 1) {
                     // TODO : Update Quiz Attempt for quizAttemptId
@@ -194,12 +195,13 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
     companion object {
         @JvmStatic
-        fun newInstance(quizId: String, attemptId: String, quizAttemptId: String) =
-            QuizFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_QUIZ_ID, quizId)
-                    putString(ARG_ATTEMPT_ID, attemptId)
-                    putString(ARG_QUIZ_ATTEMPT_ID, quizAttemptId)
+        fun newInstance(quizId: String,qnaId:String, attemptId: String, quizAttemptId: String) =
+                QuizFragment().apply {
+                    arguments = Bundle().apply {
+                        putString(QUIZ_ID, quizId)
+                        putString(QUIZ_QNA, qnaId)
+                        putString(RUN_ATTEMPT_ID, attemptId)
+                        putString(QUIZ_ATTEMPT_ID, quizAttemptId)
 
 
                 }

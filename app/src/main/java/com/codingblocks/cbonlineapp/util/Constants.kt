@@ -13,3 +13,11 @@ const val ATTEMPT_ID = "attempt_id"
 const val DOWNLOADED = "downloaded"
 
 const val LECTURE_CONTENT_ID = "lecture_content_id"
+
+const val QUIZ_ID = "quiz_id"
+
+const val QUIZ_QNA = "quiz_qna_id"
+
+const val QUIZ_ATTEMPT_ID = "quiz_attempt_id"
+
+
