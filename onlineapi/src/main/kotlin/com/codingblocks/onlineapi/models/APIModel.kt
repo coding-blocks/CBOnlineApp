@@ -1,6 +1,8 @@
 package com.codingblocks.onlineapi.models
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.github.jasminb.jsonapi.Links
+import com.github.jasminb.jsonapi.LongIdHandler
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.RelationshipLinks
@@ -522,10 +524,10 @@ class Note : BaseModel() {
     var deletedAt: String? = null
     @Relationship("run_attempt", resolve = true)
     @JvmField
-    var runAttempt: MyRunAttempt? = null
+    var runAttempt: RunAttemptId? = null
     @Relationship("content", resolve = true)
     @JvmField
-    var content: Contents? = null
+    var content: ContentId? = null
 }
 
 @Type("notes")
@@ -540,11 +542,37 @@ class Notes : BaseModel() {
     var deletedAt: String? = null
     @Relationship("run-attempt", resolve = true)
     @JvmField
-    var runAttempt: RunAttemptsModel? = null
-    @Relationship("content", resolve = true)
+    var runAttempt: RunAttemptsId? = null
+    @Relationship("content")
     @JvmField
-    var content: Contents? = null
+    var content: ContentsId? = null
 }
+
+@Type("run_attempt")
+data class RunAttemptId(
+    @Id
+    @JvmField
+    val id: String?
+)
+
+@Type("run-attempts")
+data class RunAttemptsId(
+    @Id
+    @JvmField
+    val id: String?
+)
+
+@Type("content")
+data class ContentId(
+    @Id
+    val id: String?
+)
+
+@Type("contents")
+data class ContentsId(
+    @Id
+    val id: String?
+)
 
 @Type("carousel_cards")
 class CarouselCards : BaseModel() {
