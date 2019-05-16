@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.ViewPagerAdapter
@@ -32,23 +33,11 @@ class QuizResultFragment : Fragment() {
         }
 
         Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, response ->
-            if (response != null) {
-                val body = response.body()
-                if (body != null) {
-                    // TODO : Quiz Result is coming as null, needs to be fixed
-                    // Also, the creation time is wrong...
-                    Log.v("Created At : ", body.createdAt)
-                    val quizResult = body.result
-                    Log.v("Null Check : ", (quizResult == null).toString())
-                    /**
-                     * Logcat Output
-                     * V/Created At :: 2019-05-15T09:55:32.864Z
-                     * V/Null Check :: true
-                     */
-                }
-            }
+            Log.v("Created:", response?.body()?.createdAt)
+            Log.v("Status:", response?.body()?.status)
+            Log.v("Score:", response?.body()?.result?.score.toString())
+            Log.v("Size:", response?.body()?.result?.questions?.size.toString())
         })
-
     }
 
     companion object {

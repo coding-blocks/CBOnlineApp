@@ -15,6 +15,8 @@ import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.ViewPagerAdapter
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.QuizAttempt
+import com.codingblocks.onlineapi.models.QuizSubmission
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.bottom_question_sheet.*
@@ -35,6 +37,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     private lateinit var attemptId: String
     private lateinit var quizAttemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private lateinit var quizSubmissions: ArrayList<QuizSubmission>
 
 
     lateinit var mAdapter: ViewPagerAdapter
@@ -153,23 +156,30 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     override fun onClick(v: View) {
         when (v.id) {
             R.id.nextBtn -> if (nextBtn.text == "End") {
-                val fragmentManager = fragmentManager!!
-                val fragmentTransaction = fragmentManager.beginTransaction()
-                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                fragmentTransaction.replace(R.id.framelayout_quiz,
-                    // AboutQuizFragment.newInstance(quizId,
-                    //        attemptId), "quiz")
-                    QuizResultFragment.newInstance(quizAttemptId))
-//            fragmentTransaction.addToBackStack("quiz")
-                fragmentTransaction.commit()
+                Clients.onlineV2JsonApi.sumbitQuizById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
+                    val fragmentManager = fragmentManager!!
+                    val fragmentTransaction = fragmentManager.beginTransaction()
+                    fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                    fragmentTransaction.replace(R.id.framelayout_quiz,
+                        QuizResultFragment.newInstance(quizAttemptId))
+                    fragmentTransaction.commit()
+                })
             } else
-                quizViewPager.currentItem = if (quizViewPager.currentItem < questionList.size - 1)
+                quizViewPager.currentItem = if (quizViewPager.currentItem < questionList.size - 1) {
+                    // TODO : Update Quiz Attempt for quizAttemptId
+                    // Clients.onlineV2JsonApi.updateQuizAttempt(quizAttemptId, attempt).enqueue(retrofitCallback {
+                    //    throwable, response ->
+
+                    // })
                     quizViewPager.currentItem + 1
+                }
                 else
                     0
 
-            R.id.prevBtn -> quizViewPager.currentItem = if (quizViewPager.currentItem > 0)
+            R.id.prevBtn -> quizViewPager.currentItem = if (quizViewPager.currentItem > 0) {
+                // TODO
                 quizViewPager.currentItem - 1
+            }
             else
                 0
             R.id.questionBtn -> {
