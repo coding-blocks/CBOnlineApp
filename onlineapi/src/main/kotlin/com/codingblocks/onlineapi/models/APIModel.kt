@@ -1,8 +1,6 @@
 package com.codingblocks.onlineapi.models
 
-import com.fasterxml.jackson.annotation.JsonCreator
 import com.github.jasminb.jsonapi.Links
-import com.github.jasminb.jsonapi.LongIdHandler
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.RelationshipLinks
@@ -11,33 +9,36 @@ import com.github.jasminb.jsonapi.annotations.Type
 open class BaseModel {
     @Id
     @JvmField
-    var id: String? = null
+    var id: String = ""
     @JvmField
-    var updatedAt: String? = null
+    var updatedAt: String = ""
 }
+
+@Type("courses")
+open class Course(
+    val title: String,
+    val subtitle: String,
+    val logo: String,
+    val summary: String,
+    val categoryId: Int,
+    val promoVideo: String,
+    val reviewCount: Int,
+    val difficulty: String,
+    val rating: Float,
+    val slug: String,
+    val coverImage: String,
+    @Relationship("instructors")
+    val instructors: ArrayList<Instructor>?,
+    @Relationship("runs")
+    val runs: ArrayList<Runs>?
+) : BaseModel()
 
 @Type("instructors")
-open class Instructor : BaseModel() {
-    @JvmField
-    var name: String? = null
-    @JvmField
-    var description: String? = null
-    @JvmField
-    var photo: String? = null
-    @Relationship("courses", resolve = true)
-    @JvmField
-    var courses: ArrayList<Course>? = null
-    @JvmField
-    var instructorCourse: InstructorCourse? = null
-}
-
-@Type("instructor")
-class InstructorSingle : Instructor()
-
-class InstructorCourse : BaseModel() {
-    @JvmField
-    var courseId: String? = null
-}
+open class Instructor(
+    val name: String?,
+    val description: String?,
+    val photo: String?
+) : BaseModel()
 
 @Type("run_attempts")
 open class MyRunAttempts : BaseModel() {
@@ -58,35 +59,21 @@ open class MyRunAttempts : BaseModel() {
 class MyRunAttempt : MyRunAttempts()
 
 @Type("runs")
-open class Runs : BaseModel() {
-    @JvmField
-    var name: String? = null
-    @JvmField
-    var description: String? = null
-    @JvmField
-    var start: String? = null
-    @JvmField
-    var end: String? = null
-    @JvmField
-    var price: String? = null
-    @JvmField
-    var mrp: String? = null
-    @JvmField
-    var unlisted: Boolean? = null
-    @JvmField
-    val enrollmentStart: String? = null
-    @JvmField
-    val enrollmentEnd: String? = null
-    @Relationship("sections", resolve = true)
-    @JvmField
-    var sections: ArrayList<Sections>? = null
-    @Relationship("tags", resolve = true)
-    @JvmField
-    var tags: ArrayList<Tags>? = null
-    @Relationship("certificate", resolve = true)
-    @JvmField
-    var certificate: Certificate? = null
-}
+open class Runs(
+    val name: String,
+    val description: String,
+    val start: String,
+    val end: String,
+    val price: String,
+    val mrp: String?,
+    val unlisted: Boolean,
+    val enrollmentStart: String,
+    val enrollmentEnd: String,
+    @Relationship("sections")
+    val sections: ArrayList<Sections>?,
+    @Relationship("sections")
+    val tags: ArrayList<Tags>?
+) : BaseModel()
 
 @Type("certificate")
 class Certificate : BaseModel() {
@@ -134,39 +121,6 @@ class MyCourseRuns : BaseModel() {
 @Type("rating")
 class Rating : BaseModel()
 
-@Type("courses")
-open class Course : BaseModel() {
-    @JvmField
-    var title: String? = null
-    @JvmField
-    var subtitle: String? = null
-    @JvmField
-    var logo: String? = null
-    @JvmField
-    var summary: String? = null
-    @JvmField
-    var categoryName: String? = null
-    @JvmField
-    var categoryId: Int = 0
-    @JvmField
-    var promoVideo: String? = null
-    @JvmField
-    var reviewCount: Int? = null
-    @JvmField
-    var difficulty: String? = null
-    @JvmField
-    var rating: Float? = null
-    @JvmField
-    var slug: String? = null
-    @JvmField
-    var coverImage: String? = null
-    @Relationship("instructors", resolve = true)
-    @JvmField
-    var instructors: ArrayList<Instructor>? = null
-    @Relationship("runs", resolve = true)
-    @JvmField
-    var runs: ArrayList<Runs>? = null
-}
 
 @Type("tags")
 class Tags : BaseModel() {
@@ -175,7 +129,7 @@ class Tags : BaseModel() {
 }
 
 @Type("course")
-class MyCourse : Course()
+class MyCourse : BaseModel()
 
 @Type("sections")
 open class Sections : BaseModel() {
@@ -575,18 +529,13 @@ data class ContentsId(
 )
 
 @Type("carousel_cards")
-class CarouselCards : BaseModel() {
-    @JvmField
-    var title: String? = null
-    @JvmField
-    var subtitle: String? = null
-    @JvmField
-    var img: String? = null
-    @JvmField
-    var buttonText: String? = null
-    @JvmField
-    var buttonLink: String? = null
-}
+class CarouselCards(
+    var title: String,
+    var subtitle: String,
+    var img: String,
+    var buttonText: String,
+    var buttonLink: String
+) : BaseModel()
 
 
 
