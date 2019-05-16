@@ -120,77 +120,77 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     private fun fetchAllCourses() {
 
 
-        Clients.onlineV2JsonApi.getAllCourses().enqueue(retrofitCallback { t, resp ->
-            skeletonScreen.hide()
-            resp?.body()?.let {
-                for (myCourses in it) {
-
-                    //calculate top run
-                    val unsortedRuns: ArrayList<Runs> = arrayListOf()
-                    for (i in 0 until myCourses.runs!!.size) {
-                        if (myCourses.runs!![i].enrollmentStart!!.toLong() < (System.currentTimeMillis() / 1000)
-                            && myCourses.runs!![i].enrollmentEnd!!.toLong() > (System.currentTimeMillis() / 1000) && !myCourses.runs!![i].unlisted!!
-                        )
-                            unsortedRuns.add(myCourses.runs!![i])
-                    }
-                    //for no current runs
-                    if (unsortedRuns.size == 0) {
-                        unsortedRuns.addAll(myCourses.runs!!)
-                    }
-                    val currentRuns = unsortedRuns.sortedWith(compareBy { it.price })
-
-                    val course = myCourses.run {
-                        Course(
-                            id ?: "",
-                            title ?: "",
-                            subtitle ?: "",
-                            logo ?: "",
-                            summary ?: "",
-                            promoVideo ?: "",
-                            difficulty ?: "",
-                            reviewCount ?: 0,
-                            rating ?: 0f,
-                            slug ?: "",
-                            coverImage ?: "",
-                            updated_at = updatedAt,
-                            categoryId = categoryId
-                        )
-
-                    }
-                    val courseRun = CourseRun(
-                        currentRuns[0].id ?: "", "",
-                        currentRuns[0].name ?: "", currentRuns[0].description ?: "",
-                        currentRuns[0].enrollmentStart ?: "",
-                        currentRuns[0].enrollmentEnd ?: "",
-                        currentRuns[0].start ?: "", currentRuns[0].end ?: "",
-                        currentRuns[0].price ?: "", currentRuns[0].mrp ?: "",
-                        myCourses.id ?: "", currentRuns[0].updatedAt ?: "",
-                        title = myCourses.title ?: ""
-                    )
-
-                    thread {
-                        val updatedCourse = courseDao.getCourse(course.id)
-                        courseDao.insert(course)
-                        runDao.insert(courseRun)
-                        if (ui.swipeRefreshLayout.isRefreshing) {
-                            ui.swipeRefreshLayout.isRefreshing = false
-                        }
-                        //Add CourseInstructors
-                        for (i in myCourses.instructors!!) {
-                            instructorDao.insert(
-                                Instructor(
-                                    i.id ?: "", i.name ?: "",
-                                    i.description ?: "", i.photo ?: "",
-                                    "", "", myCourses.id
-                                )
-                            )
-                            insertCourseAndInstructor(myCourses, i)
-                        }
-                    }
-
-                }
-            }
-        })
+//        Clients.onlineV2JsonApi.getAllCourses().enqueue(retrofitCallback { t, resp ->
+//            skeletonScreen.hide()
+//            resp?.body()?.let {
+//                for (myCourses in it) {
+//
+//                    //calculate top run
+//                    val unsortedRuns: ArrayList<Runs> = arrayListOf()
+//                    for (i in 0 until myCourses.runs!!.size) {
+//                        if (myCourses.runs!![i].enrollmentStart!!.toLong() < (System.currentTimeMillis() / 1000)
+//                            && myCourses.runs!![i].enrollmentEnd!!.toLong() > (System.currentTimeMillis() / 1000) && !myCourses.runs!![i].unlisted!!
+//                        )
+//                            unsortedRuns.add(myCourses.runs!![i])
+//                    }
+//                    //for no current runs
+//                    if (unsortedRuns.size == 0) {
+//                        unsortedRuns.addAll(myCourses.runs!!)
+//                    }
+//                    val currentRuns = unsortedRuns.sortedWith(compareBy { it.price })
+//
+//                    val course = myCourses.run {
+//                        Course(
+//                            id ?: "",
+//                            title ?: "",
+//                            subtitle ?: "",
+//                            logo ?: "",
+//                            summary ?: "",
+//                            promoVideo ?: "",
+//                            difficulty ?: "",
+//                            reviewCount ?: 0,
+//                            rating ?: 0f,
+//                            slug ?: "",
+//                            coverImage ?: "",
+//                            updated_at = updatedAt,
+//                            categoryId = categoryId
+//                        )
+//
+//                    }
+//                    val courseRun = CourseRun(
+//                        currentRuns[0].id ?: "", "",
+//                        currentRuns[0].name ?: "", currentRuns[0].description ?: "",
+//                        currentRuns[0].enrollmentStart ?: "",
+//                        currentRuns[0].enrollmentEnd ?: "",
+//                        currentRuns[0].start ?: "", currentRuns[0].end ?: "",
+//                        currentRuns[0].price ?: "", currentRuns[0].mrp ?: "",
+//                        myCourses.id ?: "", currentRuns[0].updatedAt ?: "",
+//                        title = myCourses.title ?: ""
+//                    )
+//
+//                    thread {
+//                        val updatedCourse = courseDao.getCourse(course.id)
+//                        courseDao.insert(course)
+//                        runDao.insert(courseRun)
+//                        if (ui.swipeRefreshLayout.isRefreshing) {
+//                            ui.swipeRefreshLayout.isRefreshing = false
+//                        }
+//                        //Add CourseInstructors
+//                        for (i in myCourses.instructors!!) {
+//                            instructorDao.insert(
+//                                Instructor(
+//                                    i.id ?: "", i.name ?: "",
+//                                    i.description ?: "", i.photo ?: "",
+//                                    "", "", myCourses.id
+//                                )
+//                            )
+//                            insertCourseAndInstructor(myCourses, i)
+//                        }
+//                    }
+//
+//                }
+//            }
+//        })
     }
 
     private fun insertCourseAndInstructor(

@@ -21,7 +21,6 @@ import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.CourseSection
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Instructor
-import com.codingblocks.onlineapi.models.InstructorSingle
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.MyCourse
 import com.codingblocks.onlineapi.models.MyCourseRuns
@@ -41,7 +40,6 @@ import com.codingblocks.onlineapi.models.RunAttemptsModel
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Tags
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jasminb.jsonapi.RelationshipResolver
@@ -75,7 +73,6 @@ object Clients {
         ContentProgress::class.java,
         CourseSection::class.java,
         ContentLectureType::class.java,
-        InstructorSingle::class.java,
         ContentCodeChallenge::class.java,
         ContentQna::class.java,
         Announcement::class.java,
@@ -99,7 +96,7 @@ object Clients {
         RunAttemptsId::class.java,
         ContentId::class.java,
         ContentsId::class.java
-        )
+    )
 
     private val relationshipResolver = RelationshipResolver {
         var url = it

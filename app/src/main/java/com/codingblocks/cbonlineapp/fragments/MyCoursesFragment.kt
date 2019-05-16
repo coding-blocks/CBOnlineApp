@@ -131,115 +131,115 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
     private fun fetchAllCourses() {
 
-        Clients.onlineV2JsonApi.getMyCourses().enqueue(retrofitCallback { t, resp ->
-            skeletonScreen.hide()
-            resp?.body()?.let {
-                for (myCourses in it) {
-                    //Add Course Progress to Course Object
-                    Clients.api.getMyCourseProgress(myCourses.runAttempts?.get(0)?.id.toString())
-                        .enqueue(retrofitCallback { t, progressResponse ->
-                            progressResponse?.body().let { map ->
-                                val progress: Double = try {
-                                    map!!["percent"] as Double
-                                } catch (e: Exception) {
-                                    0.0
-                                }
-                                val course = myCourses.course?.run {
-                                    Course(
-                                        id ?: "",
-                                        title ?: "",
-                                        subtitle ?: "",
-                                        logo ?: "",
-                                        summary ?: "",
-                                        promoVideo ?: "",
-                                        difficulty ?: "",
-                                        reviewCount ?: 0,
-                                        rating ?: 0f,
-                                        slug ?: "",
-                                        coverImage ?: "",
-                                        updated_at = updatedAt,
-                                        categoryId = categoryId
-                                    )
-                                }
-                                val courseRun =
-                                    CourseRun(
-                                        myCourses.id ?: "",
-                                        myCourses.runAttempts?.get(0)?.id ?: "",
-                                        myCourses.name ?: "",
-                                        myCourses.description ?: "",
-                                        myCourses.start ?: "",
-                                        myCourses.runAttempts!![0].end ?: "",
-                                        myCourses.start ?: "",
-                                        myCourses.runAttempts!![0].end ?: "",
-                                        myCourses.price ?: "",
-                                        myCourses.mrp ?: "",
-                                        myCourses.course?.id ?: "",
-                                        myCourses.updatedAt ?: "",
-                                        progress = progress,
-                                        title = myCourses.course?.title ?: "",
-                                        premium = myCourses.runAttempts?.get(0)?.premium!!
-                                    )
-
-                                doAsync {
-                                    val updateRun = runDao.getRunById(myCourses.id ?: "")
-                                    if (updateRun == null) {
-                                        courseDao.insert(course!!)
-                                        runDao.insert(courseRun)
-                                    } else if (updateRun.progress != progress) {
-                                        courseRun.hits = updateRun.hits
-                                        info { myCourses.course?.title + "updateCourse is happening" + progress + "  " + updateRun.progress }
-                                        courseDao.update(course!!)
-                                        runDao.update(courseRun)
-                                    }
-
-                                    if (ui.swipeRefreshLayout.isRefreshing) {
-                                        ui.swipeRefreshLayout.isRefreshing = false
-                                    }
-                                    //fetch CourseInstructors
-                                    myCourses.course?.instructors?.forEachIndexed { _, it ->
-                                        Clients.onlineV2JsonApi.instructorsById(it.id!!)
-                                            .enqueue(retrofitCallback { _, response ->
-
-                                                response?.body().let { instructor ->
-                                                    thread {
-                                                        instructorDao.insert(
-                                                            Instructor(
-                                                                instructor?.id
-                                                                    ?: "",
-                                                                instructor?.name ?: "",
-                                                                instructor?.description
-                                                                    ?: "",
-                                                                instructor?.photo ?: "",
-                                                                "",
-                                                                myCourses.runAttempts!![0].id!!,
-                                                                myCourses.course!!.id
-                                                            )
-                                                        )
-                                                        Log.e(
-                                                            "TAG",
-                                                            "ID : ${instructor?.id}  Name : ${instructor?.name}"
-                                                        )
-
-                                                        myCourses.course?.let { c ->
-                                                            instructor?.let { i ->
-                                                                insertCourseAndInstructor(c, i)
-                                                            }
-                                                                ?: CrashlyticsCore.getInstance().apply {
-                                                                    setString("course", c.id)
-                                                                    log("Instructor is NULL")
-                                                                }
-                                                        }
-                                                    }
-                                                }
-                                            })
-                                    }
-                                }
-
-                            }
-                        })
-                }
-            }
-        })
+//        Clients.onlineV2JsonApi.getMyCourses().enqueue(retrofitCallback { t, resp ->
+//            skeletonScreen.hide()
+//            resp?.body()?.let {
+//                for (myCourses in it) {
+//                    //Add Course Progress to Course Object
+//                    Clients.api.getMyCourseProgress(myCourses.runAttempts?.get(0)?.id.toString())
+//                        .enqueue(retrofitCallback { t, progressResponse ->
+//                            progressResponse?.body().let { map ->
+//                                val progress: Double = try {
+//                                    map!!["percent"] as Double
+//                                } catch (e: Exception) {
+//                                    0.0
+//                                }
+//                                val course = myCourses.course?.run {
+//                                    Course(
+//                                        id ?: "",
+//                                        title ?: "",
+//                                        subtitle ?: "",
+//                                        logo ?: "",
+//                                        summary ?: "",
+//                                        promoVideo ?: "",
+//                                        difficulty ?: "",
+//                                        reviewCount ?: 0,
+//                                        rating ?: 0f,
+//                                        slug ?: "",
+//                                        coverImage ?: "",
+//                                        updated_at = updatedAt,
+//                                        categoryId = categoryId
+//                                    )
+//                                }
+//                                val courseRun =
+//                                    CourseRun(
+//                                        myCourses.id ?: "",
+//                                        myCourses.runAttempts?.get(0)?.id ?: "",
+//                                        myCourses.name ?: "",
+//                                        myCourses.description ?: "",
+//                                        myCourses.start ?: "",
+//                                        myCourses.runAttempts!![0].end ?: "",
+//                                        myCourses.start ?: "",
+//                                        myCourses.runAttempts!![0].end ?: "",
+//                                        myCourses.price ?: "",
+//                                        myCourses.mrp ?: "",
+//                                        myCourses.course?.id ?: "",
+//                                        myCourses.updatedAt ?: "",
+//                                        progress = progress,
+//                                        title = myCourses.course?.title ?: "",
+//                                        premium = myCourses.runAttempts?.get(0)?.premium!!
+//                                    )
+//
+//                                doAsync {
+//                                    val updateRun = runDao.getRunById(myCourses.id ?: "")
+//                                    if (updateRun == null) {
+//                                        courseDao.insert(course!!)
+//                                        runDao.insert(courseRun)
+//                                    } else if (updateRun.progress != progress) {
+//                                        courseRun.hits = updateRun.hits
+//                                        info { myCourses.course?.title + "updateCourse is happening" + progress + "  " + updateRun.progress }
+//                                        courseDao.update(course!!)
+//                                        runDao.update(courseRun)
+//                                    }
+//
+//                                    if (ui.swipeRefreshLayout.isRefreshing) {
+//                                        ui.swipeRefreshLayout.isRefreshing = false
+//                                    }
+//                                    //fetch CourseInstructors
+//                                    myCourses.course?.instructors?.forEachIndexed { _, it ->
+//                                        Clients.onlineV2JsonApi.instructorsById(it.id!!)
+//                                            .enqueue(retrofitCallback { _, response ->
+//
+//                                                response?.body().let { instructor ->
+//                                                    thread {
+//                                                        instructorDao.insert(
+//                                                            Instructor(
+//                                                                instructor?.id
+//                                                                    ?: "",
+//                                                                instructor?.name ?: "",
+//                                                                instructor?.description
+//                                                                    ?: "",
+//                                                                instructor?.photo ?: "",
+//                                                                "",
+//                                                                myCourses.runAttempts!![0].id!!,
+//                                                                myCourses.course!!.id
+//                                                            )
+//                                                        )
+//                                                        Log.e(
+//                                                            "TAG",
+//                                                            "ID : ${instructor?.id}  Name : ${instructor?.name}"
+//                                                        )
+//
+//                                                        myCourses.course?.let { c ->
+//                                                            instructor?.let { i ->
+//                                                                insertCourseAndInstructor(c, i)
+//                                                            }
+//                                                                ?: CrashlyticsCore.getInstance().apply {
+//                                                                    setString("course", c.id)
+//                                                                    log("Instructor is NULL")
+//                                                                }
+//                                                        }
+//                                                    }
+//                                                }
+//                                            })
+//                                    }
+//                                }
+//
+//                            }
+//                        })
+//                }
+//            }
+//        })
     }
 
 
