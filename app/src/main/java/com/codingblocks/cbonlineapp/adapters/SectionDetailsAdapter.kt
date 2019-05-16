@@ -35,6 +35,8 @@ import com.codingblocks.cbonlineapp.extensions.getDistinct
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
+import com.codingblocks.cbonlineapp.util.QUIZ_ID
+import com.codingblocks.cbonlineapp.util.QUIZ_QNA
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
@@ -259,7 +261,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                                             else
                                                 updateProgress(content.id, content.attempt_id, content.progressId, "DONE", content.contentable, data.id, content.contentQna.qnaContentId)
                                         }
-                                        it.context.startActivity(it.context.intentFor<QuizActivity>("quizId" to content.contentQna.qnaQid.toString(), "attemptId" to content.attempt_id).singleTop())
+                                        it.context.startActivity(it.context.intentFor<QuizActivity>(
+                                            QUIZ_QNA to content.contentQna.qnaUid, RUN_ATTEMPT_ID to content.attempt_id,
+                                            QUIZ_ID to content.contentQna.qnaQid.toString()).singleTop())
                                     }
                                 }
                             }
