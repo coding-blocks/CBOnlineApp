@@ -17,9 +17,7 @@ class QuizResultFragment : Fragment() {
     private lateinit var quizAttemptId: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
-        View? = inflater.inflate(R.layout.fragment_quiz_result, container, false).apply {
-
-    }
+        View? = inflater.inflate(R.layout.fragment_quiz_result, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
