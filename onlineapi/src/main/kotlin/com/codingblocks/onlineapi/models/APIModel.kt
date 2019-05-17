@@ -1,8 +1,6 @@
 package com.codingblocks.onlineapi.models
 
-import com.fasterxml.jackson.annotation.JsonCreator
 import com.github.jasminb.jsonapi.Links
-import com.github.jasminb.jsonapi.LongIdHandler
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.RelationshipLinks
@@ -11,171 +9,56 @@ import com.github.jasminb.jsonapi.annotations.Type
 open class BaseModel {
     @Id
     @JvmField
-    var id: String? = null
+    var id: String = ""
     @JvmField
-    var updatedAt: String? = null
+    var updatedAt: String = ""
 }
 
-@Type("instructors")
-open class Instructor : BaseModel() {
-    @JvmField
-    var name: String? = null
-    @JvmField
-    var description: String? = null
-    @JvmField
-    var photo: String? = null
-    @Relationship("courses", resolve = true)
-    @JvmField
-    var courses: ArrayList<Course>? = null
-    @JvmField
-    var instructorCourse: InstructorCourse? = null
-}
+// =======Plurals Models =========
+@Type("courses")
+open class Course(
+    val title: String,
+    val subtitle: String,
+    val logo: String,
+    val summary: String,
+    val categoryId: Int,
+    val promoVideo: String,
+    val reviewCount: Int,
+    val difficulty: String,
+    val rating: Float,
+    val slug: String,
+    val coverImage: String,
+    @Relationship("instructors")
+    val instructors: ArrayList<Instructor>?,
+    @Relationship("runs")
+    val runs: ArrayList<Runs>?
+) : BaseModel()
 
-@Type("instructor")
-class InstructorSingle : Instructor()
-
-class InstructorCourse : BaseModel() {
-    @JvmField
-    var courseId: String? = null
-}
 
 @Type("run_attempts")
-open class MyRunAttempts : BaseModel() {
-    @JvmField
-    var certificateApproved: Boolean? = false
-    @JvmField
-    var end: String? = null
-    @JvmField
-    var premium: Boolean? = false
-    @JvmField
-    var revoked: Boolean? = false
-    @Relationship("run", resolve = true)
-    @JvmField
-    var run: MyCourseRuns? = null
-}
-
-@Type("run_attempt")
-class MyRunAttempt : MyRunAttempts()
+open class MyRunAttempts(
+    val certificateApproved: Boolean,
+    val end: String,
+    val premium: Boolean,
+    val revoked: Boolean
+) : BaseModel()
 
 @Type("runs")
-open class Runs : BaseModel() {
-    @JvmField
-    var name: String? = null
-    @JvmField
-    var description: String? = null
-    @JvmField
-    var start: String? = null
-    @JvmField
-    var end: String? = null
-    @JvmField
-    var price: String? = null
-    @JvmField
-    var mrp: String? = null
-    @JvmField
-    var unlisted: Boolean? = null
-    @JvmField
-    val enrollmentStart: String? = null
-    @JvmField
-    val enrollmentEnd: String? = null
-    @Relationship("sections", resolve = true)
-    @JvmField
-    var sections: ArrayList<Sections>? = null
-    @Relationship("tags", resolve = true)
-    @JvmField
-    var tags: ArrayList<Tags>? = null
-    @Relationship("certificate", resolve = true)
-    @JvmField
-    var certificate: Certificate? = null
-}
-
-@Type("certificate")
-class Certificate : BaseModel() {
-}
-
-@Type("run")
-class MyCourseRuns : BaseModel() {
-    @JvmField
-    var name: String? = null
-    @JvmField
-    var description: String? = null
-    @JvmField
-    var start: String? = null
-    @JvmField
-    var end: String? = null
-    @JvmField
-    var price: String? = null
-    @JvmField
-    var mrp: String? = null
-    @JvmField
-    var courseId: String? = null
-    @JvmField
-    val enrollmentStart: String? = null
-    @JvmField
-    val enrollmentEnd: String? = null
-    @Relationship("course", resolve = true)
-    @JvmField
-    var course: MyCourse? = null
-    @Relationship("run-attempts", resolve = true)
-    @JvmField
-    var runAttempts: ArrayList<MyRunAttempts>? = null
-    @Relationship("sections", resolve = true)
-    @JvmField
-    var sections: ArrayList<CourseSection>? = null
-    @Relationship("ratings", resolve = true)
-    @JvmField
-    var rating: ArrayList<Rating>? = null
-    @Relationship("announcements", resolve = true)
-    @JvmField
-    var announcements: ArrayList<Announcement>? = null
-    @JvmField
-    var whatsappLink: String? = null
-}
-
-@Type("rating")
-class Rating : BaseModel()
-
-@Type("courses")
-open class Course : BaseModel() {
-    @JvmField
-    var title: String? = null
-    @JvmField
-    var subtitle: String? = null
-    @JvmField
-    var logo: String? = null
-    @JvmField
-    var summary: String? = null
-    @JvmField
-    var categoryName: String? = null
-    @JvmField
-    var categoryId: Int = 0
-    @JvmField
-    var promoVideo: String? = null
-    @JvmField
-    var reviewCount: Int? = null
-    @JvmField
-    var difficulty: String? = null
-    @JvmField
-    var rating: Float? = null
-    @JvmField
-    var slug: String? = null
-    @JvmField
-    var coverImage: String? = null
-    @Relationship("instructors", resolve = true)
-    @JvmField
-    var instructors: ArrayList<Instructor>? = null
-    @Relationship("runs", resolve = true)
-    @JvmField
-    var runs: ArrayList<Runs>? = null
-}
-
-@Type("tags")
-class Tags : BaseModel() {
-    @JvmField
-    var name: String? = null
-}
-
-@Type("course")
-class MyCourse : Course()
+open class Runs(
+    val name: String,
+    val description: String,
+    val start: String,
+    val end: String,
+    val price: String,
+    val mrp: String?,
+    val unlisted: Boolean,
+    val enrollmentStart: String,
+    val enrollmentEnd: String,
+    @Relationship("sections")
+    val sections: ArrayList<Sections>?,
+    @Relationship("tags")
+    val tags: ArrayList<Tags>?
+) : BaseModel()
 
 @Type("sections")
 open class Sections : BaseModel() {
@@ -187,22 +70,19 @@ open class Sections : BaseModel() {
     var status: String? = null
     @JvmField
     var order: Int? = null
-    @Relationship("contents", resolve = true)
+    @Relationship("contents")
     @JvmField
-    var contents: ArrayList<Contents>? = null
+    var contents: ArrayList<ContentsId>? = null
 }
 
-@Type("contents")
-open class Contents : BaseModel() {
-    @JvmField
-    var contentable: String? = null
-    @JvmField
-    var duration: Long? = null
-    @JvmField
-    var title: String? = null
-    @JvmField
-    val sectionContent: SectionContent? = null
-}
+//=======Plurals Models =========
+
+@Type("instructors")
+open class Instructor(
+    val name: String?,
+    val description: String?,
+    val photo: String?
+) : BaseModel()
 
 class SectionContent : BaseModel() {
     @JvmField
@@ -211,63 +91,101 @@ class SectionContent : BaseModel() {
     val sectionId: String? = null
 }
 
+// =======Singular Models =========
+
+
+@Type("course")
+class MyCourse(
+    val title: String,
+    val subtitle: String,
+    val logo: String,
+    val summary: String,
+    val categoryId: Int,
+    val promoVideo: String,
+    val reviewCount: Int,
+    val difficulty: String,
+    val rating: Float,
+    val slug: String,
+    @Relationship("instructors")
+    val instructors: ArrayList<Instructor>?,
+    val coverImage: String
+) : BaseModel()
+
+@Type("run_attempt")
+open class MyRunAttempt(
+    val certificateApproved: Boolean,
+    val end: String,
+    val premium: Boolean,
+    val revoked: Boolean,
+    @Relationship("run")
+    val run: MyCourseRuns?
+) : BaseModel()
+
+@Type("run")
+class MyCourseRuns(
+    val name: String,
+    val description: String,
+    val start: String,
+    val end: String,
+    val price: String,
+    val mrp: String?,
+    val unlisted: Boolean,
+    val enrollmentStart: String,
+    val enrollmentEnd: String,
+    @Relationship("sections")
+    val sections: ArrayList<CourseSection>?,
+    @Relationship("run-attempts")
+    var runAttempts: ArrayList<MyRunAttempts>?,
+    @Relationship("course")
+    var course: MyCourse? = null,
+    @Relationship("ratings")
+    var rating: ArrayList<Rating>?,
+    val whatsappLink: String?
+) : BaseModel()
+
 @Type("section")
-class CourseSection : BaseModel() {
-    @JvmField
-    var name: String? = null
-    @JvmField
-    var status: String? = null
-    @JvmField
-    var order: Int? = null
-    @JvmField
-    var createdAt: String? = null
-    @JvmField
-    var premium: Boolean? = null
-    @JvmField
-    var runId: String? = null
+class CourseSection(
+    val name: String,
+    val status: String,
+    val order: Int,
+    val premium: Boolean,
+    val runId: String,
     @RelationshipLinks("contents")
-    @JvmField
-    var courseContentLinks: Links? = null
-    @Relationship("contents", resolve = true)
-    @JvmField
-    var courseContent: ArrayList<LectureContent>? = null
-}
+    val courseContentLinks: Links?,
+    @Relationship("contents")
+    val courseContent: ArrayList<LectureContent>? = null
+) : BaseModel()
+
 
 @Type("content")
-class LectureContent : BaseModel() {
-    @JvmField
-    var contentable: String? = null
-    @JvmField
-    var duration: Long? = null
-    @JvmField
-    var title: String? = null
-    @JvmField
-    var sectionContent: SectionContent? = null
-    @Relationship("code-challenge", resolve = true)
-    @JvmField
-    var codeChallenge: ContentCodeChallenge? = null
-    @Relationship("document", resolve = true)
-    @JvmField
-    var document: ContentDocumentType? = null
-    @Relationship("lecture", resolve = true)
-    @JvmField
-    var lecture: ContentLectureType? = null
-    @Relationship("progress", resolve = true)
-    @JvmField
-    var progress: ContentProgress? = null
-    @Relationship("video", resolve = true)
-    @JvmField
-    var video: ContentVideoType? = null
-    @Relationship("qna", resolve = true)
-    @JvmField
-    var qna: ContentQna? = null
-    @Relationship("csv", resolve = true)
-    @JvmField
-    var csv: ContentCsv? = null
-}
+class LectureContent(
+    val contentable: String,
+    val duration: Long?,
+    val title: String,
+    val sectionContent: SectionContent?,
+    @Relationship("code-challenge")
+    val codeChallenge: ContentCodeChallenge?,
+    @Relationship("document")
+    val document: ContentDocumentType?,
+    @Relationship("lecture")
+    val lecture: ContentLectureType?,
+    @Relationship("progress")
+    val progress: ContentProgress?,
+    @Relationship("video")
+    val video: ContentVideoType?,
+    @Relationship("qna")
+    val qna: ContentQna?,
+    @Relationship("csv")
+    val csv: ContentCsv?
+) : BaseModel()
+
+// =======Singular Models =========
+
+
+// =======Section Content Models =========
 
 @Type("code_challenge")
-class ContentCodeChallenge : BaseModel() {
+class ContentCodeChallenge() : BaseModel() {
     @JvmField
     var contentId: String? = null
     @JvmField
@@ -382,11 +300,14 @@ class Progress : BaseModel() {
     var status: String? = null
     @Relationship("run-attempt")
     @JvmField
-    var runs: RunAttemptsModel? = null
+    var runs: RunAttemptsId? = null
     @Relationship("content")
     @JvmField
-    var content: Contents? = null
+    var content: ContentsId? = null
 }
+
+// =======Section Content Models =========
+
 
 @Type("quizzes")
 class Quizzes : BaseModel() {
@@ -487,16 +408,13 @@ class DoubtsJsonApi : BaseModel() {
     var resolvedById: String = ""
     @Relationship("run-attempt", resolve = true)
     @JvmField
-    var runAttempt: MyRunAttempt? = null
+    var runAttempt: RunAttemptId? = null
     @Relationship("run-attempt", resolve = true)
     @JvmField
-    var postrunAttempt: RunAttemptsModel? = null
-    ////    @Relationship("comments", resolve = true,relType = RelType.RELATED)
-//    @JvmField
-//    var comments: List<Comments>? = null
+    var postrunAttempt: RunAttemptsId? = null
     @Relationship("content", resolve = true)
     @JvmField
-    var content: Contents? = null
+    var content: ContentsId? = null
 }
 
 @Type("comment")
@@ -569,24 +487,34 @@ data class ContentId(
 )
 
 @Type("contents")
-data class ContentsId(
+open class ContentsId(
     @Id
     val id: String?
-)
+){
+    var contentable: String? = null
+    val duration: Long? = null
+    val title: String? = null
+    val sectionContent: SectionContent? = null
+}
+
+@Type("rating")
+class Rating : BaseModel()
+
+
+@Type("tags")
+class Tags : BaseModel() {
+    @JvmField
+    var name: String? = null
+}
 
 @Type("carousel_cards")
-class CarouselCards : BaseModel() {
-    @JvmField
-    var title: String? = null
-    @JvmField
-    var subtitle: String? = null
-    @JvmField
-    var img: String? = null
-    @JvmField
-    var buttonText: String? = null
-    @JvmField
-    var buttonLink: String? = null
-}
+class CarouselCards(
+    var title: String,
+    var subtitle: String,
+    var img: String,
+    var buttonText: String,
+    var buttonLink: String
+) : BaseModel()
 
 
 

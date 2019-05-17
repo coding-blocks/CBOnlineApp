@@ -29,12 +29,10 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.VdoPlayerControlView
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.RunAttemptsId
-import com.codingblocks.onlineapi.models.RunAttemptsModel
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
@@ -294,13 +292,9 @@ class VideoPlayerActivity : AppCompatActivity(),
                     doubt.body = doubtView.descriptionLayout.editText!!.text.toString()
                     doubt.title = doubtView.titleLayout.editText!!.text.toString()
                     doubt.category = categoryId
-                    val runAttempts = RunAttemptsModel() // type run-attempts
-                    val contents = Contents() // type contents
-                    runAttempts.id = attemptId
-                    contents.id = contentId
                     doubt.status = "PENDING"
-                    doubt.postrunAttempt = runAttempts
-                    doubt.content = contents
+                    doubt.postrunAttempt = RunAttemptsId(attemptId)
+                    doubt.content = ContentsId(contentId)
                     Clients.onlineV2JsonApi.createDoubt(doubt)
                         .enqueue(retrofitCallback { throwable, response ->
                             response?.body().let {

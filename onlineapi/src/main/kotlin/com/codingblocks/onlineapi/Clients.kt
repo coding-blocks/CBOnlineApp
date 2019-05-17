@@ -4,7 +4,6 @@ import com.codingblocks.onlineapi.api.OnlineJsonApi
 import com.codingblocks.onlineapi.api.OnlineRestApi
 import com.codingblocks.onlineapi.models.Announcement
 import com.codingblocks.onlineapi.models.CarouselCards
-import com.codingblocks.onlineapi.models.Certificate
 import com.codingblocks.onlineapi.models.Choice
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.ContentCodeChallenge
@@ -15,13 +14,11 @@ import com.codingblocks.onlineapi.models.ContentLectureType
 import com.codingblocks.onlineapi.models.ContentProgress
 import com.codingblocks.onlineapi.models.ContentQna
 import com.codingblocks.onlineapi.models.ContentVideoType
-import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.CourseSection
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Instructor
-import com.codingblocks.onlineapi.models.InstructorSingle
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.MyCourse
 import com.codingblocks.onlineapi.models.MyCourseRuns
@@ -41,7 +38,6 @@ import com.codingblocks.onlineapi.models.RunAttemptsModel
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Tags
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jasminb.jsonapi.RelationshipResolver
@@ -59,47 +55,18 @@ object Clients {
         .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
 
     var authJwt = ""
+
     private val onlineApiResourceConverter = ResourceConverter(
-        om,
-        Instructor::class.java,
-        Course::class.java,
-        Sections::class.java,
-        Contents::class.java,
-        MyCourseRuns::class.java,
-        MyCourse::class.java,
-        MyRunAttempts::class.java,
-        MyRunAttempt::class.java,
-        ContentVideoType::class.java,
-        LectureContent::class.java,
-        ContentDocumentType::class.java,
-        ContentProgress::class.java,
-        CourseSection::class.java,
-        ContentLectureType::class.java,
-        InstructorSingle::class.java,
-        ContentCodeChallenge::class.java,
-        ContentQna::class.java,
-        Announcement::class.java,
-        Progress::class.java,
-        Quizzes::class.java,
-        Question::class.java,
-        Choice::class.java,
-        QuizAttempt::class.java,
-        RunAttemptsModel::class.java,
-        Quizqnas::class.java,
-        DoubtsJsonApi::class.java,
-        ContentCsv::class.java,
-        Comment::class.java,
-        Note::class.java,
-        Notes::class.java,
-        Rating::class.java,
-        Tags::class.java,
-        Certificate::class.java,
-        CarouselCards::class.java,
-        RunAttemptId::class.java,
-        RunAttemptsId::class.java,
-        ContentId::class.java,
-        ContentsId::class.java
-        )
+        om, Instructor::class.java, Course::class.java, Sections::class.java, MyCourseRuns::class.java,
+        MyCourse::class.java, MyRunAttempts::class.java, MyRunAttempt::class.java, ContentVideoType::class.java,
+        LectureContent::class.java, ContentDocumentType::class.java, ContentProgress::class.java,
+        CourseSection::class.java, ContentLectureType::class.java, ContentCodeChallenge::class.java,
+        ContentQna::class.java, Announcement::class.java, Progress::class.java, Quizzes::class.java,
+        Question::class.java, Choice::class.java, QuizAttempt::class.java, RunAttemptsModel::class.java,
+        Quizqnas::class.java, DoubtsJsonApi::class.java, ContentCsv::class.java, Comment::class.java,
+        Note::class.java, Notes::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
+        RunAttemptId::class.java, RunAttemptsId::class.java, ContentId::class.java, ContentsId::class.java
+    )
 
     private val relationshipResolver = RelationshipResolver {
         var url = it
