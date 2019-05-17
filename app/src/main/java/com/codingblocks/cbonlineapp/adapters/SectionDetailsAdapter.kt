@@ -41,8 +41,9 @@ import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Contents
+import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Progress
+import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.codingblocks.onlineapi.models.RunAttemptsModel
 import kotlinx.android.synthetic.main.item_section.view.*
 import org.jetbrains.anko.alert
@@ -320,13 +321,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
     fun setProgress(id: String, attempt_id: String, contentable: String, sectionId: String, contentId: String) {
         doAsync {
             val p = Progress()
-            val runAttempts = RunAttemptsModel()
-            val contents = Contents()
-            runAttempts.id = attempt_id
-            contents.id = id
             p.status = "DONE"
-            p.runs = runAttempts
-            p.content = contents
+            p.runs = RunAttemptsId(attempt_id)
+            p.content = ContentsId(id)
             Clients.onlineV2JsonApi.setProgress(p).enqueue(retrofitCallback { throwable, response ->
 
                 response?.body().let {
@@ -355,7 +352,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                         else -> {
                         }
                     }
-
                 }
             })
         }
@@ -364,14 +360,10 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
     private fun updateProgress(id: String, attempt_id: String, progressId: String, status: String, contentable: String, sectionId: String, contentId: String) {
         doAsync {
             val p = Progress()
-            val runAttempts = RunAttemptsModel()
-            val contents = Contents()
-            runAttempts.id = attempt_id
-            contents.id = id
             p.id = progressId
             p.status = status
-            p.runs = runAttempts
-            p.content = contents
+            p.runs = RunAttemptsId(attempt_id)
+            p.content = ContentsId(id)
             Clients.onlineV2JsonApi.updateProgress(progressId, p).enqueue(retrofitCallback { throwable, response ->
                 if (response != null) {
                     if (response.isSuccessful) {

@@ -197,7 +197,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         Clients.onlineV2JsonApi.courseById(courseId).enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let { course ->
                 skeletonScreen.hide()
-                fetchInstructors(course.id!!)
+                fetchInstructors(course.id)
                 batchAdapter = BatchesAdapter(ArrayList(), object : OnCartItemClickListener {
                     override fun onItemClick(id: String, name: String) {
                         addtocart(id, name)
@@ -225,8 +225,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                         toast("No available runs right now ! Please check back later")
                     }
                 }
-                showPromoVideo(course.promoVideo ?: "")
-                fetchRating(course.id!!)
+                showPromoVideo(course.promoVideo)
+                fetchRating(course.id)
                 if (!course.runs.isNullOrEmpty()) {
                     val sections = course.runs?.get(0)?.sections
                     val sectionsList = ArrayList<Sections>()
