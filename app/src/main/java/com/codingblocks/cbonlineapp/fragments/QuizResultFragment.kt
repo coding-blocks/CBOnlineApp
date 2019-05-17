@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.fragments
 
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.Color.BLACK
 import android.graphics.Color.GREEN
 import android.graphics.drawable.GradientDrawable
@@ -28,11 +29,12 @@ class QuizResultFragment : Fragment() {
             quizAttemptId = it.getString(QUIZ_ATTEMPT_ID)!!
         }
 
-        // change color of
         val totalBackground = total_questions_image.background as GradientDrawable
-        totalBackground.color = ColorStateList.valueOf(BLACK)
+        // 0x696969
+        totalBackground.color = ColorStateList.valueOf(Color.parseColor("#696969"))
         val correctBackground = correct_answers_score_image.background as GradientDrawable
-        correctBackground.color = ColorStateList.valueOf(GREEN)
+        // 0x90CE8700
+        correctBackground.color = ColorStateList.valueOf(Color.parseColor("#90ce87"))
 
         Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, response ->
             val questions = response?.body()?.result?.questions
