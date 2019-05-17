@@ -14,7 +14,6 @@ import com.codingblocks.onlineapi.models.ContentLectureType
 import com.codingblocks.onlineapi.models.ContentProgress
 import com.codingblocks.onlineapi.models.ContentQna
 import com.codingblocks.onlineapi.models.ContentVideoType
-import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.CourseSection
@@ -56,44 +55,17 @@ object Clients {
         .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
 
     var authJwt = ""
+
     private val onlineApiResourceConverter = ResourceConverter(
-        om,
-        Instructor::class.java,
-        Course::class.java,
-        Sections::class.java,
-        Contents::class.java,
-        MyCourseRuns::class.java,
-        MyCourse::class.java,
-        MyRunAttempts::class.java,
-        MyRunAttempt::class.java,
-        ContentVideoType::class.java,
-        LectureContent::class.java,
-        ContentDocumentType::class.java,
-        ContentProgress::class.java,
-        CourseSection::class.java,
-        ContentLectureType::class.java,
-        ContentCodeChallenge::class.java,
-        ContentQna::class.java,
-        Announcement::class.java,
-        Progress::class.java,
-        Quizzes::class.java,
-        Question::class.java,
-        Choice::class.java,
-        QuizAttempt::class.java,
-        RunAttemptsModel::class.java,
-        Quizqnas::class.java,
-        DoubtsJsonApi::class.java,
-        ContentCsv::class.java,
-        Comment::class.java,
-        Note::class.java,
-        Notes::class.java,
-        Rating::class.java,
-        Tags::class.java,
-        CarouselCards::class.java,
-        RunAttemptId::class.java,
-        RunAttemptsId::class.java,
-        ContentId::class.java,
-        ContentsId::class.java
+        om, Instructor::class.java, Course::class.java, Sections::class.java, MyCourseRuns::class.java,
+        MyCourse::class.java, MyRunAttempts::class.java, MyRunAttempt::class.java, ContentVideoType::class.java,
+        LectureContent::class.java, ContentDocumentType::class.java, ContentProgress::class.java,
+        CourseSection::class.java, ContentLectureType::class.java, ContentCodeChallenge::class.java,
+        ContentQna::class.java, Announcement::class.java, Progress::class.java, Quizzes::class.java,
+        Question::class.java, Choice::class.java, QuizAttempt::class.java, RunAttemptsModel::class.java,
+        Quizqnas::class.java, DoubtsJsonApi::class.java, ContentCsv::class.java, Comment::class.java,
+        Note::class.java, Notes::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
+        RunAttemptId::class.java, RunAttemptsId::class.java, ContentId::class.java, ContentsId::class.java
     )
 
     private val relationshipResolver = RelationshipResolver {

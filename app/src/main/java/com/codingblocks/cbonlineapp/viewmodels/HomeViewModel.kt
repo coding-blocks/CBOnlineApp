@@ -33,7 +33,7 @@ class HomeViewModel(
                         it.body()?.let { courseList ->
                             courseList.forEach { course ->
                                 course.run {
-                                    courseDao.insert(
+                                    courseDao.insertNew(
                                         Course(
                                             id,
                                             title,
@@ -61,7 +61,7 @@ class HomeViewModel(
                                     }
                                 }
                                 list?.get(0)?.run {
-                                    runDao.insert(
+                                    runDao.insertNew(
                                         CourseRun(
                                             id,
                                             "",
@@ -84,7 +84,7 @@ class HomeViewModel(
 
 
                                 course.instructors?.forEach { instructor ->
-                                    instructorDao.insert(
+                                    instructorDao.insertNew(
                                         Instructor(
                                             instructor.id,
                                             instructor.name,
@@ -116,7 +116,7 @@ class HomeViewModel(
                         it.body()?.let { courseList ->
                             courseList.forEach { course ->
                                 course.run {
-                                    courseDao.insert(
+                                    courseDao.insertNew(
                                         Course(
                                             id,
                                             title,
@@ -144,7 +144,7 @@ class HomeViewModel(
                                     }
                                 }
                                 list?.get(0)?.run {
-                                    runDao.insert(
+                                    runDao.insertNew(
                                         CourseRun(
                                             id,
                                             "",
@@ -166,7 +166,7 @@ class HomeViewModel(
 
 
                                 course.instructors?.forEach { instructor ->
-                                    instructorDao.insert(
+                                    instructorDao.insertNew(
                                         Instructor(
                                             instructor.id,
                                             instructor.name,

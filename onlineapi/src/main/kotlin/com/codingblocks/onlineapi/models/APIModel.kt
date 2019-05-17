@@ -56,7 +56,7 @@ open class Runs(
     val enrollmentEnd: String,
     @Relationship("sections")
     val sections: ArrayList<Sections>?,
-    @Relationship("sections")
+    @Relationship("tags")
     val tags: ArrayList<Tags>?
 ) : BaseModel()
 
@@ -70,21 +70,9 @@ open class Sections : BaseModel() {
     var status: String? = null
     @JvmField
     var order: Int? = null
-    @Relationship("contents", resolve = true)
+    @Relationship("contents")
     @JvmField
-    var contents: ArrayList<Contents>? = null
-}
-
-@Type("contents")
-open class Contents : BaseModel() {
-    @JvmField
-    var contentable: String? = null
-    @JvmField
-    var duration: Long? = null
-    @JvmField
-    var title: String? = null
-    @JvmField
-    val sectionContent: SectionContent? = null
+    var contents: ArrayList<ContentsId>? = null
 }
 
 //=======Plurals Models =========
@@ -499,10 +487,15 @@ data class ContentId(
 )
 
 @Type("contents")
-data class ContentsId(
+open class ContentsId(
     @Id
     val id: String?
-)
+){
+    var contentable: String? = null
+    val duration: Long? = null
+    val title: String? = null
+    val sectionContent: SectionContent? = null
+}
 
 @Type("rating")
 class Rating : BaseModel()

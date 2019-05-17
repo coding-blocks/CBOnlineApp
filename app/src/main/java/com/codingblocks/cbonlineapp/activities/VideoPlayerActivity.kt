@@ -29,12 +29,10 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.VdoPlayerControlView
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.RunAttemptsId
-import com.codingblocks.onlineapi.models.RunAttemptsModel
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
