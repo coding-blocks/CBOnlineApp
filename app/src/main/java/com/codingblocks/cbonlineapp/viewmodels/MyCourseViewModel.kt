@@ -55,7 +55,7 @@ class MyCourseViewModel(
                                     val oldSection = sectionDao.getSectionWithId(id)
                                     if (oldSection == null)
                                         sectionDao.insert(newSection)
-                                    else if (oldSection != newSection) {
+                                    else if (oldSection == newSection) {
                                         sectionDao.update(newSection)
                                     }
                                     courseContentLinks?.related?.href?.substring(7)
@@ -216,6 +216,10 @@ class MyCourseViewModel(
                                                                             contentsDao.insert(
                                                                                 newContent
                                                                             )
+                                                                            sectionWithContentsDao.insert(SectionWithContent(
+                                                                                courseSection.id,
+                                                                                content.id
+                                                                            ))
 
                                                                         } else if (oldContent != newContent) {
                                                                             contentLecture.isDownloaded =
@@ -224,12 +228,6 @@ class MyCourseViewModel(
                                                                                 newContent
                                                                             )
                                                                         }
-                                                                        sectionWithContentsDao.insert(
-                                                                            SectionWithContent(
-                                                                                courseSection.id,
-                                                                                content.id
-                                                                            )
-                                                                        )
                                                                     }
                                                             }
                                                         }

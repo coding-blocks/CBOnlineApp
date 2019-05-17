@@ -14,14 +14,9 @@ import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.OnItemClickListener
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.ContentId
-import com.codingblocks.onlineapi.models.Contents
 import com.codingblocks.onlineapi.models.ContentsId
-import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.Notes
-import com.codingblocks.onlineapi.models.RunAttemptId
 import com.codingblocks.onlineapi.models.RunAttemptsId
-import com.codingblocks.onlineapi.models.RunAttemptsModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.item_notes.view.bodyTv
 import kotlinx.android.synthetic.main.item_notes.view.contentTitleTv
