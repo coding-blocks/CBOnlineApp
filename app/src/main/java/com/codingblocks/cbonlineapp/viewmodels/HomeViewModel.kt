@@ -20,12 +20,12 @@ class HomeViewModel(
     var courseWithInstructorDao: CourseWithInstructorDao,
     var courseDao: CourseDao,
     var runDao: CourseRunDao,
-    var instructorDao: InstructorDao
+    private var instructorDao: InstructorDao
 ) : ViewModel() {
     var carouselCards: MutableLiveData<List<CarouselCards>> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
 
-    fun fetchRecommendedCourses() {
+    fun fetchRecommendedCourses(recommended: Boolean = true) {
         Clients.onlineV2JsonApi.getRecommendedCourses()
             .enqueue(retrofitCallback { _, response ->
                 response?.let {
@@ -51,12 +51,13 @@ class HomeViewModel(
                                         )
                                     )
                                 }
-                                var list = course.runs?.filter {
-                                    !it.enrollmentStart.greater() && it.enrollmentEnd.greater() && !it.unlisted
-                                }?.sortedWith(compareBy { it.price })
+                                var list = course.runs?.filter { run ->
+                                    !run.enrollmentStart.greater() && run.enrollmentEnd.greater() && !run.unlisted
+                                }?.sortedWith(compareBy { run -> run.price })
                                 if (list != null) {
                                     if (list.isEmpty()) {
-                                        list = course.runs?.sortedWith(compareBy { it.price })
+                                        list =
+                                            course.runs?.sortedWith(compareBy { run -> run.price })
                                     }
                                 }
                                 list?.get(0)?.run {
@@ -73,27 +74,27 @@ class HomeViewModel(
                                             price,
                                             mrp ?: "",
                                             course.id,
-                                            updatedAt,
+                                            crUpdatedAt = updatedAt,
                                             title = course.title,
-                                            recommended = true
+                                            recommended = recommended
                                         )
                                     )
                                 }
 
 
 
-                                course.instructors?.forEach {
+                                course.instructors?.forEach { instructor ->
                                     instructorDao.insert(
                                         Instructor(
-                                            it.id,
-                                            it.name,
-                                            it.description ?: "",
-                                            it.photo,
-                                            it.updatedAt
+                                            instructor.id,
+                                            instructor.name,
+                                            instructor.description ?: "",
+                                            instructor.photo,
+                                            instructor.updatedAt
                                         )
                                     )
                                     courseWithInstructorDao.insert(
-                                        CourseWithInstructor(course.id, it.id)
+                                        CourseWithInstructor(course.id, instructor.id)
                                     )
                                 }
                             }
@@ -109,7 +110,7 @@ class HomeViewModel(
 
     fun fetchAllCourses() {
         Clients.onlineV2JsonApi.getAllCourses()
-            .enqueue(retrofitCallback { throwable, response ->
+            .enqueue(retrofitCallback { _, response ->
                 response?.let {
                     if (response.isSuccessful) {
                         it.body()?.let { courseList ->
@@ -133,12 +134,13 @@ class HomeViewModel(
                                         )
                                     )
                                 }
-                                var list = course.runs?.filter {
-                                    !it.enrollmentStart.greater() && it.enrollmentEnd.greater() && !it.unlisted
-                                }?.sortedWith(compareBy { it.price })
+                                var list = course.runs?.filter { runs ->
+                                    !runs.enrollmentStart.greater() && runs.enrollmentEnd.greater() && !runs.unlisted
+                                }?.sortedWith(compareBy { run -> run.price })
                                 if (list != null) {
                                     if (list.isEmpty()) {
-                                        list = course.runs?.sortedWith(compareBy { it.price })
+                                        list =
+                                            course.runs?.sortedWith(compareBy { run -> run.price })
                                     }
                                 }
                                 list?.get(0)?.run {
@@ -155,7 +157,7 @@ class HomeViewModel(
                                             price,
                                             mrp ?: "",
                                             course.id,
-                                            updatedAt,
+                                            crUpdatedAt = updatedAt,
                                             title = course.title
                                         )
                                     )
@@ -163,18 +165,18 @@ class HomeViewModel(
 
 
 
-                                course.instructors?.forEach {
+                                course.instructors?.forEach { instructor ->
                                     instructorDao.insert(
                                         Instructor(
-                                            it.id,
-                                            it.name,
-                                            it.description ?: "",
-                                            it.photo,
-                                            it.updatedAt
+                                            instructor.id,
+                                            instructor.name,
+                                            instructor.description ?: "",
+                                            instructor.photo,
+                                            instructor.updatedAt
                                         )
                                     )
                                     courseWithInstructorDao.insert(
-                                        CourseWithInstructor(course.id, it.id)
+                                        CourseWithInstructor(course.id, instructor.id)
                                     )
                                 }
                             }
@@ -182,6 +184,116 @@ class HomeViewModel(
                         }
                     }
                     progress.value = false
+                }
+            })
+    }
+
+    fun fetchMyCourses() {
+        Clients.onlineV2JsonApi.getMyCourses()
+            .enqueue(retrofitCallback { _, response ->
+                response?.let {
+                    if (response.isSuccessful) {
+                        it.body()?.let { courseList ->
+                            courseList.forEach { courseRun ->
+                                courseRun.runAttempts?.get(0)?.id?.let { runId ->
+                                    Clients.api.getMyCourseProgress(runId)
+                                        .enqueue(retrofitCallback { _, progressRes ->
+                                            progressRes?.body().let {
+                                                val progress: Double = try {
+                                                    it?.get("percent") as Double
+                                                } catch (e: Exception) {
+                                                    0.0
+                                                }
+                                                courseRun.course?.run {
+                                                    courseDao.insertNew(
+                                                        Course(
+                                                            id,
+                                                            title,
+                                                            subtitle,
+                                                            logo,
+                                                            summary,
+                                                            promoVideo,
+                                                            difficulty,
+                                                            reviewCount,
+                                                            rating,
+                                                            slug,
+                                                            coverImage,
+                                                            updatedAt,
+                                                            categoryId
+                                                        )
+                                                    )
+                                                }
+                                                courseRun.run {
+                                                    val newRun = CourseRun(
+                                                        id,
+                                                        runAttempts?.get(0)?.id ?: "",
+                                                        name,
+                                                        description,
+                                                        enrollmentStart,
+                                                        enrollmentEnd,
+                                                        start,
+                                                        end,
+                                                        price,
+                                                        mrp ?: "",
+                                                        course?.id ?: "",
+                                                        updatedAt,
+                                                        progress,
+                                                        course?.title ?: "",
+                                                        runAttempts?.get(0)?.premium
+                                                            ?: false
+                                                    )
+                                                    val oldRun = runDao.getRunById(
+                                                        runAttempts?.get(0)?.id ?: ""
+                                                    )
+                                                    if (oldRun == null) {
+                                                        runDao.insert(newRun)
+                                                    } else if (oldRun.progress != progress) {
+                                                        newRun.hits = oldRun.hits
+                                                        runDao.update(newRun)
+                                                    }
+                                                }
+
+                                                courseRun.course?.instructors?.forEach { instructorId ->
+                                                    Clients.onlineV2JsonApi.instructorsById(
+                                                        instructorId.id
+                                                    ).enqueue(
+                                                        retrofitCallback { _, instructorResponse ->
+                                                            instructorResponse?.let {
+                                                                if (instructorResponse.isSuccessful) {
+                                                                    instructorResponse.body()?.run {
+                                                                        instructorDao.insert(
+                                                                            Instructor(
+                                                                                id,
+                                                                                name,
+                                                                                description
+                                                                                    ?: "",
+                                                                                photo,
+                                                                                updatedAt
+                                                                            )
+                                                                        )
+                                                                        courseWithInstructorDao.insert(
+                                                                            CourseWithInstructor(
+                                                                                courseRun.course?.id
+                                                                                    ?: "",
+                                                                                id
+                                                                            )
+                                                                        )
+                                                                    }
+
+                                                                }
+                                                            }
+
+                                                        })
+
+                                                }
+                                            }
+
+                                        })
+                                }
+                                progress.value = false
+                            }
+                        }
+                    }
                 }
             })
     }

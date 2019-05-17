@@ -274,7 +274,7 @@ public class VdoPlayerControlView extends FrameLayout {
         if (player != null && player.isSpeedControlSupported()) {
             speedControlButton.setVisibility(View.VISIBLE);
             float speed = player.getPlaybackSpeed();
-            chosenSpeedIndex = VideoUtils.getClosestFloatIndex(allowedSpeedList, speed);
+            chosenSpeedIndex = VideoUtils.INSTANCE.getClosestFloatIndex(allowedSpeedList, speed);
             speedControlButton.setText(allowedSpeedStrList[chosenSpeedIndex]);
         } else {
             speedControlButton.setVisibility(GONE);
@@ -495,7 +495,7 @@ public class VdoPlayerControlView extends FrameLayout {
 
         @Override
         public void onProgress(long millis) {
-            positionView.setText(VideoUtils.digitalClockTime((int)millis));
+            positionView.setText(VideoUtils.INSTANCE.digitalClockTime((int)millis));
             seekBar.setProgress((int)millis);
         }
 
@@ -516,7 +516,7 @@ public class VdoPlayerControlView extends FrameLayout {
 
         @Override
         public void onLoaded(VdoPlayer.VdoInitParams vdoInitParams) {
-            durationView.setText(String.valueOf(VideoUtils.digitalClockTime((int)player.getDuration())));
+            durationView.setText(String.valueOf(VideoUtils.INSTANCE.digitalClockTime((int)player.getDuration())));
             seekBar.setMax((int)player.getDuration());
             updateSpeedControlButton();
         }

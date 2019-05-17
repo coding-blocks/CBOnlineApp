@@ -4,7 +4,6 @@ import com.codingblocks.onlineapi.api.OnlineJsonApi
 import com.codingblocks.onlineapi.api.OnlineRestApi
 import com.codingblocks.onlineapi.models.Announcement
 import com.codingblocks.onlineapi.models.CarouselCards
-import com.codingblocks.onlineapi.models.Certificate
 import com.codingblocks.onlineapi.models.Choice
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.ContentCodeChallenge
@@ -90,7 +89,6 @@ object Clients {
         Notes::class.java,
         Rating::class.java,
         Tags::class.java,
-        Certificate::class.java,
         CarouselCards::class.java,
         RunAttemptId::class.java,
         RunAttemptsId::class.java,
