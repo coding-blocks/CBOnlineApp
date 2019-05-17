@@ -20,6 +20,7 @@ import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.google.firebase.analytics.FirebaseAnalytics
+import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
@@ -89,6 +90,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             viewModel.progress.value = true
             skeletonScreen.show()
             viewModel.fetchMyCourses()
+            displayCourses()
         }
 
         viewModel.progress.observer(viewLifecycleOwner) {
