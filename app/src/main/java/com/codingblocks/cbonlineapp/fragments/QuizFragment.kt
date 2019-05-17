@@ -11,21 +11,21 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.ViewPagerAdapter
 import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.QUIZ_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.QUIZ_ID
 import com.codingblocks.cbonlineapp.util.QUIZ_QNA
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.QuizSubmission
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.bottom_question_sheet.*
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor
-
 
 
 class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener {
@@ -36,6 +36,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     private lateinit var attemptId: String
     private lateinit var quizAttemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private lateinit var quizSubmissions: ArrayList<QuizSubmission>
 
 
     lateinit var mAdapter: ViewPagerAdapter
@@ -45,7 +46,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?)
-            : View? = inflater.inflate(R.layout.fragment_quiz, container, false).apply {
+        : View? = inflater.inflate(R.layout.fragment_quiz, container, false).apply {
         firebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     }
@@ -155,13 +156,14 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     override fun onClick(v: View) {
         when (v.id) {
             R.id.nextBtn -> if (nextBtn.text == "End") {
-                val fragmentManager = fragmentManager!!
-                val fragmentTransaction = fragmentManager.beginTransaction()
-                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                fragmentTransaction.replace(R.id.framelayout_quiz,
-                        AboutQuizFragment.newInstance(quizId,
-                                attemptId,qnaId), "quiz")
-                fragmentTransaction.commit()
+                Clients.onlineV2JsonApi.sumbitQuizById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
+                    val fragmentManager = fragmentManager!!
+                    val fragmentTransaction = fragmentManager.beginTransaction()
+                    fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                    fragmentTransaction.replace(R.id.framelayout_quiz,
+                        QuizResultFragment.newInstance(quizAttemptId))
+                    fragmentTransaction.commit()
+                })
             } else
                 quizViewPager.currentItem = if (quizViewPager.currentItem < questionList.size - 1)
                     quizViewPager.currentItem + 1
@@ -193,8 +195,8 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                         putString(QUIZ_ATTEMPT_ID, quizAttemptId)
 
 
-                    }
                 }
+            }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
