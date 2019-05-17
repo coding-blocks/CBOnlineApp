@@ -23,6 +23,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -33,7 +34,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     lateinit var skeletonScreen: SkeletonScreen
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    private val viewModel by viewModel<HomeViewModel>()
+    private val viewModel by sharedViewModel<HomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,20 +56,16 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         setHasOptionsMenu(true)
 
         courseDataAdapter =
-            CourseDataAdapter(
-                ArrayList(),
-                view.context,
-                viewModel.courseWithInstructorDao,
-                "allCourses"
+            CourseDataAdapter(ArrayList(), view.context, viewModel.courseWithInstructorDao, "allCourses"
             )
 
-        ui.allcourseText.text = "All Courses"
+        ui.allcourseText.text = getString(R.string.all_courses)
         ui.titleText.visibility = View.GONE
         ui.homeImg.visibility = View.GONE
         ui.viewPager.visibility = View.GONE
+
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
-
 
         skeletonScreen = Skeleton.bind(ui.rvCourses)
             .adapter(courseDataAdapter)
@@ -103,7 +100,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                     .filter { c ->
                         c.title.contains(searchQuery, true)
                     } as ArrayList<CourseRun>)
-            }else{
+            } else {
                 viewModel.fetchAllCourses()
             }
         }

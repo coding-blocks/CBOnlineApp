@@ -8,6 +8,10 @@ const val VIDEO_ID: String = "video_id"
 
 const val RUN_ATTEMPT_ID: String = "run_attempt_id"
 
+const val COURSE_NAME = "course_name"
+
+const val COURSE_ID = "course_id"
+
 const val ATTEMPT_ID = "attempt_id"
 
 const val DOWNLOADED = "downloaded"

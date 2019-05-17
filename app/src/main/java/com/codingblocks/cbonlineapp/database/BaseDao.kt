@@ -15,6 +15,9 @@ interface BaseDao<T> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(obj: T)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertNew(obj: T)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(obj: ArrayList<T>)
 
