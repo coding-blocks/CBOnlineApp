@@ -22,7 +22,9 @@ import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Contents
+import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
+import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.codingblocks.onlineapi.models.RunAttemptsModel
 import kotlinx.android.synthetic.main.item_doubt.view.*
 import java.util.*
@@ -96,16 +98,12 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
             val solvedDoubt = DoubtsJsonApi()
             solvedDoubt.body = doubt.body
             solvedDoubt.title = doubt.title
-            val runAttempts = RunAttemptsModel() // type run-attempts
-            val contents = Contents() // type contents
-            runAttempts.id = doubt.runAttemptId
-            contents.id = doubt.contentId
             solvedDoubt.status = "RESOLVED"
             solvedDoubt.discourseTopicId = doubt.discourseTopicId
             solvedDoubt.id = doubt.dbtUid
             solvedDoubt.resolvedById = (context as Activity).getPrefs().SP_USER_ID
-            solvedDoubt.postrunAttempt = runAttempts
-            solvedDoubt.content = contents
+            solvedDoubt.postrunAttempt = RunAttemptsId(doubt.runAttemptId)
+            solvedDoubt.content = ContentsId(doubt.contentId)
             Clients.onlineV2JsonApi.resolveDoubt(doubt.dbtUid, solvedDoubt).enqueue(retrofitCallback { throwable, response ->
                 response?.body().let {
                     if (response?.isSuccessful!!) {

@@ -294,13 +294,9 @@ class VideoPlayerActivity : AppCompatActivity(),
                     doubt.body = doubtView.descriptionLayout.editText!!.text.toString()
                     doubt.title = doubtView.titleLayout.editText!!.text.toString()
                     doubt.category = categoryId
-                    val runAttempts = RunAttemptsModel() // type run-attempts
-                    val contents = Contents() // type contents
-                    runAttempts.id = attemptId
-                    contents.id = contentId
                     doubt.status = "PENDING"
-                    doubt.postrunAttempt = runAttempts
-                    doubt.content = contents
+                    doubt.postrunAttempt = RunAttemptsId(attemptId)
+                    doubt.content = ContentsId(contentId)
                     Clients.onlineV2JsonApi.createDoubt(doubt)
                         .enqueue(retrofitCallback { throwable, response ->
                             response?.body().let {
