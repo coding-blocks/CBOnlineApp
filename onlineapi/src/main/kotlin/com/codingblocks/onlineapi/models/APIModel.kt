@@ -336,10 +336,10 @@ class Progress : BaseModel() {
     var status: String? = null
     @Relationship("run-attempt")
     @JvmField
-    var runs: RunAttemptsModel? = null
+    var runs: RunAttemptsId? = null
     @Relationship("content")
     @JvmField
-    var content: Contents? = null
+    var content: ContentsId? = null
 }
 
 @Type("quizzes")
@@ -441,16 +441,13 @@ class DoubtsJsonApi : BaseModel() {
     var resolvedById: String = ""
     @Relationship("run-attempt", resolve = true)
     @JvmField
-    var runAttempt: MyRunAttempt? = null
+    var runAttempt: RunAttemptId? = null
     @Relationship("run-attempt", resolve = true)
     @JvmField
-    var postrunAttempt: RunAttemptsModel? = null
-    ////    @Relationship("comments", resolve = true,relType = RelType.RELATED)
-//    @JvmField
-//    var comments: List<Comments>? = null
+    var postrunAttempt: RunAttemptsId? = null
     @Relationship("content", resolve = true)
     @JvmField
-    var content: Contents? = null
+    var content: ContentsId? = null
 }
 
 @Type("comment")

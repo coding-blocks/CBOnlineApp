@@ -17,11 +17,10 @@ import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
-import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.cbonlineapp.util.ZoomOutPageTransformer
-import com.codingblocks.cbonlineapp.viewmodels.CourseViewModel
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
+import com.codingblocks.onlineapi.models.CarouselCards
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -30,6 +29,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class HomeFragment : Fragment(), AnkoLogger {
@@ -37,10 +37,10 @@ class HomeFragment : Fragment(), AnkoLogger {
     private lateinit var courseDataAdapter: CourseDataAdapter
     private lateinit var skeletonScreen: SkeletonScreen
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     val ui = HomeFragmentUi<Fragment>()
 
-    private val viewModel by viewModel<CourseViewModel>()
-
+    private val viewModel by viewModel<HomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,8 +73,6 @@ class HomeFragment : Fragment(), AnkoLogger {
         ui.rvCourses.adapter = courseDataAdapter
         ui.homeImg.visibility = View.GONE
 
-
-
         skeletonScreen = Skeleton.bind(ui.rvCourses)
             .adapter(courseDataAdapter)
             .shimmer(true)
@@ -84,19 +82,25 @@ class HomeFragment : Fragment(), AnkoLogger {
             .count(4)
             .load(R.layout.item_skeleton_course_card)
             .show()
+
         ui.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.progress.value = true
+            skeletonScreen.show()
             viewModel.fetchRecommendedCourses()
         }
+
+        viewModel.fetchCards()
+
         displayCourses()
-        viewModel.fetchRecommendedCourses()
-        fetchCards()
-
-    }
-
-    private fun fetchCards() {
-        Clients.onlineV2JsonApi.carouselCards.enqueue(retrofitCallback { fallback, response ->
-            response?.body()?.let {
-                val carouselSliderAdapter = CarouselSliderAdapter(it, context)
+        viewModel.carouselCards.observer(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                ui.viewPager.visibility = View.GONE
+                ui.homeImg.visibility = View.VISIBLE
+            } else {
+                ui.viewPager.visibility = View.VISIBLE
+                ui.homeImg.visibility = View.GONE
+                val carouselSliderAdapter =
+                    CarouselSliderAdapter(it as ArrayList<CarouselCards>, context)
                 ui.viewPager.adapter = carouselSliderAdapter
                 ui.viewPager.currentItem = 0
                 ui.viewPager.setPageTransformer(true, ZoomOutPageTransformer())
@@ -104,7 +108,7 @@ class HomeFragment : Fragment(), AnkoLogger {
                 val update = Runnable {
                     if (ui.viewPager.currentItem + 1 == it.size) {
                         ui.viewPager.setCurrentItem(0, true)
-                    }`
+                    }
                     ui.viewPager.setCurrentItem(++ui.viewPager.currentItem, true)
                 }
                 val swipeTimer = Timer()
@@ -114,20 +118,24 @@ class HomeFragment : Fragment(), AnkoLogger {
                     }
                 }, 5000, 5000)
             }
-            fallback?.let {
-                ui.viewPager.visibility = View.GONE
-                ui.homeImg.visibility = View.VISIBLE
-            }
-        })
+        }
+
+        viewModel.progress.observer(viewLifecycleOwner){
+            ui.swipeRefreshLayout.isRefreshing = it
+        }
+
     }
 
+
     private fun displayCourses(searchQuery: String = "") {
-        viewModel.runDao.getRecommendedRuns().observer(this) {
+        viewModel.runDao.getRecommendedRuns().observer(viewLifecycleOwner) {
             if (!it.isEmpty()) {
                 skeletonScreen.hide()
-                courseDataAdapter.setData(it.filter { c ->
+                courseDataAdapter.setData(it.shuffled().filter { c ->
                     c.title.contains(searchQuery, true)
                 } as ArrayList<CourseRun>)
+            }else{
+                viewModel.fetchRecommendedCourses()
             }
 
         }

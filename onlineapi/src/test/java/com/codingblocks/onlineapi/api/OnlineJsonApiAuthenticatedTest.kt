@@ -56,6 +56,18 @@ class OnlineJsonApiAuthenticatedTest {
         }
     }
 
+//    @Test
+//    fun `SET progress`() {
+//        val p  = Progress()
+//        p.id = "316797"
+//        p.status = "DONE"
+//        p.runs?.id = "8252"
+//        p.content?.id = "443"
+//        val progress = jsonapi.updateProgress("316797",p).execute().body()
+//        progress?.let {
+//            assertEquals(1, 1)
+//        }
+//    }
 
     @Test
     fun `GET Quiz`() {
