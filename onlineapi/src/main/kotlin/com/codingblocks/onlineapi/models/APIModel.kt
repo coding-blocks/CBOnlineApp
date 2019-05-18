@@ -414,7 +414,10 @@ class DoubtsJsonApi : BaseModel() {
     var postrunAttempt: RunAttemptsId? = null
     @Relationship("content", resolve = true)
     @JvmField
-    var content: ContentsId? = null
+    var content: ContentId? = null
+    @Relationship("contents", resolve = true)
+    @JvmField
+    var contents: ContentsId? = null
 }
 
 @Type("comment")
