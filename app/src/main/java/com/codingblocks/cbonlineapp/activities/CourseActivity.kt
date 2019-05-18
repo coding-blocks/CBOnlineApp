@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.activities
 
 import android.content.Context
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,6 +34,7 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
+import com.google.android.material.resources.TextAppearance
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
@@ -255,9 +258,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 it.tags?.forEach {
                     val chip  = Chip(this)
                     chip.text = it.name
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        chip.typeface = applicationContext.resources.getFont(R.font.nunitosans_regular)
-                    }
+                    val typeFace: Typeface? = ResourcesCompat.getFont(this.applicationContext, R.font.nunitosans_regular)
+                    chip.typeface=typeFace
                     tagsChipgroup.addView(chip)
                 }
 
