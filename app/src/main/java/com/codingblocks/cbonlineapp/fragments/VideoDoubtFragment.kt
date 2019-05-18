@@ -76,8 +76,7 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
                         try {
                             doubtsDao.insert(
                                 DoubtsModel(
-                                    it.id
-                                        ?: "", it.title, it.body, it.content?.id
+                                    it.id, it.title, it.body, it.content?.id
                                         ?: "", it.status, it.runAttempt?.id ?: "",
                                     it.discourseTopicId
                                 )

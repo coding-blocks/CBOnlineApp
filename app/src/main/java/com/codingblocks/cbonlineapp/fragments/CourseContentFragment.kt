@@ -25,7 +25,10 @@ import kotlinx.android.synthetic.main.fragment_course_content.view.rvExpendableV
 import kotlinx.android.synthetic.main.fragment_course_content.view.sectionProgressBar
 import kotlinx.android.synthetic.main.fragment_course_content.view.swiperefresh
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.startService
+import org.jetbrains.anko.yesButton
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
@@ -106,6 +109,22 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
         viewModel.progress.observer(viewLifecycleOwner) {
             view.swiperefresh.isRefreshing = it
+        }
+        viewModel.revoked.observer(viewLifecycleOwner) {
+            if(it){
+                alert {
+                    title = "Error Fetching Course"
+                    message = """
+                        There was an error downloading course contents.
+                        Please contact support@codingblocks.com
+                        """.trimIndent()
+                    yesButton {
+                        it.dismiss()
+                        activity?.finish()
+                    }
+                    isCancelable = false
+                }.show()
+            }
         }
         return view
     }

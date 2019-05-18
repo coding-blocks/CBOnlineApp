@@ -287,13 +287,14 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 p2: Boolean
             ) {
                 if (!p2) {
-                    youtubePlayerInstance?.loadVideo(MediaUtils.getYotubeVideoId(promoVideo!!))
+                    youtubePlayerInstance?.loadVideo(MediaUtils.getYotubeVideoId(promoVideo))
                 }
             }
         }
         val youTubePlayerSupportFragment =
             supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
-        youTubePlayerSupportFragment!!.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
+        if (this@CourseActivity != null)
+            youTubePlayerSupportFragment?.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
     }
 
     private fun fetchRating(id: String) {

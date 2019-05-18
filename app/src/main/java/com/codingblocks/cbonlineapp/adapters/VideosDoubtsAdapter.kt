@@ -21,6 +21,7 @@ import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Comment
+import com.codingblocks.onlineapi.models.ContentId
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.RunAttemptsId
@@ -112,7 +113,7 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) :
             solvedDoubt.id = doubt.dbtUid
             solvedDoubt.resolvedById = (context as Activity).getPrefs().SP_USER_ID
             solvedDoubt.postrunAttempt = RunAttemptsId(doubt.runAttemptId)
-            solvedDoubt.content = ContentsId(doubt.contentId)
+            solvedDoubt.contents = ContentsId(doubt.contentId)
             Clients.onlineV2JsonApi.resolveDoubt(doubt.dbtUid, solvedDoubt)
                 .enqueue(retrofitCallback { throwable, response ->
                     response?.body().let {
@@ -127,42 +128,43 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) :
         private fun fetchComments(dbtUid: String) {
             Clients.onlineV2JsonApi.getCommentsById(dbtUid)
                 .enqueue(retrofitCallback { throwable, response ->
-                    response?.body().let {
-                        if (it != null) {
-                            if (it.isNotEmpty()) {
-                                itemView.showCommentsTv.visibility = View.VISIBLE
-                                itemView.setOnClickListener {
-                                    if (itemView.commentll.visibility == View.VISIBLE) {
-                                        itemView.showCommentsTv.text =
-                                            context.getString(R.string.showComments)
-                                        itemView.commentll.visibility = View.GONE
-                                    } else {
-                                        itemView.commentll.visibility = View.VISIBLE
-                                        itemView.showCommentsTv.text =
-                                            context.getString(R.string.hideComments)
-                                    }
+                    response?.body()?.let {
+                        if (it.isNotEmpty()) {
+                            itemView.showCommentsTv.visibility = View.VISIBLE
+                            itemView.setOnClickListener {
+                                if (itemView.commentll.visibility == View.VISIBLE) {
+                                    itemView.showCommentsTv.text =
+                                        context.getString(R.string.showComments)
+                                    itemView.commentll.visibility = View.GONE
+                                } else {
+                                    itemView.commentll.visibility = View.VISIBLE
+                                    itemView.showCommentsTv.text =
+                                        context.getString(R.string.hideComments)
                                 }
-                                val ll = itemView.findViewById<LinearLayout>(R.id.commentll)
-                                ll.removeAllViews()
-                                ll.orientation = LinearLayout.VERTICAL
-                                for (comment in it) {
-                                    val factory = LayoutInflater.from(context)
-                                    val inflatedView =
-                                        factory.inflate(R.layout.item_comment, ll, false)
-                                    val subTitle =
-                                        inflatedView.findViewById(R.id.usernameTv) as TextView
-                                    val time = inflatedView.findViewById(R.id.timeTv) as TextView
-                                    val body =
-                                        inflatedView.findViewById(R.id.bodyTv) as MarkdownView
-                                    body.loadMarkdown(comment.body)
-                                    subTitle.text = comment.username
-                                    time.text =
-                                        formatDate(comment.updatedAt!!)
-                                    ll.addView(inflatedView)
-                                }
-
                             }
+                            val ll = itemView.findViewById<LinearLayout>(R.id.commentll)
+                            ll.removeAllViews()
+                            ll.orientation = LinearLayout.VERTICAL
+                            for (comment in it) {
+                                val factory = LayoutInflater.from(context)
+                                val inflatedView =
+                                    factory.inflate(R.layout.item_comment, ll, false)
+                                val subTitle =
+                                    inflatedView.findViewById(R.id.usernameTv) as TextView
+                                val time = inflatedView.findViewById(R.id.timeTv) as TextView
+                                val body =
+                                    inflatedView.findViewById(R.id.bodyTv) as MarkdownView
+                                body.loadMarkdown(comment.body)
+                                subTitle.text = comment.username
+                                time.text =
+                                    formatDate(comment.updatedAt!!)
+                                ll.addView(inflatedView)
+                            }
+
                         }
+                    }
+                    throwable?.let {
+
                     }
                 })
         }

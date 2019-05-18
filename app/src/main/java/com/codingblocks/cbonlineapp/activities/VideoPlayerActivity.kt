@@ -29,6 +29,7 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.VdoPlayerControlView
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.ContentId
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
@@ -56,7 +57,6 @@ import kotlinx.android.synthetic.main.doubt_dialog.view.titleLayout
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
-import kotlin.concurrent.thread
 
 class VideoPlayerActivity : AppCompatActivity(),
     OnItemClickListener, AnkoLogger,
@@ -294,21 +294,23 @@ class VideoPlayerActivity : AppCompatActivity(),
                     doubt.category = categoryId
                     doubt.status = "PENDING"
                     doubt.postrunAttempt = RunAttemptsId(attemptId)
-                    doubt.content = ContentsId(contentId)
+                    doubt.contents = ContentsId(contentId)
                     Clients.onlineV2JsonApi.createDoubt(doubt)
-                        .enqueue(retrofitCallback { throwable, response ->
-                            response?.body().let {
+                        .enqueue(retrofitCallback { error, response ->
+                            response?.body()?.let { doubt ->
                                 doubtDialog.dismiss()
-                                thread {
-                                    doubtsDao.insert(
-                                        DoubtsModel(
-                                            it!!.id
-                                                ?: "", it.title, it.body, it.content?.id
-                                                ?: "", it.status, it.runAttempt?.id ?: ""
-                                        )
+                                doubtsDao.insert(
+                                    DoubtsModel(
+                                        doubt.id, doubt.title, doubt.body, contentId
+                                            ?: "", doubt.status, attemptId
                                     )
-                                }
+                                )
                             }
+                            error?.let{
+                                doubtDialog.dismiss()
+                                toast("there was some error please try again")
+                            }
+
                         })
                 }
             }
