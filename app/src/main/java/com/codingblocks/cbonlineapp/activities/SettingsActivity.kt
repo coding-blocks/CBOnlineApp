@@ -60,11 +60,7 @@ class SettingsActivity : AppCompatActivity() {
         deleteAllTv.setOnClickListener {
             contentDao.getDownloads("true").let { list ->
                 list.forEach { content ->
-                    val url = content.contentLecture.lectureUrl.substring(
-                        38,
-                        (content.contentLecture.lectureUrl.length - 11)
-                    )
-                    val folderFile = File(file, "/$url")
+                    val folderFile = File(file, "/${content.contentLecture.lectureId}")
                     MediaUtils.deleteRecursive(folderFile)
                     contentDao.updateContent(
                         content.section_id,

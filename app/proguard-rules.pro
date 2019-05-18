@@ -82,3 +82,8 @@
 -dontwarn com.google.android.gms.**
 # ===== GMS ====
 
+# ===== VIDEO CIPHER =====
+-keep class com.vdocipher.aegis.* { *; }
+
+
+

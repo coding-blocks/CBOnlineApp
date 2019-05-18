@@ -12,23 +12,31 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.tiagohm.markdownview.MarkdownView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.DoubtsDao
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.extensions.formatDate
 import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Comment
-import com.codingblocks.onlineapi.models.Contents
+import com.codingblocks.onlineapi.models.ContentId
+import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
-import com.codingblocks.onlineapi.models.RunAttemptsModel
-import kotlinx.android.synthetic.main.item_doubt.view.*
+import com.codingblocks.onlineapi.models.RunAttemptsId
+import kotlinx.android.synthetic.main.item_doubt.view.commentll
+import kotlinx.android.synthetic.main.item_doubt.view.doubtComment
+import kotlinx.android.synthetic.main.item_doubt.view.doubtDescription
+import kotlinx.android.synthetic.main.item_doubt.view.doubtTitle
+import kotlinx.android.synthetic.main.item_doubt.view.doubtTopic
+import kotlinx.android.synthetic.main.item_doubt.view.resolveDoubtTv
+import kotlinx.android.synthetic.main.item_doubt.view.showCommentsTv
 import java.util.*
 
 
-class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : RecyclerView.Adapter<VideosDoubtsAdapter.DoubtsViewHolder>() {
+class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) :
+    RecyclerView.Adapter<VideosDoubtsAdapter.DoubtsViewHolder>() {
 
 
     private lateinit var context: Context
@@ -49,8 +57,10 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
         doubtDao = database.doubtsDao()
 
 
-        return DoubtsViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_doubt, parent, false))
+        return DoubtsViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_doubt, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {
@@ -65,7 +75,8 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
 
         fun bindView(doubt: DoubtsModel) {
             fetchComments(doubt.dbtUid)
-            itemView.doubtTopic.text = contentDao.getContentWithId(doubt.runAttemptId, doubt.contentId).title
+            itemView.doubtTopic.text =
+                contentDao.getContentWithId(doubt.runAttemptId, doubt.contentId).title
             itemView.doubtTitle.text = doubt.title
             itemView.doubtDescription.text = doubt.body
             if (doubt.status == "RESOLVED") {
@@ -79,7 +90,8 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
             itemView.doubtComment.editText?.setOnEditorActionListener { textView, actionId, keyEvent ->
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
                     if (itemView.doubtComment.editText!!.text.length < 15 || itemView.doubtComment.editText!!.text.isEmpty()) {
-                        itemView.doubtComment.error = "Comment length must be at-least 15 characters."
+                        itemView.doubtComment.error =
+                            "Comment length must be at-least 15 characters."
                         return@setOnEditorActionListener false
                     } else {
                         createComment(itemView.doubtComment.editText!!.text, doubt)
@@ -96,39 +108,38 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
             val solvedDoubt = DoubtsJsonApi()
             solvedDoubt.body = doubt.body
             solvedDoubt.title = doubt.title
-            val runAttempts = RunAttemptsModel() // type run-attempts
-            val contents = Contents() // type contents
-            runAttempts.id = doubt.runAttemptId
-            contents.id = doubt.contentId
             solvedDoubt.status = "RESOLVED"
             solvedDoubt.discourseTopicId = doubt.discourseTopicId
             solvedDoubt.id = doubt.dbtUid
             solvedDoubt.resolvedById = (context as Activity).getPrefs().SP_USER_ID
-            solvedDoubt.postrunAttempt = runAttempts
-            solvedDoubt.content = contents
-            Clients.onlineV2JsonApi.resolveDoubt(doubt.dbtUid, solvedDoubt).enqueue(retrofitCallback { throwable, response ->
-                response?.body().let {
-                    if (response?.isSuccessful!!) {
-                        doubtDao.updateStatus(doubt.dbtUid, solvedDoubt.status)
+            solvedDoubt.postrunAttempt = RunAttemptsId(doubt.runAttemptId)
+            solvedDoubt.contents = ContentsId(doubt.contentId)
+            Clients.onlineV2JsonApi.resolveDoubt(doubt.dbtUid, solvedDoubt)
+                .enqueue(retrofitCallback { throwable, response ->
+                    response?.body().let {
+                        if (response?.isSuccessful!!) {
+                            doubtDao.updateStatus(doubt.dbtUid, solvedDoubt.status)
+                        }
                     }
-                }
-            })
+                })
 
         }
 
         private fun fetchComments(dbtUid: String) {
-            Clients.onlineV2JsonApi.getCommentsById(dbtUid).enqueue(retrofitCallback { throwable, response ->
-                response?.body().let {
-                    if (it != null) {
+            Clients.onlineV2JsonApi.getCommentsById(dbtUid)
+                .enqueue(retrofitCallback { throwable, response ->
+                    response?.body()?.let {
                         if (it.isNotEmpty()) {
                             itemView.showCommentsTv.visibility = View.VISIBLE
                             itemView.setOnClickListener {
                                 if (itemView.commentll.visibility == View.VISIBLE) {
-                                    itemView.showCommentsTv.text = context.getString(R.string.showComments)
+                                    itemView.showCommentsTv.text =
+                                        context.getString(R.string.showComments)
                                     itemView.commentll.visibility = View.GONE
                                 } else {
                                     itemView.commentll.visibility = View.VISIBLE
-                                    itemView.showCommentsTv.text = context.getString(R.string.hideComments)
+                                    itemView.showCommentsTv.text =
+                                        context.getString(R.string.hideComments)
                                 }
                             }
                             val ll = itemView.findViewById<LinearLayout>(R.id.commentll)
@@ -136,10 +147,13 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
                             ll.orientation = LinearLayout.VERTICAL
                             for (comment in it) {
                                 val factory = LayoutInflater.from(context)
-                                val inflatedView = factory.inflate(R.layout.item_comment, ll, false)
-                                val subTitle = inflatedView.findViewById(R.id.usernameTv) as TextView
+                                val inflatedView =
+                                    factory.inflate(R.layout.item_comment, ll, false)
+                                val subTitle =
+                                    inflatedView.findViewById(R.id.usernameTv) as TextView
                                 val time = inflatedView.findViewById(R.id.timeTv) as TextView
-                                val body = inflatedView.findViewById(R.id.bodyTv) as MarkdownView
+                                val body =
+                                    inflatedView.findViewById(R.id.bodyTv) as MarkdownView
                                 body.loadMarkdown(comment.body)
                                 subTitle.text = comment.username
                                 time.text =
@@ -149,8 +163,10 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
 
                         }
                     }
-                }
-            })
+                    throwable?.let {
+
+                    }
+                })
         }
 
         private fun createComment(text: Editable?, doubt: DoubtsModel) {
@@ -160,11 +176,12 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) : Recy
             val doubts = DoubtsJsonApi() // type doubts
             doubts.id = doubt.dbtUid
             comment.doubt = doubts
-            Clients.onlineV2JsonApi.createComment(comment).enqueue(retrofitCallback { throwable, response ->
-                response?.body().let {
-                    notifyDataSetChanged()
-                }
-            })
+            Clients.onlineV2JsonApi.createComment(comment)
+                .enqueue(retrofitCallback { throwable, response ->
+                    response?.body().let {
+                        notifyDataSetChanged()
+                    }
+                })
         }
     }
 }

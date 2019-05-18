@@ -14,10 +14,8 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.utils.ViewPagerCustomDuration
+import com.codingblocks.cbonlineapp.util.ViewPagerCustomDuration
 import com.google.android.material.tabs.TabLayout
-import de.hdodenhof.circleimageview.CircleImageView
-import org.jetbrains.anko.*
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.backgroundColor

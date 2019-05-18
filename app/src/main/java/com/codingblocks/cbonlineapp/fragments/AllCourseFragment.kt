@@ -2,31 +2,29 @@ package com.codingblocks.cbonlineapp.fragments
 
 
 import android.os.Bundle
-import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
-import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.models.Course
 import com.codingblocks.cbonlineapp.database.models.CourseRun
-import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
-import com.codingblocks.cbonlineapp.database.models.Instructor
 import com.codingblocks.cbonlineapp.extensions.getPrefs
-import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.cbonlineapp.extensions.observer
-import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Runs
+import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
+import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
-import kotlin.concurrent.thread
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class AllCourseFragment : Fragment(), AnkoLogger {
@@ -36,23 +34,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     lateinit var skeletonScreen: SkeletonScreen
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    private val database: AppDatabase by lazy {
-        AppDatabase.getInstance(context!!)
-    }
-
-    private val courseDao by lazy {
-        database.courseDao()
-    }
-    private val courseWithInstructorDao by lazy {
-        database.courseWithInstructorDao()
-    }
-    private val instructorDao by lazy {
-        database.instructorDao()
-    }
-
-    private val runDao by lazy {
-        database.courseRunDao()
-    }
+    private val viewModel by sharedViewModel<HomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,19 +53,19 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         params.putString(FirebaseAnalytics.Param.ITEM_NAME, "AllCourses")
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
 
-        //it is important to make oncreateoptions menu work
         setHasOptionsMenu(true)
 
         courseDataAdapter =
-            CourseDataAdapter(ArrayList(), view.context, courseWithInstructorDao, "allCourses")
+            CourseDataAdapter(ArrayList(), view.context, viewModel.courseWithInstructorDao, "allCourses"
+            )
 
-        ui.allcourseText.text = "All Courses"
+        ui.allcourseText.text = getString(R.string.all_courses)
         ui.titleText.visibility = View.GONE
         ui.homeImg.visibility = View.GONE
         ui.viewPager.visibility = View.GONE
+
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
-
 
         skeletonScreen = Skeleton.bind(ui.rvCourses)
             .adapter(courseDataAdapter)
@@ -98,120 +80,31 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         displayCourses()
 
         ui.swipeRefreshLayout.setOnRefreshListener {
-            // Your code here
-            fetchAllCourses()
+            viewModel.progress.value = true
+            skeletonScreen.show()
+            viewModel.fetchAllCourses()
         }
-        fetchAllCourses()
+
+        viewModel.progress.observer(viewLifecycleOwner) {
+            ui.swipeRefreshLayout.isRefreshing = it
+        }
+
 
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        runDao.getAllRuns().observer(this) {
+        viewModel.runDao.getAllRuns().observer(viewLifecycleOwner) {
             if (!it.isEmpty()) {
                 skeletonScreen.hide()
-                courseDataAdapter.setData(it.filter { c ->
-                    c.title.contains(searchQuery, true)
-                } as ArrayList<CourseRun>)
+                courseDataAdapter.setData(it.shuffled()
+                    .filter { c ->
+                        c.title.contains(searchQuery, true)
+                    } as ArrayList<CourseRun>)
+            } else {
+                viewModel.fetchAllCourses()
             }
         }
 
-    }
-
-    private fun fetchAllCourses() {
-
-
-        Clients.onlineV2JsonApi.getAllCourses().enqueue(retrofitCallback { t, resp ->
-            skeletonScreen.hide()
-            resp?.body()?.let {
-                for (myCourses in it) {
-
-                    //calculate top run
-                    val unsortedRuns: ArrayList<Runs> = arrayListOf()
-                    for (i in 0 until myCourses.runs!!.size) {
-                        if (myCourses.runs!![i].enrollmentStart!!.toLong() < (System.currentTimeMillis() / 1000)
-                            && myCourses.runs!![i].enrollmentEnd!!.toLong() > (System.currentTimeMillis() / 1000) && !myCourses.runs!![i].unlisted!!
-                        )
-                            unsortedRuns.add(myCourses.runs!![i])
-                    }
-                    //for no current runs
-                    if (unsortedRuns.size == 0) {
-                        unsortedRuns.addAll(myCourses.runs!!)
-                    }
-                    val currentRuns = unsortedRuns.sortedWith(compareBy { it.price })
-
-                    val course = myCourses.run {
-                        Course(
-                            id ?: "",
-                            title ?: "",
-                            subtitle ?: "",
-                            logo ?: "",
-                            summary ?: "",
-                            promoVideo ?: "",
-                            difficulty ?: "",
-                            reviewCount ?: 0,
-                            rating ?: 0f,
-                            slug ?: "",
-                            coverImage ?: "",
-                            updated_at = updatedAt,
-                            categoryId = categoryId
-                        )
-
-                    }
-                    val courseRun = CourseRun(
-                        currentRuns[0].id ?: "", "",
-                        currentRuns[0].name ?: "", currentRuns[0].description ?: "",
-                        currentRuns[0].enrollmentStart ?: "",
-                        currentRuns[0].enrollmentEnd ?: "",
-                        currentRuns[0].start ?: "", currentRuns[0].end ?: "",
-                        currentRuns[0].price ?: "", currentRuns[0].mrp ?: "",
-                        myCourses.id ?: "", currentRuns[0].updatedAt ?: "",
-                        title = myCourses.title ?: ""
-                    )
-
-                    thread {
-                        val updatedCourse = courseDao.getCourse(course.id)
-                        courseDao.insert(course)
-                        runDao.insert(courseRun)
-                        if (ui.swipeRefreshLayout.isRefreshing) {
-                            ui.swipeRefreshLayout.isRefreshing = false
-                        }
-                        //Add CourseInstructors
-                        for (i in myCourses.instructors!!) {
-                            instructorDao.insert(
-                                Instructor(
-                                    i.id ?: "", i.name ?: "",
-                                    i.description ?: "", i.photo ?: "",
-                                    "", "", myCourses.id
-                                )
-                            )
-                            insertCourseAndInstructor(myCourses, i)
-                        }
-                    }
-
-                }
-            }
-        })
-    }
-
-    private fun insertCourseAndInstructor(
-        course: com.codingblocks.onlineapi.models.Course,
-        instructor: com.codingblocks.onlineapi.models.Instructor
-    ) {
-
-        thread {
-            try {
-                courseWithInstructorDao.insert(
-                    CourseWithInstructor(
-                        course.id!!,
-                        instructor.id!!
-                    )
-                )
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Log.e("CRASH", "COURSE ID : ${course.id.toString()}")
-                Log.e("CRASH", "INSTRUCTOR ID : ${instructor.id.toString()}")
-            }
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

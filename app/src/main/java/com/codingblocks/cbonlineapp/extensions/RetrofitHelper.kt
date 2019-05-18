@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.Utils
+package com.codingblocks.cbonlineapp.extensions
 
 import retrofit2.Call
 import retrofit2.Callback

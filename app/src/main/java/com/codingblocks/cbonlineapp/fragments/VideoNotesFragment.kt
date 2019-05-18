@@ -10,20 +10,19 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.VideosNotesAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.util.OnItemClickListener
 import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_notes.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
-
-private const val ARG_ATTEMPT_ID = "param1"
 
 class VideoNotesFragment : Fragment(), AnkoLogger {
     private var param1: String? = null
@@ -39,7 +38,7 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_ATTEMPT_ID)
+            param1 = it.getString(RUN_ATTEMPT_ID)
         }
     }
 
@@ -132,7 +131,7 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
         fun newInstance(param1: String) =
                 VideoNotesFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG_ATTEMPT_ID, param1)
+                        putString(RUN_ATTEMPT_ID, param1)
                     }
                 }
     }

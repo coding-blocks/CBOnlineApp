@@ -9,7 +9,7 @@ import android.widget.ScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.PagerAdapter
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.retrofitCallback
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.OnItemClickListener
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttempt
@@ -40,12 +40,17 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
             view.submitButton.visibility = View.VISIBLE
         }
         Clients.onlineV2JsonApi.getQuestionById(questionList[pos]!!).enqueue(retrofitCallback { throwable, response ->
-            response?.body().let { it ->
+            response?.body().let {
                 view.questionTitle.text = "Q${pos + 1}. ${it?.title}"
                 if (it?.title.equals(it?.description)) {
                     view.questionDescription.visibility = View.GONE
                 } else {
-                    view.questionDescription.loadMarkdown(it?.description)
+                    it?.description?.let {
+                        view.questionDescription.loadMarkdown(it)
+                    } ?: run{
+                        view.questionDescription.visibility = View.GONE
+
+                    }
                 }
                 choiceDataAdapter = QuizChoiceAdapter(it?.choices!!, object : OnItemClickListener {
                     override fun onItemClick(position: Int, id: String) {

@@ -6,14 +6,22 @@ import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.fragments.AboutQuizFragment
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.QUIZ_ID
+import com.codingblocks.cbonlineapp.util.QUIZ_QNA
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_quiz.*
+import kotlinx.android.synthetic.main.activity_quiz.quiz_toolbar
 
 class QuizActivity : AppCompatActivity() {
-
-    private lateinit var quizId: String
-    private lateinit var attemptId: String
-
+    private val quizId: String by lazy {
+        intent.getStringExtra(QUIZ_ID)
+    }
+    private val qnaId: String by lazy {
+        intent.getStringExtra(QUIZ_QNA)
+    }
+    private val attemptId: String by lazy {
+        intent.getStringExtra(RUN_ATTEMPT_ID)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,15 +29,13 @@ class QuizActivity : AppCompatActivity() {
         setSupportActionBar(quiz_toolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        intent.getStringExtra("quizId").let {
-            attemptId = intent.getStringExtra("attemptId")
-            quizId = it
+        quizId.let {
             supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.framelayout_quiz, AboutQuizFragment.newInstance(it,attemptId))
-                    .commit()
+                .beginTransaction()
+                .replace(R.id.framelayout_quiz, AboutQuizFragment.newInstance(it,attemptId,qnaId))
+                .commit()
         }
+
     }
 
     override fun attachBaseContext(newBase: Context) {
@@ -37,6 +43,6 @@ class QuizActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        Components.showconfirmation(this,"exit")
+        Components.showconfirmation(this, "exit")
     }
 }

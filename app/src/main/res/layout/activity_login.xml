@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#222222"
+    android:background="@color/dark_grey"
     tools:context=".activities.LoginActivity">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/logoIv"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginStart="109dp"
+        android:contentDescription="@null"
         android:layout_marginTop="86dp"
-        android:layout_marginEnd="110dp"
         android:src="@drawable/cblogosplash"
         android:transitionName="trans1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,41 +20,31 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/login_button"
+        android:id="@+id/loginBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="195dp"
-        android:layout_marginEnd="44dp"
+        android:layout_marginStart="@dimen/margin_xxl"
+        android:layout_marginEnd="@dimen/margin_xxl"
+        android:layout_marginBottom="@dimen/margin_large"
         android:background="@drawable/button_background"
-        android:text="Login Now"
-        android:textColor="#fff"
-        android:textSize="18sp"
+        android:text="@string/login_now"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_moderate"
+        app:layout_constraintBottom_toTopOf="@+id/skipBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
-
-    <WebView
-        android:id="@+id/webview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:elevation="2dp"
-        android:visibility="gone" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/skipBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
         android:fontFamily="@font/nunitosans_bold"
-        android:text="SKIP"
+        android:text="@string/skip"
+        android:textAllCaps="true"
         android:textColor="@color/salmon"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_size_moderate"
+        android:layout_marginBottom="@dimen/margin_xxxl"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_button" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
