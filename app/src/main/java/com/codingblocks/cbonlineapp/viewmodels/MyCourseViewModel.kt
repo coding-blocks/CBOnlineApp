@@ -29,6 +29,7 @@ class MyCourseViewModel(
 
     var promoVideo: MutableLiveData<String> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
+    var revoked: MutableLiveData<Boolean> = MutableLiveData()
 
 
     fun updatehit(attemptId: String) {
@@ -60,7 +61,9 @@ class MyCourseViewModel(
                                     }
                                     courseContentLinks?.related?.href?.substring(7)
                                         ?.let { contentLink ->
-                                            Clients.onlineV2JsonApi.getSectionContents(contentLink)
+                                            Clients.onlineV2JsonApi.getSectionContents(
+                                                contentLink
+                                            )
                                                 .enqueue(
                                                     retrofitCallback { _, contentResponse ->
                                                         contentResponse?.let { contentList ->
@@ -178,7 +181,8 @@ class MyCourseViewModel(
                                                                                 content.progress?.id
                                                                                     ?: ""
                                                                         } else {
-                                                                            status = "UNDONE"
+                                                                            status =
+                                                                                "UNDONE"
                                                                         }
 
                                                                         val newContent =
@@ -216,10 +220,12 @@ class MyCourseViewModel(
                                                                             contentsDao.insert(
                                                                                 newContent
                                                                             )
-                                                                            sectionWithContentsDao.insert(SectionWithContent(
-                                                                                courseSection.id,
-                                                                                content.id
-                                                                            ))
+                                                                            sectionWithContentsDao.insert(
+                                                                                SectionWithContent(
+                                                                                    courseSection.id,
+                                                                                    content.id
+                                                                                )
+                                                                            )
 
                                                                         } else if (oldContent != newContent) {
                                                                             contentLecture.isDownloaded =
@@ -239,6 +245,8 @@ class MyCourseViewModel(
                             }
                         }
                         progress.value = false
+                    } else if (it.code() == 404) {
+                        revoked.value = true
                     }
                 }
             })
