@@ -144,14 +144,14 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
 
                     if (minute >= 1 && hour == 0L){
                         itemView.lectureTime.text = ("$minute Mins")
-                        itemView.free.text = ("  FREE  ")
 
                     }
                     else if (hour >= 1) {
                         itemView.lectureTime.text = ("$hour Hours")
-                        itemView.free.text = ("  FREE  ")
+
                     } else {
                         itemView.lectureTime.text = ("---")
+                        itemView.free.setVisibility(View.GONE)
                     }
                     subTitle.text = content.title
 
