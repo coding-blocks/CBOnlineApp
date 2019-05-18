@@ -3,7 +3,6 @@ package com.codingblocks.cbonlineapp.adapters
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
-import android.graphics.drawable.GradientDrawable
 import android.net.ConnectivityManager
 import android.os.Environment
 import android.view.LayoutInflater
@@ -143,17 +142,12 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                     val hour = duration / (1000 * 60 * 60) % 24
                     val minute = duration / (1000 * 60) % 60
 
-                    if (minute >= 1 && hour == 0L){
+                    if (minute >= 1 && hour == 0L)
                         itemView.lectureTime.text = ("$minute Mins")
-
-                    }
                     else if (hour >= 1) {
                         itemView.lectureTime.text = ("$hour Hours")
-
-                    } else {
+                    } else
                         itemView.lectureTime.text = ("---")
-                        itemView.free.setVisibility(View.GONE)
-                    }
                     subTitle.text = content.title
 
                     if (!data.premium || premium && ((courseStartDate.toLong() * 1000) < System.currentTimeMillis())) {
