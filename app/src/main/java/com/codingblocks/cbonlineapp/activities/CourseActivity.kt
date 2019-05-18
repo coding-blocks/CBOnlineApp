@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.activities
 
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -25,36 +26,18 @@ import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.OnCartItemClickListener
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Sections
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.chip.Chip
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_course.batchRv
-import kotlinx.android.synthetic.main.activity_course.buyBtn
-import kotlinx.android.synthetic.main.activity_course.coursePageLogo
-import kotlinx.android.synthetic.main.activity_course.coursePageMentors
-import kotlinx.android.synthetic.main.activity_course.coursePageRatingBar
-import kotlinx.android.synthetic.main.activity_course.coursePageRatingCountTv
-import kotlinx.android.synthetic.main.activity_course.coursePageRatingTv
-import kotlinx.android.synthetic.main.activity_course.coursePageSubtitle
-import kotlinx.android.synthetic.main.activity_course.coursePageSummary
-import kotlinx.android.synthetic.main.activity_course.coursePageTitle
-import kotlinx.android.synthetic.main.activity_course.courseProgress1
-import kotlinx.android.synthetic.main.activity_course.courseProgress2
-import kotlinx.android.synthetic.main.activity_course.courseProgress3
-import kotlinx.android.synthetic.main.activity_course.courseProgress4
-import kotlinx.android.synthetic.main.activity_course.courseProgress5
-import kotlinx.android.synthetic.main.activity_course.courseRootView
-import kotlinx.android.synthetic.main.activity_course.instructorRv
-import kotlinx.android.synthetic.main.activity_course.rvExpendableView
-import kotlinx.android.synthetic.main.activity_course.scrollView
-import kotlinx.android.synthetic.main.activity_course.toolbar
-import kotlinx.android.synthetic.main.activity_course.trialBtn
+import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.android.synthetic.main.bottom_cart_sheet.bottom_sheet
 import kotlinx.android.synthetic.main.bottom_cart_sheet.checkoutBtn
 import kotlinx.android.synthetic.main.bottom_cart_sheet.continueBtn
@@ -65,6 +48,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.textAppearance
 import org.jetbrains.anko.toast
 
 class CourseActivity : AppCompatActivity(), AnkoLogger {
@@ -225,6 +209,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                         toast("No available runs right now ! Please check back later")
                     }
                 }
+                fetchTags(course)
                 showPromoVideo(course.promoVideo)
                 fetchRating(course.id)
                 if (!course.runs.isNullOrEmpty()) {
@@ -253,6 +238,32 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 }
             }
         })
+    }
+
+    private fun fetchTags(course: Course) {
+
+        course.runs?.forEach {
+            if(it.tags?.size==0){
+                tagstv.visibility = View.GONE
+                coursePagevtags.visibility = View.GONE
+                tagsChipgroup.visibility = View.GONE
+            }else{
+                tagstv.visibility = View.VISIBLE
+                coursePagevtags.visibility = View.VISIBLE
+                tagsChipgroup.visibility = View.VISIBLE
+
+                it.tags?.forEach {
+                    val chip  = Chip(this)
+                    chip.text = it.name
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        chip.typeface = applicationContext.resources.getFont(R.font.nunitosans_regular)
+                    }
+                    tagsChipgroup.addView(chip)
+                }
+
+            }
+        }
+
     }
 
     private fun addtocart(id: String, name: String) {
