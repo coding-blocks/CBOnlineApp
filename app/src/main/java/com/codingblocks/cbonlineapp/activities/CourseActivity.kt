@@ -14,6 +14,8 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.SnapHelper
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.ProgressBarAnimation
@@ -63,6 +65,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     private lateinit var instructorAdapter: InstructorDataAdapter
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     var sheetBehavior: BottomSheetBehavior<*>? = null
+    val batchSnapHelper: SnapHelper = LinearSnapHelper()
+
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(this)
     }
@@ -193,6 +197,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 batchRv.layoutManager =
                     LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                 batchRv.adapter = batchAdapter
+                batchSnapHelper.attachToRecyclerView(batchRv)
                 setImageAndTitle(course.logo!!, course.title!!)
                 coursePageSubtitle.text = course.subtitle
                 coursePageSummary.text = course.summary
