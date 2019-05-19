@@ -109,8 +109,9 @@ class HomeFragment : Fragment(), AnkoLogger {
                 val update = Runnable {
                     if (ui.viewPager.currentItem + 1 == it.size) {
                         ui.viewPager.setCurrentItem(0, true)
+                    }else{
+                        ui.viewPager.setCurrentItem(ui.viewPager.currentItem+1, true)
                     }
-                    ui.viewPager.setCurrentItem(++ui.viewPager.currentItem, true)
                 }
                 val swipeTimer = Timer()
                 swipeTimer.schedule(object : TimerTask() {
