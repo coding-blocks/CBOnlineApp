@@ -58,6 +58,7 @@ import org.jetbrains.anko.toast
 
 class CourseActivity : AppCompatActivity(), AnkoLogger {
     lateinit var skeletonScreen: SkeletonScreen
+    lateinit var rvExpandableskeleton: SkeletonScreen
     lateinit var courseId: String
     lateinit var courseName: String
     lateinit var progressBar: Array<ProgressBar?>
@@ -66,6 +67,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     var sheetBehavior: BottomSheetBehavior<*>? = null
     val batchSnapHelper: SnapHelper = LinearSnapHelper()
+    val sectionAdapter = SectionsDataAdapter(ArrayList())
+
 
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(this)
@@ -112,6 +115,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
             .duration(1200)
             .load(R.layout.item_skeleton_course)
             .show()
+
 
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
         sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
@@ -223,9 +227,17 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 if (!course.runs.isNullOrEmpty()) {
                     val sections = course.runs?.get(0)?.sections
                     val sectionsList = ArrayList<Sections>()
-                    val sectionAdapter = SectionsDataAdapter(ArrayList())
                     rvExpendableView.layoutManager = LinearLayoutManager(this)
                     rvExpendableView.adapter = sectionAdapter
+                    rvExpandableskeleton = Skeleton.bind(rvExpendableView)
+                        .adapter(sectionAdapter)
+                        .shimmer(true)
+                        .angle(20)
+                        .frozen(true)
+                        .duration(1200)
+                        .count(4)
+                        .load(R.layout.item_skeleton_section_card)
+                        .show()
                     sections!!.forEachIndexed { index, section ->
                         GlobalScope.launch(Dispatchers.Main) {
                             val request = service.getSections(section.id!!)
@@ -236,6 +248,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                                 sectionsList.add(value)
                                 if (sectionsList.size == sections.size) {
                                     sectionsList.sortBy { it.order }
+                                    rvExpandableskeleton.hide()
                                     sectionAdapter.setData(sectionsList)
                                 }
                             } else {
