@@ -20,18 +20,46 @@
             android:gravity="center_vertical"
             android:minHeight="60dp">
 
-            <TextView
-                android:id="@+id/title"
+            <LinearLayout
+                android:id="@+id/linear"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
                 android:layout_toStartOf="@id/arrow"
                 android:fontFamily="@font/nunitosans_semibold"
+                android:orientation="horizontal"
                 android:textColor="@android:color/primary_text_light"
-                android:textSize="16sp"
-                tools:text="Introduction And Logistics" />
+                android:textSize="15sp">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="200dp"
+                    android:layout_height="58dp"
+                    android:fontFamily="@font/nunitosans_semibold"
+                    android:textColor="@android:color/primary_text_light"
+                    android:textSize="15sp"
+                    android:layout_marginTop="2dp"
+                    tools:text="Introduction And Logistics" />
+
+
+                <TextView
+                    android:id="@+id/btnfree"
+                    android:layout_width="60dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/buttondesign"
+                    android:clickable="false"
+                    android:gravity="center"
+                    android:text="@string/free"
+                    android:textColor="#fff"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
 
             <ImageButton
                 android:id="@+id/arrow"
@@ -47,7 +75,7 @@
                 android:id="@+id/lectures"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/title"
+                android:layout_toEndOf="@+id/linear"
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="10dp"
                 android:fontFamily="@font/nunitosans_semibold"
@@ -60,7 +88,6 @@
                 android:id="@+id/lectureTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/title"
                 android:layout_marginStart="10dp"
                 android:layout_marginBottom="8dp"
                 android:layout_toEndOf="@id/lectures"
