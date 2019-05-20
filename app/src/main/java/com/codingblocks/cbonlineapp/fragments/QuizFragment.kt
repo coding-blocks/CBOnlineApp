@@ -1,30 +1,36 @@
 package com.codingblocks.cbonlineapp.fragments
 
 
+import android.app.AlertDialog
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.ViewPagerAdapter
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
-import com.codingblocks.cbonlineapp.util.QUIZ_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.QUIZ_ID
-import com.codingblocks.cbonlineapp.util.QUIZ_QNA
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.*
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizSubmission
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.bottom_question_sheet.*
+import kotlinx.android.synthetic.main.custom_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.padding
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.textColor
 
 
@@ -122,6 +128,42 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             count++
             rowLayout.addView(numberBtn)
         }
+        val submitButton = Button(context)
+        submitButton.background = context!!.getDrawable(R.drawable.submit_button_background)
+        submitButton.textColor = context!!.resources.getColor(R.color.white)
+        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        params.bottomMargin = 16
+        submitButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.submit_image, 0)
+        submitButton.compoundDrawablePadding = 16
+        params.topMargin = 8
+        // submitButton.backgroundColor = context!!.resources.getColor(R.color.colorPrimaryDark)
+        submitButton.layoutParams = params
+        submitButton.text = "Submit"
+        submitButton.setOnClickListener {
+            confirmSubmitQuiz()
+        }
+        numberLayout.addView(submitButton)
+    }
+
+    private fun confirmSubmitQuiz() {
+        val builder = AlertDialog.Builder(activity)
+        val inflater = requireActivity().layoutInflater
+        val customView = inflater.inflate(R.layout.custom_dialog, null)
+        customView.okBtn.text = "Yes"
+        customView.cancelBtn.text = "Cancel"
+        customView.description.text = "Are you sure to submit the quiz?"
+        builder.setCancelable(false)
+        builder.setView(customView)
+        val dialog = builder.create()
+        customView.cancelBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        customView.okBtn.setOnClickListener {
+            submitQuiz()
+            dialog.dismiss()
+        }
+        dialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
     }
 
     override fun onPageScrollStateChanged(state: Int) {
@@ -153,17 +195,21 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
         }
     }
 
+    private fun submitQuiz() {
+        Clients.onlineV2JsonApi.sumbitQuizById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
+            val fragmentManager = fragmentManager!!
+            val fragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+            fragmentTransaction.replace(R.id.framelayout_quiz,
+                QuizResultFragment.newInstance(quizAttemptId))
+            fragmentTransaction.commit()
+        })
+    }
+
     override fun onClick(v: View) {
         when (v.id) {
             R.id.nextBtn -> if (nextBtn.text == "End") {
-                Clients.onlineV2JsonApi.sumbitQuizById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
-                    val fragmentManager = fragmentManager!!
-                    val fragmentTransaction = fragmentManager.beginTransaction()
-                    fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                    fragmentTransaction.replace(R.id.framelayout_quiz,
-                        QuizResultFragment.newInstance(quizAttemptId))
-                    fragmentTransaction.commit()
-                })
+                submitQuiz()
             } else
                 quizViewPager.currentItem = if (quizViewPager.currentItem < questionList.size - 1)
                     quizViewPager.currentItem + 1
@@ -186,13 +232,13 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
     companion object {
         @JvmStatic
-        fun newInstance(quizId: String,qnaId:String, attemptId: String, quizAttemptId: String) =
-                QuizFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(QUIZ_ID, quizId)
-                        putString(QUIZ_QNA, qnaId)
-                        putString(RUN_ATTEMPT_ID, attemptId)
-                        putString(QUIZ_ATTEMPT_ID, quizAttemptId)
+        fun newInstance(quizId: String, qnaId: String, attemptId: String, quizAttemptId: String) =
+            QuizFragment().apply {
+                arguments = Bundle().apply {
+                    putString(QUIZ_ID, quizId)
+                    putString(QUIZ_QNA, qnaId)
+                    putString(RUN_ATTEMPT_ID, attemptId)
+                    putString(QUIZ_ATTEMPT_ID, quizAttemptId)
 
 
                 }
