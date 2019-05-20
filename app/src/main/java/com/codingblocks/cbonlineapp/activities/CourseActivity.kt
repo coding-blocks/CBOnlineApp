@@ -236,7 +236,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                         .frozen(true)
                         .duration(1200)
                         .count(4)
-                        .load(R.layout.item_skeleton_course_card)
+                        .load(R.layout.item_skeleton_section_card)
                         .show()
                     sections!!.forEachIndexed { index, section ->
                         GlobalScope.launch(Dispatchers.Main) {
