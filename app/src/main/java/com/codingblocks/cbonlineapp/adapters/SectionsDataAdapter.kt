@@ -110,6 +110,7 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
         private fun showOrHide(ll: View, itemView: View) {
             if (ll.visibility == View.GONE) {
                 ll.visibility = View.VISIBLE
+                itemView.arrow.setImageResource(R.drawable.ic_up_arrow)
 //                arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
 //                        0.5f)
 //                arrowAnimation.fillAfter = true
@@ -118,6 +119,7 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
 //                itemView.arrow.startAnimation(arrowAnimation)
             } else {
                 ll.visibility = View.GONE
+                itemView.arrow.setImageResource(R.drawable.plus)
 //                arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
 //                        0.5f)
 //                arrowAnimation.fillAfter = true
