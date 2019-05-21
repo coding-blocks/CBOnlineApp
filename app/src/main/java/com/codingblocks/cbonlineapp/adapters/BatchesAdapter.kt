@@ -1,11 +1,17 @@
 package com.codingblocks.cbonlineapp.adapters
 
+import android.content.Context
 import android.graphics.Paint
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.ui.BatchesCardUi
+import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.OnCartItemClickListener
+import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Runs
 import org.jetbrains.anko.AnkoContext
 import java.text.SimpleDateFormat
@@ -14,6 +20,7 @@ import java.util.*
 class BatchesAdapter(private var batchesData: ArrayList<Runs>?, var listener: OnCartItemClickListener) : RecyclerView.Adapter<BatchesAdapter.BatchViewHolder>() {
 
     val ui = BatchesCardUi()
+    lateinit var context: Context
 
     fun setData(batchesData: ArrayList<Runs>) {
         this.batchesData = batchesData
@@ -22,6 +29,7 @@ class BatchesAdapter(private var batchesData: ArrayList<Runs>?, var listener: On
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BatchViewHolder {
+        context = parent.context
         return BatchViewHolder(ui.createView(AnkoContext.create(parent.context, parent)))
     }
 
@@ -60,6 +68,13 @@ class BatchesAdapter(private var batchesData: ArrayList<Runs>?, var listener: On
                 ui.enrollmentTv.text = "Enrollment ends $enrollmentDate"
                 ui.enrollBtn.setOnClickListener {
                     listener.onItemClick(id!!,description!!)
+                }
+                ui.trialBtn.setOnClickListener {
+                    Clients.api.enrollTrial(this.id).enqueue(retrofitCallback { throwable, response ->
+                        if (response?.isSuccessful!!){
+                            Components.showconfirmation(context,"trial")
+                        }
+                    })
                 }
 
             }
