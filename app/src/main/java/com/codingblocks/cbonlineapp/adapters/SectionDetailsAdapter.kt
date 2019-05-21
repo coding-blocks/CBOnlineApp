@@ -71,7 +71,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
     private lateinit var sectionWithContentDao: SectionWithContentsDao
     lateinit var arrowAnimation: RotateAnimation
 
-
     fun setData(sectionData: ArrayList<CourseSection>, premium: Boolean, crStart: String) {
         this.sectionData = sectionData
         this.premium = premium
@@ -118,6 +117,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                     ll.removeAllViews()
                     ll.visibility = View.GONE
                 }
+                if(data.premium){itemView.free.setVisibility(View.GONE)}
                 itemView.lectures.text = "0/${it.size} Lectures Completed"
                 var duration: Long = 0
                 var sectionComplete = 0
@@ -134,8 +134,10 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                         downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
                         sectionComplete++
                     }
-                    if (content.contentable == "lecture")
+                    if (content.contentable == "lecture") {
                         duration += content.contentLecture.lectureDuration
+
+                    }
                     else if (content.contentable == "video") {
                         duration += content.contentVideo.videoDuration
                     }
@@ -151,7 +153,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
 
                     } else {
                         itemView.lectureTime.text = ("---")
-                        itemView.free.setVisibility(View.GONE)
                     }
                     subTitle.text = content.title
 
