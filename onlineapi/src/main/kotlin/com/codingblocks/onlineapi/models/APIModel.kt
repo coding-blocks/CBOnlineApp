@@ -740,7 +740,6 @@ class Notes : BaseModel() {
 class CarouselCards : BaseModel() {
     @JvmField
     var title: String? = null
-
     @JvmField
     var subtitle: String? = null
 

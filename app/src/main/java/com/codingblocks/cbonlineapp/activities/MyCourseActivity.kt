@@ -279,7 +279,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
                                                 )
                                             val updateContent = contentDao.getContentWithId(
                                                 attemptId, content.id
-                                                    ?: ""
+                                                ?: ""
                                             )
                                             if (updateContent == null) {
                                                 contentDao.insert(oldContent)
