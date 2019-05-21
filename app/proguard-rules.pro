@@ -52,11 +52,11 @@
 -keepclassmembers class * {
      @com.fasterxml.jackson.annotation.* *;
 }
-
 # ====== Jackson =========
 
 #  ==== JSONAPI Converter ====
 # Keep jsonapi-converter relative fields
+-keep class com.github.jasminb.** { *; }
 -keepclassmembers class * {
     @com.github.jasminb.jsonapi.annotations.Id <fields>;
     @com.github.jasminb.jsonapi.annotations.Meta <fields>;
@@ -84,6 +84,8 @@
 
 # ===== VIDEO CIPHER =====
 -keep class com.vdocipher.aegis.* { *; }
+
+
 
 
 

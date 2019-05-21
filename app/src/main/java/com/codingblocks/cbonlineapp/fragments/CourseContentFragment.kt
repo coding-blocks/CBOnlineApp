@@ -5,28 +5,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.DownloadStarter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
-import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.database.models.CourseSection
 import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.services.DownloadService
 import com.codingblocks.cbonlineapp.util.ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.LECTURE_CONTENT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
+import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_course_content.view.rvExpendableView
 import kotlinx.android.synthetic.main.fragment_course_content.view.sectionProgressBar
 import kotlinx.android.synthetic.main.fragment_course_content.view.swiperefresh
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.startService
+import org.jetbrains.anko.yesButton
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     companion object {
@@ -39,14 +42,10 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             }
     }
 
-    lateinit var attemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-    private val database: AppDatabase by lazy {
-        AppDatabase.getInstance(context!!)
-    }
-    private val courseDao by lazy {
-        database.courseRunDao()
-    }
+    lateinit var attemptId: String
+    private val viewModel by sharedViewModel<MyCourseViewModel>()
+
 
     override fun startDownload(
         videoId: String,
@@ -57,8 +56,15 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         contentId: String,
         sectionId: String
     ) {
-        startService<DownloadService>("id" to id, VIDEO_ID to videoId, LECTURE_CONTENT_ID to lectureContentId, "title" to title, ATTEMPT_ID to attemptId, CONTENT_ID to contentId,
-            SECTION_ID to sectionId)
+        startService<DownloadService>(
+            "id" to id,
+            VIDEO_ID to videoId,
+            LECTURE_CONTENT_ID to lectureContentId,
+            "title" to title,
+            ATTEMPT_ID to attemptId,
+            CONTENT_ID to contentId,
+            SECTION_ID to sectionId
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,28 +88,44 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             }
         }
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
-        val sectionDao = database.sectionDao()
         val sectionsList = ArrayList<CourseSection>()
         val sectionAdapter = SectionDetailsAdapter(sectionsList, activity!!, this)
         view.rvExpendableView.layoutManager = LinearLayoutManager(context)
         view.rvExpendableView.adapter = sectionAdapter
         view.sectionProgressBar.show()
-        sectionDao.getCourseSection(attemptId).observe(this, Observer<List<CourseSection>> {
+
+        viewModel.sectionDao.getCourseSection(attemptId).observer(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 view.sectionProgressBar.hide()
             }
-            courseDao.getRunByAtemptId(attemptId).observe(this, Observer<CourseRun> { courseRun ->
+            viewModel.runDao.getRunByAtemptId(attemptId).observer(viewLifecycleOwner) { courseRun ->
                 sectionAdapter.setData(
                     it as ArrayList<CourseSection>,
                     courseRun.premium,
                     courseRun.crStart
                 )
-            })
-            if (view.swiperefresh.isRefreshing) {
-                view.swiperefresh.isRefreshing = false
             }
-        })
+        }
 
+        viewModel.progress.observer(viewLifecycleOwner) {
+            view.swiperefresh.isRefreshing = it
+        }
+        viewModel.revoked.observer(viewLifecycleOwner) {
+            if(it){
+                alert {
+                    title = "Error Fetching Course"
+                    message = """
+                        There was an error downloading course contents.
+                        Please contact support@codingblocks.com
+                        """.trimIndent()
+                    yesButton {
+                        it.dismiss()
+                        activity?.finish()
+                    }
+                    isCancelable = false
+                }.show()
+            }
+        }
         return view
     }
 

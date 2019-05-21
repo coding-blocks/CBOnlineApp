@@ -8,7 +8,9 @@ import androidx.viewpager.widget.ViewPager
 import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.NoSuchElementException
 
 fun <T> LiveData<T>.observer(owner: LifecycleOwner, onEmission: (T) -> Unit) {
@@ -40,7 +42,8 @@ fun <T> LiveData<T>.getDistinct(): LiveData<T> {
                 lastObj = obj
                 distinctLiveData.postValue(lastObj)
             } else if ((obj == null && lastObj != null)
-                    || obj != lastObj) {
+                || obj != lastObj
+            ) {
                 lastObj = obj
                 distinctLiveData.postValue(lastObj)
             }
@@ -48,6 +51,7 @@ fun <T> LiveData<T>.getDistinct(): LiveData<T> {
     })
     return distinctLiveData
 }
+
 fun folderSize(directory: File): Long {
     var length: Long = 0
     for (file in directory.listFiles()) {
@@ -63,7 +67,33 @@ fun Long.readableFileSize(): String {
     if (this <= 0) return "0 MB"
     val units = arrayOf("B", "kB", "MB", "GB", "TB")
     val digitGroups = (Math.log10(this.toDouble()) / Math.log10(1024.0)).toInt()
-    return DecimalFormat("#,##0.#").format(this / Math.pow(1024.0, digitGroups.toDouble())) + " " + units[digitGroups]
+    return DecimalFormat("#,##0.#").format(
+        this / Math.pow(
+            1024.0,
+            digitGroups.toDouble()
+        )
+    ) + " " + units[digitGroups]
+}
+
+fun String.greater(): Boolean {
+    return this.toLong() >= (System.currentTimeMillis() / 1000)
+}
+
+fun Long.getDurationBreakdown(): String {
+    if (this <= 0) {
+        return "---"
+    }
+    var millis = this
+    val hours = TimeUnit.MILLISECONDS.toHours(millis)
+    millis -= TimeUnit.HOURS.toMillis(hours)
+    val minutes = TimeUnit.MILLISECONDS.toMinutes(millis)
+
+    val sb = StringBuilder(64)
+    sb.append(hours)
+    sb.append(" Hours ")
+    sb.append(minutes)
+    sb.append(" Mins ")
+    return (sb.toString())
 }
 
 fun formatDate(date: String): String {
@@ -72,9 +102,12 @@ fun formatDate(date: String): String {
         throw NoSuchElementException("Invalid Date")
     }
     val newDate = format.parse(date)
-
+    val calender = Calendar.getInstance()
+    calender.time = newDate
+    calender.add(Calendar.HOUR, 5)
+    calender.add(Calendar.MINUTE, 30)
     format = SimpleDateFormat("MMM dd,yyyy hh:mm", Locale.US)
-    return format.format(newDate)
+    return format.format(calender.time)
 }
 
 fun secToTime(time: Double): String {
@@ -94,14 +127,18 @@ fun secToTime(time: Double): String {
 }
 
 fun pageChangeCallback(
-        fnState: (Int) -> Unit,
-        fnSelected: (Int) -> Unit,
-        fnScrolled: (Int, Float, Int) -> Unit
+    fnState: (Int) -> Unit,
+    fnSelected: (Int) -> Unit,
+    fnScrolled: (Int, Float, Int) -> Unit
 ): ViewPager.OnPageChangeListener {
     return object : ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) = fnState(state)
         override fun onPageSelected(position: Int) = fnSelected(position)
-        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) =
-                fnScrolled(position, positionOffset, positionOffsetPixels)
+        override fun onPageScrolled(
+            position: Int,
+            positionOffset: Float,
+            positionOffsetPixels: Int
+        ) =
+            fnScrolled(position, positionOffset, positionOffsetPixels)
     }
 }

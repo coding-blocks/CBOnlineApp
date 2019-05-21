@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -11,6 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.onlineapi.models.Sections
+import com.ethanhua.skeleton.SkeletonScreen
 import kotlinx.android.synthetic.main.item_section.view.*
 import java.util.*
 
@@ -110,19 +112,19 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
         private fun showOrHide(ll: View, itemView: View) {
             if (ll.visibility == View.GONE) {
                 ll.visibility = View.VISIBLE
-//                arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-//                        0.5f)
-//                arrowAnimation.fillAfter = true
-//                arrowAnimation.duration = 350
+                arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                        0.5f)
+                arrowAnimation.fillAfter = true
+                arrowAnimation.duration = 350
 
-//                itemView.arrow.startAnimation(arrowAnimation)
+                itemView.arrow.startAnimation(arrowAnimation)
             } else {
                 ll.visibility = View.GONE
-//                arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-//                        0.5f)
-//                arrowAnimation.fillAfter = true
-//                arrowAnimation.duration = 350
-//                itemView.arrow.startAnimation(arrowAnimation)
+                arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                        0.5f)
+                arrowAnimation.fillAfter = true
+                arrowAnimation.duration = 350
+                itemView.arrow.startAnimation(arrowAnimation)
             }
         }
 

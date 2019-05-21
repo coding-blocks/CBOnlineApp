@@ -1,7 +1,6 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Progress
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
@@ -14,8 +13,9 @@ class OnlineJsonApiAuthenticatedTest {
 
 
     @Before
-    fun `set JWT` () {
-        Clients.authJwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc5NzUsImZpcnN0bmFtZSI6IlB1bGtpdCIsImxhc3RuYW1lIjoiQWdnYXJ3YWwiLCJ1c2VybmFtZSI6ImFnZ2Fyd2FscHVsa2l0NTk2LWciLCJlbWFpbCI6ImFnZ2Fyd2FscHVsa2l0NTk2QGdtYWlsLmNvbSIsIm1vYmlsZSI6Iis5MS05NTgyMDU0NjY0Iiwib25lYXV0aF9pZCI6IjEyMDM1IiwibGFzdF9yZWFkX25vdGlmaWNhdGlvbiI6IjAiLCJwaG90byI6Imh0dHBzOi8vZ3JhcGguZmFjZWJvb2suY29tLzE3ODMzODk3MzUwMjg0NjAvcGljdHVyZT90eXBlPWxhcmdlIiwiY29sbGVnZSI6IkFtaXR5IFNjaG9vbCBPZiBFbmdpbmVlcmluZyAmIFRlY2hub2xvZ3kgKE5vaWRhKSIsIm9yZ2FuaXphdGlvbiI6bnVsbCwicm9sZUlkIjoyLCJjcmVhdGVkQXQiOiIyMDE4LTA5LTI3VDEzOjEwOjU5LjM5NloiLCJ1cGRhdGVkQXQiOiIyMDE5LTAyLTAzVDE1OjE3OjQwLjU2MloiLCJjbGllbnRJZCI6IjI0MTQ0MDM4LTFmMDUtNGM0ZS1hYmJlLWExYzMxZjgyNTUyMCIsImNsaWVudCI6IndlYiIsImlzVG9rZW5Gb3JBZG1pbiI6ZmFsc2UsImlhdCI6MTU0OTQ1NzE2MCwiZXhwIjoxNTQ5NDU4NjYwfQ.AEhNW3SFiUfwkafuur3GwXwdXVfIYNF7tfPqPjwGLpx-h7AcSSx0c3QLj2VHccWe8pQyr9zN5_5fiU9egC-VFLgMQqSXurPIK9UO5GS-enfH4G5QJJ_QJjIPB7IEQCK0DEY7Dpf66VYG33XegO5TdfPz_tPUyhaXPpVEsDM1AOPnWl9kjMEBGACb0KmdNX4xTg5j6qWyMwxc9pa1d4pjuVvaQjwLpF43Jws0jnmErUvj8FLKXeoE8tdByiw-Bf0RAXIC0c2xa5bfmHQLa1w2io2SsN6un04MOHsPupwJjq8umNHHiMZrGRquApMx71YZ-htTwKfmWAX_bJUMJOJFsw"
+    fun `set JWT`() {
+        Clients.authJwt =
+            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc5NzUsImZpcnN0bmFtZSI6IlB1bGtpdCIsImxhc3RuYW1lIjoiQWdnYXJ3YWwiLCJ1c2VybmFtZSI6ImFnZ2Fyd2FscHVsa2l0NTk2LWciLCJlbWFpbCI6ImFnZ2Fyd2FscHVsa2l0NTk2QGdtYWlsLmNvbSIsInZlcmlmaWVkZW1haWwiOiJhZ2dhcndhbHB1bGtpdDU5NkBnbWFpbC5jb20iLCJ2ZXJpZmllZG1vYmlsZSI6Iis5MS05NTgyMDU0NjY0IiwibW9iaWxlIjoiKzkxLTk1ODIwNTQ2NjQiLCJvbmVhdXRoX2lkIjoiMTIwMzUiLCJsYXN0X3JlYWRfbm90aWZpY2F0aW9uIjoiMCIsInBob3RvIjoiaHR0cHM6Ly9ncmFwaC5mYWNlYm9vay5jb20vMTc4MzM4OTczNTAyODQ2MC9waWN0dXJlP3R5cGU9bGFyZ2UiLCJjb2xsZWdlIjoiQW1pdHkgU2Nob29sIE9mIEVuZ2luZWVyaW5nICYgVGVjaG5vbG9neSAoTm9pZGEpIiwib3JnYW5pemF0aW9uIjpudWxsLCJyb2xlSWQiOjIsImNyZWF0ZWRBdCI6IjIwMTgtMDktMjdUMTM6MTA6NTkuMzk2WiIsInVwZGF0ZWRBdCI6IjIwMTktMDUtMTZUMTI6NDg6MTIuNjk5WiIsImNsaWVudElkIjoiNDU5ODRiZjEtMjlkYi00ZWEzLTlhN2QtMzI0ZGRkMjUwNjY0IiwiY2xpZW50Ijoid2ViIiwiaXNUb2tlbkZvckFkbWluIjpmYWxzZSwiaWF0IjoxNTU4MDEwOTQ2LCJleHAiOjE1NTgwMTI0NDZ9.iUJW6ekYLBWWVHwtTv7L3O3Q8Q3d53EIVLX9WvwvCZZC7uy0lMeoVmBRDFGeHvoqnL9exG5xyKggKhhlaxcGkLPYeGuvEzOnepyhuEOkWVKVrbN0ZxArwTq-GsCItDTKVOlJ9u18Wpd6OBpbHiQ5CSfHXPGDThFf26T905IbP8z-S5yCbAtBer8sbvCiVs96D_Sdcd-Z5MNfRDaX8nJfqCVnrXUHLiC_bHrePBwLej5hTM-4BgxD0XuB2Lj6LloLM_JdKsS54Ed3kWSyruFLq2NKqpphmIlv3eo3QamwqTaw5aTbhZSy-_YC10TIAbZS5pSKLhvAPaNvUDu8bWvmYg"
     }
 
     @Test
@@ -28,14 +28,6 @@ class OnlineJsonApiAuthenticatedTest {
         }
     }
 
-
-//    @Test
-//    fun `GET content`() {
-//            val courses = jsonapi.getSectionContent("886").execute().body()
-//            courses?.let {
-//                assertEquals("Python Basics", it)
-//            }
-//    }
 
     @Test
     fun `GET comment`() {
@@ -53,29 +45,29 @@ class OnlineJsonApiAuthenticatedTest {
         }
     }
 
-    @Test
-    fun `GET enrolledCourse`() {
-        suspend {
+//    @Test
+//    fun `GET enrolledCourse`() {
+//        suspend {
+//
+//            val course = jsonapi.enrolledCourseById("8252").execute().body()
+//            course?.let {
+//                assertNotEquals(4, it.run?.sections)
+//            }
+//        }
+//    }
 
-            val course = jsonapi.enrolledCourseById("8252").execute().body()
-            course?.let {
-                assertNotEquals(4, it.run?.sections)
-            }
-        }
-    }
-
-    @Test
-    fun `SET progress`() {
-        val p  = Progress()
-        p.id = "316797"
-        p.status = "DONE"
-        p.runs?.id = "8252"
-        p.content?.id = "443"
-        val progress = jsonapi.updateProgress("316797",p).execute().body()
-        progress?.let {
-            assertEquals(1, 1)
-        }
-    }
+//    @Test
+//    fun `SET progress`() {
+//        val p  = Progress()
+//        p.id = "316797"
+//        p.status = "DONE"
+//        p.runs?.id = "8252"
+//        p.content?.id = "443"
+//        val progress = jsonapi.updateProgress("316797",p).execute().body()
+//        progress?.let {
+//            assertEquals(1, 1)
+//        }
+//    }
 
     @Test
     fun `GET Quiz`() {
@@ -84,6 +76,7 @@ class OnlineJsonApiAuthenticatedTest {
             assertNotNull(it.size)
         }
     }
+
     @Test
     fun `GET Question`() {
         val questions = jsonapi.getQuestionById("22").execute().body()
@@ -91,6 +84,7 @@ class OnlineJsonApiAuthenticatedTest {
             assertNotNull(it.title)
         }
     }
+
     @Test
     fun `GET Quiz Attempt`() {
         val quizAttempt = jsonapi.getQuizAttempt("3").execute().body()
@@ -98,6 +92,7 @@ class OnlineJsonApiAuthenticatedTest {
             assertNotNull(it.size)
         }
     }
+
     @Test
     fun `GET Doubts `() {
         val doubts = api.getDoubts("22").execute().body()
@@ -108,8 +103,16 @@ class OnlineJsonApiAuthenticatedTest {
 
     @Test
     fun `GET DoubtByAttemptId `() {
-        val doubts = jsonapi.getDoubtByAttemptId("8252").execute().body()
+        val doubts = jsonapi.getDoubtByAttemptId("22842").execute().body()
         doubts?.let {
+            assertNotNull(it)
+        }
+    }
+
+    @Test
+    fun `GET NoteById `() {
+        val notes = jsonapi.getNotesByAttemptId("22842").execute().body()
+        notes?.let {
             assertNotNull(it)
         }
     }

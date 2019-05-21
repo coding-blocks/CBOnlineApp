@@ -1,16 +1,21 @@
 package com.codingblocks.cbonlineapp.activities
 
 import android.content.Context
+import android.graphics.Typeface
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.SnapHelper
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.Utils.ProgressBarAnimation
@@ -25,10 +30,12 @@ import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.OnCartItemClickListener
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Sections
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.chip.Chip
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
@@ -44,6 +51,7 @@ import kotlinx.android.synthetic.main.activity_course.coursePageRatingTv
 import kotlinx.android.synthetic.main.activity_course.coursePageSubtitle
 import kotlinx.android.synthetic.main.activity_course.coursePageSummary
 import kotlinx.android.synthetic.main.activity_course.coursePageTitle
+import kotlinx.android.synthetic.main.activity_course.coursePagevtags
 import kotlinx.android.synthetic.main.activity_course.courseProgress1
 import kotlinx.android.synthetic.main.activity_course.courseProgress2
 import kotlinx.android.synthetic.main.activity_course.courseProgress3
@@ -53,6 +61,8 @@ import kotlinx.android.synthetic.main.activity_course.courseRootView
 import kotlinx.android.synthetic.main.activity_course.instructorRv
 import kotlinx.android.synthetic.main.activity_course.rvExpendableView
 import kotlinx.android.synthetic.main.activity_course.scrollView
+import kotlinx.android.synthetic.main.activity_course.tagsChipgroup
+import kotlinx.android.synthetic.main.activity_course.tagstv
 import kotlinx.android.synthetic.main.activity_course.toolbar
 import kotlinx.android.synthetic.main.activity_course.trialBtn
 import kotlinx.android.synthetic.main.bottom_cart_sheet.bottom_sheet
@@ -69,6 +79,7 @@ import org.jetbrains.anko.toast
 
 class CourseActivity : AppCompatActivity(), AnkoLogger {
     lateinit var skeletonScreen: SkeletonScreen
+    lateinit var rvExpandableskeleton: SkeletonScreen
     lateinit var courseId: String
     lateinit var courseName: String
     lateinit var progressBar: Array<ProgressBar?>
@@ -76,6 +87,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     private lateinit var instructorAdapter: InstructorDataAdapter
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     var sheetBehavior: BottomSheetBehavior<*>? = null
+    val batchSnapHelper: SnapHelper = LinearSnapHelper()
+    val sectionAdapter = SectionsDataAdapter(ArrayList())
+
+
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(this)
     }
@@ -121,6 +136,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
             .duration(1200)
             .load(R.layout.item_skeleton_course)
             .show()
+
 
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
         sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
@@ -197,7 +213,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         Clients.onlineV2JsonApi.courseById(courseId).enqueue(retrofitCallback { t, resp ->
             resp?.body()?.let { course ->
                 skeletonScreen.hide()
-                fetchInstructors(course.id!!)
+                fetchInstructors(course.id)
                 batchAdapter = BatchesAdapter(ArrayList(), object : OnCartItemClickListener {
                     override fun onItemClick(id: String, name: String) {
                         addtocart(id, name)
@@ -206,6 +222,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 batchRv.layoutManager =
                     LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                 batchRv.adapter = batchAdapter
+                batchSnapHelper.attachToRecyclerView(batchRv)
                 setImageAndTitle(course.logo!!, course.title!!)
                 coursePageSubtitle.text = course.subtitle
                 coursePageSummary.text = course.summary
@@ -225,34 +242,72 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                         toast("No available runs right now ! Please check back later")
                     }
                 }
-                showPromoVideo(course.promoVideo ?: "")
-                fetchRating(course.id!!)
+                fetchTags(course)
+                showPromoVideo(course.promoVideo)
+                fetchRating(course.id)
                 if (!course.runs.isNullOrEmpty()) {
                     val sections = course.runs?.get(0)?.sections
                     val sectionsList = ArrayList<Sections>()
-                    val sectionAdapter = SectionsDataAdapter(ArrayList())
                     rvExpendableView.layoutManager = LinearLayoutManager(this)
                     rvExpendableView.adapter = sectionAdapter
-                    sections!!.forEachIndexed { index, section ->
-                        GlobalScope.launch(Dispatchers.Main) {
-                            val request = service.getSections(section.id!!)
-                            val response = request.await()
-                            if (response.isSuccessful) {
-                                val value = response.body()!!
-                                value.order = index
-                                sectionsList.add(value)
-                                if (sectionsList.size == sections.size) {
-                                    sectionsList.sortBy { it.order }
-                                    sectionAdapter.setData(sectionsList)
+                    rvExpandableskeleton = Skeleton.bind(rvExpendableView)
+                        .adapter(sectionAdapter)
+                        .shimmer(true)
+                        .angle(20)
+                        .frozen(true)
+                        .duration(1200)
+                        .count(4)
+                        .load(R.layout.item_skeleton_section_card)
+                        .show()
+                    runOnUiThread {
+                        sections!!.forEachIndexed { index, section ->
+                            GlobalScope.launch(Dispatchers.Main) {
+                                val request = service.getSections(section.id!!)
+                                val response = request.await()
+                                if (response.isSuccessful) {
+                                    val value = response.body()!!
+                                    value.order = index
+                                    sectionsList.add(value)
+                                    if (sectionsList.size == sections.size) {
+                                        sectionsList.sortBy { it.order }
+                                        rvExpandableskeleton.hide()
+                                        sectionAdapter.setData(sectionsList)
+                                    }
+                                } else {
+                                    toast("Error ${response.code()}")
                                 }
-                            } else {
-                                toast("Error ${response.code()}")
                             }
                         }
                     }
                 }
             }
         })
+    }
+
+    private fun fetchTags(course: Course) {
+
+        course.runs?.forEach {
+            if (it.tags?.size == 0) {
+                tagstv.visibility = View.GONE
+                coursePagevtags.visibility = View.GONE
+                tagsChipgroup.visibility = View.GONE
+            } else {
+                tagstv.visibility = View.VISIBLE
+                coursePagevtags.visibility = View.VISIBLE
+                tagsChipgroup.visibility = View.VISIBLE
+
+                it.tags?.forEach {
+                    val chip = Chip(this)
+                    chip.text = it.name
+                    val typeFace: Typeface? =
+                        ResourcesCompat.getFont(this.applicationContext, R.font.nunitosans_regular)
+                    chip.typeface = typeFace
+                    tagsChipgroup.addView(chip)
+                }
+
+            }
+        }
+
     }
 
     private fun addtocart(id: String, name: String) {
@@ -287,13 +342,14 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 p2: Boolean
             ) {
                 if (!p2) {
-                    youtubePlayerInstance?.loadVideo(MediaUtils.getYotubeVideoId(promoVideo!!))
+                    youtubePlayerInstance?.loadVideo(MediaUtils.getYotubeVideoId(promoVideo))
                 }
             }
         }
         val youTubePlayerSupportFragment =
             supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
-        youTubePlayerSupportFragment!!.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
+        if (this@CourseActivity != null)
+            youTubePlayerSupportFragment?.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
     }
 
     private fun fetchRating(id: String) {
