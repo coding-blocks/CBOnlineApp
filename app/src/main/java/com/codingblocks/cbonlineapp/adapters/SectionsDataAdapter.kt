@@ -58,12 +58,6 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
                     duration += subItems.duration!!
             }
 
-            if (position == 0) {
-                itemView.btnfree.visibility = View.VISIBLE
-            } else {
-                itemView.btnfree.visibility = View.GONE
-                itemView.btnfree.isClickable = false
-            }
 
             val hour = duration / (1000 * 60 * 60) % 24
             val minute = duration / (1000 * 60) % 60
@@ -84,13 +78,6 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
                 val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
                 val subDuration = inflatedView.findViewById(R.id.textView16) as TextView
                 val contentImg = inflatedView.findViewById(R.id.imageView3) as ImageView
-
-//                if (!data.preminum!!) {
-//                    itemView.btnfree.visibility = View.VISIBLE
-//                } else {
-//                    itemView.btnfree.visibility = View.GONE
-//                    itemView.btnfree.isClickable = false
-//                }
                 if (i.contentable == "lecture" || i.contentable == "video") {
                     val contentDuration: Long = i.duration!!
                     contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))

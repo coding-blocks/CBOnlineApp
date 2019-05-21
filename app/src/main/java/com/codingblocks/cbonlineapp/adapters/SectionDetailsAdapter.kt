@@ -57,7 +57,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
     private lateinit var context: Context
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
-    private var premium: Boolean=false
+    private var premium: Boolean = false
     private lateinit var courseStartDate: String
 
     private lateinit var sectionWithContentDao: SectionWithContentsDao
@@ -141,22 +141,6 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                     } else
                         itemView.lectureTime.text = ("---")
                     subTitle.text = content.title
-
-                    if (position == 0) {
-                        itemView.btnfree.visibility = View.VISIBLE
-                    } else {
-                        itemView.btnfree.visibility = View.GONE
-                        itemView.btnfree.isClickable = false
-                    }
-
-//                    if(data.premium)
-//                    { //itemView.btnfree.setBackgroundResource(R.drawable.buttondesign)
-//                        itemView.btnfree.visibility=View.VISIBLE }
-//                    else {
-//                        itemView.btnfree.visibility=View.GONE
-//                        itemView.btnfree.isClickable=false
-//                    }
-
                     if (!data.premium || premium && ((courseStartDate.toLong() * 1000) < System.currentTimeMillis())) {
                         if (sectionComplete == it.size) {
                             itemView.lectures.text = "$sectionComplete/${it.size} Lectures Completed"

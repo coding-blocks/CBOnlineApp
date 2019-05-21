@@ -71,7 +71,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     lateinit var skeletonScreen: SkeletonScreen
     lateinit var courseId: String
     lateinit var courseName: String
-    lateinit var coursesubtitle: String
     lateinit var progressBar: Array<ProgressBar?>
     private lateinit var batchAdapter: BatchesAdapter
     private lateinit var instructorAdapter: InstructorDataAdapter
