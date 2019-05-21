@@ -117,6 +117,7 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                     ll.removeAllViews()
                     ll.visibility = View.GONE
                 }
+                if(data.premium){itemView.free.visibility = View.GONE}
                 itemView.lectures.text = "0/${it.size} Lectures Completed"
                 var duration: Long = 0
                 var sectionComplete = 0
