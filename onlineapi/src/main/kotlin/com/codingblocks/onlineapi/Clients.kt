@@ -34,7 +34,6 @@ import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.Rating
 import com.codingblocks.onlineapi.models.RunAttemptId
 import com.codingblocks.onlineapi.models.RunAttemptsId
-import com.codingblocks.onlineapi.models.RunAttemptsModel
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Tags
 import com.fasterxml.jackson.databind.DeserializationFeature
@@ -48,6 +47,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.jackson.JacksonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object Clients {
     private val om = jacksonObjectMapper()
@@ -62,7 +63,7 @@ object Clients {
         LectureContent::class.java, ContentDocumentType::class.java, ContentProgress::class.java,
         CourseSection::class.java, ContentLectureType::class.java, ContentCodeChallenge::class.java,
         ContentQna::class.java, Announcement::class.java, Progress::class.java, Quizzes::class.java,
-        Question::class.java, Choice::class.java, QuizAttempt::class.java, RunAttemptsModel::class.java,
+        Question::class.java, Choice::class.java, QuizAttempt::class.java,
         Quizqnas::class.java, DoubtsJsonApi::class.java, ContentCsv::class.java, Comment::class.java,
         Note::class.java, Notes::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
         RunAttemptId::class.java, RunAttemptsId::class.java, ContentId::class.java, ContentsId::class.java
@@ -88,7 +89,12 @@ object Clients {
         onlineApiResourceConverter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_TYPE_IN_RELATIONSHIP)
     }
 
+    private const val connectTimeout = 15 // 15s
+    private const val readTimeout = 15 // 15s
+
     private val ClientInterceptor = OkHttpClient.Builder()
+        .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
+        .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
         .addInterceptor { chain ->
             chain.proceed(
                 chain.request().newBuilder().addHeader(
@@ -104,6 +110,7 @@ object Clients {
         .client(ClientInterceptor)
         .baseUrl("https://api-online.cb.lk/api/v2/")
         .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
+        .addConverterFactory(JacksonConverterFactory.create(om))
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .build()
     val onlineV2JsonApi: OnlineJsonApi

@@ -36,13 +36,35 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
-import com.google.android.material.resources.TextAppearance
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_course.*
+import kotlinx.android.synthetic.main.activity_course.batchRv
+import kotlinx.android.synthetic.main.activity_course.buyBtn
+import kotlinx.android.synthetic.main.activity_course.coursePageLogo
+import kotlinx.android.synthetic.main.activity_course.coursePageMentors
+import kotlinx.android.synthetic.main.activity_course.coursePageRatingBar
+import kotlinx.android.synthetic.main.activity_course.coursePageRatingCountTv
+import kotlinx.android.synthetic.main.activity_course.coursePageRatingTv
+import kotlinx.android.synthetic.main.activity_course.coursePageSubtitle
+import kotlinx.android.synthetic.main.activity_course.coursePageSummary
+import kotlinx.android.synthetic.main.activity_course.coursePageTitle
+import kotlinx.android.synthetic.main.activity_course.coursePagevtags
+import kotlinx.android.synthetic.main.activity_course.courseProgress1
+import kotlinx.android.synthetic.main.activity_course.courseProgress2
+import kotlinx.android.synthetic.main.activity_course.courseProgress3
+import kotlinx.android.synthetic.main.activity_course.courseProgress4
+import kotlinx.android.synthetic.main.activity_course.courseProgress5
+import kotlinx.android.synthetic.main.activity_course.courseRootView
+import kotlinx.android.synthetic.main.activity_course.instructorRv
+import kotlinx.android.synthetic.main.activity_course.rvExpendableView
+import kotlinx.android.synthetic.main.activity_course.scrollView
+import kotlinx.android.synthetic.main.activity_course.tagsChipgroup
+import kotlinx.android.synthetic.main.activity_course.tagstv
+import kotlinx.android.synthetic.main.activity_course.toolbar
+import kotlinx.android.synthetic.main.activity_course.trialBtn
 import kotlinx.android.synthetic.main.bottom_cart_sheet.bottom_sheet
 import kotlinx.android.synthetic.main.bottom_cart_sheet.checkoutBtn
 import kotlinx.android.synthetic.main.bottom_cart_sheet.continueBtn
@@ -53,7 +75,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.textAppearance
 import org.jetbrains.anko.toast
 
 class CourseActivity : AppCompatActivity(), AnkoLogger {
@@ -238,21 +259,23 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                         .count(4)
                         .load(R.layout.item_skeleton_section_card)
                         .show()
-                    sections!!.forEachIndexed { index, section ->
-                        GlobalScope.launch(Dispatchers.Main) {
-                            val request = service.getSections(section.id!!)
-                            val response = request.await()
-                            if (response.isSuccessful) {
-                                val value = response.body()!!
-                                value.order = index
-                                sectionsList.add(value)
-                                if (sectionsList.size == sections.size) {
-                                    sectionsList.sortBy { it.order }
-                                    rvExpandableskeleton.hide()
-                                    sectionAdapter.setData(sectionsList)
+                    runOnUiThread {
+                        sections!!.forEachIndexed { index, section ->
+                            GlobalScope.launch(Dispatchers.Main) {
+                                val request = service.getSections(section.id!!)
+                                val response = request.await()
+                                if (response.isSuccessful) {
+                                    val value = response.body()!!
+                                    value.order = index
+                                    sectionsList.add(value)
+                                    if (sectionsList.size == sections.size) {
+                                        sectionsList.sortBy { it.order }
+                                        rvExpandableskeleton.hide()
+                                        sectionAdapter.setData(sectionsList)
+                                    }
+                                } else {
+                                    toast("Error ${response.code()}")
                                 }
-                            } else {
-                                toast("Error ${response.code()}")
                             }
                         }
                     }
@@ -264,20 +287,21 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     private fun fetchTags(course: Course) {
 
         course.runs?.forEach {
-            if(it.tags?.size==0){
+            if (it.tags?.size == 0) {
                 tagstv.visibility = View.GONE
                 coursePagevtags.visibility = View.GONE
                 tagsChipgroup.visibility = View.GONE
-            }else{
+            } else {
                 tagstv.visibility = View.VISIBLE
                 coursePagevtags.visibility = View.VISIBLE
                 tagsChipgroup.visibility = View.VISIBLE
 
                 it.tags?.forEach {
-                    val chip  = Chip(this)
+                    val chip = Chip(this)
                     chip.text = it.name
-                    val typeFace: Typeface? = ResourcesCompat.getFont(this.applicationContext, R.font.nunitosans_regular)
-                    chip.typeface=typeFace
+                    val typeFace: Typeface? =
+                        ResourcesCompat.getFont(this.applicationContext, R.font.nunitosans_regular)
+                    chip.typeface = typeFace
                     tagsChipgroup.addView(chip)
                 }
 
