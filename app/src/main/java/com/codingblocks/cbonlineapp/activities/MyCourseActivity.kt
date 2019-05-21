@@ -1,95 +1,61 @@
 package com.codingblocks.cbonlineapp.activities
 
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
-import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.models.ContentCodeChallenge
-import com.codingblocks.cbonlineapp.database.models.ContentCsvModel
-import com.codingblocks.cbonlineapp.database.models.ContentDocument
-import com.codingblocks.cbonlineapp.database.models.ContentLecture
-import com.codingblocks.cbonlineapp.database.models.ContentQna
-import com.codingblocks.cbonlineapp.database.models.ContentVideo
-import com.codingblocks.cbonlineapp.database.models.Course
-import com.codingblocks.cbonlineapp.database.models.CourseContent
-import com.codingblocks.cbonlineapp.database.models.CourseRun
-import com.codingblocks.cbonlineapp.database.models.CourseSection
-import com.codingblocks.cbonlineapp.database.models.SectionWithContent
+import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.fragments.AnnouncementsFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
 import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
 import com.codingblocks.cbonlineapp.fragments.OverviewFragment
+import com.codingblocks.cbonlineapp.util.COURSE_ID
+import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_my_course.htab_tabs
 import kotlinx.android.synthetic.main.activity_my_course.htab_viewpager
 import kotlinx.android.synthetic.main.activity_my_course.toolbar
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.info
-import org.jetbrains.anko.yesButton
-import kotlin.concurrent.thread
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
-    override fun onRefresh() {
-        fetchCourse(attemptId)
-    }
 
     private lateinit var attemptId: String
     private lateinit var courseId: String
-    private val database: AppDatabase by lazy {
-        AppDatabase.getInstance(this)
-    }
-    private val courseDao by lazy {
-        database.courseDao()
-    }
-    private val runDao by lazy {
-        database.courseRunDao()
-    }
-    private val sectionDao by lazy {
-        database.sectionDao()
-    }
-    private val contentDao by lazy {
-        database.contentDao()
-    }
-    private val sectionWithContentsDao by lazy {
-        database.sectionWithContentsDao()
-    }
 
-    companion object {
-        const val YOUTUBE_API_KEY = "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
-    }
+    private val viewModel by viewModel<MyCourseViewModel>()
+
 
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
-    @RequiresApi(Build.VERSION_CODES.N_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_course)
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        courseId = intent.getStringExtra("course_id")
-        title = intent.getStringExtra("courseName")
-        attemptId = intent.getStringExtra("attempt_id")
-        runDao.getRunByAtemptId(attemptId).observe(this, Observer<CourseRun> {
-            setupViewPager(it.crUid, it.crCourseId)
-        })
-        //update hits
-        runDao.updateHit(attemptId)
+        courseId = intent.getStringExtra(COURSE_ID)
+        title = intent.getStringExtra(COURSE_NAME)
+        attemptId = intent.getStringExtra(RUN_ATTEMPT_ID)
+
+        viewModel.updatehit(attemptId)
+
+        viewModel.getPromoVideo(courseId)
 
 
-        courseDao.getMyCourse(courseId).observe(this, Observer<Course> {
+        viewModel.fetchCourse(attemptId)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setupViewPager(attemptId, courseId)
+
+        viewModel.promoVideo.observer(this) {
             youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
                 override fun onInitializationFailure(
                     p0: YouTubePlayer.Provider?,
@@ -103,252 +69,17 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
                     p2: Boolean
                 ) {
                     if (!p2) {
-                        it?.let {
-                            youtubePlayerInstance?.cueVideo(MediaUtils.getYotubeVideoId(it.promoVideo))
-                        }
+                        youtubePlayerInstance?.cueVideo(MediaUtils.getYotubeVideoId(it))
                     }
                 }
             }
             val youTubePlayerSupportFragment =
                 supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
-            youTubePlayerSupportFragment!!.initialize(YOUTUBE_API_KEY, youtubePlayerInit)
-        })
 
-
-        fetchCourse(attemptId)
-    }
-
-    private fun fetchCourse(attemptId: String) {
-        Clients.onlineV2JsonApi.enrolledCourseById(attemptId)
-            .enqueue(retrofitCallback { throwable, response ->
-                response?.body()?.let { it ->
-                    val run = it.run?.run {
-                        CourseRun(
-                            id.toString(),
-                            attemptId,
-                            name.toString(),
-                            description.toString(),
-                            start.toString(),
-                            end.toString(),
-                            price.toString(),
-                            mrp.toString(),
-                            courseId.toString(),
-                            updatedAt.toString()
-                        )
-                    }
-                    val oldRun = runDao.getRunById(run?.crUid!!)
-//                if (oldRun == null) {
-//                    runDao.insert(run)
-//                } else if (oldRun != run) {
-//                    runDao.update(run)
-//                }
-                    runDao.insert(run)
-
-                    doAsync {
-                        thread {
-                            //Course Sections List
-                            for (section in it.run?.sections!!) {
-                                val newSection =
-                                    CourseSection(
-                                        section.id ?: "", section.name ?: "",
-                                        section.order!!, section.premium!!, section.status ?: "",
-                                        section.runId ?: "", attemptId, section.updatedAt ?: ""
-                                    )
-                                val oldSection = sectionDao.getSectionWithId(section.id!!)
-                                if (oldSection == null)
-                                    sectionDao.insert(newSection)
-                                else if (oldSection == newSection) {
-                                    sectionDao.update(newSection)
-                                }
-                                Clients.onlineV2JsonApi.getSectionContents(
-                                    section.courseContentLinks!!.related.href.substring(
-                                        7
-                                    )
-                                ).enqueue(retrofitCallback { throwable, response ->
-                                    response?.body().let {
-                                        section.courseContent = it
-                                        //Section Contents List
-                                        section.courseContent?.forEach { content ->
-                                            var contentDocument =
-                                                ContentDocument()
-                                            var contentLecture =
-                                                ContentLecture()
-                                            var contentVideo =
-                                                ContentVideo()
-                                            var contentQna =
-                                                ContentQna()
-                                            var contentCodeChallenge =
-                                                ContentCodeChallenge()
-                                            var contentCsv =
-                                                ContentCsvModel()
-
-                                            when {
-                                                content.contentable.equals("lecture") -> content.lecture?.let {
-                                                    contentLecture =
-                                                        ContentLecture(
-                                                            it.id ?: "",
-                                                            it.name ?: "",
-                                                            it.duration!!,
-                                                            it.videoId ?: "",
-                                                            content.sectionContent?.id ?: "",
-                                                            it.updatedAt ?: ""
-                                                        )
-                                                }
-                                                content.contentable.equals("document") -> content.document?.let {
-                                                    contentDocument =
-                                                        ContentDocument(
-                                                            it.id
-                                                                ?: "",
-                                                            it.name ?: "",
-                                                            it.pdfLink ?: "",
-                                                            content.sectionContent?.id ?: "",
-                                                            it.updatedAt ?: ""
-                                                        )
-                                                }
-                                                content.contentable.equals("video") -> content.video?.let {
-                                                    contentVideo =
-                                                        ContentVideo(
-                                                            it.id ?: "",
-                                                            it.name ?: "",
-                                                            it.duration!!,
-                                                            it.description ?: "",
-                                                            it.url ?: "",
-                                                            content.sectionContent?.id ?: "",
-                                                            it.updatedAt ?: ""
-                                                        )
-                                                }
-                                                content.contentable.equals("qna") -> content.qna?.let {
-                                                    contentQna =
-                                                        ContentQna(
-                                                            it.id ?: "",
-                                                            it.name ?: "",
-                                                            it.qId ?: 0,
-                                                            content.sectionContent?.id ?: "",
-                                                            it.updatedAt ?: ""
-                                                        )
-                                                }
-                                                content.contentable.equals("code_challenge") -> content.codeChallenge?.let {
-                                                    contentCodeChallenge =
-                                                        ContentCodeChallenge(
-                                                            it.id
-                                                                ?: "",
-                                                            it.name ?: "",
-                                                            it.hbProblemId ?: 0,
-                                                            it.hbContestId ?: 0,
-                                                            content.sectionContent?.id ?: "",
-                                                            it.updatedAt ?: ""
-                                                        )
-                                                }
-                                                content.contentable.equals("csv") -> content.csv?.let {
-                                                    contentCsv =
-                                                        ContentCsvModel(
-                                                            it.id
-                                                                ?: "",
-                                                            it.name ?: "",
-                                                            it.description ?: "",
-                                                            it.contentId ?: "",
-                                                            it.updatedAt ?: ""
-                                                        )
-                                                }
-                                            }
-                                            var progressId = ""
-                                            val status: String
-                                            if (content.progress != null) {
-                                                status = content.progress?.status ?: ""
-                                                progressId = content.progress?.id ?: ""
-                                            } else {
-                                                status = "UNDONE"
-                                            }
-                                            val oldContent =
-                                                CourseContent(
-                                                    content.id ?: "", status, progressId,
-                                                    content.title ?: "", content.duration!!,
-                                                    content.contentable
-                                                        ?: "", content.sectionContent?.order!!,
-                                                    content.sectionContent?.sectionId
-                                                        ?: "", attemptId,
-                                                    section.premium!!,
-                                                    content.sectionContent?.updatedAt
-                                                        ?: "",
-                                                    contentLecture,
-                                                    contentDocument,
-                                                    contentVideo,
-                                                    contentQna,
-                                                    contentCodeChallenge,
-                                                    contentCsv
-                                                )
-                                            val updateContent = contentDao.getContentWithId(
-                                                attemptId, content.id
-                                                    ?: ""
-                                            )
-                                            if (updateContent == null ) {
-
-                                                contentDao.insert(oldContent)
-                                                insertSectionWithContent(
-                                                    section.id
-                                                        ?: "", content.id ?: ""
-                                                )
-                                            } else if (updateContent != oldContent) {
-                                                contentLecture.isDownloaded =  updateContent.contentLecture.isDownloaded
-                                                contentDao.update(
-                                                    CourseContent(
-                                                        content.id ?: "", status, progressId,
-                                                        content.title ?: "", content.duration!!,
-                                                        content.contentable
-                                                            ?: "", content.sectionContent?.order!!,
-                                                        content.sectionContent?.sectionId
-                                                            ?: "", attemptId,
-                                                        section.premium!!,
-                                                        content.sectionContent?.updatedAt
-                                                            ?: "",
-                                                        contentLecture,
-                                                        contentDocument,
-                                                        contentVideo,
-                                                        contentQna,
-                                                        contentCodeChallenge
-                                                    )
-                                                )
-                                            }
-                                        }
-                                    }
-                                })
-                            }
-                        }
-                    }
-                }
-                throwable?.let {
-                    if (!it.localizedMessage.contains("Unable to resolve"))
-                        alert {
-                            title = "Error Fetching Course"
-                            message = """
-                        There was an error downloading course contents.
-                        Please contact support@codingblocks.com
-                        """.trimIndent()
-                            yesButton {
-                                it.dismiss()
-                                finish()
-                            }
-                            isCancelable = false
-                        }.show()
-                }
-            })
-    }
-
-    private fun insertSectionWithContent(sectionId: String, contentId: String) {
-        thread {
-            try {
-                sectionWithContentsDao.insert(
-                    SectionWithContent(
-                        sectionId,
-                        contentId
-                    )
-                )
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Log.e("CRASH", "COURSE ID : $sectionId")
-                Log.e("CRASH", "INSTRUCTOR ID : $contentId")
-            }
+            youTubePlayerSupportFragment!!.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
         }
+
+
     }
 
     private fun setupViewPager(crUid: String, crCourseId: String) {
@@ -366,5 +97,9 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
         htab_tabs.getTabAt(3)?.setIcon(R.drawable.ic_announcement)
         htab_tabs.getTabAt(2)?.select()
         htab_viewpager.offscreenPageLimit = 4
+    }
+
+    override fun onRefresh() {
+        viewModel.fetchCourse(attemptId)
     }
 }
