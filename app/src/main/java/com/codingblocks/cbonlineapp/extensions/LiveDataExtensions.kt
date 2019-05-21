@@ -106,7 +106,7 @@ fun formatDate(date: String): String {
     calender.time = newDate
     calender.add(Calendar.HOUR, 5)
     calender.add(Calendar.MINUTE, 30)
-    format = SimpleDateFormat("MMM dd,yyyy hh:mm", Locale.US)
+    format = SimpleDateFormat("MMM dd yyyy\nhh:mm a", Locale.US)
     return format.format(calender.time)
 }
 

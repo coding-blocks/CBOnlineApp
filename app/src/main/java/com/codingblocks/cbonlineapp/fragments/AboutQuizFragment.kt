@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.QuizAttemptListAdapter
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
@@ -53,12 +54,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_about_quiz, container, false).apply {
-        quizAttemptListAdapter =
-            QuizAttemptListAdapter(context, attemptList, object : OnItemClickListener {
-                override fun onItemClick(position: Int, id: String) {
-                    initiateQuiz(id)
-                }
-            })
+        quizAttemptListAdapter = QuizAttemptListAdapter(attemptList)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -76,11 +72,16 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
             qnaId = it.getString(QUIZ_QNA)
         }
 
-        val header =
-            layoutInflater.inflate(R.layout.quiz_attempt_header, quizAttemptLv, false) as ViewGroup
-        quizAttemptLv.addHeaderView(header, null, false)
-        quizAttemptLv.adapter = quizAttemptListAdapter
+        val viewManager = LinearLayoutManager(context)
+        quizAttemptLv.apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = quizAttemptListAdapter
+        }
 
+        quizAttemptListAdapter.onItemClick = { it ->
+            initiateQuiz(it.id)
+        }
 
         fetchQuizDetails()
         fetchQuizAttempts()
