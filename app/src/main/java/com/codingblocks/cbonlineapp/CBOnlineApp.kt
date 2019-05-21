@@ -10,6 +10,7 @@ import com.squareup.picasso.Picasso
 import io.github.inflationx.calligraphy3.CalligraphyConfig
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor
 import io.github.inflationx.viewpump.ViewPump
+import org.koin.android.ext.android.startKoin
 
 class CBOnlineApp : Application() {
 
@@ -20,6 +21,11 @@ class CBOnlineApp : Application() {
     override fun onCreate() {
         super.onCreate()
         mInstance = this
+
+        startKoin(this, listOf(
+            viewModelModule,
+            databaseModule
+        ))
         Picasso.setSingletonInstance(Picasso.Builder(this).build())
 
         //Initiate Calligraphy

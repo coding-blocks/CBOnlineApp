@@ -15,7 +15,7 @@ import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizqnas
-import com.codingblocks.onlineapi.models.RunAttemptsModel
+import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import kotlinx.android.synthetic.main.fragment_about_quiz.aboutQuiz
@@ -88,12 +88,10 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         startQuiz.setOnClickListener {
 
             val quizAttempt = QuizAttempt()
-            val runAttempts = RunAttemptsModel()
-            runAttempts.id = attemptId
             val qna = Quizqnas()
             qna.id = qnaId
             quizAttempt.qna = qna
-            quizAttempt.runAttempt = runAttempts
+            quizAttempt.runAttempt = RunAttemptsId(attemptId)
 
             Clients.onlineV2JsonApi.createQuizAttempt(quizAttempt)
                 .enqueue(retrofitCallback { throwable, response ->

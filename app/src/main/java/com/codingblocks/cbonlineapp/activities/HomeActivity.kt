@@ -20,13 +20,14 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
+import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
@@ -49,6 +50,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var doubleBackToExitPressedOnce = false
     lateinit var prefs: PreferenceHelper
     var mFragmentToSet: Fragment? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prefs = getPrefs()
@@ -133,8 +135,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         doAsync {
             Clients.api.logout().enqueue(retrofitCallback { throwable, response ->
                 response?.let {
-                    if(it.isSuccessful){
-                        deleteDatabaseFile(this@HomeActivity,"app-database")
+                    if (it.isSuccessful) {
+                        deleteDatabaseFile(this@HomeActivity, "app-database")
                     }
                 }
             })
@@ -297,6 +299,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo.isConnected
     }
+
     fun deleteDatabaseFile(context: Context, databaseName: String) {
         val databases = File(context.applicationInfo.dataDir + "/databases")
         val db = File(databases, databaseName)
