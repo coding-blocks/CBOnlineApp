@@ -55,6 +55,17 @@
                 android:textColor="@android:color/primary_text_light"
                 android:textSize="13sp"
                 tools:text="3 Lectures" />
+            <TextView android:id="@+id/free"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:text=" FREE "
+                android:layout_toStartOf="@id/arrow"
+                android:background="@drawable/button_background"
+                android:fontFamily="@font/nunitosans_semibold"
+                android:gravity="center"
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/lectureTime"

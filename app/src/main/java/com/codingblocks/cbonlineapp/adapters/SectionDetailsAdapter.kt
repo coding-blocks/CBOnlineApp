@@ -287,6 +287,9 @@ class SectionDetailsAdapter(private var sectionData: ArrayList<CourseSection>?,
                         else
                             showOrHide(ll, it)
                     }
+                    if(data.premium) {
+                        itemView.free.visibility = View.GONE
+                    }
                 }
             })
         }
