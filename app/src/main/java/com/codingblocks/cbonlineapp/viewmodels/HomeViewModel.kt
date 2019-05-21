@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.database.CourseDao
@@ -107,6 +108,128 @@ class HomeViewModel(
             })
     }
 
+    fun fetchMyCourses(refresh: Boolean = false) {
+        try {
+            Clients.onlineV2JsonApi.getMyCourses()
+                .enqueue(retrofitCallback { _, response ->
+                    response?.let {
+                        if (response.isSuccessful) {
+                            it.body()?.let { courseList ->
+                                courseList.forEach { courseRun ->
+                                    courseRun.runAttempts?.get(0)?.id?.let { runId ->
+                                        Clients.api.getMyCourseProgress(runId)
+                                            .enqueue(retrofitCallback { _, progressRes ->
+                                                progressRes?.body().let {
+                                                    val progress: Double = try {
+                                                        it?.get("percent") as Double
+                                                    } catch (e: Exception) {
+                                                        0.0
+                                                    }
+                                                    val newCourse = courseRun.course?.run {
+                                                        Course(
+                                                            id,
+                                                            title,
+                                                            subtitle,
+                                                            logo,
+                                                            summary,
+                                                            promoVideo,
+                                                            difficulty,
+                                                            reviewCount,
+                                                            rating,
+                                                            slug,
+                                                            coverImage,
+                                                            updatedAt,
+                                                            categoryId
+                                                        )
+                                                    }
+                                                    courseRun.run {
+                                                        val newRun = CourseRun(
+                                                            id,
+                                                            runAttempts?.get(0)?.id ?: "",
+                                                            name,
+                                                            description,
+                                                            enrollmentStart,
+                                                            enrollmentEnd,
+                                                            start,
+                                                            end,
+                                                            price,
+                                                            mrp ?: "",
+                                                            course?.id ?: "",
+                                                            updatedAt,
+                                                            progress,
+                                                            course?.title ?: "",
+                                                            runAttempts?.get(0)?.premium
+                                                                ?: false
+                                                        )
+                                                        val oldRun = runDao.getRunById(
+                                                            runAttempts?.get(0)?.id ?: ""
+                                                        )
+                                                        if (oldRun == null) {
+                                                            newCourse?.let { it1 ->
+                                                                courseDao.insertNew(
+                                                                    it1
+                                                                )
+                                                            }
+                                                            runDao.insertNew(newRun)
+                                                        } else if (oldRun.progress != progress || refresh) {
+                                                            newRun.hits = oldRun.hits
+                                                            newCourse?.let { it1 ->
+                                                                courseDao.update(
+                                                                    it1
+                                                                )
+                                                            }
+                                                            runDao.update(newRun)
+                                                        }
+                                                    }
+
+                                                    courseRun.course?.instructors?.forEach { instructorId ->
+                                                        Clients.onlineV2JsonApi.instructorsById(
+                                                            instructorId.id
+                                                        ).enqueue(
+                                                            retrofitCallback { _, instructorResponse ->
+                                                                instructorResponse?.let {
+                                                                    if (instructorResponse.isSuccessful) {
+                                                                        instructorResponse.body()
+                                                                            ?.run {
+                                                                                instructorDao.insertNew(
+                                                                                    Instructor(
+                                                                                        id,
+                                                                                        name,
+                                                                                        description
+                                                                                            ?: "",
+                                                                                        photo,
+                                                                                        updatedAt
+                                                                                    )
+                                                                                )
+                                                                                courseWithInstructorDao.insert(
+                                                                                    CourseWithInstructor(
+                                                                                        courseRun.course?.id
+                                                                                            ?: "",
+                                                                                        id
+                                                                                    )
+                                                                                )
+                                                                            }
+
+                                                                    }
+                                                                }
+
+                                                            })
+
+                                                    }
+                                                }
+
+                                            })
+                                    }
+                                }
+                            }
+                            progress.value = false
+                        }
+                    }
+                })
+        } catch (e: Exception) {
+            Log.i("Error", e.localizedMessage)
+        }
+    }
 
     fun fetchAllCourses() {
         Clients.onlineV2JsonApi.getAllCourses()
@@ -184,116 +307,6 @@ class HomeViewModel(
                         }
                     }
                     progress.value = false
-                }
-            })
-    }
-
-    fun fetchMyCourses() {
-        Clients.onlineV2JsonApi.getMyCourses()
-            .enqueue(retrofitCallback { _, response ->
-                response?.let {
-                    if (response.isSuccessful) {
-                        it.body()?.let { courseList ->
-                            courseList.forEach { courseRun ->
-                                courseRun.runAttempts?.get(0)?.id?.let { runId ->
-                                    Clients.api.getMyCourseProgress(runId)
-                                        .enqueue(retrofitCallback { _, progressRes ->
-                                            progressRes?.body().let {
-                                                val progress: Double = try {
-                                                    it?.get("percent") as Double
-                                                } catch (e: Exception) {
-                                                    0.0
-                                                }
-                                                courseRun.course?.run {
-                                                    courseDao.insertNew(
-                                                        Course(
-                                                            id,
-                                                            title,
-                                                            subtitle,
-                                                            logo,
-                                                            summary,
-                                                            promoVideo,
-                                                            difficulty,
-                                                            reviewCount,
-                                                            rating,
-                                                            slug,
-                                                            coverImage,
-                                                            updatedAt,
-                                                            categoryId
-                                                        )
-                                                    )
-                                                }
-                                                courseRun.run {
-                                                    val newRun = CourseRun(
-                                                        id,
-                                                        runAttempts?.get(0)?.id ?: "",
-                                                        name,
-                                                        description,
-                                                        enrollmentStart,
-                                                        enrollmentEnd,
-                                                        start,
-                                                        end,
-                                                        price,
-                                                        mrp ?: "",
-                                                        course?.id ?: "",
-                                                        updatedAt,
-                                                        progress,
-                                                        course?.title ?: "",
-                                                        runAttempts?.get(0)?.premium
-                                                            ?: false
-                                                    )
-                                                    val oldRun = runDao.getRunById(
-                                                        runAttempts?.get(0)?.id ?: ""
-                                                    )
-                                                    if (oldRun == null) {
-                                                        runDao.insert(newRun)
-                                                    } else if (oldRun.progress != progress) {
-                                                        newRun.hits = oldRun.hits
-                                                        runDao.update(newRun)
-                                                    }
-                                                }
-
-                                                courseRun.course?.instructors?.forEach { instructorId ->
-                                                    Clients.onlineV2JsonApi.instructorsById(
-                                                        instructorId.id
-                                                    ).enqueue(
-                                                        retrofitCallback { _, instructorResponse ->
-                                                            instructorResponse?.let {
-                                                                if (instructorResponse.isSuccessful) {
-                                                                    instructorResponse.body()?.run {
-                                                                        instructorDao.insert(
-                                                                            Instructor(
-                                                                                id,
-                                                                                name,
-                                                                                description
-                                                                                    ?: "",
-                                                                                photo,
-                                                                                updatedAt
-                                                                            )
-                                                                        )
-                                                                        courseWithInstructorDao.insert(
-                                                                            CourseWithInstructor(
-                                                                                courseRun.course?.id
-                                                                                    ?: "",
-                                                                                id
-                                                                            )
-                                                                        )
-                                                                    }
-
-                                                                }
-                                                            }
-
-                                                        })
-
-                                                }
-                                            }
-
-                                        })
-                                }
-                                progress.value = false
-                            }
-                        }
-                    }
                 }
             })
     }

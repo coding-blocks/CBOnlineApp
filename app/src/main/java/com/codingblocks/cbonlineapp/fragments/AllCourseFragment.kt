@@ -34,7 +34,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     lateinit var skeletonScreen: SkeletonScreen
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    private val viewModel by sharedViewModel<HomeViewModel>()
+    private val viewModel by viewModel<HomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -42,7 +42,6 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.util.*
 
@@ -51,7 +50,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var doubleBackToExitPressedOnce = false
     lateinit var prefs: PreferenceHelper
     var mFragmentToSet: Fragment? = null
-    private val viewModel by viewModel<HomeViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

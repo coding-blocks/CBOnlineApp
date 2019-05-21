@@ -137,7 +137,7 @@ class MyCourseRuns(
     @Relationship("run-attempts")
     var runAttempts: ArrayList<MyRunAttempts>?,
     @Relationship("course")
-    var course: MyCourse? = null,
+    var course: MyCourse?,
     @Relationship("ratings")
     var rating: ArrayList<Rating>?,
     val whatsappLink: String?
@@ -356,7 +356,7 @@ class QuizAttempt : BaseModel() {
     var qna: Quizqnas? = null
     @Relationship("run-attempt", resolve = true)
     @JvmField
-    var runAttempt: RunAttemptsModel? = null
+    var runAttempt: RunAttemptsId? = null
     @JvmField
     var submission: ArrayList<QuizSubmission> = arrayListOf()
 }
@@ -388,9 +388,6 @@ class QuizQuestion : BaseModel() {
 
 @Type("qnas")
 class Quizqnas : BaseModel()
-
-@Type("run-attempts")
-class RunAttemptsModel : BaseModel()
 
 @Type("doubt")
 class DoubtsJsonApi : BaseModel() {
@@ -470,21 +467,20 @@ class Notes : BaseModel() {
 }
 
 @Type("run_attempt")
-data class RunAttemptId(
+class RunAttemptId(
     @Id
     @JvmField
     val id: String?
 )
 
 @Type("run-attempts")
-data class RunAttemptsId(
+class RunAttemptsId(
     @Id
-    @JvmField
     val id: String?
 )
 
 @Type("content")
-data class ContentId(
+class ContentId(
     @Id
     val id: String?
 )
@@ -493,8 +489,9 @@ data class ContentId(
 open class ContentsId(
     @Id
     val id: String?
-){
+) {
     var contentable: String? = null
+
     val duration: Long? = null
     val title: String? = null
     val sectionContent: SectionContent? = null

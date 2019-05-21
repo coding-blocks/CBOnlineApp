@@ -9,6 +9,7 @@ import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.NoSuchElementException
 
 fun <T> LiveData<T>.observer(owner: LifecycleOwner, onEmission: (T) -> Unit) {
@@ -75,6 +76,23 @@ fun Long.readableFileSize(): String {
 
 fun String.greater(): Boolean {
     return this.toLong() >= (System.currentTimeMillis() / 1000)
+}
+
+fun Long.getDurationBreakdown(): String {
+    if (this <= 0) {
+        return "---"
+    }
+    var millis = this
+    val hours = TimeUnit.MILLISECONDS.toHours(millis)
+    millis -= TimeUnit.HOURS.toMillis(hours)
+    val minutes = TimeUnit.MILLISECONDS.toMinutes(millis)
+
+    val sb = StringBuilder(64)
+    sb.append(hours)
+    sb.append(" Hours ")
+    sb.append(minutes)
+    sb.append(" Mins ")
+    return (sb.toString())
 }
 
 fun formatDate(date: String): String {

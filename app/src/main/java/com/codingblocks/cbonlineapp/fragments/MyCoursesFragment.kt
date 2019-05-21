@@ -23,7 +23,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -35,7 +34,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     private lateinit var skeletonScreen: SkeletonScreen
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    private val viewModel by sharedViewModel<HomeViewModel>()
+    private val viewModel by viewModel<HomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,7 +87,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         ui.swipeRefreshLayout.setOnRefreshListener {
             viewModel.progress.value = true
             skeletonScreen.show()
-            viewModel.fetchMyCourses()
+            viewModel.fetchMyCourses(true)
         }
 
         viewModel.progress.observer(viewLifecycleOwner) {

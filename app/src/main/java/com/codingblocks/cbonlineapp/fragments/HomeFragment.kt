@@ -41,7 +41,7 @@ class HomeFragment : Fragment(), AnkoLogger {
 
     val ui = HomeFragmentUi<Fragment>()
 
-    private val viewModel by sharedViewModel<HomeViewModel>()
+    private val viewModel by viewModel<HomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
