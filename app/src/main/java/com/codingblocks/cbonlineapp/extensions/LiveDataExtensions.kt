@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager
 import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.NoSuchElementException
 
@@ -83,9 +84,12 @@ fun formatDate(date: String): String {
         throw NoSuchElementException("Invalid Date")
     }
     val newDate = format.parse(date)
-
+    val calender = Calendar.getInstance()
+    calender.time = newDate
+    calender.add(Calendar.HOUR, 5)
+    calender.add(Calendar.MINUTE, 30)
     format = SimpleDateFormat("MMM dd,yyyy hh:mm", Locale.US)
-    return format.format(newDate)
+    return format.format(calender.time)
 }
 
 fun secToTime(time: Double): String {
