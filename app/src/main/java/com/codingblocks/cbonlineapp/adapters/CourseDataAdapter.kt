@@ -74,6 +74,13 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
         }
     }
 
+    /**
+     * The function to call when the adapter has to be cleared of items
+     */
+    fun clear() {
+        courseData?.clear()
+    }
+
     inner class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private lateinit var courseDao: CourseDao

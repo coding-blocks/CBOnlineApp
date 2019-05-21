@@ -6,24 +6,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.NotesDao
 import com.codingblocks.cbonlineapp.database.models.NotesModel
-import com.codingblocks.cbonlineapp.util.OnItemClickListener
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.extensions.secToTime
+import com.codingblocks.cbonlineapp.util.OnItemClickListener
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Contents
+import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Notes
-import com.codingblocks.onlineapi.models.RunAttemptsModel
+import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.item_notes.view.*
+import kotlinx.android.synthetic.main.item_notes.view.bodyTv
+import kotlinx.android.synthetic.main.item_notes.view.contentTitleTv
+import kotlinx.android.synthetic.main.item_notes.view.deleteTv
+import kotlinx.android.synthetic.main.item_notes.view.editTv
+import kotlinx.android.synthetic.main.item_notes.view.timeTv
 import org.jetbrains.anko.design.snackbar
 import java.util.*
 
 
-class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var listener: OnItemClickListener) : RecyclerView.Adapter<VideosNotesAdapter.NotesViewHolder>() {
+class VideosNotesAdapter(
+    private var notesData: ArrayList<NotesModel>,
+    var listener: OnItemClickListener
+) : RecyclerView.Adapter<VideosNotesAdapter.NotesViewHolder>() {
 
 
     private lateinit var context: Context
@@ -44,8 +51,10 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
         notesDao = database.notesDao()
 
 
-        return NotesViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_notes, parent, false))
+        return NotesViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_notes, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {
@@ -59,7 +68,8 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
     inner class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindView(note: NotesModel, position: Int) {
-            itemView.contentTitleTv.text = contentDao.getContentWithId(note.runAttemptId, note.contentId).title
+            itemView.contentTitleTv.text =
+                contentDao.getContentWithId(note.runAttemptId, note.contentId).title
             itemView.bodyTv.setText(note.text)
             itemView.timeTv.text = secToTime(note.duration)
 
@@ -88,13 +98,14 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
                     }.addCallback(object : Snackbar.Callback() {
                         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                             if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-                                Clients.onlineV2JsonApi.deleteNoteById(note.nttUid).enqueue(retrofitCallback { throwable, response ->
-                                    response.let {
-                                        if (it?.isSuccessful!!) {
-                                            notesDao.deleteNoteByID(note.nttUid)
+                                Clients.onlineV2JsonApi.deleteNoteById(note.nttUid)
+                                    .enqueue(retrofitCallback { throwable, response ->
+                                        response.let {
+                                            if (it?.isSuccessful!!) {
+                                                notesDao.deleteNoteByID(note.nttUid)
+                                            }
                                         }
-                                    }
-                                })
+                                    })
                             }
                         }
                     }).setActionTextColor(context.resources.getColor(R.color.salmon))
@@ -110,26 +121,23 @@ class VideosNotesAdapter(private var notesData: ArrayList<NotesModel>, var liste
             val note = Notes()
             note.text = itemView.bodyTv.text.toString()
             note.duration = notesModel.duration
-            val runAttempts = RunAttemptsModel() // type run_attempts
-            val contents = Contents() // type contents
-            runAttempts.id = notesModel.runAttemptId
-            contents.id = notesModel.contentId
-            note.runAttempt = runAttempts
-            note.content = contents
+            note.runAttempt = RunAttemptsId(notesModel.runAttemptId)
+            note.content = ContentsId(notesModel.contentId)
             notesModel.text = itemView.bodyTv.text.toString()
-            Clients.onlineV2JsonApi.updateNoteById(notesModel.nttUid, note).enqueue(retrofitCallback { _, response ->
-                response?.body().let {
-                    if (response?.isSuccessful!!)
-                        try {
-                            itemView.editTv.text = "Edit"
-                            itemView.deleteTv.text = "Delete"
-                            itemView.bodyTv.isEnabled = false
-                            notesDao.update(notesModel)
-                        } catch (e: Exception) {
+            Clients.onlineV2JsonApi.updateNoteById(notesModel.nttUid, note)
+                .enqueue(retrofitCallback { _, response ->
+                    response?.body().let {
+                        if (response?.isSuccessful!!)
+                            try {
+                                itemView.editTv.text = "Edit"
+                                itemView.deleteTv.text = "Delete"
+                                itemView.bodyTv.isEnabled = false
+                                notesDao.update(notesModel)
+                            } catch (e: Exception) {
 
-                        }
-                }
-            })
+                            }
+                    }
+                })
         }
 
     }

@@ -17,12 +17,12 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 100040600
+        versionCode 100040602
         // 1 (versioning scheme)
         // 00 (major version)
         // 04 (minor version)
         // 06 (patch version)
-        // 00 spare for betas/RCs
+        // 02 spare for betas/RCs
         versionName "0.4.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false
@@ -59,6 +59,7 @@ android {
 ext {
     ankoVersion = '0.10.6'
     room_version = "2.1.0-beta01"
+    koin_version = "1.0.2"
     ankoLibs = [
             // commons
             'commons',
@@ -114,6 +115,10 @@ dependencies {
 
     //VideoCipher library
     implementation 'com.vdocipher.aegis:vdocipher-android:1.0.0-beta6'
+
+    // Koin
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 
 
     //Routers
