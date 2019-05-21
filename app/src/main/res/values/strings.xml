@@ -54,7 +54,7 @@
     <string name="verify_desc">You need to verify your account first before continuing</string>
     <string name="verify_title">Verify Now</string>
     <string name="enroll_desc">You have been successfully enrolled into this course</string>
-    <string name="free">free</string>
+    <string name="free">Free</string>
     <string name="cart_description">Your cart contains other items. Do you want to discard previous items from your cart and continue buying new one?</string>
     <string name="cart_title">Replace Cart Items?</string>
     <string name="yes_continue">Yes,Continue</string>
