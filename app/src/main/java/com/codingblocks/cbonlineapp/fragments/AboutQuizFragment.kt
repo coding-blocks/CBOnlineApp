@@ -54,7 +54,9 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_about_quiz, container, false).apply {
-        quizAttemptListAdapter = QuizAttemptListAdapter(attemptList)
+        quizAttemptListAdapter = QuizAttemptListAdapter(attemptList) { attempt : QuizAttempt ->
+            initiateQuiz(attempt.id)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -77,10 +79,6 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = quizAttemptListAdapter
-        }
-
-        quizAttemptListAdapter.onItemClick = { it ->
-            initiateQuiz(it.id)
         }
 
         fetchQuizDetails()
