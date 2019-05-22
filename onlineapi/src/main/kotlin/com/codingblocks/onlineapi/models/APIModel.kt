@@ -516,6 +516,11 @@ class CarouselCards(
     var buttonLink: String
 ) : BaseModel()
 
+@Type("player")
+class Player(
+    var playerId: String? = null
+)
+
 
 
 

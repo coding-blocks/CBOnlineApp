@@ -68,7 +68,7 @@ data class CourseRun(
     var recommended: Boolean = false
 )
 
-@Entity()
+@Entity
 data class Instructor(
     var uid: String,
     var name: String?,

@@ -1,8 +1,10 @@
 package com.codingblocks.cbonlineapp.activities
 
 import android.annotation.TargetApi
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
@@ -27,9 +29,10 @@ import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
-import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Player
 import com.google.android.material.navigation.NavigationView
+import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_home.drawer_layout
@@ -50,6 +53,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var doubleBackToExitPressedOnce = false
     lateinit var prefs: PreferenceHelper
     var mFragmentToSet: Fragment? = null
+    private var updateUIReciver: BroadcastReceiver? = null
+    private var filter: IntentFilter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,6 +111,17 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fetchUser()
         //adding label to nav drawer items
         nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
+
+        filter = IntentFilter()
+
+        filter?.addAction("com.codingblocks.notification")
+
+        updateUIReciver = object : BroadcastReceiver() {
+
+            override fun onReceive(context: Context, intent: Intent) {
+                invalidateOptionsMenu()
+            }
+        }
     }
 
     private fun setUser() {
@@ -164,6 +180,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     prefs.SP_JWT_TOKEN_KEY = jwt
                     prefs.SP_JWT_REFRESH_TOKEN = rt
                     Clients.authJwt = jwt
+                    val status = OneSignal.getPermissionSubscriptionState()
+                    //Set Player ID For OneSignal
+                    Clients.onlineV2JsonApi.setPlayerId(Player(playerId = status.subscriptionStatus.userId))
+                        .enqueue(retrofitCallback { throwable, response ->
+
+                    })
                     fetchUser()
                     Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
                 } else if (response?.code() == 500 && prefs.SP_ACCESS_TOKEN_KEY == "access_token") {
@@ -177,7 +199,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (prefs.SP_ACCESS_TOKEN_KEY != "access_token") {
             Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
             Clients.api.getMe().enqueue(retrofitCallback { t, resp ->
-                resp?.body()?.let { it ->
+                resp?.body()?.let {
                     if (resp.isSuccessful) {
                         try {
                             val jSONObject =
@@ -257,7 +279,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
-    fun changeFragment(filter: String) {
+    private fun changeFragment(filter: String) {
         when (filter) {
             "All Courses" -> mFragmentToSet = AllCourseFragment()
             "Home" -> mFragmentToSet = HomeFragment()
@@ -269,7 +291,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        //now getIntent() should always return the last received intent
     }
 
     @TargetApi(25)
@@ -285,6 +306,28 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
             .build()
         sM.dynamicShortcuts = Arrays.asList(shortcut1)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        registerReceiver(updateUIReciver, filter)
+        invalidateOptionsMenu()
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_notifications -> {
+                startActivity(intentFor<NotificationsActivity>())
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(updateUIReciver)
     }
 
     @TargetApi(25)

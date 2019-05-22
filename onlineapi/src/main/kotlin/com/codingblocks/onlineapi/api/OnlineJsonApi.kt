@@ -11,6 +11,7 @@ import com.codingblocks.onlineapi.models.MyCourseRuns
 import com.codingblocks.onlineapi.models.MyRunAttempt
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.Notes
+import com.codingblocks.onlineapi.models.Player
 import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.Question
 import com.codingblocks.onlineapi.models.QuizAttempt
@@ -170,6 +171,9 @@ interface OnlineJsonApi {
 
     @get:GET("carousel_cards?sort=order")
     val carouselCards: Call<ArrayList<CarouselCards>>
+
+    @POST("players")
+    fun setPlayerId(@Body params: Player):Call<ResponseBody>
 
 
 }
