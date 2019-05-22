@@ -33,6 +33,7 @@ class QuizActivity : AppCompatActivity() {
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.framelayout_quiz, AboutQuizFragment.newInstance(it,attemptId,qnaId))
+                .setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
                 .addToBackStack("")
                 .commit()
         }

@@ -201,7 +201,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
         Clients.onlineV2JsonApi.sumbitQuizById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
             val fragmentManager = fragmentManager!!
             val fragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+            fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
             fragmentTransaction.replace(R.id.framelayout_quiz,
                 QuizResultFragment.newInstance(quizId, qnaId, attemptId, quizAttemptId))
             fragmentTransaction.addToBackStack("")
