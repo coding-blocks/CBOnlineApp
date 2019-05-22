@@ -26,6 +26,10 @@
         android:checkableBehavior="none"
         android:menuCategory="system">
         <item
+            android:id="@+id/nav_inbox"
+            android:icon="@drawable/ic_library_books_black_24dp"
+            android:title="Inbox" />
+        <item
             android:id="@+id/nav_preferences"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="@string/title_activity_settings" />

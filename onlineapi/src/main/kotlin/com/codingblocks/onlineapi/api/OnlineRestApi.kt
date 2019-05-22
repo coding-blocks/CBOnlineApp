@@ -58,4 +58,7 @@ interface OnlineRestApi {
 
     @GET("v2/runs/clear_cart")
     fun clearCart(): Call<JsonObject>
+
+    @GET("v2/users/me/chatSignature")
+    fun getSignature(): Call<JsonObject>
 }
