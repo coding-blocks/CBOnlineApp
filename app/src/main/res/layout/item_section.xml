@@ -17,7 +17,7 @@
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
+            android:gravity="top"
             android:minHeight="60dp">
 
             <TextView
@@ -26,7 +26,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="2dp"
+                android:gravity="top"
                 android:layout_toStartOf="@id/arrow"
                 android:fontFamily="@font/nunitosans_semibold"
                 android:textColor="@android:color/primary_text_light"
@@ -61,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="6dp"
                 android:text="  FREE  "
                 android:layout_above="@+id/lectureTime"
                 android:layout_toStartOf="@id/arrow"
@@ -77,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title"
                 android:layout_marginStart="10dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="2dp"
                 android:layout_toEndOf="@id/lectures"
                 android:fontFamily="@font/nunitosans_semibold"
                 android:maxLines="1"
