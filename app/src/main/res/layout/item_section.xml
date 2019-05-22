@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="10dp"
-                android:text=" FREE "
+                android:text="  FREE  "
                 android:layout_above="@+id/lectureTime"
                 android:layout_toStartOf="@id/arrow"
                 android:background="@drawable/button_background"
