@@ -136,6 +136,7 @@ class SectionDetailsAdapter(
                         val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
                         val downloadBtn = inflatedView.findViewById(R.id.downloadBtn) as ImageView
                         val contentType = inflatedView.findViewById(R.id.contentType) as ImageView
+                        if(data.premium){itemView.free.visibility = View.GONE}
 
                         if (content.progress == "DONE") {
                             subTitle.textColor = context.resources.getColor(R.color.green)
