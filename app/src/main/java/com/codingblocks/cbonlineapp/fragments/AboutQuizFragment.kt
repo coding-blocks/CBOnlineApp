@@ -74,10 +74,9 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
             qnaId = it.getString(QUIZ_QNA)
         }
 
-        val viewManager = LinearLayoutManager(context)
         quizAttemptLv.apply {
             setHasFixedSize(true)
-            layoutManager = viewManager
+            layoutManager = LinearLayoutManager(context)
             adapter = quizAttemptListAdapter
         }
 
@@ -141,6 +140,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
             R.id.framelayout_quiz,
             QuizFragment.newInstance(quizId,qnaId, attemptId, quizAttemptId), "quiz"
         )
+        fragmentTransaction.addToBackStack("")
         fragmentTransaction.commit()
     }
 }

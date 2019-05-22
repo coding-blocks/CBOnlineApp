@@ -33,6 +33,7 @@ class QuizActivity : AppCompatActivity() {
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.framelayout_quiz, AboutQuizFragment.newInstance(it,attemptId,qnaId))
+                .addToBackStack("")
                 .commit()
         }
 
@@ -43,6 +44,12 @@ class QuizActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        Components.showconfirmation(this, "exit")
+        // Components.showconfirmation(this, "exit")
+        if(supportFragmentManager.backStackEntryCount == 0){
+            Components.showconfirmation(this, "exit")
+        }
+        else{
+            supportFragmentManager.popBackStack()
+        }
     }
 }

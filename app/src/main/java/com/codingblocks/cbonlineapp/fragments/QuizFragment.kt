@@ -43,6 +43,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     private lateinit var quizAttemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var quizSubmissions: ArrayList<QuizSubmission>
+    private var isSubmitted : Boolean = false
 
 
     lateinit var mAdapter: ViewPagerAdapter
@@ -143,6 +144,14 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             confirmSubmitQuiz()
         }
         numberLayout.addView(submitButton)
+        // hide submit button if quiz has already been submitted
+        Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
+            val body = response?.body()
+            if(body?.status.equals("FINAL")) {
+                isSubmitted = true
+                submitButton.visibility = View.GONE
+            }
+        })
     }
 
     private fun confirmSubmitQuiz() {
@@ -201,14 +210,15 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             val fragmentTransaction = fragmentManager.beginTransaction()
             fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
             fragmentTransaction.replace(R.id.framelayout_quiz,
-                QuizResultFragment.newInstance(quizAttemptId))
+                QuizResultFragment.newInstance(quizId, qnaId, attemptId, quizAttemptId))
+            fragmentTransaction.addToBackStack("")
             fragmentTransaction.commit()
         })
     }
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.nextBtn -> if (nextBtn.text == "End") {
+            R.id.nextBtn -> if (nextBtn.text == "End" && !isSubmitted) {
                 submitQuiz()
             } else
                 quizViewPager.currentItem = if (quizViewPager.currentItem < questionList.size - 1)
