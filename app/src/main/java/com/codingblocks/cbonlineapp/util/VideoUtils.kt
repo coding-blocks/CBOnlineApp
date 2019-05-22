@@ -15,21 +15,21 @@ object VideoUtils {
 
         var timeThumb = ""
         if (hours > 0) {
-            if (hours < 10) {
-                timeThumb += "0$hours:"
+            timeThumb += if (hours < 10) {
+                "0$hours:"
             } else {
-                timeThumb += "$hours:"
+                "$hours:"
             }
         }
-        if (minutes > 0) {
-            if (minutes < 10) {
-                timeThumb += "0$minutes:"
-            } else {
-                timeThumb += "$minutes:"
-            }
-        } else {
-            timeThumb += "00" + ":"
-        }
+         timeThumb += if (minutes > 0) {
+             if (minutes < 10) {
+                 "0$minutes:"
+             } else {
+                 "$minutes:"
+             }
+         } else {
+             "00" + ":"
+         }
         if (seconds < 10) {
             timeThumb += "0$seconds"
         } else {

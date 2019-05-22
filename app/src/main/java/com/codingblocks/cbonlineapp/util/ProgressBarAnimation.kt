@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.Utils
+package com.codingblocks.cbonlineapp.util
 
 import android.view.animation.Animation
 import android.view.animation.Transformation
