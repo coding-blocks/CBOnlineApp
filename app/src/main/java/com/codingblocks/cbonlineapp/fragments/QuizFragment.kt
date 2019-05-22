@@ -2,16 +2,13 @@ package com.codingblocks.cbonlineapp.fragments
 
 
 import android.app.AlertDialog
-import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.codingblocks.cbonlineapp.R
@@ -22,15 +19,11 @@ import com.codingblocks.cbonlineapp.util.*
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizSubmission
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.button.MaterialButton
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.bottom_question_sheet.*
 import kotlinx.android.synthetic.main.custom_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.backgroundColor
-import org.jetbrains.anko.padding
-import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.textColor
 
 

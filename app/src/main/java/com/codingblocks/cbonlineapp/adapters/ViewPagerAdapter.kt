@@ -24,7 +24,6 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
     private lateinit var choiceDataAdapter: QuizChoiceAdapter
     var submissionList: ArrayList<QuizSubmission> = submission as ArrayList<QuizSubmission>
 
-
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
 
         container.removeView(`object` as ScrollView)
