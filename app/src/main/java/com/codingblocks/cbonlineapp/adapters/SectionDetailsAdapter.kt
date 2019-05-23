@@ -146,8 +146,8 @@ class SectionDetailsAdapter(
                         }
                         itemView.lectureTime.text = duration.getDurationBreakdown()
 
-                        if(data.premium)
-                            itemView.free.visibility = View.GONE
+                        if(!data.premium)
+                            itemView.free.visibility = View.VISIBLE
 
                         subTitle.text = content.title
 
