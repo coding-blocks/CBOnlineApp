@@ -10,5 +10,5 @@ interface NotificationClickListener {
      * @param notificationID The ID of the clicked event
      * @param url The url for routing to required activity
      */
-    fun onClick(notificationID: String, url: String)
+    fun onClick(notificationID: Long, url: String)
 }
