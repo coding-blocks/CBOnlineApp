@@ -65,7 +65,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
             .shimmer(true)
             .angle(20)
             .duration(1200)
-            .load(R.layout.item_skeleton_course)
+            .load(R.layout.item_skeleton_quiz)
             .show()
 
         arguments?.let {
