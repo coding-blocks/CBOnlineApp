@@ -5,7 +5,10 @@ import cn.campusapp.router.Router
 import cn.campusapp.router.router.IActivityRouteTableInitializer
 import com.codingblocks.cbonlineapp.activities.CourseActivity
 import com.codingblocks.cbonlineapp.activities.MyCourseActivity
+import com.codingblocks.cbonlineapp.util.NotificationOpenedHandler
+import com.codingblocks.cbonlineapp.util.NotificationReceivedHandler
 import com.crashlytics.android.core.CrashlyticsCore
+import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
 import io.github.inflationx.calligraphy3.CalligraphyConfig
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor
@@ -22,11 +25,21 @@ class CBOnlineApp : Application() {
         super.onCreate()
         mInstance = this
 
-        startKoin(this, listOf(
-            viewModelModule,
-            databaseModule
-        ))
+        startKoin(
+            this, listOf(
+                viewModelModule,
+                databaseModule
+            )
+        )
         Picasso.setSingletonInstance(Picasso.Builder(this).build())
+
+        // OneSignal Initialization
+        OneSignal.startInit(this)
+            .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+            .unsubscribeWhenNotificationsAreDisabled(true)
+            .setNotificationReceivedHandler(NotificationReceivedHandler())
+            .setNotificationOpenedHandler(NotificationOpenedHandler())
+            .init()
 
         //Initiate Calligraphy
         ViewPump.init(

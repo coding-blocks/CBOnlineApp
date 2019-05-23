@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.codingblocks.cbonlineapp.DownloadStarter
+import com.codingblocks.cbonlineapp.util.DownloadStarter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
 import com.codingblocks.cbonlineapp.database.models.CourseSection
@@ -25,13 +25,13 @@ import kotlinx.android.synthetic.main.fragment_course_content.view.rvExpendableV
 import kotlinx.android.synthetic.main.fragment_course_content.view.sectionProgressBar
 import kotlinx.android.synthetic.main.fragment_course_content.view.swiperefresh
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.alert
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.startService
 import org.jetbrains.anko.yesButton
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
+class CourseContentFragment : Fragment(), AnkoLogger,
+    DownloadStarter {
     companion object {
         @JvmStatic
         fun newInstance(param1: String) =

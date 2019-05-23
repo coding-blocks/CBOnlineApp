@@ -68,7 +68,7 @@ data class CourseRun(
     var recommended: Boolean = false
 )
 
-@Entity()
+@Entity
 data class Instructor(
     var uid: String,
     var name: String?,
@@ -287,6 +287,15 @@ data class NotesModel(
     var runAttemptId: String = "",
     var createdAt: String = "",
     var deletedAt: String = ""
+)
+@Entity
+data class Notification(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    val heading: String,
+    val body: String,
+    val url: String,
+    val seen: Boolean = false
 )
 
 

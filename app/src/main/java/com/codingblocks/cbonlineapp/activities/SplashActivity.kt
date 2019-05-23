@@ -33,7 +33,7 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-    fun deleteDatabaseFile(context: Context, databaseName: String) {
+    private fun deleteDatabaseFile(context: Context, databaseName: String) {
         val databases = File(context.applicationInfo.dataDir + "/databases")
         val db = File(databases, databaseName)
         if (db.delete())
@@ -49,7 +49,7 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-    fun clearData() {
+    private fun clearData() {
         try {
             val mCurrentVersion = BuildConfig.VERSION_CODE
             val mSharedPreferences =

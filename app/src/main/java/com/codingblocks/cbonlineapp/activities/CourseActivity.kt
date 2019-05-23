@@ -3,7 +3,6 @@ package com.codingblocks.cbonlineapp.activities
 import android.content.Context
 import android.graphics.Typeface
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -18,7 +17,7 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.Utils.ProgressBarAnimation
+import com.codingblocks.cbonlineapp.util.ProgressBarAnimation
 import com.codingblocks.cbonlineapp.adapters.BatchesAdapter
 import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter

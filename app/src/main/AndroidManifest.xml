@@ -18,6 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.NotificationsActivity"
+            android:parentActivityName=".activities.HomeActivity"
+            android:theme="@style/myTheme"
+            />
         <activity
             android:name=".activities.SplashActivity"
             android:screenOrientation="portrait"
@@ -42,6 +46,17 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcut" />
         </activity>
+
+        <meta-data
+            android:name="com.onesignal.NotificationOpened.DEFAULT"
+            android:value="DISABLE" />
+        <meta-data
+            android:name="com.onesignal.NotificationAccentColor.DEFAULT"
+            android:value="FF1589EE" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/cblogo" />
+
         <activity
             android:name=".activities.LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
