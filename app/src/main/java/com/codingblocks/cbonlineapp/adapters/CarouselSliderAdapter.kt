@@ -31,11 +31,11 @@ class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Co
         view.title.text = list[position].title
         view.subTitle.text = list[position].subtitle
         view.button.text = list[position].buttonText
-        if (list[position].img!!.takeLast(3) == "png") {
-            Picasso.get().load(list[position].img!!)
+        if (list[position].img.takeLast(3) == "png") {
+            Picasso.get().load(list[position].img)
                     .fit().into(view.imgView)
         } else {
-            view.imgView.loadSvg(list[position].img!!)
+            view.imgView.loadSvg(list[position].img)
         }
         view.button.setOnClickListener {
             when {
@@ -46,9 +46,6 @@ class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Co
                         }
                     val customTabsIntent = builder.build()
                     customTabsIntent.launchUrl(mContext, Uri.parse(list[position].buttonLink))
-                }
-                list[position].buttonLink == "http://cb.lk/ss"-> {
-
                 }
                 else -> Router.open("activity://course/"+list[position].buttonLink)
             }
