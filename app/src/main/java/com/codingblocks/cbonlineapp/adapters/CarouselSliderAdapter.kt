@@ -32,7 +32,7 @@ class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Co
         view.subTitle.text = list[position].subtitle
         view.button.text = list[position].buttonText
         if (list[position].img.takeLast(3) == "png") {
-            Picasso.get().load(list[position].img)
+            Picasso.with(mContext).load(list[position].img)
                     .fit().into(view.imgView)
         } else {
             view.imgView.loadSvg(list[position].img)
