@@ -31,7 +31,10 @@ Application is available here:
 - Retrofit [Docs](http://square.github.io/retrofit/2.x/retrofit/)
 - Picasso [Docs](http://square.github.io/picasso/)
 - JSON API Converter [Docs](https://github.com/jasminb/jsonapi-converter)
-- ExoMedia [Docs](https://devbrackets.com/dev/libs/docs/exomedia/4.0.0/index.html)
+- VideoCipher [Docs](https://legacysite.vdocipher.com/files/android_javadoc/1.0.0-beta1/)
+- AndROuter [Docs](https://github.com/campusappcn/AndRouter)
+- Koin [Docs](https://github.com/InsertKoinIO/koin)
+
 
 ## Contributions Best Practices
 
