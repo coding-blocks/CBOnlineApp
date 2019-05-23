@@ -4,14 +4,15 @@ import androidx.room.Room
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
+import com.codingblocks.cbonlineapp.viewmodels.NotificationViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 
 val viewModelModule = module {
-
     viewModel { HomeViewModel(get(), get(), get(), get()) }
     viewModel { MyCourseViewModel(get(), get(), get(), get(), get()) }
+    viewModel { NotificationViewModel(get()) }
 
 
 }
@@ -60,6 +61,10 @@ val databaseModule = module {
     factory {
         val database: AppDatabase = get()
         database.sectionWithContentsDao()
+    }
+    factory {
+        val database: AppDatabase = get()
+        database.notificationDao()
     }
 
 

@@ -289,6 +289,15 @@ data class NotesModel(
     var deletedAt: String = ""
 )
 
+data class Notification(
+    @PrimaryKey(autoGenerate = true)
+    var id: String,
+    var heading: String,
+    var body: String,
+    var url: String,
+    var seen: Boolean = false
+)
+
 
 
 
