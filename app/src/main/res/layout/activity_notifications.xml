@@ -1,9 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.codingblocks.cbonlineapp.activities.NotificationsActivity">
+    android:background="@drawable/gradient_theme_left_to_right"
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/notificationToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:elevation="4dp"
+        app:title="Notifications"
+        android:gravity="center_vertical"
+        app:theme="@style/ToolBarStyle" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/notificationRv"
+        android:background="@color/white"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/emptyTv"
+        android:gravity="center"
+        android:textSize="26sp"
+        android:visibility="gone"
+        android:text="You're all caught up !!!"
+        android:textColor="@color/salmon"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

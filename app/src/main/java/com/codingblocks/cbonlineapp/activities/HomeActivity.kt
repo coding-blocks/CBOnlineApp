@@ -13,6 +13,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -22,6 +23,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
@@ -45,6 +47,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
+import org.koin.android.ext.android.inject
 import java.io.File
 import java.util.*
 
@@ -55,6 +58,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     var mFragmentToSet: Fragment? = null
     private var updateUIReciver: BroadcastReceiver? = null
     private var filter: IntentFilter? = null
+    private val notificationDao: NotificationDao by inject()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -185,7 +190,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     Clients.onlineV2JsonApi.setPlayerId(Player(playerId = status.subscriptionStatus.userId))
                         .enqueue(retrofitCallback { throwable, response ->
 
-                    })
+                        })
                     fetchUser()
                     Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
                 } else if (response?.code() == 500 && prefs.SP_ACCESS_TOKEN_KEY == "access_token") {
@@ -314,6 +319,17 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         invalidateOptionsMenu()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.home_notifications, menu)
+        val menuItem = menu.findItem(R.id.action_notifications)
+        if(notificationDao.count == 0){
+            menuItem.icon = resources.getDrawable(R.drawable.ic_notification)
+        }else{
+            menuItem.icon = resources.getDrawable(R.drawable.ic_notification_active)
+
+        }
+            return true
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
