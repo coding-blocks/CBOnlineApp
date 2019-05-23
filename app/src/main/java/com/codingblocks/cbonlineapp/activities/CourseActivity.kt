@@ -111,7 +111,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     private fun setImageAndTitle(image: String, courseName: String) {
         if (image.takeLast(3) == "png")
-            Picasso.get().load(image).into(coursePageLogo)
+            Picasso.with(this).load(image).into(coursePageLogo)
         else
             coursePageLogo.loadSvg(image)
         title = courseName
@@ -151,7 +151,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     val image = it.get("image_url").asString
                     val name = it.get("productName").asString
                     if (image.takeLast(3) == "png")
-                        Picasso.get().load(image).into(newImage)
+                        Picasso.with().load(image).into(newImage)
                     else
                         newImage.loadSvg(image)
                     oldTitle.text = name

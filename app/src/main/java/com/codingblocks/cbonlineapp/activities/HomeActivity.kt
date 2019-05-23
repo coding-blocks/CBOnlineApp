@@ -131,7 +131,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setUser() {
         if (!prefs.SP_USER_IMAGE.isEmpty())
-            Picasso.get().load(prefs.SP_USER_IMAGE).placeholder(R.drawable.defaultavatar).fit().into(
+            Picasso.with(this).load(prefs.SP_USER_IMAGE).placeholder(R.drawable.defaultavatar).fit().into(
                 nav_view.getHeaderView(0).nav_header_imageView
             )
         nav_view.getHeaderView(0).login_button.text = "Logout"

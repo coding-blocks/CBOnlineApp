@@ -74,12 +74,6 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
         }
     }
 
-    /**
-     * The function to call when the adapter has to be cleared of items
-     */
-    fun clear() {
-        courseData?.clear()
-    }
 
     inner class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -94,9 +88,9 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
             ui.courseTitle.text = data.title
             data.subtitle
             if (data.coverImage.takeLast(3) == "png") {
-                Picasso.get().load(data.coverImage)
+                Picasso.with(context).load(data.coverImage)
                         .fit().into(ui.courseCoverImageView)
-                Picasso.get().load(data.logo)
+                Picasso.with(context).load(data.logo)
                         .fit().into(ui.courselogo)
             } else {
                 ui.courseCoverImageView.loadSvg(data.coverImage)
@@ -106,12 +100,12 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
             var instructors = ""
             for (i in 0 until instructorsList.size) {
                 if (i == 0) {
-                    Picasso.get().load(instructorsList[i].photo)
+                    Picasso.with(context).load(instructorsList[i].photo)
                             .fit().into(ui.courseInstrucImgView1)
                     instructors += instructorsList[i].name
                 } else if (i == 1) {
                     ui.courseInstrucImgView2.visibility = View.VISIBLE
-                    Picasso.get().load(instructorsList[i].photo)
+                    Picasso.with(context).load(instructorsList[i].photo)
                             .fit().into(ui.courseInstrucImgView2)
                     instructors += ", ${instructorsList[i].name}"
                 } else if (i >= 2) {
@@ -147,10 +141,6 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
 
 
             itemView.setOnClickListener {
-                //                            val textPair: Pair<View, String> = Pair(itemView.courseTitle, "textTrans")
-//                            val imagePair: Pair<View, String> = Pair(itemView.courseLogo, "imageTrans")
-                //TODO fix transition
-//                    val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity, textPair, imagePair)
                 it.context.startActivity(
                         it.context.intentFor<CourseActivity>(
                                 "courseId" to data.id,
