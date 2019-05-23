@@ -288,14 +288,14 @@ data class NotesModel(
     var createdAt: String = "",
     var deletedAt: String = ""
 )
-
+@Entity
 data class Notification(
     @PrimaryKey(autoGenerate = true)
-    var id: String,
-    var heading: String,
-    var body: String,
-    var url: String,
-    var seen: Boolean = false
+    val id: Long = 0,
+    val heading: String,
+    val body: String,
+    val url: String,
+    val seen: Boolean = false
 )
 
 

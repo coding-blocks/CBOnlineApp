@@ -14,7 +14,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.ViewPagerCustomDuration
+import com.codingblocks.cbonlineapp.widgets.ViewPagerCustomDuration
 import com.google.android.material.tabs.TabLayout
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
@@ -34,7 +34,9 @@ import org.jetbrains.anko.wrapContent
 
 class HomeFragmentUi<T> : AnkoComponent<T> {
 
-    inline fun ViewManager.customViewPager(theme: Int = 0, init: ViewPagerCustomDuration.() -> Unit) = ankoView({ ViewPagerCustomDuration(it) }, theme, init)
+    inline fun ViewManager.customViewPager(theme: Int = 0, init: ViewPagerCustomDuration.() -> Unit) = ankoView({
+        ViewPagerCustomDuration(it)
+    }, theme, init)
 
     lateinit var rvCourses: RecyclerView
     lateinit var allcourseText: TextView
