@@ -45,10 +45,7 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.RunAttemptsId
-import kotlinx.android.synthetic.main.item_section.view.arrow
-import kotlinx.android.synthetic.main.item_section.view.lectureTime
-import kotlinx.android.synthetic.main.item_section.view.lectures
-import kotlinx.android.synthetic.main.item_section.view.title
+import kotlinx.android.synthetic.main.item_section.view.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
@@ -148,6 +145,9 @@ class SectionDetailsAdapter(
                             duration += content.contentVideo.videoDuration
                         }
                         itemView.lectureTime.text = duration.getDurationBreakdown()
+
+                        if(data.premium)
+                            itemView.free.visibility = View.GONE
 
                         subTitle.text = content.title
 
