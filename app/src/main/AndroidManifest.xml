@@ -18,7 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.NotificationsActivity"></activity>
+        <activity android:name=".activities.NotificationsActivity"
+            android:parentActivityName=".activities.HomeActivity"
+            android:theme="@style/myTheme"
+            />
         <activity
             android:name=".activities.SplashActivity"
             android:screenOrientation="portrait"

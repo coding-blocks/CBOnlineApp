@@ -10,19 +10,13 @@ import com.codingblocks.cbonlineapp.database.models.Notification
 import com.codingblocks.cbonlineapp.ui.NotificationCardUi
 import org.jetbrains.anko.AnkoContext
 
-class NotificationsAdapter(private var items: List<Notification>) :
+class NotificationsAdapter(diffCallback: NotificationsDiffCallback) :
     ListAdapter<Notification, NotificationsAdapter.NotificationsViewHolder>(
-        NotificationsDiffCallback()
+        diffCallback
     ) {
 
     val ui = NotificationCardUi()
     var onClick: NotificationClickListener? = null
-
-    fun setData(items: List<Notification>) {
-        this.items = items
-        notifyDataSetChanged()
-    }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationsViewHolder {
 
@@ -30,13 +24,9 @@ class NotificationsAdapter(private var items: List<Notification>) :
 
     }
 
-    override fun getItemCount(): Int {
-        return (items.size)
-    }
-
     override fun onBindViewHolder(holder: NotificationsViewHolder, position: Int) {
         holder.apply {
-            bindView(items[position])
+            bindView(getItem(position))
             onClickListener = onClick
         }
 

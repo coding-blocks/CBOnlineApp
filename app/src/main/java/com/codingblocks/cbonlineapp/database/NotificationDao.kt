@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.codingblocks.cbonlineapp.database.models.Notification
@@ -13,6 +14,9 @@ abstract class NotificationDao : BaseDao<Notification> {
     @Query("UPDATE Notification SET seen = 1 where seen != 1")
     abstract fun updateseenAll()
 
+    @Query("DELETE FROM Notification where id = :uid")
+    abstract fun deleteNotificationByID(uid: String)
+
     @Query("DELETE FROM Notification")
     abstract fun nukeTable()
 
@@ -20,5 +24,8 @@ abstract class NotificationDao : BaseDao<Notification> {
     abstract val count: Int
 
     @get:Query("SELECT * FROM Notification")
-    abstract val allNotification: List<Notification>
+    abstract val allNotification: LiveData<List<Notification>>
+
+    @get:Query("SELECT * FROM Notification")
+    abstract val allNotificationNonLive: List<Notification>
 }
