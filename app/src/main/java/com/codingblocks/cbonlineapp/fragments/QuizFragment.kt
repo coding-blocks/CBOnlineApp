@@ -54,10 +54,10 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         arguments?.let {
-            quizId = it.getString(QUIZ_ID)!!
-            qnaId = it.getString(QUIZ_QNA)!!
-            attemptId = it.getString(RUN_ATTEMPT_ID)!!
-            quizAttemptId = it.getString(QUIZ_ATTEMPT_ID)!!
+            quizId = it.getString(QUIZ_ID)
+            qnaId = it.getString(QUIZ_QNA)
+            attemptId = it.getString(RUN_ATTEMPT_ID)
+            quizAttemptId = it.getString(QUIZ_ATTEMPT_ID)
         }
 
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
