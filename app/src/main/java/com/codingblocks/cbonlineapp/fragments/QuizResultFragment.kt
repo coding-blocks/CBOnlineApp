@@ -13,11 +13,17 @@ import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.QUIZ_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.QUIZ_ID
+import com.codingblocks.cbonlineapp.util.QUIZ_QNA
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_quiz_result.*
 
 class QuizResultFragment : Fragment() {
 
+    private lateinit var quizId: String
+    private lateinit var qnaId: String
+    private lateinit var attemptId: String
     private lateinit var quizAttemptId: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
@@ -26,7 +32,10 @@ class QuizResultFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         arguments?.let {
-            quizAttemptId = it.getString(QUIZ_ATTEMPT_ID)!!
+            quizId = it.getString(QUIZ_ID)
+            qnaId = it.getString(QUIZ_QNA)
+            attemptId = it.getString(RUN_ATTEMPT_ID)
+            quizAttemptId = it.getString(QUIZ_ATTEMPT_ID)
         }
 
         val totalBackground = total_questions_image.background as GradientDrawable
@@ -49,14 +58,26 @@ class QuizResultFragment : Fragment() {
             correct_answers_score_image.text = correctQuestions.toString()
             wrong_answers_image.text = wrongQuestions.toString()
         })
+
+        quizResultGoBackBtn.setOnClickListener {
+            val fragmentManager = fragmentManager!!
+            val fragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
+            fragmentTransaction.replace(R.id.framelayout_quiz,
+                QuizFragment.newInstance(quizId, qnaId, attemptId, quizAttemptId))
+            fragmentTransaction.commit()
+        }
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(attemptID: String) =
+        fun newInstance(quizId: String, qnaId: String, attemptId: String, quizAttemptId: String) =
             QuizResultFragment().apply {
                 arguments = Bundle().apply {
-                    putString(QUIZ_ATTEMPT_ID, attemptID)
+                    putString(QUIZ_ID, quizId)
+                    putString(QUIZ_QNA, qnaId)
+                    putString(RUN_ATTEMPT_ID, attemptId)
+                    putString(QUIZ_ATTEMPT_ID, quizAttemptId)
                 }
             }
     }

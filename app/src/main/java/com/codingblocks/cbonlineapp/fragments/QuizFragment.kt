@@ -2,16 +2,13 @@ package com.codingblocks.cbonlineapp.fragments
 
 
 import android.app.AlertDialog
-import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.codingblocks.cbonlineapp.R
@@ -22,15 +19,11 @@ import com.codingblocks.cbonlineapp.util.*
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizSubmission
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.button.MaterialButton
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.bottom_question_sheet.*
 import kotlinx.android.synthetic.main.custom_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.backgroundColor
-import org.jetbrains.anko.padding
-import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.textColor
 
 
@@ -43,6 +36,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     private lateinit var quizAttemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var quizSubmissions: ArrayList<QuizSubmission>
+    private var isSubmitted : Boolean = false
 
 
     lateinit var mAdapter: ViewPagerAdapter
@@ -60,10 +54,10 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         arguments?.let {
-            quizId = it.getString(QUIZ_ID)!!
-            qnaId = it.getString(QUIZ_QNA)!!
-            attemptId = it.getString(RUN_ATTEMPT_ID)!!
-            quizAttemptId = it.getString(QUIZ_ATTEMPT_ID)!!
+            quizId = it.getString(QUIZ_ID)
+            qnaId = it.getString(QUIZ_QNA)
+            attemptId = it.getString(RUN_ATTEMPT_ID)
+            quizAttemptId = it.getString(QUIZ_ATTEMPT_ID)
         }
 
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
@@ -143,6 +137,14 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             confirmSubmitQuiz()
         }
         numberLayout.addView(submitButton)
+        // hide submit button if quiz has already been submitted
+        Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
+            val body = response?.body()
+            if(body?.status.equals("FINAL")) {
+                isSubmitted = true
+                submitButton.visibility = View.GONE
+            }
+        })
     }
 
     private fun confirmSubmitQuiz() {
@@ -199,16 +201,17 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
         Clients.onlineV2JsonApi.sumbitQuizById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
             val fragmentManager = fragmentManager!!
             val fragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+            fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
             fragmentTransaction.replace(R.id.framelayout_quiz,
-                QuizResultFragment.newInstance(quizAttemptId))
+                QuizResultFragment.newInstance(quizId, qnaId, attemptId, quizAttemptId))
+            fragmentTransaction.addToBackStack("")
             fragmentTransaction.commit()
         })
     }
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.nextBtn -> if (nextBtn.text == "End") {
+            R.id.nextBtn -> if (nextBtn.text == "End" && !isSubmitted) {
                 submitQuiz()
             } else
                 quizViewPager.currentItem = if (quizViewPager.currentItem < questionList.size - 1)
