@@ -74,10 +74,9 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
             qnaId = it.getString(QUIZ_QNA)
         }
 
-        val viewManager = LinearLayoutManager(context)
         quizAttemptLv.apply {
             setHasFixedSize(true)
-            layoutManager = viewManager
+            layoutManager = LinearLayoutManager(context)
             adapter = quizAttemptListAdapter
         }
 
@@ -133,14 +132,12 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
     private fun initiateQuiz(quizAttemptId: String) {
         val fragmentManager = fragmentManager!!
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.setCustomAnimations(
-            android.R.anim.slide_in_left,
-            android.R.anim.slide_out_right
-        )
+        fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
         fragmentTransaction.replace(
             R.id.framelayout_quiz,
             QuizFragment.newInstance(quizId,qnaId, attemptId, quizAttemptId), "quiz"
         )
+        fragmentTransaction.addToBackStack("")
         fragmentTransaction.commit()
     }
 }
