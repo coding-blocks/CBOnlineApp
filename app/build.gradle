@@ -42,6 +42,7 @@ android {
             versionNameSuffix '-debug-version'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'
+            applicationIdSuffix = 'debug'
 
         }
         release {
