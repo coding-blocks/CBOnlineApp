@@ -40,7 +40,7 @@ class NotificationsAdapter(diffCallback: NotificationsDiffCallback) :
             ui.title.text = item.heading
             ui.body.text = item.body
             itemView.setOnClickListener {
-                onClickListener?.onClick(item.id, item.url)
+                onClickListener?.onClick(item.id, item.url, item.videoId)
             }
 
             if (item.seen) {

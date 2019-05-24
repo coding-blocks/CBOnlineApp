@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import cn.campusapp.router.Router
+import cn.campusapp.router.route.ActivityRoute
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
 import com.codingblocks.cbonlineapp.R
@@ -24,12 +25,17 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
 
     override fun notificationOpened(result: OSNotificationOpenResult) {
         val url = result.notification.payload.launchURL
+        val data = result.notification.payload.additionalData
         if (url.contains("course", true) ||
-            url.contains("classroom", true) ||
-            url.contains("player", true)
-        )
+            url.contains("classroom", true)
+        ) {
             Router.open("activity://course/$url")
-        else {
+        } else if (url.contains("player", true)) {
+            val activityRoute = Router.getRoute("activity://course/$url") as ActivityRoute
+            activityRoute
+                .withParams(VIDEO_ID, data.optString(VIDEO_ID))
+                .open()
+        } else {
             val builder = CustomTabsIntent.Builder()
                 .enableUrlBarHiding()
                 .setToolbarColor(mInstance.resources.getColor(R.color.colorPrimaryDark))
@@ -53,7 +59,15 @@ class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
         val title = notification.payload.title
         val body = notification.payload.body
         val url = notification.payload.launchURL
-        notificationDao.insertWithId(Notification(heading = title, body = body, url = url))
+        val videoId = data.optString(VIDEO_ID) ?: ""
+        notificationDao.insertWithId(
+            Notification(
+                heading = title,
+                body = body,
+                url = url,
+                videoId = videoId
+            )
+        )
             .also {
                 position = it
 

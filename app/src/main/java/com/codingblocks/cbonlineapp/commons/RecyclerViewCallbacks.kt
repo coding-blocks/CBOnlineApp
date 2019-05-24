@@ -9,6 +9,7 @@ interface NotificationClickListener {
      *
      * @param notificationID The ID of the clicked event
      * @param url The url for routing to required activity
+     * @param videoId The videoId for playing video
      */
-    fun onClick(notificationID: Long, url: String)
+    fun onClick(notificationID: Long, url: String, videoId: String)
 }

@@ -295,7 +295,8 @@ data class Notification(
     val heading: String,
     val body: String,
     val url: String,
-    val seen: Boolean = false
+    val seen: Boolean = false,
+    val videoId: String = ""
 )
 
 

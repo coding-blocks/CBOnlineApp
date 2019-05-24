@@ -10,12 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.campusapp.router.Router
+import cn.campusapp.router.route.ActivityRoute
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.NotificationsAdapter
 import com.codingblocks.cbonlineapp.commons.NotificationClickListener
 import com.codingblocks.cbonlineapp.commons.NotificationsDiffCallback
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.extensions.observer
+import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_notifications.emptyTv
 import kotlinx.android.synthetic.main.activity_notifications.notificationRv
@@ -37,14 +39,22 @@ class NotificationsActivity : AppCompatActivity() {
 
         setUpUI()
         val eventClickListener: NotificationClickListener = object : NotificationClickListener {
-            override fun onClick(notificationID: Long, url: String) {
+            override fun onClick(
+                notificationID: Long,
+                url: String,
+                videoId: String
+            ) {
                 notificationDao.updateseen(notificationID)
                 if (url.contains("course", true) ||
-                    url.contains("classroom", true) ||
-                    url.contains("player", true)
-                )
+                    url.contains("classroom", true)
+                ) {
                     Router.open("activity://course/$url")
-                else {
+                } else if (url.contains("player", true)) {
+                    val activityRoute = Router.getRoute("activity://course/$url") as ActivityRoute
+                    activityRoute
+                        .withParams(VIDEO_ID, videoId)
+                        .open()
+                } else {
                     val builder = CustomTabsIntent.Builder()
                         .enableUrlBarHiding()
                         .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
