@@ -13,12 +13,11 @@ import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
-import com.codingblocks.cbonlineapp.util.ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.LECTURE_CONTENT_ID
 import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.onlineapi.Clients
@@ -70,7 +69,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger,
         contentDao = database.contentDao()
         notificationManager.notify(0, notificationBuilder.build())
         videoId = intent.getStringExtra(VIDEO_ID)
-        attemptId = intent.getStringExtra(ATTEMPT_ID)
+        attemptId = intent.getStringExtra(RUN_ATTEMPT_ID)
         sectionId = intent.getStringExtra(SECTION_ID)
         contentId = intent.getStringExtra(CONTENT_ID)
         lectureContentId = intent.getStringExtra(LECTURE_CONTENT_ID)

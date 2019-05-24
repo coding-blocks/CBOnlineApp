@@ -151,7 +151,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     val image = it.get("image_url").asString
                     val name = it.get("productName").asString
                     if (image.takeLast(3) == "png")
-                        Picasso.with().load(image).into(newImage)
+                        Picasso.with(this).load(image).into(newImage)
                     else
                         newImage.loadSvg(image)
                     oldTitle.text = name
