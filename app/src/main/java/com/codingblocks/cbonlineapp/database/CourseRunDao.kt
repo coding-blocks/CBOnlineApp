@@ -20,6 +20,9 @@ abstract class CourseRunDao : BaseDao<CourseRun> {
     @Query("SELECT * FROM CourseRun where crAttemptId = :attemptId")
     abstract fun getRunById(attemptId: String): CourseRun
 
+    @Query("SELECT * FROM CourseRun where crUid = :runId")
+    abstract fun getRunByRunId(runId: String): CourseRun
+
     @Query("UPDATE CourseRun SET hits = hits+1 where crAttemptId = :attemptId")
     abstract fun updateHit(attemptId: String)
 

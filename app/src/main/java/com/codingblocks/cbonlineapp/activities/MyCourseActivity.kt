@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
@@ -27,6 +28,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var attemptId: String
+    private lateinit var runId: String
     private lateinit var courseId: String
 
     private val viewModel by viewModel<MyCourseViewModel>()
@@ -41,14 +43,15 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         courseId = intent.getStringExtra(COURSE_ID)
         title = intent.getStringExtra(COURSE_NAME)
-        attemptId = intent.getStringExtra(RUN_ATTEMPT_ID)
-
+        attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
+        runId = intent.getStringExtra(RUN_ID) ?: ""
+        if (attemptId.isEmpty()) {
+            attemptId = viewModel.getRunAttempt(runId)
+        }
         viewModel.updatehit(attemptId)
-
+        viewModel.fetchCourse(attemptId)
         viewModel.getPromoVideo(courseId)
 
-
-        viewModel.fetchCourse(attemptId)
     }
 
     override fun onStart() {

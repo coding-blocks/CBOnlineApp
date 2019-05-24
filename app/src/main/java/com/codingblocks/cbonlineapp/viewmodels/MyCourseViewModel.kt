@@ -40,6 +40,10 @@ class MyCourseViewModel(
         promoVideo.value = courseDao.getCourse(courseId).promoVideo
     }
 
+    fun getRunAttempt(runId: String): String {
+        return runDao.getRunByRunId(runId).crAttemptId
+    }
+
     fun fetchCourse(attemptId: String) {
         Clients.onlineV2JsonApi.enrolledCourseById(attemptId)
             .enqueue(retrofitCallback { _, response ->

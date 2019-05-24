@@ -14,7 +14,7 @@ import com.codingblocks.cbonlineapp.database.models.CourseSection
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.services.DownloadService
-import com.codingblocks.cbonlineapp.util.ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.LECTURE_CONTENT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
@@ -37,7 +37,7 @@ class CourseContentFragment : Fragment(), AnkoLogger,
         fun newInstance(param1: String) =
             CourseContentFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ATTEMPT_ID, param1)
+                    putString(RUN_ATTEMPT_ID, param1)
                 }
             }
     }
@@ -61,7 +61,7 @@ class CourseContentFragment : Fragment(), AnkoLogger,
             VIDEO_ID to videoId,
             LECTURE_CONTENT_ID to lectureContentId,
             "title" to title,
-            ATTEMPT_ID to attemptId,
+            RUN_ATTEMPT_ID to attemptId,
             CONTENT_ID to contentId,
             SECTION_ID to sectionId
         )
@@ -71,7 +71,7 @@ class CourseContentFragment : Fragment(), AnkoLogger,
         super.onCreate(savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
         arguments?.let {
-            attemptId = it.getString(ATTEMPT_ID)!!
+            attemptId = it.getString(RUN_ATTEMPT_ID)!!
         }
     }
 

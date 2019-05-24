@@ -1,18 +1,18 @@
 package com.codingblocks.cbonlineapp.util
 
-const val CONTENT_ID: String = "content_id"
+const val CONTENT_ID: String = "contentId"
 
-const val SECTION_ID: String = "section_id"
+const val SECTION_ID: String = "sectionId"
 
-const val VIDEO_ID: String = "video_id"
+const val VIDEO_ID: String = "videoId"
 
-const val RUN_ATTEMPT_ID: String = "run_attempt_id"
+const val RUN_ATTEMPT_ID: String = "runAttemptId"
 
 const val COURSE_NAME = "course_name"
 
-const val COURSE_ID = "course_id"
+const val COURSE_ID = "courseId"
 
-const val ATTEMPT_ID = "attempt_id"
+const val RUN_ID = "runId"
 
 const val DOWNLOADED = "downloaded"
 
