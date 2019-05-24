@@ -1,14 +1,14 @@
 package com.codingblocks.cbonlineapp.activities
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import cn.campusapp.router.Router
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.NotificationsAdapter
@@ -38,8 +38,21 @@ class NotificationsActivity : AppCompatActivity() {
         setUpUI()
         val eventClickListener: NotificationClickListener = object : NotificationClickListener {
             override fun onClick(notificationID: Long, url: String) {
-            notificationDao.updateseen(notificationID)
-                Router.open("activity://course/$url")
+                notificationDao.updateseen(notificationID)
+                if (url.contains("course", true) ||
+                    url.contains("classroom", true) ||
+                    url.contains("player", true)
+                )
+                    Router.open("activity://course/$url")
+                else {
+                    val builder = CustomTabsIntent.Builder()
+                        .enableUrlBarHiding()
+                        .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+                        .setShowTitle(true)
+                        .setSecondaryToolbarColor(resources.getColor(R.color.colorPrimary))
+                    val customTabsIntent = builder.build()
+                    customTabsIntent.launchUrl(this@NotificationsActivity, Uri.parse(url))
+                }
             }
 
         }

@@ -19,17 +19,17 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 100040602
+        versionCode 100040700
         // 1 (versioning scheme)
         // 00 (major version)
         // 04 (minor version)
         // 06 (patch version)
         // 02 spare for betas/RCs
-        versionName "0.4.6"
+        versionName "0.4.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false
         manifestPlaceholders = [
-                onesignal_app_id               : 'a543de9a-416e-4274-a3d7-f5f0b837ab07',
+                onesignal_app_id               : '01d75aac-5123-4145-b655-ba8d27c5dc13',
                 onesignal_google_project_number: 'REMOTE'
         ]
     }
@@ -42,7 +42,6 @@ android {
             versionNameSuffix '-debug-version'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'
-            applicationIdSuffix = 'debug'
 
         }
         release {

@@ -52,7 +52,7 @@
             android:value="DISABLE" />
         <meta-data
             android:name="com.onesignal.NotificationAccentColor.DEFAULT"
-            android:value="FF1589EE" />
+            android:value="FF6666" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/cblogo" />

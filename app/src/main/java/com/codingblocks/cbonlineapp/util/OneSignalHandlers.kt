@@ -1,8 +1,12 @@
 package com.codingblocks.cbonlineapp.util
 
 import android.content.Intent
+import android.net.Uri
+import androidx.browser.customtabs.CustomTabsIntent
 import cn.campusapp.router.Router
 import com.codingblocks.cbonlineapp.CBOnlineApp
+import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.database.models.Notification
 import com.onesignal.OSNotification
@@ -20,9 +24,20 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
 
     override fun notificationOpened(result: OSNotificationOpenResult) {
         val url = result.notification.payload.launchURL
-
-        Router.open("activity://course/$url")
-
+        if (url.contains("course", true) ||
+            url.contains("classroom", true) ||
+            url.contains("player", true)
+        )
+            Router.open("activity://course/$url")
+        else {
+            val builder = CustomTabsIntent.Builder()
+                .enableUrlBarHiding()
+                .setToolbarColor(mInstance.resources.getColor(R.color.colorPrimaryDark))
+                .setShowTitle(true)
+                .setSecondaryToolbarColor(mInstance.resources.getColor(R.color.colorPrimary))
+            val customTabsIntent = builder.build()
+            customTabsIntent.launchUrl(mInstance, Uri.parse(url))
+        }
         doAsync {
             notificationDao.updateseen(position)
         }

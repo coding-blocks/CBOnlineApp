@@ -13,9 +13,13 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.loadSvg
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_carousel.view.*
+import kotlinx.android.synthetic.main.item_carousel.view.button
+import kotlinx.android.synthetic.main.item_carousel.view.imgView
+import kotlinx.android.synthetic.main.item_carousel.view.subTitle
+import kotlinx.android.synthetic.main.item_carousel.view.title
 
-class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Context?) : PagerAdapter() {
+class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Context?) :
+    PagerAdapter() {
 
 
     override fun isViewFromObject(p0: View, p1: Any): Boolean {
@@ -33,21 +37,21 @@ class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Co
         view.button.text = list[position].buttonText
         if (list[position].img.takeLast(3) == "png") {
             Picasso.with(mContext).load(list[position].img)
-                    .fit().into(view.imgView)
+                .fit().into(view.imgView)
         } else {
             view.imgView.loadSvg(list[position].img)
         }
         view.button.setOnClickListener {
-            when {
-                list[position].buttonLink == "http://cb.lk/ss" -> {
-                    val builder = CustomTabsIntent.Builder().enableUrlBarHiding()
-                        mContext?.let {
-                           builder.enableUrlBarHiding().setToolbarColor(it.resources.getColor(R.color.colorPrimaryDark))
-                        }
-                    val customTabsIntent = builder.build()
-                    customTabsIntent.launchUrl(mContext, Uri.parse(list[position].buttonLink))
+            if (list[position].buttonLink.contains("course",true)) {
+                Router.open("activity://course/" + list[position].buttonLink)
+            } else {
+                val builder = CustomTabsIntent.Builder().enableUrlBarHiding()
+                mContext?.let {
+                    builder.enableUrlBarHiding()
+                        .setToolbarColor(it.resources.getColor(R.color.colorPrimaryDark))
                 }
-                else -> Router.open("activity://course/"+list[position].buttonLink)
+                val customTabsIntent = builder.build()
+                customTabsIntent.launchUrl(mContext, Uri.parse(list[position].buttonLink))
             }
         }
         container.addView(view)
