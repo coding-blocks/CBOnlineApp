@@ -8,7 +8,9 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import cn.campusapp.router.Router
 import cn.campusapp.router.route.ActivityRoute
 import com.codingblocks.cbonlineapp.R
@@ -16,12 +18,11 @@ import com.codingblocks.cbonlineapp.adapters.NotificationsAdapter
 import com.codingblocks.cbonlineapp.commons.NotificationClickListener
 import com.codingblocks.cbonlineapp.commons.NotificationsDiffCallback
 import com.codingblocks.cbonlineapp.database.NotificationDao
+import com.codingblocks.cbonlineapp.database.models.Notification
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_notifications.emptyTv
-import kotlinx.android.synthetic.main.activity_notifications.notificationRv
-import kotlinx.android.synthetic.main.activity_notifications.notificationToolbar
+import kotlinx.android.synthetic.main.activity_notifications.*
 import org.koin.android.ext.android.inject
 
 class NotificationsActivity : AppCompatActivity() {
@@ -70,6 +71,24 @@ class NotificationsActivity : AppCompatActivity() {
             onClick = eventClickListener
         }
 
+        val itemTouch = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                // get all notifications
+                val notifications = notificationDao.allNotificationNonLive
+                // get the id of element which needs to be deleted
+                val deleteUID = notifications[position].id
+                // remove the item from database
+                notificationDao.deleteNotificationByID(deleteUID.toString())
+            }
+        }
+        val helper = ItemTouchHelper(itemTouch)
+        helper.attachToRecyclerView(notificationRv)
+
     }
 
     private fun setUpUI() {
@@ -86,7 +105,6 @@ class NotificationsActivity : AppCompatActivity() {
                 emptyTv.visibility = View.VISIBLE
             }
         }
-
     }
 
 
