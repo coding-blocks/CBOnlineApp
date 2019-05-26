@@ -1,18 +1,16 @@
 package com.codingblocks.cbonlineapp.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.LeaderboardListAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
-import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Leaderboard
 import kotlinx.android.synthetic.main.fragment_leaderboard.*
@@ -22,7 +20,10 @@ import kotlin.concurrent.thread
 class LeaderboardFragment : Fragment() {
 
     lateinit var attemptId: String
-    lateinit var runId : String
+    lateinit var runId: String
+    private lateinit var leaderboardListAdapter: LeaderboardListAdapter
+    private var data = ArrayList<Leaderboard>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +32,8 @@ class LeaderboardFragment : Fragment() {
         }
 
         getRunId()
+
+        leaderboardListAdapter = LeaderboardListAdapter(data)
     }
 
     private fun getRunId() {
@@ -51,13 +54,20 @@ class LeaderboardFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        var leaderboardArray = ArrayList<Leaderboard>()
-        val adapter = LeaderboardListAdapter(context!!, leaderboardArray)
-        leaderboardList.adapter = adapter
+
+        leaderboardList.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = leaderboardListAdapter
+        }
+
         Clients.api.leaderboardById(runId).enqueue(retrofitCallback { throwable, response ->
-            leaderboardArray = response?.body() as ArrayList<Leaderboard>
-            adapter.list = leaderboardArray
-            adapter.notifyDataSetChanged()
+            response?.body().let {
+                if (it != null) {
+                    data.addAll(it as ArrayList<Leaderboard>)
+                    leaderboardListAdapter.notifyDataSetChanged()
+                }
+            }
         })
     }
 

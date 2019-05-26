@@ -28,7 +28,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?):
             View? = inflater.inflate(R.layout.fragment_overview, container, false).apply {
-        leaderboardListAdapter = LeaderboardListAdapter(context, list)
+        // leaderboardListAdapter = LeaderboardListAdapter(context, list)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
