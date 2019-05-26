@@ -22,51 +22,6 @@
         app:headerLayout="@layout/nav_header_home"
         app:itemBackground="@android:color/transparent"
         app:menu="@menu/activity_home_drawer">
-
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom"-->
-        <!--android:clickable="true"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:weightSum="4">-->
-
-        <!--<ImageButton-->
-        <!--android:id="@+id/footer_item_1"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:adjustViewBounds="true"-->
-        <!--android:scaleType="centerCrop"-->
-        <!--android:src="@drawable/cblogo" />-->
-
-        <!--<ImageButton-->
-        <!--android:id="@+id/footer_item_2"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:adjustViewBounds="true"-->
-        <!--android:scaleType="centerCrop"-->
-        <!--android:src="@drawable/youtube" />-->
-
-        <!--<ImageButton-->
-        <!--android:id="@+id/footer_item_3"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:adjustViewBounds="true"-->
-        <!--android:scaleType="centerCrop"-->
-        <!--android:src="@drawable/facebook" />-->
-
-        <!--<ImageButton-->
-        <!--android:id="@+id/footer_item_4"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:adjustViewBounds="true"-->
-        <!--android:scaleType="centerCrop"-->
-        <!--android:src="@drawable/twitter" />-->
-        <!--</LinearLayout>-->
     </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

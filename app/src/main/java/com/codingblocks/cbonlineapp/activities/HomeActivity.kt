@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
+import android.graphics.Bitmap
 import android.graphics.drawable.Icon
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -16,6 +17,8 @@ import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -39,7 +42,9 @@ import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_home.drawer_layout
 import kotlinx.android.synthetic.main.activity_home.nav_view
+import kotlinx.android.synthetic.main.app_bar_home.fragment_holder
 import kotlinx.android.synthetic.main.app_bar_home.toolbar
+import kotlinx.android.synthetic.main.app_bar_home.webView
 import kotlinx.android.synthetic.main.nav_header_home.view.login_button
 import kotlinx.android.synthetic.main.nav_header_home.view.nav_header_imageView
 import org.jetbrains.anko.AnkoLogger
@@ -271,6 +276,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_preferences -> {
                 startActivity(intentFor<SettingsActivity>().singleTop())
             }
+            R.id.nav_inbox -> {
+                showWebView()
+            }
             R.id.nav_contactUs -> {
                 startActivity(intentFor<AboutActivity>().singleTop())
             }
@@ -278,6 +286,38 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun showWebView() {
+        fragment_holder.visibility = View.GONE
+        webView.visibility = View.VISIBLE
+        val webSetting = webView.settings
+        webSetting.builtInZoomControls = true
+        webSetting.javaScriptEnabled = true
+        Clients.api.getSignature().enqueue(retrofitCallback { throwable, response ->
+            response?.body()?.let {
+                //                it.get("signature")
+                webView.webViewClient = object : WebViewClient() {
+
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        super.onPageFinished(view, url)
+                    }
+
+                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                        super.onPageStarted(view, url, favicon)
+//                val script: String =
+//                    "?id=${user.id}&name=${user.firstname}&email=&photo=&signature=&appId="
+
+                    }
+
+                }
+                webView.loadUrl("file:///android_asset/chat.html")
+            }
+        })
+        webView.webViewClient = WebViewClient()
+
+
+
     }
 
     override fun attachBaseContext(newBase: Context) {
