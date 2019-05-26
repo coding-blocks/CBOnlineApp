@@ -36,7 +36,8 @@ class LeaderboardFragment : Fragment() {
         val adapter = LeaderboardListAdapter(context!!, leaderboardArray)
         leaderboardList.adapter = adapter
         Clients.api.leaderboardById(runId).enqueue(retrofitCallback { throwable, response ->
-            Log.v("RESPONSE", response.toString())
+            leaderboardArray = response?.body() as ArrayList<Leaderboard>
+            adapter.list = leaderboardArray
             adapter.notifyDataSetChanged()
         })
     }
