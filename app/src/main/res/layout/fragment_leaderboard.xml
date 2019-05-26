@@ -5,47 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Rank"
-            android:textColor="@color/salmon" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="User"
-            android:textColor="@color/salmon" />
-
-        <TextView
-            android:id="@+id/leaderboard_college"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="College"
-            android:textColor="@color/salmon" />
-
-        <TextView
-            android:id="@+id/leaderboard_score"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Score"
-            android:textColor="@color/salmon" />
-    </LinearLayout>
+    <include layout="@layout/leaderboard_header"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/leaderboardList"
