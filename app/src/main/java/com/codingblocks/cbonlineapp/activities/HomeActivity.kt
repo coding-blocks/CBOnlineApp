@@ -34,6 +34,10 @@ import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Player
 import com.google.android.material.navigation.NavigationView
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
@@ -59,6 +63,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var updateUIReciver: BroadcastReceiver? = null
     private var filter: IntentFilter? = null
     private val notificationDao: NotificationDao by inject()
+    private val appUpdateManager by lazy {
+        AppUpdateManagerFactory.create(this)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -172,6 +179,28 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 fetchToken(data)
             }
         }
+        // Returns an intent object that you use to check for an update.
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+        // Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                // For a flexible update, use AppUpdateType.FLEXIBLE
+                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+            ) {
+                // Request the update.
+                appUpdateManager.startUpdateFlowForResult(
+                    // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                    appUpdateInfo,
+                    // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
+                    AppUpdateType.IMMEDIATE,
+                    // The current activity making the update request.
+                    this,
+                    // Include a request code to later monitor this update request.
+                    1001
+                )
+            }
+        }
     }
 
     private fun fetchToken(data: Uri) {
@@ -238,8 +267,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 finishAffinity()
                 return
             }
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+            this.doubleBackToExitPressedOnce = true
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
             Handler().postDelayed({
                 doubleBackToExitPressedOnce = false
             }, 2000)
@@ -317,18 +346,36 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onResume()
         registerReceiver(updateUIReciver, filter)
         invalidateOptionsMenu()
+
+        appUpdateManager
+            .appUpdateInfo
+            .addOnSuccessListener { appUpdateInfo ->
+                if (appUpdateInfo.updateAvailability()
+                    == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS
+                ) {
+                    // If an in-app update is already running, resume the update.
+                    appUpdateManager.startUpdateFlowForResult(
+                        appUpdateInfo,
+                        IMMEDIATE,
+                        this,
+                        1001
+                    )
+                }
+            }
+
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.home_notifications, menu)
         val menuItem = menu.findItem(R.id.action_notifications)
-        if(notificationDao.count == 0){
+        if (notificationDao.count == 0) {
             menuItem.icon = resources.getDrawable(R.drawable.ic_notification)
-        }else{
+        } else {
             menuItem.icon = resources.getDrawable(R.drawable.ic_notification_active)
 
         }
-            return true
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
