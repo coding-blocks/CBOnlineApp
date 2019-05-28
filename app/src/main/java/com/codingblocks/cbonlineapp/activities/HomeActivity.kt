@@ -18,10 +18,12 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.codingblocks.cbonlineapp.PreferenceManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.extensions.getPrefs
@@ -67,7 +69,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         AppUpdateManagerFactory.create(this)
     }
 
-
+  private val preference : PreferenceManager= PreferenceManager()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prefs = getPrefs()
@@ -146,6 +148,19 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             createShortcut()
         }
         nav_view.getHeaderView(0).login_button.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Confirm Logout")
+            builder.setMessage("Are you sure you want to logout?")
+            builder.setPositiveButton("Logout") { _, _ ->
+               preference.clear()
+                startActivity(Intent(this, LoginActivity::class.java))
+                finishAffinity()
+            }
+            builder.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
             prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
             prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
             if (nav_view.getHeaderView(0).login_button.text == "Logout") {
@@ -420,5 +435,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             else
                 println("Failed to delete database journal")
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }
