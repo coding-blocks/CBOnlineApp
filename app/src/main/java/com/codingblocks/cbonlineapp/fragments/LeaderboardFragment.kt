@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.LeaderboardListAdapter
@@ -13,6 +14,7 @@ import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import org.jetbrains.anko.doAsync
 import com.codingblocks.cbonlineapp.commons.LeaderboardDiffCallback
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
+import com.codingblocks.cbonlineapp.viewmodels.LeaderboardViewModel
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_leaderboard.*
 import kotlin.concurrent.thread
@@ -55,20 +57,20 @@ class LeaderboardFragment : Fragment() {
         val mLayoutManager = LinearLayoutManager(context)
         leaderboardList.layoutManager = mLayoutManager
         leaderboardList.adapter = leaderboardAdapter
-        Clients.api.leaderboardById(runId).enqueue(retrofitCallback { throwable, response ->
-            response?.body().let {
-                if (it != null) {
-                    leaderboardProgressBar.visibility = View.GONE
-                    leaderboardList.visibility = View.VISIBLE
-                    emptyLeaderboard.visibility = View.GONE
-                    leaderboardAdapter.submitList(it)
-                } else {
-                    leaderboardProgressBar.visibility = View.GONE
-                    leaderboardList.visibility = View.GONE
-                    emptyLeaderboard.visibility = View.VISIBLE
-                    // hiding leader board header in case of no leader board available
-                    header_view_leaderboard.visibility = View.GONE
-                }
+        val leaderboardViewModel = LeaderboardViewModel(runId)
+        leaderboardViewModel.getLeaderboard()
+        leaderboardViewModel.leaderboard.observe(this, Observer {
+            if (it != null) {
+                leaderboardProgressBar.visibility = View.GONE
+                leaderboardList.visibility = View.VISIBLE
+                emptyLeaderboard.visibility = View.GONE
+                leaderboardAdapter.submitList(it)
+            } else {
+                leaderboardProgressBar.visibility = View.GONE
+                leaderboardList.visibility = View.GONE
+                emptyLeaderboard.visibility = View.VISIBLE
+                // hiding leader board header in case of no leader board available
+                header_view_leaderboard.visibility = View.GONE
             }
         })
     }
