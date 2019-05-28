@@ -25,6 +25,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.PreferenceManager
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.AppDatabase_Impl
+import com.codingblocks.cbonlineapp.database.BaseDao
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
@@ -152,7 +155,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             builder.setTitle("Confirm Logout")
             builder.setMessage("Are you sure you want to logout?")
             builder.setPositiveButton("Logout") { _, _ ->
-               preference.clear()
+                deleteDatabaseFile(this@HomeActivity, "app-database")
+                baseContext.deleteDatabase("app-database")
+                preference.clear()
                 startActivity(Intent(this, LoginActivity::class.java))
                 finishAffinity()
             }
