@@ -97,4 +97,5 @@
     <string name="mcq">MCQ</string>
     <string name="notifications">Notifications</string>
     <string name="search_courses">Search Courses</string>
+    <string name="logout">Logout</string>
 </resources>

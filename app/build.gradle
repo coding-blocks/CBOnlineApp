@@ -98,7 +98,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.1'
     implementation 'androidx.browser:browser:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    implementation group: 'com.google.android.play', name: 'core', version: '1.6.0'
+    implementation 'com.google.android.play:core:1.6.0'
     // 3rd party libs
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
