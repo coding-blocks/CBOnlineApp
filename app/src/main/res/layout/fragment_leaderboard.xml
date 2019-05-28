@@ -7,8 +7,15 @@
 
     <include layout="@layout/leaderboard_header" />
 
+    <ProgressBar
+        android:id="@+id/leaderboardProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/leaderboardList"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/leader_board_list" />

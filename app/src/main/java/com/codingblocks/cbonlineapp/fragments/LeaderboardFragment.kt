@@ -58,10 +58,12 @@ class LeaderboardFragment : Fragment() {
         Clients.api.leaderboardById(runId).enqueue(retrofitCallback { throwable, response ->
             response?.body().let {
                 if (it != null) {
+                    leaderboardProgressBar.visibility = View.GONE
                     leaderboardList.visibility = View.VISIBLE
                     emptyLeaderboard.visibility = View.GONE
                     leaderboardAdapter.submitList(it)
                 } else {
+                    leaderboardProgressBar.visibility = View.GONE
                     leaderboardList.visibility = View.GONE
                     emptyLeaderboard.visibility = View.VISIBLE
                 }
