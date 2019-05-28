@@ -113,7 +113,7 @@ dependencies {
 
     // Image view libraries
     implementation 'de.hdodenhof:circleimageview:3.0.0'
-    implementation 'com.caverock:androidsvg-aar:1.3'
+    implementation 'com.caverock:androidsvg-aar:1.4'
 
     //database
     implementation "androidx.room:room-runtime:$room_version"
