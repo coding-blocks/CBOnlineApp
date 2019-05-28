@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.database.ContentDao

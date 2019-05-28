@@ -22,6 +22,7 @@ import com.codingblocks.cbonlineapp.adapters.BatchesAdapter
 import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.models.Instructor
 import com.codingblocks.cbonlineapp.extensions.loadSvg
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
@@ -139,7 +140,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
         sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-
 
         fetchCourse()
     }

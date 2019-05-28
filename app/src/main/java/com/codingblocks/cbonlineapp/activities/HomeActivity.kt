@@ -7,22 +7,39 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.Icon
+import android.graphics.drawable.PictureDrawable
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.getPrefs
+import androidx.fragment.app.Fragment
+import com.caverock.androidsvg.SVG
+import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.CourseRunDao
+import com.codingblocks.cbonlineapp.database.NotificationDao
+import com.codingblocks.cbonlineapp.database.models.CourseRun
+import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.extensions.observer
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
@@ -36,7 +53,14 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
+import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Player
+import com.onesignal.OneSignal
+import com.squareup.okhttp.Request
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_home.drawer_layout
 import kotlinx.android.synthetic.main.activity_home.nav_view
@@ -47,14 +71,21 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
+import java.io.InputStream
+import java.net.URL
 import java.util.*
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     AnkoLogger {
     private var updateUIReciver: BroadcastReceiver? = null
     private var filter: IntentFilter? = null
+    private val notificationDao: NotificationDao by inject()
+    lateinit var sM : ShortcutManager
+    private val viewHomeModel by viewModel<HomeViewModel>()
 
     private val viewModel by viewModel<HomeActivityViewModel>()
 
@@ -115,6 +146,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             startActivity(intentFor<LoginActivity>().singleTop())
         }
         fetchUser()
+
+
+
         //adding label to nav drawer items
         nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
 
@@ -128,6 +162,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 invalidateOptionsMenu()
             }
         }
+
     }
 
     private fun setUser() {
@@ -137,7 +172,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             )
         nav_view.getHeaderView(0).login_button.text = resources.getString(R.string.logout)
         if (Build.VERSION.SDK_INT >= 25) {
-            createShortcut()
+          //  createShortcut()
+            createTopCourseShortcut()
         }
         nav_view.getHeaderView(0).login_button.setOnClickListener {
             viewModel.prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
@@ -369,7 +405,69 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     @TargetApi(25)
     private fun removeShortcuts() {
         val shortcutManager = getSystemService(ShortcutManager::class.java)
-        shortcutManager.disableShortcuts(Arrays.asList("shortcut1"))
+       // shortcutManager.disableShortcuts(Arrays.asList("shortcut1"))
+        shortcutManager.disableShortcuts(Arrays.asList("topcourse"))
         shortcutManager.removeAllDynamicShortcuts()
     }
+
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo.isConnected
+    }
+
+    fun deleteDatabaseFile(context: Context, databaseName: String) {
+        val databases = File(context.applicationInfo.dataDir + "/databases")
+        val db = File(databases, databaseName)
+        if (db.delete())
+            println("Database deleted")
+        else
+            println("Failed to delete database")
+        val journal = File(databases, "$databaseName-journal")
+        if (journal.exists()) {
+            if (journal.delete())
+                println("Database journal deleted")
+            else
+                println("Failed to delete database journal")
+        }
+    }
+
+    @TargetApi(26)
+    fun createTopCourseShortcut(){
+        val sM=getSystemService(ShortcutManager::class.java)
+        viewHomeModel.runDao.getTopRun().observer(this) {
+            val data = AppDatabase.getInstance(applicationContext).courseDao().getCourse(it.crCourseId)
+            val intent2 = Intent(applicationContext, MyCourseActivity::class.java)
+            intent2.action = Intent.ACTION_VIEW
+            intent2.putExtra("courseId",it.crCourseId)
+            intent2.putExtra("course_name", it.title)
+            intent2.putExtra("runAttemptId", it.crAttemptId)
+            val shortcut2 = ShortcutInfo.Builder(this@HomeActivity, "topcourse")
+            shortcut2.setIntent(intent2)
+            shortcut2.setLongLabel(data.title)
+            shortcut2.setShortLabel(data.subtitle)
+            shortcut2.setDisabledMessage("Login to open this")
+            shortcut2.setIcon(Icon.createWithResource(applicationContext,R.mipmap.ic_launcher))
+            sM.dynamicShortcuts = Arrays.asList(shortcut2.build())
+
+//            doAsync {
+//                MediaUtils.okHttpClient.newCall((okhttp3.Request.Builder().url(data.logo).build()))
+//                    .execute().body()?.let {
+//                         with(SVG.getFromInputStream(it.byteStream())) {
+//                             val picDrawable = PictureDrawable(renderToPicture(
+//                                 10, 10
+//                             ))
+//                             val bmp = Bitmap.createBitmap(
+//                                 picDrawable.intrinsicWidth,
+//                                 picDrawable.intrinsicHeight,
+//                                 Bitmap.Config.ARGB_8888
+//                             )
+//                             shortcut2.setIcon(Icon.createWithBitmap(bmp))
+//                             sM.dynamicShortcuts = Arrays.asList(shortcut2.build())
+//                        }
+//                    }
+//            }
+        }
+    }
+
 }

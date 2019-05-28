@@ -17,6 +17,9 @@ abstract class CourseRunDao : BaseDao<CourseRun> {
     @Query("SELECT * FROM CourseRun where crAttemptId != " + "'" + "' ORDER BY hits DESC")
     abstract fun getMyRuns(): LiveData<List<CourseRun>>
 
+    @Query("SELECT * FROM CourseRun where crAttemptId != " + "'" + "' ORDER BY hits DESC limit 1")
+    abstract fun getTopRun(): LiveData<CourseRun>
+
     @Query("SELECT * FROM CourseRun where crAttemptId = :attemptId")
     abstract fun getRunById(attemptId: String): CourseRun
 

@@ -4,6 +4,8 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -11,11 +13,17 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.codingblocks.cbonlineapp.CBOnlineApp
+import com.codingblocks.cbonlineapp.R
 import okhttp3.Cache
 import okhttp3.CacheControl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import retrofit2.http.Url
 import java.io.File
+import java.io.IOException
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
@@ -92,9 +100,9 @@ object MediaUtils {
             } else {
 
                 ActivityCompat.requestPermissions(
-                        context as Activity,
-                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        1
+                    context as Activity,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    1
                 )
                 false
             }

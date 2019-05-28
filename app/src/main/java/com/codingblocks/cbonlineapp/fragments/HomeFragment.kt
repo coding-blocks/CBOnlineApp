@@ -1,17 +1,26 @@
 package com.codingblocks.cbonlineapp.fragments
 
 
+import android.annotation.TargetApi
+import android.content.Context
+import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.activities.HomeActivity
 import com.codingblocks.cbonlineapp.adapters.CarouselSliderAdapter
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.models.CourseRun
@@ -128,7 +137,6 @@ class HomeFragment : Fragment(), AnkoLogger {
 
     }
 
-
     private fun displayCourses(searchQuery: String = "") {
         viewModel.runDao.getRecommendedRuns().observer(viewLifecycleOwner) {
             if (!it.isEmpty()) {
@@ -164,5 +172,4 @@ class HomeFragment : Fragment(), AnkoLogger {
         })
         super.onCreateOptionsMenu(menu, inflater)
     }
-
 }
