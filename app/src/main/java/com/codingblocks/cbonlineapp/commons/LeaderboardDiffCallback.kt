@@ -13,9 +13,7 @@ class LeaderboardDiffCallback : DiffUtil.ItemCallback<Leaderboard>() {
      * return true if the contents of both items are same
      */
     override fun areContentsTheSame(oldItem: Leaderboard, newItem: Leaderboard): Boolean {
-        return oldItem.userName == newItem.userName &&
-            oldItem.collegeName.equals(newItem.collegeName) &&
-            oldItem.score == newItem.score
+        return oldItem == newItem
     }
 
     /**

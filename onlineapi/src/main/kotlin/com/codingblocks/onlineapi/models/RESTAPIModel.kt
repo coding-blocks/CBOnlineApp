@@ -60,7 +60,7 @@ data class RatingModel(
         val userScore: Any?
 )
 
-class Leaderboard(@JvmField
+data class Leaderboard(@JvmField
                   var userName: String) : BaseModel() {
 
     @JvmField
