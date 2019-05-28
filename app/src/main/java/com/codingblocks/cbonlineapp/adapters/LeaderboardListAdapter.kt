@@ -24,6 +24,10 @@ class LeaderboardListAdapter(diffCallback: LeaderboardDiffCallback) :
         }
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     inner class LeaderboardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindView(item: Leaderboard) {
