@@ -21,24 +21,21 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.extensions.getPrefs
-import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.FileUtils
+import com.codingblocks.cbonlineapp.util.NetworkUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
-import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Player
+import com.codingblocks.cbonlineapp.viewmodels.HomeActivityViewModel
+import com.codingblocks.cbonlineapp.viewmodels.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_home.drawer_layout
@@ -48,29 +45,26 @@ import kotlinx.android.synthetic.main.nav_header_home.view.login_button
 import kotlinx.android.synthetic.main.nav_header_home.view.nav_header_imageView
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.util.*
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     AnkoLogger {
-    private var doubleBackToExitPressedOnce = false
-    lateinit var prefs: PreferenceHelper
-    var mFragmentToSet: Fragment? = null
     private var updateUIReciver: BroadcastReceiver? = null
     private var filter: IntentFilter? = null
-    private val notificationDao: NotificationDao by inject()
+
+    private val viewModel by viewModel<HomeActivityViewModel>()
+
     private val appUpdateManager by lazy {
         AppUpdateManagerFactory.create(this)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefs = getPrefs()
+        viewModel.prefs = getPrefs()
         setContentView(R.layout.activity_home)
         setSupportActionBar(toolbar)
         title = "Coding Blocks"
@@ -86,12 +80,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onDrawerStateChanged(newState: Int) {}
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
             override fun onDrawerClosed(drawerView: View) {
-                if (mFragmentToSet != null) {
+                if (viewModel.mFragmentToSet != null) {
                     supportFragmentManager
                         .beginTransaction()
-                        .replace(R.id.fragment_holder, mFragmentToSet!!)
+                        .replace(R.id.fragment_holder, viewModel.mFragmentToSet ?: HomeFragment())
                         .commit()
-                    mFragmentToSet = null
+                    viewModel.mFragmentToSet = null
                 }
             }
 
@@ -101,7 +95,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.commit()
-        if (prefs.SP_ACCESS_TOKEN_KEY != "access_token" && !isNetworkAvailable(this)) {
+        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != "access_token" && !NetworkUtils.isNetworkAvailable(this)) {
             transaction.replace(R.id.fragment_holder, MyCoursesFragment())
             setUser()
         } else {
@@ -137,17 +131,17 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun setUser() {
-        if (!prefs.SP_USER_IMAGE.isEmpty())
-            Picasso.with(this).load(prefs.SP_USER_IMAGE).placeholder(R.drawable.defaultavatar).fit().into(
+        if (viewModel.prefs.SP_USER_IMAGE.isNotEmpty())
+            Picasso.with(this).load(viewModel.prefs.SP_USER_IMAGE).placeholder(R.drawable.defaultavatar).fit().into(
                 nav_view.getHeaderView(0).nav_header_imageView
             )
-        nav_view.getHeaderView(0).login_button.text = "Logout"
+        nav_view.getHeaderView(0).login_button.text = resources.getString(R.string.logout)
         if (Build.VERSION.SDK_INT >= 25) {
             createShortcut()
         }
         nav_view.getHeaderView(0).login_button.setOnClickListener {
-            prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
-            prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
+            viewModel.prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
+            viewModel.prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
             if (nav_view.getHeaderView(0).login_button.text == "Logout") {
                 removeShortcuts()
                 invalidateToken()
@@ -155,17 +149,18 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             startActivity(intentFor<LoginActivity>().singleTop())
             finish()
         }
-        val nav_menu = nav_view.menu
-        nav_menu.findItem(R.id.nav_my_courses).isVisible = true
+        val navMenu = nav_view.menu
+        navMenu.findItem(R.id.nav_my_courses).isVisible = true
     }
 
     private fun invalidateToken() {
         doAsync {
-            Clients.api.logout().enqueue(retrofitCallback { throwable, response ->
-                response?.let {
-                    if (it.isSuccessful) {
-                        deleteDatabaseFile(this@HomeActivity, "app-database")
-                    }
+            viewModel.invalidateToken(object : OnCompleteListener {
+                override fun onResponseComplete() {
+                    FileUtils.deleteDatabaseFile(this@HomeActivity, "app-database")
+                }
+
+                override fun onResponseFailed() {
                 }
             })
         }
@@ -186,14 +181,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
                 // For a flexible update, use AppUpdateType.FLEXIBLE
-                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+                && appUpdateInfo.isUpdateTypeAllowed(IMMEDIATE)
             ) {
                 // Request the update.
                 appUpdateManager.startUpdateFlowForResult(
                     // Pass the intent that is returned by 'getAppUpdateInfo()'.
                     appUpdateInfo,
                     // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
-                    AppUpdateType.IMMEDIATE,
+                    IMMEDIATE,
                     // The current activity making the update request.
                     this,
                     // Include a request code to later monitor this update request.
@@ -204,53 +199,32 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun fetchToken(data: Uri) {
-        val grantCode = data.getQueryParameter("code")
-        Clients.api.getToken(grantCode).enqueue(retrofitCallback { error, response ->
-            response.let {
-                if (response?.isSuccessful == true) {
-                    val jwt = response.body()?.asJsonObject?.get("jwt")?.asString!!
-                    val rt = response.body()?.asJsonObject?.get("refresh_token")?.asString!!
-                    prefs.SP_ACCESS_TOKEN_KEY = grantCode
-                    prefs.SP_JWT_TOKEN_KEY = jwt
-                    prefs.SP_JWT_REFRESH_TOKEN = rt
-                    Clients.authJwt = jwt
-                    val status = OneSignal.getPermissionSubscriptionState()
-                    //Set Player ID For OneSignal
-                    Clients.onlineV2JsonApi.setPlayerId(Player(playerId = status.subscriptionStatus.userId))
-                        .enqueue(retrofitCallback { throwable, response ->
-
-                        })
-                    fetchUser()
-                    Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
-                } else if (response?.code() == 500 && prefs.SP_ACCESS_TOKEN_KEY == "access_token") {
-                    Components.showconfirmation(this, "verify")
-                }
+        val grantCode = data.getQueryParameter("code") as String
+        viewModel.fetchToken(grantCode, object : OnCompleteListener {
+            override fun onResponseComplete() {
+                fetchUser()
+                Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
             }
+
+            override fun onResponseFailed() {
+                Components.showconfirmation(this@HomeActivity, "verify")
+            }
+
         })
     }
 
     private fun fetchUser() {
-        if (prefs.SP_ACCESS_TOKEN_KEY != "access_token") {
-            Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
-            Clients.api.getMe().enqueue(retrofitCallback { t, resp ->
-                resp?.body()?.let {
-                    if (resp.isSuccessful) {
-                        try {
-                            val jSONObject =
-                                it.getAsJsonObject("data").getAsJsonObject("attributes")
-                            prefs.SP_USER_ID = it.getAsJsonObject("data").get("id").asString
-                            prefs.SP_ONEAUTH_ID = jSONObject.get("oneauth-id").asString
-                            prefs.SP_USER_IMAGE = jSONObject.get("photo").asString
-                        } catch (e: Exception) {
-                        }
-                        setUser()
-                    } else {
-                        nav_view.getHeaderView(0).login_button.setOnClickListener {
-                            startActivity(intentFor<LoginActivity>().singleTop())
-                        }
+        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != "access_token") {
+            viewModel.getMe(object : OnCompleteListener {
+                override fun onResponseComplete() {
+                    setUser()
+                }
+
+                override fun onResponseFailed() {
+                    nav_view.getHeaderView(0).login_button.setOnClickListener {
+                        startActivity(intentFor<LoginActivity>().singleTop())
                     }
                 }
-                info { "login error ${t?.localizedMessage}" }
             })
         } else {
             nav_view.getHeaderView(0).login_button.setOnClickListener {
@@ -263,14 +237,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
-            if (doubleBackToExitPressedOnce) {
+            if (viewModel.doubleBackToExitPressedOnce) {
                 finishAffinity()
                 return
             }
-            this.doubleBackToExitPressedOnce = true
+            viewModel.doubleBackToExitPressedOnce = true
             Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
             Handler().postDelayed({
-                doubleBackToExitPressedOnce = false
+                viewModel.doubleBackToExitPressedOnce = false
             }, 2000)
         }
     }
@@ -315,9 +289,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun changeFragment(filter: String) {
         when (filter) {
-            "All Courses" -> mFragmentToSet = AllCourseFragment()
-            "Home" -> mFragmentToSet = HomeFragment()
-            "My Courses" -> mFragmentToSet = MyCoursesFragment()
+            "All Courses" -> viewModel.mFragmentToSet = AllCourseFragment()
+            "Home" -> viewModel.mFragmentToSet = HomeFragment()
+            "My Courses" -> viewModel.mFragmentToSet = MyCoursesFragment()
         }
         onBackPressed()
     }
@@ -365,11 +339,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.home_notifications, menu)
         val menuItem = menu.findItem(R.id.action_notifications)
-        if (notificationDao.count == 0) {
+        if (viewModel.notificationDao.count == 0) {
             menuItem.icon = resources.getDrawable(R.drawable.ic_notification)
         } else {
             menuItem.icon = resources.getDrawable(R.drawable.ic_notification_active)
@@ -398,27 +371,5 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val shortcutManager = getSystemService(ShortcutManager::class.java)
         shortcutManager.disableShortcuts(Arrays.asList("shortcut1"))
         shortcutManager.removeAllDynamicShortcuts()
-    }
-
-    fun isNetworkAvailable(context: Context): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo.isConnected
-    }
-
-    fun deleteDatabaseFile(context: Context, databaseName: String) {
-        val databases = File(context.applicationInfo.dataDir + "/databases")
-        val db = File(databases, databaseName)
-        if (db.delete())
-            println("Database deleted")
-        else
-            println("Failed to delete database")
-        val journal = File(databases, "$databaseName-journal")
-        if (journal.exists()) {
-            if (journal.delete())
-                println("Database journal deleted")
-            else
-                println("Failed to delete database journal")
-        }
     }
 }
