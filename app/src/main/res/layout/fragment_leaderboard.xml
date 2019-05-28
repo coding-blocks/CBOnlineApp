@@ -11,21 +11,22 @@
         android:id="@+id/leaderboardProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/leaderboardList"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         tools:listitem="@layout/leader_board_list" />
 
     <TextView
         android:id="@+id/emptyLeaderboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
         android:background="@color/white"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:text="Leaderboard not available for this course!!"
         android:textColor="@color/salmon"
         android:textSize="26sp"
