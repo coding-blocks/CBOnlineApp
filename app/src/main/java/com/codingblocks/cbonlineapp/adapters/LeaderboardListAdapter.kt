@@ -1,35 +1,37 @@
 package com.codingblocks.cbonlineapp.adapters
 
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.commons.LeaderboardDiffCallback
+import com.codingblocks.cbonlineapp.ui.LeaderboardCardUi
 import com.codingblocks.onlineapi.models.Leaderboard
-import kotlinx.android.synthetic.main.leader_board_list.view.*
+import org.jetbrains.anko.AnkoContext
 
-class LeaderboardListAdapter(val dataset: ArrayList<Leaderboard>) :
-    RecyclerView.Adapter<LeaderboardListAdapter.LeaderboardViewHolder>() {
+class LeaderboardListAdapter(diffCallback : LeaderboardDiffCallback) :
+    ListAdapter<Leaderboard, LeaderboardListAdapter.LeaderboardViewHolder>(diffCallback){
 
-    class LeaderboardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(leaderboard: Leaderboard) {
-            itemView.leaderboard_user.text = leaderboard.userName
-            itemView.leaderboard_college.text = leaderboard.collegeName
-            itemView.leaderboard_score.text = leaderboard.score.toString()
-            itemView.leaderboard_sno.text = (adapterPosition + 1).toString()
+    val ui = LeaderboardCardUi()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeaderboardListAdapter.LeaderboardViewHolder {
+        return LeaderboardViewHolder(ui.createView(AnkoContext.create(parent.context, parent)))
+    }
+
+    override fun onBindViewHolder(holder: LeaderboardListAdapter.LeaderboardViewHolder, position: Int) {
+        holder.apply {
+            bindView(getItem(position))
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeaderboardViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.leader_board_list, parent, false)
-        return LeaderboardViewHolder(view)
-    }
+    inner class LeaderboardViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
 
-    override fun onBindViewHolder(holder: LeaderboardViewHolder, position: Int) {
-        holder.bind(dataset[position])
-    }
+        fun bindView(item : Leaderboard){
 
-    override fun getItemCount() = dataset.size
+            // TODO
+
+        }
+
+    }
 
 }
