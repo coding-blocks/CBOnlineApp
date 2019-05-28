@@ -9,12 +9,20 @@ import com.codingblocks.onlineapi.models.Leaderboard
  */
 class LeaderboardDiffCallback : DiffUtil.ItemCallback<Leaderboard>() {
 
+    /**
+     * return true if the contents of both items are same
+     */
     override fun areContentsTheSame(oldItem: Leaderboard, newItem: Leaderboard): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.userName == newItem.userName &&
+            oldItem.collegeName.equals(newItem.collegeName) &&
+            oldItem.score == newItem.score
     }
 
+    /**
+     * returns true if both items have same ID
+     */
     override fun areItemsTheSame(oldItem: Leaderboard, newItem: Leaderboard): Boolean {
-        return oldItem == newItem
+        return oldItem.id == newItem.id
     }
 
 }
