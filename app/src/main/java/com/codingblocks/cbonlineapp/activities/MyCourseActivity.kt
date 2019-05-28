@@ -97,7 +97,7 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
         htab_tabs.getTabAt(2)?.setIcon(R.drawable.ic_docs)
         htab_tabs.getTabAt(3)?.setIcon(R.drawable.ic_announcement)
 
-        htab_tabs.getTabAt(4)?.setIcon(R.drawable.ic_announcement)
+        htab_tabs.getTabAt(4)?.setIcon(R.drawable.ic_leaderboard)
         htab_tabs.getTabAt(2)?.select()
         htab_viewpager.offscreenPageLimit = 4
     }
