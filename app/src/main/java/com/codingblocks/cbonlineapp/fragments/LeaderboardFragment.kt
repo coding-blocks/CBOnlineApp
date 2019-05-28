@@ -66,6 +66,8 @@ class LeaderboardFragment : Fragment() {
                     leaderboardProgressBar.visibility = View.GONE
                     leaderboardList.visibility = View.GONE
                     emptyLeaderboard.visibility = View.VISIBLE
+                    // hiding leader board header in case of no leader board available
+                    header_view_leaderboard.visibility = View.GONE
                 }
             }
         })

@@ -5,7 +5,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/leaderboard_header" />
+    <include
+        android:id="@+id/header_view_leaderboard"
+        layout="@layout/leaderboard_header" />
 
     <ProgressBar
         android:id="@+id/leaderboardProgressBar"
