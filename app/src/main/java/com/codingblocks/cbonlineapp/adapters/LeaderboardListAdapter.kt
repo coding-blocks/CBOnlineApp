@@ -9,8 +9,8 @@ import com.codingblocks.cbonlineapp.ui.LeaderboardCardUi
 import com.codingblocks.onlineapi.models.Leaderboard
 import org.jetbrains.anko.AnkoContext
 
-class LeaderboardListAdapter(diffCallback : LeaderboardDiffCallback) :
-    ListAdapter<Leaderboard, LeaderboardListAdapter.LeaderboardViewHolder>(diffCallback){
+class LeaderboardListAdapter(diffCallback: LeaderboardDiffCallback) :
+    ListAdapter<Leaderboard, LeaderboardListAdapter.LeaderboardViewHolder>(diffCallback) {
 
     val ui = LeaderboardCardUi()
 
@@ -24,12 +24,13 @@ class LeaderboardListAdapter(diffCallback : LeaderboardDiffCallback) :
         }
     }
 
-    inner class LeaderboardViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
+    inner class LeaderboardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindView(item : Leaderboard){
-
-            // TODO
-
+        fun bindView(item: Leaderboard) {
+            ui.leaderboardsno.text = (adapterPosition + 1).toString()
+            ui.leaderboarduser.text = item.userName
+            ui.leaderboardcollege.text = item.collegeName
+            ui.leaderboardsscore.text = item.score.toString()
         }
 
     }
