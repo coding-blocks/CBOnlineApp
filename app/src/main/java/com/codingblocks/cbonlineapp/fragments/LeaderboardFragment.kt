@@ -10,18 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.LeaderboardListAdapter
 import com.codingblocks.cbonlineapp.commons.LeaderboardDiffCallback
-import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.viewmodels.LeaderboardViewModel
 import kotlinx.android.synthetic.main.fragment_leaderboard.*
-import org.jetbrains.anko.doAsync
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.concurrent.thread
 
 class LeaderboardFragment : Fragment() {
 
     lateinit var attemptId: String
-    lateinit var runId: String
     private val leaderboardAdapter = LeaderboardListAdapter(LeaderboardDiffCallback())
     private val leaderboardViewModel: LeaderboardViewModel by viewModel()
 
@@ -31,20 +27,8 @@ class LeaderboardFragment : Fragment() {
             attemptId = it.getString(RUN_ATTEMPT_ID)
         }
 
-        getRunId()
 
         // leaderboardListAdapter = LeaderboardListAdapter(data)
-    }
-
-    private fun getRunId() {
-        val database = AppDatabase.getInstance(context!!)
-        val courseDao = database.courseRunDao()
-        thread {
-            doAsync {
-                val courseRun = courseDao.getRunById(attemptId)
-                runId = courseRun.crUid
-            }
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
@@ -57,7 +41,7 @@ class LeaderboardFragment : Fragment() {
         val mLayoutManager = LinearLayoutManager(context)
         leaderboardList.layoutManager = mLayoutManager
         leaderboardList.adapter = leaderboardAdapter
-        leaderboardViewModel.getLeaderboard()
+        leaderboardViewModel.getLeaderboard(attemptId)
         leaderboardViewModel.leaderboard.observe(this, Observer {
             if (it != null) {
                 leaderboardProgressBar.visibility = View.GONE
