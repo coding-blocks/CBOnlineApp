@@ -20,28 +20,27 @@ class AboutActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         callTv.setOnClickListener {
-            dialPhone(callTv.text.toString());
+            dialPhone(callTv.text.toString())
         }
         mailTv.setOnClickListener {
             email(mailTv.text.toString())
         }
 
         phone1_1.setOnClickListener {
-            dialPhone(phone1_1.text.toString());
+            dialPhone(phone1_1.text.toString())
         }
 
         phone1_2.setOnClickListener {
-            dialPhone(phone1_2.text.toString());
+            dialPhone(phone1_2.text.toString())
         }
 
         email1_1.setOnClickListener {
             email(mailTv.text.toString())
-
         }
     }
 
     fun dialPhone(s: String) {
-        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${s}"))
+        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$s"))
         startActivity(intent)
     }
 

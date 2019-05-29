@@ -176,7 +176,7 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                             marginEnd = dip(12)
                         }
                     }.lparams(width = 0, height = matchParent) {
-                        weight = 1.6f //not support value
+                        weight = 1.6f // not support value
                         marginStart = dip(8)
                     }
                 }.lparams(width = matchParent)

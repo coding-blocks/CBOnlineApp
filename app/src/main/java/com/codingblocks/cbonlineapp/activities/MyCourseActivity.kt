@@ -30,7 +30,6 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
 
     private val viewModel by viewModel<MyCourseViewModel>()
 
-
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +47,6 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
         viewModel.updatehit(attemptId)
         viewModel.fetchCourse(attemptId)
         viewModel.getPromoVideo(courseId)
-
     }
 
     override fun onStart() {
@@ -78,8 +76,6 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
 
             youTubePlayerSupportFragment!!.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
         }
-
-
     }
 
     private fun setupViewPager(crUid: String, crCourseId: String) {

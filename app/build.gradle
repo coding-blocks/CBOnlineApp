@@ -10,8 +10,10 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 
-
 def YOUTUBE_KEY = System.getenv('YOUTUBE_KEY') ?: "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
+def CLIENT_ID = System.getenv('CLIENT_ID') ?: "5633768694"
+def REDIRECT_URI = System.getenv('REDIRECT_URI') ?: "app://online.codingblocks.com"
+def OAUTH_URL = System.getenv('OAUTH_URL') ?: "https://account.codingblocks.com/oauth/authorize"
 
 android {
     compileSdkVersion 28
@@ -42,6 +44,9 @@ android {
             versionNameSuffix '-debug-version'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'
+            buildConfigField "String", "CLIENT_ID", '"' + CLIENT_ID + '"'
+            buildConfigField "String", "REDIRECT_URI", '"' + REDIRECT_URI + '"'
+            buildConfigField "String", "OAUTH_URL", '"' + OAUTH_URL + '"'
             applicationIdSuffix = 'debug'
 
         }
@@ -49,6 +54,9 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'
+            buildConfigField "String", "CLIENT_ID", '"' + CLIENT_ID + '"'
+            buildConfigField "String", "REDIRECT_URI", '"' + REDIRECT_URI + '"'
+            buildConfigField "String", "OAUTH_URL", '"' + OAUTH_URL + '"'
 
         }
     }
@@ -79,9 +87,8 @@ ext {
 }
 spotless {
     kotlin {
-        ktlint().userData(['android'        : 'true', 'color': 'tr/gradue',
-                           'max_line_length': '250', 'reporter': 'checkstyle'])
-        target 'app/src/**/*.kt', 'onlineapi/src/**/*.kt'
+        ktlint()
+        target '**/*.kt'
     }
 }
 

@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.quiz_single_option.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor
 
-
 class QuizChoiceAdapter(
     private var choices: ArrayList<Choice>,
     private var listener: OnItemClickListener
@@ -26,7 +25,6 @@ class QuizChoiceAdapter(
                 .inflate(R.layout.quiz_single_option, parent, false)
         ).apply {
             context = parent.context
-
         }
 
     override fun getItemCount(): Int {
@@ -35,7 +33,6 @@ class QuizChoiceAdapter(
 
     override fun onBindViewHolder(holder: ChoiceViewHolder, position: Int) {
         holder.bindView(choices[position], listener, context, position)
-
     }
 
     inner class ChoiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), AnkoLogger {
@@ -68,7 +65,6 @@ class QuizChoiceAdapter(
                     itemView.optionTitle.textColor = context.resources.getColor(R.color.black)
                     itemView.markedImgView.backgroundTintList =
                         ColorStateList.valueOf(context.resources.getColor(R.color.battleship_gray))
-
                 }
             }
 

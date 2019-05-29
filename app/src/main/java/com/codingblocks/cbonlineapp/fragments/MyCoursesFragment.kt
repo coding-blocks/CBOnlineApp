@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -24,8 +23,6 @@ import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
-
 
 class MyCoursesFragment : Fragment(), AnkoLogger {
 
@@ -42,7 +39,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         savedInstanceState: Bundle?
     ):
         View? = ui.createView(AnkoContext.create(ctx, this))
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,7 +62,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         ui.titleText.visibility = View.GONE
         ui.homeImg.visibility = View.GONE
         ui.viewPager.visibility = View.GONE
-
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
@@ -95,7 +90,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         }
     }
 
-
     private fun displayCourses(searchQuery: String = "") {
         viewModel.runDao.getMyRuns().observer(viewLifecycleOwner) {
             if (!it.isEmpty()) {
@@ -103,12 +97,11 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 courseDataAdapter.setData(it.filter { c ->
                     c.title.contains(searchQuery, true)
                 } as ArrayList<CourseRun>)
-            }else {
+            } else {
                 viewModel.fetchMyCourses()
             }
         }
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.home, menu)

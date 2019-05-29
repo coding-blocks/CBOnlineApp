@@ -12,21 +12,20 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.OnItemClickListener
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.QuizResult
-import com.codingblocks.onlineapi.models.QuizSubmission
+import com.codingblocks.onlineapi.models.Choice
+import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizqnas
+import com.codingblocks.onlineapi.models.QuizSubmission
 import kotlinx.android.synthetic.main.quizlayout.view.*
 import org.jetbrains.anko.AnkoLogger
 
-
-class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: String, var attemptId: String, private var questionList: HashMap<Int, String>, submission: List<QuizSubmission>?, var result: QuizResult?) : PagerAdapter(), AnkoLogger {
+class ViewPagerAdapter(private var mContext: Context, private var quizId: String, private var qaId: String, private var questionList: HashMap<Int, String>, submission: List<QuizSubmission>?, private var result: QuizResult?) : PagerAdapter(), AnkoLogger {
     private lateinit var choiceDataAdapter: QuizChoiceAdapter
     var submissionList: ArrayList<QuizSubmission> = submission as ArrayList<QuizSubmission>
 
-    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-
-        container.removeView(`object` as ScrollView)
+    override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
+        container.removeView(obj as ScrollView)
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any = LayoutInflater.from(mContext).inflate(R.layout.quizlayout, container, false).apply {
@@ -38,61 +37,60 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
         if (pos == questionList.size - 1 && result == null) {
             view.submitButton.visibility = View.VISIBLE
         }
-        Clients.onlineV2JsonApi.getQuestionById(questionList[pos]!!).enqueue(retrofitCallback { throwable, response ->
-            response?.body().let {
-                view.questionTitle.text = "Q${pos + 1}. ${it?.title}"
-                if (it?.title.equals(it?.description)) {
+        Clients.onlineV2JsonApi.getQuestionById(questionList[pos]
+            ?: "").enqueue(retrofitCallback { _, response ->
+            response?.body().let { question ->
+                view.questionTitle.text = "Q${pos + 1}. ${question?.title}"
+                if (question?.title.equals(question?.description)) {
                     view.questionDescription.visibility = View.GONE
                 } else {
-                    it?.description?.let {
+                    question?.description?.let {
                         view.questionDescription.loadMarkdown(it)
-                    } ?: run{
+                    } ?: run {
                         view.questionDescription.visibility = View.GONE
-
                     }
                 }
-                choiceDataAdapter = QuizChoiceAdapter(it?.choices!!, object : OnItemClickListener {
+                choiceDataAdapter = QuizChoiceAdapter(question?.choices as ArrayList<Choice>, object : OnItemClickListener {
                     override fun onItemClick(position: Int, id: String) {
                         if (result == null) {
-                            //marking correct option in the list
-                            it.choices!![position].marked = true
+                            // marking correct option in the list
+                            question.choices?.get(position)?.marked = true
 
-                            //unmarking rest of the options
-                            it.choices!!.forEachIndexed { index, choice ->
+                            // unmarking rest of the options
+                            question.choices?.forEachIndexed { index, _ ->
                                 if (index != position) {
-                                    it.choices!![index].marked = false
+                                    question.choices?.get(index)?.marked = false
                                     choiceDataAdapter.notifyDataSetChanged()
                                 }
                             }
-                            //adding or removing the previous marked option
+                            // adding or removing the previous marked option
                             submissionList.forEach { quizSumbission ->
-                                if (quizSumbission.id == questionList[pos]!!) {
-                                    quizSumbission.markedChoices = arrayOf(it.choices!![position].id!!)
+                                if (quizSumbission.id == questionList[pos]) {
+                                    quizSumbission.markedChoices = arrayOf(question.choices?.get(position)?.id
+                                        ?: "")
                                 }
                             }
                             val quizAttempt = QuizAttempt()
                             quizAttempt.id = qaId
                             quizAttempt.status = "DRAFT"
                             val quizSubmission = QuizSubmission()
-                            quizSubmission.id = questionList[pos]!!
+                            quizSubmission.id = questionList[pos] ?: ""
                             quizSubmission.markedChoices = arrayOf(id)
                             submissionList.add(quizSubmission)
                             quizAttempt.submission.addAll(submissionList)
                             val qna = Quizqnas()
                             qna.id = quizId
                             quizAttempt.qna = qna
-                            Clients.onlineV2JsonApi.updateQuizAttempt(qaId, quizAttempt).enqueue(retrofitCallback { throwable, response ->
-
+                            Clients.onlineV2JsonApi.updateQuizAttempt(qaId, quizAttempt).enqueue(retrofitCallback { _, _ ->
                             })
                         }
                     }
-
                 })
                 submissionList.forEach { quizSumbission ->
-                    if (quizSumbission.id == questionList[pos]!!) {
+                    if (quizSumbission.id == questionList[pos]) {
                         quizSumbission.markedChoices?.forEach { markedChoice ->
-                            it.choices?.forEach { choice ->
-                                if (markedChoice.contains(choice.id!!)) {
+                            question.choices?.forEach { choice ->
+                                if (markedChoice.contains(choice.id)) {
                                     choice.marked = true
                                     choiceDataAdapter.notifyDataSetChanged()
                                 }
@@ -101,13 +99,13 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                     }
                 }
                 result?.questions?.forEach { quizQuestion ->
-                    if (quizQuestion.id == questionList[pos]!!) {
+                    if (quizQuestion.id == questionList[pos]) {
                         quizQuestion.answers?.forEach { answers ->
-                            it.choices?.forEach { choice ->
-                                if (answers.contains(choice.id!!)) {
+                            question.choices?.forEach { choice ->
+                                if (answers.contains(choice.id)) {
                                     choice.correct = true
                                     choiceDataAdapter.notifyDataSetChanged()
-                                }else{
+                                } else {
                                     choice.correct = false
                                     choiceDataAdapter.notifyDataSetChanged()
                                 }
@@ -117,20 +115,17 @@ class ViewPagerAdapter(var mContext: Context, var quizId: String, var qaId: Stri
                 }
                 view.questionRv.layoutManager = LinearLayoutManager(mContext)
                 view.questionRv.adapter = choiceDataAdapter
-
             }
         })
         view.submitButton.setOnClickListener {
-            Clients.onlineV2JsonApi.sumbitQuizById(qaId).enqueue(retrofitCallback { throwable, response ->
+            Clients.onlineV2JsonApi.sumbitQuizById(qaId).enqueue(retrofitCallback { _, _ ->
                 (mContext as Activity).finish()
             })
         }
-
     }
 
-    override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        return view == `object`
-
+    override fun isViewFromObject(view: View, obj: Any): Boolean {
+        return view == obj
     }
 
     override fun getCount(): Int {

@@ -8,8 +8,8 @@ import androidx.viewpager.widget.ViewPager
 import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.NoSuchElementException
 
@@ -41,8 +41,8 @@ fun <T> LiveData<T>.getDistinct(): LiveData<T> {
                 initialized = true
                 lastObj = obj
                 distinctLiveData.postValue(lastObj)
-            } else if ((obj == null && lastObj != null)
-                || obj != lastObj
+            } else if ((obj == null && lastObj != null) ||
+                obj != lastObj
             ) {
                 lastObj = obj
                 distinctLiveData.postValue(lastObj)

@@ -4,10 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
-import android.os.Environment
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.codingblocks.cbonlineapp.CBOnlineApp
@@ -18,7 +15,6 @@ import okhttp3.OkHttpClient
 import java.io.File
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
-
 
 object MediaUtils {
 
@@ -56,7 +52,6 @@ object MediaUtils {
 
         fileOrDirectory.delete()
     }
-
 
     fun getYotubeVideoId(videoUrl: String): String {
         var vId = ""
@@ -98,9 +93,8 @@ object MediaUtils {
                 )
                 false
             }
-        } else { //permission is automatically granted on sdk<23 upon installation
+        } else { // permission is automatically granted on sdk<23 upon installation
             true
         }
     }
-
 }

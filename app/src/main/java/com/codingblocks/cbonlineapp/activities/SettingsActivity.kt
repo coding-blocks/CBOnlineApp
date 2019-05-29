@@ -15,7 +15,6 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.io.File
 
-
 class SettingsActivity : AppCompatActivity() {
 
     private val database: AppDatabase by lazy {
@@ -27,11 +26,9 @@ class SettingsActivity : AppCompatActivity() {
     }
     private val file by lazy {
         this.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
-
     }
 
     val stat by lazy { StatFs(Environment.getExternalStorageDirectory().path) }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +36,6 @@ class SettingsActivity : AppCompatActivity() {
         setSupportActionBar(settings_toolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-
     }
 
     override fun onStart() {
@@ -56,7 +51,6 @@ class SettingsActivity : AppCompatActivity() {
             file
         ).readableFileSize())
 
-
         deleteAllTv.setOnClickListener {
             contentDao.getDownloads("true").let { list ->
                 list.forEach { content ->
@@ -68,9 +62,7 @@ class SettingsActivity : AppCompatActivity() {
                         "false"
                     )
                 }
-
             }
-
         }
     }
 

@@ -8,6 +8,7 @@ import com.codingblocks.cbonlineapp.commons.LeaderboardDiffCallback
 import com.codingblocks.cbonlineapp.ui.LeaderboardCardUi
 import com.codingblocks.onlineapi.models.Leaderboard
 import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.AnkoLogger
 
 class LeaderboardListAdapter(diffCallback: LeaderboardDiffCallback) :
     ListAdapter<Leaderboard, LeaderboardListAdapter.LeaderboardViewHolder>(diffCallback) {
@@ -38,5 +39,4 @@ class LeaderboardListAdapter(diffCallback: LeaderboardDiffCallback) :
         }
 
     }
-
 }

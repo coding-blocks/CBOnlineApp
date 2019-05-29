@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -23,9 +22,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 class AllCourseFragment : Fragment(), AnkoLogger {
 
@@ -42,7 +39,6 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         savedInstanceState: Bundle?
     ):
         View = ui.createView(AnkoContext.create(ctx, this))
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -88,8 +84,6 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         viewModel.progress.observer(viewLifecycleOwner) {
             ui.swipeRefreshLayout.isRefreshing = it
         }
-
-
     }
 
     private fun displayCourses(searchQuery: String = "") {
@@ -104,7 +98,6 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                 viewModel.fetchAllCourses()
             }
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -127,5 +120,4 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         })
         super.onCreateOptionsMenu(menu, inflater)
     }
-
 }

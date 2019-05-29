@@ -13,7 +13,6 @@ import org.jetbrains.anko.uiThread
 fun ImageView.loadSvg(svgUrl: String, onDrawableCreated: ((Drawable) -> Unit)?) {
     setLayerType(View.LAYER_TYPE_SOFTWARE, null)
 
-
     doAsync {
         MediaUtils.okHttpClient.newCall((Request.Builder().url(svgUrl).build()))
                 .execute().body()?.let {
@@ -26,7 +25,6 @@ fun ImageView.loadSvg(svgUrl: String, onDrawableCreated: ((Drawable) -> Unit)?) 
                             setImageDrawable(picDrawable)
                             onDrawableCreated?.let { it(picDrawable) }
                         }
-
                     }
                 }
     }

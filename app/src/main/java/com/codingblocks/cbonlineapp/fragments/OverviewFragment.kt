@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +13,7 @@ import org.jetbrains.anko.AnkoLogger
 private const val ARG_ATTEMPT_ID = "attempt_id"
 private const val ARG__RUN_ID = "run_id"
 
-
 class OverviewFragment : Fragment(), AnkoLogger {
-
 
     lateinit var attemptId: String
     lateinit var runId: String
@@ -32,7 +29,6 @@ class OverviewFragment : Fragment(), AnkoLogger {
         arguments?.let {
             attemptId = it.getString(ARG_ATTEMPT_ID)!!
             runId = it.getString(ARG__RUN_ID)!!
-
         }
 
     }
@@ -45,7 +41,6 @@ class OverviewFragment : Fragment(), AnkoLogger {
                 arguments = Bundle().apply {
                     putString(ARG_ATTEMPT_ID, param1)
                     putString(ARG__RUN_ID, crUid)
-
                 }
             }
     }
@@ -61,6 +56,4 @@ class OverviewFragment : Fragment(), AnkoLogger {
             }
         }
     }
-
-
 }

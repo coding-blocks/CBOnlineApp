@@ -69,6 +69,4 @@ val databaseModule = module {
         val database: AppDatabase = get()
         database.notificationDao()
     }
-
-
 }

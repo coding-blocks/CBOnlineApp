@@ -21,7 +21,6 @@ class NotificationsAdapter(diffCallback: NotificationsDiffCallback) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationsViewHolder {
 
         return NotificationsViewHolder(ui.createView(AnkoContext.create(parent.context, parent)))
-
     }
 
     override fun onBindViewHolder(holder: NotificationsViewHolder, position: Int) {
@@ -29,7 +28,6 @@ class NotificationsAdapter(diffCallback: NotificationsDiffCallback) :
             bindView(getItem(position))
             onClickListener = onClick
         }
-
     }
 
     inner class NotificationsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -46,10 +44,7 @@ class NotificationsAdapter(diffCallback: NotificationsDiffCallback) :
             if (item.seen) {
                 ui.title.alpha = 0.5f
                 ui.body.alpha = 0.5f
-
             }
-
-
         }
     }
 }

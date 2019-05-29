@@ -30,7 +30,6 @@ class ZoomOutPageTransformer : ViewPager.PageTransformer {
 
                 // Fade the page relative to its size.
                 view.alpha = MIN_ALPHA + (scaleFactor - MIN_SCALE) / (1 - MIN_SCALE) * (1 - MIN_ALPHA)
-
             }
             else -> // (1,+Infinity]
                 // This page is way off-screen to the right.

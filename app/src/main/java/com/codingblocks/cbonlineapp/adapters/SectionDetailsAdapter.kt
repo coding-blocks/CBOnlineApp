@@ -56,7 +56,6 @@ import org.jetbrains.anko.yesButton
 import java.io.File
 import kotlin.concurrent.thread
 
-
 class SectionDetailsAdapter(
     private var sectionData: ArrayList<CourseSection>?,
     private var activity: LifecycleOwner,
@@ -72,7 +71,6 @@ class SectionDetailsAdapter(
     private lateinit var sectionWithContentDao: SectionWithContentsDao
     lateinit var arrowAnimation: RotateAnimation
 
-
     fun setData(sectionData: ArrayList<CourseSection>, premium: Boolean, crStart: String) {
         this.sectionData = sectionData
         this.premium = premium
@@ -83,7 +81,6 @@ class SectionDetailsAdapter(
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
         holder.bindView(sectionData!![position], starter)
     }
-
 
     override fun getItemCount(): Int {
 
@@ -99,7 +96,6 @@ class SectionDetailsAdapter(
         database = AppDatabase.getInstance(context)
         contentDao = database.contentDao()
         sectionWithContentDao = database.sectionWithContentsDao()
-
 
         return CourseViewHolder(
             LayoutInflater.from(parent.context)
@@ -146,7 +142,7 @@ class SectionDetailsAdapter(
                         }
                         itemView.lectureTime.text = duration.getDurationBreakdown()
 
-                        if(!data.premium)
+                        if (!data.premium)
                             itemView.free.visibility = View.VISIBLE
 
                         subTitle.text = content.title
@@ -261,7 +257,6 @@ class SectionDetailsAdapter(
                                                     }
                                                     noButton { it.dismiss() }
                                                 }.show()
-
                                             }
                                             inflatedView.setOnClickListener {
                                                 if (content.progress == "UNDONE") {
@@ -296,7 +291,6 @@ class SectionDetailsAdapter(
                                             }
                                         }
                                     }
-
                                 }
                                 content.contentable == "document" -> {
                                     contentType.setImageDrawable(context.getDrawable(R.drawable.ic_document))
@@ -410,14 +404,14 @@ class SectionDetailsAdapter(
                         }
 
                         itemView.setOnClickListener {
-                            if (itemView.title.text.contains("Challenges",true))
+                            if (itemView.title.text.contains("Challenges", true))
                                 Components.showconfirmation(activity as Context, "unavailable")
                             else
                                 showOrHide(ll, it)
                         }
 
                         itemView.arrow.setOnClickListener {
-                            if (itemView.title.text.contains("Challenges",true))
+                            if (itemView.title.text.contains("Challenges", true))
                                 Components.showconfirmation(activity as Context, "unavailable")
                             else
                                 showOrHide(ll, it)
@@ -433,7 +427,6 @@ class SectionDetailsAdapter(
             return mWifi.isConnected
         }
     }
-
 
     fun showOrHide(ll: View, itemView: View) {
         if (ll.visibility == View.GONE) {
@@ -567,8 +560,6 @@ class SectionDetailsAdapter(
                                         )
                                     }
                             }
-
-
                         }
                     }
                 })
