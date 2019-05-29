@@ -61,7 +61,7 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
                         itemView.courseBtn1.background = context.getDrawable(R.drawable.button_background)
                         itemView.courseBtn1.setOnClickListener {
                             it.context.startActivity(it.context.intentFor<MyCourseActivity>(
-                                COURSE_ID to id, RUN_ATTEMPT_ID to courseRun.crAttemptId, COURSE_NAME to title, RUN_ID to courseRun.crUid).singleTop())
+                                RUN_ATTEMPT_ID to courseRun.crAttemptId, COURSE_NAME to title, RUN_ID to courseRun.crUid).singleTop())
                         }
 //                        itemView.setOnClickListener {
 //                            it.context.startActivity(it.context.intentFor<MyCourseActivity>("course_id" to id, "attempt_id" to courseRun.crAttemptId, "courseName" to title).singleTop())
