@@ -169,11 +169,9 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                     400,400
                                 )
                             )
-                            val bitmap = Bitmap.createBitmap(picDrawable.intrinsicWidth,picDrawable.intrinsicHeight,Bitmap.Config.ARGB_8888)
-                            val canvas = Canvas(bitmap)
-                            picDrawable.setBounds(0,0,canvas.width, canvas.height)
-                            picDrawable.draw(canvas)
-                            shortcut.setIcon(Icon.createWithBitmap(bitmap))
+                            val bitmap = MediaUtils.getBitmapFromPictureDrawable(picDrawable)
+                            val circularBitmap = MediaUtils.getCircularBitmap(bitmap)
+                            shortcut.setIcon(Icon.createWithBitmap(circularBitmap))
                             sM!!.dynamicShortcuts = Arrays.asList(shortcut.build())
                         }
 
