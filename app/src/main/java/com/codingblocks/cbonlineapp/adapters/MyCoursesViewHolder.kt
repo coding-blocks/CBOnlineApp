@@ -45,15 +45,15 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
                     itemView.courseProgress.progress = courseRun.progress.toInt()
                     itemView.courseCoverImgView.loadSvg(coverImage)
                     itemView.courseLogo.loadSvg(logo)
-                    if(!courseRun.premium){
+                    if (!courseRun.premium) {
                         itemView.trialTv.visibility = View.VISIBLE
-                    }else{
+                    } else {
                         itemView.trialTv.visibility = View.GONE
                     }
                     if (courseRun.crEnd.toLong() * 1000 > System.currentTimeMillis()) {
-                        if(courseRun.progress == 0.0){
+                        if (courseRun.progress == 0.0) {
                             itemView.courseBtn1.text = "Start"
-                        }else{
+                        } else {
                             itemView.courseBtn1.text = "Resume"
                         }
                         itemView.courseBtn1.isEnabled = true
@@ -70,12 +70,10 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
                         itemView.courseBtn1.text = "Expired"
                         itemView.courseBtn1.isEnabled = false
                         itemView.courseBtn1.background = context.getDrawable(R.drawable.button_disable)
-
-
                     }
                 }
 
-                //bind Instructors
+                // bind Instructors
                 val instructorsLiveData = instructorDao.getInstructorWithCourseId(data.id)
                     instructorsLiveData.observe({ (context as LifecycleOwner).lifecycle }, {
                         val instructorsList = it

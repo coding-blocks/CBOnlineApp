@@ -89,7 +89,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     val batchSnapHelper: SnapHelper = LinearSnapHelper()
     val sectionAdapter = SectionsDataAdapter(ArrayList())
 
-
     private val database: AppDatabase by lazy {
         AppDatabase.getInstance(this)
     }
@@ -104,7 +103,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         courseName = intent.getStringExtra("courseName") ?: ""
         val image = intent.getStringExtra("courseLogo") ?: ""
         setImageAndTitle(image, courseName)
-
 
         init()
     }
@@ -136,10 +134,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
             .load(R.layout.item_skeleton_course)
             .show()
 
-
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
         sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-
 
         fetchCourse()
     }
@@ -303,10 +299,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     chip.typeface = typeFace
                     tagsChipgroup.addView(chip)
                 }
-
             }
         }
-
     }
 
     private fun addtocart(id: String, name: String) {
@@ -392,4 +386,3 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         }
     }
 }
-

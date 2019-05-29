@@ -16,7 +16,6 @@ import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.CarouselCards
 
-
 class HomeViewModel(
     var courseWithInstructorDao: CourseWithInstructorDao,
     var courseDao: CourseDao,
@@ -82,8 +81,6 @@ class HomeViewModel(
                                     )
                                 }
 
-
-
                                 course.instructors?.forEach { instructor ->
                                     instructorDao.insertNew(
                                         Instructor(
@@ -99,11 +96,9 @@ class HomeViewModel(
                                     )
                                 }
                             }
-
                         }
                     }
                     progress.value = false
-
                 }
             })
     }
@@ -209,15 +204,11 @@ class HomeViewModel(
                                                                                     )
                                                                                 )
                                                                             }
-
                                                                     }
                                                                 }
-
                                                             })
-
                                                     }
                                                 }
-
                                             })
                                     }
                                 }
@@ -286,8 +277,6 @@ class HomeViewModel(
                                     )
                                 }
 
-
-
                                 course.instructors?.forEach { instructor ->
                                     instructorDao.insertNew(
                                         Instructor(
@@ -303,14 +292,12 @@ class HomeViewModel(
                                     )
                                 }
                             }
-
                         }
                     }
                     progress.value = false
                 }
             })
     }
-
 
     fun fetchCards() {
         Clients.onlineV2JsonApi.carouselCards.enqueue(retrofitCallback { fallback, response ->
@@ -319,7 +306,4 @@ class HomeViewModel(
             }
         })
     }
-
-
 }
-

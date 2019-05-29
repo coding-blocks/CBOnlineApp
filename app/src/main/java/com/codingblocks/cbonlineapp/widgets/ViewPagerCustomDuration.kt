@@ -36,7 +36,6 @@ class ViewPagerCustomDuration : ViewPager {
             scroller.set(this, mScroller)
         } catch (ignored: Exception) {
         }
-
     }
 
     /*

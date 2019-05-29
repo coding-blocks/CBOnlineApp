@@ -29,7 +29,6 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.VdoPlayerControlView
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.ContentId
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
@@ -115,7 +114,6 @@ class VideoPlayerActivity : AppCompatActivity(),
         currentOrientation = resources.configuration.orientation
 
         setupUI()
-
     }
 
     private fun setupUI() {
@@ -139,7 +137,6 @@ class VideoPlayerActivity : AppCompatActivity(),
         }
         setupViewPager(attemptId)
     }
-
 
     private fun setupViewPager(attemptId: String) {
         val adapter = TabLayoutAdapter(supportFragmentManager)
@@ -306,11 +303,10 @@ class VideoPlayerActivity : AppCompatActivity(),
                                     )
                                 )
                             }
-                            error?.let{
+                            error?.let {
                                 doubtDialog.dismiss()
                                 toast("there was some error please try again")
                             }
-
                         })
                 }
             }
@@ -328,7 +324,6 @@ class VideoPlayerActivity : AppCompatActivity(),
         noteView.descriptionLayout.visibility = View.GONE
         noteView.title.text = "Create A Note"
         noteView.okBtn.text = "Create Note"
-
 
         noteView.cancelBtn.setOnClickListener {
             noteDialog.dismiss()

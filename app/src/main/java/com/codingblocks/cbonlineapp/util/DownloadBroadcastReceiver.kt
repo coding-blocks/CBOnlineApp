@@ -10,7 +10,7 @@ open class DownloadBroadcastReceiver : BroadcastReceiver() {
         val action = intent.action
 
         if (DownloadManager.ACTION_DOWNLOAD_COMPLETE == action) {
-            //Show a notification
+            // Show a notification
         }
     }
 }

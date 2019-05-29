@@ -19,7 +19,6 @@ import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_video_doubt.view.*
 import org.jetbrains.anko.AnkoLogger
 
-
 private const val ARG_ATTEMPT_ID = "param1"
 
 class VideoDoubtFragment : Fragment(), AnkoLogger {
@@ -32,6 +31,7 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
     private val doubtsDao by lazy {
         database.doubtsDao()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -39,11 +39,9 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_video_doubt, container, false)
-
         fetchDoubts()
         val doubtList = ArrayList<DoubtsModel>()
         val doubtsAdapter = VideosDoubtsAdapter(doubtList)
@@ -52,19 +50,11 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
         val itemDecorator = DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL)
         itemDecorator.setDrawable(ContextCompat.getDrawable(context!!, R.drawable.divider)!!)
         view.doubtsRv.addItemDecoration(itemDecorator)
-
         doubtsDao.getDoubts(param1!!).observe(this, Observer<List<DoubtsModel>> {
             doubtsAdapter.setData(it as ArrayList<DoubtsModel>)
-            if (it.isEmpty()) {
-                view.doubtsRv.visibility = View.GONE
-                view.emptyTv.visibility = View.VISIBLE
-            } else {
-                view.doubtsRv.visibility = View.VISIBLE
-                view.emptyTv.visibility = View.GONE
-            }
+            view.doubtsRv.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
+            view.emptyTv.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
         })
-
-
         return view
     }
 
@@ -77,7 +67,7 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
                             doubtsDao.insert(
                                 DoubtsModel(
                                     it.id, it.title, it.body, it.content?.id
-                                        ?: "", it.status, it.runAttempt?.id ?: "",
+                                    ?: "", it.status, it.runAttempt?.id ?: "",
                                     it.discourseTopicId
                                 )
                             )
@@ -88,20 +78,16 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
                     }
                 }
             }
-
         })
     }
 
-
-
-
-        companion object {
-            @JvmStatic
-            fun newInstance(param1: String) =
-                    VideoDoubtFragment().apply {
-                        arguments = Bundle().apply {
-                            putString(ARG_ATTEMPT_ID, param1)
-                        }
-                    }
-        }
+    companion object {
+        @JvmStatic
+        fun newInstance(param1: String) =
+            VideoDoubtFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_ATTEMPT_ID, param1)
+                }
+            }
     }
+}

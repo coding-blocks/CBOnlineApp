@@ -42,7 +42,6 @@ class DownloadService : IntentService("Download Service"), AnkoLogger,
     lateinit var lectureContentId: String
     lateinit var dataId: String
 
-
     private val notificationManager by lazy {
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
@@ -124,7 +123,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger,
             })
     }
 
-    //function to update progress according to download progress
+    // function to update progress according to download progress
     private fun sendNotification(download: Int) {
         notificationBuilder.setProgress(100, download, false)
         notificationBuilder.setContentText("Downloaded $download %")
@@ -136,7 +135,7 @@ class DownloadService : IntentService("Download Service"), AnkoLogger,
             contentDao.updateContent(dataId, lectureContentId, "true")
         }
         val intent = Intent(this, VideoPlayerActivity::class.java)
-        intent.putExtra(VIDEO_ID,videoId)
+        intent.putExtra(VIDEO_ID, videoId)
         intent.putExtra(RUN_ATTEMPT_ID, attemptId)
         intent.putExtra(CONTENT_ID, contentId)
         intent.putExtra(DOWNLOADED, true)
@@ -167,7 +166,6 @@ class DownloadService : IntentService("Download Service"), AnkoLogger,
         notificationBuilder.setOngoing(false)
         notificationBuilder.setContentText("Download Failed")
         notificationManager.notify(0, notificationBuilder.build())
-
     }
 
     override fun onQueued(p0: String?, p1: DownloadStatus?) {
@@ -181,4 +179,3 @@ class DownloadService : IntentService("Download Service"), AnkoLogger,
         notificationManager.cancel(0)
     }
 }
-

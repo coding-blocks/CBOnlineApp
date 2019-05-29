@@ -14,7 +14,6 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.singleTop
 
-
 object Components {
     fun showconfirmation(context: Context, type: String) {
         val confirmDialog = AlertDialog.Builder(context).create()
