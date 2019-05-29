@@ -33,10 +33,11 @@ class CBOnlineApp : Application() {
 
         startKoin(
             this, listOf(
-                viewModelModule,
-                databaseModule
-            )
+            viewModelModule,
+            databaseModule
         )
+        )
+
         Picasso.setSingletonInstance(Picasso.Builder(this).build())
 
         // OneSignal Initialization
