@@ -88,7 +88,7 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
         adapter.add(AnnouncementsFragment.newInstance(courseId), "About")
         adapter.add(CourseContentFragment.newInstance(attemptId), "Course Content")
         adapter.add(DoubtsFragment.newInstance(attemptId, crCourseId), "Doubts")
-        adapter.add(LeaderboardFragment.newInstance(attemptId), "Leaderboard")
+        adapter.add(LeaderboardFragment.newInstance(runId), "Leaderboard")
 
         htab_viewpager.adapter = adapter
         htab_tabs.setupWithViewPager(htab_viewpager)

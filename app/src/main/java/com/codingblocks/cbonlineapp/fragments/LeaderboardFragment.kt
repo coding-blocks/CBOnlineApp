@@ -17,14 +17,14 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LeaderboardFragment : Fragment() {
 
-    lateinit var attemptId: String
+    lateinit var runId: String
     private val leaderboardAdapter = LeaderboardListAdapter(LeaderboardDiffCallback())
     private val leaderboardViewModel: LeaderboardViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            attemptId = it.getString(RUN_ATTEMPT_ID)
+            runId = it.getString(RUN_ATTEMPT_ID)
         }
 
 
@@ -41,7 +41,7 @@ class LeaderboardFragment : Fragment() {
         val mLayoutManager = LinearLayoutManager(context)
         leaderboardList.layoutManager = mLayoutManager
         leaderboardList.adapter = leaderboardAdapter
-        leaderboardViewModel.getLeaderboard(attemptId)
+        leaderboardViewModel.getLeaderboard(runId)
         leaderboardViewModel.leaderboard.observe(this, Observer {
             if (it != null) {
                 leaderboardProgressBar.visibility = View.GONE

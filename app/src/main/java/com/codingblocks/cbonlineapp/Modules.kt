@@ -15,7 +15,7 @@ val viewModelModule = module {
     viewModel { HomeViewModel(get(), get(), get(), get()) }
     viewModel { MyCourseViewModel(get(), get(), get(), get(), get()) }
     viewModel { NotificationViewModel(get()) }
-    viewModel { LeaderboardViewModel(get()) }
+    viewModel { LeaderboardViewModel() }
     //Activities
     viewModel { HomeActivityViewModel(get()) }
 }
