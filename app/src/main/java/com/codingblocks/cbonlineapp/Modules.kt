@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp
 import androidx.room.Room
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
+import com.codingblocks.cbonlineapp.viewmodels.LeaderboardViewModel
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import com.codingblocks.cbonlineapp.viewmodels.NotificationViewModel
 import org.koin.android.ext.koin.androidApplication
@@ -13,7 +14,7 @@ val viewModelModule = module {
     viewModel { HomeViewModel(get(), get(), get(), get()) }
     viewModel { MyCourseViewModel(get(), get(), get(), get(), get()) }
     viewModel { NotificationViewModel(get()) }
-
+    viewModel { LeaderboardViewModel(get()) }
 
 }
 val databaseModule = module {

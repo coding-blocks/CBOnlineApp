@@ -17,6 +17,8 @@ import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.viewmodels.LeaderboardViewModel
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_leaderboard.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.concurrent.thread
 
 class LeaderboardFragment : Fragment() {
@@ -24,6 +26,7 @@ class LeaderboardFragment : Fragment() {
     lateinit var attemptId: String
     lateinit var runId: String
     private val leaderboardAdapter = LeaderboardListAdapter(LeaderboardDiffCallback())
+    private val leaderboardViewModel by viewModel<LeaderboardViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +60,6 @@ class LeaderboardFragment : Fragment() {
         val mLayoutManager = LinearLayoutManager(context)
         leaderboardList.layoutManager = mLayoutManager
         leaderboardList.adapter = leaderboardAdapter
-        val leaderboardViewModel = LeaderboardViewModel(runId)
         leaderboardViewModel.getLeaderboard()
         leaderboardViewModel.leaderboard.observe(this, Observer {
             if (it != null) {
