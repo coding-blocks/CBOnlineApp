@@ -28,9 +28,6 @@ class PreferenceHelper private constructor() {
         }
     }
 
-
-
-
     var SP_ACCESS_TOKEN_KEY: String
         get() = prefs!!.getString(ACCESS_TOKEN, ACCESS_TOKEN) ?: ""
         set(value) {
@@ -43,6 +40,9 @@ class PreferenceHelper private constructor() {
             prefs!!.edit().putString(JWT_TOKEN, value).apply()
         }
 
+    fun clear() {
+        prefs?.edit()?.clear()?.apply()
+    }
     var SP_JWT_REFRESH_TOKEN: String
         get() = prefs!!.getString(REFRESH_TOKEN, REFRESH_TOKEN) ?: ""
         set(value) {

@@ -23,11 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import com.codingblocks.cbonlineapp.PreferenceManager
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.AppDatabase_Impl
-import com.codingblocks.cbonlineapp.database.BaseDao
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
@@ -72,7 +68,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         AppUpdateManagerFactory.create(this)
     }
 
-  private val preference : PreferenceManager= PreferenceManager()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prefs = getPrefs()
@@ -152,12 +148,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         nav_view.getHeaderView(0).login_button.setOnClickListener {
             val builder = AlertDialog.Builder(this)
+            val dialogView=layoutInflater.inflate(R.layout.logout_dialogue , null)
+            builder.setView(dialogView)
             builder.setTitle("Confirm Logout")
             builder.setMessage("Are you sure you want to logout?")
             builder.setPositiveButton("Logout") { _, _ ->
                 deleteDatabaseFile(this@HomeActivity, "app-database")
                 baseContext.deleteDatabase("app-database")
-                preference.clear()
+                prefs.clear()
                 startActivity(Intent(this, LoginActivity::class.java))
                 finishAffinity()
             }
@@ -168,10 +166,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             dialog.show()
             prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
             prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
-            if (nav_view.getHeaderView(0).login_button.text == "Logout") {
                 removeShortcuts()
                 invalidateToken()
-            }
             startActivity(intentFor<LoginActivity>().singleTop())
             finish()
         }
@@ -442,8 +438,4 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
 }
