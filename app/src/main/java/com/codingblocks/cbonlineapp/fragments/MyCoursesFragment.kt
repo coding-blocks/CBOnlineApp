@@ -1,6 +1,15 @@
 package com.codingblocks.cbonlineapp.fragments
 
+import android.annotation.TargetApi
+import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.Icon
+import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -9,20 +18,26 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.caverock.androidsvg.SVG
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
+import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.google.firebase.analytics.FirebaseAnalytics
+import okhttp3.Request
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.ctx
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 class MyCoursesFragment : Fragment(), AnkoLogger {
 
@@ -88,6 +103,9 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         viewModel.progress.observer(viewLifecycleOwner) {
             ui.swipeRefreshLayout.isRefreshing = it
         }
+
+        createShortcut()
+
     }
 
     private fun displayCourses(searchQuery: String = "") {
@@ -123,4 +141,47 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         })
         super.onCreateOptionsMenu(menu, inflater)
     }
+
+    @TargetApi(28)
+    fun createShortcut() {
+        val sM = activity?.getSystemService(ShortcutManager::class.java)
+        viewModel.runDao.getTopRun().observer(viewLifecycleOwner) {
+
+            val data = viewModel.courseDao.getCourse(it.crCourseId)
+
+            val intent = Intent(activity, MyCourseActivity::class.java)
+            intent.action = Intent.ACTION_VIEW
+            intent.putExtra("courseId",it.crCourseId)
+            intent.putExtra("course_name",data.title)
+            intent.putExtra("runAttemptId",it.crAttemptId)
+            val shortcut =  ShortcutInfo.Builder(activity,"topcourse")
+            shortcut.setIntent(intent)
+            shortcut.setLongLabel(it.title)
+            shortcut.setShortLabel(it.title)
+            shortcut.setDisabledMessage("Login to open this")
+
+            doAsync {
+                MediaUtils.okHttpClient.newCall(Request.Builder().url(data.logo).build())
+                    .execute().body()?.let {
+                        with(SVG.getFromInputStream(it.byteStream())){
+                            val picDrawable = PictureDrawable(
+                                this.renderToPicture(
+                                    400,400
+                                )
+                            )
+                            val bitmap = Bitmap.createBitmap(picDrawable.intrinsicWidth,picDrawable.intrinsicHeight,Bitmap.Config.ARGB_8888)
+                            val canvas = Canvas(bitmap)
+                            picDrawable.setBounds(0,0,canvas.width, canvas.height)
+                            picDrawable.draw(canvas)
+                            shortcut.setIcon(Icon.createWithBitmap(bitmap))
+                            sM!!.dynamicShortcuts = Arrays.asList(shortcut.build())
+                        }
+
+                    }
+            }
+
+        }
+    }
+
+
 }

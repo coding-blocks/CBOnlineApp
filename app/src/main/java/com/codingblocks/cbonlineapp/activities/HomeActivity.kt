@@ -135,7 +135,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             )
         nav_view.getHeaderView(0).login_button.text = resources.getString(R.string.logout)
         if (Build.VERSION.SDK_INT >= 25) {
-            createShortcut()
+           // createShortcut()
         }
         nav_view.getHeaderView(0).login_button.setOnClickListener {
             viewModel.prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
@@ -364,7 +364,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     @TargetApi(25)
     private fun removeShortcuts() {
         val shortcutManager = getSystemService(ShortcutManager::class.java)
-        shortcutManager.disableShortcuts(Arrays.asList("shortcut1"))
+        //shortcutManager.disableShortcuts(Arrays.asList("shortcut1"))
+        shortcutManager.disableShortcuts((Arrays.asList("topcourse")))
         shortcutManager.removeAllDynamicShortcuts()
     }
 }
