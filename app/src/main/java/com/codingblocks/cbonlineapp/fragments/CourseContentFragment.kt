@@ -46,7 +46,6 @@ class CourseContentFragment : Fragment(), AnkoLogger,
     lateinit var attemptId: String
     private val viewModel by sharedViewModel<MyCourseViewModel>()
 
-
     override fun startDownload(
         videoId: String,
         id: String,
@@ -76,7 +75,8 @@ class CourseContentFragment : Fragment(), AnkoLogger,
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
@@ -111,7 +111,7 @@ class CourseContentFragment : Fragment(), AnkoLogger,
             view.swiperefresh.isRefreshing = it
         }
         viewModel.revoked.observer(viewLifecycleOwner) {
-            if(it){
+            if (it) {
                 alert {
                     title = "Error Fetching Course"
                     message = """

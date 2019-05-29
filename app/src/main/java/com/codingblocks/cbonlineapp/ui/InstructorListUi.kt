@@ -19,7 +19,7 @@ import org.jetbrains.anko.textView
 import org.jetbrains.anko.wrapContent
 
 class InstructorListUi : AnkoComponent<ViewGroup> {
-    //custom views using anko
+    // custom views using anko
     inline fun ViewManager.circleImageView(theme: Int = 0, init: CircleImageView.() -> Unit) = ankoView({ CircleImageView(it) }, theme, init)
 
     lateinit var instructorTitle: TextView
@@ -31,7 +31,7 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
 
         constraintLayout {
             font = Typeface.createFromAsset(context.assets, "fonts/NunitoSans-Regular.ttf")
-            //write this before using its id on another layout
+            // write this before using its id on another layout
             instructorImgView = circleImageView {
                 id = View.generateViewId()
             }.lparams(width = dip(150), height = dip(150)) {

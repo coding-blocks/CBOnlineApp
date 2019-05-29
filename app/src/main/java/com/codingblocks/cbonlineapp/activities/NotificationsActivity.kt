@@ -18,7 +18,6 @@ import com.codingblocks.cbonlineapp.adapters.NotificationsAdapter
 import com.codingblocks.cbonlineapp.commons.NotificationClickListener
 import com.codingblocks.cbonlineapp.commons.NotificationsDiffCallback
 import com.codingblocks.cbonlineapp.database.NotificationDao
-import com.codingblocks.cbonlineapp.database.models.Notification
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
@@ -65,13 +64,12 @@ class NotificationsActivity : AppCompatActivity() {
                     customTabsIntent.launchUrl(this@NotificationsActivity, Uri.parse(url))
                 }
             }
-
         }
         notificationAdapter.apply {
             onClick = eventClickListener
         }
 
-        val itemTouch = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+        val itemTouch = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                 return false
             }
@@ -88,7 +86,6 @@ class NotificationsActivity : AppCompatActivity() {
         }
         val helper = ItemTouchHelper(itemTouch)
         helper.attachToRecyclerView(notificationRv)
-
     }
 
     private fun setUpUI() {
@@ -106,7 +103,6 @@ class NotificationsActivity : AppCompatActivity() {
             }
         }
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.notification_menu, menu)
@@ -139,7 +135,6 @@ class NotificationsActivity : AppCompatActivity() {
             onClick = null
         }
     }
-
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))

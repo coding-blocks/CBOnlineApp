@@ -15,7 +15,7 @@ val viewModelModule = module {
     viewModel { MyCourseViewModel(get(), get(), get(), get(), get()) }
     viewModel { NotificationViewModel(get()) }
 
-    //Activities
+    // Activities
     viewModel { HomeActivityViewModel(get()) }
 }
 val databaseModule = module {
@@ -68,6 +68,4 @@ val databaseModule = module {
         val database: AppDatabase = get()
         database.notificationDao()
     }
-
-
 }

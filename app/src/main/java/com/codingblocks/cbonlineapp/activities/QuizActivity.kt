@@ -32,12 +32,11 @@ class QuizActivity : AppCompatActivity() {
         quizId.let {
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.framelayout_quiz, AboutQuizFragment.newInstance(it,attemptId,qnaId))
+                .replace(R.id.framelayout_quiz, AboutQuizFragment.newInstance(it, attemptId, qnaId))
                 .setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
                 .addToBackStack("")
                 .commit()
         }
-
     }
 
     override fun attachBaseContext(newBase: Context) {
@@ -45,11 +44,9 @@ class QuizActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        // Components.showconfirmation(this, "exit")
-        if(supportFragmentManager.backStackEntryCount == 0){
+        if (supportFragmentManager.backStackEntryCount == 0) {
             Components.showconfirmation(this, "exit")
-        }
-        else{
+        } else {
             supportFragmentManager.popBackStack()
         }
     }

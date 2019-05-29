@@ -9,7 +9,6 @@ import android.widget.TextView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.onlineapi.models.Leaderboard
 import org.jetbrains.anko.AnkoLogger
-import java.util.*
 
 class LeaderboardListAdapter(internal var context: Context,
                              var list: ArrayList<Leaderboard>?
@@ -40,12 +39,12 @@ class LeaderboardListAdapter(internal var context: Context,
             val attemptViewHolder = ViewHolder(pos, name, college, score)
             view.tag = attemptViewHolder
         }
-        val e = getItem(position)//to differentiate between filtered list and todo list
+        val e = getItem(position) // to differentiate between filtered list and todo list
         val attemptViewHolder = view.tag as ViewHolder
         attemptViewHolder.posTextView.text = (position + 1).toString() + ""
         attemptViewHolder.nameTextView.text = e?.userName!!
         attemptViewHolder.collegeTextView.text = e.collegeName
-        attemptViewHolder.scoreTextView.text = e.score.toString() ?:"N/a"
+        attemptViewHolder.scoreTextView.text = e.score.toString() ?: "N/a"
 
         return view
     }

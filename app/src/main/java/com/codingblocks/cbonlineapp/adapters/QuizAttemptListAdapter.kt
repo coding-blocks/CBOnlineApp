@@ -3,18 +3,17 @@ package com.codingblocks.cbonlineapp.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.formatDate
 import com.codingblocks.onlineapi.models.QuizAttempt
 import kotlinx.android.synthetic.main.quiz_attempt_list.view.*
 
-class QuizAttemptListAdapter(val dataset: ArrayList<QuizAttempt>, val clickListner : (QuizAttempt) -> Unit) :
+class QuizAttemptListAdapter(val dataset: ArrayList<QuizAttempt>, val clickListner: (QuizAttempt) -> Unit) :
     RecyclerView.Adapter<QuizAttemptListAdapter.QuizAttemptViewHolder>() {
 
     class QuizAttemptViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(attempt : QuizAttempt, clickListner : (QuizAttempt) -> Unit) {
+        fun bind(attempt: QuizAttempt, clickListner: (QuizAttempt) -> Unit) {
             view.numberTv.text = (adapterPosition + 1).toString()
             view.statusTv.text = attempt.status
             view.dateTv.text = formatDate(attempt.createdAt!!)

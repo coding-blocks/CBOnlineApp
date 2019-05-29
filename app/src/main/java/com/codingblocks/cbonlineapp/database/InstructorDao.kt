@@ -10,6 +10,4 @@ abstract class InstructorDao : BaseDao<Instructor> {
 
     @Query("SElECT * FROM Instructor ")
     abstract fun getInstructors(): LiveData<List<Instructor>>
-
-
 }

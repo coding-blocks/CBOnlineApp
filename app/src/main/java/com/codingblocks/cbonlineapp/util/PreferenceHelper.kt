@@ -3,8 +3,6 @@ package com.codingblocks.cbonlineapp.util
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import androidx.annotation.Keep
-
 
 class PreferenceHelper private constructor() {
     companion object {
@@ -27,9 +25,6 @@ class PreferenceHelper private constructor() {
             return instance
         }
     }
-
-
-
 
     var SP_ACCESS_TOKEN_KEY: String
         get() = prefs!!.getString(ACCESS_TOKEN, ACCESS_TOKEN) ?: ""

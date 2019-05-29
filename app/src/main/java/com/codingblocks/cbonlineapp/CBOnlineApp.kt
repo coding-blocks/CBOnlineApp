@@ -47,7 +47,7 @@ class CBOnlineApp : Application() {
             .setNotificationOpenedHandler(NotificationOpenedHandler())
             .init()
 
-        //Initiate Calligraphy
+        // Initiate Calligraphy
         ViewPump.init(
             ViewPump.builder()
                 .addInterceptor(
@@ -61,7 +61,7 @@ class CBOnlineApp : Application() {
                 .build()
         )
 
-        //Configure Routers
+        // Configure Routers
         try {
             Router.initActivityRouter(applicationContext, IActivityRouteTableInitializer { router ->
                 router["activity://course/https://online.codingblocks.com/classroom/course/:s{$COURSE_ID}/run/:s{$RUN_ID}/overview"] =
