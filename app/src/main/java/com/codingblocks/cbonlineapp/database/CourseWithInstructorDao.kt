@@ -9,10 +9,8 @@ import androidx.room.RoomWarnings
 import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
 import com.codingblocks.cbonlineapp.database.models.Instructor
 
-
 @Dao
 interface CourseWithInstructorDao {
-
 
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("""
@@ -32,8 +30,6 @@ interface CourseWithInstructorDao {
         """)
     fun getInstructorWithCourseIdNonLive(courseID: String): List<Instructor>
 
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(join: CourseWithInstructor)
-
 }

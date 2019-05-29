@@ -23,5 +23,3 @@ const val QUIZ_ID = "quiz_id"
 const val QUIZ_QNA = "quiz_qna_id"
 
 const val QUIZ_ATTEMPT_ID = "quiz_attempt_id"
-
-

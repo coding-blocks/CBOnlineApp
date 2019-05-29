@@ -24,20 +24,16 @@ import kotlinx.android.synthetic.main.item_notes.view.deleteTv
 import kotlinx.android.synthetic.main.item_notes.view.editTv
 import kotlinx.android.synthetic.main.item_notes.view.timeTv
 import org.jetbrains.anko.design.snackbar
-import java.util.*
-
 
 class VideosNotesAdapter(
     private var notesData: ArrayList<NotesModel>,
     var listener: OnItemClickListener
 ) : RecyclerView.Adapter<VideosNotesAdapter.NotesViewHolder>() {
 
-
     private lateinit var context: Context
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
     private lateinit var notesDao: NotesDao
-
 
     fun setData(notesData: ArrayList<NotesModel>) {
         this.notesData = notesData
@@ -49,7 +45,6 @@ class VideosNotesAdapter(
         database = AppDatabase.getInstance(context)
         contentDao = database.contentDao()
         notesDao = database.notesDao()
-
 
         return NotesViewHolder(
             LayoutInflater.from(parent.context)
@@ -85,7 +80,6 @@ class VideosNotesAdapter(
                 } else {
                     createNote(note)
                 }
-
             }
 
             itemView.deleteTv.setOnClickListener {
@@ -134,11 +128,9 @@ class VideosNotesAdapter(
                                 itemView.bodyTv.isEnabled = false
                                 notesDao.update(notesModel)
                             } catch (e: Exception) {
-
                             }
                     }
                 })
         }
-
     }
 }

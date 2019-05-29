@@ -31,7 +31,6 @@ class MyCourseViewModel(
     var progress: MutableLiveData<Boolean> = MutableLiveData()
     var revoked: MutableLiveData<Boolean> = MutableLiveData()
 
-
     fun updatehit(attemptId: String) {
         runDao.updateHit(attemptId)
     }
@@ -230,7 +229,6 @@ class MyCourseViewModel(
                                                                                     content.id
                                                                                 )
                                                                             )
-
                                                                         } else if (oldContent != newContent) {
                                                                             contentLecture.isDownloaded =
                                                                                 oldContent.contentLecture.isDownloaded
@@ -242,10 +240,8 @@ class MyCourseViewModel(
                                                             }
                                                         }
                                                     })
-
                                         }
                                 }
-
                             }
                         }
                         progress.value = false
@@ -270,5 +266,4 @@ class MyCourseViewModel(
 //        }
 //    }
     }
-
 }

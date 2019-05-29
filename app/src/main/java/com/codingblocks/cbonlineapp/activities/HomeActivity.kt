@@ -8,7 +8,6 @@ import android.content.IntentFilter
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -48,8 +47,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.File
-import java.util.*
+import java.util.Arrays
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     AnkoLogger {
@@ -115,7 +113,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             startActivity(intentFor<LoginActivity>().singleTop())
         }
         fetchUser()
-        //adding label to nav drawer items
+        // adding label to nav drawer items
         nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
 
         filter = IntentFilter()
@@ -179,9 +177,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // Checks that the platform will allow the specified type of update.
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
                 // For a flexible update, use AppUpdateType.FLEXIBLE
-                && appUpdateInfo.isUpdateTypeAllowed(IMMEDIATE)
+                appUpdateInfo.isUpdateTypeAllowed(IMMEDIATE)
             ) {
                 // Request the update.
                 appUpdateManager.startUpdateFlowForResult(
@@ -209,7 +207,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onResponseFailed() {
                 Components.showconfirmation(this@HomeActivity, "verify")
             }
-
         })
     }
 
@@ -336,7 +333,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     )
                 }
             }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -346,7 +342,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             menuItem.icon = resources.getDrawable(R.drawable.ic_notification)
         } else {
             menuItem.icon = resources.getDrawable(R.drawable.ic_notification_active)
-
         }
         return true
     }

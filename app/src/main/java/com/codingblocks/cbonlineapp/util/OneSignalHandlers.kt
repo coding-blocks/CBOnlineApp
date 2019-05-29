@@ -22,7 +22,6 @@ private val notificationDao = StandAloneContext.getKoin().koinContext.get<Notifi
 
 class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
 
-
     override fun notificationOpened(result: OSNotificationOpenResult) {
         val url = result.notification.payload.launchURL
         val data = result.notification.payload.additionalData
@@ -48,11 +47,9 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
             notificationDao.updateseen(position)
         }
     }
-
 }
 
 class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
-
 
     override fun notificationReceived(notification: OSNotification) {
         val data = notification.payload.additionalData
@@ -78,6 +75,4 @@ class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
                 CBOnlineApp.mInstance.sendBroadcast(local)
             }
     }
-
 }
-

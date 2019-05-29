@@ -65,11 +65,9 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                         startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                         horizontalBias = 0.0f
                         endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-
                     }
                     viewPager = customViewPager {
                         id = View.generateViewId()
-
                     }.lparams(width = matchParent, height = dip(155)) {
                         marginStart = dip(8)
                         marginEnd = dip(8)
@@ -78,7 +76,6 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                         horizontalBias = 0.0f
                         topToBottom = titleText.id
                         endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-
                     }
                     homeImg = imageView(R.drawable.ic_home) {
                         id = View.generateViewId()

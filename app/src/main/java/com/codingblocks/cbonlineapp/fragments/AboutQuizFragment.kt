@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.QuizAttemptListAdapter
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
-import com.codingblocks.cbonlineapp.util.OnItemClickListener
 import com.codingblocks.cbonlineapp.util.QUIZ_ID
 import com.codingblocks.cbonlineapp.util.QUIZ_QNA
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
@@ -51,10 +50,11 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
     lateinit var skeletonScreen: SkeletonScreen
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_about_quiz, container, false).apply {
-        quizAttemptListAdapter = QuizAttemptListAdapter(attemptList) { attempt : QuizAttempt ->
+        quizAttemptListAdapter = QuizAttemptListAdapter(attemptList) { attempt: QuizAttempt ->
             initiateQuiz(attempt.id)
         }
     }
@@ -116,7 +116,6 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
                     quizType.text = getString(R.string.mcq)
                 }
             })
-
     }
 
     private fun fetchQuizAttempts() {
@@ -135,7 +134,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
         fragmentTransaction.replace(
             R.id.framelayout_quiz,
-            QuizFragment.newInstance(quizId,qnaId, attemptId, quizAttemptId), "quiz"
+            QuizFragment.newInstance(quizId, qnaId, attemptId, quizAttemptId), "quiz"
         )
         fragmentTransaction.addToBackStack("")
         fragmentTransaction.commit()

@@ -36,10 +36,9 @@ class HomeActivityViewModel(var notificationDao: NotificationDao) : ViewModel() 
                     prefs.SP_JWT_REFRESH_TOKEN = rt
                     Clients.authJwt = jwt
                     val status = OneSignal.getPermissionSubscriptionState()
-                    //Set Player ID For OneSignal
+                    // Set Player ID For OneSignal
                     Clients.onlineV2JsonApi.setPlayerId(Player(playerId = status.subscriptionStatus.userId))
                         .enqueue(retrofitCallback { _, _ ->
-
                         })
                     onCompleteListener.onResponseComplete()
                 } else if (response?.code() == 500 && prefs.SP_ACCESS_TOKEN_KEY == "access_token") {
@@ -53,7 +52,7 @@ class HomeActivityViewModel(var notificationDao: NotificationDao) : ViewModel() 
         setJWTToken()
         Clients.api.getMe().enqueue(retrofitCallback { t, resp ->
             resp.let {
-                if(resp?.isSuccessful == true){
+                if (resp?.isSuccessful == true) {
                     resp.body()?.let {
                         try {
                             val jSONObject =
@@ -65,7 +64,7 @@ class HomeActivityViewModel(var notificationDao: NotificationDao) : ViewModel() 
                         }
                     }
                     onCompleteListener.onResponseComplete()
-                }else{
+                } else {
                     onCompleteListener.onResponseFailed()
                 }
             }

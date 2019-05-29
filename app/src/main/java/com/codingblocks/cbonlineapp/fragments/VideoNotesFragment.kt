@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +22,6 @@ import kotlinx.android.synthetic.main.fragment_notes.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
-
 class VideoNotesFragment : Fragment(), AnkoLogger {
     private var param1: String? = null
 
@@ -42,8 +40,11 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_notes, container, false)
 
@@ -54,17 +55,14 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
                 try {
                     (activity as OnItemClickListener).onItemClick(position, id)
                 } catch (cce: ClassCastException) {
-
                 }
             }
-
         })
         view.notesRv.layoutManager = LinearLayoutManager(context)
         view.notesRv.adapter = notesAdapter
         val itemDecorator = DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL)
         itemDecorator.setDrawable(ContextCompat.getDrawable(context!!, R.drawable.divider)!!)
         view.notesRv.addItemDecoration(itemDecorator)
-
 
         notesDao.getNotes(param1!!).observer(this) {
             notesAdapter.setData(it as ArrayList<NotesModel>)
@@ -76,7 +74,6 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
                 view.emptyTv.visibility = View.GONE
             }
         }
-
 
         return view
     }
@@ -121,10 +118,8 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
                     }
                 }
             }
-
         })
     }
-
 
     companion object {
         @JvmStatic

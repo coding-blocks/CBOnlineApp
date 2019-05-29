@@ -21,7 +21,6 @@ import kotlinx.android.synthetic.main.item_carousel.view.title
 class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Context?) :
     PagerAdapter() {
 
-
     override fun isViewFromObject(p0: View, p1: Any): Boolean {
         return (p0 == p1)
     }
@@ -42,7 +41,7 @@ class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Co
             view.imgView.loadSvg(list[position].img)
         }
         view.button.setOnClickListener {
-            if (list[position].buttonLink.contains("course",true)) {
+            if (list[position].buttonLink.contains("course", true)) {
                 Router.open("activity://course/" + list[position].buttonLink)
             } else {
                 val builder = CustomTabsIntent.Builder().enableUrlBarHiding()
@@ -61,5 +60,4 @@ class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Co
     override fun destroyItem(container: ViewGroup, position: Int, view: Any) {
         container.removeView(view as FrameLayout)
     }
-
 }

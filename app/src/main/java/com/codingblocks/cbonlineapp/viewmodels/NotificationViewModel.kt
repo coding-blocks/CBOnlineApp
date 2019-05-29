@@ -5,6 +5,4 @@ import com.codingblocks.cbonlineapp.database.NotificationDao
 
 class NotificationViewModel(
     var notificationDao: NotificationDao
-    ) : ViewModel() {
-
-}
+) : ViewModel()

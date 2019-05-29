@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,8 +30,11 @@ class AnnouncementsFragment : Fragment() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_annoucements, container, false)
         database = AppDatabase.getInstance(context!!)
@@ -69,6 +71,4 @@ class AnnouncementsFragment : Fragment() {
             }
         }
     }
-
-
 }

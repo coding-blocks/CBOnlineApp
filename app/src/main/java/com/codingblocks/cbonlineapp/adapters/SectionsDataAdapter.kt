@@ -12,10 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.onlineapi.models.Sections
-import com.ethanhua.skeleton.SkeletonScreen
 import kotlinx.android.synthetic.main.item_section.view.*
-import java.util.*
-
 
 class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : RecyclerView.Adapter<SectionsDataAdapter.CourseViewHolder>() {
 
@@ -30,7 +27,6 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
         holder.bindView(sectionData!![position])
     }
-
 
     override fun getItemCount(): Int {
 
@@ -89,12 +85,10 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
                     }
                 } else if (i.contentable == "document") {
                     contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_document))
-
                 } else if (i.contentable == "code-challenge") {
                     contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
                 }
                 subTitle.text = i.title
-
 
                 ll.addView(inflatedView)
             }
@@ -106,7 +100,6 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
 //            itemView.arrow.setOnClickListener {
 //                showOrHide(ll, itemView)
 //            }
-
         }
 
         private fun showOrHide(ll: View, itemView: View) {
@@ -127,6 +120,5 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
                 itemView.arrow.startAnimation(arrowAnimation)
             }
         }
-
     }
 }

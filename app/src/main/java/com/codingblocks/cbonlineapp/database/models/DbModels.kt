@@ -10,7 +10,6 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.sql.Date
 
-
 open class BaseModel(
     @NonNull
     @PrimaryKey
@@ -35,7 +34,6 @@ data class Course(
     var categoryId: Int
 
 ) : BaseModel(uid, updated_at)
-
 
 @Entity(
     indices = [Index("crCourseId")],
@@ -108,7 +106,7 @@ data class CourseWithInstructor(
         entity = CourseRun::class,
         parentColumns = ["crUid"],
         childColumns = ["run_id"],
-        onDelete = ForeignKey.SET_NULL //or CASCADE
+        onDelete = ForeignKey.SET_NULL // or CASCADE
     ))]
 )
 data class CourseSection(
@@ -128,7 +126,7 @@ data class CourseSection(
         entity = CourseSection::class,
         parentColumns = ["id"],
         childColumns = ["section_id"],
-        onDelete = ForeignKey.SET_NULL //or CASCADE
+        onDelete = ForeignKey.SET_NULL // or CASCADE
     ))]
 )
 data class CourseContent(
@@ -220,7 +218,6 @@ data class ContentVideo(
     var videoUpdatedAt: String = ""
 )
 
-
 @Entity
 data class ContentCodeChallenge(
     var codeUid: String = "",
@@ -255,7 +252,7 @@ data class ContentCsvModel(
         entity = CourseContent::class,
         parentColumns = ["id"],
         childColumns = ["contentId"],
-        onDelete = ForeignKey.CASCADE //or CASCADE
+        onDelete = ForeignKey.CASCADE // or CASCADE
     ))]
 )
 data class DoubtsModel(
@@ -275,7 +272,7 @@ data class DoubtsModel(
         entity = CourseContent::class,
         parentColumns = ["id"],
         childColumns = ["contentId"],
-        onDelete = ForeignKey.CASCADE //or CASCADE
+        onDelete = ForeignKey.CASCADE // or CASCADE
     ))]
 )
 data class NotesModel(
@@ -298,10 +295,3 @@ data class Notification(
     val seen: Boolean = false,
     val videoId: String = ""
 )
-
-
-
-
-
-
-
