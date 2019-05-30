@@ -4,7 +4,14 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.wrapContent
+import org.jetbrains.anko.padding
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.textView
 
 class LeaderboardCardUi : AnkoComponent<ViewGroup> {
 
