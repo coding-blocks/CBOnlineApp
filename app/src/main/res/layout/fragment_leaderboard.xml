@@ -7,12 +7,14 @@
 
     <include
         android:id="@+id/header_view_leaderboard"
+        android:visibility="visible"
         layout="@layout/leaderboard_header" />
 
     <ProgressBar
         android:id="@+id/leaderboardProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="visible"
         android:layout_gravity="center" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -26,10 +28,10 @@
         android:id="@+id/emptyLeaderboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:fontFamily="@font/nunitosans_regular"
         android:background="@color/white"
-        android:gravity="center_horizontal"
-        android:text="Leaderboard not available for this course!!"
+        android:text="@string/leaderboard_emptyView"
         android:textColor="@color/salmon"
         android:textSize="26sp"
         android:visibility="gone" />

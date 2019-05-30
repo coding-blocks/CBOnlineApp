@@ -26,8 +26,6 @@ class LeaderboardFragment : Fragment() {
         arguments?.let {
             runId = it.getString(RUN_ATTEMPT_ID)
         }
-
-        // leaderboardListAdapter = LeaderboardListAdapter(data)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):

@@ -80,6 +80,7 @@ interface OnlineJsonApi {
     @GET("runs")
     fun getMyCourses(
         @Query("enrolled") enrolled: String = "true",
+        @Query("filter[unlisted]") unlisted: String = "false",
         @Query("include") include: String = "course,run_attempts"
     ): Call<ArrayList<MyCourseRuns>>
 

@@ -91,28 +91,36 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.commit()
-        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != "access_token" && !NetworkUtils.isNetworkAvailable(this)) {
-            transaction.replace(R.id.fragment_holder, MyCoursesFragment())
-            setUser()
-        } else {
-            transaction.replace(R.id.fragment_holder, HomeFragment())
+
+        if (savedInstanceState == null) {
+
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.commit()
+            if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != "access_token" && !NetworkUtils.isNetworkAvailable(
+                    this
+                )
+            ) {
+                transaction.replace(R.id.fragment_holder, MyCoursesFragment())
+                setUser()
+            } else {
+                transaction.replace(R.id.fragment_holder, HomeFragment())
+            }
+            when {
+                intent.getStringExtra("course") == "mycourses" -> transaction.replace(
+                    R.id.fragment_holder,
+                    MyCoursesFragment()
+                )
+                intent.getStringExtra("course") == "allcourses" -> transaction.replace(
+                    R.id.fragment_holder,
+                    AllCourseFragment()
+                )
+            }
+            nav_view.getHeaderView(0).login_button.setOnClickListener {
+                startActivity(intentFor<LoginActivity>().singleTop())
+            }
+            fetchUser()
         }
-        when {
-            intent.getStringExtra("course") == "mycourses" -> transaction.replace(
-                R.id.fragment_holder,
-                MyCoursesFragment()
-            )
-            intent.getStringExtra("course") == "allcourses" -> transaction.replace(
-                R.id.fragment_holder,
-                AllCourseFragment()
-            )
-        }
-        nav_view.getHeaderView(0).login_button.setOnClickListener {
-            startActivity(intentFor<LoginActivity>().singleTop())
-        }
-        fetchUser()
+
         // adding label to nav drawer items
         nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
 
