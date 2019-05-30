@@ -11,6 +11,7 @@ import com.codingblocks.cbonlineapp.fragments.AnnouncementsFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
 import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
 import com.codingblocks.cbonlineapp.fragments.OverviewFragment
+import com.codingblocks.cbonlineapp.fragments.LeaderboardFragment
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
@@ -33,7 +34,6 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
 
     private val viewModel by viewModel<MyCourseViewModel>()
 
-
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +51,6 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
         viewModel.updatehit(attemptId)
         viewModel.fetchCourse(attemptId)
         viewModel.getPromoVideo(courseId)
-
     }
 
     override fun onStart() {
@@ -81,8 +80,6 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
 
             youTubePlayerSupportFragment!!.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
         }
-
-
     }
 
     private fun setupViewPager(crUid: String, crCourseId: String) {
@@ -91,6 +88,7 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
         adapter.add(AnnouncementsFragment.newInstance(courseId), "About")
         adapter.add(CourseContentFragment.newInstance(attemptId), "Course Content")
         adapter.add(DoubtsFragment.newInstance(attemptId, crCourseId), "Doubts")
+        adapter.add(LeaderboardFragment.newInstance(runId), "Leaderboard")
 
         htab_viewpager.adapter = adapter
         htab_tabs.setupWithViewPager(htab_viewpager)
@@ -98,6 +96,8 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
         htab_tabs.getTabAt(1)?.setIcon(R.drawable.ic_announcement)
         htab_tabs.getTabAt(2)?.setIcon(R.drawable.ic_docs)
         htab_tabs.getTabAt(3)?.setIcon(R.drawable.ic_announcement)
+
+        htab_tabs.getTabAt(4)?.setIcon(R.drawable.ic_leaderboard)
         htab_tabs.getTabAt(2)?.select()
         htab_viewpager.offscreenPageLimit = 4
     }

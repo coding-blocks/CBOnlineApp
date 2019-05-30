@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
@@ -15,7 +14,10 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.ViewPagerAdapter
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
-import com.codingblocks.cbonlineapp.util.*
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.QUIZ_QNA
+import com.codingblocks.cbonlineapp.util.QUIZ_ID
+import com.codingblocks.cbonlineapp.util.QUIZ_ATTEMPT_ID
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizSubmission
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -26,9 +28,7 @@ import kotlinx.android.synthetic.main.fragment_quiz.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor
 
-
 class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener {
-
 
     private lateinit var quizId: String
     private lateinit var qnaId: String
@@ -36,19 +36,19 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     private lateinit var quizAttemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var quizSubmissions: ArrayList<QuizSubmission>
-    private var isSubmitted : Boolean = false
-
+    private var isSubmitted: Boolean = false
 
     lateinit var mAdapter: ViewPagerAdapter
     var questionList = HashMap<Int, String>()
     var sheetBehavior: BottomSheetBehavior<*>? = null
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?)
-        : View? = inflater.inflate(R.layout.fragment_quiz, container, false).apply {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ):
+        View? = inflater.inflate(R.layout.fragment_quiz, container, false).apply {
         firebaseAnalytics = FirebaseAnalytics.getInstance(context)
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -74,20 +74,17 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                     if (index == quiz.questions!!.size - 1) {
                         Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, attemptResponse ->
                             attemptResponse?.body().let {
-                                mAdapter = ViewPagerAdapter(context!!, qnaId, quizAttemptId, attemptId, questionList, it?.submission, it?.result)
+                                mAdapter = ViewPagerAdapter(context!!, qnaId, quizAttemptId, questionList, it?.submission, it?.result)
                                 quizViewPager.adapter = mAdapter
                                 quizViewPager.currentItem = 0
                                 quizViewPager.setOnPageChangeListener(this)
                                 quizViewPager.offscreenPageLimit = 3
                             }
                         })
-
                     }
                 }
-
             }
         })
-
     }
 
     private fun setUpQuestionBottomSheet(size: Int) {
@@ -140,7 +137,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
         // hide submit button if quiz has already been submitted
         Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
             val body = response?.body()
-            if(body?.status.equals("FINAL")) {
+            if (body?.status.equals("FINAL")) {
                 isSubmitted = true
                 submitButton.visibility = View.GONE
             }
@@ -169,7 +166,6 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     }
 
     override fun onPageScrollStateChanged(state: Int) {
-
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -192,7 +188,6 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                 nextBtn.text = "Next"
                 nextBtn.setTextColor(Color.parseColor("#000000"))
                 prevBtn.setTextColor(Color.parseColor("#000000"))
-
             }
         }
     }
@@ -242,8 +237,6 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                     putString(QUIZ_QNA, qnaId)
                     putString(RUN_ATTEMPT_ID, attemptId)
                     putString(QUIZ_ATTEMPT_ID, quizAttemptId)
-
-
                 }
             }
     }
@@ -257,6 +250,4 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             firebaseAnalytics.logEvent("Open", params)
         }
     }
-
-
 }

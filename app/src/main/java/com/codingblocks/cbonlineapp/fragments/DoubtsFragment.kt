@@ -15,13 +15,10 @@ import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_doubts.*
 import org.jetbrains.anko.AnkoLogger
 
-
 private const val ARG_ATTEMPT_ID = "attempt_id"
 private const val ARG_COURSE_ID = "course_id"
 
-
 class DoubtsFragment : Fragment(), AnkoLogger {
-
 
     private val attemptId: String by lazy {
         arguments?.getString(ARG_ATTEMPT_ID) ?: ""
@@ -30,11 +27,13 @@ class DoubtsFragment : Fragment(), AnkoLogger {
         arguments?.getString(ARG_COURSE_ID) ?: ""
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?):
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ):
             View? = inflater.inflate(R.layout.fragment_doubts, container, false).apply {
     }
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -49,7 +48,6 @@ class DoubtsFragment : Fragment(), AnkoLogger {
                 it?.topicList?.topics?.let { it1 -> doubtsAdapter.setData(it1) }
             }
         })
-
     }
 
     companion object {
@@ -60,9 +58,7 @@ class DoubtsFragment : Fragment(), AnkoLogger {
                     arguments = Bundle().apply {
                         putString(ARG_ATTEMPT_ID, param1)
                         putString(ARG_COURSE_ID, crUid)
-
                     }
                 }
     }
-
 }

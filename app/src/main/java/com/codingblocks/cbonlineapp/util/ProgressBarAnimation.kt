@@ -11,5 +11,4 @@ class ProgressBarAnimation(private val progressBar: ProgressBar?, private val fr
         val value = from + (to - from) * interpolatedTime
         progressBar!!.progress = value.toInt()
     }
-
 }

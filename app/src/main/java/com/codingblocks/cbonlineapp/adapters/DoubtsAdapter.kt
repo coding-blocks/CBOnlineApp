@@ -25,7 +25,6 @@ class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>) : RecyclerVi
         holder.bindView(doubtsData[position])
     }
 
-
     override fun getItemCount(): Int {
         return doubtsData.size
     }
@@ -53,10 +52,7 @@ class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>) : RecyclerVi
                         .setSecondaryToolbarColor(context.resources.getColor(R.color.colorPrimary))
                 val customTabsIntent = builder.build()
                 customTabsIntent.launchUrl(context, Uri.parse("http://discuss.codingblocks.com/t/$DOUBT_ID"))
-
             }
-
-
         }
     }
 }

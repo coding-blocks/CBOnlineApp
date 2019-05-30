@@ -21,7 +21,6 @@ import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Comment
-import com.codingblocks.onlineapi.models.ContentId
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.RunAttemptsId
@@ -32,18 +31,14 @@ import kotlinx.android.synthetic.main.item_doubt.view.doubtTitle
 import kotlinx.android.synthetic.main.item_doubt.view.doubtTopic
 import kotlinx.android.synthetic.main.item_doubt.view.resolveDoubtTv
 import kotlinx.android.synthetic.main.item_doubt.view.showCommentsTv
-import java.util.*
-
 
 class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) :
     RecyclerView.Adapter<VideosDoubtsAdapter.DoubtsViewHolder>() {
-
 
     private lateinit var context: Context
     private lateinit var database: AppDatabase
     private lateinit var contentDao: ContentDao
     private lateinit var doubtDao: DoubtsDao
-
 
     fun setData(doubtsData: ArrayList<DoubtsModel>) {
         this.doubtsData = doubtsData
@@ -55,7 +50,6 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) :
         database = AppDatabase.getInstance(context)
         contentDao = database.contentDao()
         doubtDao = database.doubtsDao()
-
 
         return DoubtsViewHolder(
             LayoutInflater.from(parent.context)
@@ -122,7 +116,6 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) :
                         }
                     }
                 })
-
         }
 
         private fun fetchComments(dbtUid: String) {
@@ -160,11 +153,9 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) :
                                     formatDate(comment.updatedAt!!)
                                 ll.addView(inflatedView)
                             }
-
                         }
                     }
                     throwable?.let {
-
                     }
                 })
         }

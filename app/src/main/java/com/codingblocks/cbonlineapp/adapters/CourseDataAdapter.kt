@@ -19,12 +19,15 @@ import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import kotlin.collections.ArrayList
 
-
-class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
-                        val context: Context,
-                        private val courseWithInstructorDao: CourseWithInstructorDao, var type: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AnkoLogger {
+class CourseDataAdapter(
+    private var courseData: ArrayList<CourseRun>?,
+    val context: Context,
+    private val courseWithInstructorDao: CourseWithInstructorDao,
+    var type: String
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AnkoLogger {
 
     val ui = MyCourseCardUi()
 
@@ -33,7 +36,6 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
 
         notifyDataSetChanged()
     }
-
 
     override fun getItemCount(): Int {
 
@@ -73,7 +75,6 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
             }
         }
     }
-
 
     inner class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -139,7 +140,6 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
                 ui.enrollment.text = "Hurry Up! Enrollment ends $endDate"
             }
 
-
             itemView.setOnClickListener {
                 it.context.startActivity(
                         it.context.intentFor<CourseActivity>(
@@ -149,9 +149,6 @@ class CourseDataAdapter(private var courseData: ArrayList<CourseRun>?,
                         )
                 )
             }
-
-
         }
     }
 }
-

@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.fragments
 
-
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -27,11 +26,10 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 import kotlin.collections.ArrayList
-
 
 class HomeFragment : Fragment(), AnkoLogger {
 
@@ -50,7 +48,6 @@ class HomeFragment : Fragment(), AnkoLogger {
     ):
         View? = ui.createView(AnkoContext.create(ctx, this))
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
@@ -68,7 +65,6 @@ class HomeFragment : Fragment(), AnkoLogger {
                 viewModel.courseWithInstructorDao,
                 "allCourses"
             )
-
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
@@ -109,8 +105,8 @@ class HomeFragment : Fragment(), AnkoLogger {
                 val update = Runnable {
                     if (ui.viewPager.currentItem + 1 == it.size) {
                         ui.viewPager.setCurrentItem(0, true)
-                    }else{
-                        ui.viewPager.setCurrentItem(ui.viewPager.currentItem+1, true)
+                    } else {
+                        ui.viewPager.setCurrentItem(ui.viewPager.currentItem + 1, true)
                     }
                 }
                 val swipeTimer = Timer()
@@ -122,12 +118,10 @@ class HomeFragment : Fragment(), AnkoLogger {
             }
         }
 
-        viewModel.progress.observer(viewLifecycleOwner){
+        viewModel.progress.observer(viewLifecycleOwner) {
             ui.swipeRefreshLayout.isRefreshing = it
         }
-
     }
-
 
     private fun displayCourses(searchQuery: String = "") {
         viewModel.runDao.getRecommendedRuns().observer(viewLifecycleOwner) {
@@ -136,13 +130,11 @@ class HomeFragment : Fragment(), AnkoLogger {
                 courseDataAdapter.setData(it.shuffled().filter { c ->
                     c.title.contains(searchQuery, true)
                 } as ArrayList<CourseRun>)
-            }else{
+            } else {
                 viewModel.fetchRecommendedCourses()
             }
-
         }
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.home, menu)
@@ -164,5 +156,4 @@ class HomeFragment : Fragment(), AnkoLogger {
         })
         super.onCreateOptionsMenu(menu, inflater)
     }
-
 }
