@@ -9,7 +9,6 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
@@ -21,9 +20,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
@@ -32,7 +31,6 @@ import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.NetworkUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.viewmodels.HomeActivityViewModel
-import com.codingblocks.cbonlineapp.viewmodels.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
@@ -49,7 +47,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
+import java.util.Arrays
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     AnkoLogger {
@@ -154,9 +152,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         nav_view.getHeaderView(0).login_button.text = resources.getString(R.string.logout)
-        if (Build.VERSION.SDK_INT >= 25) {
-           // createShortcut()
-        }
         nav_view.getHeaderView(0).login_button.setOnClickListener {
             viewModel.prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
             viewModel.prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
@@ -172,16 +167,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun invalidateToken() {
-        doAsync {
-            viewModel.invalidateToken(object : OnCompleteListener {
-                override fun onResponseComplete() {
+        viewModel.invalidateTokenProgress.observer(this) {
+            if (it) {
+                doAsync {
                     FileUtils.deleteDatabaseFile(this@HomeActivity, "app-database")
                 }
-
-                override fun onResponseFailed() {
-                }
-            })
+            }
         }
+        viewModel.invalidateToken()
     }
 
     override fun onStart() {
@@ -218,31 +211,31 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun fetchToken(data: Uri) {
         val grantCode = data.getQueryParameter("code") as String
-        viewModel.fetchToken(grantCode, object : OnCompleteListener {
-            override fun onResponseComplete() {
+
+        viewModel.fetchTokenProgress.observer(this) {
+            if (it) {
                 fetchUser()
                 Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onResponseFailed() {
+            } else {
                 Components.showconfirmation(this@HomeActivity, "verify")
             }
-        })
+        }
+        viewModel.fetchToken(grantCode)
     }
 
     private fun fetchUser() {
         if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != "access_token") {
-            viewModel.getMe(object : OnCompleteListener {
-                override fun onResponseComplete() {
-                    setUser()
-                }
 
-                override fun onResponseFailed() {
+            viewModel.getMeProgress.observer(this) {
+                if (it) {
+                    setUser()
+                } else {
                     nav_view.getHeaderView(0).login_button.setOnClickListener {
                         startActivity(intentFor<LoginActivity>().singleTop())
                     }
                 }
-            })
+            }
+            viewModel.getMe()
         } else {
             nav_view.getHeaderView(0).login_button.setOnClickListener {
                 startActivity(intentFor<LoginActivity>().singleTop())
@@ -358,7 +351,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.home_notifications, menu)
         val menuItem = menu.findItem(R.id.action_notifications)
-        if (viewModel.notificationDao.count == 0) {
+        if (viewModel.getNotificationCount() == 0) {
             menuItem.icon = resources.getDrawable(R.drawable.ic_notification)
         } else {
             menuItem.icon = resources.getDrawable(R.drawable.ic_notification_active)
@@ -384,9 +377,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     @TargetApi(25)
     private fun removeShortcuts() {
         val shortcutManager = getSystemService(ShortcutManager::class.java)
-        //shortcutManager.disableShortcuts(Arrays.asList("shortcut1"))
-        shortcutManager.disableShortcuts((Arrays.asList("topcourse${0}")))
-        shortcutManager.disableShortcuts((Arrays.asList("topcourse${1}")))
+        shortcutManager.disableShortcuts((Arrays.asList("topcourse$0")))
+        shortcutManager.disableShortcuts((Arrays.asList("topcourse$1")))
         shortcutManager.removeAllDynamicShortcuts()
     }
 }
