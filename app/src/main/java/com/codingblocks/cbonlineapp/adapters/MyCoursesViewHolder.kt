@@ -11,9 +11,9 @@ import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.extensions.loadSvg
-import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.my_course_card_horizontal.view.*
 import org.jetbrains.anko.AnkoLogger
@@ -60,7 +60,7 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
                         itemView.courseBtn1.background = context.getDrawable(R.drawable.button_background)
                         itemView.courseBtn1.setOnClickListener {
                             it.context.startActivity(it.context.intentFor<MyCourseActivity>(
-                                COURSE_ID to id, RUN_ATTEMPT_ID to courseRun.crAttemptId, COURSE_NAME to title).singleTop())
+                                RUN_ATTEMPT_ID to courseRun.crAttemptId, COURSE_NAME to title, RUN_ID to courseRun.crUid).singleTop())
                         }
 //                        itemView.setOnClickListener {
 //                            it.context.startActivity(it.context.intentFor<MyCourseActivity>("course_id" to id, "attempt_id" to courseRun.crAttemptId, "courseName" to title).singleTop())

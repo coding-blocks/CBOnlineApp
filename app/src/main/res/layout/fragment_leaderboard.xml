@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/header_view_leaderboard"
+        layout="@layout/leaderboard_header" />
+
+    <ProgressBar
+        android:id="@+id/leaderboardProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/leaderboardList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:listitem="@layout/leader_board_list" />
+
+    <TextView
+        android:id="@+id/emptyLeaderboard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:text="Leaderboard not available for this course!!"
+        android:textColor="@color/salmon"
+        android:textSize="26sp"
+        android:visibility="gone" />
+
+</LinearLayout>
