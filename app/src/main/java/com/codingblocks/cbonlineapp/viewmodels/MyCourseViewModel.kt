@@ -16,15 +16,16 @@ import com.codingblocks.cbonlineapp.database.models.ContentVideo
 import com.codingblocks.cbonlineapp.database.models.CourseContent
 import com.codingblocks.cbonlineapp.database.models.CourseSection
 import com.codingblocks.cbonlineapp.database.models.SectionWithContent
+import com.codingblocks.cbonlineapp.extensions.getDistinct
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 
 class MyCourseViewModel(
-    var courseDao: CourseDao,
-    var runDao: CourseRunDao,
-    private var sectionWithContentsDao: SectionWithContentsDao,
-    private var contentsDao: ContentDao,
-    var sectionDao: SectionDao
+    private val courseDao: CourseDao,
+    private val runDao: CourseRunDao,
+    private val sectionWithContentsDao: SectionWithContentsDao,
+    private val contentsDao: ContentDao,
+    private val sectionDao: SectionDao
 ) : ViewModel() {
 
     var promoVideo: MutableLiveData<String> = MutableLiveData()
@@ -39,16 +40,30 @@ class MyCourseViewModel(
         promoVideo.value = courseDao.getCourse(courseId).promoVideo
     }
 
-    fun getRunAttempt(runId: String): String {
-        return runDao.getRunByRunId(runId).crAttemptId
-    }
+    fun getRunAttempt(runId: String): String = runDao.getRunByRunId(runId).crAttemptId
+
+    fun getContentWithSectionId(id: String) = sectionWithContentsDao.getContentWithSectionId(id).getDistinct()
+
+    fun updateContent(id: String, lectureContentId: String, s: String) = contentsDao.updateContent(id, lectureContentId, s)
+
+    fun updateProgressLecture(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressLecture(sectionId, contentId, s, s1)
+
+    fun updateProgressDocument(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressDocument(sectionId, contentId, s, s1)
+
+    fun updateProgressVideo(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressVideo(sectionId, contentId, s, s1)
+
+    fun updateProgressQna(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressQna(sectionId, contentId, s, s1)
+
+    fun getCourseSection(attemptId: String) = sectionDao.getCourseSection(attemptId)
+
+    fun getRunByAtemptId(attemptId: String) = runDao.getRunByAtemptId(attemptId)
 
     fun fetchCourse(attemptId: String) {
         Clients.onlineV2JsonApi.enrolledCourseById(attemptId)
             .enqueue(retrofitCallback { _, response ->
-                response?.let {
-                    if (it.isSuccessful) {
-                        it.body()?.run?.sections?.let { sectionList ->
+                response?.let { runAttempt ->
+                    if (runAttempt.isSuccessful) {
+                        runAttempt.body()?.run?.sections?.let { sectionList ->
                             sectionList.forEach { courseSection ->
                                 courseSection.run {
                                     val newSection = CourseSection(
@@ -121,7 +136,8 @@ class MyCourseViewModel(
                                                                                         contentVideoType.id,
                                                                                         contentVideoType.name
                                                                                             ?: "",
-                                                                                        contentVideoType.duration!!,
+                                                                                        contentVideoType.duration
+                                                                                            ?: 0L,
                                                                                         contentVideoType.description
                                                                                             ?: "",
                                                                                         contentVideoType.url
@@ -245,7 +261,7 @@ class MyCourseViewModel(
                             }
                         }
                         progress.value = false
-                    } else if (it.code() == 404) {
+                    } else if (runAttempt.code() == 404) {
                         revoked.value = true
                     }
                 }

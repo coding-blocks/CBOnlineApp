@@ -4,5 +4,5 @@ import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.database.NotificationDao
 
 class NotificationViewModel(
-    var notificationDao: NotificationDao
+    private val notificationDao: NotificationDao
 ) : ViewModel()
