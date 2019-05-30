@@ -7,7 +7,11 @@ import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.extensions.observer
-import com.codingblocks.cbonlineapp.fragments.*
+import com.codingblocks.cbonlineapp.fragments.AnnouncementsFragment
+import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
+import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
+import com.codingblocks.cbonlineapp.fragments.OverviewFragment
+import com.codingblocks.cbonlineapp.fragments.LeaderboardFragment
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
