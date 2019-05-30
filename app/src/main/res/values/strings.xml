@@ -98,4 +98,5 @@
     <string name="notifications">Notifications</string>
     <string name="search_courses">Search Courses</string>
     <string name="logout">Logout</string>
+    <string name="leaderboard_emptyView">Leaderboard not available for this course!!</string>
 </resources>
