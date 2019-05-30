@@ -27,13 +27,11 @@ class LeaderboardFragment : Fragment() {
             runId = it.getString(RUN_ATTEMPT_ID)
         }
 
-
         // leaderboardListAdapter = LeaderboardListAdapter(data)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = inflater.inflate(R.layout.fragment_leaderboard, container, false).apply {
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -67,5 +65,4 @@ class LeaderboardFragment : Fragment() {
                 }
             }
     }
-
 }

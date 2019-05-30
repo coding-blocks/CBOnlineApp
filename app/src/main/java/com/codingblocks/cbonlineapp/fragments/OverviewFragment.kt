@@ -18,8 +18,11 @@ class OverviewFragment : Fragment(), AnkoLogger {
     lateinit var attemptId: String
     lateinit var runId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?):
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ):
         View? = inflater.inflate(R.layout.fragment_overview, container, false).apply {
     }
 
@@ -30,7 +33,6 @@ class OverviewFragment : Fragment(), AnkoLogger {
             attemptId = it.getString(ARG_ATTEMPT_ID)!!
             runId = it.getString(ARG__RUN_ID)!!
         }
-
     }
 
     companion object {

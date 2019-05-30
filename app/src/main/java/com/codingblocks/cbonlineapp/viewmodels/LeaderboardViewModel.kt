@@ -15,5 +15,4 @@ class LeaderboardViewModel : ViewModel() {
             leaderboard.value = response?.body()
         })
     }
-
 }

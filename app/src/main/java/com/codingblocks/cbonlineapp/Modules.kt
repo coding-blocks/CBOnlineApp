@@ -16,7 +16,7 @@ val viewModelModule = module {
     viewModel { MyCourseViewModel(get(), get(), get(), get(), get()) }
     viewModel { NotificationViewModel(get()) }
     viewModel { LeaderboardViewModel() }
-    //Activities
+    // Activities
     viewModel { HomeActivityViewModel(get()) }
 }
 val databaseModule = module {

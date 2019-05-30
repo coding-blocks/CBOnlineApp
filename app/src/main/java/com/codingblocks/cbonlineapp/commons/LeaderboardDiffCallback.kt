@@ -22,5 +22,4 @@ class LeaderboardDiffCallback : DiffUtil.ItemCallback<Leaderboard>() {
     override fun areItemsTheSame(oldItem: Leaderboard, newItem: Leaderboard): Boolean {
         return oldItem.id == newItem.id
     }
-
 }
