@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -28,6 +29,7 @@ import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.FileUtils
+import com.codingblocks.cbonlineapp.util.FileUtils.deleteDatabaseFile
 import com.codingblocks.cbonlineapp.util.NetworkUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.viewmodels.HomeActivityViewModel
@@ -48,6 +50,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
 import java.util.Arrays
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -147,7 +150,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             createShortcut()
         }
         nav_view.getHeaderView(0).login_button.setOnClickListener {
-<<<<<<< HEAD
+
             val builder = AlertDialog.Builder(this)
             val dialogView=layoutInflater.inflate(R.layout.logout_dialogue , null)
             builder.setView(dialogView)
@@ -167,11 +170,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             dialog.show()
             prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
             prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
-=======
+
             viewModel.prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
             viewModel.prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
             if (nav_view.getHeaderView(0).login_button.text == "Logout") {
->>>>>>> 6b3f4b64ce8b300d49b72862c131f244fc3970d3
+
                 removeShortcuts()
                 invalidateToken()
             startActivity(intentFor<LoginActivity>().singleTop())
@@ -397,7 +400,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         shortcutManager.disableShortcuts(Arrays.asList("shortcut1"))
         shortcutManager.removeAllDynamicShortcuts()
     }
-<<<<<<< HEAD
+
 
     fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager =
@@ -421,6 +424,5 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-=======
->>>>>>> 6b3f4b64ce8b300d49b72862c131f244fc3970d3
-}
+
+}}
