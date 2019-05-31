@@ -521,6 +521,18 @@ class Player(
     var playerId: String? = null
 )
 
+@Type("type")
+data class Users(
+    val firstname: String,
+    val username: String,
+    val mobile: String,
+    val oneauthId: String,
+    val college: String,
+    val photo:String,
+    val email:String
+) : BaseModel()
+
+
 
 
 

@@ -23,8 +23,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
@@ -34,6 +36,7 @@ import com.codingblocks.cbonlineapp.util.NetworkUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.viewmodels.HomeActivityViewModel
 import com.codingblocks.cbonlineapp.viewmodels.OnCompleteListener
+import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
@@ -52,7 +55,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.Arrays
+import java.util.*
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     AnkoLogger {
@@ -300,11 +303,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fragment_holder.visibility = View.GONE
         webView.visibility = View.VISIBLE
         val webSetting = webView.settings
+        WebView.setWebContentsDebuggingEnabled(true)
         webSetting.builtInZoomControls = true
         webSetting.javaScriptEnabled = true
         Clients.api.getSignature().enqueue(retrofitCallback { throwable, response ->
             response?.body()?.let {
-                //                it.get("signature")
+                val signature = it.get("signature")
                 webView.webViewClient = object : WebViewClient() {
 
                     override fun onPageFinished(view: WebView?, url: String?) {
@@ -313,17 +317,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
-//                val script: String =
-//                    "?id=${user.id}&name=${user.firstname}&email=&photo=&signature=&appId="
-
                     }
 
                 }
-                webView.loadUrl("file:///android_asset/chat.html")
+                val script: String =
+                    "?id=${getPrefs().SP_USER_ID}&name=${getPrefs().SP_USER_NAME}&email=${getPrefs().SP_USER_EMAIL}&photo=${getPrefs().SP_USER_IMAGE}&signature=$signature&appId=${BuildConfig.TALKJS_KEY}"
+
+                webView.loadUrl("file:///android_asset/chat.html$script")
             }
         })
         webView.webViewClient = WebViewClient()
-
 
 
     }

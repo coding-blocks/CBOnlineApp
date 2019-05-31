@@ -50,19 +50,16 @@ class HomeActivityViewModel(var notificationDao: NotificationDao) : ViewModel() 
 
     fun getMe(onCompleteListener: OnCompleteListener) {
         setJWTToken()
-        Clients.api.getMe().enqueue(retrofitCallback { t, resp ->
+        Clients.onlineV2JsonApi.getMe().enqueue(retrofitCallback { t, resp ->
             resp.let {
                 if (resp?.isSuccessful == true) {
                     resp.body()?.let {
-                        try {
-                            val jSONObject =
-                                it.getAsJsonObject("data").getAsJsonObject("attributes")
-                            prefs.SP_USER_ID = it.getAsJsonObject("data").get("id").asString
-                            prefs.SP_ONEAUTH_ID = jSONObject.get("oneauth-id").asString
-                            prefs.SP_USER_IMAGE = jSONObject.get("photo").asString
-                        } catch (e: Exception) {
+                            prefs.SP_USER_ID = it.id
+                            prefs.SP_ONEAUTH_ID = it.oneauthId
+                            prefs.SP_USER_IMAGE = it.photo
+                            prefs.SP_USER_NAME = it.username
+                            prefs.SP_USER_NAME = it.email
                         }
-                    }
                     onCompleteListener.onResponseComplete()
                 } else {
                     onCompleteListener.onResponseFailed()

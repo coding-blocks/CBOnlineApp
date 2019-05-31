@@ -13,6 +13,8 @@ class PreferenceHelper private constructor() {
         const val USER_IMAGE = "user_image"
         const val ONEAUTH_ID = "oneauth_id"
         const val USER_ID = "user_id"
+        const val USER_NAME = "userName"
+        const val USER_EMAIL = "userEmail"
         const val WIFI = "wifi"
         const val WIFI_VALUE = false
         private var prefs: SharedPreferences? = null
@@ -58,6 +60,16 @@ class PreferenceHelper private constructor() {
         get() = prefs!!.getString(USER_ID, USER_ID) ?: ""
         set(value) {
             prefs!!.edit().putString(USER_ID, value).apply()
+        }
+    var SP_USER_NAME: String
+        get() = prefs!!.getString(USER_NAME, USER_NAME) ?: ""
+        set(value) {
+            prefs!!.edit().putString(USER_NAME, value).apply()
+        }
+    var SP_USER_EMAIL: String
+        get() = prefs!!.getString(USER_EMAIL, USER_EMAIL) ?: ""
+        set(value) {
+            prefs!!.edit().putString(USER_NAME, value).apply()
         }
     var SP_WIFI: Boolean
         get() = prefs!!.getBoolean(WIFI, WIFI_VALUE)

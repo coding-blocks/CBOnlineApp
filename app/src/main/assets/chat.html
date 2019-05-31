@@ -4,6 +4,52 @@
 
 <h1> this is text through assets folder </h1></br>
 <h2> h2 text</h2>
+<p id="result">
 
+</p>
 </body>
+<script>
+(function(t,a,l,k,j,s){
+s=a.createElement('script');s.async=1;s.src="https://cdn.talkjs.com/talk.js";a.head.appendChild(s)
+;k=t.Promise;t.Talk={v:1,ready:{then:function(f){if(k)return new k(function(r,e){l.push([f,r,e])});l
+.push([f])},catch:function(){return k&&new k()},c:l}};})(window,document,[]);
+</script>
+
+<script>
+    window.onload = function () {
+        Talk.ready.then(function () {
+            var qp = new URLSearchParams(window.location.search)
+            //document.getElementById('result').innerHTML = qp.get('name') + qp.get('email')
+
+            var email = 'aggarwalpulkit596@gmail.com'
+            var name = 'Pulkit'
+            var id = 37975
+            var photo = 'https://graph.facebook.com/1783389735028460/picture?type=large'
+            var appId = '2LhQvB3j'
+
+            var me  = new Talk.User({
+                id,
+                name,
+                email,
+                photoUrl: photo
+             })
+
+            try {
+                const talkSession = Talk.Session({
+                    appId,
+                    me,
+                    signature: 'dbe97f63f0b29da2cb3b388fc1e7f24d5d0789542d7a1e2d4e7c048fe68002fb'
+                }).catch(console.error)
+            } catch (err) {
+                console.error(err)
+            }
+
+            var inbox = talkSession.createInbox()
+            inbox.mount(document.getElementByTagName('body'))
+        })
+
+
+
+    }
+</script>
 </html>

@@ -30,9 +30,6 @@ interface OnlineRestApi {
     @GET("v2/courses/{id}/rating")
     fun getCourseRating(@Path("id") id: String): Call<RatingModel>
 
-    @GET("v2/users/me")
-    fun getMe(): Call<JsonObject>
-
     @GET("v2/runs/{runId}/enroll")
     fun enrollTrial(@Path("runId") id: String): Call<JsonObject>
 

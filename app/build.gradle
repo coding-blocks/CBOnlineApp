@@ -14,7 +14,9 @@ def YOUTUBE_KEY = System.getenv('YOUTUBE_KEY') ?: "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJ
 def CLIENT_ID = System.getenv('CLIENT_ID') ?: "5633768694"
 def REDIRECT_URI = System.getenv('REDIRECT_URI') ?: "app://online.codingblocks.com"
 def OAUTH_URL = System.getenv('OAUTH_URL') ?: "https://account.codingblocks.com/oauth/authorize"
-def TALKJS_KEY = System.getenv('TALKJS_KEY') ?: "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
+def TALKJS_KEY = System.getenv('TALKJS_KEY') ?: "tSkEmXbp"
+def TALKJS_SECRET = System.getenv('TALKJS_SECRET') ?: "sk_test_s52jVqusQeGdEBZ0AKy8KXjP"
+
 
 
 android {
@@ -50,6 +52,7 @@ android {
             buildConfigField "String", "REDIRECT_URI", '"' + REDIRECT_URI + '"'
             buildConfigField "String", "OAUTH_URL", '"' + OAUTH_URL + '"'
             buildConfigField "String", "TALKJS_KEY", '"' + TALKJS_KEY + '"'
+            buildConfigField "String", "TALKJS_SECRET", '"' + TALKJS_SECRET + '"'
             applicationIdSuffix = 'debug'
 
         }

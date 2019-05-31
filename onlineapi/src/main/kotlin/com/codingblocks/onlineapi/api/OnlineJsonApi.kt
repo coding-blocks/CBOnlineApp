@@ -17,6 +17,9 @@ import com.codingblocks.onlineapi.models.Question
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.Sections
+import com.codingblocks.onlineapi.models.User
+import com.codingblocks.onlineapi.models.Users
+import com.google.gson.JsonObject
 import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -175,6 +178,10 @@ interface OnlineJsonApi {
 
     @POST("players")
     fun setPlayerId(@Body params: Player):Call<ResponseBody>
+
+    @GET("users/me")
+    fun getMe(): Call<Users>
+
 
 
 }
