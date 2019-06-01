@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.CarouselSliderAdapter
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
+import com.codingblocks.cbonlineapp.adapters.EndlessPagerAdapter
 import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
@@ -98,16 +99,13 @@ class HomeFragment : Fragment(), AnkoLogger {
                 ui.homeImg.visibility = View.GONE
                 val carouselSliderAdapter =
                     CarouselSliderAdapter(it as ArrayList<CarouselCards>, context)
-                ui.viewPager.adapter = carouselSliderAdapter
-                ui.viewPager.currentItem = 0
+                val endlessPagerAdapter = EndlessPagerAdapter(carouselSliderAdapter, ui.viewPager)
+                ui.viewPager.adapter = endlessPagerAdapter
+                ui.viewPager.currentItem = 1
                 ui.viewPager.setPageTransformer(true, ZoomOutPageTransformer())
                 val handler = Handler()
                 val update = Runnable {
-                    if (ui.viewPager.currentItem + 1 == it.size) {
-                        ui.viewPager.setCurrentItem(0, true)
-                    } else {
-                        ui.viewPager.setCurrentItem(ui.viewPager.currentItem + 1, true)
-                    }
+                    ui.viewPager.setCurrentItem(ui.viewPager.currentItem + 1, true)
                 }
                 val swipeTimer = Timer()
                 swipeTimer.schedule(object : TimerTask() {
