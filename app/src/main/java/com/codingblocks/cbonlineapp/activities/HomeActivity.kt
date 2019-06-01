@@ -18,8 +18,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
@@ -47,7 +49,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.Arrays
+import java.util.*
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     AnkoLogger {
@@ -141,6 +143,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Picasso.with(this).load(viewModel.prefs.SP_USER_IMAGE).placeholder(R.drawable.defaultavatar).fit().into(
                 nav_view.getHeaderView(0).nav_header_imageView
             )
+        nav_view.getHeaderView(0).nav_header_imageView.setOnClickListener {
+            val builder = CustomTabsIntent.Builder()
+                .enableUrlBarHiding()
+                .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+                .setShowTitle(true)
+                .setSecondaryToolbarColor(resources.getColor(R.color.colorPrimary))
+            val customTabsIntent = builder.build()
+            customTabsIntent.launchUrl(this, Uri.parse("https://account.codingblocks.com"))
+        }
+
         nav_view.getHeaderView(0).login_button.text = resources.getString(R.string.logout)
         if (Build.VERSION.SDK_INT >= 25) {
             createShortcut()
