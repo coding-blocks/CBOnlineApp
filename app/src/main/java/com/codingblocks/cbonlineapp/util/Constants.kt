@@ -16,6 +16,8 @@ const val RUN_ID = "runId"
 
 const val DOWNLOADED = "downloaded"
 
+const val COURSE_TAB = "course_tab"
+
 const val LECTURE_CONTENT_ID = "lecture_content_id"
 
 const val QUIZ_ID = "quiz_id"
