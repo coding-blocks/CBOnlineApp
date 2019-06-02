@@ -4,7 +4,12 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.PorterDuffXfermode
+import android.graphics.PorterDuff
 import android.graphics.drawable.PictureDrawable
 import android.os.Build
 import androidx.core.app.ActivityCompat
@@ -100,7 +105,7 @@ object MediaUtils {
         }
     }
 
-    fun getBitmapFromPictureDrawable(picDrawable: PictureDrawable):Bitmap{
+    fun getBitmapFromPictureDrawable(picDrawable: PictureDrawable): Bitmap {
         val bitmap = Bitmap.createBitmap(picDrawable.intrinsicWidth,picDrawable.intrinsicHeight,Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         picDrawable.setBounds(0,0,canvas.width, canvas.height)

@@ -365,7 +365,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun removeShortcuts() {
         val shortcutManager = getSystemService(ShortcutManager::class.java)
         //shortcutManager.disableShortcuts(Arrays.asList("shortcut1"))
-        shortcutManager.disableShortcuts((Arrays.asList("topcourse")))
+        shortcutManager.disableShortcuts((Arrays.asList("topcourse${0}")))
+        shortcutManager.disableShortcuts((Arrays.asList("topcourse${1}")))
         shortcutManager.removeAllDynamicShortcuts()
     }
 }
