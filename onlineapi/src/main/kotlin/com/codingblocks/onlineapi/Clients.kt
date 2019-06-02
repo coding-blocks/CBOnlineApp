@@ -6,6 +6,7 @@ import com.codingblocks.onlineapi.models.Announcement
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Choice
 import com.codingblocks.onlineapi.models.Comment
+import com.codingblocks.onlineapi.models.Company
 import com.codingblocks.onlineapi.models.ContentCodeChallenge
 import com.codingblocks.onlineapi.models.ContentCsv
 import com.codingblocks.onlineapi.models.ContentDocumentType
@@ -23,6 +24,7 @@ import com.codingblocks.onlineapi.models.CricketQuestion
 import com.codingblocks.onlineapi.models.CricketQuestionPost
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Instructor
+import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Match
 import com.codingblocks.onlineapi.models.MatchPost
@@ -80,10 +82,8 @@ object Clients {
         Note::class.java, Notes::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
         RunAttemptId::class.java, RunAttemptsId::class.java, ContentId::class.java, ContentsId::class.java,
         UserPrediction::class.java,CricketChoice::class.java,CricketQuestion::class.java,Match::class.java,
-        UserPredictionPost::class.java,
-        CricketChoicePost::class.java,
-        CricketQuestionPost::class.java,
-        MatchPost::class.java
+        UserPredictionPost::class.java, CricketChoicePost::class.java, CricketQuestionPost::class.java,
+        MatchPost::class.java, Jobs::class.java,Company::class.java
     )
 
     private val relationshipResolver = RelationshipResolver {

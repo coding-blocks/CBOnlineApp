@@ -107,4 +107,5 @@
     <string name="clean_dialog_description">If you want to continue with the download, Please clear the oldest download.</string>
     <string name="clean_dialog_okBtn">Clear Oldest Download</string>
     <string name="clean_dialog_cancelBtn">Cancel Current Download</string>
+    <string name="get_hired">Get Hired</string>
 </resources>

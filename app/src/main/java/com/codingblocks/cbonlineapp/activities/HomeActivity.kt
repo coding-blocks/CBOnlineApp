@@ -236,6 +236,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_preferences -> {
                 startActivity(intentFor<SettingsActivity>().singleTop())
             }
+            R.id.nav_jobs-> {
+                startActivity(intentFor<JobsActivity>().singleTop())
+            }
             R.id.nav_contactUs -> {
                 startActivity(intentFor<AboutActivity>().singleTop())
             }

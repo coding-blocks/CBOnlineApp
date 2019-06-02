@@ -26,6 +26,10 @@
         android:checkableBehavior="none"
         android:menuCategory="system">
         <item
+            android:id="@+id/nav_jobs"
+            android:icon="@drawable/ic_support"
+            android:title="@string/get_hired" />
+        <item
             android:id="@+id/nav_preferences"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="@string/title_activity_settings" />

@@ -6,6 +6,7 @@ import com.codingblocks.onlineapi.models.ContentProgress
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Instructor
+import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Match
 import com.codingblocks.onlineapi.models.MyCourseRuns
@@ -31,6 +32,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.util.*
 
 interface OnlineJsonApi {
 
@@ -188,6 +190,16 @@ interface OnlineJsonApi {
 
     @GET("cricket_cup/matches/today")
     fun getMatch() : Call<ArrayList<Match>>
+
+
+    @GET("jobs")
+    fun getJobs(
+        @Query("filter[deadline][\$gt]") deadline: String = Date(System.currentTimeMillis().toString()).toString(),
+        @Query("filter[postedOn][\$lte]") postedOn: String = System.currentTimeMillis().toString(),
+        @Query("page[offset]") pageOffSet: String = "0",
+        @Query("page[limit]") pageLimit: String = "12",
+        @Query("sort") sort: String = "-postedOn"
+    ): Call<ArrayList<Jobs>>
 
 
 }

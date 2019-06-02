@@ -591,6 +591,38 @@ class MatchPost(
     val id:String
 )
 
+@Type("jobs")
+class Jobs(
+    val coverImage: String,
+    val ctc: String,
+    val deadline: String,
+    val description: String,
+    val eligibility: String,
+    val experience: String,
+    val form:ArrayList<Form>?,
+    val location: String,
+    val postedOn: String,
+    val type: String,
+    val title: String,
+    @Relationship("company")
+    val company: ArrayList<Company>?
+) : BaseModel()
+
+class Form(
+    val name:String,
+    val required:Boolean,
+    val title:String,
+    val type:String
+)
+
+@Type("companies")
+class Company(
+    val name:String,
+    val logo:String,
+    val description:String,
+    val website:String
+): BaseModel()
+
 
 
 
