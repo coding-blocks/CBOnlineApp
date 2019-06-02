@@ -41,6 +41,7 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
                 .setShowTitle(true)
                 .setSecondaryToolbarColor(mInstance.resources.getColor(R.color.colorPrimary))
             val customTabsIntent = builder.build()
+            customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             customTabsIntent.launchUrl(mInstance, Uri.parse(url))
         }
         doAsync {
