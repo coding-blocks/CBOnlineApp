@@ -86,7 +86,7 @@
         <activity
             android:name=".activities.CourseActivity"
             android:parentActivityName=".activities.HomeActivity"
-            android:theme="@style/courseTheme" />
+            android:theme="@style/Theme.CB.Course" />
         <activity
             android:name=".activities.MyCourseActivity"
             android:label="@string/title_activity_my_course"
