@@ -28,7 +28,7 @@ data class Course(
     var difficulty: String,
     var reviewCount: Int,
     var rating: Float,
-    var slug: String,
+    var slug: String?,
     var coverImage: String,
     var updated_at: String?,
     var categoryId: Int

@@ -6,13 +6,7 @@ import cn.campusapp.router.router.IActivityRouteTableInitializer
 import com.codingblocks.cbonlineapp.activities.CourseActivity
 import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.COURSE_ID
-import com.codingblocks.cbonlineapp.util.NotificationOpenedHandler
-import com.codingblocks.cbonlineapp.util.NotificationReceivedHandler
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.RUN_ID
-import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.*
 import com.crashlytics.android.core.CrashlyticsCore
 import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
@@ -65,7 +59,7 @@ class CBOnlineApp : Application() {
         // Configure Routers
         try {
             Router.initActivityRouter(applicationContext, IActivityRouteTableInitializer { router ->
-                router["activity://course/https://online.codingblocks.com/classroom/course/:s{$COURSE_ID}/run/:s{$RUN_ID}/overview"] =
+                router["activity://course/https://online.codingblocks.com/classroom/course/:s{$COURSE_ID}/run/:s{$RUN_ID}/:s{$COURSE_TAB}"] =
                     MyCourseActivity::class.java
                 router["activity://course/https://online.codingblocks.com/courses/:s{courseId}"] =
                     CourseActivity::class.java
