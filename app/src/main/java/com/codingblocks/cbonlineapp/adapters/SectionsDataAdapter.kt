@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Sections
 import kotlinx.android.synthetic.main.item_section.view.*
 
@@ -25,12 +26,12 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
     }
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
-        holder.bindView(sectionData!![position])
+        sectionData?.get(position)?.let { holder.bindView(it) }
     }
 
     override fun getItemCount(): Int {
 
-        return sectionData!!.size
+        return sectionData?.size ?: 0
     }
     override fun getItemViewType(position: Int): Int {
         return position
@@ -50,9 +51,9 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
             itemView.title.text = data.name
             itemView.lectures.text = ("${data.contents?.size} Lectures")
             var duration: Long = 0
-            for (subItems in data.contents!!) {
+            for (subItems in data.contents ?: listOf<ContentsId>()) {
                 if (subItems.contentable == "lecture" || subItems.contentable == "video")
-                    duration += subItems.duration!!
+                    duration += subItems.duration ?: 0L
             }
             val hour = duration / (1000 * 60 * 60) % 24
             val minute = duration / (1000 * 60) % 60

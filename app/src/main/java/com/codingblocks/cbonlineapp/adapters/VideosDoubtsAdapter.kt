@@ -12,13 +12,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.tiagohm.markdownview.MarkdownView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.ContentDao
-import com.codingblocks.cbonlineapp.database.DoubtsDao
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.extensions.formatDate
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
+import com.codingblocks.cbonlineapp.viewmodels.VideoPlayerViewModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.ContentsId
@@ -32,13 +30,12 @@ import kotlinx.android.synthetic.main.item_doubt.view.doubtTopic
 import kotlinx.android.synthetic.main.item_doubt.view.resolveDoubtTv
 import kotlinx.android.synthetic.main.item_doubt.view.showCommentsTv
 
-class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) :
-    RecyclerView.Adapter<VideosDoubtsAdapter.DoubtsViewHolder>() {
+class VideosDoubtsAdapter(
+    private var doubtsData: ArrayList<DoubtsModel>,
+    private var viewModel: VideoPlayerViewModel
+) : RecyclerView.Adapter<VideosDoubtsAdapter.DoubtsViewHolder>() {
 
     private lateinit var context: Context
-    private lateinit var database: AppDatabase
-    private lateinit var contentDao: ContentDao
-    private lateinit var doubtDao: DoubtsDao
 
     fun setData(doubtsData: ArrayList<DoubtsModel>) {
         this.doubtsData = doubtsData
@@ -47,9 +44,6 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoubtsViewHolder {
         context = parent.context
-        database = AppDatabase.getInstance(context)
-        contentDao = database.contentDao()
-        doubtDao = database.doubtsDao()
 
         return DoubtsViewHolder(
             LayoutInflater.from(parent.context)
@@ -70,7 +64,7 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) :
         fun bindView(doubt: DoubtsModel) {
             fetchComments(doubt.dbtUid)
             itemView.doubtTopic.text =
-                contentDao.getContentWithId(doubt.runAttemptId, doubt.contentId).title
+                viewModel.getContentWithId(doubt.runAttemptId, doubt.contentId).title
             itemView.doubtTitle.text = doubt.title
             itemView.doubtDescription.text = doubt.body
             if (doubt.status == "RESOLVED") {
@@ -81,15 +75,15 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) :
                     resolveDoubt(doubt)
                 }
             }
-            itemView.doubtComment.editText?.setOnEditorActionListener { textView, actionId, keyEvent ->
+            itemView.doubtComment.editText?.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    if (itemView.doubtComment.editText!!.text.length < 15 || itemView.doubtComment.editText!!.text.isEmpty()) {
+                    if (itemView.doubtComment.editText?.text.toString().length < 15 || itemView.doubtComment.editText?.text.toString().isEmpty()) {
                         itemView.doubtComment.error =
                             "Comment length must be at-least 15 characters."
                         return@setOnEditorActionListener false
                     } else {
-                        createComment(itemView.doubtComment.editText!!.text, doubt)
-                        itemView.doubtComment.editText!!.text.clear()
+                        createComment(itemView.doubtComment.editText?.text, doubt)
+                        itemView.doubtComment.editText?.text?.clear()
                         return@setOnEditorActionListener true
                     }
                 }
@@ -109,10 +103,10 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) :
             solvedDoubt.postrunAttempt = RunAttemptsId(doubt.runAttemptId)
             solvedDoubt.contents = ContentsId(doubt.contentId)
             Clients.onlineV2JsonApi.resolveDoubt(doubt.dbtUid, solvedDoubt)
-                .enqueue(retrofitCallback { throwable, response ->
+                .enqueue(retrofitCallback { _, response ->
                     response?.body().let {
-                        if (response?.isSuccessful!!) {
-                            doubtDao.updateStatus(doubt.dbtUid, solvedDoubt.status)
+                        if (response?.isSuccessful == true) {
+                            viewModel.updateDoubtStatus(doubt.dbtUid, solvedDoubt.status)
                         }
                     }
                 })
@@ -150,7 +144,7 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) :
                                 body.loadMarkdown(comment.body)
                                 subTitle.text = comment.username
                                 time.text =
-                                    formatDate(comment.updatedAt!!)
+                                    formatDate(comment.updatedAt)
                                 ll.addView(inflatedView)
                             }
                         }
@@ -168,10 +162,9 @@ class VideosDoubtsAdapter(private var doubtsData: ArrayList<DoubtsModel>) :
             doubts.id = doubt.dbtUid
             comment.doubt = doubts
             Clients.onlineV2JsonApi.createComment(comment)
-                .enqueue(retrofitCallback { throwable, response ->
-                    response?.body().let {
+                .enqueue(retrofitCallback { _, response ->
+                    if (response?.isSuccessful == true)
                         notifyDataSetChanged()
-                    }
                 })
         }
     }

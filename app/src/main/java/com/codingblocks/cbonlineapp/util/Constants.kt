@@ -6,7 +6,11 @@ const val SECTION_ID: String = "sectionId"
 
 const val VIDEO_ID: String = "videoId"
 
+const val ARG_ATTEMPT_ID: String = "param1"
+
 const val RUN_ATTEMPT_ID: String = "runAttemptId"
+
+const val ARG_COURSE_ID = "course_id"
 
 const val COURSE_NAME = "course_name"
 

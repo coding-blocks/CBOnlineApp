@@ -6,13 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.ContentDao
-import com.codingblocks.cbonlineapp.database.NotesDao
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.OnItemClickListener
+import com.codingblocks.cbonlineapp.viewmodels.VideoPlayerViewModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Notes
@@ -27,13 +25,11 @@ import org.jetbrains.anko.design.snackbar
 
 class VideosNotesAdapter(
     private var notesData: ArrayList<NotesModel>,
-    var listener: OnItemClickListener
+    private val listener: OnItemClickListener,
+    private val viewModel: VideoPlayerViewModel
 ) : RecyclerView.Adapter<VideosNotesAdapter.NotesViewHolder>() {
 
     private lateinit var context: Context
-    private lateinit var database: AppDatabase
-    private lateinit var contentDao: ContentDao
-    private lateinit var notesDao: NotesDao
 
     fun setData(notesData: ArrayList<NotesModel>) {
         this.notesData = notesData
@@ -42,9 +38,6 @@ class VideosNotesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         context = parent.context
-        database = AppDatabase.getInstance(context)
-        contentDao = database.contentDao()
-        notesDao = database.notesDao()
 
         return NotesViewHolder(
             LayoutInflater.from(parent.context)
@@ -64,7 +57,7 @@ class VideosNotesAdapter(
 
         fun bindView(note: NotesModel, position: Int) {
             itemView.contentTitleTv.text =
-                contentDao.getContentWithId(note.runAttemptId, note.contentId).title
+                viewModel.getContentWithId(note.runAttemptId, note.contentId).title
             itemView.bodyTv.setText(note.text)
             itemView.timeTv.text = secToTime(note.duration)
 
@@ -91,12 +84,12 @@ class VideosNotesAdapter(
                         notifyItemInserted(position)
                     }.addCallback(object : Snackbar.Callback() {
                         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                            if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                            if (event == DISMISS_EVENT_TIMEOUT) {
                                 Clients.onlineV2JsonApi.deleteNoteById(note.nttUid)
-                                    .enqueue(retrofitCallback { throwable, response ->
+                                    .enqueue(retrofitCallback { _, response ->
                                         response.let {
-                                            if (it?.isSuccessful!!) {
-                                                notesDao.deleteNoteByID(note.nttUid)
+                                            if (it?.isSuccessful == true) {
+                                                viewModel.deleteNoteByID(note.nttUid)
                                             }
                                         }
                                     })
@@ -121,12 +114,12 @@ class VideosNotesAdapter(
             Clients.onlineV2JsonApi.updateNoteById(notesModel.nttUid, note)
                 .enqueue(retrofitCallback { _, response ->
                     response?.body().let {
-                        if (response?.isSuccessful!!)
+                        if (response?.isSuccessful == true)
                             try {
                                 itemView.editTv.text = "Edit"
                                 itemView.deleteTv.text = "Delete"
                                 itemView.bodyTv.isEnabled = false
-                                notesDao.update(notesModel)
+                                viewModel.updateNote(notesModel)
                             } catch (e: Exception) {
                             }
                     }

@@ -28,7 +28,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 
     val ui = HomeFragmentUi<Fragment>()
     private lateinit var courseDataAdapter: CourseDataAdapter
-    lateinit var skeletonScreen: SkeletonScreen
+    private lateinit var skeletonScreen: SkeletonScreen
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private val viewModel by viewModel<HomeViewModel>()
@@ -43,7 +43,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         val params = Bundle()
         params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
         params.putString(FirebaseAnalytics.Param.ITEM_NAME, "AllCourses")
@@ -52,7 +52,12 @@ class AllCourseFragment : Fragment(), AnkoLogger {
         setHasOptionsMenu(true)
 
         courseDataAdapter =
-            CourseDataAdapter(ArrayList(), view.context, viewModel.courseWithInstructorDao, "allCourses"
+            CourseDataAdapter(
+                ArrayList(),
+                viewModel.getCourseDao(),
+                requireContext(),
+                viewModel.getCourseWithInstructorDao(),
+                "allCourses"
             )
 
         ui.allcourseText.text = getString(R.string.all_courses)
@@ -87,8 +92,8 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        viewModel.runDao.getAllRuns().observer(viewLifecycleOwner) {
-            if (!it.isEmpty()) {
+        viewModel.getAllRuns().observer(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
                 skeletonScreen.hide()
                 courseDataAdapter.setData(it.shuffled()
                     .filter { c ->

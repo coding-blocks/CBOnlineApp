@@ -26,10 +26,11 @@ class CBOnlineApp : Application() {
         mInstance = this
 
         startKoin(
-            this, listOf(
-            viewModelModule,
-            databaseModule
-        )
+            this,
+            listOf(
+                viewModelModule,
+                databaseModule
+            )
         )
 
         Picasso.setSingletonInstance(Picasso.Builder(this).build())

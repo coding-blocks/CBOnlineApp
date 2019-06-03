@@ -68,9 +68,9 @@ class CourseContentFragment : Fragment(), AnkoLogger,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         arguments?.let {
-            attemptId = it.getString(RUN_ATTEMPT_ID)!!
+            attemptId = it.getString(RUN_ATTEMPT_ID) ?: ""
         }
     }
 
@@ -87,18 +87,19 @@ class CourseContentFragment : Fragment(), AnkoLogger,
             } catch (cce: ClassCastException) {
             }
         }
-        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         val sectionsList = ArrayList<CourseSection>()
-        val sectionAdapter = SectionDetailsAdapter(sectionsList, activity!!, this)
+
+        val sectionAdapter = SectionDetailsAdapter(sectionsList, viewLifecycleOwner, this, viewModel)
         view.rvExpendableView.layoutManager = LinearLayoutManager(context)
         view.rvExpendableView.adapter = sectionAdapter
         view.sectionProgressBar.show()
 
-        viewModel.sectionDao.getCourseSection(attemptId).observer(viewLifecycleOwner) {
+        viewModel.getCourseSection(attemptId).observer(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 view.sectionProgressBar.hide()
             }
-            viewModel.runDao.getRunByAtemptId(attemptId).observer(viewLifecycleOwner) { courseRun ->
+            viewModel.getRunByAtemptId(attemptId).observer(viewLifecycleOwner) { courseRun ->
                 sectionAdapter.setData(
                     it as ArrayList<CourseSection>,
                     courseRun.premium,
@@ -110,8 +111,8 @@ class CourseContentFragment : Fragment(), AnkoLogger,
         viewModel.progress.observer(viewLifecycleOwner) {
             view.swiperefresh.isRefreshing = it
         }
-        viewModel.revoked.observer(viewLifecycleOwner) {
-            if (it) {
+        viewModel.revoked.observer(viewLifecycleOwner) { value ->
+            if (value) {
                 alert {
                     title = "Error Fetching Course"
                     message = """

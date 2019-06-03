@@ -106,28 +106,26 @@ object MediaUtils {
     }
 
     fun getBitmapFromPictureDrawable(picDrawable: PictureDrawable): Bitmap {
-        val bitmap = Bitmap.createBitmap(picDrawable.intrinsicWidth,picDrawable.intrinsicHeight,Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(picDrawable.intrinsicWidth, picDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
-        picDrawable.setBounds(0,0,canvas.width, canvas.height)
+        picDrawable.setBounds(0, 0, canvas.width, canvas.height)
         picDrawable.draw(canvas)
 
         return bitmap
     }
 
-    fun getCircularBitmap(bitmap: Bitmap):Bitmap{
-        val circlebitmap = Bitmap.createBitmap(bitmap.width,bitmap.height,Bitmap.Config.ARGB_8888)
+    fun getCircularBitmap(bitmap: Bitmap): Bitmap {
+        val circlebitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(circlebitmap)
         val paint = Paint()
-        val rect = Rect(0,0,bitmap.width,bitmap.height)
+        val rect = Rect(0, 0, bitmap.width, bitmap.height)
 
         paint.isAntiAlias = true
-        canvas.drawARGB(0,0,0,0)
-        canvas.drawCircle((bitmap.width/2).toFloat(),(bitmap.height/2).toFloat(), (bitmap.width/2).toFloat(),paint)
+        canvas.drawARGB(0, 0, 0, 0)
+        canvas.drawCircle((bitmap.width / 2).toFloat(), (bitmap.height / 2).toFloat(), (bitmap.width / 2).toFloat(), paint)
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
-        canvas.drawBitmap(bitmap,rect,rect,paint)
+        canvas.drawBitmap(bitmap, rect, rect, paint)
 
         return circlebitmap
-
     }
-
 }

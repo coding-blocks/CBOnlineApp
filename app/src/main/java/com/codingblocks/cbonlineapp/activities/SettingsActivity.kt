@@ -6,29 +6,25 @@ import android.os.Environment
 import android.os.StatFs
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.extensions.folderSize
 import com.codingblocks.cbonlineapp.extensions.readableFileSize
+import com.codingblocks.cbonlineapp.viewmodels.SettingsViewModel
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_settings.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
 class SettingsActivity : AppCompatActivity() {
 
-    private val database: AppDatabase by lazy {
-        AppDatabase.getInstance(this)
-    }
+    private val viewModel by viewModel<SettingsViewModel>()
 
-    private val contentDao by lazy {
-        database.contentDao()
-    }
     private val file by lazy {
         this.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
     }
 
-    val stat by lazy { StatFs(Environment.getExternalStorageDirectory().path) }
+    private val stat by lazy { StatFs(Environment.getExternalStorageDirectory().path) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,11 +48,11 @@ class SettingsActivity : AppCompatActivity() {
         ).readableFileSize())
 
         deleteAllTv.setOnClickListener {
-            contentDao.getDownloads("true").let { list ->
+            viewModel.getDownloads().let { list ->
                 list.forEach { content ->
                     val folderFile = File(file, "/${content.contentLecture.lectureId}")
                     MediaUtils.deleteRecursive(folderFile)
-                    contentDao.updateContent(
+                    viewModel.updateContent(
                         content.section_id,
                         content.contentLecture.lectureContentId,
                         "false"
