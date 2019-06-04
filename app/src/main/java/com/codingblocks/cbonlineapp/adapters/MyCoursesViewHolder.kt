@@ -6,11 +6,11 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.MyCourseActivity
-import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.extensions.loadSvg
+import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
@@ -38,13 +38,8 @@ import kotlin.concurrent.thread
 
 class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), AnkoLogger {
 
-    private lateinit var courseDao: CourseDao
-    private lateinit var database: AppDatabase
+    fun bindView(courseRun: CourseRun, courseDao: CourseDao, instructorDao: CourseWithInstructorDao, context: Context) {
 
-    fun bindView(courseRun: CourseRun, instructorDao: CourseWithInstructorDao, context: Context) {
-
-        database = AppDatabase.getInstance(context)
-        courseDao = database.courseDao()
         thread {
             doAsync {
                 val data = courseDao.getCourse(courseRun.crCourseId)
@@ -91,8 +86,7 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
                     }
 
                     // bind Instructors
-                    val instructorsLiveData = instructorDao.getInstructorWithCourseId(data.id)
-                    instructorsLiveData.observe({ (context as LifecycleOwner).lifecycle }, {
+                    instructorDao.getInstructorWithCourseId(data.id).observer((context as LifecycleOwner)) {
                         val instructorsList = it
 
                         var instructors = ""
@@ -113,7 +107,7 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
                             }
                         }
                         itemView.courseInstructors.text = instructors
-                    })
+                    }
                 }
             }
         }

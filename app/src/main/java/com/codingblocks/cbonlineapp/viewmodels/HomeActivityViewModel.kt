@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.viewmodels
 
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
@@ -9,24 +10,30 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Player
 import com.onesignal.OneSignal
 
-class HomeActivityViewModel(var notificationDao: NotificationDao) : ViewModel() {
+class HomeActivityViewModel(
+    private val notificationDao: NotificationDao
+) : ViewModel() {
     internal var doubleBackToExitPressedOnce = false
     var mFragmentToSet: Fragment? = null
 
     lateinit var prefs: PreferenceHelper
 
-    fun invalidateToken(onCompleteListener: OnCompleteListener) {
-        Clients.api.logout().enqueue(retrofitCallback { throwable, response ->
+    fun getNotificationCount() = notificationDao.count
+
+    var invalidateTokenProgress: MutableLiveData<Boolean> = MutableLiveData()
+    var fetchTokenProgress: MutableLiveData<Boolean> = MutableLiveData()
+    var getMeProgress: MutableLiveData<Boolean> = MutableLiveData()
+
+    fun invalidateToken() {
+        Clients.api.logout().enqueue(retrofitCallback { _, response ->
             response?.let {
-                if (it.isSuccessful) {
-                    onCompleteListener.onResponseComplete()
-                }
+                invalidateTokenProgress.value = it.isSuccessful
             }
         })
     }
 
-    fun fetchToken(grantCode: String, onCompleteListener: OnCompleteListener) {
-        Clients.api.getToken(grantCode).enqueue(retrofitCallback { error, response ->
+    fun fetchToken(grantCode: String) {
+        Clients.api.getToken(grantCode).enqueue(retrofitCallback { _, response ->
             response.let {
                 if (response?.isSuccessful == true) {
                     val jwt = response.body()?.asJsonObject?.get("jwt")?.asString!!
@@ -40,17 +47,17 @@ class HomeActivityViewModel(var notificationDao: NotificationDao) : ViewModel() 
                     Clients.onlineV2JsonApi.setPlayerId(Player(playerId = status.subscriptionStatus.userId))
                         .enqueue(retrofitCallback { _, _ ->
                         })
-                    onCompleteListener.onResponseComplete()
+                    fetchTokenProgress.value = true
                 } else if (response?.code() == 500 && prefs.SP_ACCESS_TOKEN_KEY == "access_token") {
-                    onCompleteListener.onResponseFailed()
+                    fetchTokenProgress.value = false
                 }
             }
         })
     }
 
-    fun getMe(onCompleteListener: OnCompleteListener) {
+    fun getMe() {
         setJWTToken()
-        Clients.api.getMe().enqueue(retrofitCallback { t, resp ->
+        Clients.api.getMe().enqueue(retrofitCallback { _, resp ->
             resp.let {
                 if (resp?.isSuccessful == true) {
                     resp.body()?.let {
@@ -63,9 +70,9 @@ class HomeActivityViewModel(var notificationDao: NotificationDao) : ViewModel() 
                         } catch (e: Exception) {
                         }
                     }
-                    onCompleteListener.onResponseComplete()
+                    getMeProgress.value = true
                 } else {
-                    onCompleteListener.onResponseFailed()
+                    getMeProgress.value = false
                 }
             }
         })
@@ -74,9 +81,4 @@ class HomeActivityViewModel(var notificationDao: NotificationDao) : ViewModel() 
     private fun setJWTToken() {
         Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
     }
-}
-
-interface OnCompleteListener {
-    fun onResponseComplete()
-    fun onResponseFailed()
 }

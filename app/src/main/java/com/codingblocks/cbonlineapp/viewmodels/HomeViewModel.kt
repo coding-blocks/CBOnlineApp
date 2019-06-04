@@ -17,13 +17,27 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.CarouselCards
 
 class HomeViewModel(
-    var courseWithInstructorDao: CourseWithInstructorDao,
-    var courseDao: CourseDao,
-    var runDao: CourseRunDao,
-    private var instructorDao: InstructorDao
+    private val courseWithInstructorDao: CourseWithInstructorDao,
+    private val courseDao: CourseDao,
+    private val runDao: CourseRunDao,
+    private val instructorDao: InstructorDao
 ) : ViewModel() {
     var carouselCards: MutableLiveData<List<CarouselCards>> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
+
+    fun getCourseDao() = courseDao
+
+    fun getCourseById(id: String) = courseDao.getCourse(id)
+
+    fun getCourseWithInstructorDao() = courseWithInstructorDao
+
+    fun getRecommendedRuns() = runDao.getRecommendedRuns()
+
+    fun getAllRuns() = runDao.getAllRuns()
+
+    fun getMyRuns() = runDao.getMyRuns()
+
+    fun getTopRun() = runDao.getTopRun()
 
     fun fetchRecommendedCourses(recommended: Boolean = true) {
         Clients.onlineV2JsonApi.getRecommendedCourses()

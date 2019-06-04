@@ -17,6 +17,7 @@ import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_quiz_result.*
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class QuizResultFragment : Fragment() {
 
     private lateinit var quizId: String
