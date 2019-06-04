@@ -393,14 +393,14 @@ class SectionDetailsAdapter(
 
                     itemView.setOnClickListener {
                         if (itemView.title.text.contains("Challenges", true))
-                            Components.showconfirmation(activity as Context, "unavailable")
+                            Components.showconfirmation(context, "unavailable")
                         else
                             showOrHide(ll, it)
                     }
 
                     itemView.arrow.setOnClickListener {
                         if (itemView.title.text.contains("Challenges", true))
-                            Components.showconfirmation(activity as Context, "unavailable")
+                            Components.showconfirmation(context, "unavailable")
                         else
                             showOrHide(ll, it)
                     }

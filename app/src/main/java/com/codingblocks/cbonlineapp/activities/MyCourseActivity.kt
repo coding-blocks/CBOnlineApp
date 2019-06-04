@@ -54,7 +54,6 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
             viewModel.fetchCourse(attemptId)
             viewModel.getPromoVideo(courseId)
             setupViewPager(attemptId, courseId)
-
         }
     }
 
