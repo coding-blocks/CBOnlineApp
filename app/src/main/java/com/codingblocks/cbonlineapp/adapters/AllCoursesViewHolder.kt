@@ -21,6 +21,8 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val data = courseDao.getCourse(courseRun.crCourseId)
         ui.courseTitle.text = data.title
+        ui.courseRatingBar.rating = data.rating
+        ui.courseRatingTv.text = data.rating.toString()
         data.subtitle
         if (data.coverImage.takeLast(3) == "png") {
             Picasso.with(context).load(data.coverImage)
