@@ -122,7 +122,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         // adding label to nav drawer items
-        nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
+//        nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
 
         filter = IntentFilter()
 

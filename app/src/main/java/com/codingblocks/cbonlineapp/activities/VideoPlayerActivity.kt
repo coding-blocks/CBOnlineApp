@@ -52,6 +52,8 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+
+
 class VideoPlayerActivity : AppCompatActivity(),
     OnItemClickListener, AnkoLogger,
     VdoPlayer.InitializationListener {
@@ -89,6 +91,10 @@ class VideoPlayerActivity : AppCompatActivity(),
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
         viewModel.currentOrientation = resources.configuration.orientation
 
@@ -345,7 +351,8 @@ class VideoPlayerActivity : AppCompatActivity(),
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         }
