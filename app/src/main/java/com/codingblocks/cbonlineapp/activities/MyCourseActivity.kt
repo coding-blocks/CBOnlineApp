@@ -48,14 +48,17 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
         if (attemptId.isEmpty()) {
             attemptId = viewModel.getRunAttempt(runId)
         }
-        viewModel.updatehit(attemptId)
-        viewModel.fetchCourse(attemptId)
-        viewModel.getPromoVideo(courseId)
+        if (savedInstanceState == null) {
+
+            viewModel.updatehit(attemptId)
+            viewModel.fetchCourse(attemptId)
+            viewModel.getPromoVideo(courseId)
+            setupViewPager(attemptId, courseId)
+        }
     }
 
     override fun onStart() {
         super.onStart()
-        setupViewPager(attemptId, courseId)
 
         viewModel.promoVideo.observer(this) {
             youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {

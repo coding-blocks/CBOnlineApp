@@ -26,7 +26,7 @@ open class Course(
     val reviewCount: Int,
     val difficulty: String,
     val rating: Float,
-    val slug: String,
+    val slug: String?,
     val coverImage: String,
     @Relationship("instructors")
     val instructors: ArrayList<Instructor>?,
@@ -105,7 +105,7 @@ class MyCourse(
     val reviewCount: Int,
     val difficulty: String,
     val rating: Float,
-    val slug: String,
+    val slug: String?,
     @Relationship("instructors")
     val instructors: ArrayList<Instructor>?,
     val coverImage: String

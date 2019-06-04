@@ -51,7 +51,7 @@ class HomeFragment : Fragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         val params = Bundle()
         params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
         params.putString(FirebaseAnalytics.Param.ITEM_NAME, "Home")
@@ -62,8 +62,9 @@ class HomeFragment : Fragment(), AnkoLogger {
         courseDataAdapter =
             CourseDataAdapter(
                 ArrayList(),
-                view.context,
-                viewModel.courseWithInstructorDao,
+                viewModel.getCourseDao(),
+                requireContext(),
+                viewModel.getCourseWithInstructorDao(),
                 "allCourses"
             )
 
@@ -122,7 +123,7 @@ class HomeFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        viewModel.runDao.getRecommendedRuns().observer(viewLifecycleOwner) {
+        viewModel.getRecommendedRuns().observer(viewLifecycleOwner) {
             if (!it.isEmpty()) {
                 skeletonScreen.hide()
                 courseDataAdapter.setData(it.shuffled().filter { c ->

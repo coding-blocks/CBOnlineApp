@@ -53,7 +53,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         val params = Bundle()
         params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
         params.putString(FirebaseAnalytics.Param.ITEM_NAME, "MyCourses")
@@ -62,8 +62,9 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         courseDataAdapter =
             CourseDataAdapter(
                 ArrayList(),
-                activity!!,
-                viewModel.courseWithInstructorDao,
+                viewModel.getCourseDao(),
+                requireContext(),
+                viewModel.getCourseWithInstructorDao(),
                 "myCourses"
             )
 
@@ -101,12 +102,11 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         }
 
         createShortcut()
-
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        viewModel.runDao.getMyRuns().observer(viewLifecycleOwner) {
-            if (!it.isEmpty()) {
+        viewModel.getMyRuns().observer(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
                 skeletonScreen.hide()
                 courseDataAdapter.setData(it.filter { c ->
                     c.title.contains(searchQuery, true)
@@ -141,21 +141,20 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     @TargetApi(28)
     fun createShortcut() {
 
-        val sM = activity?.getSystemService(ShortcutManager::class.java)
+        val sM = requireContext().getSystemService(ShortcutManager::class.java)
         val shortcutList: MutableList<ShortcutInfo> = ArrayList()
 
-        viewModel.runDao.getTopRun().observer(viewLifecycleOwner) {
-
+        viewModel.getTopRun().observer(viewLifecycleOwner) {
             doAsync {
                 it.forEachIndexed { index, courseRun ->
-                    val data = viewModel.courseDao.getCourse(courseRun.crCourseId)
+                    val data = viewModel.getCourseById(courseRun.crCourseId)
 
                     val intent = Intent(activity, MyCourseActivity::class.java)
                     intent.action = Intent.ACTION_VIEW
-                    intent.putExtra("courseId",courseRun.crCourseId)
-                    intent.putExtra("course_name",data.title)
-                    intent.putExtra("runAttemptId",courseRun.crAttemptId)
-                    val shortcut =  ShortcutInfo.Builder(activity,"topcourse${index}")
+                    intent.putExtra("courseId", courseRun.crCourseId)
+                    intent.putExtra("course_name", data.title)
+                    intent.putExtra("runAttemptId", courseRun.crAttemptId)
+                    val shortcut = ShortcutInfo.Builder(requireContext(), "topcourse$index")
                     shortcut.setIntent(intent)
                     shortcut.setLongLabel(courseRun.title)
                     shortcut.setShortLabel(courseRun.title)
@@ -163,26 +162,21 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
                     MediaUtils.okHttpClient.newCall(Request.Builder().url(data.logo).build())
                         .execute().body()?.let {
-                            with(SVG.getFromInputStream(it.byteStream())){
+                            with(SVG.getFromInputStream(it.byteStream())) {
                                 val picDrawable = PictureDrawable(
                                     this.renderToPicture(
-                                        400,400
+                                        400, 400
                                     )
                                 )
                                 val bitmap = MediaUtils.getBitmapFromPictureDrawable(picDrawable)
                                 val circularBitmap = MediaUtils.getCircularBitmap(bitmap)
                                 shortcut.setIcon(Icon.createWithBitmap(circularBitmap))
-                                shortcutList.add(index,shortcut.build())
+                                shortcutList.add(index, shortcut.build())
                             }
-
                         }
                 }
-                sM!!.dynamicShortcuts = shortcutList
-
+                sM?.dynamicShortcuts = shortcutList
             }
         }
-
     }
-
-
 }

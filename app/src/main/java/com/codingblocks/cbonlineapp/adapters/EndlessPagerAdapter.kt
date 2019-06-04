@@ -92,11 +92,9 @@ class EndlessPagerAdapter(private val adapter: PagerAdapter, viewPager: ViewPage
             positionOffset: Float,
             positionOffsetPixels: Int
         ) {
-
         }
 
         override fun onPageSelected(position: Int) {
-
         }
 
         override fun onPageScrollStateChanged(state: Int) {

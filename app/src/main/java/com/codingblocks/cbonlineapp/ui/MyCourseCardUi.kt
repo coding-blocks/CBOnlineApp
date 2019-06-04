@@ -12,12 +12,11 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.extensions.styledRatingBar
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.backgroundColor
-import org.jetbrains.anko.cardview.v7.cardView
-import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.frameLayout
 import org.jetbrains.anko.imageView
@@ -29,6 +28,10 @@ import org.jetbrains.anko.textView
 import org.jetbrains.anko.topPadding
 import org.jetbrains.anko.view
 import org.jetbrains.anko.wrapContent
+import org.jetbrains.anko.cardview.v7.cardView
+import org.jetbrains.anko.relativeLayout
+import org.jetbrains.anko.alignParentBottom
+import org.jetbrains.anko.custom.ankoView
 
 class MyCourseCardUi : AnkoComponent<ViewGroup> {
     inline fun ViewManager.circleImageView(theme: Int = 0, init: CircleImageView.() -> Unit) = ankoView({ CircleImageView(it) }, theme, init)
@@ -55,48 +58,56 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                 linearLayout {
                     weightSum = 3.0f
                     frameLayout {
-                        linearLayout {
-                            gravity = Gravity.CENTER
-                            orientation = LinearLayout.VERTICAL
-                            elevation = 5f
-                            courselogo = circleImageView {
-                                topPadding = dip(16)
-                                borderColor = Color.parseColor("#ffffff")
-                                borderWidth = dip(2)
-                            }.lparams(width = dip(76), height = dip(76))
-                            courseTitle = textView {
-                                textSize = 20f
-                                typeface = font
-                                textAlignment = View.TEXT_ALIGNMENT_CENTER
-                                textColor = Color.parseColor("#ffffff")
-                            }.lparams(matchParent, wrapContent) {
-                                marginStart = dip(4)
-                                topMargin = dip(8)
-                                marginEnd = dip(4)
-                                bottomMargin = dip(12)
-                            }
-//                            linearLayout {
-//                                courseRatingBar = ratingBar{
-//                                    numStars = 5
-//                                    setIsIndicator(true)
-//                                }.lparams(wrapContent, dip(40))
-//                                courseRatingTv = textView {
-//                                    textSize = 12f
-//                                    typeface = font
-//                                }.lparams(wrapContent, wrapContent) {
-//                                    marginStart = dip(14)
-//                                }
-//                            }.lparams(matchParent, wrapContent) {
-//                                marginStart = dip(8)
-//                                marginEnd = dip(8)
-//
-//                            }
-                        }.lparams(matchParent, matchParent)
-
                         courseCoverImageView = imageView {
                             scaleType = ImageView.ScaleType.CENTER_CROP
                             setImageResource(R.drawable.placeholder_course_cover)
                         }.lparams(width = matchParent, height = matchParent)
+
+                        relativeLayout {
+                            linearLayout {
+                                gravity = Gravity.CENTER_HORIZONTAL
+                                orientation = LinearLayout.VERTICAL
+                                elevation = 5f
+                                courselogo = circleImageView {
+                                    topPadding = dip(16)
+                                    borderColor = Color.parseColor("#ffffff")
+                                    borderWidth = dip(2)
+                                }.lparams(width = dip(76), height = dip(76))
+                                courseTitle = textView {
+                                    textSize = 17f
+                                    typeface = font
+                                    textAlignment = View.TEXT_ALIGNMENT_CENTER
+                                    textColor = Color.parseColor("#ffffff")
+                                }.lparams(matchParent, wrapContent) {
+                                    marginStart = dip(4)
+                                    topMargin = dip(8)
+                                    marginEnd = dip(4)
+                                    bottomMargin = dip(12)
+                                }
+                            }.lparams(matchParent, matchParent)
+
+                            linearLayout {
+                                gravity = Gravity.CENTER
+                                courseRatingBar = styledRatingBar(R.style.Widget_AppCompat_RatingBar_Small) {
+                                    gravity = Gravity.CENTER
+                                    setIsIndicator(true)
+                                    numStars = 5
+                                    progressTintList = context.resources.getColorStateList(android.R.color.holo_orange_light)
+                                }.lparams(wrapContent, wrapContent)
+                                courseRatingTv = textView {
+                                    textSize = 12f
+                                    typeface = font
+                                    textColor = Color.parseColor("#ffffff")
+                                }.lparams(wrapContent, wrapContent) {
+                                    marginStart = dip(14)
+                                }
+                            }.lparams(matchParent, wrapContent) {
+                                marginStart = dip(20)
+                                marginEnd = dip(8)
+                                bottomMargin = dip(8)
+                                alignParentBottom()
+                            }
+                        }.lparams(matchParent, matchParent)
                     }.lparams(width = 0, height = matchParent) {
                         weight = 1.4f
                     }

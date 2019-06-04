@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Coding Blocks Online</string>
-    <string name="title_activity_home">HomeActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="all_courses">All Courses</string>
@@ -98,5 +97,7 @@
     <string name="notifications">Notifications</string>
     <string name="search_courses">Search Courses</string>
     <string name="logout">Logout</string>
+    <string name="create_a_note">Create a Note</string>
+    <string name="create_note">Create Note</string>
     <string name="leaderboard_emptyView">Leaderboard not available for this course!!</string>
 </resources>
