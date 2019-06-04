@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_quiz.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener {
 
     private lateinit var quizId: String
@@ -70,7 +71,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             response?.body()?.let { quiz ->
                 setUpQuestionBottomSheet(quiz.questions?.size ?: 0)
                 quiz.questions?.forEachIndexed { index, question ->
-                    questionList[index] = question.id ?: ""
+                    questionList[index] = question.id
                     if (index == quiz.questions!!.size - 1) {
                         Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, attemptResponse ->
                             attemptResponse?.body().let {
