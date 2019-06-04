@@ -1,9 +1,8 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.Clients
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertNotNull
+import com.codingblocks.onlineapi.models.*
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
@@ -15,105 +14,91 @@ class OnlineJsonApiAuthenticatedTest {
     @Before
     fun `set JWT`() {
         Clients.authJwt =
-            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc5NzUsImZpcnN0bmFtZSI6IlB1bGtpdCIsImxhc3RuYW1lIjoiQWdnYXJ3YWwiLCJ1c2VybmFtZSI6ImFnZ2Fyd2FscHVsa2l0NTk2LWciLCJlbWFpbCI6ImFnZ2Fyd2FscHVsa2l0NTk2QGdtYWlsLmNvbSIsInZlcmlmaWVkZW1haWwiOiJhZ2dhcndhbHB1bGtpdDU5NkBnbWFpbC5jb20iLCJ2ZXJpZmllZG1vYmlsZSI6Iis5MS05NTgyMDU0NjY0IiwibW9iaWxlIjoiKzkxLTk1ODIwNTQ2NjQiLCJvbmVhdXRoX2lkIjoiMTIwMzUiLCJsYXN0X3JlYWRfbm90aWZpY2F0aW9uIjoiMCIsInBob3RvIjoiaHR0cHM6Ly9ncmFwaC5mYWNlYm9vay5jb20vMTc4MzM4OTczNTAyODQ2MC9waWN0dXJlP3R5cGU9bGFyZ2UiLCJjb2xsZWdlIjoiQW1pdHkgU2Nob29sIE9mIEVuZ2luZWVyaW5nICYgVGVjaG5vbG9neSAoTm9pZGEpIiwib3JnYW5pemF0aW9uIjpudWxsLCJyb2xlSWQiOjIsImNyZWF0ZWRBdCI6IjIwMTgtMDktMjdUMTM6MTA6NTkuMzk2WiIsInVwZGF0ZWRBdCI6IjIwMTktMDUtMTZUMTI6NDg6MTIuNjk5WiIsImNsaWVudElkIjoiNDU5ODRiZjEtMjlkYi00ZWEzLTlhN2QtMzI0ZGRkMjUwNjY0IiwiY2xpZW50Ijoid2ViIiwiaXNUb2tlbkZvckFkbWluIjpmYWxzZSwiaWF0IjoxNTU4MDEwOTQ2LCJleHAiOjE1NTgwMTI0NDZ9.iUJW6ekYLBWWVHwtTv7L3O3Q8Q3d53EIVLX9WvwvCZZC7uy0lMeoVmBRDFGeHvoqnL9exG5xyKggKhhlaxcGkLPYeGuvEzOnepyhuEOkWVKVrbN0ZxArwTq-GsCItDTKVOlJ9u18Wpd6OBpbHiQ5CSfHXPGDThFf26T905IbP8z-S5yCbAtBer8sbvCiVs96D_Sdcd-Z5MNfRDaX8nJfqCVnrXUHLiC_bHrePBwLej5hTM-4BgxD0XuB2Lj6LloLM_JdKsS54Ed3kWSyruFLq2NKqpphmIlv3eo3QamwqTaw5aTbhZSy-_YC10TIAbZS5pSKLhvAPaNvUDu8bWvmYg"
+            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTI4ODE1LCJmaXJzdG5hbWUiOiJSYWh1bCIsImxhc3RuYW1lIjoiUmF5IiwidXNlcm5hbWUiOiJSYWh1bC1SYXktMjM0OTI2MDg3MjAxOTQ4OCIsImVtYWlsIjoicmFodWw5NjUwcmF5QGdtYWlsLmNvbSIsInZlcmlmaWVkZW1haWwiOiJyYWh1bDk2NTByYXlAZ21haWwuY29tIiwidmVyaWZpZWRtb2JpbGUiOm51bGwsIm1vYmlsZSI6Iis5MS05NjUwMTI0NzU2Iiwib25lYXV0aF9pZCI6IjMyODIyIiwibGFzdF9yZWFkX25vdGlmaWNhdGlvbiI6IjAiLCJwaG90byI6Imh0dHBzOi8vZ3JhcGguZmFjZWJvb2suY29tLzIzNDkyNjA4NzIwMTk0ODgvcGljdHVyZT90eXBlPWxhcmdlIiwiY29sbGVnZSI6IjAtLS1PVEhFUiAvIE5PVCBMSVNURUQgLyBOTyBDT0xMRUdFIC0tLTAiLCJvcmdhbml6YXRpb24iOm51bGwsInJvbGVJZCI6MiwiY3JlYXRlZEF0IjoiMjAxOS0wNS0xNFQxODowNToxOC44NTRaIiwidXBkYXRlZEF0IjoiMjAxOS0wNi0wMlQxMTozMDoyNy4wNTRaIiwicm9sZSI6eyJpZCI6MiwibmFtZSI6IlN0dWRlbnQiLCJjcmVhdGVkQXQiOiIyMDE3LTA5LTA3VDEwOjU4OjE5Ljk5M1oiLCJ1cGRhdGVkQXQiOiIyMDE3LTA5LTA3VDEwOjU4OjE5Ljk5M1oifSwiY2xpZW50SWQiOiI3MGIyZWI0NS03NjFlLTQ3MTItYjdjNi02YWI3MTQ2ODFhMmYiLCJjbGllbnQiOiJhbmRyb2lkIiwiaWF0IjoxNTU5NDc1MDI3LCJleHAiOjE1NjQ4NzUwMjd9.GEnoIyi4zIJEJfLqI11fB_2XF6CXMX4p_A5tmpcUa7Rwxy5U7XhP_iYftwyiadgjOCWW_CcvvVKLZlTOM7rmK23Ms4-ptf4lC6gp0pzjP5UV_Ab6aulfrsBFOwoRyL0NgrUKNHNb4XfuRPtwFiXVtBvp9Ln5uRXbFfbr3ewj9v_C_roBeB6PNYu2b7O8h3G4OqVLI6xjhmM_U89s5Pm7hhBVI_95Eom0LweavDZSisVViwLYuE4L82g1yXpbeDi-Q6BJsqFA05TDlVOalt6cKHzjFlMfgtFOomM6hAFfqL3lWaOqmndWU3ZI3q3x0cJ1Zv7xeZISqXboSQfrhdOkcA"
     }
 
     @Test
     fun `GET section`() {
         suspend {
             val courses = jsonapi.getSections("795").await().body()
-            courses?.let {
-                assertEquals("Python Basics", it.name)
-            }
+            assertNotNull(courses)
         }
     }
 
-
-    @Test
-    fun `GET comment`() {
-        val comment = jsonapi.getCommentsById("428").execute().body()
-        comment?.let {
-            assertEquals(3, it.size)
-        }
-    }
 
     @Test
     fun `GET myCourses`() {
         val courses = jsonapi.getMyCourses().execute().body()
-        courses?.let {
-            assertNotEquals(4, it.size)
-        }
+        assertNotNull(courses)
     }
 
-//    @Test
-//    fun `GET enrolledCourse`() {
-//        suspend {
-//
-//            val course = jsonapi.enrolledCourseById("8252").execute().body()
-//            course?.let {
-//                assertNotEquals(4, it.run?.sections)
-//            }
-//        }
-//    }
+    @Test
+    fun `GET enrolledCourse`() {
+        val course = jsonapi.enrolledCourseById("22684").execute().body()
+        assertNotNull(course)
+    }
 
-//    @Test
-//    fun `SET progress`() {
-//        val p  = Progress()
-//        p.id = "316797"
-//        p.status = "DONE"
-//        p.runs?.id = "8252"
-//        p.content?.id = "443"
-//        val progress = jsonapi.updateProgress("316797",p).execute().body()
-//        progress?.let {
-//            assertEquals(1, 1)
-//        }
-//    }
+    @Test
+    fun `GET getSectionContents`(){
+        val section = jsonapi.getSectionContents("/sections/6874/relationships/contents").execute().body()
+        assertNotNull(section)
+    }
+
+    @Test
+    fun `GET QuizById`(){
+        val quiz = jsonapi.getQuizById("23").execute().body()
+        assertNotNull(quiz)
+    }
 
     @Test
     fun `GET Quiz`() {
         val quizzes = jsonapi.getQuizAttempt("3").execute().body()
-        quizzes?.let {
-            assertNotNull(it.size)
-        }
+        assertNotNull(quizzes)
     }
+
+    @Test
+    fun `GET getQuizAttempById`(){
+        val quiz = jsonapi.getQuizAttemptById("6443").execute().body()
+        assertNotNull(quiz)
+    }
+
 
     @Test
     fun `GET Question`() {
         val questions = jsonapi.getQuestionById("22").execute().body()
-        questions?.let {
-            assertNotNull(it.title)
-        }
+        assertNotNull(questions)
     }
 
     @Test
     fun `GET Quiz Attempt`() {
-        val quizAttempt = jsonapi.getQuizAttempt("3").execute().body()
-        quizAttempt?.let {
-            assertNotNull(it.size)
-        }
-    }
-
-    @Test
-    fun `GET Doubts `() {
-        val doubts = api.getDoubts("22").execute().body()
-        doubts?.let {
-            assertNotNull(it)
-        }
+        val quizAttempt = jsonapi.getQuizAttempt("23").execute().body()
+        assertNotNull(quizAttempt)
     }
 
     @Test
     fun `GET DoubtByAttemptId `() {
-        val doubts = jsonapi.getDoubtByAttemptId("22842").execute().body()
-        doubts?.let {
-            assertNotNull(it)
-        }
+        val doubts = jsonapi.getDoubtByAttemptId("22684").execute().body()
+        assertNotNull((doubts))
     }
 
     @Test
     fun `GET NoteById `() {
-        val notes = jsonapi.getNotesByAttemptId("22842").execute().body()
-        notes?.let {
-            assertNotNull(it)
-        }
+        val notes = jsonapi.getNotesByAttemptId("22684").execute().body()
+        assertNotNull(notes)
+    }
+
+    @Test
+    fun `POST createNote`(){
+
+        val runAttemt = RunAttemptsId("22685")
+        val contentsId = ContentsId("233")
+        val note  = Notes()
+        note.text = "demo note"
+        note.duration = 1.2
+        note.runAttempt = runAttemt
+        note.content = contentsId
+
+        val noteResponse = jsonapi.createNote(note).execute().body()
+        assertNotNull(noteResponse)
     }
 }
