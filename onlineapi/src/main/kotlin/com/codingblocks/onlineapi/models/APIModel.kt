@@ -476,7 +476,7 @@ class RunAttemptId(
 @Type("run-attempts")
 class RunAttemptsId(
     @Id
-    val id: String?
+    var id: String?
 )
 
 @Type("content")
@@ -488,7 +488,7 @@ class ContentId(
 @Type("contents")
 open class ContentsId(
     @Id
-    val id: String?
+    var id: String?
 ) {
     var contentable: String? = null
 
