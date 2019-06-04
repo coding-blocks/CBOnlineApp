@@ -2,7 +2,6 @@ package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.Clients
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 

@@ -1,15 +1,15 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.*
-import org.junit.Assert.*
+import com.codingblocks.onlineapi.models.RunAttemptsId
+import com.codingblocks.onlineapi.models.ContentsId
+import com.codingblocks.onlineapi.models.Notes
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 
 class OnlineJsonApiAuthenticatedTest {
     val jsonapi = Clients.onlineV2JsonApi
-    val api = Clients.api
-
 
     @Before
     fun `set JWT`() {
