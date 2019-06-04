@@ -52,8 +52,6 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
-
 class VideoPlayerActivity : AppCompatActivity(),
     OnItemClickListener, AnkoLogger,
     VdoPlayer.InitializationListener {

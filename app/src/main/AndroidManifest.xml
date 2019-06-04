@@ -154,6 +154,7 @@
         <activity
             android:name=".activities.QuizActivity"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:parentActivityName=".activities.MyCourseActivity"
             android:theme="@style/myTheme" />
     </application>
