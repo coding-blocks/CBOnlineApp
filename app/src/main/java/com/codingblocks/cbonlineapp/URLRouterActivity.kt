@@ -16,8 +16,6 @@ class URLRouterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-
         intent?.data?.let { uri ->
 
             if (TextUtils.isEmpty(uri.host)) fallBack()
@@ -32,11 +30,9 @@ class URLRouterActivity : AppCompatActivity() {
                 "player" -> openRouter(uri)
                 else -> fallBack()
             }
+        }
 
-        } ?:
-
-        finish()
-
+        ?: finish()
     }
 
     private fun openRouter(uri: Uri) {

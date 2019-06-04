@@ -6,7 +6,14 @@ import cn.campusapp.router.router.IActivityRouteTableInitializer
 import com.codingblocks.cbonlineapp.activities.CourseActivity
 import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.util.*
+import com.codingblocks.cbonlineapp.util.NotificationReceivedHandler
+import com.codingblocks.cbonlineapp.util.NotificationOpenedHandler
+import com.codingblocks.cbonlineapp.util.COURSE_ID
+import com.codingblocks.cbonlineapp.util.COURSE_TAB
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.crashlytics.android.core.CrashlyticsCore
 import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
