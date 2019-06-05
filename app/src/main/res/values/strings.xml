@@ -100,4 +100,8 @@
     <string name="create_a_note">Create a Note</string>
     <string name="create_note">Create Note</string>
     <string name="leaderboard_emptyView">Leaderboard not available for this course!!</string>
+    <string name="clean_dialog_title">You have reached your data limit!</string>
+    <string name="clean_dialog_description">If you want to continue with the download, Please clear the oldest download.</string>
+    <string name="clean_dialog_okBtn">Clear Oldest Download</string>
+    <string name="clean_dialog_cancelBtn">Cancel Current Download</string>
 </resources>
