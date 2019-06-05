@@ -16,6 +16,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.GravityCompat
@@ -28,6 +29,7 @@ import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.FileUtils
+import com.codingblocks.cbonlineapp.util.FileUtils.deleteDatabaseFile
 import com.codingblocks.cbonlineapp.util.NetworkUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.viewmodels.HomeActivityViewModel
@@ -153,12 +155,28 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.getHeaderView(0).login_button.text = resources.getString(R.string.logout)
         nav_view.getHeaderView(0).login_button.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            val dialogView = layoutInflater.inflate(R.layout.logout_dialogue, null)
+            builder.setView(dialogView)
+            builder.setTitle("Confirm Logout")
+            builder.setMessage("Are you sure you want to logout?")
+            builder.setPositiveButton("Logout") { _, _ ->
+                deleteDatabaseFile(this@HomeActivity, "app-database")
+                baseContext.deleteDatabase("app-database")
+                viewModel.prefs.clear()
+                startActivity(Intent(this, LoginActivity::class.java))
+                finishAffinity()
+            }
+            builder.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
             viewModel.prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
             viewModel.prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
-            if (nav_view.getHeaderView(0).login_button.text == "Logout") {
                 removeShortcuts()
                 invalidateToken()
-            }
+
             startActivity(intentFor<LoginActivity>().singleTop())
             finish()
         }

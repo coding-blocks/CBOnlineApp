@@ -37,7 +37,9 @@ class PreferenceHelper private constructor() {
         set(value) {
             prefs!!.edit().putString(JWT_TOKEN, value).apply()
         }
-
+    fun clear() {
+        prefs?.edit()?.clear()?.apply()
+    }
     var SP_JWT_REFRESH_TOKEN: String
         get() = prefs!!.getString(REFRESH_TOKEN, REFRESH_TOKEN) ?: ""
         set(value) {
