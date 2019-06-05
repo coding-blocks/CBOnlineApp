@@ -29,7 +29,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener {
+class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener, ViewPagerAdapter.ViewPagerInteractor {
 
     private lateinit var quizId: String
     private lateinit var qnaId: String
