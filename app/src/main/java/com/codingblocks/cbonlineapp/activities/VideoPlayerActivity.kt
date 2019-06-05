@@ -28,6 +28,7 @@ import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.RunAttemptsId
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
@@ -43,6 +44,7 @@ import kotlinx.android.synthetic.main.activity_video_player.player_viewpager
 import kotlinx.android.synthetic.main.activity_video_player.rootLayout
 import kotlinx.android.synthetic.main.activity_video_player.videoContainer
 import kotlinx.android.synthetic.main.activity_video_player.videoFab
+import kotlinx.android.synthetic.main.cannot_create_doubt_dialog.view.*
 import kotlinx.android.synthetic.main.doubt_dialog.view.cancelBtn
 import kotlinx.android.synthetic.main.doubt_dialog.view.descriptionLayout
 import kotlinx.android.synthetic.main.doubt_dialog.view.okBtn
@@ -250,41 +252,55 @@ class VideoPlayerActivity : AppCompatActivity(),
             val categoryId = viewModel.getCourseById(it.crCourseId).categoryId
             val doubtDialog = AlertDialog.Builder(this).create()
             val doubtView = layoutInflater.inflate(R.layout.doubt_dialog, null)
-            doubtView.cancelBtn.setOnClickListener {
-                doubtDialog.dismiss()
-            }
-            doubtView.okBtn.setOnClickListener {
-                if (doubtView.titleLayout.editText?.text.toString().length < 15 || doubtView.titleLayout.editText?.text.toString().isEmpty()) {
-                    doubtView.titleLayout.error = getString(R.string.doubt_title_error)
-                    return@setOnClickListener
-                } else if (doubtView.descriptionLayout.editText?.text.toString().length < 20 || doubtView.descriptionLayout.editText?.text.toString().isEmpty()) {
-                    doubtView.descriptionLayout.error = getString(R.string.doubt_description_error)
-                    doubtView.titleLayout.error = ""
-                } else {
-                    doubtView.descriptionLayout.error = ""
-                    val doubt = DoubtsJsonApi()
-                    doubt.body = doubtView.descriptionLayout.editText?.text.toString()
-                    doubt.title = doubtView.titleLayout.editText?.text.toString()
-                    doubt.category = categoryId
-                    doubt.status = "PENDING"
-                    doubt.postrunAttempt = RunAttemptsId(attemptId)
-                    doubt.contents = ContentsId(contentId)
-                    viewModel.createDoubtProgress.observer(this) { progress ->
-                        if (progress)
-                            doubtDialog.dismiss()
-                        else {
-                            doubtDialog.dismiss()
-                            toast("there was some error please try again")
-                        }
-                    }
-                    viewModel.createDoubt(doubt, attemptId)
+
+            if (!it.premium){
+                val cannotCreateDialog = AlertDialog.Builder(this).create()
+                val cannotCreateView = layoutInflater.inflate(R.layout.cannot_create_doubt_dialog,null)
+                cannotCreateView.okBtn.setOnClickListener {
+                    cannotCreateDialog.dismiss()
                 }
+                cannotCreateDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+                cannotCreateDialog.setView(cannotCreateView)
+                cannotCreateDialog.setCancelable(false)
+                cannotCreateDialog.show()
+            }else{
+                doubtView.cancelBtn.setOnClickListener {
+                    doubtDialog.dismiss()
+                }
+                doubtView.okBtn.setOnClickListener {
+                    if (doubtView.titleLayout.editText?.text.toString().length < 15 || doubtView.titleLayout.editText?.text.toString().isEmpty()) {
+                        doubtView.titleLayout.error = getString(R.string.doubt_title_error)
+                        return@setOnClickListener
+                    } else if (doubtView.descriptionLayout.editText?.text.toString().length < 20 || doubtView.descriptionLayout.editText?.text.toString().isEmpty()) {
+                        doubtView.descriptionLayout.error = getString(R.string.doubt_description_error)
+                        doubtView.titleLayout.error = ""
+                    } else {
+                        doubtView.descriptionLayout.error = ""
+                        val doubt = DoubtsJsonApi()
+                        doubt.body = doubtView.descriptionLayout.editText?.text.toString()
+                        doubt.title = doubtView.titleLayout.editText?.text.toString()
+                        doubt.category = categoryId
+                        doubt.status = "PENDING"
+                        doubt.postrunAttempt = RunAttemptsId(attemptId)
+                        doubt.contents = ContentsId(contentId)
+                        viewModel.createDoubtProgress.observer(this) { progress ->
+                            if (progress)
+                                doubtDialog.dismiss()
+                            else {
+                                doubtDialog.dismiss()
+                                toast("there was some error please try again")
+                            }
+                        }
+                        viewModel.createDoubt(doubt, attemptId)
+                    }
+                }
+
+                doubtDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+                doubtDialog.setView(doubtView)
+                doubtDialog.setCancelable(false)
+                doubtDialog.show()
             }
 
-            doubtDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-            doubtDialog.setView(doubtView)
-            doubtDialog.setCancelable(false)
-            doubtDialog.show()
         }
     }
 

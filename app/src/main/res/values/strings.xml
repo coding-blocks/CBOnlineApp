@@ -46,6 +46,7 @@
     <string name="hint_description">Description</string>
     <string name="hint_title">Title</string>
     <string name="doubt_title">Ask A Doubt</string>
+    <string name="cannot_create_doubt">Doubts cannot be created in Trials!</string>
     <string name="doubt_btn">Post Doubt</string>
     <string name="showComments">Show Comments</string>
     <string name="hideComments">Hide Comments</string>
