@@ -75,7 +75,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                     if (index == quiz.questions!!.size - 1) {
                         Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, attemptResponse ->
                             attemptResponse?.body().let {
-                                mAdapter = ViewPagerAdapter(context!!, qnaId, quizAttemptId, questionList, it?.submission, it?.result)
+                                mAdapter = ViewPagerAdapter(context!!, qnaId, quizAttemptId, questionList, it?.submission, it?.result, this)
                                 quizViewPager.adapter = mAdapter
                                 quizViewPager.currentItem = 0
                                 quizViewPager.setOnPageChangeListener(this)
@@ -145,7 +145,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
         })
     }
 
-    private fun confirmSubmitQuiz() {
+    fun confirmSubmitQuiz() {
         val builder = AlertDialog.Builder(activity)
         val inflater = requireActivity().layoutInflater
         val customView = inflater.inflate(R.layout.custom_dialog, null)
@@ -193,7 +193,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
         }
     }
 
-    private fun submitQuiz() {
+    fun submitQuiz() {
         Clients.onlineV2JsonApi.sumbitQuizById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
             val fragmentManager = fragmentManager!!
             val fragmentTransaction = fragmentManager.beginTransaction()
@@ -208,7 +208,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     override fun onClick(v: View) {
         when (v.id) {
             R.id.nextBtn -> if (nextBtn.text == "End" && !isSubmitted) {
-                submitQuiz()
+                confirmSubmitQuiz()
             } else
                 quizViewPager.currentItem = if (quizViewPager.currentItem < questionList.size - 1)
                     quizViewPager.currentItem + 1
@@ -250,5 +250,9 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             params.putString("name", "Quiz")
             firebaseAnalytics.logEvent("Open", params)
         }
+    }
+
+    override fun onQuiZSubmitted() {
+        confirmSubmitQuiz()
     }
 }
