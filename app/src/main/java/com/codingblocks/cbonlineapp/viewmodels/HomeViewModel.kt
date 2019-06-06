@@ -90,7 +90,8 @@ class HomeViewModel(
                                             course.id,
                                             crUpdatedAt = updatedAt,
                                             title = course.title,
-                                            recommended = recommended
+                                            recommended = recommended,
+                                            summary = course.summary
                                         )
                                     )
                                 }
@@ -167,7 +168,8 @@ class HomeViewModel(
                                                             updatedAt,
                                                             progress,
                                                             course?.title ?: "",
-                                                            runAttempts?.get(0)?.premium
+                                                            summary = course?.summary?: "",
+                                                            premium = runAttempts?.get(0)?.premium
                                                                 ?: false
                                                         )
                                                         val oldRun = runDao.getRunById(
@@ -286,7 +288,8 @@ class HomeViewModel(
                                             mrp ?: "",
                                             course.id,
                                             crUpdatedAt = updatedAt,
-                                            title = course.title
+                                            title = course.title,
+                                            summary = course.summary
                                         )
                                     )
                                 }

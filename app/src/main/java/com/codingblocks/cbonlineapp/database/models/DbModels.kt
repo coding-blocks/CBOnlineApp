@@ -61,6 +61,7 @@ data class CourseRun(
     var crUpdatedAt: String = "",
     var progress: Double = 0.0,
     var title: String = "",
+    var summary: String = "",
     var premium: Boolean = false,
     var hits: Int = 0,
     var recommended: Boolean = false

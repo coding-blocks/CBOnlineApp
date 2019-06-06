@@ -127,7 +127,8 @@ class HomeFragment : Fragment(), AnkoLogger {
             if (!it.isEmpty()) {
                 skeletonScreen.hide()
                 courseDataAdapter.setData(it.shuffled().filter { c ->
-                    c.title.contains(searchQuery, true)
+                    c.title.contains(searchQuery, true) ||
+                        c.summary.contains(searchQuery, true)
                 } as ArrayList<CourseRun>)
             } else {
                 viewModel.fetchRecommendedCourses()

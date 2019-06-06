@@ -34,6 +34,7 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
+import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_video_player.displayYoutubeVideo
@@ -90,10 +91,6 @@ class VideoPlayerActivity : AppCompatActivity(),
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
         viewModel.currentOrientation = resources.configuration.orientation
 
         setupUI()
@@ -109,6 +106,7 @@ class VideoPlayerActivity : AppCompatActivity(),
             displayYoutubeVideo.view?.visibility = View.GONE
             videoContainer.visibility = View.VISIBLE
             playerFragment = fragmentManager.findFragmentById(R.id.videoView) as VdoPlayerFragment
+            playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
             playerControlView = findViewById(R.id.player_control_view)
             showControls(false)
 
@@ -334,17 +332,24 @@ class VideoPlayerActivity : AppCompatActivity(),
     }
 
     private fun showFullScreen(show: Boolean) {
+        showSystemUi(show)
         requestedOrientation = if (show) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
             // go to landscape orientation for fullscreen mode
             ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+
         } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
             // go to portrait orientation
             ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
         }
     }
 
     private fun showSystemUi(show: Boolean) {
-        if (!show) {
+        if (show) {
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -355,6 +360,7 @@ class VideoPlayerActivity : AppCompatActivity(),
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         }
     }
+
 
     private val playbackListener = object : VdoPlayer.PlaybackEventListener {
         override fun onTracksChanged(p0: Array<out Track>?, p1: Array<out Track>?) {
@@ -401,7 +407,7 @@ class VideoPlayerActivity : AppCompatActivity(),
         VdoPlayerControlView.ControllerVisibilityListener { visibility ->
             if (viewModel.currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
                 if (visibility != View.VISIBLE) {
-                    showSystemUi(false)
+//                    showSystemUi(false)
                 }
             }
         }
@@ -420,7 +426,6 @@ class VideoPlayerActivity : AppCompatActivity(),
                 pagerFrame.visibility = View.GONE
                 playerControlView?.fitsSystemWindows = true
                 // hide system windows
-                showSystemUi(false)
                 showControls(false)
             }
             else -> {
@@ -431,7 +436,6 @@ class VideoPlayerActivity : AppCompatActivity(),
                 playerControlView?.fitsSystemWindows = false
                 playerControlView?.setPadding(0, 0, 0, 0)
                 // show system windows
-                showSystemUi(true)
             }
         }
     }
