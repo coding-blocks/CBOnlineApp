@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.adapters
 
-import android.app.Activity
 import android.content.Context
 import android.util.SparseArray
 import android.view.LayoutInflater
@@ -137,8 +136,7 @@ class ViewPagerAdapter(private var mContext: Context, private var quizId: String
         return questionList.size()
     }
 
-    interface QuizInteractor{
+    interface QuizInteractor {
         fun onQuizSubmitted()
     }
-
 }
