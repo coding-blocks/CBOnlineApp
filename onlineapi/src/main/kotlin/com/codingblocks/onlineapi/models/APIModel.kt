@@ -521,6 +521,45 @@ class Player(
     var playerId: String? = null
 )
 
+@Type("cricket_cup_match")
+class Match(
+    val title: String,
+    val start: String,
+    val description: String,
+    val team1: String,
+    val team2: String,
+    val predictionEnd: String,
+    @Relationship("cricketCupMatch")
+    val cricketCupQuestions: ArrayList<CricketQuestion>?
+) : BaseModel()
+
+@Type("cricket_cup_question")
+class CricketQuestion(
+    val title: String,
+    val description: String,
+    val score: String,
+    val correctChoiceId: String,
+    @Relationship("cricketCupMatch")
+    val cricketCupQuestions: Match?
+)
+
+@Type("cricket_cup_choice")
+class CricketChoice(
+    val content: String,
+    @Relationship("cricketCupMatch")
+    val cricketCupQuestions: CricketQuestion?
+)
+
+@Type("cricket_cup_user_prediction")
+class UserPrediction(
+    @Relationship("cricketCupQuestion")
+    val cricketCupQuestion: CricketQuestion?,
+    @Relationship("choice")
+    val choice: CricketChoice?,
+    @Relationship("cricketCupMatch")
+    val cricketCupMatch: Match?
+)
+
 
 
 
