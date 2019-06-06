@@ -18,27 +18,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.ThrowableActivity"
+
+            android:theme="@style/Theme.CB.Throwable">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".URLRouterActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="http"/>
-                <data android:scheme="https"/>
 
-                <data android:host="online.codingblocks.com"/>
-
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="online.codingblocks.com" />
                 <data android:pathPrefix="/classroom" />
                 <data android:pathPrefix="/courses" />
                 <data android:pathPrefix="/player" />
-
             </intent-filter>
-        </activity>
-
-        <!--<meta-data android:name="android.max_aspect" android:value="2.1" />-->
-
+        </activity> <!-- <meta-data android:name="android.max_aspect" android:value="2.1" /> -->
         <activity
             android:name=".activities.NotificationsActivity"
             android:parentActivityName=".activities.HomeActivity"
@@ -48,11 +53,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -157,8 +158,8 @@
         <activity
             android:name=".activities.QuizActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
             android:parentActivityName=".activities.MyCourseActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/myTheme" />
     </application>
 

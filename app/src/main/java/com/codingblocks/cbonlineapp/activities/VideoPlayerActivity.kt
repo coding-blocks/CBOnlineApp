@@ -52,6 +52,9 @@ import kotlinx.android.synthetic.main.doubt_dialog.view.titleLayout
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import android.util.DisplayMetrics
+import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_STRETCH_TO_FIT
+
 
 class VideoPlayerActivity : AppCompatActivity(),
     OnItemClickListener, AnkoLogger,
@@ -92,8 +95,9 @@ class VideoPlayerActivity : AppCompatActivity(),
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         viewModel.currentOrientation = resources.configuration.orientation
-
-        setupUI()
+        if (savedInstanceState == null) {
+            setupUI()
+        }
     }
 
     private fun setupUI() {
@@ -106,7 +110,10 @@ class VideoPlayerActivity : AppCompatActivity(),
             displayYoutubeVideo.view?.visibility = View.GONE
             videoContainer.visibility = View.VISIBLE
             playerFragment = fragmentManager.findFragmentById(R.id.videoView) as VdoPlayerFragment
-            playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
+//            val metrics = resources.displayMetrics
+//            val ratio = metrics.heightPixels.toFloat() / metrics.widthPixels.toFloat()
+//            playerFragment.setAspectRatio(ratio)
+//            playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_STRETCH_TO_FIT
             playerControlView = findViewById(R.id.player_control_view)
             showControls(false)
 
@@ -340,7 +347,6 @@ class VideoPlayerActivity : AppCompatActivity(),
             )
             // go to landscape orientation for fullscreen mode
             ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-
         } else {
             window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
             // go to portrait orientation
@@ -360,7 +366,6 @@ class VideoPlayerActivity : AppCompatActivity(),
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         }
     }
-
 
     private val playbackListener = object : VdoPlayer.PlaybackEventListener {
         override fun onTracksChanged(p0: Array<out Track>?, p1: Array<out Track>?) {
