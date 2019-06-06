@@ -129,8 +129,7 @@ class ViewPagerAdapter(private var mContext: Context, private var quizId: String
         return questionList.size
     }
 
-    interface ViewPagerInteractor{
+    interface ViewPagerInteractor {
         fun onQuiZSubmitted()
     }
-
 }
