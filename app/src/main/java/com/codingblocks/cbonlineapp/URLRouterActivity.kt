@@ -28,6 +28,8 @@ class URLRouterActivity : AppCompatActivity() {
                 "classroom" -> openRouter(uri)
                 "courses" -> openRouter(uri)
                 "player" -> openRouter(uri)
+                "cricket_cup" -> openRouter(uri)
+
                 else -> fallBack()
             }
         }
