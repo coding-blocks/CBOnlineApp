@@ -12,11 +12,25 @@
         android:background="@color/indigo_blue"
         android:orientation="vertical">
 
-        <ImageView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/bannner" />
+            android:layout_height="wrap_content">
+            <ImageView
+                android:elevation="5dp"
+                android:id="@+id/backBtn"
+                android:layout_margin="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_left_arrow" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/bannner" />
+        </RelativeLayout>
+
+
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -316,7 +330,7 @@
                         android:text="Winner of the Match"
                         android:textSize="20sp" />
 
-                    <com.google.android.material.chip.Chip
+                    <Button
                         android:id="@+id/pointsBtn"
                         android:layout_alignParentEnd="true"
                         android:layout_width="wrap_content"
