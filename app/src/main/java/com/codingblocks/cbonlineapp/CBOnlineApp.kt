@@ -5,6 +5,7 @@ import cn.campusapp.router.Router
 import cn.campusapp.router.router.IActivityRouteTableInitializer
 import com.codingblocks.cbonlineapp.activities.CourseActivity
 import com.codingblocks.cbonlineapp.activities.MyCourseActivity
+import com.codingblocks.cbonlineapp.activities.ThrowableActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.NotificationReceivedHandler
 import com.codingblocks.cbonlineapp.util.NotificationOpenedHandler
@@ -73,6 +74,9 @@ class CBOnlineApp : Application() {
                     CourseActivity::class.java
                 router["activity://course/https://online.codingblocks.com/player/:s{$RUN_ATTEMPT_ID}/content/:s{$SECTION_ID}/:s{$CONTENT_ID}"] =
                     VideoPlayerActivity::class.java
+                router["activity://course/https://online.codingblocks.com/:s{$RUN_ATTEMPT_ID}"] =
+                    ThrowableActivity::class.java
+
             })
         } catch (e: ConcurrentModificationException) {
             CrashlyticsCore.getInstance().apply {
