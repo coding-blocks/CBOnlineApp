@@ -35,6 +35,7 @@ import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
+import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_STRETCH_TO_FIT
 import com.vdocipher.aegis.player.VdoPlayerFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_video_player.displayYoutubeVideo
@@ -92,8 +93,9 @@ class VideoPlayerActivity : AppCompatActivity(),
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         viewModel.currentOrientation = resources.configuration.orientation
-
-        setupUI()
+        if (savedInstanceState == null) {
+            setupUI()
+        }
     }
 
     private fun setupUI() {
@@ -106,7 +108,10 @@ class VideoPlayerActivity : AppCompatActivity(),
             displayYoutubeVideo.view?.visibility = View.GONE
             videoContainer.visibility = View.VISIBLE
             playerFragment = fragmentManager.findFragmentById(R.id.videoView) as VdoPlayerFragment
-            playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
+            val metrics = resources.displayMetrics
+            val ratio = (metrics.heightPixels.toFloat() - 100) / (metrics.widthPixels.toFloat() - 100)
+            playerFragment.setAspectRatio(ratio)
+//            playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_STRETCH_TO_FIT
             playerControlView = findViewById(R.id.player_control_view)
             showControls(false)
 
