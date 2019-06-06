@@ -34,8 +34,6 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
-import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
-import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_STRETCH_TO_FIT
 import com.vdocipher.aegis.player.VdoPlayerFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_video_player.displayYoutubeVideo
@@ -254,9 +252,9 @@ class VideoPlayerActivity : AppCompatActivity(),
             val doubtDialog = AlertDialog.Builder(this).create()
             val doubtView = layoutInflater.inflate(R.layout.doubt_dialog, null)
 
-            if(!it.premium){
+            if (!it.premium) {
                 val cannotCreateDialog = AlertDialog.Builder(this).create()
-                val cannotCreateView = layoutInflater.inflate(R.layout.cannot_create_doubt_dialog,null)
+                val cannotCreateView = layoutInflater.inflate(R.layout.cannot_create_doubt_dialog, null)
                 cannotCreateView.okBtn.setOnClickListener {
                     cannotCreateDialog.dismiss()
                 }
@@ -264,7 +262,7 @@ class VideoPlayerActivity : AppCompatActivity(),
                 cannotCreateDialog.setView(cannotCreateView)
                 cannotCreateDialog.setCancelable(false)
                 cannotCreateDialog.show()
-            }else{
+            } else {
                 doubtView.cancelBtn.setOnClickListener {
                     doubtDialog.dismiss()
                 }
@@ -358,7 +356,6 @@ class VideoPlayerActivity : AppCompatActivity(),
             )
             // go to landscape orientation for fullscreen mode
             ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-
         } else {
             window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
             // go to portrait orientation
@@ -378,7 +375,6 @@ class VideoPlayerActivity : AppCompatActivity(),
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         }
     }
-
 
     private val playbackListener = object : VdoPlayer.PlaybackEventListener {
         override fun onTracksChanged(p0: Array<out Track>?, p1: Array<out Track>?) {
