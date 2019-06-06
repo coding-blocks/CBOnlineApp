@@ -55,7 +55,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/neon_red</item>
         <item name="colorPrimaryDark">@color/indigo_blue</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/indigo_blue</item>
         <item name="android:fontFamily">@font/nunitosans_bold</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="android:textColor">#333333</item>
