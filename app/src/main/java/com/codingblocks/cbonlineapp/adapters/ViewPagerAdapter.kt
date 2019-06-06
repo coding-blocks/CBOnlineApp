@@ -20,7 +20,7 @@ import com.codingblocks.onlineapi.models.QuizSubmission
 import kotlinx.android.synthetic.main.quizlayout.view.*
 import org.jetbrains.anko.AnkoLogger
 
-class ViewPagerAdapter(private var mContext: Context, private var quizId: String, private var qaId: String, private var questionList: HashMap<Int, String>, submission: List<QuizSubmission>?, private var result: QuizResult?) : PagerAdapter(), AnkoLogger {
+class ViewPagerAdapter(private var mContext: Context, private var quizId: String, private var qaId: String, private var questionList: HashMap<Int, String>, submission: List<QuizSubmission>?, private var result: QuizResult?, val listener: QuizInteractor) : PagerAdapter(), AnkoLogger {
     private lateinit var choiceDataAdapter: QuizChoiceAdapter
     var submissionList: ArrayList<QuizSubmission> = submission as ArrayList<QuizSubmission>
 
@@ -118,9 +118,7 @@ class ViewPagerAdapter(private var mContext: Context, private var quizId: String
             }
         })
         view.submitButton.setOnClickListener {
-            Clients.onlineV2JsonApi.sumbitQuizById(qaId).enqueue(retrofitCallback { _, _ ->
-                (mContext as Activity).finish()
-            })
+            listener.onQuizSubmitted()
         }
     }
 
@@ -131,4 +129,9 @@ class ViewPagerAdapter(private var mContext: Context, private var quizId: String
     override fun getCount(): Int {
         return questionList.size
     }
+
+    interface QuizInteractor{
+        fun onQuizSubmitted()
+    }
+
 }

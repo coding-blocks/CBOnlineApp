@@ -29,7 +29,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener {
+class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener, ViewPagerAdapter.QuizInteractor {
 
     private lateinit var quizId: String
     private lateinit var qnaId: String
@@ -75,7 +75,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                     if (index == quiz.questions!!.size - 1) {
                         Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, attemptResponse ->
                             attemptResponse?.body().let {
-                                mAdapter = ViewPagerAdapter(context!!, qnaId, quizAttemptId, questionList, it?.submission, it?.result)
+                                mAdapter = ViewPagerAdapter(context!!, qnaId, quizAttemptId, questionList, it?.submission, it?.result, this)
                                 quizViewPager.adapter = mAdapter
                                 quizViewPager.currentItem = 0
                                 quizViewPager.setOnPageChangeListener(this)
@@ -227,6 +227,10 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                 }
             }
         }
+    }
+
+    override fun onQuizSubmitted() {
+        confirmSubmitQuiz()
     }
 
     companion object {
