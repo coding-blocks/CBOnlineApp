@@ -109,7 +109,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             if (it.isNotEmpty()) {
                 skeletonScreen.hide()
                 courseDataAdapter.setData(it.filter { c ->
-                    c.title.contains(searchQuery, true)
+                    c.title.contains(searchQuery, true) ||
+                        c.summary.contains(searchQuery, true)
                 } as ArrayList<CourseRun>)
             } else {
                 viewModel.fetchMyCourses()

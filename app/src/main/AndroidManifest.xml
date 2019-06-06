@@ -36,6 +36,9 @@
 
             </intent-filter>
         </activity>
+
+        <!--<meta-data android:name="android.max_aspect" android:value="2.1" />-->
+
         <activity
             android:name=".activities.NotificationsActivity"
             android:parentActivityName=".activities.HomeActivity"
