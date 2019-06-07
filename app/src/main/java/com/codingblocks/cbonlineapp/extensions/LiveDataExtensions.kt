@@ -110,6 +110,12 @@ fun formatDate(date: String): String {
     return format.format(calender.time)
 }
 
+fun String.isotomillisecond(): Long {
+    val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+    val newDate = format.parse(this)
+    return newDate.time
+}
+
 fun secToTime(time: Double): String {
     val sec = time.toInt()
     val seconds = sec % 60
