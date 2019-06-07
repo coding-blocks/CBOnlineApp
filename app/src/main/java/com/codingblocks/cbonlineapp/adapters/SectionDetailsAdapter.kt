@@ -33,6 +33,8 @@ import com.codingblocks.cbonlineapp.util.QUIZ_QNA
 import com.codingblocks.cbonlineapp.util.QUIZ_ID
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.NetworkUtils
+import com.codingblocks.cbonlineapp.util.FileUtils
+import com.codingblocks.cbonlineapp.util.OnCleanDialogListener
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.Animations.collapse
 import com.codingblocks.cbonlineapp.util.Animations.expand
@@ -191,17 +193,16 @@ class SectionDetailsAdapter(
                                             if (MediaUtils.checkPermission(context)) {
                                                 if ((context as Activity).getPrefs().SP_WIFI) {
                                                     if (NetworkUtils.connectedToWifi(context) == true) {
-                                                        starter.startDownload(
+                                                        startFileDownload(
                                                             content.contentLecture.lectureId,
                                                             data.id,
                                                             content.contentLecture.lectureContentId,
                                                             content.title,
                                                             content.attempt_id,
                                                             content.id,
-                                                            content.section_id
+                                                            content.section_id,
+                                                            downloadBtn
                                                         )
-                                                        downloadBtn.isEnabled = false
-                                                        (downloadBtn.background as AnimationDrawable).start()
                                                     } else {
                                                         Components.showconfirmation(
                                                             context,
@@ -209,17 +210,16 @@ class SectionDetailsAdapter(
                                                         )
                                                     }
                                                 } else {
-                                                    starter.startDownload(
+                                                    startFileDownload(
                                                         content.contentLecture.lectureId,
                                                         data.id,
                                                         content.contentLecture.lectureContentId,
                                                         content.title,
                                                         content.attempt_id,
                                                         content.id,
-                                                        content.section_id
+                                                        content.section_id,
+                                                        downloadBtn
                                                     )
-                                                    downloadBtn.isEnabled = false
-                                                    (downloadBtn.background as AnimationDrawable).start()
                                                 }
                                             } else {
                                                 MediaUtils.isStoragePermissionGranted(context)
@@ -406,6 +406,59 @@ class SectionDetailsAdapter(
                     }
                 }
             }
+        }
+
+        private fun startFileDownload(lectureId: String, dataId: String, lectureContentId: String, title: String, attempt_id: String, content_id: String, section_id: String, downloadBtn: ImageView) {
+            if (FileUtils.checkIfCannotDownload(context)) {
+                FileUtils.showIfCleanDialog(context, object : OnCleanDialogListener {
+                    override fun onComplete() {
+                        startDownload(
+                            lectureId,
+                            dataId,
+                            lectureContentId,
+                            title,
+                            attempt_id,
+                            content_id,
+                            section_id,
+                            downloadBtn
+                        )
+                    }
+                })
+            } else {
+                startDownload(
+                    lectureId,
+                    dataId,
+                    lectureContentId,
+                    title,
+                    attempt_id,
+                    content_id,
+                    section_id,
+                    downloadBtn
+                )
+            }
+        }
+
+        private fun startDownload(
+            videoId: String,
+            id: String,
+            lectureContentId: String,
+            title: String,
+            attemptId: String,
+            contentId: String,
+            sectionId: String,
+            downloadBtn: ImageView
+        ) {
+            starter.startDownload(
+                videoId,
+                id,
+                lectureContentId,
+                title,
+                attemptId,
+                contentId,
+                sectionId
+            )
+            downloadBtn.isEnabled = false
+            (downloadBtn.background as AnimationDrawable).start()
         }
     }
 

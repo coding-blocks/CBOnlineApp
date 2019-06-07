@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
+import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.getPrefs
@@ -60,6 +61,27 @@ class SettingsActivity : AppCompatActivity() {
                 }
             }
         }
+
+        seekbarLimit.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser)
+                    setSeekbarProgress(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
+        seekbarLimit.progress = getPrefs().SP_DATA_LIMIT.minus(1).times(100).toInt()
+        setSeekbarProgress(seekbarLimit.progress)
+    }
+
+    private fun setSeekbarProgress(progress: Int) {
+        val size = (1 + progress / 100.toDouble()).toFloat()
+        seekbarTv.text = "${size}GB"
+        getPrefs().SP_DATA_LIMIT = size
     }
 
     override fun attachBaseContext(newBase: Context) {
