@@ -34,7 +34,6 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
-import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_STRETCH_TO_FIT
 import com.vdocipher.aegis.player.VdoPlayerFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
