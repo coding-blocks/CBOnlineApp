@@ -61,6 +61,8 @@ interface OnlineRestApi {
 
     @GET("v2/cricket_cup/matches/earnings")
     fun getEarning(): Call<JsonObject>
+    @GET("v2/cricket_cup/matches/{matchId}/score")
+    fun getScore(@Path("matchId") id: String) : Call<JsonObject>
 
 
 }

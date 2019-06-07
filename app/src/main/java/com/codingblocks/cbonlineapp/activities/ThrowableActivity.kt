@@ -1,21 +1,23 @@
 package com.codingblocks.cbonlineapp.activities
 
-//import jdk.nashorn.internal.objects.NativeDate.getTime
-//import android.R
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.extensions.formatDate
 import com.codingblocks.cbonlineapp.extensions.isotomillisecond
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.CricketQuestion
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_throwable.backBtn
 import kotlinx.android.synthetic.main.activity_throwable.earningTv
 import kotlinx.android.synthetic.main.activity_throwable.infoll
+import kotlinx.android.synthetic.main.activity_throwable.matchTime
 import kotlinx.android.synthetic.main.activity_throwable.predictionOverTv
 import kotlinx.android.synthetic.main.activity_throwable.ques1Points
 import kotlinx.android.synthetic.main.activity_throwable.ques1rad1
@@ -24,6 +26,7 @@ import kotlinx.android.synthetic.main.activity_throwable.ques1rad3
 import kotlinx.android.synthetic.main.activity_throwable.ques1rad4
 import kotlinx.android.synthetic.main.activity_throwable.ques1rad5
 import kotlinx.android.synthetic.main.activity_throwable.ques1rad6
+import kotlinx.android.synthetic.main.activity_throwable.ques1radGroup
 import kotlinx.android.synthetic.main.activity_throwable.ques2Points
 import kotlinx.android.synthetic.main.activity_throwable.ques2rad1
 import kotlinx.android.synthetic.main.activity_throwable.ques2rad2
@@ -31,6 +34,7 @@ import kotlinx.android.synthetic.main.activity_throwable.ques2rad3
 import kotlinx.android.synthetic.main.activity_throwable.ques2rad4
 import kotlinx.android.synthetic.main.activity_throwable.ques2rad5
 import kotlinx.android.synthetic.main.activity_throwable.ques2rad6
+import kotlinx.android.synthetic.main.activity_throwable.ques2radGroup
 import kotlinx.android.synthetic.main.activity_throwable.ques3
 import kotlinx.android.synthetic.main.activity_throwable.ques3Points
 import kotlinx.android.synthetic.main.activity_throwable.ques3rad1
@@ -39,14 +43,20 @@ import kotlinx.android.synthetic.main.activity_throwable.ques3rad3
 import kotlinx.android.synthetic.main.activity_throwable.ques3rad4
 import kotlinx.android.synthetic.main.activity_throwable.ques3rad5
 import kotlinx.android.synthetic.main.activity_throwable.ques3rad6
+import kotlinx.android.synthetic.main.activity_throwable.ques3radGroup
 import kotlinx.android.synthetic.main.activity_throwable.question1
 import kotlinx.android.synthetic.main.activity_throwable.question2
 import kotlinx.android.synthetic.main.activity_throwable.quiz
 import kotlinx.android.synthetic.main.activity_throwable.quiz1ll
+import kotlinx.android.synthetic.main.activity_throwable.rootLayout
 import kotlinx.android.synthetic.main.activity_throwable.submitBtn
+import kotlinx.android.synthetic.main.activity_throwable.submitQuizBtn
 import kotlinx.android.synthetic.main.activity_throwable.team1Name
+import kotlinx.android.synthetic.main.activity_throwable.team1Score
 import kotlinx.android.synthetic.main.activity_throwable.team2Name
-
+import kotlinx.android.synthetic.main.activity_throwable.team2Score
+import kotlinx.android.synthetic.main.activity_throwable.timeTv
+import org.jetbrains.anko.design.snackbar
 
 class ThrowableActivity : AppCompatActivity() {
 
@@ -76,10 +86,8 @@ class ThrowableActivity : AppCompatActivity() {
                                 override fun onAnimationEnd(animation: Animator?) {
                                     quiz1ll.visibility = View.VISIBLE
                                 }
-
                             })
                     }
-
                 })
         }
     }
@@ -89,7 +97,26 @@ class ThrowableActivity : AppCompatActivity() {
             response?.body().let {
                 if (response?.isSuccessful!!) {
                     it!![0].run {
+                        val timer = object : CountDownTimer(
+                            predictionEnd.isotomillisecond() - System.currentTimeMillis(),
+                            1000
+                        ) {
+                            override fun onTick(millisUntilFinished: Long) {
+                                val seconds = millisUntilFinished / 1000
+                                val minutes = seconds / 60
+                                val hours = minutes / 60
+                                val days = hours / 24
+                                val time =
+                                    "  $days   ${hours % 24}   ${minutes % 60}  ${seconds % 60}"
+                                timeTv.text = time
+                                getScore(id)
+                            }
 
+                            override fun onFinish() {
+                            }
+                        }
+                        timer.start()
+                        matchTime.text = formatDate(start)
                         team1Name.text = team1.name
                         Picasso.with(this@ThrowableActivity).load(team1.flag)
                             .placeholder(R.drawable.flag_placeholder).fit().into(
@@ -100,13 +127,14 @@ class ThrowableActivity : AppCompatActivity() {
                             .placeholder(R.drawable.flag_placeholder).fit().into(
                                 findViewById<CircleImageView>(R.id.team1Flag)
                             )
-                        if (predictionEnd.isotomillisecond() > System.currentTimeMillis()) {
+                        if (predictionEnd.isotomillisecond() < System.currentTimeMillis()) {
                             predictionOverTv.visibility = View.VISIBLE
                             quiz.visibility = View.GONE
                         } else {
                             quiz.visibility = View.VISIBLE
                             predictionOverTv.visibility = View.GONE
                         }
+                        setSubmitButton(cricketCupQuestions)
                         cricketCupQuestions?.forEachIndexed { index, cricketQuestion ->
                             when (index) {
                                 0 -> {
@@ -244,14 +272,94 @@ class ThrowableActivity : AppCompatActivity() {
                                     }
                                 }
                             }
-
                         }
                     }
                 }
             }
-
-
         })
+    }
+
+    private fun getScore(id: String) {
+        Clients.api.getScore(id).enqueue(retrofitCallback { throwable, response ->
+            response?.body().let {
+                if (response?.isSuccessful!!) {
+                    team1Score.text = it?.getAsJsonObject("score")?.getAsJsonObject("batting")?.get("score")?.asString
+                    team2Score.text = it?.getAsJsonObject("score")?.getAsJsonObject("bowling")?.get("score")?.asString
+                }
+            }
+        })
+    }
+
+    private fun setSubmitButton(cricketCupQuestions: ArrayList<CricketQuestion>?) {
+        var id1: String?
+        var id2: String?
+        var id3: String?
+        submitQuizBtn.setOnClickListener {
+            if (ques1radGroup.checkedRadioButtonId != -1 && ques2radGroup.checkedRadioButtonId != -1 && ques3radGroup.checkedRadioButtonId != -1) {
+                when (ques1radGroup.checkedRadioButtonId) {
+                    R.id.ques1rad1 -> {
+                        id1 = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(0)?.id
+                    }
+                    R.id.ques1rad2 -> {
+                        id1 = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(1)?.id
+                    }
+                    R.id.ques1rad3 -> {
+                        id1 = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(2)?.id
+                    }
+                    R.id.ques1rad4 -> {
+                        id1 = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(3)?.id
+                    }
+                    R.id.ques1rad5 -> {
+                        id1 = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(4)?.id
+                    }
+                    R.id.ques1rad6 -> {
+                        id1 = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(5)?.id
+                    }
+                }
+                when (ques2radGroup.checkedRadioButtonId) {
+                    R.id.ques2rad1 -> {
+                        id2 = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(0)?.id
+                    }
+                    R.id.ques2rad2 -> {
+                        id2 = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(1)?.id
+                    }
+                    R.id.ques2rad3 -> {
+                        id2 = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(2)?.id
+                    }
+                    R.id.ques2rad4 -> {
+                        id2 = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(3)?.id
+                    }
+                    R.id.ques2rad5 -> {
+                        id2 = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(4)?.id
+                    }
+                    R.id.ques2rad6 -> {
+                        id2 = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(5)?.id
+                    }
+                }
+                when (ques3radGroup.checkedRadioButtonId) {
+                    R.id.ques3rad1 -> {
+                        id2 = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(0)?.id
+                    }
+                    R.id.ques3rad2 -> {
+                        id2 = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(1)?.id
+                    }
+                    R.id.ques3rad3 -> {
+                        id2 = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(2)?.id
+                    }
+                    R.id.ques3rad4 -> {
+                        id2 = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(3)?.id
+                    }
+                    R.id.ques3rad5 -> {
+                        id2 = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(4)?.id
+                    }
+                    R.id.ques3rad6 -> {
+                        id2 = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(5)?.id
+                    }
+                }
+            } else {
+                rootLayout.snackbar("You mut answer all the questions")
+            }
+        }
     }
 
     private fun getEarning() {
@@ -261,14 +369,10 @@ class ThrowableActivity : AppCompatActivity() {
                     earningTv.text = "Your Winnings: INR " + it?.get("earnings")?.asInt
                 }
             }
-
         })
     }
 
-
     override fun onStart() {
         super.onStart()
-
-
     }
 }

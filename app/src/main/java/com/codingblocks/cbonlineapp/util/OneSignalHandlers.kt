@@ -56,7 +56,7 @@ class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
 
     override fun notificationReceived(notification: OSNotification) {
         val data = notification.payload.additionalData
-        val payload  = notification.payload
+        val payload = notification.payload
         val title = notification.payload.title
         val body = notification.payload.body
         val url = notification.payload.launchURL
