@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
@@ -48,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -86,7 +87,7 @@
                 android:layout_margin="16dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -103,7 +104,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/nunitosans_bold"
-                    android:text="Your Winnings: INR 4000"
+                    android:text="Your Winnings: INR 0"
                     android:textSize="24sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -112,6 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/button_background_throwable"
+                    android:onClick="startHome"
                     android:padding="16dp"
                     android:paddingStart="27dp"
                     android:paddingTop="15dp"
@@ -134,116 +136,40 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:layout_margin="6dp"
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <TextView
+                        android:textAlignment="center"
+                        android:id="@+id/timeTv"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_margin="6dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitosans_bold"
+                        android:text="00  00  00  00"
+                        android:textColor="#f6013d"
+                        android:textSize="26sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunitosans_bold"
-                            android:text="00"
-                            android:textColor="#f6013d"
-                            android:textSize="28sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunitosans_bold"
-                            android:text="Days"
-                            android:textColor="@color/neon_red"
-                            android:textSize="14.5sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
+                    <TextView
+                        android:textAlignment="center"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_margin="6dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitosans_bold"
+                        android:text="Days  Hours  Mins  Secs"
+                        android:textColor="#f6013d"
+                        android:textSize="16.5sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunitosans_bold"
-                            android:text="00"
-                            android:textColor="#f6013d"
-                            android:textSize="28sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunitosans_bold"
-                            android:text="Hours"
-                            android:textColor="#f6013d"
-                            android:textSize="14.5sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_margin="6dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunitosans_bold"
-                            android:text="00"
-                            android:textColor="#f6013d"
-                            android:textSize="28sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunitosans_bold"
-                            android:text="Mins"
-                            android:textColor="#f6013d"
-                            android:textSize="14.5sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_margin="6dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunitosans_bold"
-                            android:text="00"
-                            android:textColor="#f6013d"
-                            android:textSize="28sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunitosans_bold"
-                            android:text="Secs"
-                            android:textColor="#f6013d"
-                            android:textSize="14.5sp" />
-
-                    </LinearLayout>
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/matchTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:fontFamily="@font/nunitosans_bold"
                     android:gravity="center"
                     android:textColor="#333333"
+                    android:lines="1"
                     android:textSize="20sp"
                     tools:text="Wednesday, Jun 5, 03:00 PM" />
 
@@ -353,21 +279,21 @@
                     android:background="@color/colorAccent" />
 
                 <com.codingblocks.cbonlineapp.widgets.GradientTextView
-                    android:layout_width="wrap_content"
-                    android:textSize="24sp"
-                    android:visibility="gone"
                     android:id="@+id/predictionOverTv"
-                    android:textAlignment="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="Prediction period for this match has expired."
-                    android:layout_height="wrap_content" />
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/quiz"
-                    android:gravity="center"
-                    android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
                     <RelativeLayout
                         android:layout_width="match_parent"

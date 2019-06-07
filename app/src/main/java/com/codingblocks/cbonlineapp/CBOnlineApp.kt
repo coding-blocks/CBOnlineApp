@@ -76,7 +76,6 @@ class CBOnlineApp : Application() {
                     VideoPlayerActivity::class.java
                 router["activity://course/https://online.codingblocks.com/:s{$RUN_ATTEMPT_ID}"] =
                     ThrowableActivity::class.java
-
             })
         } catch (e: ConcurrentModificationException) {
             CrashlyticsCore.getInstance().apply {
