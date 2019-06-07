@@ -17,9 +17,12 @@ import com.codingblocks.onlineapi.models.ContentVideoType
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.CourseSection
+import com.codingblocks.onlineapi.models.CricketChoice
+import com.codingblocks.onlineapi.models.CricketQuestion
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Instructor
 import com.codingblocks.onlineapi.models.LectureContent
+import com.codingblocks.onlineapi.models.Match
 import com.codingblocks.onlineapi.models.MyCourse
 import com.codingblocks.onlineapi.models.MyCourseRuns
 import com.codingblocks.onlineapi.models.MyRunAttempt
@@ -36,6 +39,7 @@ import com.codingblocks.onlineapi.models.RunAttemptId
 import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Tags
+import com.codingblocks.onlineapi.models.UserPrediction
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -66,7 +70,8 @@ object Clients {
         Question::class.java, Choice::class.java, QuizAttempt::class.java,
         Quizqnas::class.java, DoubtsJsonApi::class.java, ContentCsv::class.java, Comment::class.java,
         Note::class.java, Notes::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
-        RunAttemptId::class.java, RunAttemptsId::class.java, ContentId::class.java, ContentsId::class.java
+        RunAttemptId::class.java, RunAttemptsId::class.java, ContentId::class.java, ContentsId::class.java,
+        UserPrediction::class.java,CricketChoice::class.java,CricketQuestion::class.java,Match::class.java
     )
 
     private val relationshipResolver = RelationshipResolver {
