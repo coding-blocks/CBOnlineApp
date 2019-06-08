@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.widgets
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.RadioButton
@@ -45,13 +44,13 @@ class ToggleButtonGroupTableLayout : TableLayout, OnClickListener {
      * @see android.widget.TableLayout#addView(android.view.View, int, android.view.ViewGroup.LayoutParams)
      */
     override fun addView(
-        child: View, index: Int,
+        child: View,
+        index: Int,
         params: android.view.ViewGroup.LayoutParams
     ) {
         super.addView(child, index, params)
         setChildrenOnClickListener(child as TableRow)
     }
-
 
     /* (non-Javadoc)
      * @see android.widget.TableLayout#addView(android.view.View, android.view.ViewGroup.LayoutParams)
@@ -60,7 +59,6 @@ class ToggleButtonGroupTableLayout : TableLayout, OnClickListener {
         super.addView(child, params)
         setChildrenOnClickListener(child as TableRow)
     }
-
 
     private fun setChildrenOnClickListener(tr: TableRow) {
         val c = tr.childCount

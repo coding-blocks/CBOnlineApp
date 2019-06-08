@@ -523,12 +523,12 @@ class Player(
 
 @Type("cricket_cup_matches")
 class Match(
-    val title: String,
-    val start: String,
+    val title: String?,
+    val start: String?,
     val description: String?,
-    val team1: Team,
-    val team2: Team,
-    val predictionEnd: String,
+    val team1: Team?,
+    val team2: Team?,
+    val predictionEnd: String?,
     @Relationship("cricket-cup-questions")
     val cricketCupQuestions: ArrayList<CricketQuestion>?
 ) : BaseModel()
@@ -543,7 +543,7 @@ class Team(
 
 @Type("cricket_cup_questions")
 class CricketQuestion(
-    val title: String,
+    val title: String?,
     val description: String?,
     val score: String?,
     val correctChoiceId: String?,
@@ -553,16 +553,16 @@ class CricketQuestion(
 
 @Type("cricket_cup_choices")
 class CricketChoice(
-    val content: String
+    val content: String?
 ) : BaseModel()
 
-@Type("cricket_cup_user_prediction")
+@Type("cricket_cup_user_predictions")
 class UserPrediction(
-    @Relationship("cricketCupQuestion")
+    @Relationship("cricket-cup-question")
     val cricketCupQuestion: CricketQuestion?,
-    @Relationship("choice")
+    @Relationship("cricket-cup-choice")
     val choice: CricketChoice?,
-    @Relationship("cricketCupMatch")
+    @Relationship("cricket-cup-match")
     val cricketCupMatch: Match?
 ) : BaseModel()
 

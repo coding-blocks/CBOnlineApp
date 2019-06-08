@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootLayout"
+    android:overScrollMode="never"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
@@ -90,10 +91,11 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/nameTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunitosans_bold"
-                    android:text="Welcome, Siddharth Jain"
+                    android:text="Welcome,"
                     android:textColor="#333333"
                     android:textSize="20sp" />
 

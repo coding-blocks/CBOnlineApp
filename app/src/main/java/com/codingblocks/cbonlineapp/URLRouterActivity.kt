@@ -6,7 +6,9 @@ import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
 import cn.campusapp.router.Router
 import com.codingblocks.cbonlineapp.activities.HomeActivity
+import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.otherwise
+import com.codingblocks.onlineapi.Clients
 import org.jetbrains.anko.intentFor
 
 class URLRouterActivity : AppCompatActivity() {
@@ -35,6 +37,8 @@ class URLRouterActivity : AppCompatActivity() {
         }
 
         ?: finish()
+
+        Clients.authJwt = getPrefs().SP_JWT_TOKEN_KEY
     }
 
     private fun openRouter(uri: Uri) {

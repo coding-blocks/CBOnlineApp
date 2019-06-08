@@ -180,7 +180,10 @@ interface OnlineJsonApi {
     @GET("cricket_cup/user_predictions")
     fun getUserPrediction(
         @Query("filter[cricketCupMatchId]") matchId: String
-    ): ArrayList<UserPrediction>
+    ): Call<ArrayList<UserPrediction>>
+
+    @POST("cricket_cup/user_predictions")
+    fun setUserPrediction(@Body params: UserPrediction): ArrayList<UserPrediction>
 
     @GET("cricket_cup/matches/today")
     fun getMatch() : Call<ArrayList<Match>>

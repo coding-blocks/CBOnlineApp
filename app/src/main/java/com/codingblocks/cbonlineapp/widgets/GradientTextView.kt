@@ -25,7 +25,7 @@ class GradientTextView : TextView {
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
 
-        //Setting the gradient if layout is changed
+        // Setting the gradient if layout is changed
         if (changed) {
             paint.shader = LinearGradient(
                 0f, 0f, width.toFloat(), height.toFloat(),
