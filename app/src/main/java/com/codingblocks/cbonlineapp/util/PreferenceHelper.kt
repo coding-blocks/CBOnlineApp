@@ -13,6 +13,7 @@ class PreferenceHelper private constructor() {
         const val USER_IMAGE = "user_image"
         const val ONEAUTH_ID = "oneauth_id"
         const val USER_ID = "user_id"
+        const val USER_NAME = "user_name"
         const val WIFI = "wifi"
         const val WIFI_DEFAULT = false
         const val DATA_LIMIT = "data_limit"
@@ -61,6 +62,13 @@ class PreferenceHelper private constructor() {
         set(value) {
             prefs?.edit()?.putString(USER_ID, value)?.apply()
         }
+
+    var SP_USER_NAME: String
+        get() = prefs?.getString(USER_NAME, USER_NAME) ?: ""
+        set(value) {
+            prefs?.edit()?.putString(USER_NAME, value)?.apply()
+        }
+
     var SP_WIFI: Boolean
         get() = prefs?.getBoolean(WIFI, WIFI_DEFAULT) ?: WIFI_DEFAULT
         set(value) {

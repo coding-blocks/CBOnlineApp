@@ -4,10 +4,12 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.formatDate
+import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.isotomillisecond
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
@@ -18,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_throwable.backBtn
 import kotlinx.android.synthetic.main.activity_throwable.earningTv
 import kotlinx.android.synthetic.main.activity_throwable.infoll
 import kotlinx.android.synthetic.main.activity_throwable.matchTime
+import kotlinx.android.synthetic.main.activity_throwable.nameTv
 import kotlinx.android.synthetic.main.activity_throwable.predictionOverTv
 import kotlinx.android.synthetic.main.activity_throwable.ques1Points
 import kotlinx.android.synthetic.main.activity_throwable.ques1rad1
@@ -68,6 +71,8 @@ class ThrowableActivity : AppCompatActivity() {
             finish()
         }
 
+        nameTv.text = "Welcome, " + getPrefs().SP_USER_NAME
+
         getEarning()
         getMatch()
         submitBtn.setOnClickListener {
@@ -97,41 +102,42 @@ class ThrowableActivity : AppCompatActivity() {
             response?.body().let {
                 if (response?.isSuccessful!!) {
                     it!![0].run {
-                        val timer = object : CountDownTimer(
-                            predictionEnd.isotomillisecond() - System.currentTimeMillis(),
-                            1000
-                        ) {
-                            override fun onTick(millisUntilFinished: Long) {
-                                val seconds = millisUntilFinished / 1000
-                                val minutes = seconds / 60
-                                val hours = minutes / 60
-                                val days = hours / 24
-                                val time =
-                                    "  $days   ${hours % 24}   ${minutes % 60}  ${seconds % 60}"
-                                timeTv.text = time
-                                getScore(id)
-                            }
-
-                            override fun onFinish() {
-                            }
-                        }
-                        timer.start()
-                        matchTime.text = formatDate(start)
-                        team1Name.text = team1.name
-                        Picasso.with(this@ThrowableActivity).load(team1.flag)
+                        fetchUserPrediction(id, cricketCupQuestions)
+                        matchTime.text = formatDate(start ?: "")
+                        team1Name.text = team1?.name ?: ""
+                        Picasso.with(this@ThrowableActivity).load(team1?.flag)
                             .placeholder(R.drawable.flag_placeholder).fit().into(
                                 findViewById<CircleImageView>(R.id.team1Flag)
                             )
-                        team2Name.text = team2.name
-                        Picasso.with(this@ThrowableActivity).load(team1.flag)
+                        team2Name.text = team2?.name
+                        Picasso.with(this@ThrowableActivity).load(team1?.flag)
                             .placeholder(R.drawable.flag_placeholder).fit().into(
                                 findViewById<CircleImageView>(R.id.team1Flag)
                             )
-                        if (predictionEnd.isotomillisecond() < System.currentTimeMillis()) {
+                        if (predictionEnd?.isotomillisecond() ?: 0 < System.currentTimeMillis()) {
                             predictionOverTv.visibility = View.VISIBLE
                             quiz.visibility = View.GONE
                         } else {
                             quiz.visibility = View.VISIBLE
+                            val timer = object : CountDownTimer(
+                                predictionEnd?.isotomillisecond() ?: 0 - System.currentTimeMillis(),
+                                1000
+                            ) {
+                                override fun onTick(millisUntilFinished: Long) {
+                                    val seconds = millisUntilFinished / 1000
+                                    val minutes = seconds / 60
+                                    val hours = minutes / 60
+                                    val days = hours / 24
+                                    val time =
+                                        "  $days   ${hours % 24}   ${minutes % 60}  ${seconds % 60}"
+                                    timeTv.text = time
+                                    getScore(id)
+                                }
+
+                                override fun onFinish() {
+                                }
+                            }
+                            timer.start()
                             predictionOverTv.visibility = View.GONE
                         }
                         setSubmitButton(cricketCupQuestions)
@@ -279,12 +285,43 @@ class ThrowableActivity : AppCompatActivity() {
         })
     }
 
+    private fun fetchUserPrediction(
+        id: String,
+        cricketCupQuestions: ArrayList<CricketQuestion>?
+    ) {
+        var questionId: String = ""
+        var choice: String?
+        Clients.onlineV2JsonApi.getUserPrediction(id)
+            .enqueue(retrofitCallback { throwable, response ->
+                response?.body().let {
+                    if (response?.isSuccessful!!) {
+                        it?.forEachIndexed { index, userPrediction ->
+                            with(cricketCupQuestions?.filter {
+                                it.id == userPrediction.cricketCupQuestion?.id
+                            }.apply {
+                                questionId = this?.get(0)?.title ?: ""
+                            }?.get(0)?.cricketCupChoices?.filter {
+                                it.id == userPrediction.choice?.id
+                            }) {
+                                choice = this?.get(0)?.content
+                                Log.e("TAG ANSWER", choice + "  " + questionId)
+                            }
+                        }
+                    }
+                }
+            })
+    }
+
     private fun getScore(id: String) {
         Clients.api.getScore(id).enqueue(retrofitCallback { throwable, response ->
             response?.body().let {
                 if (response?.isSuccessful!!) {
-                    team1Score.text = it?.getAsJsonObject("score")?.getAsJsonObject("batting")?.get("score")?.asString
-                    team2Score.text = it?.getAsJsonObject("score")?.getAsJsonObject("bowling")?.get("score")?.asString
+                    team1Score.text =
+                        it?.getAsJsonObject("score")?.getAsJsonObject("batting")?.get("score")
+                            ?.asString
+                    team2Score.text =
+                        it?.getAsJsonObject("score")?.getAsJsonObject("bowling")?.get("score")
+                            ?.asString
                 }
             }
         })
@@ -356,6 +393,8 @@ class ThrowableActivity : AppCompatActivity() {
                         id2 = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(5)?.id
                     }
                 }
+//                var prediction=UserPrediction(Match())
+//                prediction.choice?.id =
             } else {
                 rootLayout.snackbar("You mut answer all the questions")
             }
@@ -370,9 +409,5 @@ class ThrowableActivity : AppCompatActivity() {
                 }
             }
         })
-    }
-
-    override fun onStart() {
-        super.onStart()
     }
 }
