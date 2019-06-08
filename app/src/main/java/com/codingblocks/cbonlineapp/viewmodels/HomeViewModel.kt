@@ -168,7 +168,7 @@ class HomeViewModel(
                                                             updatedAt,
                                                             progress,
                                                             course?.title ?: "",
-                                                            summary = course?.summary?: "",
+                                                            summary = course?.summary ?: "",
                                                             premium = runAttempts?.get(0)?.premium
                                                                 ?: false
                                                         )
