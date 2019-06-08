@@ -7,6 +7,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.BuildConfig
@@ -430,6 +431,13 @@ class VideoPlayerActivity : AppCompatActivity(),
                 player_tabs.visibility = View.GONE
                 pagerFrame.visibility = View.GONE
                 playerControlView?.fitsSystemWindows = true
+
+                val paramsFragment: RelativeLayout.LayoutParams = playerFragment.view?.layoutParams as RelativeLayout.LayoutParams
+                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
+                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_TOP)
+                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_START)
+                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_END)
+
                 // hide system windows
                 showControls(false)
             }
@@ -439,6 +447,13 @@ class VideoPlayerActivity : AppCompatActivity(),
                 pagerFrame.visibility = View.VISIBLE
 
                 playerControlView?.fitsSystemWindows = false
+
+                val paramsFragment: RelativeLayout.LayoutParams = playerFragment.view?.layoutParams as RelativeLayout.LayoutParams
+                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
+                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_TOP)
+                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_START)
+                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_END)
+
                 playerControlView?.setPadding(0, 0, 0, 0)
                 // show system windows
             }
