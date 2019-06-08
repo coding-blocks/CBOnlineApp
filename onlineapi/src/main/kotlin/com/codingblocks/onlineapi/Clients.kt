@@ -18,11 +18,14 @@ import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.CourseSection
 import com.codingblocks.onlineapi.models.CricketChoice
+import com.codingblocks.onlineapi.models.CricketChoicePost
 import com.codingblocks.onlineapi.models.CricketQuestion
+import com.codingblocks.onlineapi.models.CricketQuestionPost
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Instructor
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Match
+import com.codingblocks.onlineapi.models.MatchPost
 import com.codingblocks.onlineapi.models.MyCourse
 import com.codingblocks.onlineapi.models.MyCourseRuns
 import com.codingblocks.onlineapi.models.MyRunAttempt
@@ -40,6 +43,7 @@ import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Tags
 import com.codingblocks.onlineapi.models.UserPrediction
+import com.codingblocks.onlineapi.models.UserPredictionPost
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -71,7 +75,11 @@ object Clients {
         Quizqnas::class.java, DoubtsJsonApi::class.java, ContentCsv::class.java, Comment::class.java,
         Note::class.java, Notes::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
         RunAttemptId::class.java, RunAttemptsId::class.java, ContentId::class.java, ContentsId::class.java,
-        UserPrediction::class.java,CricketChoice::class.java,CricketQuestion::class.java,Match::class.java
+        UserPrediction::class.java,CricketChoice::class.java,CricketQuestion::class.java,Match::class.java,
+        UserPredictionPost::class.java,
+        CricketChoicePost::class.java,
+        CricketQuestionPost::class.java,
+        MatchPost::class.java
     )
 
     private val relationshipResolver = RelationshipResolver {

@@ -523,14 +523,14 @@ class Player(
 
 @Type("cricket_cup_matches")
 class Match(
-    val title: String?,
-    val start: String?,
-    val description: String?,
-    val team1: Team?,
-    val team2: Team?,
-    val predictionEnd: String?,
+    var title: String? = "",
+    var start: String? = "",
+    var description: String? = "",
+    var team1: Team? = null,
+    var team2: Team? = null,
+    var predictionEnd: String? = "",
     @Relationship("cricket-cup-questions")
-    val cricketCupQuestions: ArrayList<CricketQuestion>?
+    var cricketCupQuestions: ArrayList<CricketQuestion>? = null
 ) : BaseModel()
 
 class Team(
@@ -543,28 +543,53 @@ class Team(
 
 @Type("cricket_cup_questions")
 class CricketQuestion(
-    val title: String?,
-    val description: String?,
-    val score: String?,
-    val correctChoiceId: String?,
+    var title: String? = null,
+    var description: String? = null,
+    var score: String? = null,
+    var correctChoiceId: String? = null,
     @Relationship("cricket-cup-choices")
-    val cricketCupChoices: ArrayList<CricketChoice>?
+    var cricketCupChoices: ArrayList<CricketChoice>? = null
 ) : BaseModel()
 
 @Type("cricket_cup_choices")
-class CricketChoice(
-    val content: String?
-) : BaseModel()
+class CricketChoice : BaseModel(){
+    val content: String? = ""
+}
 
 @Type("cricket_cup_user_predictions")
 class UserPrediction(
     @Relationship("cricket-cup-question")
-    val cricketCupQuestion: CricketQuestion?,
+    var cricketCupQuestion: CricketQuestion? = null,
     @Relationship("cricket-cup-choice")
-    val choice: CricketChoice?,
+    var choice: CricketChoice? = null,
     @Relationship("cricket-cup-match")
-    val cricketCupMatch: Match?
+    var cricketCupMatch: Match? = null
 ) : BaseModel()
+
+@Type("cricket-cup-user-predictions")
+class UserPredictionPost(
+    @Relationship("cricket-cup-question")
+    var cricketCupQuestion: CricketQuestionPost,
+    @Relationship("cricket-cup-choice")
+    var choice: CricketChoicePost,
+    @Relationship("cricket-cup-match")
+    var cricketCupMatch: MatchPost
+):BaseModel()
+@Type("cricket-cup-questions")
+class CricketQuestionPost(
+    @Id
+    val id:String
+)
+@Type("cricket-cup-choices")
+class CricketChoicePost(
+    @Id
+    val id:String
+)
+@Type("cricket-cup-matches")
+class MatchPost(
+    @Id
+    val id:String
+)
 
 
 

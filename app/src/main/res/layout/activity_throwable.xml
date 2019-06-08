@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -88,7 +88,7 @@
                 android:layout_margin="16dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/nameTv"
@@ -140,11 +140,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="6dp"
+                    android:id="@+id/timell"
                     android:orientation="vertical">
 
                     <TextView
                         android:textAlignment="center"
                         android:id="@+id/timeTv"
+                        android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunitosans_bold"
@@ -155,6 +157,7 @@
                     <TextView
                         android:textAlignment="center"
                         android:layout_width="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunitosans_bold"
                         android:text="Days  Hours  Mins  Secs"
@@ -199,9 +202,10 @@
                         android:gravity="center"
                         android:orientation="vertical">
 
-                        <de.hdodenhof.circleimageview.CircleImageView
+                        <ImageView
                             android:id="@+id/team1Flag"
                             android:layout_width="80dp"
+                            android:scaleType="centerInside"
                             android:layout_height="80dp" />
 
                         <TextView
@@ -222,7 +226,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosans_bold"
                             android:gravity="center"
-                            android:text="210/5"
+                            android:text="DNB"
                             android:textSize="16sp" />
                     </LinearLayout>
 
@@ -245,6 +249,7 @@
 
                         <ImageView
                             android:id="@+id/team2Flag"
+                            android:scaleType="centerInside"
                             android:layout_width="80dp"
                             android:layout_height="80dp" />
 
@@ -266,7 +271,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosans_bold"
                             android:gravity="center"
-                            android:text="210/5"
+                            android:text="DNB"
                             android:textSize="16sp" />
 
 
@@ -286,7 +291,10 @@
                     android:layout_height="wrap_content"
                     android:text="Prediction period for this match has expired."
                     android:textAlignment="center"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="8dp"
                     android:visibility="gone" />
 
                 <LinearLayout
@@ -331,6 +339,14 @@
                             android:background="@drawable/gradient_outline"
                             android:padding="10dp"
                             android:text="250 Points" />
+
+                        <com.codingblocks.cbonlineapp.widgets.GradientTextView
+                            android:id="@+id/ques1submission"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/question1"
+                            android:layout_marginTop="4dp"/>
 
                         <com.codingblocks.cbonlineapp.widgets.ToggleButtonGroupTableLayout
                             android:id="@+id/ques1radGroup"
@@ -445,6 +461,13 @@
                             android:background="@drawable/gradient_outline"
                             android:padding="10dp"
                             android:text="500 Points" />
+                        <com.codingblocks.cbonlineapp.widgets.GradientTextView
+                            android:id="@+id/ques2submission"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/question2"
+                            android:layout_marginTop="4dp"/>
 
 
                         <com.codingblocks.cbonlineapp.widgets.ToggleButtonGroupTableLayout
@@ -559,6 +582,14 @@
                             android:background="@drawable/gradient_outline"
                             android:padding="10dp"
                             android:text="1000 Points" />
+
+                        <com.codingblocks.cbonlineapp.widgets.GradientTextView
+                            android:id="@+id/ques3submission"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/ques3"
+                            android:layout_marginTop="4dp"/>
 
 
                         <com.codingblocks.cbonlineapp.widgets.ToggleButtonGroupTableLayout
