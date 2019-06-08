@@ -4,18 +4,23 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
+import android.os.Handler
+import android.text.Html
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.formatDate
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.isotomillisecond
+import com.codingblocks.cbonlineapp.extensions.loadSvg
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.CricketChoicePost
 import com.codingblocks.onlineapi.models.CricketQuestion
+import com.codingblocks.onlineapi.models.CricketQuestionPost
+import com.codingblocks.onlineapi.models.MatchPost
+import com.codingblocks.onlineapi.models.UserPredictionPost
 import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_throwable.backBtn
 import kotlinx.android.synthetic.main.activity_throwable.earningTv
 import kotlinx.android.synthetic.main.activity_throwable.infoll
@@ -30,6 +35,7 @@ import kotlinx.android.synthetic.main.activity_throwable.ques1rad4
 import kotlinx.android.synthetic.main.activity_throwable.ques1rad5
 import kotlinx.android.synthetic.main.activity_throwable.ques1rad6
 import kotlinx.android.synthetic.main.activity_throwable.ques1radGroup
+import kotlinx.android.synthetic.main.activity_throwable.ques1submission
 import kotlinx.android.synthetic.main.activity_throwable.ques2Points
 import kotlinx.android.synthetic.main.activity_throwable.ques2rad1
 import kotlinx.android.synthetic.main.activity_throwable.ques2rad2
@@ -38,6 +44,7 @@ import kotlinx.android.synthetic.main.activity_throwable.ques2rad4
 import kotlinx.android.synthetic.main.activity_throwable.ques2rad5
 import kotlinx.android.synthetic.main.activity_throwable.ques2rad6
 import kotlinx.android.synthetic.main.activity_throwable.ques2radGroup
+import kotlinx.android.synthetic.main.activity_throwable.ques2submission
 import kotlinx.android.synthetic.main.activity_throwable.ques3
 import kotlinx.android.synthetic.main.activity_throwable.ques3Points
 import kotlinx.android.synthetic.main.activity_throwable.ques3rad1
@@ -47,6 +54,7 @@ import kotlinx.android.synthetic.main.activity_throwable.ques3rad4
 import kotlinx.android.synthetic.main.activity_throwable.ques3rad5
 import kotlinx.android.synthetic.main.activity_throwable.ques3rad6
 import kotlinx.android.synthetic.main.activity_throwable.ques3radGroup
+import kotlinx.android.synthetic.main.activity_throwable.ques3submission
 import kotlinx.android.synthetic.main.activity_throwable.question1
 import kotlinx.android.synthetic.main.activity_throwable.question2
 import kotlinx.android.synthetic.main.activity_throwable.quiz
@@ -54,14 +62,20 @@ import kotlinx.android.synthetic.main.activity_throwable.quiz1ll
 import kotlinx.android.synthetic.main.activity_throwable.rootLayout
 import kotlinx.android.synthetic.main.activity_throwable.submitBtn
 import kotlinx.android.synthetic.main.activity_throwable.submitQuizBtn
+import kotlinx.android.synthetic.main.activity_throwable.team1Flag
 import kotlinx.android.synthetic.main.activity_throwable.team1Name
 import kotlinx.android.synthetic.main.activity_throwable.team1Score
+import kotlinx.android.synthetic.main.activity_throwable.team2Flag
 import kotlinx.android.synthetic.main.activity_throwable.team2Name
 import kotlinx.android.synthetic.main.activity_throwable.team2Score
 import kotlinx.android.synthetic.main.activity_throwable.timeTv
 import org.jetbrains.anko.design.snackbar
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
 
 class ThrowableActivity : AppCompatActivity() {
+
+    lateinit var timer: CountDownTimer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,22 +119,26 @@ class ThrowableActivity : AppCompatActivity() {
                         fetchUserPrediction(id, cricketCupQuestions)
                         matchTime.text = formatDate(start ?: "")
                         team1Name.text = team1?.name ?: ""
-                        Picasso.with(this@ThrowableActivity).load(team1?.flag)
-                            .placeholder(R.drawable.flag_placeholder).fit().into(
-                                findViewById<CircleImageView>(R.id.team1Flag)
-                            )
                         team2Name.text = team2?.name
-                        Picasso.with(this@ThrowableActivity).load(team1?.flag)
-                            .placeholder(R.drawable.flag_placeholder).fit().into(
-                                findViewById<CircleImageView>(R.id.team1Flag)
-                            )
+                        if (team1?.logo?.takeLast(3) == "png")
+                            Picasso.with(this@ThrowableActivity).load(team1?.logo).into(team1Flag)
+                        else
+                            team1Flag.loadSvg(team1?.logo ?: "")
+
+                        if (team2?.logo?.takeLast(3) == "png")
+                            Picasso.with(this@ThrowableActivity).load(team2?.logo).into(team2Flag)
+                        else
+                            team2Flag.loadSvg(team2?.logo ?: "")
+
+                        getScore(id, team1?.id, team2?.id)
                         if (predictionEnd?.isotomillisecond() ?: 0 < System.currentTimeMillis()) {
                             predictionOverTv.visibility = View.VISIBLE
                             quiz.visibility = View.GONE
                         } else {
                             quiz.visibility = View.VISIBLE
-                            val timer = object : CountDownTimer(
-                                predictionEnd?.isotomillisecond() ?: 0 - System.currentTimeMillis(),
+                            timer = object : CountDownTimer(
+                                (predictionEnd?.isotomillisecond()
+                                    ?: 0) - System.currentTimeMillis(),
                                 1000
                             ) {
                                 override fun onTick(millisUntilFinished: Long) {
@@ -131,16 +149,14 @@ class ThrowableActivity : AppCompatActivity() {
                                     val time =
                                         "  $days   ${hours % 24}   ${minutes % 60}  ${seconds % 60}"
                                     timeTv.text = time
-                                    getScore(id)
                                 }
 
                                 override fun onFinish() {
                                 }
                             }
-                            timer.start()
                             predictionOverTv.visibility = View.GONE
                         }
-                        setSubmitButton(cricketCupQuestions)
+                        setSubmitButton(id, cricketCupQuestions)
                         cricketCupQuestions?.forEachIndexed { index, cricketQuestion ->
                             when (index) {
                                 0 -> {
@@ -289,114 +305,203 @@ class ThrowableActivity : AppCompatActivity() {
         id: String,
         cricketCupQuestions: ArrayList<CricketQuestion>?
     ) {
-        var questionId: String = ""
         var choice: String?
+        var correct: String? = null
         Clients.onlineV2JsonApi.getUserPrediction(id)
             .enqueue(retrofitCallback { throwable, response ->
                 response?.body().let {
-                    if (response?.isSuccessful!!) {
+                    if (response?.isSuccessful == true) {
+                        if (it != null) {
+                            if (it.size > 0) {
+                                submitQuizBtn.visibility = View.GONE
+                                predictionOverTv.visibility = View.VISIBLE
+                                predictionOverTv.text = "Your Predictions for today"
+                            }
+                        }
                         it?.forEachIndexed { index, userPrediction ->
                             with(cricketCupQuestions?.filter {
                                 it.id == userPrediction.cricketCupQuestion?.id
                             }.apply {
-                                questionId = this?.get(0)?.title ?: ""
+                                correct = this?.get(0)?.correctChoiceId
                             }?.get(0)?.cricketCupChoices?.filter {
                                 it.id == userPrediction.choice?.id
                             }) {
                                 choice = this?.get(0)?.content
-                                Log.e("TAG ANSWER", choice + "  " + questionId)
+                                when (index) {
+                                    0 -> {
+                                        ques1radGroup.visibility = View.GONE
+                                        ques1submission.apply {
+                                            visibility = View.VISIBLE
+                                            if (correct != null)
+                                                text = if (correct == id)
+                                                    "Correct $choice"
+                                                else
+                                                    "Incorrect $choice"
+                                            text = choice
+
+                                        }
+                                    }
+                                    1 -> {
+                                        ques2radGroup.visibility = View.GONE
+                                        ques2submission.apply {
+                                            visibility = View.VISIBLE
+                                            if (correct != null)
+                                                text = if (correct == id)
+                                                    "Correct $choice"
+                                                else
+                                                    "Incorrect $choice"
+                                            text = choice
+                                        }
+                                    }
+                                    2 -> {
+                                        ques3radGroup.visibility = View.GONE
+                                        ques3submission.apply {
+                                            visibility = View.VISIBLE
+                                            if (correct != null)
+                                                text = if (correct == id)
+                                                    "Correct $choice"
+                                                else
+                                                    "Incorrect $choice"
+                                            text = choice
+                                        }
+                                    }
+                                    else -> return@let
+                                }
                             }
                         }
+                    } else {
+                        timer.start()
                     }
                 }
             })
     }
 
-    private fun getScore(id: String) {
-        Clients.api.getScore(id).enqueue(retrofitCallback { throwable, response ->
-            response?.body().let {
-                if (response?.isSuccessful!!) {
-                    team1Score.text =
-                        it?.getAsJsonObject("score")?.getAsJsonObject("batting")?.get("score")
-                            ?.asString
-                    team2Score.text =
-                        it?.getAsJsonObject("score")?.getAsJsonObject("bowling")?.get("score")
-                            ?.asString
-                }
+    private fun getScore(id: String, id1: String?, id2: String?) {
+        val handler = Handler()
+
+        val r = object : Runnable {
+            override fun run() {
+                Clients.api.getScore(id).enqueue(retrofitCallback { throwable, response ->
+                    response?.body().let {
+                        if (response?.isSuccessful == true) {
+
+                            if (it?.getAsJsonObject("score")?.getAsJsonObject("batting")?.get("id")?.asString == id1) {
+                                team1Score.text =
+                                    it?.getAsJsonObject("score")?.getAsJsonObject("batting")
+                                        ?.get("score")?.asString
+                                team2Score.text =
+                                    it?.getAsJsonObject("score")?.getAsJsonObject("bowling")
+                                        ?.get("score")?.asString
+                            } else {
+                                team2Score.text =
+                                    it?.getAsJsonObject("score")?.getAsJsonObject("batting")
+                                        ?.get("score")
+                                        ?.asString
+                                team1Score.text =
+                                    it?.getAsJsonObject("score")?.getAsJsonObject("bowling")
+                                        ?.get("score")
+                                        ?.asString
+                            }
+
+                        }
+                    }
+                })
+                handler.postDelayed(this, 5000)
             }
-        })
+        }
+
+        handler.postDelayed(r, 5000)
     }
 
-    private fun setSubmitButton(cricketCupQuestions: ArrayList<CricketQuestion>?) {
-        var id1: String?
-        var id2: String?
-        var id3: String?
+    private fun setSubmitButton(
+        id: String,
+        cricketCupQuestions: ArrayList<CricketQuestion>?
+    ) {
+        val questionId = arrayOfNulls<String>(3) // returns Array<String?>
+        val choiceId = arrayOfNulls<String>(3) // returns Array<String?>
         submitQuizBtn.setOnClickListener {
             if (ques1radGroup.checkedRadioButtonId != -1 && ques2radGroup.checkedRadioButtonId != -1 && ques3radGroup.checkedRadioButtonId != -1) {
+                questionId[0] = cricketCupQuestions?.get(0)?.id
+                questionId[1] = cricketCupQuestions?.get(1)?.id
+                questionId[2] = cricketCupQuestions?.get(2)?.id
+
                 when (ques1radGroup.checkedRadioButtonId) {
                     R.id.ques1rad1 -> {
-                        id1 = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(0)?.id
+                        choiceId[0] = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(0)?.id
                     }
                     R.id.ques1rad2 -> {
-                        id1 = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(1)?.id
+                        choiceId[0] = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(1)?.id
                     }
                     R.id.ques1rad3 -> {
-                        id1 = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(2)?.id
+                        choiceId[0] = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(2)?.id
                     }
                     R.id.ques1rad4 -> {
-                        id1 = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(3)?.id
+                        choiceId[0] = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(3)?.id
                     }
                     R.id.ques1rad5 -> {
-                        id1 = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(4)?.id
+                        choiceId[0] = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(4)?.id
                     }
                     R.id.ques1rad6 -> {
-                        id1 = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(5)?.id
+                        choiceId[0] = cricketCupQuestions?.get(0)?.cricketCupChoices?.get(5)?.id
                     }
                 }
                 when (ques2radGroup.checkedRadioButtonId) {
                     R.id.ques2rad1 -> {
-                        id2 = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(0)?.id
+                        choiceId[1] = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(0)?.id
                     }
                     R.id.ques2rad2 -> {
-                        id2 = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(1)?.id
+                        choiceId[1] = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(1)?.id
                     }
                     R.id.ques2rad3 -> {
-                        id2 = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(2)?.id
+                        choiceId[1] = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(2)?.id
                     }
                     R.id.ques2rad4 -> {
-                        id2 = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(3)?.id
+                        choiceId[1] = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(3)?.id
                     }
                     R.id.ques2rad5 -> {
-                        id2 = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(4)?.id
+                        choiceId[1] = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(4)?.id
                     }
                     R.id.ques2rad6 -> {
-                        id2 = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(5)?.id
+                        choiceId[1] = cricketCupQuestions?.get(1)?.cricketCupChoices?.get(5)?.id
                     }
                 }
                 when (ques3radGroup.checkedRadioButtonId) {
                     R.id.ques3rad1 -> {
-                        id2 = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(0)?.id
+                        choiceId[2] = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(0)?.id
                     }
                     R.id.ques3rad2 -> {
-                        id2 = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(1)?.id
+                        choiceId[2] = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(1)?.id
                     }
                     R.id.ques3rad3 -> {
-                        id2 = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(2)?.id
+                        choiceId[2] = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(2)?.id
                     }
                     R.id.ques3rad4 -> {
-                        id2 = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(3)?.id
+                        choiceId[2] = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(3)?.id
                     }
                     R.id.ques3rad5 -> {
-                        id2 = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(4)?.id
+                        choiceId[2] = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(4)?.id
                     }
                     R.id.ques3rad6 -> {
-                        id2 = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(5)?.id
+                        choiceId[2] = cricketCupQuestions?.get(2)?.cricketCupChoices?.get(5)?.id
                     }
                 }
-//                var prediction=UserPrediction(Match())
-//                prediction.choice?.id =
+                questionId.forEachIndexed { index, s ->
+                    val userPrediction = UserPredictionPost(
+                        CricketQuestionPost(s ?: ""),
+                        CricketChoicePost(choiceId[index] ?: ""),
+                        MatchPost((id))
+                    )
+                    Clients.onlineV2JsonApi.setUserPrediction(userPrediction).enqueue(
+                        retrofitCallback { throwable, response ->
+                            if (response?.isSuccessful == true) {
+                                response.body().let {
+                                    fetchUserPrediction(id, cricketCupQuestions)
+                                }
+                            }
+                        })
+                }
             } else {
-                rootLayout.snackbar("You mut answer all the questions")
+                rootLayout.snackbar(Html.fromHtml("<font color=\"#ffffff\">You mut answer all the questions</font>"))
             }
         }
     }
@@ -409,5 +514,9 @@ class ThrowableActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    fun startHome(v: View) {
+        startActivity(intentFor<HomeActivity>().singleTop())
     }
 }

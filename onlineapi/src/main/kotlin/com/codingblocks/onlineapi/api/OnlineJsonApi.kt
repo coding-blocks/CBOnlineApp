@@ -19,6 +19,7 @@ import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.UserPrediction
+import com.codingblocks.onlineapi.models.UserPredictionPost
 import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -183,7 +184,7 @@ interface OnlineJsonApi {
     ): Call<ArrayList<UserPrediction>>
 
     @POST("cricket_cup/user_predictions")
-    fun setUserPrediction(@Body params: UserPrediction): ArrayList<UserPrediction>
+    fun setUserPrediction(@Body params: UserPredictionPost): Call<ArrayList<UserPrediction>>
 
     @GET("cricket_cup/matches/today")
     fun getMatch() : Call<ArrayList<Match>>
