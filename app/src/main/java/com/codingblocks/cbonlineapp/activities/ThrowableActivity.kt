@@ -338,7 +338,6 @@ class ThrowableActivity : AppCompatActivity() {
                                                 else
                                                     "Incorrect $choice"
                                             text = choice
-
                                         }
                                     }
                                     1 -> {
@@ -402,7 +401,6 @@ class ThrowableActivity : AppCompatActivity() {
                                         ?.get("score")
                                         ?.asString
                             }
-
                         }
                     }
                 })
