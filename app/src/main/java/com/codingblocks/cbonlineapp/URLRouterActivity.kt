@@ -36,10 +36,9 @@ class URLRouterActivity : AppCompatActivity() {
             }
 
                 ?: finish()
-        }else{
+        } else {
             fallBack()
         }
-
     }
 
     private fun openRouter(uri: Uri) {
