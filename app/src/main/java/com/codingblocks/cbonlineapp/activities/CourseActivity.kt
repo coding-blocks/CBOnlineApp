@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.ProgressBarAnimation
 import com.codingblocks.cbonlineapp.adapters.BatchesAdapter
 import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
@@ -27,6 +26,7 @@ import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.OnCartItemClickListener
+import com.codingblocks.cbonlineapp.util.ProgressBarAnimation
 import com.codingblocks.cbonlineapp.viewmodels.CourseViewModel
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Sections
@@ -206,7 +206,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
             batchSnapHelper.attachToRecyclerView(batchRv)
             setImageAndTitle(course.logo, course.title)
             coursePageSubtitle.text = course.subtitle
-            coursePageSummary.text = course.summary
+            coursePageSummary.loadMarkdown(course.summary)
             trialBtn.setOnClickListener {
                 if (course.runs != null) {
                     viewModel.enrollTrialProgress.observeOnce {

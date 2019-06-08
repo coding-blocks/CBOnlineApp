@@ -11,6 +11,7 @@ import androidx.viewpager.widget.PagerAdapter
 import cn.campusapp.router.Router
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.loadSvg
+import com.codingblocks.cbonlineapp.extensions.otherwise
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_carousel.view.button
@@ -41,9 +42,7 @@ class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Co
             view.imgView.loadSvg(list[position].img)
         }
         view.button.setOnClickListener {
-            if (list[position].buttonLink.contains("course", true)) {
-                Router.open("activity://course/" + list[position].buttonLink)
-            } else {
+            Router.open("activity://course/" + list[position].buttonLink).otherwise {
                 val builder = CustomTabsIntent.Builder().enableUrlBarHiding()
                 mContext?.let {
                     builder.enableUrlBarHiding()

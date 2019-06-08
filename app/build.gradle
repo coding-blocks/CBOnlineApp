@@ -21,13 +21,13 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 100040700
+        versionCode 100040800
         // 1 (versioning scheme)
         // 00 (major version)
         // 04 (minor version)
         // 06 (patch version)
         // 02 spare for betas/RCs
-        versionName "0.4.7"
+        versionName "0.4.8"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false
         manifestPlaceholders = [
@@ -158,4 +158,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    implementation 'androidx.cardview:cardview:1.0.0'
 }

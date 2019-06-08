@@ -100,6 +100,8 @@
     <string name="create_a_note">Create a Note</string>
     <string name="create_note">Create Note</string>
     <string name="leaderboard_emptyView">Leaderboard not available for this course!!</string>
+    <string name="quiz">• Sign in to play the contest from 30th May 2019 to 14th July 2019.\n• For each match, make three predictions - guess the winning team, score of winning team and total number of sixes in the match.\n• Predictions once made cannot be changed or modified.\n• For each match, Top predictors with correct daily prediction will win the daily points. A lucky draw will be done in case of a tie.\n• Coding Blocks decision will be final in case of any discrepency.
+</string>
     <string name="clean_dialog_title">You have reached your data limit!</string>
     <string name="clean_dialog_description">If you want to continue with the download, Please clear the oldest download.</string>
     <string name="clean_dialog_okBtn">Clear Oldest Download</string>

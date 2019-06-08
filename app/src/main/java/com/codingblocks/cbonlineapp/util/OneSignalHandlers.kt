@@ -4,12 +4,12 @@ import android.content.Intent
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import cn.campusapp.router.Router
-import cn.campusapp.router.route.ActivityRoute
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.database.models.Notification
+import com.codingblocks.cbonlineapp.extensions.otherwise
 import com.onesignal.OSNotification
 import com.onesignal.OSNotificationOpenResult
 import com.onesignal.OneSignal
@@ -25,16 +25,10 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
     override fun notificationOpened(result: OSNotificationOpenResult) {
         val url = result.notification.payload.launchURL
         val data = result.notification.payload.additionalData
-        if (url.contains("course", true) ||
-            url.contains("classroom", true)
-        ) {
-            Router.open("activity://course/$url")
-        } else if (url.contains("player", true)) {
-            val activityRoute = Router.getRoute("activity://course/$url") as ActivityRoute
-            activityRoute
-                .withParams(VIDEO_ID, data.optString(VIDEO_ID))
-                .open()
-        } else {
+//        if (url.contains("course", true) ||
+//            url.contains("classroom", true)
+//        ) {
+        Router.open("activity://course/$url").otherwise {
             val builder = CustomTabsIntent.Builder()
                 .enableUrlBarHiding()
                 .setToolbarColor(mInstance.resources.getColor(R.color.colorPrimaryDark))
@@ -44,6 +38,14 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
             customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             customTabsIntent.launchUrl(mInstance, Uri.parse(url))
         }
+//        } else if (url.contains("player", true)) {
+//            val activityRoute = Router.getRoute("activity://course/$url") as ActivityRoute
+//            activityRoute
+//                .withParams(VIDEO_ID, data.optString(VIDEO_ID))
+//                .open()
+//        } else {
+//
+//        }
         doAsync {
             notificationDao.updateseen(position)
         }
@@ -54,6 +56,7 @@ class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
 
     override fun notificationReceived(notification: OSNotification) {
         val data = notification.payload.additionalData
+        val payload = notification.payload
         val title = notification.payload.title
         val body = notification.payload.body
         val url = notification.payload.launchURL
