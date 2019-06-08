@@ -117,7 +117,7 @@
                     android:layout_marginEnd="110dp"
                     android:background="@color/black" />
 
-                <com.codingblocks.cbonlineapp.widgets.ExpandableTextView
+                <br.tiagohm.markdownview.MarkdownView
                     android:id="@+id/coursePageSummary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                     android:layout_marginTop="14dp"
                     android:layout_marginEnd="16dp"
                     android:fontFamily="@font/nunitosans_semibold"
-                    android:textAlignment="viewStart"
+                    app:escapeHtml="false"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
