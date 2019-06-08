@@ -75,7 +75,7 @@ import org.jetbrains.anko.singleTop
 
 class ThrowableActivity : AppCompatActivity() {
 
-    lateinit var timer: CountDownTimer
+     var timer: CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -306,13 +306,16 @@ class ThrowableActivity : AppCompatActivity() {
         cricketCupQuestions: ArrayList<CricketQuestion>?
     ) {
         var choice: String?
+        var score: String = "0"
         var correct: String? = null
+        var countScore: Int = 0
         Clients.onlineV2JsonApi.getUserPrediction(id)
             .enqueue(retrofitCallback { throwable, response ->
                 response?.body().let {
                     if (response?.isSuccessful == true) {
                         if (it != null) {
                             if (it.size > 0) {
+                                quiz.visibility = View.VISIBLE
                                 submitQuizBtn.visibility = View.GONE
                                 predictionOverTv.visibility = View.VISIBLE
                                 predictionOverTv.text = "Your Predictions for today"
@@ -323,6 +326,8 @@ class ThrowableActivity : AppCompatActivity() {
                                 it.id == userPrediction.cricketCupQuestion?.id
                             }.apply {
                                 correct = this?.get(0)?.correctChoiceId
+                                score = this?.get(0)?.score ?: "0"
+
                             }?.get(0)?.cricketCupChoices?.filter {
                                 it.id == userPrediction.choice?.id
                             }) {
@@ -333,11 +338,13 @@ class ThrowableActivity : AppCompatActivity() {
                                         ques1submission.apply {
                                             visibility = View.VISIBLE
                                             if (correct != null)
-                                                text = if (correct == id)
-                                                    "Correct $choice"
-                                                else
-                                                    "Incorrect $choice"
-                                            text = choice
+                                                if (correct == id) {
+                                                    countScore += Integer.parseInt(score)
+                                                    text = "Correct $choice"
+                                                } else
+                                                    text = "Incorrect $choice"
+                                            else
+                                                text = choice
                                         }
                                     }
                                     1 -> {
@@ -345,11 +352,13 @@ class ThrowableActivity : AppCompatActivity() {
                                         ques2submission.apply {
                                             visibility = View.VISIBLE
                                             if (correct != null)
-                                                text = if (correct == id)
-                                                    "Correct $choice"
-                                                else
-                                                    "Incorrect $choice"
-                                            text = choice
+                                                if (correct == id) {
+                                                    countScore += Integer.parseInt(score)
+                                                    text = "Correct $choice"
+                                                } else
+                                                    text = "Incorrect $choice"
+                                            else
+                                                text = choice
                                         }
                                     }
                                     2 -> {
@@ -357,11 +366,13 @@ class ThrowableActivity : AppCompatActivity() {
                                         ques3submission.apply {
                                             visibility = View.VISIBLE
                                             if (correct != null)
-                                                text = if (correct == id)
-                                                    "Correct $choice"
-                                                else
-                                                    "Incorrect $choice"
-                                            text = choice
+                                                if (correct == id) {
+                                                    countScore += Integer.parseInt(score)
+                                                    text = "Correct $choice"
+                                                } else
+                                                    text = "Incorrect $choice"
+                                            else
+                                                text = choice
                                         }
                                     }
                                     else -> return@let
@@ -369,7 +380,7 @@ class ThrowableActivity : AppCompatActivity() {
                             }
                         }
                     } else {
-                        timer.start()
+                        timer?.start()
                     }
                 }
             })
@@ -404,7 +415,7 @@ class ThrowableActivity : AppCompatActivity() {
                         }
                     }
                 })
-                handler.postDelayed(this, 5000)
+                handler.postDelayed(this, 10000)
             }
         }
 
