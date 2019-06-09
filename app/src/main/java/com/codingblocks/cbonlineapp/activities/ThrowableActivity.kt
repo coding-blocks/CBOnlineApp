@@ -75,7 +75,7 @@ import org.jetbrains.anko.singleTop
 
 class ThrowableActivity : AppCompatActivity() {
 
-     var timer: CountDownTimer? = null
+    var timer: CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -327,7 +327,6 @@ class ThrowableActivity : AppCompatActivity() {
                             }.apply {
                                 correct = this?.get(0)?.correctChoiceId
                                 score = this?.get(0)?.score ?: "0"
-
                             }?.get(0)?.cricketCupChoices?.filter {
                                 it.id == userPrediction.choice?.id
                             }) {
