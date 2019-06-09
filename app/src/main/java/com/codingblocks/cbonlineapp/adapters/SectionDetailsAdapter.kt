@@ -154,45 +154,117 @@ class SectionDetailsAdapter(
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
                                 if (content.contentLecture.lectureUid.isNotEmpty()) {
                                     ll.addView(inflatedView)
-                                    if (content.contentLecture.isDownloaded == "false") {
-                                        downloadBtn.setImageDrawable(null)
-                                        downloadBtn.background =
-                                            context.getDrawable(android.R.drawable.stat_sys_download)
-                                        inflatedView.setOnClickListener {
-                                            if (content.progress == "UNDONE") {
-                                                if (content.progressId.isEmpty())
-                                                    setProgress(
-                                                        content.id,
-                                                        content.attempt_id,
-                                                        content.contentable,
-                                                        data.id,
-                                                        content.contentLecture.lectureContentId
-                                                    )
-                                                else
-                                                    updateProgress(
-                                                        content.id,
-                                                        content.attempt_id,
-                                                        content.progressId,
-                                                        "DONE",
-                                                        content.contentable,
-                                                        data.id,
-                                                        content.contentLecture.lectureContentId
-                                                    )
+
+                                    when {
+                                        content.contentLecture.isDownloaded == "true" && FileUtils.checkDownloadFileExists(context, content.contentLecture.lectureId) -> {
+                                            downloadBtn.setOnClickListener {
+
+                                                (context as Activity).alert("This lecture will be deleted !!!") {
+                                                    yesButton {
+                                                        val file =
+                                                            context.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+                                                        val folderFile = File(
+                                                            file,
+                                                            "/${content.contentLecture.lectureId}"
+                                                        )
+                                                        MediaUtils.deleteRecursive(folderFile)
+                                                        viewModel.updateContent(
+                                                            data.id,
+                                                            content.contentLecture.lectureContentId,
+                                                            "false"
+                                                        )
+                                                    }
+                                                    noButton { it.dismiss() }
+                                                }.show()
                                             }
-                                            it.context.startActivity(
-                                                it.context.intentFor<VideoPlayerActivity>(
-                                                    VIDEO_ID to content.contentLecture.lectureId,
-                                                    RUN_ATTEMPT_ID to content.attempt_id,
-                                                    CONTENT_ID to content.id,
-                                                    SECTION_ID to content.section_id,
-                                                    DOWNLOADED to false
-                                                ).singleTop()
-                                            )
+                                            inflatedView.setOnClickListener {
+                                                if (content.progress == "UNDONE") {
+                                                    if (content.progressId.isEmpty())
+                                                        setProgress(
+                                                            content.id,
+                                                            content.attempt_id,
+                                                            content.contentable,
+                                                            data.id,
+                                                            content.contentLecture.lectureContentId
+                                                        )
+                                                    else
+                                                        updateProgress(
+                                                            content.id,
+                                                            content.attempt_id,
+                                                            content.progressId,
+                                                            "DONE",
+                                                            content.contentable,
+                                                            data.id,
+                                                            content.contentLecture.lectureContentId
+                                                        )
+                                                }
+                                                it.context.startActivity(
+                                                    it.context.intentFor<VideoPlayerActivity>(
+                                                        VIDEO_ID to content.contentLecture.lectureId,
+                                                        RUN_ATTEMPT_ID to content.attempt_id,
+                                                        CONTENT_ID to content.id,
+                                                        SECTION_ID to data.id,
+                                                        DOWNLOADED to true
+                                                    ).singleTop()
+                                                )
+                                            }
                                         }
-                                        downloadBtn.setOnClickListener {
-                                            if (MediaUtils.checkPermission(context)) {
-                                                if ((context as Activity).getPrefs().SP_WIFI) {
-                                                    if (NetworkUtils.connectedToWifi(context) == true) {
+                                        else -> {
+                                            downloadBtn.setImageDrawable(null)
+                                            downloadBtn.background =
+                                                context.getDrawable(android.R.drawable.stat_sys_download)
+                                            inflatedView.setOnClickListener {
+                                                if (content.progress == "UNDONE") {
+                                                    if (content.progressId.isEmpty())
+                                                        setProgress(
+                                                            content.id,
+                                                            content.attempt_id,
+                                                            content.contentable,
+                                                            data.id,
+                                                            content.contentLecture.lectureContentId
+                                                        )
+                                                    else
+                                                        updateProgress(
+                                                            content.id,
+                                                            content.attempt_id,
+                                                            content.progressId,
+                                                            "DONE",
+                                                            content.contentable,
+                                                            data.id,
+                                                            content.contentLecture.lectureContentId
+                                                        )
+                                                }
+                                                it.context.startActivity(
+                                                    it.context.intentFor<VideoPlayerActivity>(
+                                                        VIDEO_ID to content.contentLecture.lectureId,
+                                                        RUN_ATTEMPT_ID to content.attempt_id,
+                                                        CONTENT_ID to content.id,
+                                                        SECTION_ID to content.section_id,
+                                                        DOWNLOADED to false
+                                                    ).singleTop()
+                                                )
+                                            }
+                                            downloadBtn.setOnClickListener {
+                                                if (MediaUtils.checkPermission(context)) {
+                                                    if ((context as Activity).getPrefs().SP_WIFI) {
+                                                        if (NetworkUtils.connectedToWifi(context) == true) {
+                                                            startFileDownload(
+                                                                content.contentLecture.lectureId,
+                                                                data.id,
+                                                                content.contentLecture.lectureContentId,
+                                                                content.title,
+                                                                content.attempt_id,
+                                                                content.id,
+                                                                content.section_id,
+                                                                downloadBtn
+                                                            )
+                                                        } else {
+                                                            Components.showconfirmation(
+                                                                context,
+                                                                "wifi"
+                                                            )
+                                                        }
+                                                    } else {
                                                         startFileDownload(
                                                             content.contentLecture.lectureId,
                                                             data.id,
@@ -203,79 +275,11 @@ class SectionDetailsAdapter(
                                                             content.section_id,
                                                             downloadBtn
                                                         )
-                                                    } else {
-                                                        Components.showconfirmation(
-                                                            context,
-                                                            "wifi"
-                                                        )
                                                     }
                                                 } else {
-                                                    startFileDownload(
-                                                        content.contentLecture.lectureId,
-                                                        data.id,
-                                                        content.contentLecture.lectureContentId,
-                                                        content.title,
-                                                        content.attempt_id,
-                                                        content.id,
-                                                        content.section_id,
-                                                        downloadBtn
-                                                    )
+                                                    MediaUtils.isStoragePermissionGranted(context)
                                                 }
-                                            } else {
-                                                MediaUtils.isStoragePermissionGranted(context)
                                             }
-                                        }
-                                    } else {
-                                        downloadBtn.setOnClickListener {
-
-                                            (context as Activity).alert("This lecture will be deleted !!!") {
-                                                yesButton {
-                                                    val file =
-                                                        context.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
-                                                    val folderFile = File(
-                                                        file,
-                                                        "/${content.contentLecture.lectureId}"
-                                                    )
-                                                    MediaUtils.deleteRecursive(folderFile)
-                                                    viewModel.updateContent(
-                                                        data.id,
-                                                        content.contentLecture.lectureContentId,
-                                                        "false"
-                                                    )
-                                                }
-                                                noButton { it.dismiss() }
-                                            }.show()
-                                        }
-                                        inflatedView.setOnClickListener {
-                                            if (content.progress == "UNDONE") {
-                                                if (content.progressId.isEmpty())
-                                                    setProgress(
-                                                        content.id,
-                                                        content.attempt_id,
-                                                        content.contentable,
-                                                        data.id,
-                                                        content.contentLecture.lectureContentId
-                                                    )
-                                                else
-                                                    updateProgress(
-                                                        content.id,
-                                                        content.attempt_id,
-                                                        content.progressId,
-                                                        "DONE",
-                                                        content.contentable,
-                                                        data.id,
-                                                        content.contentLecture.lectureContentId
-                                                    )
-                                            }
-                                            it.context.startActivity(
-                                                it.context.intentFor<VideoPlayerActivity>(
-                                                    VIDEO_ID to content.contentLecture.lectureId,
-                                                    RUN_ATTEMPT_ID to content.attempt_id,
-                                                    CONTENT_ID to content.id,
-                                                    SECTION_ID to data.id,
-                                                    DOWNLOADED to true
-                                                ).singleTop()
-                                            )
                                         }
                                     }
                                 }
