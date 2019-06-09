@@ -122,6 +122,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         Clients.onlineV2JsonApi.getQuizAttempt(qnaId)
             .enqueue(retrofitCallback { _, response ->
                 response?.body()?.let { attempts ->
+                    attemptList.clear()
                     attemptList.addAll(attempts as ArrayList<QuizAttempt>)
                     quizAttemptListAdapter.notifyDataSetChanged()
                 }
