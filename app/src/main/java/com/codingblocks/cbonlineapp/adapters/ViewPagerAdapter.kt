@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.adapters
 
 import android.content.Context
+import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.viewpager.widget.PagerAdapter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.OnItemClickListener
+import com.codingblocks.cbonlineapp.viewmodels.QuizViewModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizResult
 import com.codingblocks.onlineapi.models.Choice
@@ -19,7 +21,7 @@ import com.codingblocks.onlineapi.models.QuizSubmission
 import kotlinx.android.synthetic.main.quizlayout.view.*
 import org.jetbrains.anko.AnkoLogger
 
-class ViewPagerAdapter(private var mContext: Context, private var quizId: String, private var qaId: String, private var questionList: HashMap<Int, String>, submission: List<QuizSubmission>?, private var result: QuizResult?, val listener: QuizInteractor) : PagerAdapter(), AnkoLogger {
+class ViewPagerAdapter(private var mContext: Context, private var quizId: String, private var qaId: String, private var questionList: SparseArray<String>, submission: List<QuizSubmission>?, private var result: QuizResult?,val listener: QuizInteractor, private var viewModel: QuizViewModel) : PagerAdapter(), AnkoLogger {
     private lateinit var choiceDataAdapter: QuizChoiceAdapter
     var submissionList: ArrayList<QuizSubmission> = submission as ArrayList<QuizSubmission>
 
@@ -28,12 +30,12 @@ class ViewPagerAdapter(private var mContext: Context, private var quizId: String
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any = LayoutInflater.from(mContext).inflate(R.layout.quizlayout, container, false).apply {
-        fetchQuestion(position, this)
+        fetchQuestion(viewModel, position, this)
         container.addView(this)
     }
 
-    private fun fetchQuestion(pos: Int, view: View) {
-        if (pos == questionList.size - 1 && result == null) {
+    private fun fetchQuestion(viewModel: QuizViewModel, pos: Int, view: View) {
+        if (pos == questionList.size() - 1 && result == null) {
             view.submitButton.visibility = View.VISIBLE
         }
         Clients.onlineV2JsonApi.getQuestionById(questionList[pos]
@@ -53,6 +55,7 @@ class ViewPagerAdapter(private var mContext: Context, private var quizId: String
                     override fun onItemClick(position: Int, id: String) {
                         if (result == null) {
                             // marking correct option in the list
+                            viewModel.bottomSheetQuizData.value?.get(pos)?.value = true
                             question.choices?.get(position)?.marked = true
 
                             // unmarking rest of the options
@@ -91,6 +94,7 @@ class ViewPagerAdapter(private var mContext: Context, private var quizId: String
                             question.choices?.forEach { choice ->
                                 if (markedChoice.contains(choice.id)) {
                                     choice.marked = true
+                                    viewModel.bottomSheetQuizData.value?.get(pos)?.value = true
                                     choiceDataAdapter.notifyDataSetChanged()
                                 }
                             }
@@ -99,10 +103,12 @@ class ViewPagerAdapter(private var mContext: Context, private var quizId: String
                 }
                 result?.questions?.forEach { quizQuestion ->
                     if (quizQuestion.id == questionList[pos]) {
+                        viewModel.bottomSheetQuizData.value?.get(pos)?.value = false
                         quizQuestion.answers?.forEach { answers ->
                             question.choices?.forEach { choice ->
                                 if (answers.contains(choice.id)) {
                                     choice.correct = true
+                                    viewModel.bottomSheetQuizData.value?.get(pos)?.value = choice.marked
                                     choiceDataAdapter.notifyDataSetChanged()
                                 } else {
                                     choice.correct = false
@@ -126,7 +132,7 @@ class ViewPagerAdapter(private var mContext: Context, private var quizId: String
     }
 
     override fun getCount(): Int {
-        return questionList.size
+        return questionList.size()
     }
 
     interface QuizInteractor {

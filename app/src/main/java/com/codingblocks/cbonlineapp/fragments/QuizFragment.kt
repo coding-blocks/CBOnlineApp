@@ -3,23 +3,26 @@ package com.codingblocks.cbonlineapp.fragments
 import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.viewpager.widget.ViewPager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.ViewPagerAdapter
 import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.QUIZ_QNA
 import com.codingblocks.cbonlineapp.util.QUIZ_ID
 import com.codingblocks.cbonlineapp.util.QUIZ_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.viewmodels.QuizViewModel
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.QuizSubmission
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.bottom_question_sheet.*
@@ -27,6 +30,7 @@ import kotlinx.android.synthetic.main.custom_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener, ViewPagerAdapter.QuizInteractor {
@@ -36,12 +40,13 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     private lateinit var attemptId: String
     private lateinit var quizAttemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-    private lateinit var quizSubmissions: ArrayList<QuizSubmission>
     private var isSubmitted: Boolean = false
 
-    lateinit var mAdapter: ViewPagerAdapter
-    var questionList = HashMap<Int, String>()
-    var sheetBehavior: BottomSheetBehavior<*>? = null
+    private lateinit var mAdapter: ViewPagerAdapter
+    private var questionList = SparseArray<String>()
+    private var sheetBehavior: BottomSheetBehavior<*>? = null
+
+    private val viewModel by viewModel<QuizViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,15 +74,17 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
         Clients.onlineV2JsonApi.getQuizById(quizId).enqueue(retrofitCallback { _, response ->
             response?.body()?.let { quiz ->
+                setupMutableBottomSheetData(quiz.questions?.size ?: 0)
                 setUpQuestionBottomSheet(quiz.questions?.size ?: 0)
                 quiz.questions?.forEachIndexed { index, question ->
-                    questionList[index] = question.id
+                    questionList.put(index, question.id)
                     if (index == quiz.questions!!.size - 1) {
                         Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, attemptResponse ->
                             attemptResponse?.body().let {
-                                mAdapter = ViewPagerAdapter(context!!, qnaId, quizAttemptId, questionList, it?.submission, it?.result, this)
+                                mAdapter = ViewPagerAdapter(context!!, qnaId, quizAttemptId, questionList, it?.submission, it?.result, thid, viewModel)
                                 quizViewPager.adapter = mAdapter
                                 quizViewPager.currentItem = 0
+                                quizViewPager.offscreenPageLimit = quiz.questions?.size ?: 0
                                 quizViewPager.setOnPageChangeListener(this)
                                 quizViewPager.offscreenPageLimit = 3
                             }
@@ -86,6 +93,15 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                 }
             }
         })
+    }
+
+    private fun setupMutableBottomSheetData(size: Int) {
+        val tempList = mutableListOf<MutableLiveData<Boolean>>()
+        for (i in 0 until size) {
+            tempList.add(MutableLiveData())
+            tempList[i].value = false
+        }
+        viewModel.bottomSheetQuizData.value = tempList
     }
 
     private fun setUpQuestionBottomSheet(size: Int) {
@@ -110,7 +126,11 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                 numberLayout.addView(rowLayout)
             }
             val numberBtn = Button(context)
-            numberBtn.background = context!!.getDrawable(R.drawable.button_rounded_background)
+
+            viewModel.bottomSheetQuizData.value?.get(i)?.observer(viewLifecycleOwner) {
+                numberBtn.background = if (it) context!!.getDrawable(R.drawable.submit_button_background) else context!!.getDrawable(R.drawable.button_rounded_background)
+            }
+
             numberBtn.textColor = context!!.resources.getColor(R.color.white)
             numberBtn.layoutParams = buttonParams
             numberBtn.text = (i + 1).toString()
@@ -175,7 +195,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     override fun onPageSelected(position: Int) {
 
         when {
-            position + 1 == questionList.size -> {
+            position + 1 == questionList.size() -> {
 
                 nextBtn.text = "End"
                 prevBtn.setTextColor(Color.parseColor("#000000"))
@@ -210,7 +230,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             R.id.nextBtn -> if (nextBtn.text == "End" && !isSubmitted) {
                 submitQuiz()
             } else
-                quizViewPager.currentItem = if (quizViewPager.currentItem < questionList.size - 1)
+                quizViewPager.currentItem = if (quizViewPager.currentItem < questionList.size() - 1)
                     quizViewPager.currentItem + 1
                 else
                     0

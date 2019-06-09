@@ -67,6 +67,7 @@ class HomeActivityViewModel(
                             prefs.SP_USER_ID = it.getAsJsonObject("data").get("id").asString
                             prefs.SP_ONEAUTH_ID = jSONObject.get("oneauth-id").asString
                             prefs.SP_USER_IMAGE = jSONObject.get("photo").asString
+                            prefs.SP_USER_NAME = jSONObject.get("firstname").asString + " " + jSONObject.get("lastname").asString
                         } catch (e: Exception) {
                         }
                     }

@@ -11,6 +11,7 @@ import com.codingblocks.cbonlineapp.viewmodels.HomeActivityViewModel
 import com.codingblocks.cbonlineapp.viewmodels.NotificationViewModel
 import com.codingblocks.cbonlineapp.viewmodels.AnnouncementsViewModel
 import com.codingblocks.cbonlineapp.viewmodels.SettingsViewModel
+import com.codingblocks.cbonlineapp.viewmodels.QuizViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
@@ -22,6 +23,7 @@ val viewModelModule = module {
     viewModel { NotificationViewModel(get()) }
 
     viewModel { AnnouncementsViewModel(get()) }
+    viewModel { QuizViewModel() }
 
     // Activities
     viewModel { CourseViewModel(get()) }

@@ -8,8 +8,9 @@ import androidx.viewpager.widget.ViewPager
 import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Locale
+import java.util.Calendar
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 import kotlin.NoSuchElementException
 
@@ -106,8 +107,15 @@ fun formatDate(date: String): String {
     calender.time = newDate
     calender.add(Calendar.HOUR, 5)
     calender.add(Calendar.MINUTE, 30)
-    format = SimpleDateFormat("MMM dd yyyy\nhh:mm a", Locale.US)
+    format = SimpleDateFormat("MMM dd yyyy hh:mm a", Locale.US)
     return format.format(calender.time)
+}
+
+fun String.isotomillisecond(): Long {
+    val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+    format.timeZone = TimeZone.getTimeZone("UTC")
+    val newDate = format.parse(this)
+    return newDate.time
 }
 
 fun secToTime(time: Double): String {
