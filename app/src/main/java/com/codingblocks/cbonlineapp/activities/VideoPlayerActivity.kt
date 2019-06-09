@@ -19,7 +19,6 @@ import com.codingblocks.cbonlineapp.fragments.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.fragments.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
-import com.codingblocks.cbonlineapp.util.OnItemClickListener
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
@@ -54,13 +53,9 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class VideoPlayerActivity : AppCompatActivity(),
-    OnItemClickListener, AnkoLogger,
+class VideoPlayerActivity : AppCompatActivity(), AnkoLogger,
     VdoPlayer.InitializationListener {
 
-    private val attemptId by lazy {
-        intent.getStringExtra(RUN_ATTEMPT_ID)
-    }
     private val contentId by lazy {
         intent.getStringExtra(CONTENT_ID)
     }
@@ -93,6 +88,7 @@ class VideoPlayerActivity : AppCompatActivity(),
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         viewModel.currentOrientation = resources.configuration.orientation
+        viewModel.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID)
         if (savedInstanceState == null) {
             setupUI()
         }
@@ -118,13 +114,14 @@ class VideoPlayerActivity : AppCompatActivity(),
                 setupVideoView()
             }
         }
-        setupViewPager(attemptId)
+        setupViewPager(viewModel.attemptId)
+        handleNoteClick()
     }
 
     private fun setupViewPager(attemptId: String) {
         val adapter = TabLayoutAdapter(supportFragmentManager)
         adapter.add(VideoDoubtFragment.newInstance(attemptId), "Doubts")
-        adapter.add(VideoNotesFragment.newInstance(attemptId), "Notes")
+        adapter.add(VideoNotesFragment.newInstance(), "Notes")
 
         player_viewpager.adapter = adapter
         player_tabs.setupWithViewPager(player_viewpager)
@@ -188,7 +185,7 @@ class VideoPlayerActivity : AppCompatActivity(),
                 toast("there was some error with starting feed, try again")
         }
 
-        viewModel.getOtp(videoId, sectionId, attemptId)
+        viewModel.getOtp(videoId, sectionId)
     }
 
     private fun initializePlayer() {
@@ -236,17 +233,19 @@ class VideoPlayerActivity : AppCompatActivity(),
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
-    override fun onItemClick(position: Int, id: String) {
-        if (contentId == id) {
-            if (displayYoutubeVideo.view?.visibility == View.VISIBLE)
-                youtubePlayer?.seekToMillis(position * 1000)
-            else
-                videoPlayer?.seekTo(position.toLong() * 1000)
+    private fun handleNoteClick() {
+        viewModel.selectedNote.observer(this) {
+            if (contentId == it.contentId) {
+                if (displayYoutubeVideo.view?.visibility == View.VISIBLE)
+                    youtubePlayer?.seekToMillis(it.duration.toInt() * 1000)
+                else
+                    videoPlayer?.seekTo(it.duration.toInt().toLong() * 1000)
+            }
         }
     }
 
     private fun createDoubt() {
-        viewModel.getRunByAtemptId(attemptId).observer(this) {
+        viewModel.getRunByAttemptId().observer(this) {
             val categoryId = viewModel.getCourseById(it.crCourseId).categoryId
             val doubtDialog = AlertDialog.Builder(this).create()
             val doubtView = layoutInflater.inflate(R.layout.doubt_dialog, null)
@@ -279,7 +278,7 @@ class VideoPlayerActivity : AppCompatActivity(),
                         doubt.title = doubtView.titleLayout.editText?.text.toString()
                         doubt.category = categoryId
                         doubt.status = "PENDING"
-                        doubt.postrunAttempt = RunAttemptsId(attemptId)
+                        doubt.postrunAttempt = RunAttemptsId(viewModel.attemptId)
                         doubt.contents = ContentsId(contentId)
                         viewModel.createDoubtProgress.observer(this) { progress ->
                             if (progress)
@@ -289,7 +288,7 @@ class VideoPlayerActivity : AppCompatActivity(),
                                 toast("there was some error please try again")
                             }
                         }
-                        viewModel.createDoubt(doubt, attemptId)
+                        viewModel.createDoubt(doubt)
                     }
                 }
 
@@ -321,13 +320,13 @@ class VideoPlayerActivity : AppCompatActivity(),
                 note.text = noteView.titleLayout.editText?.text.toString()
                 note.duration = notePos
                 note.content = ContentsId(contentId)
-                note.runAttempt = RunAttemptsId(attemptId)
+                note.runAttempt = RunAttemptsId(viewModel.attemptId)
 
                 viewModel.createNoteProgress.observer(this) {
                     if (it) noteDialog.dismiss()
                     else toast("there was some errror with creating notes, try again")
                 }
-                viewModel.createNote(note, attemptId)
+                viewModel.createNote(note)
             }
         }
 

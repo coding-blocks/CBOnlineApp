@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/grey850"
-    tools:context=".fragments.NotesFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/notesRv"
+    <data>
+        <variable
+            name="viewModel"
+            type="com.codingblocks.cbonlineapp.viewmodels.VideoPlayerViewModel" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        tools:listitem="@layout/item_notes" />
+        android:background="@color/grey850">
 
-    <TextView
-        android:id="@+id/emptyTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/empty_notes_text"
-        android:textColor="@color/salmon"
-        android:textSize="20sp"
-        android:visibility="gone" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/notesRv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            app:setVideoPlayerAdapter="@{viewModel.getAdapter()}"
+            tools:listitem="@layout/item_notes" />
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/emptyTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/empty_notes_text"
+            android:textColor="@color/salmon"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+    </FrameLayout>
+</layout>
