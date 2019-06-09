@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.adapters
 
-import android.app.Activity
 import android.content.Context
 import android.util.SparseArray
 import android.view.LayoutInflater
@@ -22,7 +21,7 @@ import com.codingblocks.onlineapi.models.QuizSubmission
 import kotlinx.android.synthetic.main.quizlayout.view.*
 import org.jetbrains.anko.AnkoLogger
 
-class ViewPagerAdapter(private var mContext: Context, private var quizId: String, private var qaId: String, private var questionList: SparseArray<String>, submission: List<QuizSubmission>?, private var result: QuizResult?, private var viewModel: QuizViewModel) : PagerAdapter(), AnkoLogger {
+class ViewPagerAdapter(private var mContext: Context, private var quizId: String, private var qaId: String, private var questionList: SparseArray<String>, submission: List<QuizSubmission>?, private var result: QuizResult?, val listener: QuizInteractor, private var viewModel: QuizViewModel) : PagerAdapter(), AnkoLogger {
     private lateinit var choiceDataAdapter: QuizChoiceAdapter
     var submissionList: ArrayList<QuizSubmission> = submission as ArrayList<QuizSubmission>
 
@@ -124,9 +123,7 @@ class ViewPagerAdapter(private var mContext: Context, private var quizId: String
             }
         })
         view.submitButton.setOnClickListener {
-            Clients.onlineV2JsonApi.sumbitQuizById(qaId).enqueue(retrofitCallback { _, _ ->
-                (mContext as Activity).finish()
-            })
+            listener.onQuizSubmitted()
         }
     }
 
@@ -136,5 +133,9 @@ class ViewPagerAdapter(private var mContext: Context, private var quizId: String
 
     override fun getCount(): Int {
         return questionList.size()
+    }
+
+    interface QuizInteractor {
+        fun onQuizSubmitted()
     }
 }
