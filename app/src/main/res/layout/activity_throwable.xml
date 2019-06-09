@@ -1,0 +1,691 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:overScrollMode="never"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@color/indigo_blue"
+    tools:context="com.codingblocks.cbonlineapp.activities.ThrowableActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/backBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:elevation="5dp"
+                app:srcCompat="@drawable/ic_left_arrow" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/bannner" />
+        </RelativeLayout>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/quizCard1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            app:cardCornerRadius="12dp"
+            app:strokeColor="#fff"
+            app:strokeWidth="2dp">
+
+            <LinearLayout
+                android:id="@+id/infoll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rules"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/quiz"
+                    android:textSize="16sp" />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/submitBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/button_background_throwable"
+                    android:padding="8dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="Start Playing"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/quiz1ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/nameTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunitosans_bold"
+                    android:text="Welcome,"
+                    android:textColor="#333333"
+                    android:textSize="20sp" />
+
+                <com.codingblocks.cbonlineapp.widgets.GradientTextView
+                    android:id="@+id/earningTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nunitosans_bold"
+                    android:text="Your Winnings: INR 0"
+                    android:textSize="24sp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/buyBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/button_background_throwable"
+                    android:onClick="startHome"
+                    android:padding="16dp"
+                    android:paddingStart="27dp"
+                    android:paddingTop="15dp"
+                    android:paddingEnd="27dp"
+                    android:paddingBottom="15dp"
+                    android:text="@string/buy_text"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:fontFamily="@font/nunitosans_bold"
+                    android:gravity="center"
+                    android:text="Time Left to Predict"
+                    android:textColor="#333333"
+                    android:textSize="20sp" />
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="6dp"
+                    android:id="@+id/timell"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:textAlignment="center"
+                        android:id="@+id/timeTv"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitosans_bold"
+                        android:text="00  00  00  00"
+                        android:textColor="#f6013d"
+                        android:textSize="26sp" />
+
+                    <TextView
+                        android:textAlignment="center"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitosans_bold"
+                        android:text="Days  Hours  Mins  Secs"
+                        android:textColor="#f6013d"
+                        android:textSize="16.5sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/matchTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="@font/nunitosans_bold"
+                    android:gravity="center"
+                    android:textColor="#333333"
+                    android:lines="1"
+                    android:textSize="20sp"
+                    tools:text="Wednesday, Jun 5, 03:00 PM" />
+
+                <com.codingblocks.cbonlineapp.widgets.GradientTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:fontFamily="@font/nunitosans_bold"
+                    android:gravity="center"
+                    android:text="Live Score"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/team1Flag"
+                            android:layout_width="80dp"
+                            android:scaleType="centerInside"
+                            android:layout_height="80dp" />
+
+                        <TextView
+                            android:id="@+id/team1Name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:fontFamily="@font/nunitosans_bold"
+                            android:text="INDIA"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            android:textColor="#333333"
+                            android:textSize="16sp" />
+
+                        <com.codingblocks.cbonlineapp.widgets.GradientTextView
+                            android:id="@+id/team1Score"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nunitosans_bold"
+                            android:gravity="center"
+                            android:text="DNB"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.5"
+                        android:fontFamily="@font/nunitosans_bold"
+                        android:text="VS"
+                        android:textAlignment="center"
+                        android:textSize="20sp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/team2Flag"
+                            android:scaleType="centerInside"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp" />
+
+                        <TextView
+                            android:id="@+id/team2Name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:fontFamily="@font/nunitosans_bold"
+                            android:text="INDIA"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            android:textColor="#333333"
+                            android:textSize="16sp" />
+
+                        <com.codingblocks.cbonlineapp.widgets.GradientTextView
+                            android:id="@+id/team2Score"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nunitosans_bold"
+                            android:gravity="center"
+                            android:text="DNB"
+                            android:textSize="16sp" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_margin="8dp"
+                    android:background="@color/colorAccent" />
+
+                <com.codingblocks.cbonlineapp.widgets.GradientTextView
+                    android:id="@+id/predictionOverTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Prediction period for this match has expired."
+                    android:textAlignment="center"
+                    android:textSize="22sp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/quiz"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/questionLabel1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/nunitosans_bold"
+                            android:text="LEVEL 1"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/question1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/questionLabel1"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginTop="4dp"
+                            android:layout_toLeftOf="@+id/ques1Points"
+                            android:fontFamily="@font/nunitosans_bold"
+                            android:text="Winner of the Match"
+                            android:textSize="20sp" />
+
+                        <com.codingblocks.cbonlineapp.widgets.GradientTextView
+                            android:id="@+id/ques1Points"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_margin="8dp"
+                            android:background="@drawable/gradient_outline"
+                            android:padding="10dp"
+                            android:text="250 Points" />
+
+                        <com.codingblocks.cbonlineapp.widgets.GradientTextView
+                            android:id="@+id/ques1submission"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/question1"
+                            android:layout_marginTop="4dp"/>
+
+                        <com.codingblocks.cbonlineapp.widgets.ToggleButtonGroupTableLayout
+                            android:id="@+id/ques1radGroup"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/question1"
+                            android:layout_marginTop="4dp">
+
+                            <TableRow>
+
+                                <RadioButton
+                                    android:id="@+id/ques1rad1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
+                                <RadioButton
+                                    android:id="@+id/ques1rad2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
+                                <RadioButton
+                                    android:id="@+id/ques1rad3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <RadioButton
+                                    android:id="@+id/ques1rad4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
+                                <RadioButton
+                                    android:id="@+id/ques1rad5"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
+                                <RadioButton
+                                    android:id="@+id/ques1rad6"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+                            </TableRow>
+                        </com.codingblocks.cbonlineapp.widgets.ToggleButtonGroupTableLayout>
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp">
+
+                        <TextView
+                            android:id="@+id/questionLabel2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/nunitosans_bold"
+                            android:text="LEVEL 2"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/question2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/questionLabel2"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginTop="4dp"
+                            android:layout_toLeftOf="@+id/ques2Points"
+                            android:fontFamily="@font/nunitosans_bold"
+                            android:text="Winner of the Match"
+                            android:textSize="20sp" />
+
+                        <com.codingblocks.cbonlineapp.widgets.GradientTextView
+                            android:id="@+id/ques2Points"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_margin="8dp"
+                            android:background="@drawable/gradient_outline"
+                            android:padding="10dp"
+                            android:text="500 Points" />
+                        <com.codingblocks.cbonlineapp.widgets.GradientTextView
+                            android:id="@+id/ques2submission"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/question2"
+                            android:layout_marginTop="4dp"/>
+
+
+                        <com.codingblocks.cbonlineapp.widgets.ToggleButtonGroupTableLayout
+                            android:id="@+id/ques2radGroup"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/question2"
+                            android:layout_marginTop="4dp">
+
+                            <TableRow>
+
+                                <RadioButton
+                                    android:id="@+id/ques2rad1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
+                                <RadioButton
+                                    android:id="@+id/ques2rad2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
+                                <RadioButton
+                                    android:id="@+id/ques2rad3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <RadioButton
+                                    android:id="@+id/ques2rad4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
+                                <RadioButton
+                                    android:id="@+id/ques2rad5"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
+                                <RadioButton
+                                    android:id="@+id/ques2rad6"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+                            </TableRow>
+                        </com.codingblocks.cbonlineapp.widgets.ToggleButtonGroupTableLayout>
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp">
+
+                        <TextView
+                            android:id="@+id/questionLabel3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/nunitosans_bold"
+                            android:text="LEVEL 3"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/ques3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/questionLabel3"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginTop="4dp"
+                            android:layout_toLeftOf="@+id/ques3Points"
+                            android:fontFamily="@font/nunitosans_bold"
+                            android:text="Winner of the Match"
+                            android:textSize="20sp" />
+
+                        <com.codingblocks.cbonlineapp.widgets.GradientTextView
+                            android:id="@+id/ques3Points"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_margin="8dp"
+                            android:background="@drawable/gradient_outline"
+                            android:padding="10dp"
+                            android:text="1000 Points" />
+
+                        <com.codingblocks.cbonlineapp.widgets.GradientTextView
+                            android:id="@+id/ques3submission"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/ques3"
+                            android:layout_marginTop="4dp"/>
+
+
+                        <com.codingblocks.cbonlineapp.widgets.ToggleButtonGroupTableLayout
+                            android:id="@+id/ques3radGroup"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/ques3"
+                            android:layout_marginTop="4dp">
+
+                            <TableRow>
+
+                                <RadioButton
+                                    android:id="@+id/ques3rad1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
+                                <RadioButton
+                                    android:id="@+id/ques3rad2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
+                                <RadioButton
+                                    android:id="@+id/ques3rad3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <RadioButton
+                                    android:id="@+id/ques3rad4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
+                                <RadioButton
+                                    android:id="@+id/ques3rad5"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+
+                                <RadioButton
+                                    android:id="@+id/ques3rad6"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/nunitosans_bold"
+                                    android:text="Button1"
+                                    android:textSize="16sp"
+                                    android:visibility="gone" />
+                            </TableRow>
+                        </com.codingblocks.cbonlineapp.widgets.ToggleButtonGroupTableLayout>
+
+
+                    </RelativeLayout>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/submitQuizBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="4dp"
+                        android:background="@drawable/button_background_throwable"
+                        android:padding="8dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:text="Submit Predictions"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</ScrollView>

@@ -13,4 +13,6 @@
     <color name="green">#8dbf75</color>
 
     <color name="dark_grey">#222222</color>
+    <color name="indigo_blue">#381184</color>
+    <color name="neon_red">#ff003a</color>
 </resources>

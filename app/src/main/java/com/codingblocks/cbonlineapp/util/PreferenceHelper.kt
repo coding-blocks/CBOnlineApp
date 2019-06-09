@@ -13,8 +13,11 @@ class PreferenceHelper private constructor() {
         const val USER_IMAGE = "user_image"
         const val ONEAUTH_ID = "oneauth_id"
         const val USER_ID = "user_id"
+        const val USER_NAME = "user_name"
         const val WIFI = "wifi"
-        const val WIFI_VALUE = false
+        const val WIFI_DEFAULT = false
+        const val DATA_LIMIT = "data_limit"
+        const val DATA_LIMIT_DEFAULT = 1.0f
         private var prefs: SharedPreferences? = null
         private var instance: PreferenceHelper = PreferenceHelper()
 
@@ -27,41 +30,53 @@ class PreferenceHelper private constructor() {
     }
 
     var SP_ACCESS_TOKEN_KEY: String
-        get() = prefs!!.getString(ACCESS_TOKEN, ACCESS_TOKEN) ?: ""
+        get() = prefs?.getString(ACCESS_TOKEN, ACCESS_TOKEN) ?: ""
         set(value) {
-            prefs!!.edit().putString(ACCESS_TOKEN, value).apply()
+            prefs?.edit()?.putString(ACCESS_TOKEN, value)?.apply()
         }
 
     var SP_JWT_TOKEN_KEY: String
-        get() = prefs!!.getString(JWT_TOKEN, JWT_TOKEN) ?: ""
+        get() = prefs?.getString(JWT_TOKEN, JWT_TOKEN) ?: ""
         set(value) {
-            prefs!!.edit().putString(JWT_TOKEN, value).apply()
+            prefs?.edit()?.putString(JWT_TOKEN, value)?.apply()
         }
 
     var SP_JWT_REFRESH_TOKEN: String
-        get() = prefs!!.getString(REFRESH_TOKEN, REFRESH_TOKEN) ?: ""
+        get() = prefs?.getString(REFRESH_TOKEN, REFRESH_TOKEN) ?: ""
         set(value) {
-            prefs!!.edit().putString(REFRESH_TOKEN, value).apply()
+            prefs?.edit()?.putString(REFRESH_TOKEN, value)?.apply()
         }
     var SP_USER_IMAGE: String
-        get() = prefs!!.getString(USER_IMAGE, USER_IMAGE) ?: ""
+        get() = prefs?.getString(USER_IMAGE, USER_IMAGE) ?: ""
         set(value) {
-            prefs!!.edit().putString(USER_IMAGE, value).apply()
+            prefs?.edit()?.putString(USER_IMAGE, value)?.apply()
         }
     var SP_ONEAUTH_ID: String
-        get() = prefs!!.getString(ONEAUTH_ID, ONEAUTH_ID) ?: ""
+        get() = prefs?.getString(ONEAUTH_ID, ONEAUTH_ID) ?: ""
         set(value) {
-            prefs!!.edit().putString(ONEAUTH_ID, value).apply()
+            prefs?.edit()?.putString(ONEAUTH_ID, value)?.apply()
         }
 
     var SP_USER_ID: String
-        get() = prefs!!.getString(USER_ID, USER_ID) ?: ""
+        get() = prefs?.getString(USER_ID, USER_ID) ?: ""
         set(value) {
-            prefs!!.edit().putString(USER_ID, value).apply()
+            prefs?.edit()?.putString(USER_ID, value)?.apply()
         }
-    var SP_WIFI: Boolean
-        get() = prefs!!.getBoolean(WIFI, WIFI_VALUE)
+
+    var SP_USER_NAME: String
+        get() = prefs?.getString(USER_NAME, USER_NAME) ?: ""
         set(value) {
-            prefs!!.edit().putBoolean(WIFI, value).apply()
+            prefs?.edit()?.putString(USER_NAME, value)?.apply()
+        }
+
+    var SP_WIFI: Boolean
+        get() = prefs?.getBoolean(WIFI, WIFI_DEFAULT) ?: WIFI_DEFAULT
+        set(value) {
+            prefs?.edit()?.putBoolean(WIFI, value)?.apply()
+        }
+    var SP_DATA_LIMIT: Float
+        get() = prefs?.getFloat(DATA_LIMIT, DATA_LIMIT_DEFAULT) ?: DATA_LIMIT_DEFAULT
+        set(value) {
+            prefs?.edit()?.putFloat(DATA_LIMIT, value)?.apply()
         }
 }
