@@ -417,40 +417,43 @@ class VideoPlayerActivity : AppCompatActivity(),
         val oldOrientation = viewModel.currentOrientation
         viewModel.currentOrientation = newOrientation
         super.onConfigurationChanged(newConfig)
-        when (newOrientation) {
-            oldOrientation -> {
+        if (playerFragment.isVisible)
+            when (newOrientation) {
+                oldOrientation -> {
+                }
+                Configuration.ORIENTATION_LANDSCAPE -> {
+                    // hide other views
+                    player_tabs.visibility = View.GONE
+                    pagerFrame.visibility = View.GONE
+                    playerControlView?.fitsSystemWindows = true
+
+                    val paramsFragment: RelativeLayout.LayoutParams =
+                        playerFragment.view?.layoutParams as RelativeLayout.LayoutParams
+                    paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
+                    paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_TOP)
+                    paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_START)
+                    paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_END)
+
+                    // hide system windows
+                    showControls(false)
+                }
+                else -> {
+                    // show other views
+                    player_tabs.visibility = View.VISIBLE
+                    pagerFrame.visibility = View.VISIBLE
+
+                    playerControlView?.fitsSystemWindows = false
+
+                    val paramsFragment: RelativeLayout.LayoutParams =
+                        playerFragment.view?.layoutParams as RelativeLayout.LayoutParams
+                    paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
+                    paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_TOP)
+                    paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_START)
+                    paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_END)
+
+                    playerControlView?.setPadding(0, 0, 0, 0)
+                    // show system windows
+                }
             }
-            Configuration.ORIENTATION_LANDSCAPE -> {
-                // hide other views
-                player_tabs.visibility = View.GONE
-                pagerFrame.visibility = View.GONE
-                playerControlView?.fitsSystemWindows = true
-
-                val paramsFragment: RelativeLayout.LayoutParams = playerFragment.view?.layoutParams as RelativeLayout.LayoutParams
-                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_TOP)
-                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_START)
-                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_END)
-
-                // hide system windows
-                showControls(false)
-            }
-            else -> {
-                // show other views
-                player_tabs.visibility = View.VISIBLE
-                pagerFrame.visibility = View.VISIBLE
-
-                playerControlView?.fitsSystemWindows = false
-
-                val paramsFragment: RelativeLayout.LayoutParams = playerFragment.view?.layoutParams as RelativeLayout.LayoutParams
-                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_TOP)
-                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_START)
-                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_END)
-
-                playerControlView?.setPadding(0, 0, 0, 0)
-                // show system windows
-            }
-        }
     }
 }
