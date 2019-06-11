@@ -51,11 +51,15 @@ import com.github.jasminb.jsonapi.RelationshipResolver
 import com.github.jasminb.jsonapi.ResourceConverter
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
+import java.io.IOException
+import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
 object Clients {
@@ -102,8 +106,8 @@ object Clients {
         onlineApiResourceConverter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_TYPE_IN_RELATIONSHIP)
     }
 
-    private const val connectTimeout = 15 // 15s
-    private const val readTimeout = 15 // 15s
+    private const val connectTimeout = 8 // 15s
+    private const val readTimeout = 5 // 15s
 
     private val ClientInterceptor = OkHttpClient.Builder()
         .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
@@ -116,7 +120,26 @@ object Clients {
                 ).build()
             )
         }
+        .addInterceptor(object :Interceptor{
+            @Throws(IOException::class)
+            override fun intercept(chain: Interceptor.Chain): Response {
+                return onOnIntercept(chain)
+            }
+
+        })
         .build()
+
+    @Throws(IOException::class)
+    private fun onOnIntercept(chain: Interceptor.Chain): Response {
+        try {
+            return chain.proceed(chain.request())
+        } catch (exception: SocketTimeoutException) {
+            exception.printStackTrace()
+        }
+
+
+        return chain.proceed(chain.request())
+    }
 
 
     private val onlineV2JsonRetrofit = Retrofit.Builder()

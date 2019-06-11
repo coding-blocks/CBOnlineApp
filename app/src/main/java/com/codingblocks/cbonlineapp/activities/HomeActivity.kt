@@ -47,7 +47,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.Arrays
+import java.util.*
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     AnkoLogger {
@@ -156,7 +156,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             viewModel.prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
             viewModel.prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
             if (nav_view.getHeaderView(0).login_button.text == "Logout") {
-                removeShortcuts()
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
+                    removeShortcuts()
+                }
                 invalidateToken()
             }
             startActivity(intentFor<LoginActivity>().singleTop())
