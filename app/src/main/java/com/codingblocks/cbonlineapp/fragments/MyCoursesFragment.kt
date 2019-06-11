@@ -6,6 +6,7 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.graphics.drawable.PictureDrawable
+import android.os.Build.VERSION_CODES.N_MR1
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -101,7 +102,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             ui.swipeRefreshLayout.isRefreshing = it
         }
 
-        createShortcut()
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1)
+            createShortcut()
     }
 
     private fun displayCourses(searchQuery: String = "") {
@@ -139,7 +141,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    @TargetApi(28)
+    @TargetApi(N_MR1)
     fun createShortcut() {
 
         val sM = requireContext().getSystemService(ShortcutManager::class.java)
@@ -169,7 +171,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                                         400, 400
                                     )
                                 )
-                                val bitmap = MediaUtils.getBitmapFromPictureDrawable(picDrawable)
+                                val bitmap =
+                                    MediaUtils.getBitmapFromPictureDrawable(picDrawable)
                                 val circularBitmap = MediaUtils.getCircularBitmap(bitmap)
                                 shortcut.setIcon(Icon.createWithBitmap(circularBitmap))
                                 shortcutList.add(index, shortcut.build())
