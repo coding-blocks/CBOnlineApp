@@ -12,29 +12,29 @@ class OnlineRestApiAuthenticatedTest {
     @Before
     fun `set JWT`() {
         Clients.authJwt =
-            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTI4ODE1LCJmaXJzdG5hbWUiOiJSYWh1bCIsImxhc3RuYW1lIjoiUmF5IiwidXNlcm5hbWUiOiJSYWh1bC1SYXktMjM0OTI2MDg3MjAxOTQ4OCIsImVtYWlsIjoicmFodWw5NjUwcmF5QGdtYWlsLmNvbSIsInZlcmlmaWVkZW1haWwiOiJyYWh1bDk2NTByYXlAZ21haWwuY29tIiwidmVyaWZpZWRtb2JpbGUiOm51bGwsIm1vYmlsZSI6Iis5MS05NjUwMTI0NzU2Iiwib25lYXV0aF9pZCI6IjMyODIyIiwibGFzdF9yZWFkX25vdGlmaWNhdGlvbiI6IjAiLCJwaG90byI6Imh0dHBzOi8vZ3JhcGguZmFjZWJvb2suY29tLzIzNDkyNjA4NzIwMTk0ODgvcGljdHVyZT90eXBlPWxhcmdlIiwiY29sbGVnZSI6IjAtLS1PVEhFUiAvIE5PVCBMSVNURUQgLyBOTyBDT0xMRUdFIC0tLTAiLCJvcmdhbml6YXRpb24iOm51bGwsInJvbGVJZCI6MiwiY3JlYXRlZEF0IjoiMjAxOS0wNS0xNFQxODowNToxOC44NTRaIiwidXBkYXRlZEF0IjoiMjAxOS0wNi0wMlQxMTozMDoyNy4wNTRaIiwicm9sZSI6eyJpZCI6MiwibmFtZSI6IlN0dWRlbnQiLCJjcmVhdGVkQXQiOiIyMDE3LTA5LTA3VDEwOjU4OjE5Ljk5M1oiLCJ1cGRhdGVkQXQiOiIyMDE3LTA5LTA3VDEwOjU4OjE5Ljk5M1oifSwiY2xpZW50SWQiOiI3MGIyZWI0NS03NjFlLTQ3MTItYjdjNi02YWI3MTQ2ODFhMmYiLCJjbGllbnQiOiJhbmRyb2lkIiwiaWF0IjoxNTU5NDc1MDI3LCJleHAiOjE1NjQ4NzUwMjd9.GEnoIyi4zIJEJfLqI11fB_2XF6CXMX4p_A5tmpcUa7Rwxy5U7XhP_iYftwyiadgjOCWW_CcvvVKLZlTOM7rmK23Ms4-ptf4lC6gp0pzjP5UV_Ab6aulfrsBFOwoRyL0NgrUKNHNb4XfuRPtwFiXVtBvp9Ln5uRXbFfbr3ewj9v_C_roBeB6PNYu2b7O8h3G4OqVLI6xjhmM_U89s5Pm7hhBVI_95Eom0LweavDZSisVViwLYuE4L82g1yXpbeDi-Q6BJsqFA05TDlVOalt6cKHzjFlMfgtFOomM6hAFfqL3lWaOqmndWU3ZI3q3x0cJ1Zv7xeZISqXboSQfrhdOkcA"
+            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTM1OTM4LCJmaXJzdG5hbWUiOiJBZGl0eWEiLCJsYXN0bmFtZSI6Ikd1cHRhIiwidXNlcm5hbWUiOiJhZGl0eWFzdGljIiwiZW1haWwiOiJhZGl0eWFvZmZpY2lhbGd1cHRhQGdtYWlsLmNvbSIsInZlcmlmaWVkZW1haWwiOiJhZGl0eWFvZmZpY2lhbGd1cHRhQGdtYWlsLmNvbSIsInZlcmlmaWVkbW9iaWxlIjpudWxsLCJtb2JpbGUiOiIrOTEtODQ1ODg5MjIyNiIsIm9uZWF1dGhfaWQiOiIzNjM1NCIsImxhc3RfcmVhZF9ub3RpZmljYXRpb24iOiIwIiwicGhvdG8iOiJodHRwczovL2F2YXRhcnMyLmdpdGh1YnVzZXJjb250ZW50LmNvbS91LzExOTg4NTE3P3Y9NCIsImNvbGxlZ2UiOiJCaGFyYXRpIFZpZHlhcGVldGggVW5pdmVyc2l0eSBDb2xsZWdlIE9mIEVuZ2luZWVyaW5nIChQdW5lKSIsIm9yZ2FuaXphdGlvbiI6bnVsbCwicm9sZUlkIjoyLCJjcmVhdGVkQXQiOiIyMDE5LTA1LTI2VDAzOjQyOjU0Ljg4M1oiLCJ1cGRhdGVkQXQiOiIyMDE5LTA2LTA4VDAzOjQ3OjQ2LjQwOFoiLCJyb2xlIjp7ImlkIjoyLCJuYW1lIjoiU3R1ZGVudCIsImNyZWF0ZWRBdCI6IjIwMTctMDktMDdUMTA6NTg6MTkuOTkzWiIsInVwZGF0ZWRBdCI6IjIwMTctMDktMDdUMTA6NTg6MTkuOTkzWiJ9LCJjbGllbnRJZCI6IjM0ZDY5NDVjLTE0ZGItNDRhOC05NThhLWUzZGUyYzE3MzJjMCIsImNsaWVudCI6ImFuZHJvaWQiLCJpYXQiOjE1NTk5NjU2NjYsImV4cCI6MTU2NTM2NTY2Nn0.uGSl5tCh4ZGh_Ng7-2R8sLcJdQBzntSMH2WlTt6SIA7z2KD5cJffUxlaMs-z59rwmtMedPvAUZW_MF2peSvHNtfcHOERccoqAGRXXkHE5aDVQQt1yOH3iq1M4BMrbOSvJRclx6OTXvMBWfVpGsvO3A9OMUVm6SpSmO_rrUl2Ktn3oQGNDz9mEDdn8Vmn8dS5RX_cUFYWPkI0qSIzK-yNukafIFFC0ZSfYYqITihA-lYusqiVuktziFzaeO9-1drmr_P3-xA-oNwIQ6QeAmwTz8KwS1KuKWl1M_LQEs5EmfFPvtIb9GI1hSZX-6yD0Y9vjk3wxX8cqTjhA2jvj5u6gw"
     }
 
     @Test
-    fun `GET getMyCourseProgress`(){
+    fun `GET getMyCourseProgress`() {
         val progress = restapi.getMyCourseProgress("22684").execute().body()
         assertNotNull(progress)
     }
 
     @Test
-    fun `GET getOTP`(){
-        val otp = restapi.getOtp("7f97136df7cc4f349e0129040d85b79f","4688","22685").execute().body()
+    fun `GET getOTP`() {
+        val otp = restapi.getOtp("7f97136df7cc4f349e0129040d85b79f", "4688", "22685").execute().body()
         assertNotNull(otp)
     }
 
     @Test
-    fun `GET getMe`(){
+    fun `GET getMe`() {
         val me = restapi.getMe().execute().body()
         assertNotNull(me)
     }
 
     @Test
-    fun `GET enrollTrial`(){
+    fun `GET enrollTrial`() {
         val enroll = restapi.enrollTrial("262").execute().body()
         assertNotNull(enroll)
     }
