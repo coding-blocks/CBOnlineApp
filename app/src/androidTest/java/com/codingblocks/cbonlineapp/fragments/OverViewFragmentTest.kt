@@ -3,13 +3,12 @@ package com.codingblocks.cbonlineapp.fragments
 import android.os.Bundle
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.scrollTo
-import androidx.test.espresso.action.ViewActions.swipeUp
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.runner.AndroidJUnit4
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.viewactions.CustomViewAction
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
