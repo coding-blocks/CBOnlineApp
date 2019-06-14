@@ -12,19 +12,18 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class NotificationActivityTest{
+class NotificationActivityTest {
 
     @get:Rule
     val actRule = ActivityTestRule<NotificationsActivity>(NotificationsActivity::class.java)
 
     @Test
-    fun testToolBar(){
+    fun testToolBar() {
         onView(withId(R.id.notificationToolbar)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testEmptyVisibility(){
+    fun testEmptyVisibility() {
         onView(withId(R.id.emptyTv)).check(matches(isDisplayed()))
     }
-
 }

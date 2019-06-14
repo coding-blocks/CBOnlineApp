@@ -32,16 +32,12 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import com.codingblocks.cbonlineapp.viewactions.CustomViewAction
 import org.hamcrest.Matchers
 
-
-
-
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class CourseActivityTest {
 
     @get:Rule
-    public val actRule = ActivityTestRule<CourseActivity>(CourseActivity::class.java,true,false)
-
+    public val actRule = ActivityTestRule<CourseActivity>(CourseActivity::class.java, true, false)
 
     fun nestedScrollTo(): ViewAction {
         return object : ViewAction {
@@ -74,7 +70,6 @@ class CourseActivityTest {
 
                 uiController.loopMainThreadUntilIdle()
             }
-
         }
     }
 
@@ -103,72 +98,69 @@ class CourseActivityTest {
     }
 
     @Before
-    fun setUp(){
+    fun setUp() {
         val intent = Intent()
-        intent.putExtra("courseId","40")
-        intent.putExtra("courseName","Machine Learning Master Course")
+        intent.putExtra("courseId", "40")
+        intent.putExtra("courseName", "Machine Learning Master Course")
         actRule.launchActivity(intent)
         Thread.sleep(30000)
     }
 
     @Test
-    fun testToolBarVisibility(){
+    fun testToolBarVisibility() {
         onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testBuyButtonUnderVideo(){
+    fun testBuyButtonUnderVideo() {
         onView(withId(R.id.buyBtn)).check(matches(isDisplayed())).perform(click()).perform()
     }
 
     @Test
-    fun testYoutubePlayerVisible(){
+    fun testYoutubePlayerVisible() {
         onView(withId(R.id.displayYoutubeVideo)).perform(nestedScrollTo()).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testTrialUnderYoutubeClick(){
+    fun testTrialUnderYoutubeClick() {
         onView(withId(R.id.trialBtn)).check(matches(isDisplayed())).perform(click()).perform()
     }
 
     @Test
-    fun testExpandableRecyclerView(){
+    fun testExpandableRecyclerView() {
         onView(withId(R.id.rvExpendableView)).perform(nestedScrollTo()).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
     }
 
     @Test
-    fun testInstructorsRecyclerView(){
+    fun testInstructorsRecyclerView() {
         onView(withId(R.id.instructorRv)).perform(nestedScrollTo()).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testBatchesRecyclerView(){
-        onView(withId(R.id.batchRv)).perform(nestedScrollTo()).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0,CustomViewAction().clickChildViewWithId("ENROLL NOW")))
+    fun testBatchesRecyclerView() {
+        onView(withId(R.id.batchRv)).perform(nestedScrollTo()).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, CustomViewAction().clickChildViewWithId("ENROLL NOW")))
     }
 
     @Test
-    fun testBottomSheet(){
-        onView(withId(R.id.batchRv)).perform(nestedScrollTo()).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0,CustomViewAction().clickChildViewWithId("ENROLL NOW")))
+    fun testBottomSheet() {
+        onView(withId(R.id.batchRv)).perform(nestedScrollTo()).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, CustomViewAction().clickChildViewWithId("ENROLL NOW")))
         Thread.sleep(5000)
         onView(withId(R.id.bottom_sheet)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testCheckoutButton(){
-        onView(withId(R.id.batchRv)).perform(nestedScrollTo()).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0,CustomViewAction().clickChildViewWithId("ENROLL NOW")))
+    fun testCheckoutButton() {
+        onView(withId(R.id.batchRv)).perform(nestedScrollTo()).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, CustomViewAction().clickChildViewWithId("ENROLL NOW")))
         Thread.sleep(5000)
         onView(withId(R.id.bottom_sheet)).check(matches(isDisplayed()))
         onView((withId(R.id.checkoutBtn))).check(matches(isDisplayed())).perform(click()).perform()
     }
 
     @Test
-    fun testContinueButton(){
-        onView(withId(R.id.batchRv)).perform(nestedScrollTo()).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0,CustomViewAction().clickChildViewWithId("ENROLL NOW")))
+    fun testContinueButton() {
+        onView(withId(R.id.batchRv)).perform(nestedScrollTo()).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, CustomViewAction().clickChildViewWithId("ENROLL NOW")))
         Thread.sleep(5000)
         onView(withId(R.id.bottom_sheet)).check(matches(isDisplayed()))
         onView(withId(R.id.continueBtn)).check(matches(isDisplayed())).perform(click()).perform()
     }
-
-
-
 }

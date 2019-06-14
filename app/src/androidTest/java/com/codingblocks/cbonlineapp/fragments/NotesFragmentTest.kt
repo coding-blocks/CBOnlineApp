@@ -19,19 +19,15 @@ import org.junit.runner.RunWith
 class NotesFragmentTest {
 
     @Before
-    fun setUp(){
+    fun setUp() {
         FragmentScenario.launchInContainer(VideoNotesFragment::class.java, Bundle().apply {
-            putString(com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID,"22685")
-        }, R.style.Theme_CB_Course,null)
+            putString(com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID, "22685")
+        }, R.style.Theme_CB_Course, null)
         Thread.sleep(10000)
     }
 
-
     @Test
-    fun testNotesRecyclerView(){
-        onView(withId(R.id.notesRv)).check(matches(isDisplayed())).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0,CustomViewAction().clickChildViewWithId("Edit")))
+    fun testNotesRecyclerView() {
+        onView(withId(R.id.notesRv)).check(matches(isDisplayed())).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, CustomViewAction().clickChildViewWithId("Edit")))
     }
-
-
-
 }
