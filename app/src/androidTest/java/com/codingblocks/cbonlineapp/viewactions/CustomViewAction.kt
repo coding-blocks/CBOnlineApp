@@ -5,8 +5,7 @@ import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import org.hamcrest.Matcher
 
-
-class CustomViewAction{
+class CustomViewAction {
     public fun clickChildViewWithId(text: String): ViewAction {
         return object : ViewAction {
             override fun getConstraints(): Matcher<View>? {
@@ -19,7 +18,7 @@ class CustomViewAction{
 
             override fun perform(uiController: UiController, view: View) {
                 val outviews = ArrayList<View>()
-                view.findViewsWithText(outviews,text,View.FIND_VIEWS_WITH_TEXT)
+                view.findViewsWithText(outviews, text, View.FIND_VIEWS_WITH_TEXT)
                 outviews[0].performClick()
             }
         }

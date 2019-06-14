@@ -13,7 +13,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
 @RunWith(AndroidJUnit4::class)
 class AboutActivityTest {
 
@@ -21,23 +20,22 @@ class AboutActivityTest {
     val actRule = ActivityTestRule<AboutActivity>(AboutActivity::class.java)
 
     @Test
-    fun testToolBarVisibility(){
+    fun testToolBarVisibility() {
         onView(ViewMatchers.withId(R.id.toolbar)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @Test
-    fun testPhoneNumber(){
+    fun testPhoneNumber() {
         onView(withId(R.id.callTv)).check(matches(withText(R.string.tollfree_number)))
     }
 
     @Test
-    fun testPitampuraAddress(){
+    fun testPitampuraAddress() {
         onView(withId(R.id.textView1_21)).check(matches(withText(R.string.pitampura_address)))
     }
 
     @Test
-    fun testNoidaAddress(){
+    fun testNoidaAddress() {
         onView(withId(R.id.textView2_21)).check(matches(withText(R.string.noida_address)))
     }
-
 }
