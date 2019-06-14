@@ -37,7 +37,6 @@
                 <data android:pathPrefix="/courses" />
                 <data android:pathPrefix="/player" />
                 <data android:pathPrefix="/cricket_cup" />
-
             </intent-filter>
         </activity> <!-- <meta-data android:name="android.max_aspect" android:value="2.1" /> -->
         <activity
@@ -158,8 +157,8 @@
         <activity
             android:name=".activities.QuizActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
             android:parentActivityName=".activities.MyCourseActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/myTheme" />
     </application>
 
