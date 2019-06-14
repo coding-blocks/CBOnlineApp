@@ -13,19 +13,18 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class VideoDoubtsFragmentTest{
+class VideoDoubtsFragmentTest {
 
     @Before
-    fun setUp(){
+    fun setUp() {
         FragmentScenario.launchInContainer(VideoDoubtFragment::class.java, Bundle().apply {
-            putString(com.codingblocks.cbonlineapp.util.ARG_ATTEMPT_ID,"22685")
-        }, R.style.Theme_CB_Course,null)
+            putString(com.codingblocks.cbonlineapp.util.ARG_ATTEMPT_ID, "22685")
+        }, R.style.Theme_CB_Course, null)
         Thread.sleep(10000)
     }
 
     @Test
-    fun testEmptyText(){
+    fun testEmptyText() {
         onView(withId(R.id.emptyTv)).check(matches(isDisplayed()))
     }
-
 }

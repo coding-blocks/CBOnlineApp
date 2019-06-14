@@ -17,62 +17,58 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class HomeActivityTest{
+class HomeActivityTest {
 
     @get:Rule
-    public val actRule = ActivityTestRule<HomeActivity>(HomeActivity::class.java,true,true)
+    public val actRule = ActivityTestRule<HomeActivity>(HomeActivity::class.java, true, true)
 
     @Test
-    fun testFragmentHolderVisibility(){
+    fun testFragmentHolderVisibility() {
         onView(withId(R.id.fragment_holder)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testAppBarVisibility(){
+    fun testAppBarVisibility() {
         onView(withId(R.id.appBar)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun clickOnNavigationItemShowsAllCourses(){
+    fun clickOnNavigationItemShowsAllCourses() {
         openDrawer()
         assertNotNull(onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_all_courses)))
     }
 
     @Test
-    fun clickOnNavigationItemShowsHome(){
+    fun clickOnNavigationItemShowsHome() {
         openDrawer()
         assertNotNull(onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_home)))
     }
 
     @Test
-    fun clickOnNavigationItemShowsMyCourses(){
+    fun clickOnNavigationItemShowsMyCourses() {
         openDrawer()
         assertNotNull(onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_my_courses)))
     }
 
     @Test
-    fun clickOnNavigationItemsOpensWhatsapp(){
+    fun clickOnNavigationItemsOpensWhatsapp() {
         openDrawer()
         assertNotNull(onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_whatsapp)))
     }
 
     @Test
-    fun clickOnNavigationItemOpenSettings(){
+    fun clickOnNavigationItemOpenSettings() {
         openDrawer()
         assertNotNull(onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_preferences)))
     }
 
     @Test
-    fun clickONNavigationItemOpensContactUs(){
+    fun clickONNavigationItemOpensContactUs() {
         openDrawer()
         assertNotNull(onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_contactUs)))
     }
 
-
-    fun openDrawer(){
+    fun openDrawer() {
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open())
     }
-
-
-
 }

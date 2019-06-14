@@ -16,12 +16,11 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
 @RunWith(AndroidJUnit4::class)
 class QuizResultFragmentTest {
 
     @Before
-    fun setUp(){
+    fun setUp() {
         FragmentScenario.launchInContainer(QuizResultFragment::class.java, Bundle().apply {
             putString(QUIZ_ID, "23")
             putString(QUIZ_QNA, "20")
@@ -32,23 +31,22 @@ class QuizResultFragmentTest {
     }
 
     @Test
-    fun testCorrectAnswers(){
+    fun testCorrectAnswers() {
         onView(withId(R.id.correct_answers_score_image)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testTotalQuestions(){
+    fun testTotalQuestions() {
         onView(withId(R.id.total_questions_image)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testWrongAnswers(){
+    fun testWrongAnswers() {
         onView(withId(R.id.wrong_answers_image)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testGoBackButton(){
+    fun testGoBackButton() {
         onView(withId(R.id.quizResultGoBackBtn)).check(matches(isDisplayed()))
     }
-
 }

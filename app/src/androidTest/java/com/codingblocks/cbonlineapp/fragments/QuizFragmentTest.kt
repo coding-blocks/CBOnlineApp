@@ -20,7 +20,7 @@ import org.junit.runner.RunWith
 class QuizFragmentTest {
 
     @Before
-    fun setUp(){
+    fun setUp() {
         FragmentScenario.launchInContainer(QuizFragment::class.java, Bundle().apply {
             putString(QUIZ_ID, "23")
             putString(QUIZ_QNA, "20")
@@ -31,8 +31,7 @@ class QuizFragmentTest {
     }
 
     @Test
-    fun testQuizViewPager(){
+    fun testQuizViewPager() {
         onView(withId(R.id.quizViewPager)).check(matches(isDisplayed()))
     }
-
 }

@@ -12,19 +12,18 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class LoginActivityTest{
+class LoginActivityTest {
 
     @get:Rule
     val actRule = ActivityTestRule<LoginActivity>(LoginActivity::class.java, true, true)
 
     @Test
-    fun testLoginButton(){
+    fun testLoginButton() {
         assertNotNull(onView(withId(R.id.loginBtn)).perform(click()).perform())
     }
 
     @Test
-    fun testSkipButton(){
+    fun testSkipButton() {
         assertNotNull(onView(withId(R.id.skipBtn)).perform(click()).perform())
     }
-
 }

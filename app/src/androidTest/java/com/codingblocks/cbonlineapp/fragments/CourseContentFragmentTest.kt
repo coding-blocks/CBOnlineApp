@@ -20,16 +20,15 @@ import org.junit.runner.RunWith
 class CourseContentFragmentTest {
 
     @Before
-    fun setup(){
+    fun setup() {
         FragmentScenario.launchInContainer(CourseContentFragment::class.java, Bundle().apply {
-            putString(RUN_ATTEMPT_ID,"22685")
+            putString(RUN_ATTEMPT_ID, "22685")
         }, R.style.Theme_CB_Course, null)
         Thread.sleep(30000)
     }
 
     @Test
-    fun testCourseContentRecyclerView(){
-        onView(withId(R.id.rvExpendableView)).check(matches(isDisplayed())).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0,click())).perform()
+    fun testCourseContentRecyclerView() {
+        onView(withId(R.id.rvExpendableView)).check(matches(isDisplayed())).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click())).perform()
     }
-
 }

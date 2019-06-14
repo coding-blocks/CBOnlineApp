@@ -16,24 +16,23 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class AnnouncementFragmentTest{
+class AnnouncementFragmentTest {
 
     @Before
-    fun setUp(){
+    fun setUp() {
         FragmentScenario.launchInContainer(AnnouncementsFragment::class.java, Bundle().apply {
-            putString(ARG_COURSE_ID,"45")
+            putString(ARG_COURSE_ID, "45")
         })
         Thread.sleep(30000)
     }
 
     @Test
-    fun testAboutInstructorText(){
+    fun testAboutInstructorText() {
         onView(withId(R.id.aboutTv)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testInstructorRecyclerView(){
+    fun testInstructorRecyclerView() {
         onView(withId(R.id.instructorRv)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0)).check(matches(isDisplayed()))
     }
-
 }

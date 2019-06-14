@@ -13,37 +13,35 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
 @RunWith(AndroidJUnit4::class)
 class OverViewFragmentTest {
 
     @Before
-    fun setUp(){
+    fun setUp() {
         FragmentScenario.launchInContainer(OverviewFragment::class.java, Bundle().apply {
-            putString("attempt_id","22685")
-            putString("run_id","22685")
-        }, R.style.Theme_CB_Course,null)
+            putString("attempt_id", "22685")
+            putString("run_id", "22685")
+        }, R.style.Theme_CB_Course, null)
         Thread.sleep(10000)
     }
 
     @Test
-    fun testRootViewVisibility(){
+    fun testRootViewVisibility() {
         onView(isRoot()).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testCardViewVisibility(){
+    fun testCardViewVisibility() {
         onView(withId(R.id.materialCardView)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testFAQAssignment(){
+    fun testFAQAssignment() {
         onView((withId(R.id.faqassignmentDescription))).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testFAQLectureDescription(){
+    fun testFAQLectureDescription() {
         onView(withId(R.id.faqLectureDescription)).check(matches(isDisplayed()))
     }
-
 }

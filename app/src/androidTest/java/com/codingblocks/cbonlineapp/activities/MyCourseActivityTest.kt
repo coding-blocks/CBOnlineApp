@@ -17,7 +17,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
 @RunWith(AndroidJUnit4::class)
 class MyCourseActivityTest {
 
@@ -25,24 +24,23 @@ class MyCourseActivityTest {
     val actRule = ActivityTestRule<MyCourseActivity>(MyCourseActivity::class.java, true, false)
 
     @Before
-    fun setUp(){
+    fun setUp() {
         val intent = Intent()
-        intent.putExtra(COURSE_ID,"17")
-        intent.putExtra(RUN_ATTEMPT_ID,"23092")
-        intent.putExtra(COURSE_NAME,"Competitive Programming Online")
-        intent.putExtra(RUN_ID,"209")
+        intent.putExtra(COURSE_ID, "17")
+        intent.putExtra(RUN_ATTEMPT_ID, "23092")
+        intent.putExtra(COURSE_NAME, "Competitive Programming Online")
+        intent.putExtra(RUN_ID, "209")
         actRule.launchActivity(intent)
         Thread.sleep(30000)
     }
 
     @Test
-    fun testYoutubeVideoVisibility(){
+    fun testYoutubeVideoVisibility() {
         onView(withId(R.id.displayYoutubeVideo)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testViewPager(){
+    fun testViewPager() {
         onView(withId(R.id.htab_viewpager)).check(matches(isDisplayed()))
     }
-
 }

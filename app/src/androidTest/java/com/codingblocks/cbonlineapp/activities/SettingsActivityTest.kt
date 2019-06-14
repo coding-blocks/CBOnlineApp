@@ -12,16 +12,14 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
 @RunWith(AndroidJUnit4::class)
-class SettingsActivityTest{
+class SettingsActivityTest {
 
     @get:Rule
     val actRule = ActivityTestRule<SettingsActivity>(SettingsActivity::class.java)
 
     @Test
-    fun testSwitch(){
+    fun testSwitch() {
         onView(withId(R.id.wifiSwitch)).check(matches(isDisplayed())).perform(click()).perform()
     }
-
 }
