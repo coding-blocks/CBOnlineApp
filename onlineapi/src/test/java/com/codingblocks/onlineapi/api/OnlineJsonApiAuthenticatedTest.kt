@@ -32,17 +32,17 @@ class OnlineJsonApiAuthenticatedTest {
         assertNotNull(courses)
     }
 
-    @Test
-    fun `GET enrolledCourse`() {
-        val course = jsonapi.enrolledCourseById("22684").execute().body()
-        assertNotNull(course)
-    }
+//    @Test
+//    fun `GET enrolledCourse`() {
+//        val course = jsonapi.enrolledCourseById("22684").execute().body()
+//        assertNotNull(course)
+//    }
 
-    @Test
-    fun `GET getSectionContents`() {
-        val section = jsonapi.getSectionContents("/sections/6874/relationships/contents").execute().body()
-        assertNotNull(section)
-    }
+//    @Test
+//    fun `GET getSectionContents`() {
+//        val section = jsonapi.getSectionContents("/sections/6874/relationships/contents").execute().body()
+//        assertNotNull(section)
+//    }
 
     @Test
     fun `GET QuizById`() {
@@ -56,11 +56,11 @@ class OnlineJsonApiAuthenticatedTest {
         assertNotNull(quizzes)
     }
 
-    @Test
-    fun `GET getQuizAttempById`() {
-        val quiz = jsonapi.getQuizAttemptById("6443").execute().body()
-        assertNotNull(quiz)
-    }
+//    @Test
+//    fun `GET getQuizAttempById`() {
+//        val quiz = jsonapi.getQuizAttemptById("6443").execute().body()
+//        assertNotNull(quiz)
+//    }
 
 
     @Test
@@ -75,30 +75,30 @@ class OnlineJsonApiAuthenticatedTest {
         assertNotNull(quizAttempt)
     }
 
-    @Test
-    fun `GET DoubtByAttemptId `() {
-        val doubts = jsonapi.getDoubtByAttemptId("22684").execute().body()
-        assertNotNull((doubts))
-    }
+//    @Test
+//    fun `GET DoubtByAttemptId `() {
+//        val doubts = jsonapi.getDoubtByAttemptId("22684").execute().body()
+//        assertNotNull((doubts))
+//    }
 
-    @Test
-    fun `GET NoteById `() {
-        val notes = jsonapi.getNotesByAttemptId("22684").execute().body()
-        assertNotNull(notes)
-    }
+//    @Test
+//    fun `GET NoteById `() {
+//        val notes = jsonapi.getNotesByAttemptId("22684").execute().body()
+//        assertNotNull(notes)
+//    }
 
-    @Test
-    fun `POST createNote`() {
-
-        val runAttemt = RunAttemptsId("22685")
-        val contentsId = ContentsId("233")
-        val note = Notes()
-        note.text = "demo note"
-        note.duration = 1.2
-        note.runAttempt = runAttemt
-        note.content = contentsId
-
-        val noteResponse = jsonapi.createNote(note).execute().body()
-        assertNotNull(noteResponse)
-    }
+//    @Test
+//    fun `POST createNote`() {
+//
+//        val runAttemt = RunAttemptsId("22685")
+//        val contentsId = ContentsId("233")
+//        val note = Notes()
+//        note.text = "demo note"
+//        note.duration = 1.2
+//        note.runAttempt = runAttemt
+//        note.content = contentsId
+//
+//        val noteResponse = jsonapi.createNote(note).execute().body()
+//        assertNotNull(noteResponse)
+//    }
 }

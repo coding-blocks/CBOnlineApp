@@ -24,7 +24,11 @@ import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
+import com.codingblocks.cbonlineapp.util.COURSE_ID
+import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
@@ -152,11 +156,14 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 it.forEachIndexed { index, courseRun ->
                     val data = viewModel.getCourseById(courseRun.crCourseId)
 
-                    val intent = Intent(activity, MyCourseActivity::class.java)
-                    intent.action = Intent.ACTION_VIEW
-                    intent.putExtra("courseId", courseRun.crCourseId)
-                    intent.putExtra("course_name", data.title)
-                    intent.putExtra("runAttemptId", courseRun.crAttemptId)
+                    val intent = Intent(activity, MyCourseActivity::class.java).apply {
+                        action = Intent.ACTION_VIEW
+                        putExtra(COURSE_ID, courseRun.crCourseId)
+                        putExtra(RUN_ATTEMPT_ID, courseRun.crAttemptId)
+                        putExtra(COURSE_NAME, data.title)
+                        putExtra(RUN_ID, courseRun.crUid)
+                    }
+
                     val shortcut = ShortcutInfo.Builder(requireContext(), "topcourse$index")
                     shortcut.setIntent(intent)
                     shortcut.setLongLabel(courseRun.title)

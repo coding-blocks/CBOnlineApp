@@ -106,8 +106,8 @@ object Clients {
         onlineApiResourceConverter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_TYPE_IN_RELATIONSHIP)
     }
 
-    private const val connectTimeout = 8 // 15s
-    private const val readTimeout = 5 // 15s
+    private const val connectTimeout = 15 // 15s
+    private const val readTimeout = 15 // 15s
 
     private val ClientInterceptor = OkHttpClient.Builder()
         .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
@@ -120,13 +120,6 @@ object Clients {
                 ).build()
             )
         }
-        .addInterceptor(object :Interceptor{
-            @Throws(IOException::class)
-            override fun intercept(chain: Interceptor.Chain): Response {
-                return onOnIntercept(chain)
-            }
-
-        })
         .build()
 
     @Throws(IOException::class)
