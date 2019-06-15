@@ -21,7 +21,6 @@ jacocoTestReport {
 test {
     useJUnit()
     maxHeapSize = '1G'
-    ignoreFailures = true
 }
 
 dependencies {

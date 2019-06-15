@@ -69,19 +69,6 @@ android {
         exclude 'META-INF/atomicfu.kotlin_module'
     }
 
-    configurations.all {
-        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-            def requested = details.requested
-            if (requested.group == "com.android.support") {
-                if (!requested.name.startsWith("multidex")) {
-                    details.useVersion "26.+"
-                }
-            }
-        }
-
-        all*.exclude group: 'com.google.guava', module: 'listenablefuture'
-    }
-
 }
 
 
