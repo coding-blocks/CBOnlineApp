@@ -107,9 +107,9 @@ class EndlessPagerAdapter(private val adapter: PagerAdapter, viewPager: ViewPage
                     }
                     val index = viewPager.currentItem
                     if (index == 0) {
-                        viewPager.setCurrentItem(itemCount - 2, false)
+                        viewPager.setCurrentItem(itemCount - 2, true)
                     } else if (index == itemCount - 1) {
-                        viewPager.setCurrentItem(1, false)
+                        viewPager.setCurrentItem(1, true)
                     }
                 }
             }
