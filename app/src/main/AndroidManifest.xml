@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.codingblocks.cbonlineapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -126,8 +127,9 @@
         </activity>
         <activity
             android:name=".activities.VideoPlayerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:supportsPictureInPicture="true" />
         <activity
             android:name=".activities.PdfActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
