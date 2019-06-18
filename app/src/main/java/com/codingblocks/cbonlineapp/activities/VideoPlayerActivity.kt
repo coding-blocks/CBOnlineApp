@@ -485,7 +485,7 @@ class VideoPlayerActivity : AppCompatActivity(),
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
 
-        if (isInPictureInPictureMode){
+        if (isInPictureInPictureMode) {
             player_tabs.visibility = View.GONE
             pagerFrame.visibility = View.GONE
 
@@ -502,8 +502,7 @@ class VideoPlayerActivity : AppCompatActivity(),
 
             // hide system windows
             showControls(false)
-
-        }else{
+        } else {
             player_tabs.visibility = View.VISIBLE
             pagerFrame.visibility = View.VISIBLE
 
@@ -516,14 +515,13 @@ class VideoPlayerActivity : AppCompatActivity(),
                 paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_END)
             }
             playerControlView?.setPadding(0, 0, 0, 0)
-
         }
 
         super.onPictureInPictureModeChanged(isInPictureInPictureMode)
     }
 
     @TargetApi(Build.VERSION_CODES.O)
-    fun activatePIPMode(){
+    fun activatePIPMode() {
 
         val display = windowManager.defaultDisplay
         val size = Point()
@@ -535,7 +533,5 @@ class VideoPlayerActivity : AppCompatActivity(),
         val mPIPParams = PictureInPictureParams.Builder()
         mPIPParams.setAspectRatio(aspectRatio)
         enterPictureInPictureMode(mPIPParams.build())
-
     }
-
 }
