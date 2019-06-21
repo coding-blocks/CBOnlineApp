@@ -5,9 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
-import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -17,18 +15,17 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.FileUtils
-import com.codingblocks.cbonlineapp.util.NetworkUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.viewmodels.HomeActivityViewModel
 import com.google.android.material.navigation.NavigationView
@@ -40,32 +37,35 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_home.drawer_layout
 import kotlinx.android.synthetic.main.activity_home.nav_view
 import kotlinx.android.synthetic.main.app_bar_home.toolbar
+import kotlinx.android.synthetic.main.nav_header_home.login_button
+import kotlinx.android.synthetic.main.nav_header_home.nav_header_imageView
 import kotlinx.android.synthetic.main.nav_header_home.view.login_button
-import kotlinx.android.synthetic.main.nav_header_home.view.nav_header_imageView
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.Arrays
+import java.util.*
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
-    AnkoLogger {
-    private var updateUIReciver: BroadcastReceiver? = null
+    AnkoLogger, View.OnClickListener, DrawerLayout.DrawerListener {
+
+    private var updateUIReceiver: BroadcastReceiver? = null
     private var filter: IntentFilter? = null
-
     private val viewModel by viewModel<HomeActivityViewModel>()
-
     private val appUpdateManager by lazy {
         AppUpdateManagerFactory.create(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.prefs = getPrefs()
         setContentView(R.layout.activity_home)
+
+        viewModel.prefs = getPrefs()
+
         setSupportActionBar(toolbar)
         title = "Coding Blocks"
+
         val toggle = ActionBarDrawerToggle(
             this,
             drawer_layout,
@@ -74,36 +74,21 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.string.navigation_drawer_close
         )
         drawer_layout.addDrawerListener(toggle)
-        drawer_layout.addDrawerListener(object : DrawerLayout.DrawerListener {
-            override fun onDrawerStateChanged(newState: Int) {}
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
-            override fun onDrawerClosed(drawerView: View) {
-                if (viewModel.mFragmentToSet != null) {
-                    supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.fragment_holder, viewModel.mFragmentToSet ?: HomeFragment())
-                        .commit()
-                    viewModel.mFragmentToSet = null
-                }
-            }
-
-            override fun onDrawerOpened(drawerView: View) {}
-        })
         toggle.syncState()
+
+        drawer_layout.addDrawerListener(this)
         nav_view.setNavigationItemSelectedListener(this)
 
         if (savedInstanceState == null) {
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.commit()
-            if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != "access_token" && !NetworkUtils.isNetworkAvailable(
-                    this
-                )
-            ) {
-                transaction.replace(R.id.fragment_holder, MyCoursesFragment())
+            if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != "access_token") {
+                val navMenu = nav_view.menu
+                navMenu.findItem(R.id.nav_my_courses).isVisible = true
+                transaction.replace(R.id.fragment_holder, MyCoursesFragment()).commit()
                 setUser()
             } else {
-                transaction.replace(R.id.fragment_holder, HomeFragment())
+                transaction.replace(R.id.fragment_holder, HomeFragment()).commit()
             }
             when {
                 intent.getStringExtra("course") == "mycourses" -> transaction.replace(
@@ -115,9 +100,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     AllCourseFragment()
                 )
             }
-            nav_view.getHeaderView(0).login_button.setOnClickListener {
-                startActivity(intentFor<LoginActivity>().singleTop())
-            }
+            nav_view.getHeaderView(0).login_button.setOnClickListener(this)
             fetchUser()
         }
 
@@ -128,7 +111,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         filter?.addAction("com.codingblocks.notification")
 
-        updateUIReciver = object : BroadcastReceiver() {
+        updateUIReceiver = object : BroadcastReceiver() {
 
             override fun onReceive(context: Context, intent: Intent) {
                 invalidateOptionsMenu()
@@ -138,45 +121,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setUser() {
         if (viewModel.prefs.SP_USER_IMAGE.isNotEmpty())
-            Picasso.with(this).load(viewModel.prefs.SP_USER_IMAGE).placeholder(R.drawable.defaultavatar).fit().into(
-                nav_view.getHeaderView(0).nav_header_imageView
-            )
-        nav_view.getHeaderView(0).nav_header_imageView.setOnClickListener {
-            val builder = CustomTabsIntent.Builder()
-                .enableUrlBarHiding()
-                .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
-                .setShowTitle(true)
-                .setSecondaryToolbarColor(resources.getColor(R.color.colorPrimary))
-            val customTabsIntent = builder.build()
-            customTabsIntent.launchUrl(this, Uri.parse("https://account.codingblocks.com"))
-        }
-
-        nav_view.getHeaderView(0).login_button.text = resources.getString(R.string.logout)
-        nav_view.getHeaderView(0).login_button.setOnClickListener {
-            viewModel.prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
-            viewModel.prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
-            if (nav_view.getHeaderView(0).login_button.text == "Logout") {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
-                    removeShortcuts()
-                }
-                invalidateToken()
+            nav_header_imageView.apply {
+                setOnClickListener(this@HomeActivity)
+                Picasso.with(this@HomeActivity).load(viewModel.prefs.SP_USER_IMAGE)
+                    .placeholder(R.drawable.defaultavatar).fit().into(this)
             }
-            startActivity(intentFor<LoginActivity>().singleTop())
-            finish()
+        login_button.apply {
+            text = resources.getString(R.string.logout)
         }
-        val navMenu = nav_view.menu
-        navMenu.findItem(R.id.nav_my_courses).isVisible = true
-    }
-
-    private fun invalidateToken() {
-        viewModel.invalidateTokenProgress.observer(this) {
-            if (it) {
-                doAsync {
-                    FileUtils.deleteDatabaseFile(this@HomeActivity, "app-database")
-                }
-            }
-        }
-        viewModel.invalidateToken()
     }
 
     override fun onStart() {
@@ -187,6 +139,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 fetchToken(data)
             }
         }
+
+        checkForUpdates()
+    }
+
+    private fun checkForUpdates() {
         // Returns an intent object that you use to check for an update.
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
 
@@ -214,7 +171,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun fetchToken(data: Uri) {
         val grantCode = data.getQueryParameter("code") as String
 
-        viewModel.fetchTokenProgress.observer(this) {
+        viewModel.fetchTokenProgress.observeOnce {
             if (it) {
                 fetchUser()
                 Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
@@ -226,23 +183,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun fetchUser() {
-        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != "access_token") {
 
-            viewModel.getMeProgress.observer(this) {
-                if (it) {
-                    setUser()
-                } else {
-                    nav_view.getHeaderView(0).login_button.setOnClickListener {
-                        startActivity(intentFor<LoginActivity>().singleTop())
-                    }
-                }
-            }
-            viewModel.getMe()
-        } else {
-            nav_view.getHeaderView(0).login_button.setOnClickListener {
-                startActivity(intentFor<LoginActivity>().singleTop())
+        viewModel.getMeProgress.observer(this) {
+            if (it) {
+                setUser()
             }
         }
+        viewModel.getMe()
     }
 
     override fun onBackPressed() {
@@ -313,24 +260,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setIntent(intent)
     }
 
-    @TargetApi(25)
-    private fun createShortcut() {
-        val sM = getSystemService(ShortcutManager::class.java)
-        val intent1 = Intent(applicationContext, HomeActivity::class.java)
-        intent1.action = Intent.ACTION_VIEW
-        val shortcut1 = ShortcutInfo.Builder(this, "shortcut1")
-            .setIntent(intent1)
-            .setLongLabel("My Tickets")
-            .setShortLabel("Open to show all tickets")
-            .setDisabledMessage("Login to open this")
-            .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
-            .build()
-        sM.dynamicShortcuts = Arrays.asList(shortcut1)
-    }
-
     override fun onResume() {
         super.onResume()
-        registerReceiver(updateUIReciver, filter)
+        registerReceiver(updateUIReceiver, filter)
         invalidateOptionsMenu()
 
         appUpdateManager
@@ -373,7 +305,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onPause() {
         super.onPause()
-        unregisterReceiver(updateUIReciver)
+        unregisterReceiver(updateUIReceiver)
     }
 
     @TargetApi(25)
@@ -382,5 +314,56 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         shortcutManager.disableShortcuts((Arrays.asList("topcourse$0")))
         shortcutManager.disableShortcuts((Arrays.asList("topcourse$1")))
         shortcutManager.removeAllDynamicShortcuts()
+    }
+
+    private fun invalidateToken() {
+        viewModel.invalidateTokenProgress.observer(this) {
+            if (it) {
+                doAsync {
+                    FileUtils.deleteDatabaseFile(this@HomeActivity, "app-database")
+                }
+            }
+        }
+        viewModel.invalidateToken()
+    }
+
+    override fun onDrawerStateChanged(newState: Int) {
+    }
+
+    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+    }
+
+    override fun onDrawerClosed(drawerView: View) {
+    }
+
+    override fun onDrawerOpened(drawerView: View) {
+        if (viewModel.mFragmentToSet != null) {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment_holder, viewModel.mFragmentToSet ?: HomeFragment())
+                .commit()
+            viewModel.mFragmentToSet = null
+        }
+    }
+
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.login_button -> {
+                viewModel.prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
+                viewModel.prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
+                if (nav_view.getHeaderView(0).login_button.text == "Logout") {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
+                        removeShortcuts()
+                    }
+                    invalidateToken()
+                }
+                startActivity(intentFor<LoginActivity>().singleTop())
+                finish()
+            }
+            R.id.nav_header_imageView -> Components.openChrome(
+                this,
+                "https://account.codingblocks.com"
+            )
+        }
     }
 }
