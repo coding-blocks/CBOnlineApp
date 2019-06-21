@@ -1,13 +1,11 @@
 package com.codingblocks.cbonlineapp.activities
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,9 +17,12 @@ import com.codingblocks.cbonlineapp.commons.NotificationClickListener
 import com.codingblocks.cbonlineapp.commons.NotificationsDiffCallback
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.extensions.observer
+import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_notifications.*
+import kotlinx.android.synthetic.main.activity_notifications.emptyTv
+import kotlinx.android.synthetic.main.activity_notifications.notificationRv
+import kotlinx.android.synthetic.main.activity_notifications.notificationToolbar
 import org.koin.android.ext.android.inject
 
 class NotificationsActivity : AppCompatActivity() {
@@ -55,13 +56,7 @@ class NotificationsActivity : AppCompatActivity() {
                         .withParams(VIDEO_ID, videoId)
                         .open()
                 } else {
-                    val builder = CustomTabsIntent.Builder()
-                        .enableUrlBarHiding()
-                        .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
-                        .setShowTitle(true)
-                        .setSecondaryToolbarColor(resources.getColor(R.color.colorPrimary))
-                    val customTabsIntent = builder.build()
-                    customTabsIntent.launchUrl(this@NotificationsActivity, Uri.parse(url))
+                    Components.openChrome(this@NotificationsActivity, url)
                 }
             }
         }
@@ -69,8 +64,13 @@ class NotificationsActivity : AppCompatActivity() {
             onClick = eventClickListener
         }
 
-        val itemTouch = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        val itemTouch = object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
                 return false
             }
 

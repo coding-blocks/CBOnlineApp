@@ -2,13 +2,11 @@ package com.codingblocks.cbonlineapp.activities
 
 import android.content.Context
 import android.graphics.Typeface
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -147,13 +145,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         }
         checkoutBtn.setOnClickListener {
             viewModel.sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-            val builder = CustomTabsIntent.Builder().enableUrlBarHiding()
-                .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
-            val customTabsIntent = builder.build()
-            customTabsIntent.launchUrl(
-                this@CourseActivity,
-                Uri.parse("https://dukaan.codingblocks.com/mycart")
-            )
+            Components.openChrome(this, "https://dukaan.codingblocks.com/mycart")
         }
         continueBtn.setOnClickListener {
             viewModel.sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
@@ -292,13 +284,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     private fun addToCart(id: String, name: String) {
         viewModel.addedToCartProgress.observeOnce {
             if (it) {
-                val builder = CustomTabsIntent.Builder().enableUrlBarHiding()
-                    .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
-                val customTabsIntent = builder.build()
-                customTabsIntent.launchUrl(
-                    this@CourseActivity,
-                    Uri.parse("https://dukaan.codingblocks.com/mycart")
-                )
+                Components.openChrome(this, "https://dukaan.codingblocks.com/mycart")
             } else {
                 showBottomSheet(id, name)
             }

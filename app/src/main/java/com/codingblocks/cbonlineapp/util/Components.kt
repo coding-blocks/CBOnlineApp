@@ -70,13 +70,16 @@ object Components {
         confirmDialog.show()
     }
 
-    fun openChrome(context: Context, url: String) {
+    fun openChrome(context: Context, url: String, newTask: Boolean = false) {
         val builder = CustomTabsIntent.Builder()
             .enableUrlBarHiding()
             .setToolbarColor(context.resources.getColor(R.color.colorPrimaryDark))
             .setShowTitle(true)
             .setSecondaryToolbarColor(context.resources.getColor(R.color.colorPrimary))
         val customTabsIntent = builder.build()
+        if (newTask) {
+            customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
         customTabsIntent.launchUrl(context, Uri.parse(url))
     }
 }

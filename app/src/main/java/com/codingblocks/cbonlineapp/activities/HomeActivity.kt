@@ -45,7 +45,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
+import java.util.Arrays
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     AnkoLogger, View.OnClickListener, DrawerLayout.DrawerListener {
@@ -117,6 +117,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 invalidateOptionsMenu()
             }
         }
+
+        viewModel.invalidateTokenProgress.observer(this) {
+            if (it) {
+                doAsync {
+                    FileUtils.deleteDatabaseFile(this@HomeActivity, "app-database")
+                }
+            }
+        }
     }
 
     private fun setUser() {
@@ -126,6 +134,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Picasso.with(this@HomeActivity).load(viewModel.prefs.SP_USER_IMAGE)
                     .placeholder(R.drawable.defaultavatar).fit().into(this)
             }
+        viewModel.prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
+        viewModel.prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
         login_button.apply {
             text = resources.getString(R.string.logout)
         }
@@ -316,17 +326,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         shortcutManager.removeAllDynamicShortcuts()
     }
 
-    private fun invalidateToken() {
-        viewModel.invalidateTokenProgress.observer(this) {
-            if (it) {
-                doAsync {
-                    FileUtils.deleteDatabaseFile(this@HomeActivity, "app-database")
-                }
-            }
-        }
-        viewModel.invalidateToken()
-    }
-
     override fun onDrawerStateChanged(newState: Int) {
     }
 
@@ -349,13 +348,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onClick(v: View) {
         when (v.id) {
             R.id.login_button -> {
-                viewModel.prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
-                viewModel.prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
-                if (nav_view.getHeaderView(0).login_button.text == "Logout") {
+                if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != "access_token") {
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
                         removeShortcuts()
                     }
-                    invalidateToken()
+                    viewModel.invalidateToken()
                 }
                 startActivity(intentFor<LoginActivity>().singleTop())
                 finish()

@@ -1,17 +1,16 @@
 package com.codingblocks.cbonlineapp.adapters
 
 import android.content.Context
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.viewpager.widget.PagerAdapter
 import cn.campusapp.router.Router
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.loadSvg
 import com.codingblocks.cbonlineapp.extensions.otherwise
+import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_carousel.view.button
@@ -43,13 +42,7 @@ class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Co
         }
         view.button.setOnClickListener {
             Router.open("activity://course/" + list[position].buttonLink).otherwise {
-                val builder = CustomTabsIntent.Builder().enableUrlBarHiding()
-                mContext?.let {
-                    builder.enableUrlBarHiding()
-                        .setToolbarColor(it.resources.getColor(R.color.colorPrimaryDark))
-                }
-                val customTabsIntent = builder.build()
-                customTabsIntent.launchUrl(mContext, Uri.parse(list[position].buttonLink))
+                Components.openChrome(it.context, list[position].buttonLink)
             }
         }
         container.addView(view)
