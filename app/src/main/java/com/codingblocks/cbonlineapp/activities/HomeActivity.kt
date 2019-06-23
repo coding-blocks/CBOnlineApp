@@ -236,13 +236,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     `package` = "com.whatsapp"
                     data = Uri.parse("https://wa.me/919811557517")
                 }
-                    if (packageManager.resolveActivity(sendIntent, 0) != null) {
-                        startActivity(sendIntent)
-                    } else {
-                        Toast.makeText(applicationContext, "Please install whatsApp", Toast.LENGTH_SHORT).show()
-
-                    }
-
+                if (packageManager.resolveActivity(sendIntent, 0) != null) {
+                    startActivity(sendIntent)
+                } else {
+                    Toast.makeText(applicationContext, "Please install whatsApp", Toast.LENGTH_SHORT).show()
+                }
             }
             R.id.nav_preferences -> {
                 startActivity(intentFor<SettingsActivity>().singleTop())
