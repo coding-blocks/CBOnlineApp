@@ -221,7 +221,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_all_courses -> {it init
+            R.id.nav_all_courses -> {
                 changeFragment("All Courses")
             }
             R.id.nav_home -> {
@@ -229,7 +229,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_my_courses -> {
                 changeFragment("My Courses")
-
             }
             R.id.nav_whatsapp -> {
                 val sendIntent: Intent = Intent().apply {
