@@ -11,6 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.runner.AndroidJUnit4
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.ARG_COURSE_ID
+import com.codingblocks.onlineapi.Clients
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
