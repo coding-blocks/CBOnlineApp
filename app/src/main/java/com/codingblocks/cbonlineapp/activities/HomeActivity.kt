@@ -221,7 +221,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_all_courses -> {
+            R.id.nav_all_courses -> {it init
                 changeFragment("All Courses")
             }
             R.id.nav_home -> {
@@ -229,16 +229,21 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_my_courses -> {
                 changeFragment("My Courses")
+
             }
             R.id.nav_whatsapp -> {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setPackage("com.whatsapp")
-                intent.data = Uri.parse("https://wa.me/919811557517")
-                if (packageManager.resolveActivity(intent, 0) != null) {
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(this, "Please install whatsApp", Toast.LENGTH_SHORT).show()
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_VIEW
+                    `package` = "com.whatsapp"
+                    data = Uri.parse("https://wa.me/919811557517")
                 }
+                    if (packageManager.resolveActivity(sendIntent, 0) != null) {
+                        startActivity(sendIntent)
+                    } else {
+                        Toast.makeText(applicationContext, "Please install whatsApp", Toast.LENGTH_SHORT).show()
+
+                    }
+
             }
             R.id.nav_preferences -> {
                 startActivity(intentFor<SettingsActivity>().singleTop())
