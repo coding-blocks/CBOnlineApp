@@ -28,9 +28,8 @@ class HomeActivityTest {
     @get:Rule
     public val actRule = ActivityTestRule<HomeActivity>(HomeActivity::class.java, false, true)
 
-
     @Before
-    fun setUp(){
+    fun setUp() {
         Thread.sleep(5000)
     }
 
@@ -75,8 +74,7 @@ class HomeActivityTest {
     }
 
     @After
-    fun tearDown(){
+    fun tearDown() {
         actRule.finishActivity()
     }
-
 }
