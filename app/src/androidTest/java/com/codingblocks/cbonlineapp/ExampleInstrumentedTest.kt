@@ -17,6 +17,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("com.codingblocks.cbonlineapp", appContext.packageName)
+        assertEquals("com.codingblocks.cbonlineapp.debug", appContext.packageName)
     }
 }
