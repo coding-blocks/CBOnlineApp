@@ -63,7 +63,6 @@ class SettingsActivity : AppCompatActivity() {
                 }
             }
         }
-
         seekbarLimit.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser)
@@ -84,7 +83,6 @@ class SettingsActivity : AppCompatActivity() {
         pipSwitch.setOnClickListener {
             getPrefs().SP_PIP = pipSwitch.isChecked
         }
-
     }
 
     private fun setSeekbarProgress(progress: Int) {

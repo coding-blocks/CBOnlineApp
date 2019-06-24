@@ -62,7 +62,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import android.util.DisplayMetrics
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_STRETCH_TO_FIT
 
-
 class VideoPlayerActivity : AppCompatActivity(),
     OnItemClickListener, AnkoLogger,
     VdoPlayer.InitializationListener {
@@ -121,6 +120,7 @@ class VideoPlayerActivity : AppCompatActivity(),
 //            val ratio = metrics.heightPixels.toFloat() / metrics.widthPixels.toFloat()
 //            playerFragment.setAspectRatio(ratio)
 //            playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_STRETCH_TO_FIT
+            playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
             playerControlView = findViewById(R.id.player_control_view)
             showControls(false)
 
@@ -472,7 +472,7 @@ class VideoPlayerActivity : AppCompatActivity(),
 
                 if (::playerFragment.isInitialized) {
                     val paramsFragment: RelativeLayout.LayoutParams =
-                        playerFragment.view?.layoutParams as RelativeLayout.LayoutParams
+                        playerFragment.view.layoutParams as RelativeLayout.LayoutParams
                     paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
                     paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_TOP)
                     paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_START)

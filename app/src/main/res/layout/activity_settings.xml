@@ -163,13 +163,6 @@
                 android:layout_weight="3" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#eeeeee"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="32dp"/>
-
     </LinearLayout>
 
 </LinearLayout>
