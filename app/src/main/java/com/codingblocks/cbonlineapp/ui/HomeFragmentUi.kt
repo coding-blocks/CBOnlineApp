@@ -118,6 +118,7 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                         overScrollMode = View.OVER_SCROLL_NEVER
                     }.lparams(width = matchParent, height = 0) {
                         topMargin = dip(8)
+                        bottomMargin =dip(24)
                         marginStart = dip(4)
                         marginEnd = dip(4)
                         horizontalBias = 0.0f

@@ -45,7 +45,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.Arrays
+import java.util.*
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     AnkoLogger, View.OnClickListener, DrawerLayout.DrawerListener {
@@ -94,14 +94,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 intent.getStringExtra("course") == "mycourses" -> transaction.replace(
                     R.id.fragment_holder,
                     MyCoursesFragment()
-                )
+                ).commit()
                 intent.getStringExtra("course") == "allcourses" -> transaction.replace(
                     R.id.fragment_holder,
                     AllCourseFragment()
-                )
+                ).commit()
             }
             nav_view.getHeaderView(0).login_button.setOnClickListener(this)
-            fetchUser()
         }
 
         // adding label to nav drawer items
@@ -303,15 +302,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_notifications -> {
-                startActivity(intentFor<NotificationsActivity>())
-                return true
-            }
-            else -> super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.action_notifications -> {
+            startActivity(intentFor<NotificationsActivity>())
+            true
         }
+        else -> super.onOptionsItemSelected(item)
     }
+
 
     override fun onPause() {
         super.onPause()

@@ -67,6 +67,7 @@ class HomeFragment : Fragment(), AnkoLogger {
                 viewModel.getCourseWithInstructorDao(),
                 "allCourses"
             )
+        ui.rvCourses.isNestedScrollingEnabled = false
 
         ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
         ui.rvCourses.adapter = courseDataAdapter
