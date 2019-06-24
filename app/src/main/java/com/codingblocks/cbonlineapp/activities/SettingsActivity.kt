@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.activities
 
 import android.content.Context
+import android.content.pm.PackageInfo
 import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
@@ -14,6 +15,7 @@ import com.codingblocks.cbonlineapp.extensions.readableFileSize
 import com.codingblocks.cbonlineapp.viewmodels.SettingsViewModel
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_settings.*
+import org.jetbrains.anko.attr
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
@@ -76,6 +78,13 @@ class SettingsActivity : AppCompatActivity() {
         })
         seekbarLimit.progress = getPrefs().SP_DATA_LIMIT.minus(1).times(100).toInt()
         setSeekbarProgress(seekbarLimit.progress)
+
+        pipSwitch.isChecked = getPrefs().SP_PIP
+
+        pipSwitch.setOnClickListener {
+            getPrefs().SP_PIP = pipSwitch.isChecked
+        }
+
     }
 
     private fun setSeekbarProgress(progress: Int) {
