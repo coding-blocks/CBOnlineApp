@@ -79,7 +79,7 @@ class HomeActivityViewModel(
         })
     }
 
-    private fun setJWTToken() {
+    fun setJWTToken() {
         Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
     }
 }

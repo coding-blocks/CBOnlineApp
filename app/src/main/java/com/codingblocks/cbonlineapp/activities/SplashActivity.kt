@@ -15,7 +15,7 @@ import java.io.File
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        clearData()
+//        clearData()
         GlobalScope.launch {
             finishSplashScreen()
         }

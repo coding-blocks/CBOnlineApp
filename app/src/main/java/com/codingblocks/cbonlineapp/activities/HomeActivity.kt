@@ -37,15 +37,14 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_home.drawer_layout
 import kotlinx.android.synthetic.main.activity_home.nav_view
 import kotlinx.android.synthetic.main.app_bar_home.toolbar
-import kotlinx.android.synthetic.main.nav_header_home.login_button
-import kotlinx.android.synthetic.main.nav_header_home.nav_header_imageView
 import kotlinx.android.synthetic.main.nav_header_home.view.login_button
+import kotlinx.android.synthetic.main.nav_header_home.view.nav_header_imageView
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
+import java.util.Arrays
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     AnkoLogger, View.OnClickListener, DrawerLayout.DrawerListener {
@@ -90,16 +89,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else {
                 transaction.replace(R.id.fragment_holder, HomeFragment()).commit()
             }
-            when {
-                intent.getStringExtra("course") == "mycourses" -> transaction.replace(
-                    R.id.fragment_holder,
-                    MyCoursesFragment()
-                ).commit()
-                intent.getStringExtra("course") == "allcourses" -> transaction.replace(
-                    R.id.fragment_holder,
-                    AllCourseFragment()
-                ).commit()
-            }
+//            when (intent.getStringExtra("course")) {
+//                "mycourses" -> transaction.replace(
+//                    R.id.fragment_holder,
+//                    MyCoursesFragment()
+//                ).commit()
+//                "allcourses" -> transaction.replace(
+//                    R.id.fragment_holder,
+//                    AllCourseFragment()
+//                ).commit()
+//            }
             nav_view.getHeaderView(0).login_button.setOnClickListener(this)
         }
 
@@ -128,16 +127,19 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setUser() {
         if (viewModel.prefs.SP_USER_IMAGE.isNotEmpty())
-            nav_header_imageView.apply {
+            nav_view.getHeaderView(0).nav_header_imageView.apply {
                 setOnClickListener(this@HomeActivity)
                 Picasso.with(this@HomeActivity).load(viewModel.prefs.SP_USER_IMAGE)
                     .placeholder(R.drawable.defaultavatar).fit().into(this)
             }
         viewModel.prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
         viewModel.prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
-        login_button.apply {
+        viewModel.setJWTToken()
+        nav_view.getHeaderView(0).login_button.apply {
             text = resources.getString(R.string.logout)
         }
+        val navMenu = nav_view.menu
+        navMenu.findItem(R.id.nav_my_courses).isVisible = true
     }
 
     override fun onStart() {
@@ -179,26 +181,29 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun fetchToken(data: Uri) {
         val grantCode = data.getQueryParameter("code") as String
+        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY == "access_token") {
+            viewModel.fetchToken(grantCode)
 
-        viewModel.fetchTokenProgress.observeOnce {
-            if (it) {
-                fetchUser()
-                Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
-            } else {
-                Components.showconfirmation(this@HomeActivity, "verify")
+            viewModel.fetchTokenProgress.observeOnce {
+                if (it) {
+
+                    fetchUser()
+                    Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
+                } else {
+                    Components.showconfirmation(this@HomeActivity, "verify")
+                }
             }
         }
-        viewModel.fetchToken(grantCode)
     }
 
     private fun fetchUser() {
+        viewModel.getMe()
 
         viewModel.getMeProgress.observer(this) {
             if (it) {
                 setUser()
             }
         }
-        viewModel.getMe()
     }
 
     override fun onBackPressed() {
@@ -310,7 +315,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         else -> super.onOptionsItemSelected(item)
     }
 
-
     override fun onPause() {
         super.onPause()
         unregisterReceiver(updateUIReceiver)
@@ -324,16 +328,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         shortcutManager.removeAllDynamicShortcuts()
     }
 
-    override fun onDrawerStateChanged(newState: Int) {
-    }
+    // Navigation Drawer Methods
+    override fun onDrawerStateChanged(newState: Int) {}
 
-    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-    }
+    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
 
     override fun onDrawerClosed(drawerView: View) {
-    }
-
-    override fun onDrawerOpened(drawerView: View) {
         if (viewModel.mFragmentToSet != null) {
             supportFragmentManager
                 .beginTransaction()
@@ -342,6 +342,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             viewModel.mFragmentToSet = null
         }
     }
+
+    override fun onDrawerOpened(drawerView: View) {}
 
     override fun onClick(v: View) {
         when (v.id) {
