@@ -82,7 +82,6 @@ class SettingsActivity : AppCompatActivity() {
         pipSwitch.setOnClickListener {
             getPrefs().SP_PIP = pipSwitch.isChecked
         }
-
     }
 
     private fun setSeekbarProgress(progress: Int) {
