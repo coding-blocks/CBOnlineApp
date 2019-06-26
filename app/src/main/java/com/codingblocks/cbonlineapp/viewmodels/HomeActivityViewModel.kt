@@ -25,6 +25,7 @@ class HomeActivityViewModel(
     var getMeProgress: MutableLiveData<Boolean> = MutableLiveData()
 
     fun invalidateToken() {
+        prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
         Clients.api.logout().enqueue(retrofitCallback { _, response ->
             response?.let {
                 invalidateTokenProgress.value = it.isSuccessful

@@ -25,7 +25,6 @@ import com.codingblocks.cbonlineapp.fragments.AllCourseFragment
 import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
 import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.viewmodels.HomeActivityViewModel
 import com.google.android.material.navigation.NavigationView
@@ -40,11 +39,9 @@ import kotlinx.android.synthetic.main.app_bar_home.toolbar
 import kotlinx.android.synthetic.main.nav_header_home.view.login_button
 import kotlinx.android.synthetic.main.nav_header_home.view.nav_header_imageView
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.Arrays
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     AnkoLogger, View.OnClickListener, DrawerLayout.DrawerListener {
@@ -81,7 +78,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (savedInstanceState == null) {
 
             val transaction = supportFragmentManager.beginTransaction()
-            if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != "access_token") {
+            if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN) {
                 val navMenu = nav_view.menu
                 navMenu.findItem(R.id.nav_my_courses).isVisible = true
                 transaction.replace(R.id.fragment_holder, MyCoursesFragment()).commit()
@@ -118,9 +115,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         viewModel.invalidateTokenProgress.observer(this) {
             if (it) {
-                doAsync {
-                    FileUtils.deleteDatabaseFile(this@HomeActivity, "app-database")
-                }
             }
         }
     }
@@ -132,8 +126,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Picasso.with(this@HomeActivity).load(viewModel.prefs.SP_USER_IMAGE)
                     .placeholder(R.drawable.defaultavatar).fit().into(this)
             }
-        viewModel.prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
-        viewModel.prefs.SP_JWT_TOKEN_KEY = PreferenceHelper.JWT_TOKEN
         viewModel.setJWTToken()
         nav_view.getHeaderView(0).login_button.apply {
             text = resources.getString(R.string.logout)
@@ -181,12 +173,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun fetchToken(data: Uri) {
         val grantCode = data.getQueryParameter("code") as String
-        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY == "access_token") {
+        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY == PreferenceHelper.ACCESS_TOKEN) {
             viewModel.fetchToken(grantCode)
-
             viewModel.fetchTokenProgress.observeOnce {
                 if (it) {
-
                     fetchUser()
                     Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
                 } else {
@@ -198,7 +188,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun fetchUser() {
         viewModel.getMe()
-
         viewModel.getMeProgress.observer(this) {
             if (it) {
                 setUser()
@@ -323,8 +312,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     @TargetApi(25)
     private fun removeShortcuts() {
         val shortcutManager = getSystemService(ShortcutManager::class.java)
-        shortcutManager.disableShortcuts((Arrays.asList("topcourse$0")))
-        shortcutManager.disableShortcuts((Arrays.asList("topcourse$1")))
+
+        // Either Disable or Remove Shortcuts
+//        shortcutManager.disableShortcuts((Arrays.asList("topcourse$0")))
+//        shortcutManager.disableShortcuts((Arrays.asList("topcourse$1")))
         shortcutManager.removeAllDynamicShortcuts()
     }
 
@@ -348,10 +339,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onClick(v: View) {
         when (v.id) {
             R.id.login_button -> {
-                if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != "access_token") {
+                if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN) {
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
                         removeShortcuts()
                     }
+                    deleteDatabase("app-database")
                     viewModel.invalidateToken()
                 }
                 startActivity(intentFor<LoginActivity>().singleTop())

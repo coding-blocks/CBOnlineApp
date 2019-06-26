@@ -6,17 +6,20 @@ import androidx.appcompat.app.AlertDialog
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.folderSize
 import com.codingblocks.cbonlineapp.extensions.getPrefs
-import kotlinx.android.synthetic.main.custom_dialog.view.*
+import kotlinx.android.synthetic.main.custom_dialog.view.cancelBtn
+import kotlinx.android.synthetic.main.custom_dialog.view.description
+import kotlinx.android.synthetic.main.custom_dialog.view.okBtn
+import kotlinx.android.synthetic.main.custom_dialog.view.title
 import org.jetbrains.anko.layoutInflater
 import java.io.File
-import kotlin.Comparator
 
 const val FILE_THRESHOLD = 256000
 const val GB_TO_KB = 1024 * 1024
 
 object FileUtils {
 
-    private fun getCommonPath(context: Context) = context.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+    private fun getCommonPath(context: Context) =
+        context.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
 
     fun deleteDatabaseFile(context: Context, databaseName: String) {
         val databases = File(context.applicationInfo.dataDir + "/databases")
