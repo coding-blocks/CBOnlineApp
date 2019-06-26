@@ -17,6 +17,7 @@ jacocoTestReport {
     }
     dependsOn(test)
 }
+//jar.dependsOn test
 
 test {
     useJUnit()

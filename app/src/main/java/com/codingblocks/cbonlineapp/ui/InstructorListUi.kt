@@ -8,6 +8,7 @@ import android.view.ViewManager
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet.MATCH_CONSTRAINT_WRAP
+import com.codingblocks.cbonlineapp.extensions.circleImageView
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
@@ -19,8 +20,6 @@ import org.jetbrains.anko.textView
 import org.jetbrains.anko.wrapContent
 
 class InstructorListUi : AnkoComponent<ViewGroup> {
-    // custom views using anko
-    inline fun ViewManager.circleImageView(theme: Int = 0, init: CircleImageView.() -> Unit) = ankoView({ CircleImageView(it) }, theme, init)
 
     lateinit var instructorTitle: TextView
     lateinit var instructorDescription: TextView

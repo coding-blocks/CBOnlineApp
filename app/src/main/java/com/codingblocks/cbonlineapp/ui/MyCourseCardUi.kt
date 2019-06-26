@@ -12,6 +12,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.extensions.circleImageView
 import com.codingblocks.cbonlineapp.extensions.styledRatingBar
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.AnkoComponent
@@ -34,7 +35,6 @@ import org.jetbrains.anko.alignParentBottom
 import org.jetbrains.anko.custom.ankoView
 
 class MyCourseCardUi : AnkoComponent<ViewGroup> {
-    inline fun ViewManager.circleImageView(theme: Int = 0, init: CircleImageView.() -> Unit) = ankoView({ CircleImageView(it) }, theme, init)
     lateinit var courseTitle: TextView
     lateinit var courseRun: TextView
     lateinit var enrollment: TextView

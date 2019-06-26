@@ -593,9 +593,9 @@ class MatchPost(
 
 @Type("jobs")
 class Jobs(
-    val coverImage: String,
+    val coverImage: String?,
     val ctc: String,
-    val deadline: String,
+    val deadline: String?,
     val description: String,
     val eligibility: String,
     val experience: String,
