@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewManager
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet.MATCH_CONSTRAINT_WRAP
@@ -13,7 +12,6 @@ import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.constraint.layout.constraintLayout
-import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.textColor
 import org.jetbrains.anko.textView

@@ -5,7 +5,6 @@ import android.graphics.Typeface
 import android.view.View
 import android.view.View.TEXT_ALIGNMENT_CENTER
 import android.view.ViewGroup
-import android.view.ViewManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.solver.widgets.ConstraintWidget
@@ -21,7 +20,6 @@ import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.constraint.layout.constraintLayout
-import org.jetbrains.anko.custom.ankoView
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.imageView
 import org.jetbrains.anko.matchParent

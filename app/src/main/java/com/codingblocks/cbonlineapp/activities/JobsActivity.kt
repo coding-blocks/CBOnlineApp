@@ -16,7 +16,6 @@ class JobsActivity : AppCompatActivity() {
         Clients.onlineV2JsonApi.getJobs(getDate(),
             getDate()).enqueue(retrofitCallback { throwable, response ->
             response?.body().let {
-
             }
         })
     }

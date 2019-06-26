@@ -3,7 +3,9 @@ package com.codingblocks.cbonlineapp.extensions
 import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
 fun folderSize(directory: File): Long {
@@ -87,7 +89,7 @@ fun secToTime(time: Double): String {
     return String.format("00:%02d:%02d", minutes, seconds)
 }
 
-fun getDate(): String{
+fun getDate(): String {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
     dateFormat.timeZone = TimeZone.getTimeZone("UTC")
 

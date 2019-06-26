@@ -5,14 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
-import java.io.File
-import java.text.DecimalFormat
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Calendar
-import java.util.TimeZone
-import java.util.concurrent.TimeUnit
-import kotlin.NoSuchElementException
 
 fun <T> LiveData<T>.observer(owner: LifecycleOwner, onEmission: (T) -> Unit) {
     return observe(owner, Observer<T> {
@@ -52,8 +44,6 @@ fun <T> LiveData<T>.getDistinct(): LiveData<T> {
     })
     return distinctLiveData
 }
-
-
 
 fun pageChangeCallback(
     fnState: (Int) -> Unit,
