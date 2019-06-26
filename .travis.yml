@@ -47,4 +47,5 @@ script:
 - ./gradlew build
 - ./gradlew test
 - ./gradlew spotlessCheck
+- ./gradlew connectedCheck
 

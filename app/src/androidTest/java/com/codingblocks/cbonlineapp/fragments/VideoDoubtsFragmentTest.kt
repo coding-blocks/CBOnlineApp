@@ -15,6 +15,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class VideoDoubtsFragmentTest {
 
+
     @Before
     fun setUp() {
         FragmentScenario.launchInContainer(VideoDoubtFragment::class.java, Bundle().apply {

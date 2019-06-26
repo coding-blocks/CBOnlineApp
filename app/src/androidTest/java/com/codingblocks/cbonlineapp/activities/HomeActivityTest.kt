@@ -35,7 +35,7 @@ class HomeActivityTest {
 
     @Test
     fun testAppBarVisibility() {
-        onView(withId(R.id.appBar)).check(matches(isDisplayed()))
+        onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
     }
 
     @Test

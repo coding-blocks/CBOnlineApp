@@ -19,6 +19,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class QuizResultFragmentTest {
 
+
     @Before
     fun setUp() {
         FragmentScenario.launchInContainer(QuizResultFragment::class.java, Bundle().apply {

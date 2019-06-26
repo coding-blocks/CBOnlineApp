@@ -18,6 +18,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class AnnouncementFragmentTest {
 
+
     @Before
     fun setUp() {
         FragmentScenario.launchInContainer(AnnouncementsFragment::class.java, Bundle().apply {
