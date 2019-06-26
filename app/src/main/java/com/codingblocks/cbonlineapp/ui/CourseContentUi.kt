@@ -15,11 +15,7 @@ import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 import org.jetbrains.anko.support.v4.themedContentLoadingProgressBar
 
-/**
- * Generate with Plugin
- * @plugin Kotlin Anko Converter For Xml
- * @version 1.3.4
- */
+
 class CourseContentUi<T> : AnkoComponent<T> {
     lateinit var rvSection: RecyclerView
     lateinit var sectionProgressBar: ContentLoadingProgressBar
