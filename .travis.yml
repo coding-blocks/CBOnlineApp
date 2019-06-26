@@ -28,11 +28,41 @@ licenses:
 before_install:
 - yes | sdkmanager "platforms;android-25"
 - yes | sdkmanager "platforms;android-27"
+# Install the Android SDK Dependency.
+- export ANDROID_HOME=~/android-sdk-linux
+- if [ $TRAVIS_OS_NAME == "osx" ]; then wget -q "https://dl.google.com/android/repository/sdk-tools-darwin-4333796.zip" -O android-sdk-tools.zip; else wget -q "https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip" -O android-sdk-tools.zip; fi
+#  - wget -q "https://dl.google.com/android/repository/sdk-tools-${OS}-4333796.zip" -O android-sdk-tools.zip
+- unzip -q android-sdk-tools.zip -d ${ANDROID_HOME}
+- rm android-sdk-tools.zip
+- PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
+# Silence warning.
+- mkdir -p ~/.android
+- touch ~/.android/repositories.cfg
+- HOMEBREW_NO_AUTO_UPDATE=1
+- if [ $TRAVIS_OS_NAME == "osx" ]; then brew cask uninstall java; brew tap caskroom/versions; brew cask install java8; fi
+# Accept licenses before installing components, no need to echo y for each component
+- yes | sdkmanager --licenses
+# Platform tools
+- sdkmanager "emulator" "tools" "platform-tools" > /dev/null
+- sdkmanager --list | head -15
+# install older packages (for emulator)
+- sdkmanager "build-tools;25.0.2" "platforms;android-25" > /dev/null
+# Create and start emulator.
+- sdkmanager "system-images;android-$SYS;$ABI" > /dev/null
+- sdkmanager --list | head -15
+- echo no | avdmanager create avd --force -n test -k "system-images;android-$SYS;$ABI"
+# fix timezone warning
+- if [ $TRAVIS_OS_NAME == "osx" ]; then sudo ln -sf /usr/share/zoneinfo/US/Pacific /etc/localtime; fi
+# use the absolute emulator path in case older version installed (on default path)
+- $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window -gpu swiftshader &
 before_script:
-  - echo no | android create avd --force -n test -t android-$EMULATOR_API --abi $ANDROID_ABI
-  - emulator -avd test -no-skin -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
+#  - echo no | android create avd --force -n test -t android-$EMULATOR_API --abi $ANDROID_ABI
+#  - emulator -avd test -no-skin -no-window &
+#  - android-wait-for-emulator
+#  - adb shell input keyevent 82 &
+# Wait for emulator to startup.
+- ./scripts/android-wait-for-emulator.sh
+- adb shell input keyevent 82
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
