@@ -296,3 +296,32 @@ data class Notification(
     val seen: Boolean = false,
     val videoId: String = ""
 )
+
+@Entity
+data class Jobs(
+    @PrimaryKey
+    val id:String,
+    val coverImage: String?,
+    val deadline: String?,
+    val url: String,
+    val seen: Boolean = false,
+    val videoId: String = ""
+)
+@Entity(
+    indices = [Index("jobId")],
+    foreignKeys = [(ForeignKey(
+        entity = Jobs::class,
+        parentColumns = ["id"],
+        childColumns = ["jobId"],
+        onDelete = ForeignKey.CASCADE // or CASCADE
+    ))]
+)
+data class Companies(
+    @PrimaryKey
+    val id:String,
+    val name:String,
+    val logo:String,
+    val description:String,
+    val website:String,
+    val jobId:String
+)

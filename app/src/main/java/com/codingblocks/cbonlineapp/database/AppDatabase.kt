@@ -19,7 +19,7 @@ import com.codingblocks.cbonlineapp.database.models.SectionWithContent
         CourseWithInstructor::class, SectionWithContent::class, DoubtsModel::class, NotesModel::class, Course::class
     ], exportSchema = false, version = 13
 )
-@TypeConverters(TimestampConverter::class)
+@TypeConverters(TimestampConverter::class, ListCompanyConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun courseRunDao(): CourseRunDao
