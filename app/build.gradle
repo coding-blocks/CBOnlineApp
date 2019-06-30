@@ -68,6 +68,7 @@ android {
     packagingOptions {
         exclude 'META-INF/atomicfu.kotlin_module'
     }
+    dataBinding.enabled = true
 }
 
 ext {

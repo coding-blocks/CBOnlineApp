@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.viewmodels
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.adapters.VideosNotesAdapter
 import com.codingblocks.cbonlineapp.database.DoubtsDao
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseDao
@@ -28,6 +29,8 @@ class VideoPlayerViewModel(
     var currentOrientation: Int = 0
     var mOtp: String? = null
     var mPlaybackInfo: String? = null
+
+    var notesAdapter: VideosNotesAdapter? = null
 
     var getOtpProgress: MutableLiveData<Boolean> = MutableLiveData()
     var createDoubtProgress: MutableLiveData<Boolean> = MutableLiveData()
