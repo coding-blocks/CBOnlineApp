@@ -109,16 +109,18 @@ class PdfActivity : AppCompatActivity(), AnkoLogger {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         if (MediaUtils.checkPermission(this)) {
             try {
-                if (pdfViewPager.adapter != null)
-                    (pdfViewPager.adapter as PDFPagerAdapter).close()
+                val adapter = pdfViewPager.adapter
+                if (adapter is PDFPagerAdapter)
+                    adapter.close()
+                pdfViewPager.adapter = null
             } catch (e: Exception) {
                 onBackPressed()
             }
         } else {
         }
         this@PdfActivity.unregisterReceiver(receiver)
+        super.onDestroy()
     }
 }
