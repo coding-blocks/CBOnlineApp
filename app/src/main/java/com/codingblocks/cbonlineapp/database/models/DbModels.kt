@@ -286,6 +286,7 @@ data class NotesModel(
     var createdAt: String = "",
     var deletedAt: String = ""
 )
+
 @Entity
 data class Notification(
     @PrimaryKey(autoGenerate = true)
@@ -298,19 +299,30 @@ data class Notification(
 )
 
 @Entity
-data class Jobs(
+data class JobsModel(
     @PrimaryKey
-    val id:String,
+    val uid:String
     val coverImage: String?,
+    val ctc: String,
     val deadline: String?,
-    val url: String,
-    val seen: Boolean = false,
-    val videoId: String = ""
+    val description: String,
+    val eligibility: String,
+    val experience: String,
+    val form: ArrayList<FormId>?,
+    val location: String,
+    val postedOn: String,
+    val type: String,
+    val title: String,
+    @Embedded
+    val company: ArrayList<Companies>?
 )
+
+class FormId(val formId: FormId)
+
 @Entity(
     indices = [Index("jobId")],
     foreignKeys = [(ForeignKey(
-        entity = Jobs::class,
+        entity = JobsModel::class,
         parentColumns = ["id"],
         childColumns = ["jobId"],
         onDelete = ForeignKey.CASCADE // or CASCADE
@@ -318,10 +330,10 @@ data class Jobs(
 )
 data class Companies(
     @PrimaryKey
-    val id:String,
-    val name:String,
-    val logo:String,
-    val description:String,
-    val website:String,
-    val jobId:String
+    val id: String,
+    val name: String,
+    val logo: String,
+    val description: String,
+    val website: String,
+    val jobId: String
 )

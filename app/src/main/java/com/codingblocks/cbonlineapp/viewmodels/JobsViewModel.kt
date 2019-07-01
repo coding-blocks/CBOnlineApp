@@ -1,12 +1,15 @@
 package com.codingblocks.cbonlineapp.viewmodels
 
 import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.database.JobsDao
+import com.codingblocks.cbonlineapp.database.models.Companies
+import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.extensions.getDate
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 
 class JobsViewModel(
-
+    private val jobsDao: JobsDao
 ) : ViewModel() {
 
     fun getJobs() {
@@ -15,8 +18,39 @@ class JobsViewModel(
             getDate()
         ).enqueue(retrofitCallback { throwable, response ->
             response?.body().let {
-                if (response?.isSuccessful  == true){
+                if (response?.isSuccessful == true) {
+                    response.body()?.run {
+                        forEach {
+                            val job = JobsModel(
+                                it.id,
+                                it.coverImage,
+                                it.ctc,
+                                it.deadline,
+                                it.description,
+                                it.eligibility,
+                                it.experience,
+                                arrayListOf(),
+                                it.location,
+                                it.postedOn,
+                                it.type,
+                                it.title,
+                                arrayListOf{
+                                    val list = arrayListOf<Companies>()
+                                    it.company?.forEach { company ->
+                                        val company = Companies(
+                                            company.id,
+                                            company.name,
+                                            company.logo,
+                                            company.description,
+                                            company.website,
+                                            it.id
+                                        )
 
+                                       return@arrayListOf list.add(company)
+                                    }
+                                })
+                        }
+                    }
                 }
             }
         })

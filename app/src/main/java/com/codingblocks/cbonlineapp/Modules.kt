@@ -31,7 +31,7 @@ val viewModelModule = module {
     viewModel { VideoPlayerViewModel(get(), get(), get(), get(), get()) }
     viewModel { HomeActivityViewModel(get()) }
     viewModel { SettingsViewModel(get()) }
-    viewModel { JobsViewModel() }
+    viewModel { JobsViewModel(get()) }
 
 }
 val databaseModule = module {
@@ -93,5 +93,9 @@ val databaseModule = module {
     factory {
         val database: AppDatabase = get()
         database.notificationDao()
+    }
+    factory {
+        val database: AppDatabase = get()
+        database.jobsDao()
     }
 }

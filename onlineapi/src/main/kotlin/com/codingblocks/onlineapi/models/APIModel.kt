@@ -552,7 +552,7 @@ class CricketQuestion(
 ) : BaseModel()
 
 @Type("cricket_cup_choices")
-class CricketChoice : BaseModel(){
+class CricketChoice : BaseModel() {
     val content: String? = ""
 }
 
@@ -574,21 +574,24 @@ class UserPredictionPost(
     var choice: CricketChoicePost,
     @Relationship("cricket-cup-match")
     var cricketCupMatch: MatchPost
-):BaseModel()
+) : BaseModel()
+
 @Type("cricket-cup-questions")
 class CricketQuestionPost(
     @Id
-    val id:String
+    val id: String
 )
+
 @Type("cricket-cup-choices")
 class CricketChoicePost(
     @Id
-    val id:String
+    val id: String
 )
+
 @Type("cricket-cup-matches")
 class MatchPost(
     @Id
-    val id:String
+    val id: String
 )
 
 @Type("jobs")
@@ -599,7 +602,7 @@ class Jobs(
     val description: String,
     val eligibility: String,
     val experience: String,
-    val form:ArrayList<Form>?,
+    val form: ArrayList<Form>?,
     val location: String,
     val postedOn: String,
     val type: String,
@@ -609,19 +612,19 @@ class Jobs(
 ) : BaseModel()
 
 class Form(
-    val name:String,
-    val required:Boolean,
-    val title:String,
-    val type:String
+    val name: String,
+    val required: Boolean,
+    val title: String,
+    val type: String
 )
 
 @Type("companies")
 class Company(
-    val name:String,
-    val logo:String,
-    val description:String,
-    val website:String
-): BaseModel()
+    val name: String,
+    val logo: String,
+    val description: String,
+    val website: String
+) : BaseModel()
 
 
 
