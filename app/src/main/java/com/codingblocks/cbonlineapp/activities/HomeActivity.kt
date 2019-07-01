@@ -79,6 +79,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             val transaction = supportFragmentManager.beginTransaction()
             if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN) {
+                // Update User Token on Login
+                viewModel.getMe()
                 val navMenu = nav_view.menu
                 navMenu.findItem(R.id.nav_my_courses).isVisible = true
                 transaction.replace(R.id.fragment_holder, MyCoursesFragment()).commit()

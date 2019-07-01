@@ -75,40 +75,44 @@ class HomeViewModel(
                                     }
                                 }
                                 list?.get(0)?.run {
-                                    runDao.insertNew(
-                                        CourseRun(
-                                            id,
-                                            "",
-                                            name,
-                                            description,
-                                            enrollmentStart,
-                                            enrollmentEnd,
-                                            start,
-                                            end,
-                                            price,
-                                            mrp ?: "",
-                                            course.id,
-                                            crUpdatedAt = updatedAt,
-                                            title = course.title,
-                                            recommended = recommended,
-                                            summary = course.summary
+                                    try {
+                                        runDao.insertNew(
+                                            CourseRun(
+                                                id,
+                                                "",
+                                                name,
+                                                description,
+                                                enrollmentStart,
+                                                enrollmentEnd,
+                                                start,
+                                                end,
+                                                price,
+                                                mrp ?: "",
+                                                course.id,
+                                                crUpdatedAt = updatedAt,
+                                                title = course.title,
+                                                recommended = recommended,
+                                                summary = course.summary
+                                            )
                                         )
-                                    )
-                                }
 
-                                course.instructors?.forEach { instructor ->
-                                    instructorDao.insertNew(
-                                        Instructor(
-                                            instructor.id,
-                                            instructor.name,
-                                            instructor.description ?: "",
-                                            instructor.photo,
-                                            instructor.updatedAt
-                                        )
-                                    )
-                                    courseWithInstructorDao.insert(
-                                        CourseWithInstructor(course.id, instructor.id)
-                                    )
+                                        course.instructors?.forEach { instructor ->
+                                            instructorDao.insertNew(
+                                                Instructor(
+                                                    instructor.id,
+                                                    instructor.name,
+                                                    instructor.description ?: "",
+                                                    instructor.photo,
+                                                    instructor.updatedAt
+                                                )
+                                            )
+                                            courseWithInstructorDao.insert(
+                                                CourseWithInstructor(course.id, instructor.id)
+                                            )
+                                        }
+                                    } catch (e: Exception) {
+                                        progress.value = false
+                                    }
                                 }
                             }
                         }
