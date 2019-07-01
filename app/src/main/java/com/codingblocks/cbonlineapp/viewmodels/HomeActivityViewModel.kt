@@ -83,4 +83,19 @@ class HomeActivityViewModel(
     fun setJWTToken() {
         Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
     }
+
+    fun refreshToken() {
+        Clients.api.refreshToken(prefs.SP_JWT_REFRESH_TOKEN)
+            .enqueue(retrofitCallback { throwable, response ->
+                response?.body().let {
+                    if (response?.isSuccessful == true) {
+                        val jwt = it?.asJsonObject?.get("jwt")?.asString!!
+                        val rt = it.asJsonObject?.get("refresh_token")?.asString!!
+                        prefs.SP_JWT_TOKEN_KEY = jwt
+                        prefs.SP_JWT_REFRESH_TOKEN = rt
+                        Clients.authJwt = jwt
+                    }
+                }
+            })
+    }
 }

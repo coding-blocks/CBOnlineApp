@@ -22,7 +22,9 @@ interface OnlineRestApi {
         @Query("videoId") videoId: String,
         @Query("sectionId") sectionId: String,
         @Query("runAttemptId") runAttemptId: String,
-        @Query("offline") offline: Boolean = false): Call<JsonObject>
+        @Query("offline") offline: Boolean = false
+    ): Call<JsonObject>
+
     @POST("jwt/login?android=true")
     @FormUrlEncoded
     fun getToken(@Field("code") code: String): Call<JsonObject>
@@ -61,8 +63,13 @@ interface OnlineRestApi {
 
     @GET("v2/cricket_cup/matches/earnings")
     fun getEarning(): Call<JsonObject>
+
     @GET("v2/cricket_cup/matches/{matchId}/score")
-    fun getScore(@Path("matchId") id: String) : Call<JsonObject>
+    fun getScore(@Path("matchId") id: String): Call<JsonObject>
+
+    @POST("jwt/refresh/?client=android")
+    @FormUrlEncoded
+    fun refreshToken(@Field("refresh_token") refresh_token: String): Call<JsonObject>
 
 
 }

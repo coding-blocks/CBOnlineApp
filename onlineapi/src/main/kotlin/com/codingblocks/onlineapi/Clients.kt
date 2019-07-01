@@ -50,6 +50,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jasminb.jsonapi.RelationshipResolver
 import com.github.jasminb.jsonapi.ResourceConverter
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
+import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -146,11 +147,14 @@ object Clients {
         get() = onlineV2JsonRetrofit
             .create(OnlineJsonApi::class.java)
 
+    var gson = GsonBuilder()
+        .setLenient()
+        .create()
 
     private val retrofit = Retrofit.Builder()
         .client(ClientInterceptor)
         .baseUrl("https://api-online.cb.lk/api/")
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .build()
     val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)
