@@ -346,7 +346,7 @@ class ThrowableActivity : AppCompatActivity() {
                                                 text = choice
                                         }
                                     }
-                                    1 -> {
+                                    2 -> {
                                         ques2radGroup.visibility = View.GONE
                                         ques2submission.apply {
                                             visibility = View.VISIBLE
@@ -360,7 +360,7 @@ class ThrowableActivity : AppCompatActivity() {
                                                 text = choice
                                         }
                                     }
-                                    2 -> {
+                                    1 -> {
                                         ques3radGroup.visibility = View.GONE
                                         ques3submission.apply {
                                             visibility = View.VISIBLE
