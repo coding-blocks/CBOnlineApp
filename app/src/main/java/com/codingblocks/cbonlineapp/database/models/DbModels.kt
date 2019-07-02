@@ -301,39 +301,33 @@ data class Notification(
 @Entity
 data class JobsModel(
     @PrimaryKey
-    val uid:String
+    val uid: String,
     val coverImage: String?,
     val ctc: String,
     val deadline: String?,
     val description: String,
+    val formList:ArrayList<FormModel>?,
     val eligibility: String,
     val experience: String,
-    val form: ArrayList<FormId>?,
     val location: String,
     val postedOn: String,
     val type: String,
     val title: String,
     @Embedded
-    val company: ArrayList<Companies>?
+    val company: Companies
 )
-
-class FormId(val formId: FormId)
-
-@Entity(
-    indices = [Index("jobId")],
-    foreignKeys = [(ForeignKey(
-        entity = JobsModel::class,
-        parentColumns = ["id"],
-        childColumns = ["jobId"],
-        onDelete = ForeignKey.CASCADE // or CASCADE
-    ))]
+@Entity
+class FormModel(
+    val name: String,
+    val required: Boolean,
+    val title: String,
+    val type: String
 )
+@Entity
 data class Companies(
-    @PrimaryKey
     val id: String,
     val name: String,
     val logo: String,
-    val description: String,
-    val website: String,
-    val jobId: String
+    val companyDescription: String,
+    val website: String
 )

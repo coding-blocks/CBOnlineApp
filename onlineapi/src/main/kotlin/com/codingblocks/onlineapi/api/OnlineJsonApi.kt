@@ -2,6 +2,7 @@ package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Comment
+import com.codingblocks.onlineapi.models.Company
 import com.codingblocks.onlineapi.models.ContentProgress
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
@@ -189,7 +190,7 @@ interface OnlineJsonApi {
     fun setUserPrediction(@Body params: UserPredictionPost): Call<ArrayList<UserPrediction>>
 
     @GET("cricket_cup/matches/today")
-    fun getMatch() : Call<ArrayList<Match>>
+    fun getMatch(): Call<ArrayList<Match>>
 
 
     @GET("jobs")
@@ -200,6 +201,11 @@ interface OnlineJsonApi {
         @Query("page[limit]") pageLimit: String = "12",
         @Query("sort") sort: String = "-postedOn"
     ): Call<ArrayList<Jobs>>
+
+    @GET("companies/{id}")
+    fun getCompany(
+        @Path("id") id: String
+    ): Call<Company>
 
 
 }

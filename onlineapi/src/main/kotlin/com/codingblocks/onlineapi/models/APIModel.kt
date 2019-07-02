@@ -608,7 +608,9 @@ class Jobs(
     val type: String,
     val title: String,
     @Relationship("company")
-    val company: ArrayList<Company>?
+    val company: Company?,
+    @Relationship("courses")
+    val courses: Course?
 ) : BaseModel()
 
 class Form(
@@ -620,10 +622,10 @@ class Form(
 
 @Type("companies")
 class Company(
-    val name: String,
-    val logo: String,
-    val description: String,
-    val website: String
+    val name: String?,
+    val logo: String?,
+    val description: String?,
+    val website: String?
 ) : BaseModel()
 
 

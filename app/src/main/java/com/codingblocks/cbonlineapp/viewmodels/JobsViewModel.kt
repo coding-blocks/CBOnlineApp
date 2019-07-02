@@ -21,6 +21,7 @@ class JobsViewModel(
                 if (response?.isSuccessful == true) {
                     response.body()?.run {
                         forEach {
+
                             val job = JobsModel(
                                 it.id,
                                 it.coverImage,
@@ -29,26 +30,22 @@ class JobsViewModel(
                                 it.description,
                                 it.eligibility,
                                 it.experience,
-                                arrayListOf(),
                                 it.location,
                                 it.postedOn,
                                 it.type,
                                 it.title,
-                                arrayListOf{
-                                    val list = arrayListOf<Companies>()
-                                    it.company?.forEach { company ->
-                                        val company = Companies(
-                                            company.id,
-                                            company.name,
-                                            company.logo,
-                                            company.description,
-                                            company.website,
-                                            it.id
-                                        )
+                                company = with(it.company) {
+                                    Companies(
+                                        this?.id!!,
+                                        name ?: "",
+                                        logo ?: "",
+                                        description ?: "",
+                                        website ?: ""
+                                    )
+                                }
 
-                                       return@arrayListOf list.add(company)
-                                    }
-                                })
+                            )
+                            jobsDao.insertNew(job)
                         }
                     }
                 }
