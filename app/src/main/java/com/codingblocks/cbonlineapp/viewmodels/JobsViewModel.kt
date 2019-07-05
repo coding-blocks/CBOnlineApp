@@ -20,32 +20,43 @@ class JobsViewModel(
             response?.body().let {
                 if (response?.isSuccessful == true) {
                     response.body()?.run {
-                        forEach {
+                        forEach { job ->
 
-                            val job = JobsModel(
-                                it.id,
-                                it.coverImage,
-                                it.ctc,
-                                it.deadline,
-                                it.description,
-                                it.eligibility,
-                                it.experience,
-                                it.location,
-                                it.postedOn,
-                                it.type,
-                                it.title,
-                                company = with(it.company) {
-                                    Companies(
-                                        this?.id!!,
-                                        name ?: "",
-                                        logo ?: "",
-                                        description ?: "",
-                                        website ?: ""
-                                    )
-                                }
+                            Clients.onlineV2JsonApi.getCompany(job.company?.id ?: "").enqueue(
+                                retrofitCallback { throwable, response ->
+                                    response?.body()?.let {
+                                        val job = JobsModel(
+                                            job.id,
+                                            job.coverImage,
+                                            job.ctc,
+                                            job.deadline,
+                                            job.description,
+                                            job.eligibility,
+                                            job.experience,
+                                            job.location,
+                                            job.postedOn,
+                                            job.type,
+                                            job.title,
+                                            with(it) {
+                                                Companies(
+                                                    id,
+                                                    name ?: "",
+                                                    logo ?: "",
+                                                    description ?: "",
+                                                    website ?: ""
+                                                )
+                                            },
+                                            job.courses ?: arrayListOf()
+                                        )
 
-                            )
-                            jobsDao.insertNew(job)
+                                        jobsDao.insertNew(job)
+
+                                    }
+
+
+                                })
+
+
                         }
                     }
                 }

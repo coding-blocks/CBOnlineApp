@@ -1,22 +1,22 @@
 package com.codingblocks.cbonlineapp.database
 
 import androidx.room.TypeConverter
+import com.codingblocks.onlineapi.models.CourseId
 import com.codingblocks.onlineapi.models.Form
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 
-class ListCompanyConverter {
-
+class CourseIdList{
     @TypeConverter
-    fun fromListForm(companyList: ArrayList<Form>): String {
+    fun fromListCourseId(companyList: ArrayList<CourseId>): String {
         val objectMapper = ObjectMapper()
         return objectMapper.writeValueAsString(companyList)
     }
 
     @TypeConverter
-    fun toListForm(companyList: String): ArrayList<Form> {
+    fun toListCourseId(courseIdList: String): ArrayList<CourseId> {
         val objectMapper = ObjectMapper()
-        val mapType = object : TypeReference<ArrayList<Form>>() {}
-        return objectMapper.readValue(companyList, mapType)
+        val mapType = object : TypeReference<ArrayList<CourseId>>() {}
+        return objectMapper.readValue(courseIdList, mapType)
     }
 }

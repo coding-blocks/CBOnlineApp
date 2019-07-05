@@ -21,7 +21,7 @@ import com.codingblocks.cbonlineapp.database.models.SectionWithContent
         JobsModel::class
     ], exportSchema = false, version = 14
 )
-@TypeConverters(TimestampConverter::class, ListCompanyConverter::class)
+@TypeConverters(TimestampConverter::class, CourseIdList::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun courseRunDao(): CourseRunDao

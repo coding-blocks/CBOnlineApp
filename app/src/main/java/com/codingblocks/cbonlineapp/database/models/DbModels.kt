@@ -8,6 +8,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.codingblocks.onlineapi.models.CourseId
 import java.sql.Date
 
 open class BaseModel(
@@ -306,7 +307,6 @@ data class JobsModel(
     val ctc: String,
     val deadline: String?,
     val description: String,
-    val formList:ArrayList<FormModel>?,
     val eligibility: String,
     val experience: String,
     val location: String,
@@ -314,7 +314,8 @@ data class JobsModel(
     val type: String,
     val title: String,
     @Embedded
-    val company: Companies
+    val company: Companies,
+    val courseId: ArrayList<CourseId>
 )
 @Entity
 class FormModel(

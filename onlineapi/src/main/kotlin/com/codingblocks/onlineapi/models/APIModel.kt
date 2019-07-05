@@ -610,8 +610,14 @@ class Jobs(
     @Relationship("company")
     val company: Company?,
     @Relationship("courses")
-    val courses: Course?
+    val courses: ArrayList<CourseId>?
 ) : BaseModel()
+
+@Type("courses")
+data class CourseId(
+    @Id
+    val id: String?
+)
 
 class Form(
     val name: String,

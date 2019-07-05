@@ -17,6 +17,7 @@ import com.codingblocks.onlineapi.models.ContentQna
 import com.codingblocks.onlineapi.models.ContentVideoType
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Course
+import com.codingblocks.onlineapi.models.CourseId
 import com.codingblocks.onlineapi.models.CourseSection
 import com.codingblocks.onlineapi.models.CricketChoice
 import com.codingblocks.onlineapi.models.CricketChoicePost
@@ -83,7 +84,7 @@ object Clients {
         RunAttemptId::class.java, RunAttemptsId::class.java, ContentId::class.java, ContentsId::class.java,
         UserPrediction::class.java,CricketChoice::class.java,CricketQuestion::class.java,Match::class.java,
         UserPredictionPost::class.java, CricketChoicePost::class.java, CricketQuestionPost::class.java,
-        MatchPost::class.java, Jobs::class.java,Company::class.java
+        MatchPost::class.java, Jobs::class.java,Company::class.java,CourseId::class.java
     )
 
     private val relationshipResolver = RelationshipResolver {
