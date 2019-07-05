@@ -67,7 +67,7 @@ interface OnlineRestApi {
     @GET("v2/cricket_cup/matches/{matchId}/score")
     fun getScore(@Path("matchId") id: String): Call<JsonObject>
 
-    @POST("jwt/refresh/?client=android")
+    @POST("jwt/refresh/?android=true")
     @FormUrlEncoded
     fun refreshToken(@Field("refresh_token") refresh_token: String): Call<JsonObject>
 
