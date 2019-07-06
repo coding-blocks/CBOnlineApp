@@ -12,6 +12,8 @@ class JobsViewModel(
     private val jobsDao: JobsDao
 ) : ViewModel() {
 
+    fun getAllJobs() = jobsDao.getAllJobs()
+
     fun getJobs() {
         Clients.onlineV2JsonApi.getJobs(
             getDate(),
@@ -50,18 +52,12 @@ class JobsViewModel(
                                         )
 
                                         jobsDao.insertNew(job)
-
                                     }
-
-
                                 })
-
-
                         }
                     }
                 }
             }
         })
     }
-
 }

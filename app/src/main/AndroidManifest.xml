@@ -42,6 +42,7 @@
         </activity> <!-- <meta-data android:name="android.max_aspect" android:value="2.1" /> -->
         <activity
             android:name=".activities.NotificationsActivity"
+            android:launchMode="singleTop"
             android:parentActivityName=".activities.HomeActivity"
             android:theme="@style/myTheme" />
         <activity android:name=".activities.JobsActivity" />

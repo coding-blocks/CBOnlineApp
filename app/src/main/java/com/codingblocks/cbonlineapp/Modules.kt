@@ -32,7 +32,6 @@ val viewModelModule = module {
     viewModel { HomeActivityViewModel(get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { JobsViewModel(get()) }
-
 }
 val databaseModule = module {
 

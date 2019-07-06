@@ -15,7 +15,6 @@ import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 import org.jetbrains.anko.support.v4.themedContentLoadingProgressBar
 
-
 class CourseContentUi<T> : AnkoComponent<T> {
     lateinit var rvSection: RecyclerView
     lateinit var sectionProgressBar: ContentLoadingProgressBar

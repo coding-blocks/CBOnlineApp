@@ -45,5 +45,4 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun notificationDao(): NotificationDao
 
     abstract fun jobsDao(): JobsDao
-
 }
