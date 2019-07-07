@@ -226,14 +226,26 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 changeFragment("My Courses")
             }
             R.id.nav_whatsapp -> {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setPackage("com.whatsapp")
-                intent.data = Uri.parse("https://wa.me/919811557517")
-                if (packageManager.resolveActivity(intent, 0) != null) {
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(this, "Please install whatsApp", Toast.LENGTH_SHORT).show()
-                }
+                val pm= packageManager
+            try {
+
+        val waIntent=Intent(Intent.ACTION_SEND)
+        waIntent.type = "text/plain"
+        val text = "YOUR TEXT HERE"
+
+        val info=pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
+        //Check if package exists or not. If not then code
+        //in catch block will be called
+        waIntent.setPackage("com.whatsapp")
+
+        waIntent.putExtra(Intent.EXTRA_TEXT, text)
+        waIntent.data = Uri.parse("https://wa.me/919811557517")
+       startActivity(waIntent)
+
+   } catch (e: PackageManager.NameNotFoundException) {
+        Toast.makeText(this, "WhatsApp not Installed", Toast.LENGTH_SHORT)
+                .show();
+   }
             }
             R.id.nav_preferences -> {
                 startActivity(intentFor<SettingsActivity>().singleTop())
