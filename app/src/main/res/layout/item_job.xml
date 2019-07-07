@@ -147,6 +147,7 @@
 
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnApply"
                 android:layout_width="wrap_content"
                 android:textColor="@color/white"
                 android:layout_weight="1"
