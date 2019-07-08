@@ -108,4 +108,5 @@
     <string name="clean_dialog_okBtn">Clear Oldest Download</string>
     <string name="clean_dialog_cancelBtn">Cancel Current Download</string>
     <string name="get_hired">Get Hired</string>
+    <string name="recommended_courses_description">Based on the industry trends, you should complete these courses</string>
 </resources>

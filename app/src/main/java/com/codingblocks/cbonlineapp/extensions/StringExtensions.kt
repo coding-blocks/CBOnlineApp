@@ -1,5 +1,7 @@
 package com.codingblocks.cbonlineapp.extensions
 
+import android.text.SpannableStringBuilder
+import androidx.core.text.bold
 import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -7,6 +9,7 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
 import java.util.concurrent.TimeUnit
+import kotlin.NoSuchElementException
 
 fun folderSize(directory: File): Long {
     var length: Long = 0
@@ -98,3 +101,8 @@ fun getDate(): String {
 
     return dateFormat.format(calendar.time)
 }
+
+fun getSpannableSring(normalText: String, boldText: String): SpannableStringBuilder =
+    SpannableStringBuilder()
+        .append(normalText)
+        .bold { append(boldText) }

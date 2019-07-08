@@ -1,19 +1,15 @@
 package com.codingblocks.cbonlineapp.adapters
 
-import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.text.bold
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.JobDetailActivity
-import com.codingblocks.cbonlineapp.activities.SettingsActivity
 import com.codingblocks.cbonlineapp.commons.JobsDiffCallback
-import com.codingblocks.cbonlineapp.commons.NotificationClickListener
 import com.codingblocks.cbonlineapp.database.models.JobsModel
-import com.codingblocks.cbonlineapp.extensions.formatDate
+import com.codingblocks.cbonlineapp.extensions.getSpannableSring
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_job.view.btnApply
 import kotlinx.android.synthetic.main.item_job.view.companyLogo
@@ -27,7 +23,6 @@ import kotlinx.android.synthetic.main.item_job.view.postedAgoTv
 import kotlinx.android.synthetic.main.item_job.view.typeTv
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
-import org.jetbrains.anko.startActivity
 
 class JobsAdapter(diffCallback: JobsDiffCallback) :
     ListAdapter<JobsModel, JobsAdapter.JobsViewHolder>(
@@ -69,7 +64,7 @@ class JobsAdapter(diffCallback: JobsDiffCallback) :
                 btnApply.setOnClickListener {
                     context.startActivity(context.intentFor<JobDetailActivity>(job.uid to "jobId").singleTop())
                 }
-                itemView.setOnClickListener{
+                itemView.setOnClickListener {
                     context.startActivity(context.intentFor<JobDetailActivity>(job.uid to "jobId").singleTop())
                 }
 
@@ -77,9 +72,5 @@ class JobsAdapter(diffCallback: JobsDiffCallback) :
             }
         }
 
-        fun getSpannableSring(normalText: String, boldText: String): SpannableStringBuilder =
-            SpannableStringBuilder()
-                .append(normalText)
-                .bold { append(boldText) }
     }
 }

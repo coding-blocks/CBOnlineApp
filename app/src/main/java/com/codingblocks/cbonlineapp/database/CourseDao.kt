@@ -4,12 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.codingblocks.cbonlineapp.database.models.Course
+import com.codingblocks.onlineapi.models.CourseId
 
 @Dao
 abstract class CourseDao : BaseDao<Course> {
 
     @Query("SElECT * FROM Course ")
     abstract fun getCourses(): LiveData<List<Course>>
+
+
+    @Query("SElECT * FROM Course where uid IN (:courses)")
+    abstract fun getJobCourses(courses: ArrayList<CourseId>): LiveData<List<Course>>
 
     @Query("SElECT * FROM Course where uid = :courseId ")
     abstract fun getCourse(courseId: String): Course

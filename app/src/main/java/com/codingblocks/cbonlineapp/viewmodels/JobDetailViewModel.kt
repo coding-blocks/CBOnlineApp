@@ -11,6 +11,7 @@ import com.codingblocks.cbonlineapp.database.models.Companies
 import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.CourseId
 import com.codingblocks.onlineapi.models.Form
 
 class JobDetailViewModel(
@@ -29,9 +30,9 @@ class JobDetailViewModel(
 
     val formData: MutableLiveData<ArrayList<Form>> = MutableLiveData()
 
-    fun getAllJobs() = jobsDao.getAllJobs()
+    fun getJobById(id: String) = jobsDao.getJobById(id)
 
-    fun getJobs(jobId: String) {
+    fun fetchJob(jobId: String) {
         Clients.onlineV2JsonApi.getJobById(
             jobId
         ).enqueue(retrofitCallback { throwable, response ->
@@ -71,6 +72,10 @@ class JobDetailViewModel(
                 }
             }
         })
+    }
+
+    fun getCourses(courseId: ArrayList<CourseId>) {
+
     }
 }
 
