@@ -39,7 +39,9 @@
 
     <style name="Theme.Jobs" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:fontFamily">@font/nunitosans_semibold</item>
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="colorPrimary">@color/colorPrimaryJobs</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkJobs</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="android:textColor">@color/black</item>
     </style>
@@ -119,4 +121,6 @@
         <item name="android:layout_height">40dp</item>
     </style>
 
+    <color name="colorPrimaryDarkJobs">#452ba3</color>
+    <color name="colorPrimaryJobs">#692fdc</color>
 </resources>

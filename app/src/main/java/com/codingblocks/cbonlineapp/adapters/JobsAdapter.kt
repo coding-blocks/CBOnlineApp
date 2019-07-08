@@ -65,7 +65,7 @@ class JobsAdapter(diffCallback: JobsDiffCallback) :
                 experienceTv.text = getSpannableSring("Experience: ", job.experience)
                 typeTv.text = getSpannableSring("Job Type: ", job.type)
                 ctcTv.text = getSpannableSring("CTC: ", job.ctc)
-                deadlineTv.text = formatDate(job.deadline ?: "No Deadline")
+                deadlineTv.text = job.deadline
                 btnApply.setOnClickListener {
                     context.startActivity(context.intentFor<JobDetailActivity>(job.uid to "jobId").singleTop())
                 }

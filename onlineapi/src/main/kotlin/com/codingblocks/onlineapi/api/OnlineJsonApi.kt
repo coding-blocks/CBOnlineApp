@@ -207,5 +207,11 @@ interface OnlineJsonApi {
         @Path("id") id: String
     ): Call<Company>
 
+    @GET("jobs/{id}")
+    fun getJobById(
+        @Path("id") id: String
+    ): Call<Jobs>
+
+
 
 }

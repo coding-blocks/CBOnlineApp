@@ -607,6 +607,9 @@ class Jobs(
     val postedOn: String,
     val type: String,
     val title: String,
+    val accepting: Boolean = false,
+    val eligible: Boolean = false,
+    val status: String = "draft",
     @Relationship("company")
     val company: Company?,
     @Relationship("courses")
@@ -631,8 +634,16 @@ class Company(
     val name: String?,
     val logo: String?,
     val description: String?,
-    val website: String?
+    val website: String?,
+    val inactive: Boolean = false,
+    val contacts: ArrayList<Contact>?
 ) : BaseModel()
+
+data class Contact(
+    val email: String,
+    val name: String,
+    val phone: String
+)
 
 
 
