@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.viewmodels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.database.CourseDao
@@ -8,6 +9,7 @@ import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.InstructorDao
 import com.codingblocks.cbonlineapp.database.JobsDao
 import com.codingblocks.cbonlineapp.database.models.Companies
+import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
@@ -30,7 +32,13 @@ class JobDetailViewModel(
 
     val formData: MutableLiveData<ArrayList<Form>> = MutableLiveData()
 
+    val jobCourses: MutableLiveData<List<CourseRun>> = MutableLiveData()
+
     fun getJobById(id: String) = jobsDao.getJobById(id)
+
+    fun getCourseDao() = courseDao
+
+    fun getCourseWithInstructorDao() = courseWithInstructorDao
 
     fun fetchJob(jobId: String) {
         Clients.onlineV2JsonApi.getJobById(
@@ -75,7 +83,7 @@ class JobDetailViewModel(
     }
 
     fun getCourses(courseId: ArrayList<CourseId>) {
-
+        runDao.getJobCourses(courseId)
     }
 }
 

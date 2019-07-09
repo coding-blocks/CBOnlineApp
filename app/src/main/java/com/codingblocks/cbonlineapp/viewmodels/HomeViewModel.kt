@@ -27,11 +27,11 @@ class HomeViewModel(
 
     fun getCourseDao() = courseDao
 
-    fun getCourseById(id: String) = courseDao.getCourse(id)
-
     fun getCourseWithInstructorDao() = courseWithInstructorDao
 
     fun getRecommendedRuns() = runDao.getRecommendedRuns()
+
+    fun getCourseById(id: String) = courseDao.getCourse(id)
 
     fun getAllRuns() = runDao.getAllRuns()
 

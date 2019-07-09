@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:id="@+id/jobDescriptionBtn"
             android:background="@color/colorPrimaryDarkJobs"
             android:text="View Job Description"
             android:textColor="@color/white" />

@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import com.codingblocks.cbonlineapp.activities.JobDetailActivity
 import com.codingblocks.cbonlineapp.commons.JobsDiffCallback
 import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.extensions.getSpannableSring
+import com.codingblocks.cbonlineapp.util.JOB_ID
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_job.view.btnApply
 import kotlinx.android.synthetic.main.item_job.view.companyLogo
@@ -51,7 +53,6 @@ class JobsAdapter(diffCallback: JobsDiffCallback) :
         fun bindView(job: JobsModel) {
             with(itemView) {
                 Picasso.with(context).load(job.company.logo).into(companyLogo)
-
                 jobTitleTv.text = job.title
                 companyTv.text = job.company.name
                 postedAgoTv.text = job.postedOn
@@ -62,11 +63,9 @@ class JobsAdapter(diffCallback: JobsDiffCallback) :
                 ctcTv.text = getSpannableSring("CTC: ", job.ctc)
                 deadlineTv.text = job.deadline
                 btnApply.setOnClickListener {
-                    context.startActivity(context.intentFor<JobDetailActivity>(job.uid to "jobId").singleTop())
+                    context.startActivity(context.intentFor<JobDetailActivity>(JOB_ID to job.uid).singleTop())
                 }
-                itemView.setOnClickListener {
-                    context.startActivity(context.intentFor<JobDetailActivity>(job.uid to "jobId").singleTop())
-                }
+
 
 
             }

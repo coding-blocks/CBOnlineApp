@@ -6,6 +6,7 @@ import com.codingblocks.cbonlineapp.viewmodels.AnnouncementsViewModel
 import com.codingblocks.cbonlineapp.viewmodels.CourseViewModel
 import com.codingblocks.cbonlineapp.viewmodels.HomeActivityViewModel
 import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
+import com.codingblocks.cbonlineapp.viewmodels.JobDetailViewModel
 import com.codingblocks.cbonlineapp.viewmodels.JobsViewModel
 import com.codingblocks.cbonlineapp.viewmodels.LeaderboardViewModel
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
@@ -32,6 +33,8 @@ val viewModelModule = module {
     viewModel { HomeActivityViewModel(get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { JobsViewModel(get()) }
+    viewModel { JobDetailViewModel(get(),get(),get(),get(),get()) }
+
 }
 val databaseModule = module {
 

@@ -626,7 +626,9 @@ class Form(
     val name: String,
     val required: Boolean,
     val title: String,
-    val type: String
+    val type: String,
+    val options: String?
+
 )
 
 @Type("companies")

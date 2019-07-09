@@ -41,7 +41,7 @@
         <item name="android:fontFamily">@font/nunitosans_semibold</item>
         <item name="colorPrimary">@color/colorPrimaryJobs</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkJobs</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimary</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="android:textColor">@color/black</item>
     </style>
