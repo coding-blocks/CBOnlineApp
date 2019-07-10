@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.activities
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.TypedValue
@@ -11,6 +10,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
@@ -31,6 +31,7 @@ import kotlinx.android.synthetic.main.activity_job_detail.jobDescriptionBtn
 import kotlinx.android.synthetic.main.activity_job_detail.jobDescriptionTv
 import kotlinx.android.synthetic.main.activity_job_detail.rvJobCourses
 import kotlinx.android.synthetic.main.custom_form_dialog.view.form
+import kotlinx.android.synthetic.main.custom_form_dialog.view.okBtn
 import kotlinx.android.synthetic.main.item_job.companyLogo
 import kotlinx.android.synthetic.main.item_job.companyTv
 import kotlinx.android.synthetic.main.item_job.ctcTv
@@ -75,7 +76,7 @@ class JobDetailActivity : AppCompatActivity() {
         rvJobCourses.adapter = courseDataAdapter
 
         jobDescriptionBtn.setOnClickListener {
-            cardJobDescription.visibility = View.VISIBLE
+            cardJobDescription.isVisible = !cardJobDescription.isVisible
         }
         makeForm(viewModel.formData)
 
@@ -84,7 +85,6 @@ class JobDetailActivity : AppCompatActivity() {
 
     }
 
-    @SuppressLint("SetTextI18n")
     private fun makeForm(formData: MutableLiveData<ArrayList<Form>>) {
 
         val params = LinearLayout.LayoutParams(
@@ -163,19 +163,38 @@ class JobDetailActivity : AppCompatActivity() {
                     for (i in 0..4) {
                         rb[i] = RadioButton(this)
                         rb[i]?.text = optionsArray[i]
-                        rb[i]?.id = i + 100
+                        if (i == 0) {
+                            rb[i]?.isChecked = true
+                        }
                         rg.addView(rb[i])
                     }
-                    hashMap.put(it.name, index)
+                    hashMap[it.name] = index
                     rg.id = index
                     formlayout.addView(rg)
                 }
             }
+
+            formView.okBtn.setOnClickListener { view ->
+                it.forEach { form ->
+                    with(hashMap[form.title]) {
+                        if (form.type == "text-field") {
+                            val inputLayout = findViewById<TextInputLayout>(this!!)
+                            if (inputLayout.editText?.text.isNullOrEmpty() && form.required) {
+                                inputLayout.isErrorEnabled = true
+                                inputLayout.error = "Cannot Be Empty"
+                            } else {
+                                inputLayout.isErrorEnabled = false
+                                val value = inputLayout.editText?.text.toString()
+                            }
+                        }
+                    }
+                }
+            }
         }
-        formDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
-        formDialog.setView(formView)
-        formDialog.setCancelable(true)
-        formDialog.show()
+//        formDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+//        formDialog.setView(formView)
+//        formDialog.setCancelable(true)
+//        formDialog.show()
     }
 
     private fun setUpObservers() {
