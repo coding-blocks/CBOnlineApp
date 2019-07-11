@@ -72,7 +72,7 @@ android {
 
 ext {
     ankoVersion = '0.10.6'
-    room_version = "2.1.0-beta01"
+    room_version = "2.2.0-alpha01"
     koin_version = "1.0.2"
     ankoLibs = [
             // commons
