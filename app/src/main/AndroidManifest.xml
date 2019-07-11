@@ -122,8 +122,9 @@
         </activity>
         <activity
             android:name=".activities.VideoPlayerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:supportsPictureInPicture="true"/>
         <activity
             android:name=".activities.PdfActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

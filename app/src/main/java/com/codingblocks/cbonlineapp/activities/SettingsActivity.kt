@@ -76,6 +76,12 @@ class SettingsActivity : AppCompatActivity() {
         })
         seekbarLimit.progress = getPrefs().SP_DATA_LIMIT.minus(1).times(100).toInt()
         setSeekbarProgress(seekbarLimit.progress)
+
+        pipSwitch.isChecked = getPrefs().SP_PIP
+
+        pipSwitch.setOnClickListener {
+            getPrefs().SP_PIP = pipSwitch.isChecked
+        }
     }
 
     private fun setSeekbarProgress(progress: Int) {
