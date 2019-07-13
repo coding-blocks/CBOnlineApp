@@ -31,6 +31,9 @@ class MyCourseViewModel(
     var promoVideo: MutableLiveData<String> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
     var revoked: MutableLiveData<Boolean> = MutableLiveData()
+    var attemptId: String = ""
+    var runId: String = ""
+    var courseId: String = ""
 
     fun updatehit(attemptId: String) {
         runDao.updateHit(attemptId)

@@ -21,6 +21,7 @@
         <activity
             android:name=".activities.JobDetailActivity"
             android:parentActivityName=".activities.JobsActivity"
+            android:windowSoftInputMode="stateVisible"
             android:theme="@style/Theme.Jobs" />
         <activity
             android:name=".activities.ThrowableActivity"
