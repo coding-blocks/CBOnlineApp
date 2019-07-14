@@ -1,6 +1,5 @@
 package com.codingblocks.onlineapi
 
-import com.apple.eawt.Application
 import com.codingblocks.onlineapi.api.OnlineJsonApi
 import com.codingblocks.onlineapi.api.OnlineRestApi
 import com.codingblocks.onlineapi.models.*
@@ -10,6 +9,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jasminb.jsonapi.RelationshipResolver
 import com.github.jasminb.jsonapi.ResourceConverter
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
+import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -39,9 +39,7 @@ object Clients {
         Quizqnas::class.java, DoubtsJsonApi::class.java, ContentCsv::class.java, Comment::class.java,
         Note::class.java, Notes::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
         RunAttemptId::class.java, RunAttemptsId::class.java, ContentId::class.java, ContentsId::class.java,
-        UserPrediction::class.java, CricketChoice::class.java, CricketQuestion::class.java, Match::class.java,
-        UserPredictionPost::class.java, CricketChoicePost::class.java, CricketQuestionPost::class.java,
-        MatchPost::class.java, Jobs::class.java, Company::class.java, CourseId::class.java, JobId::class.java,
+        Jobs::class.java, Company::class.java, CourseId::class.java, JobId::class.java,
         Applications::class.java, ApplicationId::class.java
     )
 
@@ -105,11 +103,14 @@ object Clients {
         get() = onlineV2JsonRetrofit
             .create(OnlineJsonApi::class.java)
 
+    var gson = GsonBuilder()
+        .setLenient()
+        .create()
 
     private val retrofit = Retrofit.Builder()
         .client(ClientInterceptor)
         .baseUrl("https://api-online.cb.lk/api/")
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .build()
     val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)

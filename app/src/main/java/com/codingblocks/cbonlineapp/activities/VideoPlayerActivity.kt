@@ -1,10 +1,15 @@
 package com.codingblocks.cbonlineapp.activities
 
 import android.animation.LayoutTransition
+import android.annotation.TargetApi
+import android.app.PictureInPictureParams
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.graphics.Point
+import android.os.Build
 import android.os.Bundle
+import android.util.Rational
 import android.view.View
 import android.view.WindowManager
 import android.widget.RelativeLayout
@@ -13,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
+import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.extensions.pageChangeCallback
 import com.codingblocks.cbonlineapp.fragments.VideoDoubtFragment
@@ -20,6 +26,7 @@ import com.codingblocks.cbonlineapp.fragments.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.OnItemClickListener
+import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
@@ -470,5 +477,65 @@ class VideoPlayerActivity : AppCompatActivity(),
                 // show system windows
             }
         }
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        if (getPrefs().SP_PIP) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
+                activatePIPMode()
+        }
+    }
+
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
+
+        if (isInPictureInPictureMode) {
+            player_tabs.visibility = View.GONE
+            pagerFrame.visibility = View.GONE
+
+            playerControlView?.fitsSystemWindows = true
+
+            if (::playerFragment.isInitialized) {
+                val paramsFragment: RelativeLayout.LayoutParams =
+                    playerFragment.view?.layoutParams as RelativeLayout.LayoutParams
+                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
+                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_TOP)
+                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_START)
+                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_END)
+            }
+
+            // hide system windows
+            showControls(false)
+        } else {
+            player_tabs.visibility = View.VISIBLE
+            pagerFrame.visibility = View.VISIBLE
+
+            if (::playerFragment.isInitialized) {
+                val paramsFragment: RelativeLayout.LayoutParams =
+                    playerFragment.view?.layoutParams as RelativeLayout.LayoutParams
+                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
+                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_TOP)
+                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_START)
+                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_END)
+            }
+            playerControlView?.setPadding(0, 0, 0, 0)
+        }
+
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode)
+    }
+
+    @TargetApi(Build.VERSION_CODES.O)
+    fun activatePIPMode() {
+
+        val display = windowManager.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+        val width = size.x
+        val height = size.y
+
+        val aspectRatio = Rational(width, height)
+        val mPIPParams = PictureInPictureParams.Builder()
+        mPIPParams.setAspectRatio(aspectRatio)
+        enterPictureInPictureMode(mPIPParams.build())
     }
 }

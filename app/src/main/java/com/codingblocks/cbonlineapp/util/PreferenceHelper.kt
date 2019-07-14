@@ -18,6 +18,8 @@ class PreferenceHelper private constructor() {
         const val WIFI_DEFAULT = false
         const val DATA_LIMIT = "data_limit"
         const val DATA_LIMIT_DEFAULT = 1.0f
+        const val PIP = "pip"
+        const val PIP_DEFAULT = true
         private var prefs: SharedPreferences? = null
         private var instance: PreferenceHelper = PreferenceHelper()
 
@@ -78,5 +80,10 @@ class PreferenceHelper private constructor() {
         get() = prefs?.getFloat(DATA_LIMIT, DATA_LIMIT_DEFAULT) ?: DATA_LIMIT_DEFAULT
         set(value) {
             prefs?.edit()?.putFloat(DATA_LIMIT, value)?.apply()
+        }
+    var SP_PIP: Boolean
+        get() = prefs?.getBoolean(PIP, PIP_DEFAULT) ?: PIP_DEFAULT
+        set(value) {
+            prefs?.edit()?.putBoolean(PIP, value)?.apply()
         }
 }

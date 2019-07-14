@@ -88,7 +88,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         skeletonScreen = Skeleton.bind(ui.rvCourses)
             .adapter(courseDataAdapter)
             .shimmer(true)
-            .angle(20)
+            .angle(0)
             .frozen(true)
             .duration(1200)
             .count(4)

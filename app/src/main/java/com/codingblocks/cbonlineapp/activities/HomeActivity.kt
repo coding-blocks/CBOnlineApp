@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ShortcutManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
@@ -17,6 +18,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observeOnce
@@ -79,6 +81,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             val transaction = supportFragmentManager.beginTransaction()
             if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN) {
+                // Update User Token on Login
+                if (!BuildConfig.DEBUG)
+                    viewModel.refreshToken()
                 val navMenu = nav_view.menu
                 navMenu.findItem(R.id.nav_my_courses).isVisible = true
                 transaction.replace(R.id.fragment_holder, MyCoursesFragment()).commit()
@@ -86,16 +91,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else {
                 transaction.replace(R.id.fragment_holder, HomeFragment()).commit()
             }
-//            when (intent.getStringExtra("course")) {
-//                "mycourses" -> transaction.replace(
-//                    R.id.fragment_holder,
-//                    MyCoursesFragment()
-//                ).commit()
-//                "allcourses" -> transaction.replace(
-//                    R.id.fragment_holder,
-//                    AllCourseFragment()
-//                ).commit()
-//            }
             nav_view.getHeaderView(0).login_button.setOnClickListener(this)
         }
 
@@ -343,7 +338,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (v.id) {
             R.id.login_button -> {
                 if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                         removeShortcuts()
                     }
                     deleteDatabase("app-database")
