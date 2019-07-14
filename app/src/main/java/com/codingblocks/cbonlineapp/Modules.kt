@@ -33,8 +33,7 @@ val viewModelModule = module {
     viewModel { HomeActivityViewModel(get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { JobsViewModel(get()) }
-    viewModel { JobDetailViewModel(get(),get(),get(),get(),get()) }
-
+    viewModel { JobDetailViewModel(get(), get(), get(), get(), get()) }
 }
 val databaseModule = module {
 

@@ -79,9 +79,11 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         ui.titleText.visibility = View.GONE
         ui.homeImg.visibility = View.GONE
         ui.viewPager.visibility = View.GONE
-
-        ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
-        ui.rvCourses.adapter = courseDataAdapter
+        ui.rvCourses.apply {
+            isNestedScrollingEnabled = false
+            layoutManager = LinearLayoutManager(ctx)
+            adapter = courseDataAdapter
+        }
 
         skeletonScreen = Skeleton.bind(ui.rvCourses)
             .adapter(courseDataAdapter)

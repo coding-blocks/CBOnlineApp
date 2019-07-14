@@ -51,6 +51,7 @@
             android:theme="@style/myTheme" />
         <activity
             android:name=".activities.JobsActivity"
+            android:launchMode="singleTop"
             android:parentActivityName=".activities.HomeActivity"
             android:theme="@style/Theme.Jobs" />
         <activity

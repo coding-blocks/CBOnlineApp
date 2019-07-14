@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.codingblocks.cbonlineapp.database.models.Course
-import com.codingblocks.onlineapi.models.CourseId
 
 @Dao
 abstract class CourseDao : BaseDao<Course> {

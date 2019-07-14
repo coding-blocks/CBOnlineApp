@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.database.CourseDao
@@ -83,7 +82,10 @@ class JobDetailViewModel(
     }
 
     fun getCourses(courseId: ArrayList<CourseId>) {
-        runDao.getJobCourses(courseId)
+        val coureidlist = ArrayList<String>()
+        courseId.forEach {
+            it.id?.let { it1 -> coureidlist.add(it1) }
+        }
+        jobCourses.value = runDao.getJobCourses(coureidlist)
     }
 }
-

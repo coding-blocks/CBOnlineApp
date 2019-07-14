@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +48,6 @@ class JobsAdapter(diffCallback: JobsDiffCallback) :
 
     inner class JobsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-
         fun bindView(job: JobsModel) {
             with(itemView) {
                 Picasso.with(context).load(job.company.logo).into(companyLogo)
@@ -65,11 +63,7 @@ class JobsAdapter(diffCallback: JobsDiffCallback) :
                 btnApply.setOnClickListener {
                     context.startActivity(context.intentFor<JobDetailActivity>(JOB_ID to job.uid).singleTop())
                 }
-
-
-
             }
         }
-
     }
 }

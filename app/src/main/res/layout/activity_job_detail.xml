@@ -12,13 +12,20 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            app:titleTextColor="@color/white"
+            android:background="@color/colorPrimaryJobs"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+
         <include layout="@layout/item_job" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/jobDescriptionBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:id="@+id/jobDescriptionBtn"
             android:background="@color/colorPrimaryDarkJobs"
             android:text="View Job Description"
             android:textColor="@color/white" />
@@ -28,8 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:visibility="gone"
             android:background="#f2f2f2"
+            android:visibility="gone"
             app:cardCornerRadius="20dp"
             app:cardElevation="5dp">
 
@@ -92,39 +99,91 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:background="#f2f2f2"
-            app:cardCornerRadius="20dp"
+            app:cardCornerRadius="8dp"
             app:cardElevation="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="8dp">
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:fontFamily="@font/nunitosans_bold"
-                    android:text="@string/recommended_courses"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="48dp"
-                    android:layout_marginBottom="8dp"
-                    android:fontFamily="@font/nunitosans_regular"
-                    android:text="@string/recommended_courses_description"
-                    android:textSize="14sp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvJobCourses"
-                    tools:itemCount="2"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:listitem="@layout/single_course_card_horizontal" />
+                    android:gravity="center"
+                    android:background="@drawable/black_gradient"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/eligibleTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        tools:text="Job Location: Noida" />
+
+                    <TextView
+                        android:id="@+id/statusTv"
+                        android:textColor="@color/green"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        tools:text="Experience: 4 + Years" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/addResumeBtn"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/white"
+                        android:layout_weight="1"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="Add Resume and Apply"
+                        android:padding="8dp"
+                        android:background="@drawable/button_background"
+                        android:layout_height="wrap_content" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:fontFamily="@font/nunitosans_bold"
+                        android:text="@string/recommended_courses"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="48dp"
+                        android:layout_marginBottom="8dp"
+                        android:fontFamily="@font/nunitosans_regular"
+                        android:text="@string/recommended_courses_description"
+                        android:textSize="14sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvJobCourses"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/single_course_card_horizontal" />
+                </LinearLayout>
             </LinearLayout>
 
 

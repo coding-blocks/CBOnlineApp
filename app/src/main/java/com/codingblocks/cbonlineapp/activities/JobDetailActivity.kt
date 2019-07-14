@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.activities
 
 import android.content.Context
 import android.os.Bundle
-import android.text.InputType
 import android.util.TypedValue
 import android.view.View
 import android.widget.LinearLayout
@@ -11,6 +10,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
@@ -26,13 +26,6 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.JsonObject
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_job_detail.cardJobDescription
-import kotlinx.android.synthetic.main.activity_job_detail.companyDescriptionTv
-import kotlinx.android.synthetic.main.activity_job_detail.jobDescriptionBtn
-import kotlinx.android.synthetic.main.activity_job_detail.jobDescriptionTv
-import kotlinx.android.synthetic.main.activity_job_detail.rvJobCourses
-import kotlinx.android.synthetic.main.custom_form_dialog.view.form
-import kotlinx.android.synthetic.main.custom_form_dialog.view.okBtn
 import kotlinx.android.synthetic.main.item_job.companyLogo
 import kotlinx.android.synthetic.main.item_job.companyTv
 import kotlinx.android.synthetic.main.item_job.ctcTv
@@ -43,7 +36,10 @@ import kotlinx.android.synthetic.main.item_job.locationTv
 import kotlinx.android.synthetic.main.item_job.postedAgoTv
 import kotlinx.android.synthetic.main.item_job.typeTv
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
+import android.view.WindowManager
+import com.codingblocks.cbonlineapp.extensions.observeOnce
+import kotlinx.android.synthetic.main.activity_job_detail.*
+import kotlinx.android.synthetic.main.custom_form_dialog.view.*
 
 class JobDetailActivity : AppCompatActivity() {
 
@@ -53,10 +49,15 @@ class JobDetailActivity : AppCompatActivity() {
 
     lateinit var jobId: String
 
+    val formDialog by lazy {
+        AlertDialog.Builder(this).create()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_job_detail)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         jobId = intent.getStringExtra(JOB_ID)
 
@@ -77,22 +78,18 @@ class JobDetailActivity : AppCompatActivity() {
         rvJobCourses.adapter = courseDataAdapter
 
         jobDescriptionBtn.setOnClickListener {
-            //            cardJobDescription.visibility = !cardJobDescription.isVisible
+            cardJobDescription.isVisible = !cardJobDescription.isVisible
         }
         makeForm(viewModel.formData)
-
         setUpObservers()
-
-
     }
 
-
     private fun setUpObservers() {
-        viewModel.getJobById(jobId).observer(this) {
-
+        viewModel.getJobById(jobId).observeOnce {
             with(it) {
                 Picasso.with(this@JobDetailActivity).load(company.logo).into(companyLogo)
                 jobTitleTv.text = title
+                supportActionBar?.title = title
                 companyTv.text = company.name
                 postedAgoTv.text = postedOn
                 locationTv.text = getSpannableSring("Job Location: ", location)
@@ -101,12 +98,23 @@ class JobDetailActivity : AppCompatActivity() {
                 ctcTv.text = getSpannableSring("CTC: ", ctc)
                 jobDescriptionTv.text = description
                 companyDescriptionTv.text = company.companyDescription
+                eligibleTv.text = "Eligibility:    $eligibility"
                 viewModel.getCourses(courseId)
             }
         }
 
         viewModel.jobCourses.observer(this) {
             courseDataAdapter.setData(it as ArrayList<CourseRun>)
+        }
+
+        viewModel.eligibleLiveData.observeOnce {
+            if (it) {
+                statusTv.text = "Status:  Eligible"
+            } else {
+                statusTv.setTextColor(resources.getColor(R.color.salmon))
+                statusTv.text = "Status:  Not Eligible"
+                addResumeBtn.isVisible = false
+            }
         }
     }
 
@@ -123,8 +131,6 @@ class JobDetailActivity : AppCompatActivity() {
             .displayMetrics
         ).toInt()
         params.setMargins(marginInDp, marginInDp / 2, marginInDp, marginInDp / 2)
-
-        val formDialog = AlertDialog.Builder(this).create()
         val formView = layoutInflater.inflate(R.layout.custom_form_dialog, null)
         val formlayout = formView.form
         formData.observer(this) {
@@ -146,7 +152,6 @@ class JobDetailActivity : AppCompatActivity() {
                                 layoutParams = params
                             }
                             formlayout.addView(title)
-
                         } else {
                             inputLayout.hint = "${it.title}*"
                         }
@@ -158,7 +163,6 @@ class JobDetailActivity : AppCompatActivity() {
                                 layoutParams = params
                             }
                             formlayout.addView(title)
-
                         } else {
                             inputLayout.hint = it.title
                         }
@@ -166,7 +170,8 @@ class JobDetailActivity : AppCompatActivity() {
                     inputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_OUTLINE)
                     inputLayout.setBoxCornerRadii(20f, 20f, 20f, 20f)
                     val edittext = TextInputEditText(inputLayout.context)
-                    edittext.inputType = InputType.TYPE_CLASS_TEXT
+                    edittext.setOnFocusChangeListener { view, b ->
+                    }
                     inputLayout.addView(edittext)
                     inputLayout.tag = it.name
 
@@ -181,9 +186,9 @@ class JobDetailActivity : AppCompatActivity() {
                     val optionsArray = it.options?.split(",")
 
                     val rb = arrayOfNulls<RadioButton>(optionsArray!!.size)
-                    val rg = RadioGroup(this) //create the RadioGroup
+                    val rg = RadioGroup(this) // create the RadioGroup
                     rg.layoutParams = params
-                    rg.orientation = RadioGroup.VERTICAL//or RadioGroup.VERTICAL
+                    rg.orientation = RadioGroup.VERTICAL // or RadioGroup.VERTICAL
                     for (i in rb.indices) {
                         rb[i] = RadioButton(this)
                         rb[i]?.text = optionsArray[i]
@@ -212,16 +217,29 @@ class JobDetailActivity : AppCompatActivity() {
                         }
                     } else if (form.type == "radio-group") {
                         val group = formlayout.findViewWithTag<RadioGroup>(form.name)
-                        jsonObject.addProperty(form.name, findViewById<RadioButton>(group.checkedRadioButtonId).text.toString())
-
+//                        jsonObject.addProperty(form.name, findViewById<RadioButton>(group.checkedRadioButtonId).text.toString())
+                    }
+                }
+            }
+            formView.cancelBtn.setOnClickListener { view ->
+                it.forEach { form ->
+                    if (form.type == "text-field") {
+                        val inputLayout = formlayout.findViewWithTag<TextInputLayout>(form.name)
+                        inputLayout.editText?.setText("")
                     }
                 }
             }
         }
-        formDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
-        formDialog.setView(formView)
-        formDialog.setCancelable(true)
-        formDialog.show()
+
+        addResumeBtn.setOnClickListener {
+            formDialog.apply {
+                window?.setBackgroundDrawableResource(android.R.color.transparent)
+                setView(formView)
+                setCancelable(true)
+                show()
+                window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+            }
+        }
     }
 
     override fun attachBaseContext(newBase: Context) {

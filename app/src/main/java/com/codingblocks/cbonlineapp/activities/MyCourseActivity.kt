@@ -53,7 +53,6 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
         }
     }
 
-
     override fun onStart() {
         super.onStart()
 
@@ -106,8 +105,8 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
         viewModel.fetchCourse(viewModel.attemptId)
     }
 
-    override fun onRestart() {
-        super.onRestart()
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
         viewModel.updatehit(viewModel.attemptId)
         viewModel.fetchCourse(viewModel.attemptId)
         viewModel.getPromoVideo(viewModel.courseId)

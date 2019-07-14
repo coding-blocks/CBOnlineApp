@@ -3,9 +3,7 @@ package com.codingblocks.cbonlineapp.database
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
-import com.codingblocks.cbonlineapp.database.models.Course
 import com.codingblocks.cbonlineapp.database.models.CourseRun
-import com.codingblocks.onlineapi.models.CourseId
 
 @Dao
 abstract class CourseRunDao : BaseDao<CourseRun> {
@@ -34,6 +32,6 @@ abstract class CourseRunDao : BaseDao<CourseRun> {
     @Query("SELECT * FROM CourseRun where crAttemptId = :attemptId")
     abstract fun getRunByAtemptId(attemptId: String): LiveData<CourseRun>
 
-    @Query("SElECT * FROM CourseRun where crCourseId IN (:courses)")
-    abstract fun getJobCourses(courses: ArrayList<CourseId>): List<CourseRun>
+    @Query("SELECT * FROM CourseRun where crCourseId IN (:courses)")
+    abstract fun getJobCourses(courses: ArrayList<String>): List<CourseRun>
 }

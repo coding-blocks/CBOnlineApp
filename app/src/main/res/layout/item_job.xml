@@ -12,6 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -31,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="12dp"
-                android:layout_marginEnd="12dp"
+                android:layout_marginEnd="8dp"
                 android:orientation="vertical">
 
 
@@ -130,7 +131,7 @@
 
         <LinearLayout
 
-            android:padding="16dp"
+            android:padding="8dp"
             android:id="@+id/deadlinell"
             android:layout_gravity="end"
             android:layout_width="match_parent"
