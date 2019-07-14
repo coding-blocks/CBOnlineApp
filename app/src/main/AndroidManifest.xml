@@ -19,9 +19,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.ThrowableActivity"
-            android:theme="@style/Theme.CB.Throwable" />
-        <activity
             android:name=".URLRouterActivity"
             android:theme="@style/SplashTheme">
             <intent-filter android:autoVerify="true">
@@ -36,7 +33,6 @@
                 <data android:pathPrefix="/classroom" />
                 <data android:pathPrefix="/courses" />
                 <data android:pathPrefix="/player" />
-                <data android:pathPrefix="/cricket_cup" />
 
             </intent-filter>
         </activity> <!-- <meta-data android:name="android.max_aspect" android:value="2.1" /> -->
