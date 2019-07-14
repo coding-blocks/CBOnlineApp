@@ -38,6 +38,8 @@ import kotlinx.android.synthetic.main.item_job.typeTv
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import android.view.WindowManager
 import com.codingblocks.cbonlineapp.extensions.observeOnce
+import com.codingblocks.onlineapi.models.Applications
+import com.codingblocks.onlineapi.models.JobId
 import kotlinx.android.synthetic.main.activity_job_detail.*
 import kotlinx.android.synthetic.main.custom_form_dialog.view.*
 
@@ -108,12 +110,17 @@ class JobDetailActivity : AppCompatActivity() {
         }
 
         viewModel.eligibleLiveData.observeOnce {
-            if (it) {
-                statusTv.text = "Status:  Eligible"
-            } else {
-                statusTv.setTextColor(resources.getColor(R.color.salmon))
-                statusTv.text = "Status:  Not Eligible"
-                addResumeBtn.isVisible = false
+            when (it) {
+                "eligible" -> statusTv.text = "Status:  Eligible"
+                "not eligible" -> {
+                    statusTv.setTextColor(resources.getColor(R.color.salmon))
+                    statusTv.text = "Status:  Not Eligible"
+                    addResumeBtn.isVisible = false
+                }
+                "Applied" -> {
+                    statusTv.text = "You've already applied for the job"
+                    addResumeBtn.isVisible = false
+                }
             }
         }
     }
@@ -220,6 +227,7 @@ class JobDetailActivity : AppCompatActivity() {
 //                        jsonObject.addProperty(form.name, findViewById<RadioButton>(group.checkedRadioButtonId).text.toString())
                     }
                 }
+                viewModel.applyJob(Applications(jsonObject, job = JobId(jobId)))
             }
             formView.cancelBtn.setOnClickListener { view ->
                 it.forEach { form ->

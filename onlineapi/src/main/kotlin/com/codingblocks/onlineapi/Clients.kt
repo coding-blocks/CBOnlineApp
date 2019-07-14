@@ -1,52 +1,9 @@
 package com.codingblocks.onlineapi
 
+import com.apple.eawt.Application
 import com.codingblocks.onlineapi.api.OnlineJsonApi
 import com.codingblocks.onlineapi.api.OnlineRestApi
-import com.codingblocks.onlineapi.models.Announcement
-import com.codingblocks.onlineapi.models.CarouselCards
-import com.codingblocks.onlineapi.models.Choice
-import com.codingblocks.onlineapi.models.Comment
-import com.codingblocks.onlineapi.models.Company
-import com.codingblocks.onlineapi.models.ContentCodeChallenge
-import com.codingblocks.onlineapi.models.ContentCsv
-import com.codingblocks.onlineapi.models.ContentDocumentType
-import com.codingblocks.onlineapi.models.ContentId
-import com.codingblocks.onlineapi.models.ContentLectureType
-import com.codingblocks.onlineapi.models.ContentProgress
-import com.codingblocks.onlineapi.models.ContentQna
-import com.codingblocks.onlineapi.models.ContentVideoType
-import com.codingblocks.onlineapi.models.ContentsId
-import com.codingblocks.onlineapi.models.Course
-import com.codingblocks.onlineapi.models.CourseId
-import com.codingblocks.onlineapi.models.CourseSection
-import com.codingblocks.onlineapi.models.CricketChoice
-import com.codingblocks.onlineapi.models.CricketChoicePost
-import com.codingblocks.onlineapi.models.CricketQuestion
-import com.codingblocks.onlineapi.models.CricketQuestionPost
-import com.codingblocks.onlineapi.models.DoubtsJsonApi
-import com.codingblocks.onlineapi.models.Instructor
-import com.codingblocks.onlineapi.models.Jobs
-import com.codingblocks.onlineapi.models.LectureContent
-import com.codingblocks.onlineapi.models.Match
-import com.codingblocks.onlineapi.models.MatchPost
-import com.codingblocks.onlineapi.models.MyCourse
-import com.codingblocks.onlineapi.models.MyCourseRuns
-import com.codingblocks.onlineapi.models.MyRunAttempt
-import com.codingblocks.onlineapi.models.MyRunAttempts
-import com.codingblocks.onlineapi.models.Note
-import com.codingblocks.onlineapi.models.Notes
-import com.codingblocks.onlineapi.models.Progress
-import com.codingblocks.onlineapi.models.Question
-import com.codingblocks.onlineapi.models.QuizAttempt
-import com.codingblocks.onlineapi.models.Quizqnas
-import com.codingblocks.onlineapi.models.Quizzes
-import com.codingblocks.onlineapi.models.Rating
-import com.codingblocks.onlineapi.models.RunAttemptId
-import com.codingblocks.onlineapi.models.RunAttemptsId
-import com.codingblocks.onlineapi.models.Sections
-import com.codingblocks.onlineapi.models.Tags
-import com.codingblocks.onlineapi.models.UserPrediction
-import com.codingblocks.onlineapi.models.UserPredictionPost
+import com.codingblocks.onlineapi.models.*
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -82,9 +39,10 @@ object Clients {
         Quizqnas::class.java, DoubtsJsonApi::class.java, ContentCsv::class.java, Comment::class.java,
         Note::class.java, Notes::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
         RunAttemptId::class.java, RunAttemptsId::class.java, ContentId::class.java, ContentsId::class.java,
-        UserPrediction::class.java,CricketChoice::class.java,CricketQuestion::class.java,Match::class.java,
+        UserPrediction::class.java, CricketChoice::class.java, CricketQuestion::class.java, Match::class.java,
         UserPredictionPost::class.java, CricketChoicePost::class.java, CricketQuestionPost::class.java,
-        MatchPost::class.java, Jobs::class.java,Company::class.java,CourseId::class.java
+        MatchPost::class.java, Jobs::class.java, Company::class.java, CourseId::class.java, JobId::class.java,
+        Applications::class.java, ApplicationId::class.java
     )
 
     private val relationshipResolver = RelationshipResolver {

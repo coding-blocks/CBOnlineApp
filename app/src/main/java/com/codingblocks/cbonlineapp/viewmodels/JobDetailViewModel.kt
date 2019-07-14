@@ -12,6 +12,7 @@ import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Applications
 import com.codingblocks.onlineapi.models.CourseId
 import com.codingblocks.onlineapi.models.Form
 
@@ -23,7 +24,7 @@ class JobDetailViewModel(
     private val instructorDao: InstructorDao
 ) : ViewModel() {
 
-    val eligibleLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    val eligibleLiveData: MutableLiveData<String> = MutableLiveData()
 
     val inactiveLiveData: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -46,7 +47,7 @@ class JobDetailViewModel(
             response?.body().let {
                 if (response?.isSuccessful == true) {
                     response.body()?.run {
-                        eligibleLiveData.value = eligible
+                        eligibleLiveData.value = if (eligible) "eligible" else "not eligible"
                         acceptingLiveData.value = accepting
                         formData.value = form
                         val job = JobsModel(
@@ -73,7 +74,9 @@ class JobDetailViewModel(
                             },
                             courses ?: arrayListOf()
                         )
-
+                        if (application != null) {
+                            eligibleLiveData.value = "applied"
+                        }
                         jobsDao.insertNew(job)
                     }
                 }
@@ -87,5 +90,13 @@ class JobDetailViewModel(
             it.id?.let { it1 -> coureidlist.add(it1) }
         }
         jobCourses.value = runDao.getJobCourses(coureidlist)
+    }
+
+    fun applyJob(application: Applications) {
+        Clients.onlineV2JsonApi.applyJob(application).enqueue(retrofitCallback { throwable, response ->
+            if (response?.isSuccessful == true) {
+                eligibleLiveData.value = "Applied"
+            }
+        })
     }
 }

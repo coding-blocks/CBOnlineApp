@@ -1,27 +1,7 @@
 package com.codingblocks.onlineapi.api
 
-import com.codingblocks.onlineapi.models.CarouselCards
-import com.codingblocks.onlineapi.models.Comment
-import com.codingblocks.onlineapi.models.Company
-import com.codingblocks.onlineapi.models.ContentProgress
-import com.codingblocks.onlineapi.models.Course
-import com.codingblocks.onlineapi.models.DoubtsJsonApi
-import com.codingblocks.onlineapi.models.Instructor
-import com.codingblocks.onlineapi.models.Jobs
-import com.codingblocks.onlineapi.models.LectureContent
-import com.codingblocks.onlineapi.models.Match
-import com.codingblocks.onlineapi.models.MyCourseRuns
-import com.codingblocks.onlineapi.models.MyRunAttempt
-import com.codingblocks.onlineapi.models.Note
-import com.codingblocks.onlineapi.models.Notes
-import com.codingblocks.onlineapi.models.Player
-import com.codingblocks.onlineapi.models.Progress
-import com.codingblocks.onlineapi.models.Question
-import com.codingblocks.onlineapi.models.QuizAttempt
-import com.codingblocks.onlineapi.models.Quizzes
-import com.codingblocks.onlineapi.models.Sections
-import com.codingblocks.onlineapi.models.UserPrediction
-import com.codingblocks.onlineapi.models.UserPredictionPost
+import com.apple.eawt.Application
+import com.codingblocks.onlineapi.models.*
 import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -212,6 +192,8 @@ interface OnlineJsonApi {
         @Path("id") id: String
     ): Call<Jobs>
 
+    @POST("applications")
+    fun applyJob(@Body params: Applications): Call<ResponseBody>
 
 
 }

@@ -5,6 +5,7 @@ import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.RelationshipLinks
 import com.github.jasminb.jsonapi.annotations.Type
+import com.google.gson.JsonObject
 
 open class BaseModel {
     @Id
@@ -613,7 +614,9 @@ class Jobs(
     @Relationship("company")
     val company: Company?,
     @Relationship("courses")
-    val courses: ArrayList<CourseId>?
+    val courses: ArrayList<CourseId>?,
+    @Relationship("my-application")
+    val application: ApplicationId?
 ) : BaseModel()
 
 @Type("courses")
@@ -645,6 +648,26 @@ data class Contact(
     val email: String,
     val name: String,
     val phone: String
+)
+
+@Type("applications")
+data class Applications(
+    val extra: JsonObject,
+    val resumeLink: String = "",
+    @Relationship("job")
+    val job: JobId
+)
+
+@Type("jobs")
+class JobId(
+    @Id
+    val id: String
+)
+
+@Type("applications")
+class ApplicationId(
+    @Id
+    val id: String
 )
 
 
