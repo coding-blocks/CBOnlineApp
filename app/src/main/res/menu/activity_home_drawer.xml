@@ -43,5 +43,10 @@
             android:icon="@drawable/whatsapp_icon_color"
             android:title="Chat on Whatsapp" />
 
+        <item
+            android:id="@+id/report_bug"
+            android:icon="@android:drawable/ic_menu_report_image"
+            android:title="Report Aa Bug" />
+
     </group>
 </menu>

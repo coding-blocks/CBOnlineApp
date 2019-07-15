@@ -229,6 +229,7 @@ class JobDetailActivity : AppCompatActivity() {
                        jsonObject.addProperty(form.name,group.checkedRadioButtonId as String)
                     }
                 }
+                formDialog.dismiss()
                 if (!BuildConfig.DEBUG)
                     viewModel.applyJob(Applications(jsonObject, job = JobId(jobId)))
             }
