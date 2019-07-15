@@ -16,20 +16,12 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.customViewPager
 import com.codingblocks.cbonlineapp.widgets.ViewPagerCustomDuration
 import com.google.android.material.tabs.TabLayout
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.backgroundColor
+import kotlinx.android.synthetic.main.fragment_quiz_result.view.*
+import org.jetbrains.anko.*
 import org.jetbrains.anko.constraint.layout.constraintLayout
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.imageView
-import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.nestedScrollView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.view
-import org.jetbrains.anko.wrapContent
 
 class HomeFragmentUi<T> : AnkoComponent<T> {
 
@@ -111,16 +103,14 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                     rvCourses = recyclerView {
                         id = View.generateViewId()
                         overScrollMode = View.OVER_SCROLL_NEVER
-                    }.lparams(width = matchParent, height = 0) {
+                    }.lparams(width = matchParent, height = wrapContent) {
                         topMargin = dip(8)
-                        bottomMargin = dip(24)
                         marginStart = dip(4)
                         marginEnd = dip(4)
-                        horizontalBias = 0.0f
-                        matchConstraintDefaultHeight = ConstraintWidget.MATCH_CONSTRAINT_WRAP
                         startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                         endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
                         topToBottom = view.id
+                        bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
                     }
                 }.lparams(width = matchParent, height = matchParent) {
                     isFocusableInTouchMode = true

@@ -2,6 +2,9 @@ package com.codingblocks.cbonlineapp.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.CBOnlineApp
+import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
@@ -20,8 +23,7 @@ class JobDetailViewModel(
     private val jobsDao: JobsDao,
     private val courseWithInstructorDao: CourseWithInstructorDao,
     private val courseDao: CourseDao,
-    private val runDao: CourseRunDao,
-    private val instructorDao: InstructorDao
+    private val runDao: CourseRunDao
 ) : ViewModel() {
 
     val eligibleLiveData: MutableLiveData<String> = MutableLiveData()
@@ -75,7 +77,7 @@ class JobDetailViewModel(
                             courses ?: arrayListOf()
                         )
                         if (application != null) {
-                            eligibleLiveData.value = "applied"
+                            eligibleLiveData.value = mInstance.getString(R.string.applied)
                         }
                         jobsDao.insertNew(job)
                     }
@@ -95,7 +97,7 @@ class JobDetailViewModel(
     fun applyJob(application: Applications) {
         Clients.onlineV2JsonApi.applyJob(application).enqueue(retrofitCallback { throwable, response ->
             if (response?.isSuccessful == true) {
-                eligibleLiveData.value = "Applied"
+                eligibleLiveData.value = mInstance.getString(R.string.applied)
             }
         })
     }

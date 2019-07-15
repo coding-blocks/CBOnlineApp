@@ -106,4 +106,8 @@
     <string name="clean_dialog_cancelBtn">Cancel Current Download</string>
     <string name="get_hired">Get Hired</string>
     <string name="recommended_courses_description">Based on the industry trends, you should complete these courses</string>
+    <string name="applied">Applied</string>
+    <string name="job_eligible">Status:  Eligible</string>
+    <string name="job_not_eligible">Status:  Not Eligible</string>
+    <string name="job_applied">You\'ve already applied for the job</string>
 </resources>

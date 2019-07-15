@@ -583,7 +583,7 @@ data class Applications(
     val resumeLink: String = "",
     @Relationship("job")
     val job: JobId
-)
+):BaseModel()
 
 @Type("jobs")
 class JobId(
@@ -594,7 +594,7 @@ class JobId(
 @Type("applications")
 class ApplicationId(
     @Id
-    val id: String
+    val id: String?
 )
 
 

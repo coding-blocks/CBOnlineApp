@@ -37,6 +37,8 @@ import kotlinx.android.synthetic.main.item_job.postedAgoTv
 import kotlinx.android.synthetic.main.item_job.typeTv
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import android.view.WindowManager
+import androidx.lifecycle.Observer
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.onlineapi.models.Applications
 import com.codingblocks.onlineapi.models.JobId
@@ -109,16 +111,16 @@ class JobDetailActivity : AppCompatActivity() {
             courseDataAdapter.setData(it as ArrayList<CourseRun>)
         }
 
-        viewModel.eligibleLiveData.observeOnce {
+        viewModel.eligibleLiveData.observer(this) {
             when (it) {
-                "eligible" -> statusTv.text = "Status:  Eligible"
+                "eligible" -> statusTv.text = getString(R.string.job_eligible)
                 "not eligible" -> {
                     statusTv.setTextColor(resources.getColor(R.color.salmon))
-                    statusTv.text = "Status:  Not Eligible"
+                    statusTv.text = getString(R.string.job_not_eligible)
                     addResumeBtn.isVisible = false
                 }
                 "Applied" -> {
-                    statusTv.text = "You've already applied for the job"
+                    statusTv.text = getString(R.string.job_applied)
                     addResumeBtn.isVisible = false
                 }
             }
@@ -224,10 +226,11 @@ class JobDetailActivity : AppCompatActivity() {
                         }
                     } else if (form.type == "radio-group") {
                         val group = formlayout.findViewWithTag<RadioGroup>(form.name)
-//                        jsonObject.addProperty(form.name, findViewById<RadioButton>(group.checkedRadioButtonId).text.toString())
+                       jsonObject.addProperty(form.name,group.checkedRadioButtonId as String)
                     }
                 }
-                viewModel.applyJob(Applications(jsonObject, job = JobId(jobId)))
+                if (!BuildConfig.DEBUG)
+                    viewModel.applyJob(Applications(jsonObject, job = JobId(jobId)))
             }
             formView.cancelBtn.setOnClickListener { view ->
                 it.forEach { form ->
