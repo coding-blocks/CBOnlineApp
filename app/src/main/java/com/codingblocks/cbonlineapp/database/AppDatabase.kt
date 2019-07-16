@@ -10,16 +10,18 @@ import com.codingblocks.cbonlineapp.database.models.CourseSection
 import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.database.models.Instructor
+import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.database.models.Notification
 import com.codingblocks.cbonlineapp.database.models.SectionWithContent
 
 @Database(
     entities = [CourseRun::class, CourseSection::class, CourseContent::class, Instructor::class, Notification::class,
-        CourseWithInstructor::class, SectionWithContent::class, DoubtsModel::class, NotesModel::class, Course::class
-    ], exportSchema = false, version = 13
+        CourseWithInstructor::class, SectionWithContent::class, DoubtsModel::class, NotesModel::class, Course::class,
+        JobsModel::class
+    ], exportSchema = false, version = 14
 )
-@TypeConverters(TimestampConverter::class)
+@TypeConverters(TimestampConverter::class, CourseIdList::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun courseRunDao(): CourseRunDao
@@ -41,4 +43,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun notesDao(): NotesDao
 
     abstract fun notificationDao(): NotificationDao
+
+    abstract fun jobsDao(): JobsDao
 }

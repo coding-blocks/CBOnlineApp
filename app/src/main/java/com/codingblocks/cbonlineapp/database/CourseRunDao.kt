@@ -31,4 +31,7 @@ abstract class CourseRunDao : BaseDao<CourseRun> {
 
     @Query("SELECT * FROM CourseRun where crAttemptId = :attemptId")
     abstract fun getRunByAtemptId(attemptId: String): LiveData<CourseRun>
+
+    @Query("SELECT * FROM CourseRun where crCourseId IN (:courses)")
+    abstract fun getJobCourses(courses: ArrayList<String>): List<CourseRun>
 }

@@ -8,6 +8,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.codingblocks.onlineapi.models.CourseId
 import java.sql.Date
 
 open class BaseModel(
@@ -286,6 +287,7 @@ data class NotesModel(
     var createdAt: String = "",
     var deletedAt: String = ""
 )
+
 @Entity
 data class Notification(
     @PrimaryKey(autoGenerate = true)
@@ -295,4 +297,38 @@ data class Notification(
     val url: String,
     val seen: Boolean = false,
     val videoId: String = ""
+)
+
+@Entity
+data class JobsModel(
+    @PrimaryKey
+    val uid: String,
+    val coverImage: String?,
+    val ctc: String,
+    val deadline: String?,
+    val description: String,
+    val eligibility: String,
+    val experience: String,
+    val location: String,
+    val postedOn: String,
+    val type: String,
+    val title: String,
+    @Embedded
+    val company: Companies,
+    val courseId: ArrayList<CourseId>
+)
+@Entity
+class FormModel(
+    val name: String,
+    val required: Boolean,
+    val title: String,
+    val type: String
+)
+@Entity
+data class Companies(
+    val id: String,
+    val name: String,
+    val logo: String,
+    val companyDescription: String,
+    val website: String
 )

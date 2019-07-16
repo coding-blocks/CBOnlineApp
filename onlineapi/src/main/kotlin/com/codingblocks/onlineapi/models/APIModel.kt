@@ -5,6 +5,7 @@ import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.RelationshipLinks
 import com.github.jasminb.jsonapi.annotations.Type
+import com.google.gson.JsonObject
 
 open class BaseModel {
     @Id
@@ -519,6 +520,81 @@ class CarouselCards(
 @Type("player")
 class Player(
     var playerId: String? = null
+)
+
+@Type("jobs")
+class Jobs(
+    val coverImage: String?,
+    val ctc: String,
+    val deadline: String?,
+    val description: String,
+    val eligibility: String,
+    val experience: String,
+    val form: ArrayList<Form>?,
+    val location: String,
+    val postedOn: String,
+    val type: String,
+    val title: String,
+    val accepting: Boolean = false,
+    val eligible: Boolean = false,
+    val status: String = "draft",
+    @Relationship("company")
+    val company: Company?,
+    @Relationship("courses")
+    val courses: ArrayList<CourseId>?,
+    @Relationship("my-application")
+    val application: ApplicationId?
+) : BaseModel()
+
+@Type("courses")
+data class CourseId(
+    @Id
+    val id: String?
+)
+
+class Form(
+    val name: String,
+    val required: Boolean,
+    val title: String,
+    val type: String,
+    val options: String?
+
+)
+
+@Type("companies")
+class Company(
+    val name: String?,
+    val logo: String?,
+    val description: String?,
+    val website: String?,
+    val inactive: Boolean = false,
+    val contacts: ArrayList<Contact>?
+) : BaseModel()
+
+data class Contact(
+    val email: String,
+    val name: String,
+    val phone: String
+)
+
+@Type("applications")
+data class Applications(
+    val extra: JsonObject,
+    val resumeLink: String = "",
+    @Relationship("job")
+    val job: JobId
+):BaseModel()
+
+@Type("jobs")
+class JobId(
+    @Id
+    val id: String
+)
+
+@Type("applications")
+class ApplicationId(
+    @Id
+    val id: String?
 )
 
 

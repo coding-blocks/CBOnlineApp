@@ -13,8 +13,10 @@ import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -30,16 +32,18 @@ import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.viewmodels.HomeActivityViewModel
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_home.drawer_layout
-import kotlinx.android.synthetic.main.activity_home.nav_view
-import kotlinx.android.synthetic.main.app_bar_home.toolbar
-import kotlinx.android.synthetic.main.nav_header_home.view.login_button
-import kotlinx.android.synthetic.main.nav_header_home.view.nav_header_imageView
+import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.app_bar_home.*
+import kotlinx.android.synthetic.main.nav_header_home.view.*
+import kotlinx.android.synthetic.main.report_dialog.*
+import kotlinx.android.synthetic.main.report_dialog.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
@@ -53,6 +57,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val viewModel by viewModel<HomeActivityViewModel>()
     private val appUpdateManager by lazy {
         AppUpdateManagerFactory.create(this)
+    }
+
+    private val db by lazy {
+        FirebaseFirestore.getInstance()
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -231,13 +240,67 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_preferences -> {
                 startActivity(intentFor<SettingsActivity>().singleTop())
             }
+            R.id.nav_jobs -> {
+                startActivity(intentFor<JobsActivity>().singleTop())
+            }
             R.id.nav_contactUs -> {
                 startActivity(intentFor<AboutActivity>().singleTop())
+            }
+            R.id.report_bug -> {
+                showReportDialog()
             }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun showReportDialog() {
+        val reportDialog =
+            AlertDialog.Builder(this).create()
+        val formView = layoutInflater.inflate(R.layout.report_dialog, null)
+        formView.okBtn.setOnClickListener {
+            when {
+                formView.titleEdtv.editText?.text.isNullOrEmpty() -> {
+                    formView.titleEdtv.apply {
+                        isErrorEnabled = true
+                        error = "Cannot be Empty"
+                    }
+                }
+                formView.descriptionEdtv.editText?.text.isNullOrEmpty() -> {
+                    formView.descriptionEdtv.apply {
+                        isErrorEnabled = true
+                        error = "Cannot be Empty"
+                    }
+                }
+                else -> {
+                    val data = hashMapOf(
+                        "title" to formView.titleEdtv.editText?.text.toString(),
+                        "description" to formView.descriptionEdtv.editText?.text.toString(),
+                        "oneauth-id" to viewModel.prefs.SP_ONEAUTH_ID
+                    )
+
+                    db.collection("Reports")
+                        .add(data)
+                        .addOnCompleteListener {
+                            reportDialog.dismiss()
+                        }.addOnSuccessListener {
+                            Snackbar.make(drawer_layout,"Bug has been reported !!",Snackbar.LENGTH_SHORT).show()
+                        }.addOnFailureListener {
+                            Toast.makeText(this, "There was some error reporting the bug,PLease Try Again", Toast.LENGTH_SHORT).show()
+                        }
+                }
+            }
+        }
+        reportDialog.apply {
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            setView(formView)
+            setCancelable(true)
+            show()
+            window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+        }
+
+
     }
 
     override fun attachBaseContext(newBase: Context) {

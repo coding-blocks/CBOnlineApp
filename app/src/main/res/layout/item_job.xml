@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="#f2f2f2"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/companyLogo"
+                android:adjustViewBounds="true"
+                android:layout_width="120dp"
+                android:layout_height="120dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/jobTitleTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunitosans_bold"
+                    android:textSize="20sp"
+                    tools:text="Senior UI/UX Designer" />
+
+                <TextView
+                    android:id="@+id/companyTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunitosans_semibold"
+                    android:textSize="18sp"
+                    tools:text="Book My Show" />
+
+
+                <TextView
+                    android:id="@+id/postedAgoTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/nunitosans_regular"
+                    android:textColor="#999999"
+                    android:textSize="16sp"
+                    tools:text="Posted 2 weeks ago" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="8dp"
+            android:background="?android:attr/listDivider" />
+
+
+        <LinearLayout
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/locationTv"
+                android:textSize="16sp"
+                tools:text="Job Location: Noida"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/experienceTv"
+                android:textSize="16sp"
+                tools:text="Experience: 4 + Years"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/typeTv"
+                android:textSize="16sp"
+                tools:text="Job Location: Noida"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/ctcTv"
+                android:textSize="16sp"
+                tools:text="Experience: 4 + Years"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+
+            android:padding="8dp"
+            android:id="@+id/deadlinell"
+            android:layout_gravity="end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textSize="16sp"
+                android:id="@+id/deadlineTv"
+                android:layout_weight="1"
+                android:textColor="@color/salmon"
+                tools:text="Deadline: 24 March 2019"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnApply"
+                android:layout_width="wrap_content"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:text="Apply Now"
+                android:padding="8dp"
+                android:background="@drawable/button_background"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

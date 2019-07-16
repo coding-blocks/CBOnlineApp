@@ -2,16 +2,18 @@ package com.codingblocks.cbonlineapp
 
 import androidx.room.Room
 import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
-import com.codingblocks.cbonlineapp.viewmodels.CourseViewModel
-import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
-import com.codingblocks.cbonlineapp.viewmodels.LeaderboardViewModel
-import com.codingblocks.cbonlineapp.viewmodels.VideoPlayerViewModel
-import com.codingblocks.cbonlineapp.viewmodels.HomeActivityViewModel
-import com.codingblocks.cbonlineapp.viewmodels.NotificationViewModel
 import com.codingblocks.cbonlineapp.viewmodels.AnnouncementsViewModel
-import com.codingblocks.cbonlineapp.viewmodels.SettingsViewModel
+import com.codingblocks.cbonlineapp.viewmodels.CourseViewModel
+import com.codingblocks.cbonlineapp.viewmodels.HomeActivityViewModel
+import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
+import com.codingblocks.cbonlineapp.viewmodels.JobDetailViewModel
+import com.codingblocks.cbonlineapp.viewmodels.JobsViewModel
+import com.codingblocks.cbonlineapp.viewmodels.LeaderboardViewModel
+import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
+import com.codingblocks.cbonlineapp.viewmodels.NotificationViewModel
 import com.codingblocks.cbonlineapp.viewmodels.QuizViewModel
+import com.codingblocks.cbonlineapp.viewmodels.SettingsViewModel
+import com.codingblocks.cbonlineapp.viewmodels.VideoPlayerViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
@@ -30,6 +32,8 @@ val viewModelModule = module {
     viewModel { VideoPlayerViewModel(get(), get(), get(), get(), get()) }
     viewModel { HomeActivityViewModel(get()) }
     viewModel { SettingsViewModel(get()) }
+    viewModel { JobsViewModel(get()) }
+    viewModel { JobDetailViewModel(get(), get(), get(), get()) }
 }
 val databaseModule = module {
 
@@ -90,5 +94,9 @@ val databaseModule = module {
     factory {
         val database: AppDatabase = get()
         database.notificationDao()
+    }
+    factory {
+        val database: AppDatabase = get()
+        database.jobsDao()
     }
 }

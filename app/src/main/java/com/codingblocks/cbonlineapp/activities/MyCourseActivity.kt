@@ -28,10 +28,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
-    private lateinit var attemptId: String
-    private lateinit var runId: String
-    private lateinit var courseId: String
-
     private val viewModel by viewModel<MyCourseViewModel>()
 
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
@@ -41,19 +37,19 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        courseId = intent.getStringExtra(COURSE_ID)
+        viewModel.courseId = intent.getStringExtra(COURSE_ID)
         title = intent.getStringExtra(COURSE_NAME)
-        attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
-        runId = intent.getStringExtra(RUN_ID) ?: ""
-        if (attemptId.isEmpty()) {
-            attemptId = viewModel.getRunAttempt(runId)
+        viewModel.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
+        viewModel.runId = intent.getStringExtra(RUN_ID) ?: ""
+        if (viewModel.attemptId.isEmpty()) {
+            viewModel.attemptId = viewModel.getRunAttempt(viewModel.runId)
         }
         if (savedInstanceState == null) {
 
-            viewModel.updatehit(attemptId)
-            viewModel.fetchCourse(attemptId)
-            viewModel.getPromoVideo(courseId)
-            setupViewPager(attemptId, courseId)
+            viewModel.updatehit(viewModel.attemptId)
+            viewModel.fetchCourse(viewModel.attemptId)
+            viewModel.getPromoVideo(viewModel.courseId)
+            setupViewPager(viewModel.attemptId, viewModel.courseId)
         }
     }
 
@@ -87,11 +83,11 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
 
     private fun setupViewPager(crUid: String, crCourseId: String) {
         val adapter = TabLayoutAdapter(supportFragmentManager)
-        adapter.add(OverviewFragment.newInstance(attemptId, crUid), "Overview")
-        adapter.add(AnnouncementsFragment.newInstance(courseId), "About")
-        adapter.add(CourseContentFragment.newInstance(attemptId), "Course Content")
-        adapter.add(DoubtsFragment.newInstance(attemptId, crCourseId), "Doubts")
-        adapter.add(LeaderboardFragment.newInstance(runId), "Leaderboard")
+        adapter.add(OverviewFragment.newInstance(viewModel.attemptId, crUid), "Overview")
+        adapter.add(AnnouncementsFragment.newInstance(viewModel.courseId), "About")
+        adapter.add(CourseContentFragment.newInstance(viewModel.attemptId), "Course Content")
+        adapter.add(DoubtsFragment.newInstance(viewModel.attemptId, crCourseId), "Doubts")
+        adapter.add(LeaderboardFragment.newInstance(viewModel.runId), "Leaderboard")
 
         htab_viewpager.adapter = adapter
         htab_tabs.setupWithViewPager(htab_viewpager)
@@ -106,6 +102,14 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
     }
 
     override fun onRefresh() {
-        viewModel.fetchCourse(attemptId)
+        viewModel.fetchCourse(viewModel.attemptId)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        viewModel.updatehit(viewModel.attemptId)
+        viewModel.fetchCourse(viewModel.attemptId)
+        viewModel.getPromoVideo(viewModel.courseId)
+        setupViewPager(viewModel.attemptId, viewModel.courseId)
     }
 }

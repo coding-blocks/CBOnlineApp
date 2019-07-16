@@ -26,9 +26,18 @@
         android:checkableBehavior="none"
         android:menuCategory="system">
         <item
+            android:id="@+id/nav_jobs"
+            android:icon="@drawable/ic_briefcase"
+            android:title="@string/get_hired" />
+        <item
             android:id="@+id/nav_preferences"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="@string/title_activity_settings" />
+    </group>
+    <group
+        android:id="@+id/communication"
+        android:checkableBehavior="none"
+        android:menuCategory="system">
 
         <item
             android:id="@+id/nav_contactUs"
@@ -39,5 +48,10 @@
             android:icon="@drawable/whatsapp_icon_color"
             android:title="Chat on Whatsapp" />
 
+        <item
+            android:id="@+id/report_bug"
+            android:icon="@drawable/ic_bug"
+            android:title="Report A Bug" />
     </group>
+
 </menu>

@@ -1,5 +1,6 @@
 package com.codingblocks.onlineapi.api
 
+import com.codingblocks.onlineapi.models.*
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.ContentProgress
@@ -28,6 +29,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.util.*
 
 interface OnlineJsonApi {
 
@@ -174,6 +176,28 @@ interface OnlineJsonApi {
 
     @POST("players")
     fun setPlayerId(@Body params: Player): Call<ResponseBody>
+
+    @GET("jobs")
+    fun getJobs(
+        @Query("filter[deadline][\$gt]") deadline: String,
+        @Query("filter[postedOn][\$lte]") postedOn: String,
+        @Query("page[offset]") pageOffSet: String = "0",
+        @Query("page[limit]") pageLimit: String = "12",
+        @Query("sort") sort: String = "-postedOn"
+    ): Call<ArrayList<Jobs>>
+
+    @GET("companies/{id}")
+    fun getCompany(
+        @Path("id") id: String
+    ): Call<Company>
+
+    @GET("jobs/{id}")
+    fun getJobById(
+        @Path("id") id: String
+    ): Call<Jobs>
+
+    @POST("applications")
+    fun applyJob(@Body params: Applications): Call<ResponseBody>
 
 
 }
