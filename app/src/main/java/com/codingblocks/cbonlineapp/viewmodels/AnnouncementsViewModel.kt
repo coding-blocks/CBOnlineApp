@@ -7,7 +7,7 @@ import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 class AnnouncementsViewModel(
     private val instructorDao: CourseWithInstructorDao,
     private val runDao: CourseRunDao
-    ) : ViewModel() {
+) : ViewModel() {
     fun getInstructorWithCourseId(courseID: String) = instructorDao.getInstructorWithCourseId(courseID)
     fun getRunByAtemptId(attemptId: String) = runDao.getRunByAtemptId(attemptId)
 }

@@ -14,11 +14,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.models.CourseRun
-import com.codingblocks.cbonlineapp.extensions.*
+import com.codingblocks.cbonlineapp.extensions.observeOnce
+import com.codingblocks.cbonlineapp.extensions.loadSvg
+import com.codingblocks.cbonlineapp.extensions.timeAgo
+import com.codingblocks.cbonlineapp.extensions.isotomillisecond
+import com.codingblocks.cbonlineapp.extensions.getSpannableSring
+import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.util.JOB_ID
 import com.codingblocks.cbonlineapp.viewmodels.JobDetailViewModel
 import com.codingblocks.onlineapi.models.Applications
@@ -29,8 +33,19 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.JsonObject
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_job_detail.*
-import kotlinx.android.synthetic.main.custom_form_dialog.view.*
+import kotlinx.android.synthetic.main.activity_job_detail.toolbar
+import kotlinx.android.synthetic.main.activity_job_detail.rvJobCourses
+import kotlinx.android.synthetic.main.activity_job_detail.jobDescriptionBtn
+import kotlinx.android.synthetic.main.activity_job_detail.cardJobDescription
+import kotlinx.android.synthetic.main.activity_job_detail.jobDescriptionTv
+import kotlinx.android.synthetic.main.activity_job_detail.companyDescriptionTv
+import kotlinx.android.synthetic.main.activity_job_detail.eligibleTv
+import kotlinx.android.synthetic.main.activity_job_detail.statusTv
+import kotlinx.android.synthetic.main.activity_job_detail.addResumeBtn
+import kotlinx.android.synthetic.main.custom_form_dialog.view.okBtn
+import kotlinx.android.synthetic.main.custom_form_dialog.view.form
+import kotlinx.android.synthetic.main.custom_form_dialog.view.cancelBtn
+
 import kotlinx.android.synthetic.main.item_job.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -218,7 +233,7 @@ class JobDetailActivity : AppCompatActivity() {
                         val group = formlayout.findViewWithTag<RadioGroup>(form.name)
                         val radioButton = findViewById<RadioButton>(group.checkedRadioButtonId)
                         val optionsArray = form.options?.split(",")
-                        val selected_value:String = radioButton?.text?.toString() ?: (optionsArray?.get(0) ?: "")
+                        val selected_value: String = radioButton?.text?.toString() ?: (optionsArray?.get(0) ?: "")
                         jsonObject.addProperty(form.name, selected_value)
                     }
                 }

@@ -58,10 +58,10 @@ class AnnouncementsFragment : Fragment() {
             instructorAdapter.setData(it as ArrayList<Instructor>)
         }
 
-        viewModel.getRunByAtemptId(attemptId).observer(this){
-            if (!it.premium || whatsAppLink.isEmpty()){
+        viewModel.getRunByAtemptId(attemptId).observer(this) {
+            if (!it.premium || whatsAppLink.isEmpty()) {
                 joinWhatsAppGroupView.visibility = View.GONE
-            }else{
+            } else {
                 joinWhatsAppGroupView.visibility = View.VISIBLE
             }
         }
@@ -82,7 +82,7 @@ class AnnouncementsFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, whatsAppLink:String, attemptId: String) =
+        fun newInstance(param1: String, whatsAppLink: String, attemptId: String) =
             AnnouncementsFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_COURSE_ID, param1)

@@ -61,7 +61,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private val db by lazy {
         FirebaseFirestore.getInstance()
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -285,7 +284,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         .addOnCompleteListener {
                             reportDialog.dismiss()
                         }.addOnSuccessListener {
-                            Snackbar.make(drawer_layout,"Bug has been reported !!",Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(drawer_layout, "Bug has been reported !!", Snackbar.LENGTH_SHORT).show()
                         }.addOnFailureListener {
                             Toast.makeText(this, "There was some error reporting the bug,PLease Try Again", Toast.LENGTH_SHORT).show()
                         }
@@ -299,8 +298,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             show()
             window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
         }
-
-
     }
 
     override fun attachBaseContext(newBase: Context) {
