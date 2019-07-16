@@ -10,18 +10,12 @@ import com.codingblocks.cbonlineapp.activities.JobDetailActivity
 import com.codingblocks.cbonlineapp.commons.JobsDiffCallback
 import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.extensions.getSpannableSring
+import com.codingblocks.cbonlineapp.extensions.isotomillisecond
+import com.codingblocks.cbonlineapp.extensions.loadSvg
+import com.codingblocks.cbonlineapp.extensions.timeAgo
 import com.codingblocks.cbonlineapp.util.JOB_ID
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_job.view.btnApply
-import kotlinx.android.synthetic.main.item_job.view.companyLogo
-import kotlinx.android.synthetic.main.item_job.view.companyTv
-import kotlinx.android.synthetic.main.item_job.view.ctcTv
-import kotlinx.android.synthetic.main.item_job.view.deadlineTv
-import kotlinx.android.synthetic.main.item_job.view.experienceTv
-import kotlinx.android.synthetic.main.item_job.view.jobTitleTv
-import kotlinx.android.synthetic.main.item_job.view.locationTv
-import kotlinx.android.synthetic.main.item_job.view.postedAgoTv
-import kotlinx.android.synthetic.main.item_job.view.typeTv
+import kotlinx.android.synthetic.main.item_job.view.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 
@@ -50,20 +44,25 @@ class JobsAdapter(diffCallback: JobsDiffCallback) :
 
         fun bindView(job: JobsModel) {
             with(itemView) {
-                Picasso.with(context).load(job.company.logo).into(companyLogo)
+                if (job.company.logo.takeLast(3) == "svg") {
+                    companyLogo.loadSvg(job.company.logo)
+                } else {
+                    Picasso.with(context).load(job.company.logo).into(companyLogo)
+                }
                 jobTitleTv.text = job.title
                 companyTv.text = job.company.name
-                postedAgoTv.text = job.postedOn
+                postedAgoTv.text = timeAgo(job.postedOn.isotomillisecond())
                 locationTv.text =
                     getSpannableSring("Job Location: ", job.location ?: "No experience required")
                 experienceTv.text = getSpannableSring("Experience: ", job.experience)
                 typeTv.text = getSpannableSring("Job Type: ", job.type)
                 ctcTv.text = getSpannableSring("CTC: ", job.ctc)
-                deadlineTv.text = job.deadline
+                deadlineTv.text = "Deadline : No Deadline"
                 btnApply.setOnClickListener {
                     context.startActivity(context.intentFor<JobDetailActivity>(JOB_ID to job.uid).singleTop())
                 }
             }
         }
+
     }
 }

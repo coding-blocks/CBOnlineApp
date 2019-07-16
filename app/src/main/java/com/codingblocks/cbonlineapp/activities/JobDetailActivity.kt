@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
+import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -13,37 +14,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.models.CourseRun
-import com.codingblocks.cbonlineapp.extensions.getSpannableSring
-import com.codingblocks.cbonlineapp.extensions.observer
+import com.codingblocks.cbonlineapp.extensions.*
 import com.codingblocks.cbonlineapp.util.JOB_ID
 import com.codingblocks.cbonlineapp.viewmodels.JobDetailViewModel
+import com.codingblocks.onlineapi.models.Applications
 import com.codingblocks.onlineapi.models.Form
+import com.codingblocks.onlineapi.models.JobId
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.JsonObject
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.item_job.companyLogo
-import kotlinx.android.synthetic.main.item_job.companyTv
-import kotlinx.android.synthetic.main.item_job.ctcTv
-import kotlinx.android.synthetic.main.item_job.deadlinell
-import kotlinx.android.synthetic.main.item_job.experienceTv
-import kotlinx.android.synthetic.main.item_job.jobTitleTv
-import kotlinx.android.synthetic.main.item_job.locationTv
-import kotlinx.android.synthetic.main.item_job.postedAgoTv
-import kotlinx.android.synthetic.main.item_job.typeTv
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import android.view.WindowManager
-import androidx.lifecycle.Observer
-import com.codingblocks.cbonlineapp.BuildConfig
-import com.codingblocks.cbonlineapp.extensions.observeOnce
-import com.codingblocks.onlineapi.models.Applications
-import com.codingblocks.onlineapi.models.JobId
 import kotlinx.android.synthetic.main.activity_job_detail.*
 import kotlinx.android.synthetic.main.custom_form_dialog.view.*
+import kotlinx.android.synthetic.main.item_job.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class JobDetailActivity : AppCompatActivity() {
 
@@ -91,11 +80,15 @@ class JobDetailActivity : AppCompatActivity() {
     private fun setUpObservers() {
         viewModel.getJobById(jobId).observeOnce {
             with(it) {
-                Picasso.with(this@JobDetailActivity).load(company.logo).into(companyLogo)
+                if (company.logo.takeLast(3) == "svg") {
+                    companyLogo.loadSvg(company.logo)
+                } else {
+                    Picasso.with(this@JobDetailActivity).load(company.logo).into(companyLogo)
+                }
                 jobTitleTv.text = title
                 supportActionBar?.title = title
                 companyTv.text = company.name
-                postedAgoTv.text = postedOn
+                postedAgoTv.text = timeAgo(postedOn.isotomillisecond())
                 locationTv.text = getSpannableSring("Job Location: ", location)
                 experienceTv.text = getSpannableSring("Experience: ", experience)
                 typeTv.text = getSpannableSring("Job Type: ", type)
@@ -201,9 +194,6 @@ class JobDetailActivity : AppCompatActivity() {
                     for (i in rb.indices) {
                         rb[i] = RadioButton(this)
                         rb[i]?.text = optionsArray[i]
-                        if (i == 0) {
-                            rb[i]?.isChecked = true
-                        }
                         rg.addView(rb[i])
                     }
                     rg.tag = it.name
@@ -226,11 +216,14 @@ class JobDetailActivity : AppCompatActivity() {
                         }
                     } else if (form.type == "radio-group") {
                         val group = formlayout.findViewWithTag<RadioGroup>(form.name)
-                       jsonObject.addProperty(form.name,group.checkedRadioButtonId as String)
+                        val radioButton = findViewById<RadioButton>(group.checkedRadioButtonId)
+                        val optionsArray = form.options?.split(",")
+                        val selected_value:String = radioButton?.text?.toString() ?: (optionsArray?.get(0) ?: "")
+                        jsonObject.addProperty(form.name, selected_value)
                     }
                 }
                 formDialog.dismiss()
-                if (!BuildConfig.DEBUG)
+//                if (!BuildConfig.DEBUG)
                     viewModel.applyJob(Applications(jsonObject, job = JobId(jobId)))
             }
             formView.cancelBtn.setOnClickListener { view ->

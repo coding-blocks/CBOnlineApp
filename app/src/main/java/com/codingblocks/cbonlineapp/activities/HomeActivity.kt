@@ -261,28 +261,33 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val formView = layoutInflater.inflate(R.layout.report_dialog, null)
         formView.okBtn.setOnClickListener {
             when {
-                titleEdtv.editText?.text.isNullOrEmpty() -> {
-                    titleEdtv.apply {
+                formView.titleEdtv.editText?.text.isNullOrEmpty() -> {
+                    formView.titleEdtv.apply {
                         isErrorEnabled = true
                         error = "Cannot be Empty"
                     }
                 }
-                descriptionEdtv.editText?.text.isNullOrEmpty() -> {
-                    descriptionEdtv.apply {
+                formView.descriptionEdtv.editText?.text.isNullOrEmpty() -> {
+                    formView.descriptionEdtv.apply {
                         isErrorEnabled = true
                         error = "Cannot be Empty"
                     }
                 }
                 else -> {
                     val data = hashMapOf(
-                        "title" to titleEdtv.editText?.text.toString(),
-                        "description" to descriptionEdtv.editText?.text.toString()
+                        "title" to formView.titleEdtv.editText?.text.toString(),
+                        "description" to formView.descriptionEdtv.editText?.text.toString(),
+                        "oneauth-id" to viewModel.prefs.SP_ONEAUTH_ID
                     )
 
-                    db.collection("cities")
+                    db.collection("Reports")
                         .add(data)
-                        .addOnSuccessListener {
+                        .addOnCompleteListener {
+                            reportDialog.dismiss()
+                        }.addOnSuccessListener {
                             Snackbar.make(drawer_layout,"Bug has been reported !!",Snackbar.LENGTH_SHORT).show()
+                        }.addOnFailureListener {
+                            Toast.makeText(this, "There was some error reporting the bug,PLease Try Again", Toast.LENGTH_SHORT).show()
                         }
                 }
             }

@@ -27,12 +27,17 @@
         android:menuCategory="system">
         <item
             android:id="@+id/nav_jobs"
-            android:icon="@drawable/ic_announcement"
+            android:icon="@drawable/ic_briefcase"
             android:title="@string/get_hired" />
         <item
             android:id="@+id/nav_preferences"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="@string/title_activity_settings" />
+    </group>
+    <group
+        android:id="@+id/communication"
+        android:checkableBehavior="none"
+        android:menuCategory="system">
 
         <item
             android:id="@+id/nav_contactUs"
@@ -45,8 +50,8 @@
 
         <item
             android:id="@+id/report_bug"
-            android:icon="@android:drawable/ic_menu_report_image"
-            android:title="Report Aa Bug" />
-
+            android:icon="@drawable/ic_bug"
+            android:title="Report A Bug" />
     </group>
+
 </menu>

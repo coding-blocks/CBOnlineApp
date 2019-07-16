@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunitosans_bold"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     tools:text="Senior UI/UX Designer" />
 
                 <TextView
@@ -49,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunitosans_semibold"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     tools:text="Book My Show" />
 
 
@@ -57,10 +57,10 @@
                     android:id="@+id/postedAgoTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/nunitosans_regular"
                     android:textColor="#999999"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     tools:text="Posted 2 weeks ago" />
 
             </LinearLayout>
@@ -83,7 +83,7 @@
 
             <TextView
                 android:id="@+id/locationTv"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="Job Location: Noida"
                 android:layout_weight="1"
                 android:layout_margin="8dp"
@@ -92,7 +92,7 @@
 
             <TextView
                 android:id="@+id/experienceTv"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="Experience: 4 + Years"
                 android:layout_weight="1"
                 android:layout_margin="8dp"
@@ -110,7 +110,7 @@
 
             <TextView
                 android:id="@+id/typeTv"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="Job Location: Noida"
                 android:layout_weight="1"
                 android:layout_margin="8dp"
@@ -119,7 +119,7 @@
 
             <TextView
                 android:id="@+id/ctcTv"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="Experience: 4 + Years"
                 android:layout_weight="1"
                 android:layout_margin="8dp"

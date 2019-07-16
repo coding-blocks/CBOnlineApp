@@ -106,3 +106,32 @@ fun getSpannableSring(normalText: String, boldText: String): SpannableStringBuil
     SpannableStringBuilder()
         .append(normalText)
         .bold { append(boldText) }
+
+fun timeAgo(time: Long): String {
+    val diff = Math.floor(((System.currentTimeMillis() - time) / 1000).toDouble())
+    var interval = Math.floor(diff / 31536000).toInt()
+    if (interval >= 1) {
+        return "$interval Years Ago"
+    }
+    interval = Math.floor(diff / 2592000).toInt()
+    if (interval >= 1) {
+        return "$interval Months Ago"
+    }
+    interval = Math.floor(diff / 604800).toInt()
+    if (interval >= 1) {
+        return "$interval Weeks Ago"
+    }
+    interval = Math.floor(diff / 86400).toInt()
+    if (interval >= 1) {
+        return "$interval Days Ago"
+    }
+    interval = Math.floor(diff / 3600).toInt()
+    if (interval >= 1) {
+        return "$interval Hours Ago"
+    }
+    interval = Math.floor(diff / 60).toInt()
+    if (interval >= 1) {
+        return "$interval Minutes Ago"
+    }
+    return "Just Now"
+}
