@@ -26,7 +26,6 @@ import com.codingblocks.cbonlineapp.fragments.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.OnItemClickListener
-import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
@@ -45,18 +44,8 @@ import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_video_player.displayYoutubeVideo
-import kotlinx.android.synthetic.main.activity_video_player.pagerFrame
-import kotlinx.android.synthetic.main.activity_video_player.player_tabs
-import kotlinx.android.synthetic.main.activity_video_player.player_viewpager
-import kotlinx.android.synthetic.main.activity_video_player.rootLayout
-import kotlinx.android.synthetic.main.activity_video_player.videoContainer
-import kotlinx.android.synthetic.main.activity_video_player.videoFab
-import kotlinx.android.synthetic.main.doubt_dialog.view.cancelBtn
-import kotlinx.android.synthetic.main.doubt_dialog.view.descriptionLayout
-import kotlinx.android.synthetic.main.doubt_dialog.view.okBtn
-import kotlinx.android.synthetic.main.doubt_dialog.view.title
-import kotlinx.android.synthetic.main.doubt_dialog.view.titleLayout
+import kotlinx.android.synthetic.main.activity_video_player.*
+import kotlinx.android.synthetic.main.doubt_dialog.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -221,10 +210,13 @@ class VideoPlayerActivity : AppCompatActivity(),
             VdoPlayer.VdoInitParams.Builder()
                 .setOtp(viewModel.mOtp)
                 .setPlaybackInfo(viewModel.mPlaybackInfo)
+
                 .setPreferredCaptionsLanguage("en")
                 .build()
         }
-        player?.load(vdoParams)
+        player?.apply {
+            load(vdoParams)
+        }
     }
 
     override fun onInitializationFailure(p0: VdoPlayer.PlayerHost?, p1: ErrorDescription?) {
@@ -393,6 +385,8 @@ class VideoPlayerActivity : AppCompatActivity(),
         }
 
         override fun onLoaded(p0: VdoPlayer.VdoInitParams?) {
+            videoPlayer?.playWhenReady = true
+            videoPlayer?.playbackSpeed = getPrefs().SP_PLAYBACK_SPEED
         }
 
         override fun onBufferUpdate(p0: Long) {
@@ -401,7 +395,8 @@ class VideoPlayerActivity : AppCompatActivity(),
         override fun onProgress(p0: Long) {
         }
 
-        override fun onPlaybackSpeedChanged(p0: Float) {
+        override fun onPlaybackSpeedChanged(speed: Float) {
+            getPrefs().SP_PLAYBACK_SPEED = speed
         }
 
         override fun onLoadError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
@@ -482,7 +477,7 @@ class VideoPlayerActivity : AppCompatActivity(),
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
         if (getPrefs().SP_PIP) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 activatePIPMode()
         }
     }

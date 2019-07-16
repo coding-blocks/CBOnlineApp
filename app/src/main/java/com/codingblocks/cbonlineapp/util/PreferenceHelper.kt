@@ -18,6 +18,9 @@ class PreferenceHelper private constructor() {
         const val WIFI_DEFAULT = false
         const val DATA_LIMIT = "data_limit"
         const val DATA_LIMIT_DEFAULT = 1.0f
+        const val PLAYBACK_SPEED = "playback_speed"
+        const val PLAYBACK_SPEED_DEFAULT = 1f
+
         const val PIP = "pip"
         const val PIP_DEFAULT = true
         private var prefs: SharedPreferences? = null
@@ -80,6 +83,11 @@ class PreferenceHelper private constructor() {
         get() = prefs?.getFloat(DATA_LIMIT, DATA_LIMIT_DEFAULT) ?: DATA_LIMIT_DEFAULT
         set(value) {
             prefs?.edit()?.putFloat(DATA_LIMIT, value)?.apply()
+        }
+    var SP_PLAYBACK_SPEED: Float
+        get() = prefs?.getFloat(PLAYBACK_SPEED, PLAYBACK_SPEED_DEFAULT) ?: PLAYBACK_SPEED_DEFAULT
+        set(value) {
+            prefs?.edit()?.putFloat(PLAYBACK_SPEED, value)?.apply()
         }
     var SP_PIP: Boolean
         get() = prefs?.getBoolean(PIP, PIP_DEFAULT) ?: PIP_DEFAULT
