@@ -24,7 +24,7 @@ val viewModelModule = module {
     viewModel { LeaderboardViewModel() }
     viewModel { NotificationViewModel(get()) }
 
-    viewModel { AnnouncementsViewModel(get()) }
+    viewModel { AnnouncementsViewModel(get(), get()) }
     viewModel { QuizViewModel() }
 
     // Activities

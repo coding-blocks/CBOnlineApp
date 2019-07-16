@@ -65,7 +65,8 @@ data class CourseRun(
     var summary: String = "",
     var premium: Boolean = false,
     var hits: Int = 0,
-    var recommended: Boolean = false
+    var recommended: Boolean = false,
+    var whatsappLink: String = ""
 )
 
 @Entity

@@ -12,11 +12,7 @@ import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
 import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
 import com.codingblocks.cbonlineapp.fragments.OverviewFragment
 import com.codingblocks.cbonlineapp.fragments.LeaderboardFragment
-import com.codingblocks.cbonlineapp.util.COURSE_ID
-import com.codingblocks.cbonlineapp.util.COURSE_NAME
-import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.RUN_ID
+import com.codingblocks.cbonlineapp.util.*
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
@@ -41,6 +37,8 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
         title = intent.getStringExtra(COURSE_NAME)
         viewModel.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
         viewModel.runId = intent.getStringExtra(RUN_ID) ?: ""
+        viewModel.whatsappLink = intent.getStringExtra(WHATSAPP_GROUP_LINK) ?: ""
+
         if (viewModel.attemptId.isEmpty()) {
             viewModel.attemptId = viewModel.getRunAttempt(viewModel.runId)
         }
@@ -84,7 +82,7 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
     private fun setupViewPager(crUid: String, crCourseId: String) {
         val adapter = TabLayoutAdapter(supportFragmentManager)
         adapter.add(OverviewFragment.newInstance(viewModel.attemptId, crUid), "Overview")
-        adapter.add(AnnouncementsFragment.newInstance(viewModel.courseId), "About")
+        adapter.add(AnnouncementsFragment.newInstance(viewModel.courseId,viewModel.whatsappLink,viewModel.attemptId), "About")
         adapter.add(CourseContentFragment.newInstance(viewModel.attemptId), "Course Content")
         adapter.add(DoubtsFragment.newInstance(viewModel.attemptId, crCourseId), "Doubts")
         adapter.add(LeaderboardFragment.newInstance(viewModel.runId), "Leaderboard")
