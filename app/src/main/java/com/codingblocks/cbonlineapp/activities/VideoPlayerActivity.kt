@@ -25,6 +25,7 @@ import com.codingblocks.cbonlineapp.fragments.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.fragments.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
+import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
 import com.codingblocks.cbonlineapp.util.OnItemClickListener
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
@@ -167,7 +168,7 @@ class VideoPlayerActivity : AppCompatActivity(),
             ) {
                 if (!p2) {
                     youtubePlayer = youtubePlayerInstance
-                    youtubePlayerInstance?.loadVideo(youtubeUrl.substring(32))
+                    youtubePlayerInstance?.loadVideo(getYotubeVideoId(youtubeUrl))
                 }
             }
         }

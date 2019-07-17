@@ -32,7 +32,6 @@ import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.viewmodels.HomeActivityViewModel
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
 import com.google.android.play.core.install.model.UpdateAvailability
@@ -42,11 +41,12 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_home.*
 import kotlinx.android.synthetic.main.nav_header_home.view.*
-import kotlinx.android.synthetic.main.report_dialog.*
 import kotlinx.android.synthetic.main.report_dialog.view.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -277,7 +277,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     val data = hashMapOf(
                         "title" to formView.titleEdtv.editText?.text.toString(),
                         "description" to formView.descriptionEdtv.editText?.text.toString(),
-                        "oneauth-id" to viewModel.prefs.SP_ONEAUTH_ID
+                        "oneauth-id" to viewModel.prefs.SP_ONEAUTH_ID,
+                        "device" to Build.MODEL,
+                        "version" to Build.VERSION.SDK_INT,
+                        "app-version" to BuildConfig.VERSION_CODE
+
                     )
 
                     db.collection("Reports")
@@ -285,9 +289,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         .addOnCompleteListener {
                             reportDialog.dismiss()
                         }.addOnSuccessListener {
-                            Snackbar.make(drawer_layout,"Bug has been reported !!",Snackbar.LENGTH_SHORT).show()
+                            drawer_layout.snackbar("Bug has been reported !!")
                         }.addOnFailureListener {
-                            Toast.makeText(this, "There was some error reporting the bug,PLease Try Again", Toast.LENGTH_SHORT).show()
+                            toast("There was some error reporting the bug,PLease Try Again")
                         }
                 }
             }
