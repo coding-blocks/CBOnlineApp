@@ -29,11 +29,18 @@ open class Course(
     val rating: Float,
     val slug: String?,
     val coverImage: String,
+    val faq: String?,
+    val courseFeatures: ArrayList<CourseFeatures>?,
     @Relationship("instructors")
     val instructors: ArrayList<Instructor>?,
     @Relationship("runs")
     val runs: ArrayList<Runs>?
 ) : BaseModel()
+
+data class CourseFeatures(
+    val icon: String,
+    val text: String
+)
 
 
 @Type("run_attempts")

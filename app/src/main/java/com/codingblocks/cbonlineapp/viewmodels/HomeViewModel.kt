@@ -61,7 +61,8 @@ class HomeViewModel(
                                             slug,
                                             coverImage,
                                             updatedAt,
-                                            categoryId
+                                            categoryId,
+                                            faq
                                         )
                                     )
                                 }
@@ -265,7 +266,8 @@ class HomeViewModel(
                                             slug,
                                             coverImage,
                                             updatedAt,
-                                            categoryId
+                                            categoryId,
+                                            faq
                                         )
                                     )
                                 }

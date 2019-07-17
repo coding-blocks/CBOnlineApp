@@ -32,8 +32,8 @@ data class Course(
     var slug: String?,
     var coverImage: String,
     var updated_at: String?,
-    var categoryId: Int
-
+    var categoryId: Int,
+    var faq: String? = ""
 ) : BaseModel(uid, updated_at)
 
 @Entity(

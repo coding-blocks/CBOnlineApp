@@ -86,20 +86,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
 
         if (savedInstanceState == null) {
-
-            val transaction = supportFragmentManager.beginTransaction()
-            if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN) {
-                // Update User Token on Login
-                if (!BuildConfig.DEBUG)
-                    viewModel.refreshToken()
-                val navMenu = nav_view.menu
-                navMenu.findItem(R.id.nav_my_courses).isVisible = true
-                transaction.replace(R.id.fragment_holder, MyCoursesFragment()).commit()
-                setUser()
-            } else {
-                transaction.replace(R.id.fragment_holder, HomeFragment()).commit()
-            }
-            nav_view.getHeaderView(0).login_button.setOnClickListener(this)
+            setUpFragment()
         }
 
         // adding label to nav drawer items
@@ -115,11 +102,22 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 invalidateOptionsMenu()
             }
         }
+    }
 
-        viewModel.invalidateTokenProgress.observer(this) {
-            if (it) {
-            }
+    private fun setUpFragment() {
+        val transaction = supportFragmentManager.beginTransaction()
+        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN) {
+            // Update User Token on Login
+            if (!BuildConfig.DEBUG)
+                viewModel.refreshToken()
+            val navMenu = nav_view.menu
+            navMenu.findItem(R.id.nav_my_courses).isVisible = true
+            transaction.replace(R.id.fragment_holder, MyCoursesFragment()).commit()
+            setUser()
+        } else {
+            transaction.replace(R.id.fragment_holder, HomeFragment()).commit()
         }
+        nav_view.getHeaderView(0).login_button.setOnClickListener(this)
     }
 
     private fun setUser() {
@@ -371,10 +369,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     @TargetApi(25)
     private fun removeShortcuts() {
         val shortcutManager = getSystemService(ShortcutManager::class.java)
-
-        // Either Disable or Remove Shortcuts
-//        shortcutManager.disableShortcuts((Arrays.asList("topcourse$0")))
-//        shortcutManager.disableShortcuts((Arrays.asList("topcourse$1")))
         shortcutManager.removeAllDynamicShortcuts()
     }
 
@@ -413,5 +407,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 "https://account.codingblocks.com"
             )
         }
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        setUpFragment()
     }
 }
