@@ -174,7 +174,8 @@ class HomeViewModel(
                                                             course?.title ?: "",
                                                             summary = course?.summary ?: "",
                                                             premium = runAttempts?.get(0)?.premium
-                                                                ?: false
+                                                                ?: false,
+                                                            whatsappLink = whatsappLink ?: ""
                                                         )
                                                         val oldRun = runDao.getRunById(
                                                             runAttempts?.get(0)?.id ?: ""

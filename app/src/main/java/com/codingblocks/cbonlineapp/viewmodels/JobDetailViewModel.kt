@@ -2,13 +2,11 @@ package com.codingblocks.cbonlineapp.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
-import com.codingblocks.cbonlineapp.database.InstructorDao
 import com.codingblocks.cbonlineapp.database.JobsDao
 import com.codingblocks.cbonlineapp.database.models.Companies
 import com.codingblocks.cbonlineapp.database.models.CourseRun

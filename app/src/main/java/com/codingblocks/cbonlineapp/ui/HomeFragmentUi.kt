@@ -7,7 +7,6 @@ import android.view.View.TEXT_ALIGNMENT_CENTER
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.solver.widgets.ConstraintWidget
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -16,8 +15,16 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.customViewPager
 import com.codingblocks.cbonlineapp.widgets.ViewPagerCustomDuration
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.fragment_quiz_result.view.*
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.wrapContent
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.imageView
+import org.jetbrains.anko.view
+import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.nestedScrollView

@@ -63,6 +63,5 @@ class JobsAdapter(diffCallback: JobsDiffCallback) :
                 }
             }
         }
-
     }
 }

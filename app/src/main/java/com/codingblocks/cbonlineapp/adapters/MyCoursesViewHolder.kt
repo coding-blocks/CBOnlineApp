@@ -12,8 +12,8 @@ import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.extensions.loadSvg
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.util.COURSE_ID
-import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.my_course_card_horizontal.view.courseBtn1

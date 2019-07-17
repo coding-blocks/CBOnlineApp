@@ -61,7 +61,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private val db by lazy {
         FirebaseFirestore.getInstance()
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -303,8 +302,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             show()
             window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
         }
-
-
     }
 
     override fun attachBaseContext(newBase: Context) {
