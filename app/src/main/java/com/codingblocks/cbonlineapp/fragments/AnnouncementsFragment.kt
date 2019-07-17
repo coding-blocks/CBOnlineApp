@@ -18,9 +18,9 @@ import com.codingblocks.cbonlineapp.viewmodels.AnnouncementsViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.codingblocks.cbonlineapp.util.ARG_COURSE_ID
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.WHATSAPP_GROUP_LINK
-import kotlinx.android.synthetic.main.fragment_annoucements.*
-import kotlinx.android.synthetic.main.fragment_annoucements.view.*
+import kotlinx.android.synthetic.main.fragment_annoucements.view.joinWhatsAppGroupView
+import kotlinx.android.synthetic.main.fragment_annoucements.view.joinWhatsAppButton
+import kotlinx.android.synthetic.main.fragment_annoucements.view.instructorRv
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AnnouncementsFragment : Fragment() {
@@ -35,7 +35,6 @@ class AnnouncementsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             courseId = it.getString(ARG_COURSE_ID) ?: ""
-            whatsAppLink = it.getString(WHATSAPP_GROUP_LINK) ?: ""
             attemptId = it.getString(RUN_ATTEMPT_ID) ?: ""
         }
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
@@ -59,10 +58,11 @@ class AnnouncementsFragment : Fragment() {
         }
 
         viewModel.getRunByAtemptId(attemptId).observer(this) {
+            whatsAppLink = it.whatsappLink
             if (!it.premium || whatsAppLink.isEmpty()) {
-                joinWhatsAppGroupView.visibility = View.GONE
+                view.joinWhatsAppGroupView.visibility = View.GONE
             } else {
-                joinWhatsAppGroupView.visibility = View.VISIBLE
+                view.joinWhatsAppGroupView.visibility = View.VISIBLE
             }
         }
 
@@ -82,11 +82,10 @@ class AnnouncementsFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, whatsAppLink: String, attemptId: String) =
+        fun newInstance(param1: String, attemptId: String) =
             AnnouncementsFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_COURSE_ID, param1)
-                    putString(WHATSAPP_GROUP_LINK, whatsAppLink)
                     putString(RUN_ATTEMPT_ID, attemptId)
                 }
             }

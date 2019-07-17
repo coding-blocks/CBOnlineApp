@@ -34,7 +34,6 @@ class MyCourseViewModel(
     var attemptId: String = ""
     var runId: String = ""
     var courseId: String = ""
-    var whatsappLink: String = ""
 
     fun updatehit(attemptId: String) {
         runDao.updateHit(attemptId)
