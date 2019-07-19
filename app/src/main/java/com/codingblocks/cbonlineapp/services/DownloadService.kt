@@ -36,6 +36,7 @@ import java.io.File
 class DownloadService : IntentService("Download Service"), AnkoLogger,
     VdoDownloadManager.EventListener {
 
+
     lateinit var attemptId: String
     lateinit var contentId: String
     private lateinit var sectionId: String
@@ -60,8 +61,8 @@ class DownloadService : IntentService("Download Service"), AnkoLogger,
     }
     private val contentDao: ContentDao by inject()
 
-    override fun onHandleIntent(intent: Intent) {
-        val title = intent.getStringExtra("title")
+    override fun onHandleIntent(intent: Intent?) {
+        val title = intent!!.getStringExtra("title")
         dataId = intent.getStringExtra("id")
         notificationBuilder.setContentTitle(title)
         notificationManager.notify(0, notificationBuilder.build())

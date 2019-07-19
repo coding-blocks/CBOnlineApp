@@ -44,9 +44,11 @@ class SettingsActivity : AppCompatActivity() {
         }
         val bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
         spaceFreeTv.text = String.format("%s free", bytesAvailable.readableFileSize())
-        spaceUsedTv.text = String.format("%s used", folderSize(
-            file
-        ).readableFileSize())
+        spaceUsedTv.text = String.format("%s used", file?.let {
+            folderSize(
+                it
+        ).readableFileSize()
+        })
 
         deleteAllTv.setOnClickListener {
             viewModel.getDownloads().let { list ->

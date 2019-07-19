@@ -39,8 +39,8 @@ object FileUtils {
 
     fun checkIfCannotDownload(context: Context): Boolean {
         val available = context.getPrefs().SP_DATA_LIMIT.times(GB_TO_KB).toInt()
-        val sizeAfterDownload = folderSize(getCommonPath(context)).div(1024).plus(FILE_THRESHOLD)
-        return sizeAfterDownload > available
+        val sizeAfterDownload = getCommonPath(context)?.let { folderSize(it).div(1024).plus(FILE_THRESHOLD) }
+        return sizeAfterDownload!! > available
     }
 
     private fun clearOldestDirectory(context: Context) {

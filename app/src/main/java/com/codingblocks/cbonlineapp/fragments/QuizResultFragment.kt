@@ -31,10 +31,10 @@ class QuizResultFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         arguments?.let {
-            quizId = it.getString(QUIZ_ID)
-            qnaId = it.getString(QUIZ_QNA)
-            attemptId = it.getString(RUN_ATTEMPT_ID)
-            quizAttemptId = it.getString(QUIZ_ATTEMPT_ID)
+            quizId = it.getString(QUIZ_ID)?:""
+            qnaId = it.getString(QUIZ_QNA)?:""
+            attemptId = it.getString(RUN_ATTEMPT_ID)?:""
+            quizAttemptId = it.getString(QUIZ_ATTEMPT_ID)?:""
         }
 
         val totalBackground = total_questions_image.background as GradientDrawable

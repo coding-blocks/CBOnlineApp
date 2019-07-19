@@ -64,7 +64,7 @@ object Components {
         updateView.cancelBtn.setOnClickListener {
             confirmDialog.dismiss()
         }
-        confirmDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+        confirmDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         confirmDialog.setView(updateView)
         confirmDialog.setCancelable(false)
         confirmDialog.show()

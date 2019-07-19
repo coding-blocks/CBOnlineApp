@@ -16,18 +16,18 @@ def REDIRECT_URI = System.getenv('REDIRECT_URI') ?: "app://online.codingblocks.c
 def OAUTH_URL = System.getenv('OAUTH_URL') ?: "https://account.codingblocks.com/oauth/authorize"
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 100040802
+        targetSdkVersion 29
+        versionCode 100040900
         // 1 (versioning scheme)
         // 00 (major version)
         // 04 (minor version)
         // 06 (patch version)
         // 02 spare for betas/RCs
-        versionName "0.4.8"
+        versionName "0.4.9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false
         manifestPlaceholders = [

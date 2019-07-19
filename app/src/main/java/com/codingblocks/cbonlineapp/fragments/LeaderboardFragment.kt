@@ -24,7 +24,7 @@ class LeaderboardFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            runId = it.getString(RUN_ATTEMPT_ID)
+            runId = it.getString(RUN_ATTEMPT_ID)?:""
         }
     }
 

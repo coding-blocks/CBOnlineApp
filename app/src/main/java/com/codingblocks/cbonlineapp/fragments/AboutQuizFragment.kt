@@ -69,9 +69,9 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
             .show()
 
         arguments?.let {
-            quizId = it.getString(QUIZ_ID)
-            attemptId = it.getString(RUN_ATTEMPT_ID)
-            qnaId = it.getString(QUIZ_QNA)
+            quizId = it.getString(QUIZ_ID)?:""
+            attemptId = it.getString(RUN_ATTEMPT_ID)?:""
+            qnaId = it.getString(QUIZ_QNA)?:""
         }
 
         quizAttemptLv.apply {

@@ -32,7 +32,6 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener, ViewPagerAdapter.QuizInteractor {
 
     private lateinit var quizId: String
@@ -60,10 +59,10 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         arguments?.let {
-            quizId = it.getString(QUIZ_ID)
-            qnaId = it.getString(QUIZ_QNA)
-            attemptId = it.getString(RUN_ATTEMPT_ID)
-            quizAttemptId = it.getString(QUIZ_ATTEMPT_ID)
+            quizId = it.getString(QUIZ_ID)?:""
+            qnaId = it.getString(QUIZ_QNA)?:""
+            attemptId = it.getString(RUN_ATTEMPT_ID)?:""
+            quizAttemptId = it.getString(QUIZ_ATTEMPT_ID)?:""
         }
 
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
@@ -182,7 +181,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             submitQuiz()
             dialog.dismiss()
         }
-        dialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.show()
     }
 
