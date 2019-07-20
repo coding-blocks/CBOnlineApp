@@ -29,11 +29,18 @@ open class Course(
     val rating: Float,
     val slug: String?,
     val coverImage: String,
+    val faq: String?,
+    val courseFeatures: ArrayList<CourseFeatures>?,
     @Relationship("instructors")
     val instructors: ArrayList<Instructor>?,
     @Relationship("runs")
     val runs: ArrayList<Runs>?
 ) : BaseModel()
+
+data class CourseFeatures(
+    val icon: String,
+    val text: String
+)
 
 
 @Type("run_attempts")
@@ -82,7 +89,9 @@ open class Sections : BaseModel() {
 open class Instructor(
     val name: String?,
     val description: String?,
-    val photo: String?
+    val photo: String?,
+    val email:String?,
+    val sub:String?
 ) : BaseModel()
 
 class SectionContent : BaseModel() {

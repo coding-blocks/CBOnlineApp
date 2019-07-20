@@ -61,7 +61,8 @@ class HomeViewModel(
                                             slug,
                                             coverImage,
                                             updatedAt,
-                                            categoryId
+                                            categoryId,
+                                            faq
                                         )
                                     )
                                 }
@@ -103,7 +104,9 @@ class HomeViewModel(
                                                     instructor.name,
                                                     instructor.description ?: "",
                                                     instructor.photo,
-                                                    instructor.updatedAt
+                                                    instructor.updatedAt,
+                                                    instructor.email,
+                                                    instructor.sub
                                                 )
                                             )
                                             courseWithInstructorDao.insert(
@@ -214,7 +217,9 @@ class HomeViewModel(
                                                                                         description
                                                                                             ?: "",
                                                                                         photo,
-                                                                                        updatedAt
+                                                                                        updatedAt,
+                                                                                        email,
+                                                                                        sub
                                                                                     )
                                                                                 )
                                                                                 courseWithInstructorDao.insert(
@@ -265,7 +270,8 @@ class HomeViewModel(
                                             slug,
                                             coverImage,
                                             updatedAt,
-                                            categoryId
+                                            categoryId,
+                                            faq
                                         )
                                     )
                                 }
@@ -306,7 +312,9 @@ class HomeViewModel(
                                             instructor.name,
                                             instructor.description ?: "",
                                             instructor.photo,
-                                            instructor.updatedAt
+                                            instructor.updatedAt,
+                                            instructor.email,
+                                            instructor.sub
                                         )
                                     )
                                     courseWithInstructorDao.insert(

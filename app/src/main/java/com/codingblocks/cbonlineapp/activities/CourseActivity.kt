@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -56,6 +57,9 @@ import kotlinx.android.synthetic.main.activity_course.courseProgress5
 import kotlinx.android.synthetic.main.activity_course.courseRootView
 import kotlinx.android.synthetic.main.activity_course.instructorRv
 import kotlinx.android.synthetic.main.activity_course.rvExpendableView
+import kotlinx.android.synthetic.main.activity_course.faqMarkdown
+import kotlinx.android.synthetic.main.activity_course.faqTitleTv
+import kotlinx.android.synthetic.main.activity_course.faqView
 import kotlinx.android.synthetic.main.activity_course.scrollView
 import kotlinx.android.synthetic.main.activity_course.tagsChipgroup
 import kotlinx.android.synthetic.main.activity_course.tagstv
@@ -198,6 +202,13 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
             batchSnapHelper.attachToRecyclerView(batchRv)
             setImageAndTitle(course.logo, course.title)
             coursePageSubtitle.text = course.subtitle
+            if (course.faq.isNullOrEmpty()) {
+                faqMarkdown.isVisible = false
+                faqTitleTv.isVisible = false
+                faqView.isVisible = false
+            } else {
+                faqMarkdown.loadMarkdown(course.faq)
+            }
             coursePageSummary.loadMarkdown(course.summary)
             trialBtn.setOnClickListener {
                 if (course.runs != null) {
