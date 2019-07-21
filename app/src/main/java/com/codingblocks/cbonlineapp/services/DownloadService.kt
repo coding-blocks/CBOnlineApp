@@ -36,7 +36,6 @@ import java.io.File
 class DownloadService : IntentService("Download Service"), AnkoLogger,
     VdoDownloadManager.EventListener {
 
-
     lateinit var attemptId: String
     lateinit var contentId: String
     private lateinit var sectionId: String
