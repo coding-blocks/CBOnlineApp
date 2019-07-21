@@ -11,17 +11,19 @@ import com.codingblocks.cbonlineapp.extensions.circleImageView
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.dip
-import org.jetbrains.anko.textColor
 import org.jetbrains.anko.textView
+import org.jetbrains.anko.textColor
 import org.jetbrains.anko.wrapContent
+import org.jetbrains.anko.constraint.layout.constraintLayout
 
 class InstructorListUi : AnkoComponent<ViewGroup> {
 
     lateinit var instructorTitle: TextView
     lateinit var instructorDescription: TextView
     lateinit var instructorImgView: CircleImageView
+    lateinit var instructorEmail: TextView
+    lateinit var instructorTextView: TextView
     lateinit var font: Typeface
 
     override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui) {
@@ -50,7 +52,7 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
                 startToEnd = instructorImgView.id
                 matchConstraintDefaultWidth = MATCH_CONSTRAINT_WRAP
             }
-            val instructorTextView = textView("Mentor,Coding Blocks") {
+            instructorTextView = textView {
                 id = View.generateViewId()
                 textSize = 18f
                 typeface = font
@@ -62,6 +64,18 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
                 topToBottom = instructorTitle.id
                 matchConstraintDefaultWidth = MATCH_CONSTRAINT_WRAP
             }
+            instructorEmail = textView {
+                id = View.generateViewId()
+                textColor = Color.parseColor("#000000")
+                textSize = 14f
+                typeface = font
+            }.lparams(width = 0, height = wrapContent) {
+                marginStart = dip(16)
+                marginEnd = dip(8)
+                startToEnd = instructorImgView.id
+                topToBottom = instructorTextView.id
+                matchConstraintDefaultWidth = MATCH_CONSTRAINT_WRAP
+            }
             instructorDescription = textView {
                 id = View.generateViewId()
                 textColor = Color.parseColor("#000000")
@@ -71,9 +85,8 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
                 marginStart = dip(16)
                 topMargin = dip(8)
                 marginEnd = dip(8)
-                startToEnd = instructorImgView.id
-                topToBottom = instructorTextView.id
-                endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                topToBottom = instructorImgView.id
+                startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                 matchConstraintDefaultWidth = MATCH_CONSTRAINT_WRAP
             }
         }

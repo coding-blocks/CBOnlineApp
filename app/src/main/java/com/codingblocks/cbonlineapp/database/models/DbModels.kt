@@ -75,7 +75,9 @@ data class Instructor(
     var name: String?,
     var description: String,
     var photo: String?,
-    var updated_at: String?
+    var updated_at: String?,
+    var email: String?,
+    var sub: String?
 ) : BaseModel(uid, updated_at)
 
 @Entity(

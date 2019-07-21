@@ -55,7 +55,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var updateUIReceiver: BroadcastReceiver? = null
     private var filter: IntentFilter? = null
     private val viewModel by viewModel<HomeActivityViewModel>()
-    
+
     private val appUpdateManager by lazy {
         AppUpdateManagerFactory.create(this)
     }
