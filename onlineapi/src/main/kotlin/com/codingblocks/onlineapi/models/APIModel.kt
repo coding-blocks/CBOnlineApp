@@ -89,7 +89,9 @@ open class Sections : BaseModel() {
 open class Instructor(
     val name: String?,
     val description: String?,
-    val photo: String?
+    val photo: String?,
+    val email:String?,
+    val sub:String?
 ) : BaseModel()
 
 class SectionContent : BaseModel() {
