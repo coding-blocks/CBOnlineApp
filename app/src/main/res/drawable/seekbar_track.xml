@@ -5,7 +5,7 @@
         android:gravity="center_vertical|fill_horizontal">
         <shape
             android:shape="rectangle"
-            android:tint="@*android:color/material_grey_800">
+            android:tint="#424242">
             <size android:height="4dp" />
             <corners android:radius="5.0dip" />
             <solid android:color="#40000000" />
