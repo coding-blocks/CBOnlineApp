@@ -28,7 +28,6 @@ class MyCourseViewModel(
     private val sectionDao: SectionDao
 ) : ViewModel() {
 
-    var promoVideo: MutableLiveData<String> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
     var revoked: MutableLiveData<Boolean> = MutableLiveData()
     var attemptId: String = ""
@@ -37,10 +36,6 @@ class MyCourseViewModel(
 
     fun updatehit(attemptId: String) {
         runDao.updateHit(attemptId)
-    }
-
-    fun getPromoVideo(courseId: String) {
-        promoVideo.value = courseDao.getCourse(courseId).promoVideo
     }
 
     fun getRunAttempt(runId: String): String = runDao.getRunByRunId(runId).crAttemptId

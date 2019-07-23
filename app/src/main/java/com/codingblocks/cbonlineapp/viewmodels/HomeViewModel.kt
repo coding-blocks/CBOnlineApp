@@ -129,9 +129,9 @@ class HomeViewModel(
         try {
             Clients.onlineV2JsonApi.getMyCourses()
                 .enqueue(retrofitCallback { _, response ->
-                    response?.let {
+                    response?.let { response ->
                         if (response.isSuccessful) {
-                            it.body()?.let { courseList ->
+                            response.body()?.let { courseList ->
                                 courseList.forEach { courseRun ->
                                     courseRun.runAttempts?.get(0)?.id?.let { runId ->
                                         Clients.api.getMyCourseProgress(runId)
@@ -142,6 +142,8 @@ class HomeViewModel(
                                                     } catch (e: Exception) {
                                                         0.0
                                                     }
+                                                    val completedContents = it?.get("completedContents") as Double
+                                                    val totalContents = it["totalContents"] as Double
                                                     val newCourse = courseRun.course?.run {
                                                         Course(
                                                             id,
@@ -179,7 +181,10 @@ class HomeViewModel(
                                                             premium = runAttempts?.get(0)?.premium
                                                                 ?: false,
                                                             whatsappLink = whatsappLink ?: "",
-                                                            crRunEnd = runAttempts?.get(0)?.end ?: ""
+                                                            crRunEnd = runAttempts?.get(0)?.end
+                                                                ?: "",
+                                                            totalContents = totalContents.toInt(),
+                                                            completedContents = completedContents.toInt()
                                                         )
                                                         val oldRun = runDao.getRunById(
                                                             runAttempts?.get(0)?.id ?: ""
