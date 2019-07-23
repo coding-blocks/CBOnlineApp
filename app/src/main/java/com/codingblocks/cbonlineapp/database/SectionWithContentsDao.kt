@@ -21,6 +21,14 @@ interface SectionWithContentsDao {
         """)
     fun getContentWithSectionId(sectionID: String): LiveData<List<CourseContent>>
 
+    @Query("""
+        SELECT lectureId FROM CourseContent
+        INNER JOIN sectionwithcontent ON
+        CourseContent.id = sectionwithcontent.content_id
+        WHERE sectionwithcontent.section_id = :sectionID AND CourseContent.contentable = "lecture" ORDER BY `order`
+        """)
+    fun getVideoIdsWithSectionId(sectionID: String): LiveData<List<CourseContent>>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(join: SectionWithContent)
 }

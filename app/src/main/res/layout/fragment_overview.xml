@@ -28,45 +28,127 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <RelativeLayout
+                android:background="@drawable/blue_gradient"
                 android:layout_width="match_parent"
+                android:padding="16dp"
                 android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/certificateImgView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="10dp"
-                    android:src="@drawable/ic_certification_i" />
-
                 <TextView
-                    android:id="@+id/unlocktitletv"
+                    android:layout_alignTop="@+id/requestBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/certificateImgView"
-                    android:layout_centerHorizontal="true"
+                    android:layout_alignBottom="@+id/requestBtn"
+                    android:layout_marginTop="0dp"
+                    android:gravity="center"
                     android:fontFamily="@font/nunitosans_bold"
-                    android:text="Unlock Certificate"
-                    android:textColor="@color/black"
-                    android:textSize="24sp" />
+                    android:text="Generate Certificate"
+                    android:textColor="@color/white"
+                    android:textSize="22sp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="wrap_content"
+                    android:id="@+id/requestBtn"
+                    android:layout_height="wrap_content"
+
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/button_background"
+                    android:fontFamily="@font/nunitosans_bold"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:text="Request"
+                    android:textColor="@color/white" />
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_below="@id/requestBtn"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/white" />
 
                 <TextView
-                    android:id="@+id/unlockdesciptiontv"
+                    android:id="@+id/description"
                     android:layout_width="wrap_content"
+                    android:layout_below="@id/divider"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/unlocktitletv"
-                    android:layout_marginStart="24dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="16dp"
-                    android:fontFamily="@font/nunitosans_italic"
-                    android:text="Complete 90% of  your course to unlock and generate the certificate"
-                    android:textAlignment="center"
-                    android:textColor="#666666"
-                    android:textSize="18sp" />
+
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="@font/nunitosans_bold"
+                    android:text="Complete 90% of your course to unlock and generate the certificate"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:id="@+id/mentorContainer"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="8dp"
+
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/completionContainer">
+
+                    <ImageView
+                        android:id="@+id/approvalBtn"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:src="@drawable/ic_status_white"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/nunitosans_bold"
+                        android:text="Mentor Approval"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/completionContainer"
+                    android:layout_width="match_parent"
+                    android:layout_toLeftOf="@id/imageView4"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_below="@id/description"
+                    android:layout_marginTop="16dp">
+
+                    <ImageView
+                        android:id="@+id/completetionBtn"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:src="@drawable/ic_status_white"
+                        android:visibility="visible" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/nunitosans_bold"
+                        android:text="Course Completion: 90%+"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_below="@id/divider"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:src="@drawable/stamp" />
+
+
             </RelativeLayout>
 
 
