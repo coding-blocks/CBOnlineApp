@@ -6,6 +6,10 @@ const val SECTION_ID: String = "sectionId"
 
 const val VIDEO_ID: String = "videoId"
 
+const val TITLE: String = "title"
+
+const val ID: String = "id"
+
 const val ARG_ATTEMPT_ID: String = "param1"
 
 const val RUN_ATTEMPT_ID: String = "runAttemptId"
