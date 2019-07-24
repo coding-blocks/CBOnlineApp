@@ -127,7 +127,7 @@ dependencies {
     //database
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
-    implementation 'com.google.firebase:firebase-firestore-ktx:20.1.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:20.2.0'
 
 
 
