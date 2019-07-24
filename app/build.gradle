@@ -107,6 +107,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'com.google.android.play:core:1.6.1'
     implementation 'androidx.core:core-ktx:1.0.2'
+    implementation "android.arch.paging:runtime:1.0.1"
+
 
     // 3rd party libs
     implementation 'com.ethanhua:skeleton:1.1.2'
@@ -131,12 +133,12 @@ dependencies {
 
 
     //VideoCipher library
-    implementation 'com.vdocipher.aegis:vdocipher-android:1.0.0-beta6'
-
+    implementation 'com.vdocipher.aegis:vdocipher-android:1.0.0-beta8'
+    implementation 'com.vdocipher.aegis:vdocipher-cast:1.0.0-beta8'
+    implementation 'com.google.android.gms:play-services-cast-framework:16.2.0'
     // Koin
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
-    implementation "android.arch.paging:runtime:1.0.1"
 
 
 
