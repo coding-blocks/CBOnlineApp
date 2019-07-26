@@ -127,7 +127,7 @@ dependencies {
     //database
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
-    implementation 'com.google.firebase:firebase-firestore-ktx:20.1.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:20.2.0'
 
 
 
@@ -135,7 +135,7 @@ dependencies {
     //VideoCipher library
     implementation 'com.vdocipher.aegis:vdocipher-android:1.0.0-beta8'
     implementation 'com.vdocipher.aegis:vdocipher-cast:1.0.0-beta8'
-    implementation 'com.google.android.gms:play-services-cast-framework:16.2.0'
+    implementation 'com.google.android.gms:play-services-cast-framework:17.0.0'
     // Koin
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
