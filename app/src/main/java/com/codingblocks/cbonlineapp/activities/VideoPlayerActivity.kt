@@ -45,8 +45,18 @@ import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_video_player.*
-import kotlinx.android.synthetic.main.doubt_dialog.view.*
+import kotlinx.android.synthetic.main.activity_video_player.displayYoutubeVideo
+import kotlinx.android.synthetic.main.activity_video_player.pagerFrame
+import kotlinx.android.synthetic.main.activity_video_player.player_tabs
+import kotlinx.android.synthetic.main.activity_video_player.player_viewpager
+import kotlinx.android.synthetic.main.activity_video_player.rootLayout
+import kotlinx.android.synthetic.main.activity_video_player.videoContainer
+import kotlinx.android.synthetic.main.activity_video_player.videoFab
+import kotlinx.android.synthetic.main.doubt_dialog.view.cancelBtn
+import kotlinx.android.synthetic.main.doubt_dialog.view.descriptionLayout
+import kotlinx.android.synthetic.main.doubt_dialog.view.okBtn
+import kotlinx.android.synthetic.main.doubt_dialog.view.title
+import kotlinx.android.synthetic.main.doubt_dialog.view.titleLayout
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -130,11 +140,6 @@ class VideoPlayerActivity : AppCompatActivity(),
             pageChangeCallback(
                 fnSelected = { position ->
                     when (position) {
-                        0 -> {
-                            videoFab.setOnClickListener {
-                                createDoubt()
-                            }
-                        }
                         1 -> {
                             videoFab.setOnClickListener {
                                 val notePos: Double? =
@@ -143,6 +148,11 @@ class VideoPlayerActivity : AppCompatActivity(),
                                     else
                                         (videoPlayer?.currentTime?.div(1000))?.toDouble()
                                 notePos?.let { value -> createNote(value) }
+                            }
+                        }
+                        else -> {
+                            videoFab.setOnClickListener {
+                                createDoubt()
                             }
                         }
                     }

@@ -2,12 +2,6 @@ package com.codingblocks.cbonlineapp.database.models
 
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import androidx.room.PrimaryKey
 import com.codingblocks.onlineapi.models.CourseId
 import java.sql.Date
 
@@ -69,7 +63,8 @@ data class CourseRun(
     var whatsappLink: String = "",
     var crRunEnd: String = "",
     var totalContents: Int = 0,
-    var completedContents: Int = 0
+    var completedContents: Int = 0,
+    var mentorApproved: Boolean = false
 
 )
 

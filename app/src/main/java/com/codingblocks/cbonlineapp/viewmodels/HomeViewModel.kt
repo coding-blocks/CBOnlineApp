@@ -184,7 +184,9 @@ class HomeViewModel(
                                                             crRunEnd = runAttempts?.get(0)?.end
                                                                 ?: "",
                                                             totalContents = totalContents.toInt(),
-                                                            completedContents = completedContents.toInt()
+                                                            completedContents = completedContents.toInt(),
+                                                            mentorApproved = runAttempts?.get(0)?.certificateApproved
+                                                                ?: false
                                                         )
                                                         val oldRun = runDao.getRunById(
                                                             runAttempts?.get(0)?.id ?: ""
