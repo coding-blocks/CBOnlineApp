@@ -62,7 +62,7 @@ object MediaUtils {
 
     fun getYotubeVideoId(videoUrl: String): String {
         var vId = ""
-        //TODO fix regex pattern
+        // TODO fix regex pattern
         val pattern = Pattern.compile(
                 "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$",
                 Pattern.CASE_INSENSITIVE

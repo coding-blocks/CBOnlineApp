@@ -2,6 +2,12 @@ package com.codingblocks.cbonlineapp.database.models
 
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.codingblocks.onlineapi.models.CourseId
 import java.sql.Date
 
