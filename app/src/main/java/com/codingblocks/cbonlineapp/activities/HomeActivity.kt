@@ -39,12 +39,15 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.app_bar_home.*
-import kotlinx.android.synthetic.main.custom_dialog.view.*
-import kotlinx.android.synthetic.main.nav_header_home.view.*
-import kotlinx.android.synthetic.main.report_dialog.view.*
 import kotlinx.android.synthetic.main.report_dialog.view.okBtn
+import kotlinx.android.synthetic.main.activity_home.drawer_layout
+import kotlinx.android.synthetic.main.activity_home.nav_view
+import kotlinx.android.synthetic.main.app_bar_home.toolbar
+import kotlinx.android.synthetic.main.nav_header_home.view.login_button
+import kotlinx.android.synthetic.main.nav_header_home.view.nav_header_imageView
+import kotlinx.android.synthetic.main.report_dialog.view.descriptionEdtv
+import kotlinx.android.synthetic.main.report_dialog.view.okBtn
+import kotlinx.android.synthetic.main.report_dialog.view.titleEdtv
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.intentFor
@@ -284,12 +287,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         "app-version" to BuildConfig.VERSION_CODE
 
                     )
+                    reportDialog.dismiss()
 
                     db.collection("Reports")
                         .add(data)
-                        .addOnCompleteListener {
-                            reportDialog.dismiss()
-                        }.addOnSuccessListener {
+                        .addOnSuccessListener {
                             drawer_layout.snackbar("Bug has been reported !!")
                         }.addOnFailureListener {
                             toast("There was some error reporting the bug,PLease Try Again")

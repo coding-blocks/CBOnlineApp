@@ -23,7 +23,6 @@ import com.codingblocks.cbonlineapp.extensions.loadSvg
 import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.OnCartItemClickListener
 import com.codingblocks.cbonlineapp.util.ProgressBarAnimation
 import com.codingblocks.cbonlineapp.viewmodels.CourseViewModel
@@ -55,11 +54,11 @@ import kotlinx.android.synthetic.main.activity_course.courseProgress3
 import kotlinx.android.synthetic.main.activity_course.courseProgress4
 import kotlinx.android.synthetic.main.activity_course.courseProgress5
 import kotlinx.android.synthetic.main.activity_course.courseRootView
-import kotlinx.android.synthetic.main.activity_course.instructorRv
-import kotlinx.android.synthetic.main.activity_course.rvExpendableView
 import kotlinx.android.synthetic.main.activity_course.faqMarkdown
 import kotlinx.android.synthetic.main.activity_course.faqTitleTv
 import kotlinx.android.synthetic.main.activity_course.faqView
+import kotlinx.android.synthetic.main.activity_course.instructorRv
+import kotlinx.android.synthetic.main.activity_course.rvExpendableView
 import kotlinx.android.synthetic.main.activity_course.scrollView
 import kotlinx.android.synthetic.main.activity_course.tagsChipgroup
 import kotlinx.android.synthetic.main.activity_course.tagstv
@@ -317,7 +316,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 p2: Boolean
             ) {
                 if (!p2) {
-                    youtubePlayerInstance?.loadVideo(MediaUtils.getYotubeVideoId(promoVideo))
+                    youtubePlayerInstance?.loadVideo(promoVideo.split("=")[1])
                 }
             }
         }

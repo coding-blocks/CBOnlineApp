@@ -69,7 +69,8 @@ data class CourseRun(
     var whatsappLink: String = "",
     var crRunEnd: String = "",
     var totalContents: Int = 0,
-    var completedContents: Int = 0
+    var completedContents: Int = 0,
+    var mentorApproved: Boolean = false
 
 )
 
