@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.codingblocks.cbonlineapp.BuildConfig
+import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observeOnce
@@ -38,6 +39,7 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
+import kotlinx.android.synthetic.main.report_dialog.view.okBtn
 import kotlinx.android.synthetic.main.activity_home.drawer_layout
 import kotlinx.android.synthetic.main.activity_home.nav_view
 import kotlinx.android.synthetic.main.app_bar_home.toolbar
@@ -393,18 +395,40 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onDrawerOpened(drawerView: View) {}
 
+    private fun confirmLogout() {
+        val builder = android.app.AlertDialog.Builder(this)
+        val inflater = layoutInflater
+        val customView = inflater.inflate(R.layout.custom_dialog, null)
+        customView.okBtn.text = "Yes"
+        customView.cancelBtn.text = "No"
+        customView.description.text = "Are you sure you want to logout?"
+        builder.setCancelable(false)
+        builder.setView(customView)
+        val dialog = builder.create()
+        customView.cancelBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        customView.okBtn.setOnClickListener {
+            if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                    removeShortcuts()
+                }
+                deleteDatabase("app-database")
+                viewModel.invalidateToken()
+            }
+            CBOnlineApp.mInstance.clearApplicationData()
+            startActivity(intentFor<LoginActivity>().singleTop())
+            finish()
+            dialog.dismiss()
+        }
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
+    }
+
     override fun onClick(v: View) {
         when (v.id) {
             R.id.login_button -> {
-                if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                        removeShortcuts()
-                    }
-                    deleteDatabase("app-database")
-                    viewModel.invalidateToken()
-                }
-                startActivity(intentFor<LoginActivity>().singleTop())
-                finish()
+                confirmLogout()
             }
             R.id.nav_header_imageView -> Components.openChrome(
                 this,

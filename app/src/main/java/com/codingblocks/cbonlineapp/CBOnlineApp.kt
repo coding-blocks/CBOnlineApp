@@ -21,6 +21,7 @@ import io.github.inflationx.calligraphy3.CalligraphyConfig
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor
 import io.github.inflationx.viewpump.ViewPump
 import org.koin.android.ext.android.startKoin
+import java.io.File
 
 class CBOnlineApp : Application() {
 
@@ -80,5 +81,33 @@ class CBOnlineApp : Application() {
                 log("Concurrent Modification Exception")
             }
         }
+    }
+
+    fun clearApplicationData() {
+        val applicationCacheDirectory = File(cacheDir.parent)
+        if (applicationCacheDirectory.exists()) {
+            val fileNames = applicationCacheDirectory.list()
+            for (fileName in fileNames) {
+                if (fileName != "lib") {
+                    deleteFile(File(applicationCacheDirectory, fileName))
+                }
+            }
+        }
+    }
+
+    private fun deleteFile(file: File?): Boolean {
+        var deletedAll = true
+        if (file != null) {
+            if (file.isDirectory) {
+                val children = file.list()
+                for (i in children.indices) {
+                    deletedAll = deleteFile(File(file, children[i])) && deletedAll
+                }
+            } else {
+                deletedAll = file.delete()
+            }
+        }
+
+        return deletedAll
     }
 }
