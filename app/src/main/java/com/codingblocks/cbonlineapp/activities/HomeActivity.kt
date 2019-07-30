@@ -39,10 +39,11 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.report_dialog.view.okBtn
 import kotlinx.android.synthetic.main.activity_home.drawer_layout
 import kotlinx.android.synthetic.main.activity_home.nav_view
 import kotlinx.android.synthetic.main.app_bar_home.toolbar
+import kotlinx.android.synthetic.main.custom_dialog.view.cancelBtn
+import kotlinx.android.synthetic.main.custom_dialog.view.description
 import kotlinx.android.synthetic.main.nav_header_home.view.login_button
 import kotlinx.android.synthetic.main.nav_header_home.view.nav_header_imageView
 import kotlinx.android.synthetic.main.report_dialog.view.descriptionEdtv
