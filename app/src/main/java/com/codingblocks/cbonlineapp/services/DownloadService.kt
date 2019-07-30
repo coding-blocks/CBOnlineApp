@@ -15,14 +15,13 @@ import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.DownloadData
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.LECTURE_CONTENT_ID
-import com.codingblocks.cbonlineapp.util.ID
-import com.codingblocks.cbonlineapp.util.TITLE
 import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.TITLE
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.onlineapi.Clients
 import com.vdocipher.aegis.media.ErrorDescription
@@ -50,10 +49,9 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
             val downloadData = DownloadData(
-                intent.getStringExtra(ID),
+                intent.getStringExtra(SECTION_ID),
                 intent.getStringExtra(VIDEO_ID),
                 intent.getStringExtra(RUN_ATTEMPT_ID),
-                intent.getStringExtra(SECTION_ID),
                 intent.getStringExtra(CONTENT_ID),
                 intent.getStringExtra(LECTURE_CONTENT_ID),
                 notificationId++,
@@ -181,7 +179,7 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
             val data = findDataWithId(videoId)
             if (data != null) {
                 doAsync {
-                    contentDao.updateContent(data.dataId, data.lectureContentId, "true")
+                    contentDao.updateContent(data.sectionId, data.lectureContentId, "true")
                 }
                 val intent = Intent(this, VideoPlayerActivity::class.java)
                 intent.putExtra(VIDEO_ID, data.videoId)

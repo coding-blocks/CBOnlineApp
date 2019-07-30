@@ -7,16 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.codingblocks.cbonlineapp.util.DownloadStarter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
 import com.codingblocks.cbonlineapp.database.models.CourseSection
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.services.DownloadService
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.DownloadStarter
 import com.codingblocks.cbonlineapp.util.LECTURE_CONTENT_ID
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
@@ -48,22 +48,19 @@ class CourseContentFragment : Fragment(), AnkoLogger,
 
     override fun startDownload(
         videoId: String,
-        id: String,
+        sectionId: String,
         lectureContentId: String,
         title: String,
         attemptId: String,
-        contentId: String,
-        sectionId: String
+        contentId: String
     ) {
         startService<DownloadService>(
-            "id" to id,
+            SECTION_ID to sectionId,
             VIDEO_ID to videoId,
             LECTURE_CONTENT_ID to lectureContentId,
             "title" to title,
             RUN_ATTEMPT_ID to attemptId,
-            CONTENT_ID to contentId,
-            SECTION_ID to sectionId
-        )
+            CONTENT_ID to contentId)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

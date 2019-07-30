@@ -42,6 +42,8 @@ class MyCourseViewModel(
 
     fun getContentWithSectionId(id: String) = sectionWithContentsDao.getContentWithSectionId(id).getDistinct()
 
+    fun getSectionDownloadlist(id: String) = sectionWithContentsDao.getVideoIdsWithSectionId(id)
+
     fun updateContent(id: String, lectureContentId: String, s: String) = contentsDao.updateContent(id, lectureContentId, s)
 
     fun updateProgressLecture(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressLecture(sectionId, contentId, s, s1)

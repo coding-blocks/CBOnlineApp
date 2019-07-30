@@ -12,6 +12,7 @@ import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
@@ -19,31 +20,35 @@ import com.codingblocks.cbonlineapp.activities.PdfActivity
 import com.codingblocks.cbonlineapp.activities.QuizActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.database.models.CourseSection
-import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.extensions.getDurationBreakdown
 import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
-import com.codingblocks.cbonlineapp.util.DownloadStarter
-import com.codingblocks.cbonlineapp.util.VIDEO_ID
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.SECTION_ID
-import com.codingblocks.cbonlineapp.util.DOWNLOADED
-import com.codingblocks.cbonlineapp.util.QUIZ_QNA
-import com.codingblocks.cbonlineapp.util.QUIZ_ID
-import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.NetworkUtils
-import com.codingblocks.cbonlineapp.util.FileUtils
-import com.codingblocks.cbonlineapp.util.OnCleanDialogListener
-import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.Animations.collapse
 import com.codingblocks.cbonlineapp.util.Animations.expand
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.DOWNLOADED
+import com.codingblocks.cbonlineapp.util.DownloadStarter
+import com.codingblocks.cbonlineapp.util.FileUtils
+import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.NetworkUtils
+import com.codingblocks.cbonlineapp.util.OnCleanDialogListener
+import com.codingblocks.cbonlineapp.util.QUIZ_ID
+import com.codingblocks.cbonlineapp.util.QUIZ_QNA
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.RunAttemptsId
-import kotlinx.android.synthetic.main.item_section.view.*
+import kotlinx.android.synthetic.main.item_section.view.arrow
+import kotlinx.android.synthetic.main.item_section.view.downloadSectionBtn
+import kotlinx.android.synthetic.main.item_section.view.lectureTime
+import kotlinx.android.synthetic.main.item_section.view.lectures
+import kotlinx.android.synthetic.main.item_section.view.title
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
@@ -75,7 +80,7 @@ class SectionDetailsAdapter(
     }
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
-        sectionData?.get(position)?.let { holder.bindView(it, starter) }
+        sectionData?.get(position)?.let { holder.bindView(it) }
     }
 
     override fun getItemCount(): Int {
@@ -97,7 +102,7 @@ class SectionDetailsAdapter(
 
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindView(data: CourseSection, starter: DownloadStarter) {
+        fun bindView(data: CourseSection) {
             itemView.title.text = data.name
             viewModel.getContentWithSectionId(data.id).observer(activity) { courseContent ->
                 val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
@@ -132,9 +137,11 @@ class SectionDetailsAdapter(
                     }
                     itemView.lectureTime.text = duration.getDurationBreakdown()
 
-                    if (!data.premium)
-                        itemView.free.visibility = View.VISIBLE
-
+//                    if (!data.premium)
+//                        itemView.free.visibility = View.VISIBLE
+                    viewModel.getSectionDownloadlist(data.id).observer(activity) {
+                        itemView.downloadSectionBtn.isVisible = it.isNotEmpty()
+                    }
                     subTitle.text = content.title
 
                     if (!data.premium || premium && ((courseStartDate.toLong() * 1000) < System.currentTimeMillis())) {
@@ -200,7 +207,6 @@ class SectionDetailsAdapter(
                                                             content.title,
                                                             content.attempt_id,
                                                             content.id,
-                                                            content.section_id,
                                                             downloadBtn
                                                         )
                                                     } else {
@@ -217,7 +223,6 @@ class SectionDetailsAdapter(
                                                         content.title,
                                                         content.attempt_id,
                                                         content.id,
-                                                        content.section_id,
                                                         downloadBtn
                                                     )
                                                 }
@@ -408,7 +413,7 @@ class SectionDetailsAdapter(
             }
         }
 
-        private fun startFileDownload(lectureId: String, dataId: String, lectureContentId: String, title: String, attempt_id: String, content_id: String, section_id: String, downloadBtn: ImageView) {
+        private fun startFileDownload(lectureId: String, dataId: String, lectureContentId: String, title: String, attempt_id: String, content_id: String, downloadBtn: ImageView) {
             if (FileUtils.checkIfCannotDownload(context)) {
                 FileUtils.showIfCleanDialog(context, object : OnCleanDialogListener {
                     override fun onComplete() {
@@ -419,7 +424,6 @@ class SectionDetailsAdapter(
                             title,
                             attempt_id,
                             content_id,
-                            section_id,
                             downloadBtn
                         )
                     }
@@ -432,7 +436,6 @@ class SectionDetailsAdapter(
                     title,
                     attempt_id,
                     content_id,
-                    section_id,
                     downloadBtn
                 )
             }
@@ -445,7 +448,6 @@ class SectionDetailsAdapter(
             title: String,
             attemptId: String,
             contentId: String,
-            sectionId: String,
             downloadBtn: ImageView
         ) {
             starter.startDownload(
@@ -454,9 +456,7 @@ class SectionDetailsAdapter(
                 lectureContentId,
                 title,
                 attemptId,
-                contentId,
-                sectionId
-            )
+                contentId)
             downloadBtn.isEnabled = false
             (downloadBtn.background as AnimationDrawable).start()
         }
