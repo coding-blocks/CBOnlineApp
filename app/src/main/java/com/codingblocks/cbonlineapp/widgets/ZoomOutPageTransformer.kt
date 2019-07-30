@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.util
+package com.codingblocks.cbonlineapp.widgets
 
 import android.view.View
 import androidx.viewpager.widget.ViewPager

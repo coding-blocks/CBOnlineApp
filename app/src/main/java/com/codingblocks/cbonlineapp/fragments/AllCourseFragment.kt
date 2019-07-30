@@ -29,7 +29,9 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     val ui = HomeFragmentUi<Fragment>()
     private lateinit var courseDataAdapter: CourseDataAdapter
     private lateinit var skeletonScreen: SkeletonScreen
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private val firebaseAnalytics by lazy {
+        FirebaseAnalytics.getInstance(requireContext())
+    }
 
     private val viewModel by viewModel<HomeViewModel>()
 
@@ -43,7 +45,6 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         val params = Bundle()
         params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
         params.putString(FirebaseAnalytics.Param.ITEM_NAME, "AllCourses")

@@ -18,8 +18,8 @@ import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
-import com.codingblocks.cbonlineapp.util.ZoomOutPageTransformer
 import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
+import com.codingblocks.cbonlineapp.widgets.ZoomOutPageTransformer
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen

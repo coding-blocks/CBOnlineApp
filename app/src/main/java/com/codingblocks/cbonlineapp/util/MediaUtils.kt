@@ -14,40 +14,12 @@ import android.graphics.drawable.PictureDrawable
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.codingblocks.cbonlineapp.CBOnlineApp
-import okhttp3.Cache
-import okhttp3.CacheControl
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
 import java.io.File
-import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
 object MediaUtils {
 
     const val DOWNLOAD_CHANNEL_ID = "downloadChannel"
-    val okHttpClient = provideOkHttpClient()
-
-    private fun provideOkHttpClient(): OkHttpClient {
-        val cache = Cache(File(CBOnlineApp.mInstance.cacheDir, "http-cache"), 10 * 1024 * 1024)
-        return OkHttpClient.Builder()
-                .addNetworkInterceptor(provideCacheInterceptor())
-                .cache(cache)
-                .build()
-    }
-
-    private fun provideCacheInterceptor(): Interceptor {
-        return Interceptor { chain ->
-            val response = chain.proceed(chain.request())
-            val cacheControl = CacheControl.Builder()
-                    .maxAge(7, TimeUnit.DAYS)
-                    .build()
-
-            response.newBuilder()
-                    .header("Cache-Control", cacheControl.toString())
-                    .build()
-        }
-    }
 
     fun deleteRecursive(fileOrDirectory: File) {
 

@@ -27,6 +27,7 @@ import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.NetworkUtils.okHttpClient
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
@@ -172,7 +173,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                     shortcut.setShortLabel(courseRun.title)
                     shortcut.setDisabledMessage("Login to open this")
 
-                    MediaUtils.okHttpClient.newCall(Request.Builder().url(data.logo).build())
+                    okHttpClient.newCall(Request.Builder().url(data.logo).build())
                         .execute().body()?.let {
                             with(SVG.getFromInputStream(it.byteStream())) {
                                 val picDrawable = PictureDrawable(
