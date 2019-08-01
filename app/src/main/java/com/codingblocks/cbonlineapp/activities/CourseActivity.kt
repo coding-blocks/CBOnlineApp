@@ -23,6 +23,7 @@ import com.codingblocks.cbonlineapp.extensions.loadSvg
 import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
 import com.codingblocks.cbonlineapp.util.OnCartItemClickListener
 import com.codingblocks.cbonlineapp.util.ProgressBarAnimation
 import com.codingblocks.cbonlineapp.viewmodels.CourseViewModel
@@ -316,7 +317,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 p2: Boolean
             ) {
                 if (!p2) {
-                    youtubePlayerInstance?.loadVideo(promoVideo.split("=")[1])
+                    youtubePlayerInstance?.loadVideo(getYotubeVideoId(promoVideo))
                 }
             }
         }

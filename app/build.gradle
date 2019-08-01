@@ -34,6 +34,10 @@ android {
                 onesignal_app_id               : '01d75aac-5123-4145-b655-ba8d27c5dc13',
                 onesignal_google_project_number: 'REMOTE'
         ]
+        buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'
+        buildConfigField "String", "CLIENT_ID", '"' + CLIENT_ID + '"'
+        buildConfigField "String", "REDIRECT_URI", '"' + REDIRECT_URI + '"'
+        buildConfigField "String", "OAUTH_URL", '"' + OAUTH_URL + '"'
     }
     lintOptions {
         abortOnError false
@@ -42,21 +46,12 @@ android {
         debug {
             minifyEnabled false
             versionNameSuffix '-debug-version'
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'
-            buildConfigField "String", "CLIENT_ID", '"' + CLIENT_ID + '"'
-            buildConfigField "String", "REDIRECT_URI", '"' + REDIRECT_URI + '"'
-            buildConfigField "String", "OAUTH_URL", '"' + OAUTH_URL + '"'
             applicationIdSuffix = 'debug'
 
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'
-            buildConfigField "String", "CLIENT_ID", '"' + CLIENT_ID + '"'
-            buildConfigField "String", "REDIRECT_URI", '"' + REDIRECT_URI + '"'
-            buildConfigField "String", "OAUTH_URL", '"' + OAUTH_URL + '"'
 
         }
     }

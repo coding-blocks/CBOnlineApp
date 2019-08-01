@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.extensions.greater
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.CarouselCards
+import com.crashlytics.android.core.CrashlyticsCore
 
 class HomeViewModel(
     private val courseWithInstructorDao: CourseWithInstructorDao,
@@ -137,13 +138,20 @@ class HomeViewModel(
                                         Clients.api.getMyCourseProgress(runId)
                                             .enqueue(retrofitCallback { _, progressRes ->
                                                 progressRes?.body().let {
-                                                    val progress: Double = try {
-                                                        it?.get("percent") as Double
+                                                    var progress = 0.0
+                                                    var completedContents = 0.0
+                                                    var totalContents = 0.0
+                                                    try {
+                                                        progress = it?.get("percent") as Double
+                                                        completedContents = it["completedContents"] as Double
+                                                        totalContents = it["totalContents"] as Double
                                                     } catch (e: Exception) {
-                                                        0.0
+                                                        CrashlyticsCore.getInstance().apply {
+                                                            setString("Progress Error", e.localizedMessage)
+                                                            log("Null Pointer Exception")
+                                                        }
                                                     }
-                                                    val completedContents = it?.get("completedContents") as Double
-                                                    val totalContents = it["totalContents"] as Double
+
                                                     val newCourse = courseRun.course?.run {
                                                         Course(
                                                             id,

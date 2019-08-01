@@ -7,5 +7,6 @@ interface DownloadStarter {
         lectureContentId: String,
         title: String,
         attemptId: String,
-        contentId: String)
+        contentId: String
+    )
 }
