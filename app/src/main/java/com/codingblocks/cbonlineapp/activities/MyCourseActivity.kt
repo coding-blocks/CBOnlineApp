@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_my_course.contentCompletedTv
 import kotlinx.android.synthetic.main.activity_my_course.courseProgress
 import kotlinx.android.synthetic.main.activity_my_course.htab_tabs
 import kotlinx.android.synthetic.main.activity_my_course.htab_viewpager
+import kotlinx.android.synthetic.main.activity_my_course.resumeBtn
 import kotlinx.android.synthetic.main.activity_my_course.toolbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -46,6 +47,12 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
             viewModel.updatehit(viewModel.attemptId)
             viewModel.fetchCourse(viewModel.attemptId)
             setupViewPager(viewModel.attemptId, viewModel.courseId)
+        }
+
+        resumeBtn.setOnClickListener {
+            viewModel.getResumeCourse().observer(this) {
+                it.size
+            }
         }
     }
 
