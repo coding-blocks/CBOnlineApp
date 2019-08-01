@@ -11,10 +11,14 @@ import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
 import com.codingblocks.cbonlineapp.fragments.DoubtsFragment
 import com.codingblocks.cbonlineapp.fragments.LeaderboardFragment
 import com.codingblocks.cbonlineapp.fragments.OverviewFragment
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import kotlinx.android.synthetic.main.activity_my_course.contentCompletedTv
 import kotlinx.android.synthetic.main.activity_my_course.courseProgress
@@ -22,6 +26,8 @@ import kotlinx.android.synthetic.main.activity_my_course.htab_tabs
 import kotlinx.android.synthetic.main.activity_my_course.htab_viewpager
 import kotlinx.android.synthetic.main.activity_my_course.resumeBtn
 import kotlinx.android.synthetic.main.activity_my_course.toolbar
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
@@ -51,7 +57,34 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
 
         resumeBtn.setOnClickListener {
             viewModel.getResumeCourse().observer(this) {
-                it.size
+                with(it[0]) {
+                    when (contentable) {
+                        "lecture" -> {
+                            startActivity(intentFor<VideoPlayerActivity>(
+                                VIDEO_ID to contentLecture.lectureId,
+                                RUN_ATTEMPT_ID to attempt_id,
+                                CONTENT_ID to id,
+                                SECTION_ID to section_id,
+                                DOWNLOADED to contentLecture.isDownloaded
+                            ).singleTop()
+                            )
+                        }
+                        "document" -> {
+                            intentFor<PdfActivity>(
+                                "fileUrl" to contentDocument.documentPdfLink,
+                                "fileName" to contentDocument.documentName + ".pdf"
+                            ).singleTop()
+                        }
+                        "video" -> {
+                            intentFor<VideoPlayerActivity>(
+                                "videoUrl" to contentVideo.videoUrl,
+                                RUN_ATTEMPT_ID to attempt_id,
+                                CONTENT_ID to id
+                            ).singleTop()
+                        }
+                        else -> return@with
+                    }
+                }
             }
         }
     }
