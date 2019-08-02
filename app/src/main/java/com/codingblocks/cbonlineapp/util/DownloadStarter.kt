@@ -9,4 +9,6 @@ interface DownloadStarter {
         attemptId: String,
         contentId: String
     )
+
+    fun startSectionDownlod(sectionId: String)
 }

@@ -60,6 +60,10 @@ android {
         targetCompatibility = '1.8'
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     packagingOptions {
         exclude 'META-INF/atomicfu.kotlin_module'
     }

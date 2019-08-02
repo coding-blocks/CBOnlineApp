@@ -140,7 +140,15 @@ class SectionDetailsAdapter(
 //                    if (!data.premium)
 //                        itemView.free.visibility = View.VISIBLE
                     viewModel.getSectionDownloadlist(data.id).observer(activity) {
-                        itemView.downloadSectionBtn.isVisible = it.isNotEmpty()
+                        itemView.downloadSectionBtn.apply {
+                            isVisible = it.isNotEmpty()
+                            setOnClickListener {
+                                downloadSectionBtn.isEnabled = false
+                                (downloadSectionBtn.background as AnimationDrawable).start()
+                                starter.startSectionDownlod(data.id)
+                            }
+                        }
+
                     }
                     subTitle.text = content.title
 

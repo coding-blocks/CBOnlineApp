@@ -3,7 +3,6 @@ package com.codingblocks.cbonlineapp.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.database.ContentDao
-import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.SectionDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
@@ -21,7 +20,6 @@ import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 
 class MyCourseViewModel(
-    private val courseDao: CourseDao,
     private val runDao: CourseRunDao,
     private val sectionWithContentsDao: SectionWithContentsDao,
     private val contentsDao: ContentDao,

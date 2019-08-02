@@ -14,11 +14,17 @@ import com.codingblocks.cbonlineapp.fragments.OverviewFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
+import com.codingblocks.cbonlineapp.util.FILE_NAME
+import com.codingblocks.cbonlineapp.util.FILE_URL
+import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
+import com.codingblocks.cbonlineapp.util.VIDEO_URL
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import kotlinx.android.synthetic.main.activity_my_course.contentCompletedTv
 import kotlinx.android.synthetic.main.activity_my_course.courseProgress
@@ -53,13 +59,14 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
             viewModel.updatehit(viewModel.attemptId)
             viewModel.fetchCourse(viewModel.attemptId)
             setupViewPager(viewModel.attemptId, viewModel.courseId)
+
         }
 
         resumeBtn.setOnClickListener {
             viewModel.getResumeCourse().observer(this) {
                 with(it[0]) {
                     when (contentable) {
-                        "lecture" -> {
+                        LECTURE -> {
                             startActivity(intentFor<VideoPlayerActivity>(
                                 VIDEO_ID to contentLecture.lectureId,
                                 RUN_ATTEMPT_ID to attempt_id,
@@ -69,15 +76,15 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
                             ).singleTop()
                             )
                         }
-                        "document" -> {
+                        DOCUMENT -> {
                             intentFor<PdfActivity>(
-                                "fileUrl" to contentDocument.documentPdfLink,
-                                "fileName" to contentDocument.documentName + ".pdf"
+                                FILE_URL to contentDocument.documentPdfLink,
+                                FILE_NAME to contentDocument.documentName + ".pdf"
                             ).singleTop()
                         }
-                        "video" -> {
+                        VIDEO -> {
                             intentFor<VideoPlayerActivity>(
-                                "videoUrl" to contentVideo.videoUrl,
+                                VIDEO_URL to contentVideo.videoUrl,
                                 RUN_ATTEMPT_ID to attempt_id,
                                 CONTENT_ID to id
                             ).singleTop()

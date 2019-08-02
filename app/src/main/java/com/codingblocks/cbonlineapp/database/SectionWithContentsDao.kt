@@ -11,6 +11,9 @@ import com.codingblocks.cbonlineapp.database.models.SectionWithContent
 @Dao
 interface SectionWithContentsDao {
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(join: SectionWithContent)
+
     @Query("""
         SELECT * FROM CourseContent
         INNER JOIN sectionwithcontent ON
@@ -30,10 +33,8 @@ interface SectionWithContentsDao {
     @Query("""
         SELECT * FROM CourseContent cc
         INNER JOIN sectionwithcontent swc ON
-        cc.id = swc.content_id WHERE attempt_id = :attemptId AND progress = "UNDONE" ORDER BY `order` LIMIT 1
+        cc.id = swc.content_id WHERE attempt_id = :attemptId AND progress = "UNDONE" ORDER BY `order`
         """)
     fun resumeCourse(attemptId: String): LiveData<List<CourseContent>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(join: SectionWithContent)
 }

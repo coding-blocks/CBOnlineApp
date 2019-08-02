@@ -20,7 +20,7 @@ import org.koin.dsl.module.module
 
 val viewModelModule = module {
     viewModel { HomeViewModel(get(), get(), get(), get()) }
-    viewModel { MyCourseViewModel(get(), get(), get(), get(), get()) }
+    viewModel { MyCourseViewModel(get(), get(), get(), get()) }
     viewModel { LeaderboardViewModel() }
     viewModel { NotificationViewModel(get()) }
 

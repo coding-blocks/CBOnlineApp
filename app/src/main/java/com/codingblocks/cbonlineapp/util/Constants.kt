@@ -35,3 +35,19 @@ const val QUIZ_QNA = "quiz_qna_id"
 const val QUIZ_ATTEMPT_ID = "quiz_attempt_id"
 
 const val JOB_ID = "jobId"
+
+const val LECTURE = "lecture"
+
+const val DOCUMENT = "document"
+
+const val VIDEO = "video"
+
+const val FILE_NAME = "fileName"
+
+const val FILE_URL = "fileUrl"
+
+const val VIDEO_URL = "videoUrl"
+
+
+
+

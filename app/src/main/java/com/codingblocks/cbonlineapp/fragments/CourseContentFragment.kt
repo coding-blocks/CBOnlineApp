@@ -13,6 +13,7 @@ import com.codingblocks.cbonlineapp.database.models.CourseSection
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.services.DownloadService
+import com.codingblocks.cbonlineapp.services.SectionDownloadService
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DownloadStarter
 import com.codingblocks.cbonlineapp.util.LECTURE_CONTENT_ID
@@ -32,6 +33,10 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class CourseContentFragment : Fragment(), AnkoLogger,
     DownloadStarter {
+    override fun startSectionDownlod(sectionId: String) {
+        startService<SectionDownloadService>(SECTION_ID to sectionId)
+    }
+
     companion object {
         @JvmStatic
         fun newInstance(param1: String) =
