@@ -47,7 +47,3 @@ const val FILE_NAME = "fileName"
 const val FILE_URL = "fileUrl"
 
 const val VIDEO_URL = "videoUrl"
-
-
-
-

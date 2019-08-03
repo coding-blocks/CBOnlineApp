@@ -51,6 +51,7 @@ import kotlinx.android.synthetic.main.item_section.view.lectures
 import kotlinx.android.synthetic.main.item_section.view.title
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.image
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.singleTop
@@ -143,12 +144,34 @@ class SectionDetailsAdapter(
                         itemView.downloadSectionBtn.apply {
                             isVisible = it.isNotEmpty()
                             setOnClickListener {
-                                downloadSectionBtn.isEnabled = false
-                                (downloadSectionBtn.background as AnimationDrawable).start()
-                                starter.startSectionDownlod(data.id)
+                                if (MediaUtils.checkPermission(context)) {
+                                    if ((context as Activity).getPrefs().SP_WIFI) {
+                                        if (NetworkUtils.connectedToWifi(context) == true) {
+                                            itemView.downloadSectionBtn.isEnabled = false
+                                            (itemView.downloadSectionBtn.image as AnimationDrawable).start()
+                                            starter.startSectionDownlod(data.id)
+                                        } else {
+                                            Components.showconfirmation(
+                                                context,
+                                                "wifi"
+                                            )
+                                        }
+                                    } else {
+                                        startFileDownload(
+                                            content.contentLecture.lectureId,
+                                            data.id,
+                                            content.contentLecture.lectureContentId,
+                                            content.title,
+                                            content.attempt_id,
+                                            content.id,
+                                            downloadBtn
+                                        )
+                                    }
+                                } else {
+                                    MediaUtils.isStoragePermissionGranted(context)
+                                }
                             }
                         }
-
                     }
                     subTitle.text = content.title
 

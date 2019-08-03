@@ -36,5 +36,4 @@ interface SectionWithContentsDao {
         cc.id = swc.content_id WHERE attempt_id = :attemptId AND progress = "UNDONE" ORDER BY `order`
         """)
     fun resumeCourse(attemptId: String): LiveData<List<CourseContent>>
-
 }

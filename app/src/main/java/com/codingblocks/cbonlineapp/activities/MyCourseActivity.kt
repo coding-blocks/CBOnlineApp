@@ -59,7 +59,6 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
             viewModel.updatehit(viewModel.attemptId)
             viewModel.fetchCourse(viewModel.attemptId)
             setupViewPager(viewModel.attemptId, viewModel.courseId)
-
         }
 
         resumeBtn.setOnClickListener {
