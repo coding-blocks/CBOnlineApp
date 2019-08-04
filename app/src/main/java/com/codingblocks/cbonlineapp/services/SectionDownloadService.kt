@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.services
 
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -39,39 +40,48 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
     private lateinit var notification: NotificationCompat.Builder
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        sectionId = intent?.getStringExtra(SECTION_ID)
-        sectionWithContentsDao.getVideoIdsWithSectionId(sectionId ?: "").observeOnce { list ->
-            totalCount = list.size
-            notification = NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID).apply {
-                setSmallIcon(R.drawable.ic_file_download)
-                setContentTitle("Downloading Section")
-                setOnlyAlertOnce(true)
-                setLargeIcon(BitmapFactory.decodeResource(this@SectionDownloadService.resources, R.mipmap.ic_launcher))
-                setContentText("0 out of $totalCount downloaded")
-                setProgress(totalCount, 0, false)
-                color = resources.getColor(R.color.colorPrimaryDark)
-                setOngoing(true)
-                setAutoCancel(false)
-            }
-            notificationManager.notify(1, notification.build())
+        if (intent?.action.equals("STOPME")) {
+            stopSelf()
+            return START_NOT_STICKY
+        } else {
+            sectionId = intent?.getStringExtra(SECTION_ID)
+            val mIntent = Intent(this, SectionDownloadService::class.java)
+            mIntent.action = "STOPME"
+            val stopIntent = PendingIntent.getService(this, 0, mIntent, 0)
+            sectionWithContentsDao.getVideoIdsWithSectionId(sectionId ?: "").observeOnce { list ->
+                totalCount = list.size
+                notification = NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID).apply {
+                    setSmallIcon(R.drawable.ic_file_download)
+                    setContentTitle("Downloading Section")
+                    setOnlyAlertOnce(true)
+                    addAction(0, "Cancel Download", stopIntent)
+                    setLargeIcon(BitmapFactory.decodeResource(this@SectionDownloadService.resources, R.mipmap.ic_launcher))
+                    setContentText("0 out of $totalCount downloaded")
+                    setProgress(totalCount, 0, false)
+                    color = resources.getColor(R.color.colorPrimaryDark)
+                    setOngoing(true)
+                    setAutoCancel(false)
+                }
+                notificationManager.notify(1, notification.build())
 
-            list.forEach { courseContent ->
-                attemptId = courseContent.attempt_id
-                Clients.api.getOtp(courseContent.contentLecture.lectureId, courseContent.section_id, courseContent.attempt_id, true)
-                    .enqueue(retrofitCallback { _, response ->
-                        response?.let { json ->
-                            if (json.isSuccessful) {
-                                json.body()?.let {
-                                    val mOtp = it.get("otp").asString
-                                    val mPlaybackInfo = it.get("playbackInfo").asString
-                                    initializeDownload(mOtp, mPlaybackInfo, courseContent.contentLecture.lectureId)
+                list.forEach { courseContent ->
+                    attemptId = courseContent.attempt_id
+                    Clients.api.getOtp(courseContent.contentLecture.lectureId, courseContent.section_id, courseContent.attempt_id, true)
+                        .enqueue(retrofitCallback { _, response ->
+                            response?.let { json ->
+                                if (json.isSuccessful) {
+                                    json.body()?.let {
+                                        val mOtp = it.get("otp").asString
+                                        val mPlaybackInfo = it.get("playbackInfo").asString
+                                        initializeDownload(mOtp, mPlaybackInfo, courseContent.contentLecture.lectureId)
+                                    }
                                 }
                             }
-                        }
-                    })
+                        })
+                }
             }
+            return START_STICKY
         }
-        return START_STICKY
     }
 
     private fun initializeDownload(mOtp: String?, mPlaybackInfo: String?, videoId: String) {
@@ -116,6 +126,7 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
 
     override fun onDestroy() {
         super.onDestroy()
+        notificationManager.cancel(1)
     }
 
     override fun onBind(p0: Intent?): IBinder? = null
@@ -132,6 +143,7 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
     }
 
     override fun onFailed(videoId: String, p1: DownloadStatus?) {
+        completedCount--
         Clients.api.getOtp(videoId, sectionId ?: "", attemptId ?: "", true)
             .enqueue(retrofitCallback { _, response ->
                 response?.let { json ->
