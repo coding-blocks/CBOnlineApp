@@ -14,6 +14,6 @@ abstract class SectionDao : BaseDao<CourseSection> {
     @Query("SElECT * FROM CourseSection where uid = :id")
     abstract fun getSectionWithId(id: String): CourseSection
 
-    @Query("SElECT * FROM CourseSection where attempt_id = :courseId ORDER BY `order`")
+    @Query("SElECT * FROM CourseSection where attempt_id = :courseId ORDER BY `sectionOrder`")
     abstract fun getCourseSection(courseId: String): LiveData<List<CourseSection>>
 }

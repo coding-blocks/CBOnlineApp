@@ -122,7 +122,7 @@ data class CourseWithInstructor(
 data class CourseSection(
     var uid: String,
     var name: String,
-    var order: Int,
+    var sectionOrder: Int,
     var premium: Boolean,
     var status: String,
     var run_id: String,

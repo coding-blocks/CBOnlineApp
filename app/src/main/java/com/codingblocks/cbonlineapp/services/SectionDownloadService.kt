@@ -2,13 +2,17 @@ package com.codingblocks.cbonlineapp.services
 
 import android.app.Service
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Environment
 import android.os.IBinder
 import android.util.Log
+import androidx.core.app.NotificationCompat
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
+import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.onlineapi.Clients
 import com.vdocipher.aegis.media.ErrorDescription
@@ -21,6 +25,7 @@ import com.vdocipher.aegis.offline.VdoDownloadManager
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.info
+import org.jetbrains.anko.notificationManager
 import org.koin.android.ext.android.inject
 import java.io.File
 
@@ -33,21 +38,24 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         sectionId = intent?.getStringExtra(SECTION_ID)
-        sectionWithContentsDao.getVideoIdsWithSectionId(sectionId ?: "").observeOnce {
-            //            NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID).apply {
-//                setSmallIcon(R.drawable.ic_file_download)
-//                setContentTitle("Downloading Section")
-//                setOnlyAlertOnce(true)
-//                setLargeIcon(BitmapFactory.decodeResource(this@SectionDownloadService.resources, R.mipmap.ic_launcher))
-//                setContentText("Waiting to Download")
-//                setProgress(100, 0, false)
-//                color = resources.getColor(R.color.colorPrimaryDark)
-//                setOngoing(true) // THIS is the important line
-//                setAutoCancel(false)
-//            }
-            it.forEach { courseContent ->
+        sectionWithContentsDao.getVideoIdsWithSectionId(sectionId ?: "").observeOnce { list ->
+            totalCount = list.size
+            val notification = NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID).apply {
+                setSmallIcon(R.drawable.ic_file_download)
+                setContentTitle("Downloading Section")
+                setOnlyAlertOnce(true)
+                setLargeIcon(BitmapFactory.decodeResource(this@SectionDownloadService.resources, R.mipmap.ic_launcher))
+                setContentText("0 out of $totalCount")
+                setProgress(100, 0, false)
+                color = resources.getColor(R.color.colorPrimaryDark)
+                setOngoing(true)
+                setAutoCancel(false)
+            }
+            notificationManager.notify(1, notification.build())
+
+            list.forEach { courseContent ->
                 Clients.api.getOtp(courseContent.contentLecture.lectureId, courseContent.section_id, courseContent.attempt_id, true)
-                    .enqueue(retrofitCallback { throwable, response ->
+                    .enqueue(retrofitCallback { _, response ->
                         response?.let { json ->
                             if (json.isSuccessful) {
                                 json.body()?.let {

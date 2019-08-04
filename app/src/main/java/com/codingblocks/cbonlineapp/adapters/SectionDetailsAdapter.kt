@@ -157,15 +157,9 @@ class SectionDetailsAdapter(
                                             )
                                         }
                                     } else {
-                                        startFileDownload(
-                                            content.contentLecture.lectureId,
-                                            data.id,
-                                            content.contentLecture.lectureContentId,
-                                            content.title,
-                                            content.attempt_id,
-                                            content.id,
-                                            downloadBtn
-                                        )
+                                        itemView.downloadSectionBtn.isEnabled = false
+                                        (itemView.downloadSectionBtn.image as AnimationDrawable).start()
+                                        starter.startSectionDownlod(data.id)
                                     }
                                 } else {
                                     MediaUtils.isStoragePermissionGranted(context)

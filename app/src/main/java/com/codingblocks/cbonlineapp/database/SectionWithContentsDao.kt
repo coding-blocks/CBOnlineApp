@@ -26,14 +26,16 @@ interface SectionWithContentsDao {
         SELECT * FROM CourseContent cc
         INNER JOIN sectionwithcontent swc ON
         cc.id = swc.content_id
-        WHERE swc.section_id = :sectionID AND cc.contentable = "lecture" AND isDownloaded = "false" ORDER BY `order`
+        WHERE swc.section_id = :sectionID AND cc.contentable = "lecture"
+        AND isDownloaded = "false" ORDER BY `order`
         """)
     fun getVideoIdsWithSectionId(sectionID: String): LiveData<List<CourseContent>>
 
     @Query("""
-        SELECT * FROM CourseContent cc
+        SELECT * FROM CourseContent cc,CourseSection cs
         INNER JOIN sectionwithcontent swc ON
-        cc.id = swc.content_id WHERE attempt_id = :attemptId AND progress = "UNDONE" ORDER BY `order`
+        cc.id = swc.content_id WHERE cs.attempt_id = :attemptId AND progress = "UNDONE"
+        ORDER BY `sectionOrder`,`order` LIMIT 1
         """)
     fun resumeCourse(attemptId: String): LiveData<List<CourseContent>>
 }
