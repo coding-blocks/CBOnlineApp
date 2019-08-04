@@ -186,7 +186,7 @@ class SectionDetailsAdapter(
                                 contentType.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
                                 if (content.contentLecture.lectureUid.isNotEmpty()) {
                                     ll.addView(inflatedView)
-                                    if (content.contentLecture.isDownloaded == "false") {
+                                    if (content.contentLecture.isDownloaded == "false" || !FileUtils.checkDownloadFileExists(context, content.contentLecture.lectureId)) {
                                         downloadBtn.setImageDrawable(null)
                                         downloadBtn.background =
                                             context.getDrawable(android.R.drawable.stat_sys_download)

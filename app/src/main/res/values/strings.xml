@@ -106,4 +106,5 @@
     <string name="job_eligible">Status:  Eligible</string>
     <string name="job_not_eligible">Status:  Not Eligible</string>
     <string name="job_applied">You\'ve already applied for the job</string>
+    <string name="faqs">Frequently Asked Questions</string>
 </resources>

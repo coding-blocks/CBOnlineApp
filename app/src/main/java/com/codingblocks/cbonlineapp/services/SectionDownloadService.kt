@@ -143,7 +143,6 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
     }
 
     override fun onFailed(videoId: String, p1: DownloadStatus?) {
-        completedCount--
         Clients.api.getOtp(videoId, sectionId ?: "", attemptId ?: "", true)
             .enqueue(retrofitCallback { _, response ->
                 response?.let { json ->

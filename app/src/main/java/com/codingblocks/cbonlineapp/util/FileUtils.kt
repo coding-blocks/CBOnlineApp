@@ -78,6 +78,10 @@ object FileUtils {
         confirmDialog.setCancelable(false)
         confirmDialog.show()
     }
+
+    fun checkDownloadFileExists(context: Context, lectureId: String): Boolean {
+        return File(getCommonPath(context), "/$lectureId").exists()
+    }
 }
 
 interface OnCleanDialogListener {

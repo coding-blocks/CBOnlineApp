@@ -516,7 +516,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:fontFamily="@font/nunitosans_bold"
-                    android:text="@string/summary"
+                    android:text="@string/faqs"
                     android:textColor="@color/black"
                     android:textSize="22sp" />
 
