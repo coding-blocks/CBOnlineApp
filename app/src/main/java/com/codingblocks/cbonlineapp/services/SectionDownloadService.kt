@@ -33,20 +33,22 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
     private val contentDao: ContentDao by inject()
     private val sectionWithContentsDao: SectionWithContentsDao by inject()
     private var sectionId: String? = null
+    private var attemptId: String? = null
     private var totalCount = 0
     private var completedCount = 0
+    private lateinit var notification: NotificationCompat.Builder
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         sectionId = intent?.getStringExtra(SECTION_ID)
         sectionWithContentsDao.getVideoIdsWithSectionId(sectionId ?: "").observeOnce { list ->
             totalCount = list.size
-            val notification = NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID).apply {
+            notification = NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID).apply {
                 setSmallIcon(R.drawable.ic_file_download)
                 setContentTitle("Downloading Section")
                 setOnlyAlertOnce(true)
                 setLargeIcon(BitmapFactory.decodeResource(this@SectionDownloadService.resources, R.mipmap.ic_launcher))
-                setContentText("0 out of $totalCount")
-                setProgress(100, 0, false)
+                setContentText("0 out of $totalCount downloaded")
+                setProgress(totalCount, 0, false)
                 color = resources.getColor(R.color.colorPrimaryDark)
                 setOngoing(true)
                 setAutoCancel(false)
@@ -54,6 +56,7 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
             notificationManager.notify(1, notification.build())
 
             list.forEach { courseContent ->
+                attemptId = courseContent.attempt_id
                 Clients.api.getOtp(courseContent.contentLecture.lectureId, courseContent.section_id, courseContent.attempt_id, true)
                     .enqueue(retrofitCallback { _, response ->
                         response?.let { json ->
@@ -108,7 +111,7 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
-        super.onTaskRemoved(rootIntent)
+        notificationManager.cancel(1)
     }
 
     override fun onDestroy() {
@@ -118,13 +121,29 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
     override fun onBind(p0: Intent?): IBinder? = null
 
     override fun onChanged(p0: String?, p1: DownloadStatus?) {
-        info { p1?.downloadPercent }
+        notification.apply {
+            setProgress(totalCount, completedCount, false)
+            setContentText("$completedCount out of $totalCount downloaded(Current ${p1?.downloadPercent}% completed)")
+        }
+        notificationManager.notify(1, notification.build())
     }
 
     override fun onDeleted(p0: String?) {
     }
 
-    override fun onFailed(p0: String?, p1: DownloadStatus?) {
+    override fun onFailed(videoId: String, p1: DownloadStatus?) {
+        Clients.api.getOtp(videoId, sectionId ?: "", attemptId ?: "", true)
+            .enqueue(retrofitCallback { _, response ->
+                response?.let { json ->
+                    if (json.isSuccessful) {
+                        json.body()?.let {
+                            val mOtp = it.get("otp").asString
+                            val mPlaybackInfo = it.get("playbackInfo").asString
+                            initializeDownload(mOtp, mPlaybackInfo, videoId)
+                        }
+                    }
+                }
+            })
     }
 
     override fun onQueued(p0: String?, p1: DownloadStatus?) {
@@ -132,13 +151,24 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
     }
 
     override fun onCompleted(videoId: String, p1: DownloadStatus?) {
-        info { "Queue" + p1?.downloadPercent }
 
         completedCount++
         doAsync {
             sectionId?.let { contentDao.updateContentWithVideoId(it, videoId, "true") }
         }
+        notification.apply {
+            setProgress(totalCount, completedCount, false)
+            setContentText("$completedCount out of $totalCount downloaded")
+        }
+        notificationManager.notify(1, notification.build())
         if (totalCount == completedCount) {
+            notification.apply {
+                setProgress(0, 0, false)
+                setContentText("Section Downloaded")
+                setOngoing(false)
+                setAutoCancel(true)
+            }
+            notificationManager.notify(1, notification.build())
         }
     }
 }
