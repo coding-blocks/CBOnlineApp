@@ -31,10 +31,11 @@ interface SectionWithContentsDao {
     fun getVideoIdsWithSectionId(sectionID: String): LiveData<List<CourseContent>>
 
     @Query("""
-        SELECT * FROM CourseContent cc,CourseSection cs
-        INNER JOIN sectionwithcontent swc ON
-        cc.id = swc.content_id WHERE cs.attempt_id = :attemptId AND progress = "UNDONE"
-        ORDER BY `sectionOrder`,`order`
+        SELECT * FROM  CourseSection s
+	    INNER JOIN SectionWithContent sc ON sc."section_id" = s."uid"
+	    INNER JOIN CourseContent c ON c."uid" = sc."content_id"
+	    WHERE s.attempt_id = :attemptId AND progress = "UNDONE"
+        ORDER BY s."sectionOrder", sc."order" LIMIT 1;
         """)
     fun resumeCourse(attemptId: String): LiveData<List<CourseContent>>
 }

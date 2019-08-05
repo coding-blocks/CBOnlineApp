@@ -96,7 +96,7 @@ open class Instructor(
 
 class SectionContent(
     val order: Int,
-    val sectionId: String
+    val sectionId: String?
 ) : BaseModel()
 
 // =======Singular Models =========

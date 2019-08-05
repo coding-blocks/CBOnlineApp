@@ -243,7 +243,8 @@ class MyCourseViewModel(
                                                                                 SectionWithContent(
                                                                                     courseSection.id,
                                                                                     content.id,
-                                                                                    content.sectionContent?.order ?: 0
+                                                                                    content.sectionContent?.order
+                                                                                        ?: 0
 
                                                                                 )
                                                                             )
