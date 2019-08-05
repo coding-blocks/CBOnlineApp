@@ -242,7 +242,9 @@ class MyCourseViewModel(
                                                                             sectionWithContentsDao.insert(
                                                                                 SectionWithContent(
                                                                                     courseSection.id,
-                                                                                    content.id
+                                                                                    content.id,
+                                                                                    content.sectionContent?.order ?: 0
+
                                                                                 )
                                                                             )
                                                                         } else if (oldContent != newContent) {

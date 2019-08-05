@@ -193,7 +193,9 @@ data class CourseContent(
 data class SectionWithContent(
 //        @Nullable @PrimaryKey(autoGenerate = true) val id: Int?,
     @ColumnInfo(name = "section_id") val sectionId: String,
-    @ColumnInfo(name = "content_id") val contentId: String
+    @ColumnInfo(name = "content_id") val contentId: String,
+    val order: Int
+
 )
 
 @Entity

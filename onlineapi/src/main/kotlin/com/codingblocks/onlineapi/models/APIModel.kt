@@ -94,12 +94,10 @@ open class Instructor(
     val sub:String?
 ) : BaseModel()
 
-class SectionContent : BaseModel() {
-    @JvmField
-    val order: Int? = null
-    @JvmField
-    val sectionId: String? = null
-}
+class SectionContent(
+    val order: Int,
+    val sectionId: String
+) : BaseModel()
 
 // =======Singular Models =========
 

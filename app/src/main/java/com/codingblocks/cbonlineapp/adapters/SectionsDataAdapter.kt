@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Sections
-import kotlinx.android.synthetic.main.item_section.view.*
+import kotlinx.android.synthetic.main.item_section.view.arrow
+import kotlinx.android.synthetic.main.item_section.view.lectureTime
+import kotlinx.android.synthetic.main.item_section.view.lectures
+import kotlinx.android.synthetic.main.item_section.view.title
 
 class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : RecyclerView.Adapter<SectionsDataAdapter.CourseViewHolder>() {
 
@@ -98,9 +101,9 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
                 showOrHide(ll, it)
             }
 
-//            itemView.arrow.setOnClickListener {
-//                showOrHide(ll, itemView)
-//            }
+            itemView.arrow.setOnClickListener {
+                showOrHide(ll, itemView)
+            }
         }
 
         private fun showOrHide(ll: View, itemView: View) {

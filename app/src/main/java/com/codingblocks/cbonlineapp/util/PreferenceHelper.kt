@@ -22,7 +22,7 @@ class PreferenceHelper private constructor() {
         const val PLAYBACK_SPEED_DEFAULT = 1f
 
         const val PIP = "pip"
-        const val PIP_DEFAULT = true
+        const val PIP_DEFAULT = false
         private var prefs: SharedPreferences? = null
         private var instance: PreferenceHelper = PreferenceHelper()
 

@@ -54,7 +54,7 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
                     setSmallIcon(R.drawable.ic_file_download)
                     setContentTitle("Downloading Section")
                     setOnlyAlertOnce(true)
-                    addAction(0, "Cancel Download", stopIntent)
+//                    addAction(0, "Cancel Download", stopIntent)
                     setLargeIcon(BitmapFactory.decodeResource(this@SectionDownloadService.resources, R.mipmap.ic_launcher))
                     setContentText("0 out of $totalCount downloaded")
                     setProgress(totalCount, 0, false)

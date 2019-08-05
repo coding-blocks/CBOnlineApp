@@ -13,7 +13,6 @@ interface SectionWithContentsDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(join: SectionWithContent)
-
     @Query("""
         SELECT * FROM CourseContent
         INNER JOIN sectionwithcontent ON
@@ -35,7 +34,7 @@ interface SectionWithContentsDao {
         SELECT * FROM CourseContent cc,CourseSection cs
         INNER JOIN sectionwithcontent swc ON
         cc.id = swc.content_id WHERE cs.attempt_id = :attemptId AND progress = "UNDONE"
-        ORDER BY `sectionOrder`,`order` LIMIT 1
+        ORDER BY `sectionOrder`,`order`
         """)
     fun resumeCourse(attemptId: String): LiveData<List<CourseContent>>
 }
