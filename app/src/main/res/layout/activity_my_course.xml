@@ -78,20 +78,40 @@
                             android:textColor="@color/white"
                             android:textSize="20sp" />
 
-                        <Button
-                            android:id="@+id/resumeBtn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:layout_marginBottom="8dp"
-                            android:background="@drawable/button_background_outline"
-                            android:fontFamily="@font/nunitosans_semibold"
-                            android:paddingStart="24dp"
-                            android:paddingEnd="24dp"
-                            android:text="Resume"
-                            android:textColor="@color/salmon"
-                            android:textSize="16sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
+                            <Button
+                                android:id="@+id/resumeBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/button_background_outline"
+                                android:fontFamily="@font/nunitosans_semibold"
+                                android:paddingStart="24dp"
+                                android:paddingEnd="24dp"
+                                android:layout_marginEnd="12dp"
+                                android:text="Resume"
+                                android:textColor="@color/salmon"
+                                android:textSize="16sp" />
+
+                            <Button
+                                android:id="@+id/resetBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/button_background_outline"
+                                android:fontFamily="@font/nunitosans_semibold"
+                                android:paddingStart="24dp"
+                                android:paddingEnd="24dp"
+                                android:text="Reset"
+                                android:textColor="@color/salmon"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </RelativeLayout>

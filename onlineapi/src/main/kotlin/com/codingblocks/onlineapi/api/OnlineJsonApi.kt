@@ -120,6 +120,8 @@ interface OnlineJsonApi {
     @POST("progresses")
     fun setProgress(@Body params: Progress): Call<ContentProgress>
 
+    @POST("progresses/reset")
+    fun resetProgress(@Body runAttemptId: ResetRunAttempt) : Call<ResponseBody>
 
     @GET("quiz_attempts/{id}")
     fun getQuizAttemptById(
