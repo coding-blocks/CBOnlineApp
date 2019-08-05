@@ -13,7 +13,7 @@ import com.codingblocks.cbonlineapp.ui.MyCourseCardUi
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.intentFor
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 
 class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
