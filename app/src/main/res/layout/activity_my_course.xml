@@ -51,7 +51,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosans_bold"
-                            android:text="Course Progress"
+                            android:text="@string/course_progress"
                             android:textColor="@color/white"
                             android:textSize="24sp" />
 
@@ -74,44 +74,35 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:fontFamily="@font/nunitosans_bold"
-                            android:text="Contents Completed"
+                            android:text="@string/contents_completed"
                             android:textColor="@color/white"
                             android:textSize="20sp" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/resetBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/nunitosans_semibold"
+                            android:text="@string/reset_progress"
+                            android:textColor="@color/salmon"
+                            android:textSize="16sp" />
 
-                            <Button
-                                android:id="@+id/resumeBtn"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
-                                android:layout_marginBottom="8dp"
-                                android:background="@drawable/button_background_outline"
-                                android:fontFamily="@font/nunitosans_semibold"
-                                android:paddingStart="24dp"
-                                android:paddingEnd="24dp"
-                                android:layout_marginEnd="12dp"
-                                android:text="Resume"
-                                android:textColor="@color/salmon"
-                                android:textSize="16sp" />
+                        <Button
+                            android:id="@+id/resumeBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="8dp"
+                            android:background="@drawable/button_background_outline"
+                            android:fontFamily="@font/nunitosans_semibold"
+                            android:paddingStart="24dp"
+                            android:paddingEnd="24dp"
+                            android:text="@string/resume"
+                            android:textColor="@color/salmon"
+                            android:textSize="16sp" />
 
-                            <Button
-                                android:id="@+id/resetBtn"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
-                                android:layout_marginBottom="8dp"
-                                android:background="@drawable/button_background_outline"
-                                android:fontFamily="@font/nunitosans_semibold"
-                                android:paddingStart="24dp"
-                                android:paddingEnd="24dp"
-                                android:text="Reset"
-                                android:textColor="@color/salmon"
-                                android:textSize="16sp" />
-
-                        </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </RelativeLayout>

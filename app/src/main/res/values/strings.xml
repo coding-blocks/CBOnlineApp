@@ -107,4 +107,8 @@
     <string name="job_not_eligible">Status:  Not Eligible</string>
     <string name="job_applied">You\'ve already applied for the job</string>
     <string name="faqs">Frequently Asked Questions</string>
+    <string name="reset_progress">Reset Progress</string>
+    <string name="contents_completed">Contents Completed</string>
+    <string name="resume">Resume</string>
+    <string name="course_progress">Course Progress</string>
 </resources>

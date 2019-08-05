@@ -27,8 +27,15 @@ import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_URL
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
-import kotlinx.android.synthetic.main.activity_my_course.*
-import kotlinx.android.synthetic.main.custom_dialog.view.*
+import kotlinx.android.synthetic.main.activity_my_course.contentCompletedTv
+import kotlinx.android.synthetic.main.activity_my_course.courseProgress
+import kotlinx.android.synthetic.main.activity_my_course.htab_tabs
+import kotlinx.android.synthetic.main.activity_my_course.htab_viewpager
+import kotlinx.android.synthetic.main.activity_my_course.resetBtn
+import kotlinx.android.synthetic.main.activity_my_course.resumeBtn
+import kotlinx.android.synthetic.main.activity_my_course.toolbar
+import kotlinx.android.synthetic.main.custom_dialog.view.cancelBtn
+import kotlinx.android.synthetic.main.custom_dialog.view.description
 import kotlinx.android.synthetic.main.report_dialog.view.okBtn
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
@@ -74,17 +81,17 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
                             )
                         }
                         DOCUMENT -> {
-                            intentFor<PdfActivity>(
+                            startActivity(intentFor<PdfActivity>(
                                 FILE_URL to contentDocument.documentPdfLink,
                                 FILE_NAME to contentDocument.documentName + ".pdf"
-                            ).singleTop()
+                            ).singleTop())
                         }
                         VIDEO -> {
-                            intentFor<VideoPlayerActivity>(
+                            startActivity(intentFor<VideoPlayerActivity>(
                                 VIDEO_URL to contentVideo.videoUrl,
                                 RUN_ATTEMPT_ID to attempt_id,
                                 CONTENT_ID to id
-                            ).singleTop()
+                            ).singleTop())
                         }
                         else -> return@with
                     }

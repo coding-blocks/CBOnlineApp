@@ -19,6 +19,7 @@ import com.codingblocks.cbonlineapp.adapters.BatchesAdapter
 import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.cbonlineapp.database.models.Instructor
+import com.codingblocks.cbonlineapp.extensions.loadImage
 import com.codingblocks.cbonlineapp.extensions.loadSvg
 import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
@@ -104,10 +105,11 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     }
 
     private fun setImageAndTitle(image: String, courseName: String) {
-        if (image.takeLast(3) == "png")
-            Picasso.with(this).load(image).into(coursePageLogo)
-        else
-            coursePageLogo.loadSvg(image)
+        coursePageLogo.loadImage(image)
+//        if (image.takeLast(3) == "png")
+//            Picasso.with(this).load(image).into(coursePageLogo)
+//        else
+//            coursePageLogo.loadSvg(image)
         title = courseName
         coursePageTitle.text = courseName
     }
