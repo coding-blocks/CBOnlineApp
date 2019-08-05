@@ -9,7 +9,7 @@ import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.models.CourseRun
-import com.codingblocks.cbonlineapp.extensions.loadSvg
+import com.codingblocks.cbonlineapp.extensions.loadImage
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
@@ -51,8 +51,8 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
                         itemView.courseRatingBar.rating = rating
                         itemView.courseRunDescription.text = courseRun.crDescription
                         itemView.courseProgress.progress = courseRun.progress.toInt()
-                        itemView.courseCoverImgView.loadSvg(coverImage)
-                        itemView.courseLogo.loadSvg(logo)
+                        itemView.courseCoverImgView.loadImage(coverImage)
+                        itemView.courseLogo.loadImage(logo)
                         if (!courseRun.premium) {
                             itemView.trialTv.visibility = View.VISIBLE
                         } else {

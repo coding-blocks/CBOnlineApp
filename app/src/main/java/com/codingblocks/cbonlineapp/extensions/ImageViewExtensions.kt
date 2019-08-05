@@ -31,10 +31,6 @@ fun ImageView.loadSvg(svgUrl: String, onDrawableCreated: ((Drawable) -> Unit)?) 
     }
 }
 
-fun ImageView.loadSvg(svgUrl: String) {
-    loadSvg(svgUrl, null)
-}
-
 fun ImageView.loadImage(imgUrl: String) {
     if (imgUrl.takeLast(3) == "png") {
         Picasso.with(context).load(imgUrl).into(this)

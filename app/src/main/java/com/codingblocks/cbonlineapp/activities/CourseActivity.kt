@@ -20,7 +20,6 @@ import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
 import com.codingblocks.cbonlineapp.database.models.Instructor
 import com.codingblocks.cbonlineapp.extensions.loadImage
-import com.codingblocks.cbonlineapp.extensions.loadSvg
 import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.util.Components
@@ -37,7 +36,6 @@ import com.google.android.material.chip.Chip
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
-import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_course.batchRv
 import kotlinx.android.synthetic.main.activity_course.buyBtn
@@ -106,10 +104,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     private fun setImageAndTitle(image: String, courseName: String) {
         coursePageLogo.loadImage(image)
-//        if (image.takeLast(3) == "png")
-//            Picasso.with(this).load(image).into(coursePageLogo)
-//        else
-//            coursePageLogo.loadSvg(image)
         title = courseName
         coursePageTitle.text = courseName
     }
@@ -140,10 +134,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     private fun showBottomSheet(newId: String, newName: String) {
         viewModel.image.observer(this) {
-            if (it.takeLast(3) == "png")
-                Picasso.with(this@CourseActivity).load(it).into(newImage)
-            else
-                newImage.loadSvg(it ?: "")
+            newImage.loadImage(it ?: "")
         }
         viewModel.name.observer(this) {
             oldTitle.text = it

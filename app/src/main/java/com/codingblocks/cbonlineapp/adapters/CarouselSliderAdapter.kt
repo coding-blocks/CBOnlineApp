@@ -8,11 +8,10 @@ import android.widget.FrameLayout
 import androidx.viewpager.widget.PagerAdapter
 import cn.campusapp.router.Router
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.extensions.loadSvg
+import com.codingblocks.cbonlineapp.extensions.loadImage
 import com.codingblocks.cbonlineapp.extensions.otherwise
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.onlineapi.models.CarouselCards
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_carousel.view.button
 import kotlinx.android.synthetic.main.item_carousel.view.imgView
 import kotlinx.android.synthetic.main.item_carousel.view.subTitle
@@ -34,12 +33,7 @@ class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Co
         view.title.text = list[position].title
         view.subTitle.text = list[position].subtitle
         view.button.text = list[position].buttonText
-        if (list[position].img.takeLast(3) == "png") {
-            Picasso.with(mContext).load(list[position].img)
-                .fit().into(view.imgView)
-        } else {
-            view.imgView.loadSvg(list[position].img)
-        }
+        view.imgView.loadImage(list[position].img)
         view.button.setOnClickListener {
             Router.open("activity://course/" + list[position].buttonLink).otherwise {
                 Components.openChrome(it.context, list[position].buttonLink)

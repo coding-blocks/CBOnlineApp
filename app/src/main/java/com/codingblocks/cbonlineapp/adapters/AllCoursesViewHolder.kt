@@ -8,12 +8,12 @@ import com.codingblocks.cbonlineapp.activities.CourseActivity
 import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.models.CourseRun
-import com.codingblocks.cbonlineapp.extensions.loadSvg
+import com.codingblocks.cbonlineapp.extensions.loadImage
 import com.codingblocks.cbonlineapp.ui.MyCourseCardUi
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.intentFor
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.*
 
 class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -24,15 +24,8 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         ui.courseRatingBar.rating = data.rating
         ui.courseRatingTv.text = data.rating.toString()
         data.subtitle
-        if (data.coverImage.takeLast(3) == "png") {
-            Picasso.with(context).load(data.coverImage)
-                .fit().into(ui.courseCoverImageView)
-            Picasso.with(context).load(data.logo)
-                .fit().into(ui.courselogo)
-        } else {
-            ui.courseCoverImageView.loadSvg(data.coverImage)
-            ui.courselogo.loadSvg(data.logo)
-        }
+        ui.courseCoverImageView.loadImage(data.coverImage)
+        ui.courselogo.loadImage(data.logo)
         val instructorsList = courseWithInstructorDao.getInstructorWithCourseIdNonLive(data.id)
         var instructors = ""
         for (i in 0 until instructorsList.size) {

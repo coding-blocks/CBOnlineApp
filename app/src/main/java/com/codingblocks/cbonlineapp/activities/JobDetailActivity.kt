@@ -17,12 +17,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.models.CourseRun
-import com.codingblocks.cbonlineapp.extensions.observeOnce
-import com.codingblocks.cbonlineapp.extensions.loadSvg
-import com.codingblocks.cbonlineapp.extensions.timeAgo
-import com.codingblocks.cbonlineapp.extensions.isotomillisecond
 import com.codingblocks.cbonlineapp.extensions.getSpannableSring
+import com.codingblocks.cbonlineapp.extensions.isotomillisecond
+import com.codingblocks.cbonlineapp.extensions.loadImage
+import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
+import com.codingblocks.cbonlineapp.extensions.timeAgo
 import com.codingblocks.cbonlineapp.util.JOB_ID
 import com.codingblocks.cbonlineapp.viewmodels.JobDetailViewModel
 import com.codingblocks.onlineapi.models.Applications
@@ -31,22 +31,28 @@ import com.codingblocks.onlineapi.models.JobId
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.JsonObject
-import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_job_detail.toolbar
-import kotlinx.android.synthetic.main.activity_job_detail.rvJobCourses
-import kotlinx.android.synthetic.main.activity_job_detail.jobDescriptionBtn
+import kotlinx.android.synthetic.main.activity_job_detail.addResumeBtn
 import kotlinx.android.synthetic.main.activity_job_detail.cardJobDescription
-import kotlinx.android.synthetic.main.activity_job_detail.jobDescriptionTv
 import kotlinx.android.synthetic.main.activity_job_detail.companyDescriptionTv
 import kotlinx.android.synthetic.main.activity_job_detail.eligibleTv
+import kotlinx.android.synthetic.main.activity_job_detail.jobDescriptionBtn
+import kotlinx.android.synthetic.main.activity_job_detail.jobDescriptionTv
+import kotlinx.android.synthetic.main.activity_job_detail.rvJobCourses
 import kotlinx.android.synthetic.main.activity_job_detail.statusTv
-import kotlinx.android.synthetic.main.activity_job_detail.addResumeBtn
-import kotlinx.android.synthetic.main.custom_form_dialog.view.okBtn
-import kotlinx.android.synthetic.main.custom_form_dialog.view.form
+import kotlinx.android.synthetic.main.activity_job_detail.toolbar
 import kotlinx.android.synthetic.main.custom_form_dialog.view.cancelBtn
-
-import kotlinx.android.synthetic.main.item_job.*
+import kotlinx.android.synthetic.main.custom_form_dialog.view.form
+import kotlinx.android.synthetic.main.custom_form_dialog.view.okBtn
+import kotlinx.android.synthetic.main.item_job.companyLogo
+import kotlinx.android.synthetic.main.item_job.companyTv
+import kotlinx.android.synthetic.main.item_job.ctcTv
+import kotlinx.android.synthetic.main.item_job.deadlinell
+import kotlinx.android.synthetic.main.item_job.experienceTv
+import kotlinx.android.synthetic.main.item_job.jobTitleTv
+import kotlinx.android.synthetic.main.item_job.locationTv
+import kotlinx.android.synthetic.main.item_job.postedAgoTv
+import kotlinx.android.synthetic.main.item_job.typeTv
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class JobDetailActivity : AppCompatActivity() {
@@ -95,11 +101,7 @@ class JobDetailActivity : AppCompatActivity() {
     private fun setUpObservers() {
         viewModel.getJobById(jobId).observeOnce {
             with(it) {
-                if (company.logo.takeLast(3) == "svg") {
-                    companyLogo.loadSvg(company.logo)
-                } else {
-                    Picasso.with(this@JobDetailActivity).load(company.logo).into(companyLogo)
-                }
+                companyLogo.loadImage(company.logo)
                 jobTitleTv.text = title
                 supportActionBar?.title = title
                 companyTv.text = company.name
