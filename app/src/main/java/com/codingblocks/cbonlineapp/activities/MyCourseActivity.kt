@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
@@ -26,12 +27,9 @@ import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_URL
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
-import kotlinx.android.synthetic.main.activity_my_course.contentCompletedTv
-import kotlinx.android.synthetic.main.activity_my_course.courseProgress
-import kotlinx.android.synthetic.main.activity_my_course.htab_tabs
-import kotlinx.android.synthetic.main.activity_my_course.htab_viewpager
-import kotlinx.android.synthetic.main.activity_my_course.resumeBtn
-import kotlinx.android.synthetic.main.activity_my_course.toolbar
+import kotlinx.android.synthetic.main.activity_my_course.*
+import kotlinx.android.synthetic.main.custom_dialog.view.*
+import kotlinx.android.synthetic.main.report_dialog.view.okBtn
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -93,6 +91,34 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
                 }
             }
         }
+
+        resetBtn.setOnClickListener {
+            confirmReset()
+        }
+
+        viewModel.resetProgres.observe(this, Observer {
+            finish()
+        })
+    }
+
+    private fun confirmReset() {
+        val builder = android.app.AlertDialog.Builder(this)
+        val inflater = layoutInflater
+        val customView = inflater.inflate(R.layout.custom_dialog, null)
+        customView.okBtn.text = "Yes"
+        customView.cancelBtn.text = "No"
+        customView.description.text = "Are you sure you want to reset progress?"
+        builder.setCancelable(false)
+        builder.setView(customView)
+        val dialog = builder.create()
+        customView.cancelBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        customView.okBtn.setOnClickListener {
+            viewModel.resetProgress()
+        }
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
     }
 
     override fun onStart() {

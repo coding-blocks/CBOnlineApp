@@ -18,6 +18,7 @@ import com.codingblocks.cbonlineapp.database.models.SectionWithContent
 import com.codingblocks.cbonlineapp.extensions.getDistinct
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.ResetRunAttempt
 
 class MyCourseViewModel(
     private val runDao: CourseRunDao,
@@ -284,5 +285,14 @@ class MyCourseViewModel(
 //            }
 //        }
 //    }
+    }
+
+    var resetProgres: MutableLiveData<Boolean> = MutableLiveData()
+    fun resetProgress() {
+        val resetCourse = ResetRunAttempt()
+        resetCourse.runAttemptId = attemptId
+        Clients.onlineV2JsonApi.resetProgress(resetCourse).enqueue(retrofitCallback { throwable, response ->
+            resetProgres.value = response?.isSuccessful ?: false
+        })
     }
 }
