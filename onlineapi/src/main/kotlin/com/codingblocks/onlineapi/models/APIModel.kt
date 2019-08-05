@@ -1,6 +1,5 @@
 package com.codingblocks.onlineapi.models
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.github.jasminb.jsonapi.Links
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
@@ -455,12 +454,6 @@ class Note : BaseModel() {
     @Relationship("content", resolve = true)
     @JvmField
     var content: ContentId? = null
-}
-
-class ResetRunAttempt{
-    @JsonProperty("runAttemptId")
-    @JvmField
-    var runAttemptId: String? = null
 }
 
 @Type("notes")

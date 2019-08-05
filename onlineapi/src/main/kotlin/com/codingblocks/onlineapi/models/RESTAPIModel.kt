@@ -252,3 +252,8 @@ data class Details(
         val participants: List<ParticipantsItem?>? = null
 )
 
+data class ResetRunAttempt(
+    val runAttemptId: String
+)
+
+

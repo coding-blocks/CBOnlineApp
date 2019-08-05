@@ -289,9 +289,8 @@ class MyCourseViewModel(
 
     var resetProgres: MutableLiveData<Boolean> = MutableLiveData()
     fun resetProgress() {
-        val resetCourse = ResetRunAttempt()
-        resetCourse.runAttemptId = attemptId
-        Clients.onlineV2JsonApi.resetProgress(resetCourse).enqueue(retrofitCallback { throwable, response ->
+        val resetCourse = ResetRunAttempt(attemptId)
+        Clients.api.resetProgress(resetCourse).enqueue(retrofitCallback { _, response ->
             resetProgres.value = response?.isSuccessful ?: false
         })
     }

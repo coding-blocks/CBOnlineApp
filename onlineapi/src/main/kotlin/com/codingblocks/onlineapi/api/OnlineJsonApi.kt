@@ -1,12 +1,14 @@
 package com.codingblocks.onlineapi.api
 
-import com.codingblocks.onlineapi.models.*
+import com.codingblocks.onlineapi.models.Applications
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Comment
+import com.codingblocks.onlineapi.models.Company
 import com.codingblocks.onlineapi.models.ContentProgress
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Instructor
+import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.MyCourseRuns
 import com.codingblocks.onlineapi.models.MyRunAttempt
@@ -119,9 +121,6 @@ interface OnlineJsonApi {
 
     @POST("progresses")
     fun setProgress(@Body params: Progress): Call<ContentProgress>
-
-    @POST("progresses/reset")
-    fun resetProgress(@Body runAttemptId: ResetRunAttempt) : Call<ResponseBody>
 
     @GET("quiz_attempts/{id}")
     fun getQuizAttemptById(

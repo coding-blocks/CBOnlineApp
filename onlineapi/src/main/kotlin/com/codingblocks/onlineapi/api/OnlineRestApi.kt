@@ -4,8 +4,11 @@ import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.PostStream
 import com.codingblocks.onlineapi.models.RatingModel
+import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.google.gson.JsonObject
+import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -70,6 +73,9 @@ interface OnlineRestApi {
     @POST("jwt/refresh/?android=true")
     @FormUrlEncoded
     fun refreshToken(@Field("refresh_token") refresh_token: String): Call<JsonObject>
+
+    @POST("v2/progresses/reset")
+    fun resetProgress(@Body runAttemptId: ResetRunAttempt): Call<ResponseBody>
 
 
 }

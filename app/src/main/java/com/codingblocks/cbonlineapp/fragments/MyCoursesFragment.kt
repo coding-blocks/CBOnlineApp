@@ -6,6 +6,7 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.graphics.drawable.PictureDrawable
+import android.os.Build
 import android.os.Build.VERSION_CODES.N_MR1
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.cbonlineapp.util.COURSE_ID
@@ -109,7 +111,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             ui.swipeRefreshLayout.isRefreshing = it
         }
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1)
+        if (Build.VERSION.SDK_INT >= N_MR1)
             createShortcut()
     }
 
@@ -154,7 +156,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         val sM = requireContext().getSystemService(ShortcutManager::class.java)
         val shortcutList: MutableList<ShortcutInfo> = ArrayList()
 
-        viewModel.getTopRun().observer(viewLifecycleOwner) {
+        viewModel.getTopRun().observeOnce {
             doAsync {
                 it.forEachIndexed { index, courseRun ->
                     val data = viewModel.getCourseById(courseRun.crCourseId)
