@@ -8,6 +8,8 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.codingblocks.cbonlineapp.CBOnlineApp
+import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.onlineapi.models.CourseId
 import java.sql.Date
 
@@ -206,7 +208,7 @@ data class ContentLecture(
     var lectureId: String = "",
     var lectureContentId: String = "",
     var lectureUpdatedAt: String = "",
-    var isDownloaded: String = "false",
+    var isDownloaded: String = FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, lectureId).toString(),
     var date: Date = Date(0L)
 )
 
