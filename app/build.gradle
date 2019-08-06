@@ -21,7 +21,7 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 100050000
+        versionCode 100050001
         // 1 (versioning scheme)
         // 00 (major version)
         // 05 (minor version)

@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
+import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.fragments.AnnouncementsFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
@@ -67,7 +68,7 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
         }
 
         resumeBtn.setOnClickListener {
-            viewModel.getResumeCourse().observer(this) {
+            viewModel.getResumeCourse().observeOnce {
                 with(it[0]) {
                     when (contentable) {
                         LECTURE -> {
