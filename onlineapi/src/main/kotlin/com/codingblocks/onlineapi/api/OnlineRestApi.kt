@@ -64,18 +64,15 @@ interface OnlineRestApi {
     @GET("v2/runs/clear_cart")
     fun clearCart(): Call<JsonObject>
 
-    @GET("v2/cricket_cup/matches/earnings")
-    fun getEarning(): Call<JsonObject>
-
-    @GET("v2/cricket_cup/matches/{matchId}/score")
-    fun getScore(@Path("matchId") id: String): Call<JsonObject>
-
     @POST("jwt/refresh/?android=true")
     @FormUrlEncoded
     fun refreshToken(@Field("refresh_token") refresh_token: String): Call<JsonObject>
 
     @POST("v2/progresses/reset")
     fun resetProgress(@Body runAttemptId: ResetRunAttempt): Call<ResponseBody>
+
+    @GET("v2/run_attempts/{runAttemptId}/requestApproval")
+    fun requestApproval(@Path("runAttemptId") id: String): Call<ResponseBody>
 
 
 }

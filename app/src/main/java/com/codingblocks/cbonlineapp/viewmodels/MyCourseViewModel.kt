@@ -37,6 +37,8 @@ class MyCourseViewModel(
         runDao.updateHit(attemptId)
     }
 
+    fun getCourseProgress() = runDao.getCourseProgress(attemptId)
+
     fun getResumeCourse() = sectionWithContentsDao.resumeCourse(attemptId)
 
     fun getRunAttempt(runId: String): String = runDao.getRunByRunId(runId).crAttemptId
