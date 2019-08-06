@@ -17,12 +17,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity
-            android:name=".activities.JobDetailActivity"
-            android:parentActivityName=".activities.JobsActivity"
-            android:theme="@style/Theme.Jobs"
-            android:windowSoftInputMode="stateVisible" />
+        android:theme="@style/AppThemeMain">
 
         <activity
             android:name=".URLRouterActivity"
@@ -41,16 +36,7 @@
                 <data android:pathPrefix="/player" />
             </intent-filter>
         </activity> <!-- <meta-data android:name="android.max_aspect" android:value="2.1" /> -->
-        <activity
-            android:name=".activities.NotificationsActivity"
-            android:launchMode="singleTop"
-            android:parentActivityName=".activities.HomeActivity"
-            android:theme="@style/myTheme" />
-        <activity
-            android:name=".activities.JobsActivity"
-            android:launchMode="singleTop"
-            android:parentActivityName=".activities.HomeActivity"
-            android:theme="@style/Theme.Jobs" />
+
         <activity
             android:name=".activities.SplashActivity"
             android:label="@string/app_name"
@@ -71,30 +57,16 @@
                     android:host="app.codingblocks.com"
                     android:scheme="https" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcut" />
         </activity>
-
-        <meta-data
-            android:name="com.onesignal.NotificationOpened.DEFAULT"
-            android:value="DISABLE" />
-        <meta-data
-            android:name="com.onesignal.NotificationAccentColor.DEFAULT"
-            android:value="FF6666" />
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/cblogo" />
 
         <activity
             android:name=".activities.LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <activity
             android:name=".activities.HomeActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:theme="@style/myTheme">
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -107,20 +79,17 @@
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
-
         <activity
             android:name=".activities.CourseActivity"
             android:parentActivityName=".activities.HomeActivity"
             android:theme="@style/Theme.CB.Course" />
+
         <activity
             android:name=".activities.MyCourseActivity"
             android:label="@string/title_activity_my_course"
             android:launchMode="singleTop"
             android:parentActivityName=".activities.HomeActivity"
-            android:theme="@style/myTheme">
+            android:theme="@style/AppThemeMain">
             <intent-filter>
                 <action android:name="com.coddinblocks.appshortcuts.OPEN_DYNAMIC_SHORTCUT" />
 
@@ -131,14 +100,48 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.codingblocks.cbonlineapp.activities.HomeActivity" />
         </activity>
+
+        <activity
+            android:name=".activities.NotificationsActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activities.HomeActivity" />
+
+        <activity
+            android:name=".activities.JobsActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activities.HomeActivity"
+            android:theme="@style/Theme.Jobs" />
+
+        <activity
+            android:name=".activities.JobDetailActivity"
+            android:parentActivityName=".activities.JobsActivity"
+            android:theme="@style/Theme.Jobs"
+            android:windowSoftInputMode="stateVisible" />
+
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activities.HomeActivity" />
+
+        <activity
+            android:name=".activities.AboutActivity"
+            android:parentActivityName=".activities.HomeActivity" />
+
         <activity
             android:name=".activities.VideoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:supportsPictureInPicture="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
             android:name=".activities.PdfActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity
+            android:name=".activities.QuizActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activities.MyCourseActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeMain" />
 
         <receiver android:name=".util.DownloadBroadcastReceiver">
             <intent-filter>
@@ -156,24 +159,24 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity
-            android:name=".activities.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.HomeActivity"
-            android:theme="@style/myTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.codingblocks.cbonlineapp.activities.HomeActivity" />
-        </activity>
-        <activity
-            android:name=".activities.AboutActivity"
-            android:theme="@style/myTheme" />
-        <activity
-            android:name=".activities.QuizActivity"
-            android:launchMode="singleTop"
-            android:parentActivityName=".activities.MyCourseActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/myTheme" />
+        <meta-data
+            android:name="com.onesignal.NotificationOpened.DEFAULT"
+            android:value="DISABLE" />
+        <meta-data
+            android:name="com.onesignal.NotificationAccentColor.DEFAULT"
+            android:value="FF6666" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/cblogo" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <meta-data
+            android:name="android.app.shortcuts"
+            android:resource="@xml/shortcut" />
+
     </application>
 
 </manifest>
