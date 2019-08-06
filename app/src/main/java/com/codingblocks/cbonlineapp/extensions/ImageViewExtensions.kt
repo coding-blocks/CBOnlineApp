@@ -1,12 +1,16 @@
 package com.codingblocks.cbonlineapp.extensions
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
+import androidx.core.view.ViewCompat
 import com.caverock.androidsvg.SVG
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.NetworkUtils.okHttpClient
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
@@ -42,8 +46,14 @@ fun ImageView.loadImage(imgUrl: String) {
     }
 }
 
-fun Snackbar.withColor(@ColorInt backgroundColor: Int, @ColorInt textColor: Int): Snackbar {
+fun Snackbar.config(context: Context, @ColorInt backgroundColor: Int, @ColorInt textColor: Int) {
+    val params = this.view.layoutParams as ViewGroup.MarginLayoutParams
+    params.setMargins(12, 12, 12, 12)
+    this.view.layoutParams = params
+    this.view.background = context.getDrawable(R.drawable.bg_snackbar)
+
     this.view.setBackgroundColor(backgroundColor)
     this.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).setTextColor(textColor)
-    return this
+
+    ViewCompat.setElevation(this.view, 6f)
 }

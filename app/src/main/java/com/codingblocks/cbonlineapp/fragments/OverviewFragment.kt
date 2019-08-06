@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +9,12 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
-import com.codingblocks.cbonlineapp.extensions.withColor
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_overview.completetionBtn
 import kotlinx.android.synthetic.main.fragment_overview.requestBtn
-import kotlinx.android.synthetic.main.fragment_overview.view.overviewFragment
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -48,14 +45,14 @@ class OverviewFragment : Fragment(), AnkoLogger {
                     setOnClickListener {
                         Clients.api.requestApproval(viewModel.attemptId).enqueue(retrofitCallback { throwable, response ->
                             response.let {
-                                if (it?.code() == 500) {
-                                    Snackbar.make(overviewFragment, "Could not send the request", Snackbar.LENGTH_LONG).show()
-                                } else if (it?.code() == 200) {
-                                    Snackbar.make(overviewFragment, "Request Successful", Snackbar.LENGTH_LONG).show()
+                                if (it?.isSuccessful == true) {
+                                    it.body()?.let { it1 -> Snackbar.make(view.rootView, it1.string(), Snackbar.LENGTH_LONG).show() }
+                                } else {
+                                    it?.errorBody()?.let { it1 -> Snackbar.make(view.rootView, it1.string(), Snackbar.LENGTH_LONG).show() }
                                 }
                             }
                             throwable.let {
-                                Snackbar.make(view.rootView, it?.message.toString(), Snackbar.LENGTH_LONG).withColor(Color.WHITE, Color.BLACK).show()
+                                it?.message?.let { it1 -> Snackbar.make(view.rootView, it1, Snackbar.LENGTH_LONG).show() }
                             }
                         })
                     }

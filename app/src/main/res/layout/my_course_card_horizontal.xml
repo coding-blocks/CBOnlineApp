@@ -218,7 +218,7 @@
             app:layout_constraintTop_toBottomOf="@+id/courseInstructors" />
 
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/courseBtn1"
             android:layout_width="0dp"
             android:layout_height="40dp"

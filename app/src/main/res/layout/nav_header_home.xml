@@ -55,7 +55,7 @@
         app:layout_constraintStart_toEndOf="@+id/nav_header_imageView"
         app:layout_constraintTop_toBottomOf="@+id/nav_header_username_textView" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
