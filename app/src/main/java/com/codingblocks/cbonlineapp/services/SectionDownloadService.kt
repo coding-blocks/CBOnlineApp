@@ -13,7 +13,7 @@ import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
-import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.onlineapi.Clients
 import com.vdocipher.aegis.media.ErrorDescription
@@ -50,7 +50,7 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
             val stopIntent = PendingIntent.getService(this, 0, mIntent, 0)
             sectionWithContentsDao.getVideoIdsWithSectionId(sectionId ?: "").observeOnce { list ->
                 totalCount = list.size
-                notification = NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID).apply {
+                notification = NotificationCompat.Builder(this, DOWNLOAD_CHANNEL_ID).apply {
                     setSmallIcon(R.drawable.ic_file_download)
                     setContentTitle("Downloading Section")
                     setOnlyAlertOnce(true)

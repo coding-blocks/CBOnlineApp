@@ -129,8 +129,8 @@ class HomeViewModel(
     fun fetchMyCourses(refresh: Boolean = false) {
         try {
             Clients.onlineV2JsonApi.getMyCourses()
-                .enqueue(retrofitCallback { _, response ->
-                    response?.let { response ->
+                .enqueue(retrofitCallback { _, res ->
+                    res?.let { response ->
                         if (response.isSuccessful) {
                             response.body()?.let { courseList ->
                                 courseList.forEach { courseRun ->

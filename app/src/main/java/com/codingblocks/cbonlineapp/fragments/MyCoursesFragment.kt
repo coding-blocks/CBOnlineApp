@@ -56,15 +56,15 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ):
-        View? = ui.createView(AnkoContext.create(ctx, this))
+    ): View? = ui.createView(AnkoContext.create(ctx, this))
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
-        val params = Bundle()
-        params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
-        params.putString(FirebaseAnalytics.Param.ITEM_NAME, "MyCourses")
+        val params = Bundle().apply {
+            putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
+            putString(FirebaseAnalytics.Param.ITEM_NAME, "MyCourses")
+        }
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
 
         courseDataAdapter =
@@ -97,6 +97,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             .count(4)
             .load(R.layout.item_skeleton_course_card)
             .show()
+
         viewModel.fetchMyCourses()
 
         displayCourses()
@@ -143,7 +144,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                displayCourses(newText)
+                if (newText.isNotEmpty())
+                    displayCourses(newText)
                 return true
             }
         })

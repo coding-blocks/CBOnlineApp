@@ -17,8 +17,8 @@ import com.codingblocks.cbonlineapp.database.DownloadData
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
+import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.LECTURE_CONTENT_ID
-import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
@@ -55,7 +55,7 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
                 intent.getStringExtra(CONTENT_ID),
                 intent.getStringExtra(LECTURE_CONTENT_ID),
                 notificationId++,
-                NotificationCompat.Builder(this, MediaUtils.DOWNLOAD_CHANNEL_ID).apply {
+                NotificationCompat.Builder(this, DOWNLOAD_CHANNEL_ID).apply {
                     setSmallIcon(R.drawable.ic_file_download)
                     setContentTitle(intent.getStringExtra(TITLE))
                     setOnlyAlertOnce(true)

@@ -26,7 +26,12 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:statusBarColor">@color/white_transparency</item>
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
 
+        <!-- specify enter and exit transitions -->
+        <item name="android:windowEnterTransition">@transition/explode</item>
+        <item name="android:windowExitTransition">@transition/explode</item>
     </style>
 
     <style name="Theme.Jobs" parent="Theme.MaterialComponents.Light.NoActionBar">

@@ -19,8 +19,6 @@ import java.util.regex.Pattern
 
 object MediaUtils {
 
-    const val DOWNLOAD_CHANNEL_ID = "downloadChannel"
-
     fun deleteRecursive(fileOrDirectory: File) {
 
         if (fileOrDirectory.isDirectory) {

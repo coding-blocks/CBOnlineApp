@@ -124,7 +124,8 @@ class AllCourseFragment : Fragment(), AnkoLogger {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                displayCourses(newText)
+                if (newText.isNotEmpty())
+                    displayCourses(newText)
                 return true
             }
         })

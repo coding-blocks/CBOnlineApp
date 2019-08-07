@@ -1,25 +1,29 @@
 package com.codingblocks.cbonlineapp
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import cn.campusapp.router.Router
 import cn.campusapp.router.router.IActivityRouteTableInitializer
 import com.codingblocks.cbonlineapp.activities.CourseActivity
 import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.util.NotificationReceivedHandler
-import com.codingblocks.cbonlineapp.util.NotificationOpenedHandler
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_TAB
+import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
+import com.codingblocks.cbonlineapp.util.NotificationOpenedHandler
+import com.codingblocks.cbonlineapp.util.NotificationReceivedHandler
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.SECTION_ID
-import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.crashlytics.android.core.CrashlyticsCore
 import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
 import io.github.inflationx.calligraphy3.CalligraphyConfig
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor
 import io.github.inflationx.viewpump.ViewPump
+import org.jetbrains.anko.notificationManager
 import org.koin.android.ext.android.startKoin
 import java.io.File
 
@@ -32,6 +36,17 @@ class CBOnlineApp : Application() {
     override fun onCreate() {
         super.onCreate()
         mInstance = this
+
+        // Create Notification Channel
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                DOWNLOAD_CHANNEL_ID,
+                "Course Download",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
 
         startKoin(
             this,
