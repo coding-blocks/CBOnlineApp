@@ -148,7 +148,9 @@ class MyCourseRuns(
     var course: MyCourse?,
     @Relationship("ratings")
     var rating: ArrayList<Rating>?,
-    val whatsappLink: String?
+    val whatsappLink: String?,
+    val productId: Int,
+    val completionThreshold: Int
 ) : BaseModel()
 
 @Type("section")

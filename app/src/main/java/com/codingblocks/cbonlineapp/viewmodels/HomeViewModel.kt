@@ -194,7 +194,9 @@ class HomeViewModel(
                                                             totalContents = totalContents.toInt(),
                                                             completedContents = completedContents.toInt(),
                                                             mentorApproved = runAttempts?.get(0)?.certificateApproved
-                                                                ?: false
+                                                                ?: false,
+                                                            completionThreshold = completionThreshold,
+                                                            productId = productId
                                                         )
                                                         val oldRun = runDao.getRunById(
                                                             runAttempts?.get(0)?.id ?: ""

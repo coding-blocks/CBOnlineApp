@@ -118,7 +118,6 @@ class PdfActivity : AppCompatActivity(), AnkoLogger {
             } catch (e: Exception) {
                 onBackPressed()
             }
-        } else {
         }
         this@PdfActivity.unregisterReceiver(receiver)
         super.onDestroy()

@@ -55,7 +55,7 @@ class VideoPlayerViewModel(
                 response?.let {
                     mOtp = response.body()?.get("otp")?.asString
                     mPlaybackInfo = response.body()?.get("playbackInfo")?.asString
-                    getOtpProgress.value = (it.isSuccessful)
+                    getOtpProgress.postValue(it.isSuccessful)
                 }
             })
     }

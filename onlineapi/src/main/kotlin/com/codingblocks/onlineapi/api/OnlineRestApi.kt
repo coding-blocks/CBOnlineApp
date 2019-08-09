@@ -1,6 +1,7 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.Doubts
+import com.codingblocks.onlineapi.models.Extension
 import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.PostStream
 import com.codingblocks.onlineapi.models.RatingModel
@@ -73,6 +74,9 @@ interface OnlineRestApi {
 
     @GET("v2/run_attempts/{runAttemptId}/requestApproval")
     fun requestApproval(@Path("runAttemptId") id: String): Call<ResponseBody>
+
+    @GET("v2/runs/products/{id}")
+    fun getExtensions(@Path("id") productId: String): Call<Extension>
 
 
 }
