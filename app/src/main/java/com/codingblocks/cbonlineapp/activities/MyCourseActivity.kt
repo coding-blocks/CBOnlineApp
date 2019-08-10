@@ -34,10 +34,12 @@ import kotlinx.android.synthetic.main.activity_my_course.htab_tabs
 import kotlinx.android.synthetic.main.activity_my_course.htab_viewpager
 import kotlinx.android.synthetic.main.activity_my_course.resetBtn
 import kotlinx.android.synthetic.main.activity_my_course.resumeBtn
+import kotlinx.android.synthetic.main.activity_my_course.rootView
 import kotlinx.android.synthetic.main.activity_my_course.toolbar
 import kotlinx.android.synthetic.main.custom_dialog.view.cancelBtn
 import kotlinx.android.synthetic.main.custom_dialog.view.description
 import kotlinx.android.synthetic.main.report_dialog.view.okBtn
+import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -69,33 +71,37 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
 
         resumeBtn.setOnClickListener {
             viewModel.getResumeCourse().observeOnce {
-                with(it[0]) {
-                    when (contentable) {
-                        LECTURE -> {
-                            startActivity(intentFor<VideoPlayerActivity>(
-                                VIDEO_ID to contentLecture.lectureId,
-                                RUN_ATTEMPT_ID to attempt_id,
-                                CONTENT_ID to id,
-                                SECTION_ID to section_id,
-                                DOWNLOADED to contentLecture.isDownloaded
-                            ).singleTop()
-                            )
+                if (it.isNotEmpty())
+                    with(it[0]) {
+                        when (contentable) {
+                            LECTURE -> {
+                                startActivity(intentFor<VideoPlayerActivity>(
+                                    VIDEO_ID to contentLecture.lectureId,
+                                    RUN_ATTEMPT_ID to attempt_id,
+                                    CONTENT_ID to id,
+                                    SECTION_ID to section_id,
+                                    DOWNLOADED to contentLecture.isDownloaded
+                                ).singleTop()
+                                )
+                            }
+                            DOCUMENT -> {
+                                startActivity(intentFor<PdfActivity>(
+                                    FILE_URL to contentDocument.documentPdfLink,
+                                    FILE_NAME to contentDocument.documentName + ".pdf"
+                                ).singleTop())
+                            }
+                            VIDEO -> {
+                                startActivity(intentFor<VideoPlayerActivity>(
+                                    VIDEO_URL to contentVideo.videoUrl,
+                                    RUN_ATTEMPT_ID to attempt_id,
+                                    CONTENT_ID to id
+                                ).singleTop())
+                            }
+                            else -> return@with
                         }
-                        DOCUMENT -> {
-                            startActivity(intentFor<PdfActivity>(
-                                FILE_URL to contentDocument.documentPdfLink,
-                                FILE_NAME to contentDocument.documentName + ".pdf"
-                            ).singleTop())
-                        }
-                        VIDEO -> {
-                            startActivity(intentFor<VideoPlayerActivity>(
-                                VIDEO_URL to contentVideo.videoUrl,
-                                RUN_ATTEMPT_ID to attempt_id,
-                                CONTENT_ID to id
-                            ).singleTop())
-                        }
-                        else -> return@with
                     }
+                else {
+                    snackbar(rootView, "Nothing to show here")
                 }
             }
         }

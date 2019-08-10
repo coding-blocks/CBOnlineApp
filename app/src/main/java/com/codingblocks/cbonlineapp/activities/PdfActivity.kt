@@ -116,7 +116,7 @@ class PdfActivity : AppCompatActivity(), AnkoLogger {
                     adapter.close()
                 pdfViewPager.adapter = null
             } catch (e: Exception) {
-                onBackPressed()
+                finish()
             }
         }
         this@PdfActivity.unregisterReceiver(receiver)

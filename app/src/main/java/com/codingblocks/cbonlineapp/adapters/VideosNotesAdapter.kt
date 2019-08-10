@@ -57,7 +57,7 @@ class VideosNotesAdapter(
 
         fun bindView(note: NotesModel, position: Int) {
             itemView.contentTitleTv.text =
-                viewModel.getContentWithId(note.runAttemptId, note.contentId).title
+                viewModel.getContentWithId(note.runAttemptId, note.contentId)?.title ?: " "
             itemView.bodyTv.setText(note.text)
             itemView.timeTv.text = secToTime(note.duration)
 
