@@ -8,9 +8,7 @@ import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
-import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
-import com.codingblocks.onlineapi.Clients
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_overview.completetionBtn
@@ -43,18 +41,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
                     background = resources.getDrawable(R.drawable.button_background)
                     isEnabled = true
                     setOnClickListener {
-                        Clients.api.requestApproval(viewModel.attemptId).enqueue(retrofitCallback { throwable, response ->
-                            response.let {
-                                if (it?.isSuccessful == true) {
-                                    it.body()?.let { it1 -> Snackbar.make(view.rootView, it1.string(), Snackbar.LENGTH_LONG).show() }
-                                } else {
-                                    it?.errorBody()?.let { it1 -> Snackbar.make(view.rootView, it1.string(), Snackbar.LENGTH_LONG).show() }
-                                }
-                            }
-                            throwable.let {
-                                it?.message?.let { it1 -> Snackbar.make(view.rootView, it1, Snackbar.LENGTH_LONG).show() }
-                            }
-                        })
+                        viewModel.requestApproval()
                     }
                 }
             } else {
@@ -64,6 +51,10 @@ class OverviewFragment : Fragment(), AnkoLogger {
                     isEnabled = false
                 }
             }
+        }
+
+        viewModel.popMessage.observer(viewLifecycleOwner) { message ->
+            Snackbar.make(view.rootView, message, Snackbar.LENGTH_LONG).show()
         }
     }
 

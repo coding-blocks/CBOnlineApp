@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.viewmodels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.database.ContentDao
@@ -17,6 +18,7 @@ import com.codingblocks.cbonlineapp.database.models.CourseSection
 import com.codingblocks.cbonlineapp.database.models.SectionWithContent
 import com.codingblocks.cbonlineapp.extensions.getDistinct
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
+import com.codingblocks.cbonlineapp.util.SingleLiveEvent
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 
@@ -32,6 +34,8 @@ class MyCourseViewModel(
     var attemptId: String = ""
     var runId: String = ""
     var courseId: String = ""
+    private val mutablePopMessage = SingleLiveEvent<String>()
+    val popMessage: LiveData<String> = mutablePopMessage
 
     fun updatehit(attemptId: String) {
         runDao.updateHit(attemptId)
@@ -294,6 +298,19 @@ class MyCourseViewModel(
         val resetCourse = ResetRunAttempt(attemptId)
         Clients.api.resetProgress(resetCourse).enqueue(retrofitCallback { _, response ->
             resetProgres.value = response?.isSuccessful ?: false
+        })
+    }
+
+    fun requestApproval() {
+        Clients.api.requestApproval(attemptId).enqueue(retrofitCallback { throwable, response ->
+            response.let {
+                if (it?.isSuccessful == true) {
+                } else {
+                }
+            }
+            throwable.let {
+                mutablePopMessage.value = it?.message
+            }
         })
     }
 }

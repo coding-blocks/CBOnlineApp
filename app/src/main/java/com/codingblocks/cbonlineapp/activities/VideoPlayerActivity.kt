@@ -36,6 +36,7 @@ import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.RunAttemptsId
+import com.crashlytics.android.core.CrashlyticsCore
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
@@ -415,6 +416,8 @@ class VideoPlayerActivity : AppCompatActivity(),
         }
 
         override fun onLoadError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
+            CrashlyticsCore.getInstance().log("Error Message: ${p1?.errorMsg}, " +
+                "Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}")
         }
 
         override fun onMediaEnded(p0: VdoPlayer.VdoInitParams?) {
@@ -422,6 +425,10 @@ class VideoPlayerActivity : AppCompatActivity(),
         }
 
         override fun onError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
+            CrashlyticsCore.getInstance().log("Error Message: ${p1?.errorMsg}," +
+                " Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}")
+
+            // 2013 not defined
         }
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
