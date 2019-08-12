@@ -52,6 +52,7 @@ class JobsAdapter(diffCallback: JobsDiffCallback) :
 
         fun bindView(job: JobsModel) {
             with(itemView) {
+
                 companyLogo.loadImage(job.company.logo)
 
                 jobTitleTv.text = job.title
