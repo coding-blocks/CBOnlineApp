@@ -58,8 +58,8 @@ class OverviewFragment : Fragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getCourseProgress().observer(viewLifecycleOwner) { progress ->
-            if (progress > 90.0) {
+        viewModel.getRunByAtemptId(viewModel.attemptId).observer(viewLifecycleOwner) { courseRun ->
+            if (courseRun.progress > 90.0) {
                 completetionBtn.setImageResource(R.drawable.ic_status_white)
                 requestBtn.apply {
                     background = resources.getDrawable(R.drawable.button_background)
@@ -75,6 +75,15 @@ class OverviewFragment : Fragment(), AnkoLogger {
                     isEnabled = false
                 }
             }
+            if (courseRun.crRunEnd.toLong() * 1000 < System.currentTimeMillis() || courseRun.crRunEnd.toLong() * 1000 - System.currentTimeMillis() <= 2592000000)
+                viewModel.fetchExtensions(courseRun.productId).observer(viewLifecycleOwner) {
+                    if (it.isNotEmpty()) {
+                        view.extensionsCard.isVisible = true
+                        extensionsAdapter.setData(it as ArrayList<ProductExtensionsItem>)
+                    } else {
+                        view.extensionsCard.isVisible = false
+                    }
+                }
         }
 
         buyBtn.setOnClickListener {
@@ -86,15 +95,6 @@ class OverviewFragment : Fragment(), AnkoLogger {
                 })
             } ?: run {
                 longToast("Atleast Select One Before Proceding !!")
-            }
-        }
-
-        viewModel.fetchExtensions().observer(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
-                view.extensionsCard.isVisible = true
-                extensionsAdapter.setData(it as ArrayList<ProductExtensionsItem>)
-            } else {
-                view.extensionsCard.isVisible = false
             }
         }
 

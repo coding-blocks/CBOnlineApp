@@ -45,10 +45,6 @@ class MyCourseViewModel(
         runDao.updateHit(attemptId)
     }
 
-    fun getProductId() = runDao.getProductId(attemptId)
-
-    fun getCourseProgress() = runDao.getCourseProgress(attemptId)
-
     fun getResumeCourse() = sectionWithContentsDao.resumeCourse(attemptId)
 
     fun getRunAttempt(runId: String): String = runDao.getRunByRunId(runId).crAttemptId
@@ -321,8 +317,8 @@ class MyCourseViewModel(
         })
     }
 
-    fun fetchExtensions(): MutableLiveData<List<ProductExtensionsItem>> {
-        Clients.api.getExtensions(productId = getProductId()).enqueue(retrofitCallback { throwable, response ->
+    fun fetchExtensions(productId: Int): MutableLiveData<List<ProductExtensionsItem>> {
+        Clients.api.getExtensions(productId).enqueue(retrofitCallback { throwable, response ->
             response?.body().let { list ->
                 if (response?.isSuccessful == true) {
                     extensions.postValue(list?.productExtensions)
