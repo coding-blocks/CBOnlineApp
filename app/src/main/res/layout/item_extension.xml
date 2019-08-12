@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="#00000000"
         android:padding="16dp">
 
         <TextView
@@ -22,7 +23,7 @@
             android:fontFamily="@font/nunitosans_bold"
             android:text="C++ Master Course Extension for 180 days - Sep 2018"
             android:textColor="@color/black"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/date"
@@ -30,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text="29 Jan 2020"
             android:textColor="@color/battleship_gray"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/price"
@@ -40,7 +41,7 @@
             android:fontFamily="@font/nunitosans_bold"
             android:text="Rs. 7000"
             android:textColor="@color/salmon"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
 
     </LinearLayout>
 

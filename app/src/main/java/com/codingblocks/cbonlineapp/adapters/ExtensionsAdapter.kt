@@ -52,13 +52,13 @@ class ExtensionsAdapter(var list: ArrayList<ProductExtensionsItem>) : RecyclerVi
                 itemView.cardView.setCardBackgroundColor(itemView.context.resources.getColor(R.color.white))
             } else {
                 if (checkedPosition == adapterPosition) {
-                    itemView.cardView.setCardBackgroundColor(itemView.context.resources.getColor(R.color.button_material_dark))
+                    itemView.cardView.setCardBackgroundColor(itemView.context.resources.getColor(R.color.dark_transparent))
                 } else {
                     itemView.cardView.setCardBackgroundColor(itemView.context.resources.getColor(R.color.white))
                 }
             }
             itemView.setOnClickListener {
-                itemView.cardView.setCardBackgroundColor(itemView.context.resources.getColor(R.color.button_material_dark))
+                itemView.cardView.setCardBackgroundColor(itemView.context.resources.getColor(R.color.dark_transparent))
                 if (checkedPosition != adapterPosition) {
                     notifyItemChanged(checkedPosition)
                     checkedPosition = adapterPosition

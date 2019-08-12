@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
@@ -16,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_overview.completetionBtn
 import kotlinx.android.synthetic.main.fragment_overview.requestBtn
+import kotlinx.android.synthetic.main.fragment_overview.view.extensionsCard
 import kotlinx.android.synthetic.main.fragment_overview.view.extensionsRv
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -72,7 +74,10 @@ class OverviewFragment : Fragment(), AnkoLogger {
 
         viewModel.fetchExtensions().observer(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
+                view.extensionsCard.isVisible = true
                 extensionsAdapter.setData(it as ArrayList<ProductExtensionsItem>)
+            } else {
+                view.extensionsCard.isVisible = false
             }
         }
 
