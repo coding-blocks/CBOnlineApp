@@ -411,7 +411,6 @@
                         android:layout_marginBottom="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/button_background"
-
                         android:paddingTop="15dp"
                         android:paddingBottom="15dp"
                         android:text="@string/buy_text"

@@ -3,8 +3,6 @@ package com.codingblocks.cbonlineapp.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.onlineapi.models.ProductExtensionsItem
@@ -34,12 +32,10 @@ class ExtensionsAdapter(var list: ArrayList<ProductExtensionsItem>) : RecyclerVi
         holder.bind(list[position])
     }
 
-    fun getSelected(): LiveData<ProductExtensionsItem>? {
-        val liveData = MutableLiveData<ProductExtensionsItem>()
-        if (checkedPosition != -1) {
-            liveData.postValue(list[checkedPosition])
-        }
-        return liveData
+    fun getSelected(): ProductExtensionsItem? {
+        return if (checkedPosition != -1) {
+            list[checkedPosition]
+        } else null
     }
 
     inner class ExtensionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

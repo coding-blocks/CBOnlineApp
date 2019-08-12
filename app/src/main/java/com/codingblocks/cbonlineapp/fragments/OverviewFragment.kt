@@ -11,10 +11,14 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.ExtensionsAdapter
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
+import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
+import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.ProductExtensionsItem
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
+import kotlinx.android.synthetic.main.fragment_overview.buyBtn
 import kotlinx.android.synthetic.main.fragment_overview.completetionBtn
 import kotlinx.android.synthetic.main.fragment_overview.requestBtn
 import kotlinx.android.synthetic.main.fragment_overview.view.extensionsCard
@@ -69,6 +73,16 @@ class OverviewFragment : Fragment(), AnkoLogger {
                     background = resources.getDrawable(R.drawable.button_disable)
                     isEnabled = false
                 }
+            }
+        }
+
+        buyBtn.setOnClickListener {
+            extensionsAdapter.getSelected()?.id?.let { it1 ->
+                Clients.api.buyExtension(it1).enqueue(retrofitCallback { throwable, response ->
+                    response.let {
+                    }
+                    Components.openChrome(requireContext(), "https://dukaan.codingblocks.com/mycart")
+                })
             }
         }
 

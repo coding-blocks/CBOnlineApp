@@ -78,5 +78,8 @@ interface OnlineRestApi {
     @GET("v2/runs/products/{id}")
     fun getExtensions(@Path("id") productId: Int): Call<Extension>
 
+    @POST("v2/runs/extensions/{id}/buy")
+    fun buyExtension(@Path("id") extensionId: Int): Call<JsonObject>
+
 
 }

@@ -37,7 +37,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/nunitosans_bold"
-                    android:text="Your course will expire soon!"
+                    android:text="@string/extension_title"
                     android:textSize="22sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:fontFamily="@font/nunitosans_bold"
-                    android:text="Buy extension for this course"
+                    android:text="@string/extension_desc"
                     android:textColor="@color/battleship_gray"
                     android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
