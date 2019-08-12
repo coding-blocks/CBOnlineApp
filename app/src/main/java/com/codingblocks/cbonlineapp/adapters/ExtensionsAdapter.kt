@@ -45,16 +45,16 @@ class ExtensionsAdapter(var list: ArrayList<ProductExtensionsItem>) : RecyclerVi
             itemView.date.text = "${extension.duration} Days"
             itemView.price.text = "Rs. ${extension.mrp?.div(100)}"
             if (checkedPosition == -1) {
-                itemView.cardView.setCardBackgroundColor(itemView.context.resources.getColor(R.color.white))
+                itemView.cardView.setBackgroundColor(itemView.context.resources.getColor(R.color.white))
             } else {
                 if (checkedPosition == adapterPosition) {
-                    itemView.cardView.setCardBackgroundColor(itemView.context.resources.getColor(R.color.dark_transparent))
+                    itemView.cardView.setBackgroundColor(itemView.context.resources.getColor(R.color.dark_transparent))
                 } else {
-                    itemView.cardView.setCardBackgroundColor(itemView.context.resources.getColor(R.color.white))
+                    itemView.cardView.setBackgroundColor(itemView.context.resources.getColor(R.color.white))
                 }
             }
             itemView.setOnClickListener {
-                itemView.cardView.setCardBackgroundColor(itemView.context.resources.getColor(R.color.dark_transparent))
+                itemView.cardView.setBackgroundColor(itemView.context.resources.getColor(R.color.dark_transparent))
                 if (checkedPosition != adapterPosition) {
                     notifyItemChanged(checkedPosition)
                     checkedPosition = adapterPosition

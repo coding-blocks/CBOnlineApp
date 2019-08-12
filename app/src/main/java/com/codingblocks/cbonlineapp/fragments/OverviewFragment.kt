@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_overview.requestBtn
 import kotlinx.android.synthetic.main.fragment_overview.view.extensionsCard
 import kotlinx.android.synthetic.main.fragment_overview.view.extensionsRv
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.support.v4.longToast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 private const val ARG_ATTEMPT_ID = "attempt_id"
@@ -83,6 +84,8 @@ class OverviewFragment : Fragment(), AnkoLogger {
                     }
                     Components.openChrome(requireContext(), "https://dukaan.codingblocks.com/mycart")
                 })
+            } ?: run {
+                longToast("Atleast Select One Before Proceding !!")
             }
         }
 
@@ -94,8 +97,6 @@ class OverviewFragment : Fragment(), AnkoLogger {
                 view.extensionsCard.isVisible = false
             }
         }
-
-        viewModel
 
         viewModel.popMessage.observer(viewLifecycleOwner) { message ->
             Snackbar.make(view.rootView, message, Snackbar.LENGTH_LONG).show()

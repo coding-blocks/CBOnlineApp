@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
+import com.crashlytics.android.core.CrashlyticsCore
 import java.lang.Exception
 
 class VideoPlayerViewModel(
@@ -51,11 +52,17 @@ class VideoPlayerViewModel(
 
     fun getOtp(videoId: String, sectionId: String, attemptId: String) {
         Clients.api.getOtp(videoId, sectionId, attemptId)
-            .enqueue(retrofitCallback { _, response ->
+            .enqueue(retrofitCallback { error, response ->
                 response?.let {
                     mOtp = response.body()?.get("otp")?.asString
                     mPlaybackInfo = response.body()?.get("playbackInfo")?.asString
                     getOtpProgress.postValue(it.isSuccessful)
+                    it.errorBody()?.let {
+                        CrashlyticsCore.getInstance().log("Erroe Fetching Otp: ${it.string()}")
+                    }
+                }
+                error?.let {
+                    CrashlyticsCore.getInstance().log("Erroe Fetching Otp: ${it.localizedMessage}")
                 }
             })
     }

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.DownloadBroadcastReceiver
 import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.crashlytics.android.core.CrashlyticsCore
 import es.voghdev.pdfviewpager.library.PDFViewPager
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter
 import kotlinx.android.synthetic.main.activity_pdf.root
@@ -100,12 +101,16 @@ class PdfActivity : AppCompatActivity(), AnkoLogger {
     }
 
     private fun downloadFile() {
-        val request = DownloadManager.Request(Uri.parse(url))
-        request.setTitle(fileName)
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
-        // get download service and enqueue file
-        val manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        manager.enqueue(request)
+        try {
+            val request = DownloadManager.Request(Uri.parse(url))
+            request.setTitle(fileName)
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
+            // get download service and enqueue file
+            val manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            manager.enqueue(request)
+        } catch (e: java.lang.Exception) {
+            CrashlyticsCore.getInstance().log("Error Downloading Pdf: $url}")
+        }
     }
 
     override fun onDestroy() {
