@@ -76,7 +76,7 @@ interface OnlineRestApi {
     fun requestApproval(@Path("runAttemptId") id: String): Call<ResponseBody>
 
     @GET("v2/runs/products/{id}")
-    fun getExtensions(@Path("id") productId: String): Call<Extension>
+    fun getExtensions(@Path("id") productId: Int): Call<Extension>
 
 
 }

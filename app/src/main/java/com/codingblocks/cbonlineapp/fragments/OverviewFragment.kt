@@ -5,14 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.adapters.ExtensionsAdapter
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
+import com.codingblocks.onlineapi.models.ProductExtensionsItem
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_overview.completetionBtn
 import kotlinx.android.synthetic.main.fragment_overview.requestBtn
+import kotlinx.android.synthetic.main.fragment_overview.view.extensionsRv
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -26,11 +30,24 @@ class OverviewFragment : Fragment(), AnkoLogger {
     lateinit var attemptId: String
     lateinit var runId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private lateinit var extensionsAdapter: ExtensionsAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_overview, container, false)
+    ): View {
+        val view = inflater.inflate(R.layout.fragment_overview, container, false)
+
+        extensionsAdapter = ExtensionsAdapter(ArrayList())
+        view.extensionsRv.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+            adapter = extensionsAdapter
+        }
+        return view
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,6 +69,14 @@ class OverviewFragment : Fragment(), AnkoLogger {
                 }
             }
         }
+
+        viewModel.fetchExtensions().observer(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                extensionsAdapter.setData(it as ArrayList<ProductExtensionsItem>)
+            }
+        }
+
+        viewModel
 
         viewModel.popMessage.observer(viewLifecycleOwner) { message ->
             Snackbar.make(view.rootView, message, Snackbar.LENGTH_LONG).show()

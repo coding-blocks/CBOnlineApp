@@ -20,6 +20,7 @@ import com.codingblocks.cbonlineapp.extensions.getDistinct
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.SingleLiveEvent
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.ProductExtensionsItem
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 
 class MyCourseViewModel(
@@ -36,10 +37,15 @@ class MyCourseViewModel(
     var courseId: String = ""
     private val mutablePopMessage = SingleLiveEvent<String>()
     val popMessage: LiveData<String> = mutablePopMessage
+    var resetProgres: MutableLiveData<Boolean> = MutableLiveData()
+
+    private val extensions = MutableLiveData<List<ProductExtensionsItem>>()
 
     fun updatehit(attemptId: String) {
         runDao.updateHit(attemptId)
     }
+
+    fun getProductId() = runDao.getProductId(attemptId)
 
     fun getCourseProgress() = runDao.getCourseProgress(attemptId)
 
@@ -293,7 +299,6 @@ class MyCourseViewModel(
 //    }
     }
 
-    var resetProgres: MutableLiveData<Boolean> = MutableLiveData()
     fun resetProgress() {
         val resetCourse = ResetRunAttempt(attemptId)
         Clients.api.resetProgress(resetCourse).enqueue(retrofitCallback { _, response ->
@@ -305,12 +310,28 @@ class MyCourseViewModel(
         Clients.api.requestApproval(attemptId).enqueue(retrofitCallback { throwable, response ->
             response.let {
                 if (it?.isSuccessful == true) {
+                    mutablePopMessage.value = it.body()?.string()
                 } else {
+                    mutablePopMessage.value = it?.errorBody()?.string()
                 }
             }
             throwable.let {
                 mutablePopMessage.value = it?.message
             }
         })
+    }
+
+    fun fetchExtensions(): MutableLiveData<List<ProductExtensionsItem>> {
+        Clients.api.getExtensions(productId = getProductId()).enqueue(retrofitCallback { throwable, response ->
+            response?.body().let { list ->
+                if (response?.isSuccessful == true) {
+                    extensions.postValue(list?.productExtensions)
+                }
+            }
+            throwable.let {
+                mutablePopMessage.value = it?.message
+            }
+        })
+        return extensions
     }
 }

@@ -144,7 +144,7 @@ class BatchesCardUi : AnkoComponent<ViewGroup> {
                 }.lparams(width = matchParent, height = wrapContent) {
                     margin = dip(8)
                 }
-            }.lparams(matchParent, wrapContent) {
+            }.lparams(dip(300), wrapContent) {
                 margin = dip(6)
             }
         }
