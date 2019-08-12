@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
+import com.codingblocks.cbonlineapp.extensions.getDateForTime
 import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.fragments.AnnouncementsFragment
@@ -28,6 +29,7 @@ import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_URL
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
+import kotlinx.android.synthetic.main.activity_my_course.batchEndTv
 import kotlinx.android.synthetic.main.activity_my_course.contentCompletedTv
 import kotlinx.android.synthetic.main.activity_my_course.courseProgress
 import kotlinx.android.synthetic.main.activity_my_course.htab_tabs
@@ -141,6 +143,7 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
         viewModel.getRunByAtemptId(viewModel.attemptId).observer(this) {
             courseProgress.progress = it.progress.toInt()
             contentCompletedTv.text = "${it.completedContents} of ${it.totalContents} Contents Completed"
+            batchEndTv.text = "Batch Ends ${getDateForTime(it.crRunEnd)}"
         }
     }
 

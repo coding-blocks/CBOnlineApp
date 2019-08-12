@@ -92,6 +92,16 @@ fun secToTime(time: Double): String {
     return String.format("00:%02d:%02d", minutes, seconds)
 }
 
+fun getDateForTime(time: String): String {
+    val dateFormat = SimpleDateFormat("dd-MMM-yy", Locale.US)
+    dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = time.toLong() * 1000
+
+    return dateFormat.format(calendar.time)
+}
+
 fun getDate(): String {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
     dateFormat.timeZone = TimeZone.getTimeZone("UTC")
