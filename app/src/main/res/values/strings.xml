@@ -112,4 +112,6 @@
     <string name="resume">Resume</string>
     <string name="extension_desc">Buy extension for this course</string>
     <string name="extension_title">Your course will expire soon!</string>
+    <string name="filter_location">Location</string>
+    <string name="filter_job_type">Job Type</string>
 </resources>

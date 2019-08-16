@@ -182,6 +182,8 @@ interface OnlineJsonApi {
     fun getJobs(
         @Query("filter[deadline][\$gt]") deadline: String,
         @Query("filter[postedOn][\$lte]") postedOn: String,
+        @Query("filter[location][\$ilike][\$any][]") filterLoc: List<String>? = null,
+        @Query("filter[type][\$in][]") filterType: List<String>? = null,
         @Query("page[offset]") pageOffSet: String = "0",
         @Query("page[limit]") pageLimit: String = "12",
         @Query("sort") sort: String = "-postedOn"
