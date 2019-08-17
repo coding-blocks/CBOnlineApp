@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.database.FeaturesDao
 import com.codingblocks.cbonlineapp.database.InstructorDao
 import com.codingblocks.cbonlineapp.database.models.Course
+import com.codingblocks.cbonlineapp.database.models.CourseFeatures
 import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
 import com.codingblocks.cbonlineapp.database.models.Instructor
@@ -21,7 +23,8 @@ class HomeViewModel(
     private val courseWithInstructorDao: CourseWithInstructorDao,
     private val courseDao: CourseDao,
     private val runDao: CourseRunDao,
-    private val instructorDao: InstructorDao
+    private val instructorDao: InstructorDao,
+    private val featuresDao: FeaturesDao
 ) : ViewModel() {
     var carouselCards: MutableLiveData<List<CarouselCards>> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
@@ -66,6 +69,9 @@ class HomeViewModel(
                                             faq
                                         )
                                     )
+                                    courseFeatures?.forEach {
+                                        featuresDao.insert(CourseFeatures(icon = it.icon, text = it.text, crCourseId = id))
+                                    }
                                 }
                                 var list = course.runs?.filter { run ->
                                     !run.enrollmentStart.greater() && run.enrollmentEnd.greater() && !run.unlisted

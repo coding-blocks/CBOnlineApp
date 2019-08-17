@@ -38,6 +38,17 @@ data class Course(
     var faq: String? = ""
 ) : BaseModel(uid, updated_at)
 
+@Entity(foreignKeys = [ForeignKey(entity = Course::class,
+    parentColumns = ["id"],
+    childColumns = ["crCourseId"])])
+data class CourseFeatures(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int? = null,
+    val icon: String,
+    val text: String,
+    var crCourseId: String = ""
+)
+
 @Entity(
     indices = [Index("crCourseId")],
     foreignKeys = [

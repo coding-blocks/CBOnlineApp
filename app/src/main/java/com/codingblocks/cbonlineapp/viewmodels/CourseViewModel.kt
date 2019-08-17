@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.database.FeaturesDao
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Course
@@ -12,7 +13,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import retrofit2.Response
 
 class CourseViewModel(
-    private val courseWithInstructorDao: CourseWithInstructorDao
+    private val courseWithInstructorDao: CourseWithInstructorDao,
+    private val featuresDao: FeaturesDao
+
 ) : ViewModel() {
     var sheetBehavior: BottomSheetBehavior<*>? = null
 

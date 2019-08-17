@@ -19,7 +19,7 @@ import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 
 val viewModelModule = module {
-    viewModel { HomeViewModel(get(), get(), get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get(), get()) }
     viewModel { MyCourseViewModel(get(), get(), get(), get()) }
     viewModel { LeaderboardViewModel() }
     viewModel { NotificationViewModel(get()) }
@@ -28,7 +28,7 @@ val viewModelModule = module {
     viewModel { QuizViewModel() }
 
     // Activities
-    viewModel { CourseViewModel(get()) }
+    viewModel { CourseViewModel(get(), get()) }
     viewModel { VideoPlayerViewModel(get(), get(), get(), get(), get()) }
     viewModel { HomeActivityViewModel(get()) }
     viewModel { SettingsViewModel(get()) }
@@ -65,6 +65,11 @@ val databaseModule = module {
     factory {
         val database: AppDatabase = get()
         database.instructorDao()
+    }
+
+    factory {
+        val database: AppDatabase = get()
+        database.featuresDao()
     }
 
     factory {
