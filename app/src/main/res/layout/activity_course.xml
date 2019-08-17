@@ -444,29 +444,35 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
+                    <ImageView
                         android:layout_width="72dp"
+                        android:id="@+id/feature_icon_1"
                         android:layout_height="72dp"
+                        android:scaleType="fitXY"
                         android:src="@drawable/content_2" />
 
                     <TextView
+                        android:id="@+id/features_text_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
+                        android:maxWidth="100dp"
                         android:text="100 + lecture\n Video Content"
                         android:textColor="@android:color/black" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView
+                    <ImageView
                         android:layout_width="72dp"
+                        android:id="@+id/feature_icon_2"
                         android:layout_height="72dp"
                         android:layout_marginStart="8dp"
                         android:src="@drawable/revise_2" />
 
                     <TextView
+                        android:id="@+id/features_text_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-
+                        android:maxWidth="100dp"
                         android:text="Revisit and\nRevise Topics"
                         android:textColor="@android:color/black" />
 
@@ -481,30 +487,36 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
+                    <ImageView
                         android:layout_width="72dp"
                         android:layout_height="72dp"
+                        android:id="@+id/feature_icon_3"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/certificate_2" />
 
                     <TextView
+                        android:id="@+id/features_text_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-
+                        android:maxWidth="100dp"
                         android:text="Certificate of\nCompletion"
                         android:textColor="@android:color/black" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView
+                    <ImageView
                         android:layout_width="72dp"
+                        android:id="@+id/feature_icon_4"
                         android:layout_height="72dp"
+                        android:scaleType="centerCrop"
                         android:layout_marginStart="16dp"
                         android:src="@drawable/support_2" />
 
                     <TextView
+                        android:id="@+id/features_text_4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-
+                        android:maxWidth="100dp"
                         android:text="24x7 Mentor\nSupport"
                         android:textColor="@android:color/black" />
 

@@ -57,6 +57,14 @@ import kotlinx.android.synthetic.main.activity_course.courseRootView
 import kotlinx.android.synthetic.main.activity_course.faqMarkdown
 import kotlinx.android.synthetic.main.activity_course.faqTitleTv
 import kotlinx.android.synthetic.main.activity_course.faqView
+import kotlinx.android.synthetic.main.activity_course.feature_icon_1
+import kotlinx.android.synthetic.main.activity_course.feature_icon_2
+import kotlinx.android.synthetic.main.activity_course.feature_icon_3
+import kotlinx.android.synthetic.main.activity_course.feature_icon_4
+import kotlinx.android.synthetic.main.activity_course.features_text_1
+import kotlinx.android.synthetic.main.activity_course.features_text_2
+import kotlinx.android.synthetic.main.activity_course.features_text_3
+import kotlinx.android.synthetic.main.activity_course.features_text_4
 import kotlinx.android.synthetic.main.activity_course.instructorRv
 import kotlinx.android.synthetic.main.activity_course.rvExpendableView
 import kotlinx.android.synthetic.main.activity_course.scrollView
@@ -183,6 +191,28 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
             skeletonScreen.hide()
 
             fetchInstructors(course.id)
+            viewModel.getCourseFeatures(courseId).observer(this) {
+                it.forEachIndexed { index, courseFeatures ->
+                    when (index) {
+                        0 -> {
+                            feature_icon_1.loadImage(courseFeatures.icon, scale = true)
+                            features_text_1.text = courseFeatures.text
+                        }
+                        1 -> {
+                            feature_icon_2.loadImage(courseFeatures.icon, scale = true)
+                            features_text_2.text = courseFeatures.text
+                        }
+                        2 -> {
+                            feature_icon_3.loadImage(courseFeatures.icon, scale = true)
+                            features_text_3.text = courseFeatures.text
+                        }
+                        3 -> {
+                            feature_icon_4.loadImage(courseFeatures.icon, scale = true)
+                            features_text_4.text = courseFeatures.text
+                        }
+                    }
+                }
+            }
 
             batchAdapter = BatchesAdapter(ArrayList(), object : OnCartItemClickListener {
                 override fun onItemClick(id: String, name: String) {

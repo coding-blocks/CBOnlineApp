@@ -69,7 +69,7 @@ class HomeViewModel(
                                             faq
                                         )
                                     )
-                                    courseFeatures?.forEach {
+                                    coursefeatures?.forEach {
                                         featuresDao.insert(CourseFeatures(icon = it.icon, text = it.text, crCourseId = id))
                                     }
                                 }

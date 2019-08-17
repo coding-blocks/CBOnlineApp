@@ -30,7 +30,7 @@ open class Course(
     val slug: String?,
     val coverImage: String,
     val faq: String?,
-    val courseFeatures: ArrayList<CourseFeatures>?,
+    val coursefeatures: ArrayList<CourseFeatures>?,
     @Relationship("instructors")
     val instructors: ArrayList<Instructor>?,
     @Relationship("runs")

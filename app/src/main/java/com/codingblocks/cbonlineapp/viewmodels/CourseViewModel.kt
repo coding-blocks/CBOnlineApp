@@ -1,9 +1,11 @@
 package com.codingblocks.cbonlineapp.viewmodels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.FeaturesDao
+import com.codingblocks.cbonlineapp.database.models.CourseFeatures
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Course
@@ -55,6 +57,10 @@ class CourseViewModel(
             if (response?.isSuccessful == true)
                 fetchedCourse.value = response.body()
         })
+    }
+
+    fun getCourseFeatures(courseId: String): LiveData<List<CourseFeatures>> {
+        return featuresDao.getfeatures(courseId)
     }
 
     fun getCourseRating(id: String) {
