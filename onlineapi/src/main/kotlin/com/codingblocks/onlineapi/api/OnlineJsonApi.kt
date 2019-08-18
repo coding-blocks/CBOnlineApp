@@ -20,7 +20,6 @@ import com.codingblocks.onlineapi.models.Question
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.Sections
-import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -73,12 +72,12 @@ interface OnlineJsonApi {
     ): Call<ArrayList<Course>>
 
     @GET("sections/{id}")
-    fun getSections(
+    suspend fun getSections(
         @Path("id") id: String,
         @Query("exclude") query: String = "contents.*",
         @Query("include") include: String = "contents",
         @Query("sort") sort: String = "content.section_content.order"
-    ): Deferred<Response<Sections>>
+    ): Response<Sections>
 
 
     @GET("runs")
@@ -201,6 +200,9 @@ interface OnlineJsonApi {
 
     @POST("applications")
     fun applyJob(@Body params: Applications): Call<ResponseBody>
+
+//    @GET("projects/{id}")
+//    fun getProject(@Path("id") id: String): Call<Projects>
 
 
 }

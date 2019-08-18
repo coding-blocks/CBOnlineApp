@@ -25,7 +25,6 @@ import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
 import com.codingblocks.cbonlineapp.util.OnCartItemClickListener
-import com.codingblocks.cbonlineapp.util.ProgressBarAnimation
 import com.codingblocks.cbonlineapp.viewmodels.CourseViewModel
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Sections
@@ -89,7 +88,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     lateinit var courseId: String
     lateinit var courseName: String
     private lateinit var skeletonScreen: SkeletonScreen
-    private lateinit var rvExpandableskeleton: SkeletonScreen
     private lateinit var progressBar: Array<ProgressBar?>
     private lateinit var batchAdapter: BatchesAdapter
     private lateinit var instructorAdapter: InstructorDataAdapter
@@ -239,6 +237,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                         Components.showconfirmation(this@CourseActivity, "trial")
                     }
                     viewModel.enrollTrial(course.runs?.get(0)?.id ?: "")
+                } else {
+                    toast("No available runs right now ! Please check back later")
                 }
             }
             course.runs?.let { batchAdapter.setData(it) }
@@ -257,19 +257,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 val sectionsList = ArrayList<Sections>()
                 rvExpendableView.layoutManager = LinearLayoutManager(this@CourseActivity)
                 rvExpendableView.adapter = sectionAdapter
-                rvExpandableskeleton = Skeleton.bind(rvExpendableView)
-                    .adapter(sectionAdapter)
-                    .shimmer(true)
-                    .angle(20)
-                    .frozen(true)
-                    .duration(1200)
-                    .count(4)
-                    .load(R.layout.item_skeleton_section_card)
-                    .show()
                 runOnUiThread {
                     sections?.forEachIndexed { index, section ->
                         GlobalScope.launch(Dispatchers.Main) {
-                            val response2 = viewModel.getSectionsFromID(section.id)
+                            val response2 = viewModel.getCourseSection(section.id)
                             if (response2.isSuccessful) {
                                 val value = response2.body()
                                 value?.order = index
@@ -278,7 +269,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                                 }
                                 if (sectionsList.size == sections.size) {
                                     sectionsList.sortBy { it.order }
-                                    rvExpandableskeleton.hide()
                                     sectionAdapter.setData(sectionsList)
                                 }
                             } else {
@@ -350,7 +340,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     }
 
     private fun fetchRating(id: String) {
-        viewModel.courseRating.observeOnce {
+        viewModel.getCourseRating(id).observeOnce {
             it?.apply {
                 coursePageRatingCountTv.text = "$count Rating"
                 coursePageRatingTv.text = "$rating out of 5 stars"
@@ -358,10 +348,12 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 for (i in 0 until progressBar.size) {
                     progressBar[i]?.max = it.count * 1000
                     progressBar[i]?.progress = it.stats[i].toInt() * 1000
-                    val anim =
-                        ProgressBarAnimation(progressBar[i], 0F, it.stats[i].toInt() * 1000F)
-                    anim.duration = 1500
-                    progressBar[i]?.startAnimation(anim)
+
+                    // Todo Add Animation on Focus
+//                    val anim =
+//                        ProgressBarAnimation(progressBar[i], 0F, it.stats[i].toInt() * 1000F)
+//                    anim.duration = 1500
+//                    progressBar[i]?.startAnimation(anim)
                 }
             }
         }

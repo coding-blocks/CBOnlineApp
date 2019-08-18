@@ -68,6 +68,7 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                                 elevation = 5f
                                 courselogo = circleImageView {
                                     topPadding = dip(16)
+                                    transitionName = "imageTrans"
                                     borderColor = Color.parseColor("#ffffff")
                                     borderWidth = dip(2)
                                 }.lparams(width = dip(76), height = dip(76))

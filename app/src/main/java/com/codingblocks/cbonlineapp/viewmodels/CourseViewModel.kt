@@ -1,31 +1,30 @@
 package com.codingblocks.cbonlineapp.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.FeaturesDao
-import com.codingblocks.cbonlineapp.database.models.CourseFeatures
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
+import com.codingblocks.cbonlineapp.repository.CourseRepository
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Course
-import com.codingblocks.onlineapi.models.RatingModel
-import com.codingblocks.onlineapi.models.Sections
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
 
 class CourseViewModel(
     private val courseWithInstructorDao: CourseWithInstructorDao,
     private val featuresDao: FeaturesDao
 
 ) : ViewModel() {
+    private val repository = CourseRepository()
+
     var sheetBehavior: BottomSheetBehavior<*>? = null
 
     var image: MutableLiveData<String> = MutableLiveData()
     var name: MutableLiveData<String> = MutableLiveData()
 
     var fetchedCourse: MutableLiveData<Course> = MutableLiveData()
-    var courseRating: MutableLiveData<RatingModel> = MutableLiveData()
 
     var addedToCartProgress: MutableLiveData<Boolean> = MutableLiveData()
     var clearCartProgress: MutableLiveData<Boolean> = MutableLiveData()
@@ -59,25 +58,18 @@ class CourseViewModel(
         })
     }
 
-    fun getCourseFeatures(courseId: String): LiveData<List<CourseFeatures>> {
-        return featuresDao.getfeatures(courseId)
+    fun getCourseFeatures(courseId: String) = featuresDao.getfeatures(courseId)
+
+    fun getCourseRating(id: String) = liveData(Dispatchers.IO) {
+        emit(repository.getRating(id))
     }
 
-    fun getCourseRating(id: String) {
-        Clients.api.getCourseRating(id).enqueue(retrofitCallback { _, response ->
-            if (response?.isSuccessful == true)
-                courseRating.value = response.body()
-        })
-    }
+    suspend fun getCourseSection(id: String) = repository.getCourseSections(id)
 
     fun enrollTrial(id: String) {
         Clients.api.enrollTrial(id).enqueue(retrofitCallback { _, response ->
             enrollTrialProgress.value = (response?.isSuccessful == true)
         })
-    }
-
-    suspend fun getSectionsFromID(id: String): Response<Sections> {
-        return Clients.onlineV2JsonApi.getSections(id).await()
     }
 
     fun addToCart(id: String) {

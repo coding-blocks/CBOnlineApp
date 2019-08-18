@@ -34,7 +34,7 @@ interface OnlineRestApi {
     fun getToken(@Field("code") code: String): Call<JsonObject>
 
     @GET("v2/courses/{id}/rating")
-    fun getCourseRating(@Path("id") id: String): Call<RatingModel>
+    suspend fun getCourseRating(@Path("id") id: String): RatingModel
 
     @GET("v2/users/me")
     fun getMe(): Call<JsonObject>
