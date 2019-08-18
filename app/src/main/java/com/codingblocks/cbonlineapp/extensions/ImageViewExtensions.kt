@@ -44,7 +44,6 @@ fun ImageView.loadImage(imgUrl: String, scale: Boolean = false) {
             Picasso.with(context).load(imgUrl).resize(72, 72).into(this)
         else
             Picasso.with(context).load(imgUrl).into(this)
-
     } else {
         loadSvg(imgUrl, null)
     }

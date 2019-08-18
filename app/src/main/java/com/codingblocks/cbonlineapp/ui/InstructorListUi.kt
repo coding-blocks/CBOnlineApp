@@ -39,19 +39,6 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
                 startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                 topToTop = ConstraintLayout.LayoutParams.PARENT_ID
             }
-            instructorTitle = textView {
-                id = View.generateViewId()
-                textColor = Color.parseColor("#000000")
-                textSize = 22f
-                typeface = font
-            }.lparams(width = dip(0), height = dip(wrapContent)) {
-                marginStart = dip(16)
-                topMargin = dip(16)
-                marginEnd = dip(8)
-                topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-                startToEnd = instructorImgView.id
-                matchConstraintDefaultWidth = MATCH_CONSTRAINT_WRAP
-            }
             instructorTextView = textView {
                 id = View.generateViewId()
                 textSize = 18f
@@ -61,7 +48,20 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
                 marginStart = dip(16)
                 marginEnd = dip(8)
                 startToEnd = instructorImgView.id
-                topToBottom = instructorTitle.id
+                topToTop = instructorImgView.id
+                bottomToBottom = instructorImgView.id
+                matchConstraintDefaultWidth = MATCH_CONSTRAINT_WRAP
+            }
+            instructorTitle = textView {
+                id = View.generateViewId()
+                textColor = Color.parseColor("#000000")
+                textSize = 22f
+                typeface = font
+            }.lparams(width = dip(0), height = dip(wrapContent)) {
+                marginStart = dip(16)
+                marginEnd = dip(8)
+                bottomToTop = instructorTextView.id
+                startToEnd = instructorImgView.id
                 matchConstraintDefaultWidth = MATCH_CONSTRAINT_WRAP
             }
             instructorEmail = textView {
