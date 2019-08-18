@@ -1,9 +1,9 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Notes
+import com.codingblocks.onlineapi.models.RunAttemptsId
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
@@ -20,7 +20,7 @@ class OnlineJsonApiAuthenticatedTest {
     @Test
     fun `GET section`() {
         suspend {
-            val courses = jsonapi.getSections("795").await().body()
+            val courses = jsonapi.getSections("795")
             assertNotNull(courses)
         }
     }

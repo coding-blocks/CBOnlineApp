@@ -9,8 +9,8 @@ class OnlineRestApiPublicTest {
     val restapi = Clients.api
 
     @Test
-    fun `GET courseRating`(){
-        val rating = restapi.getCourseRating("18").execute().body()
+    suspend fun `GET courseRating`(){
+        val rating = restapi.getCourseRating("18")
         assertNotNull(rating)
     }
 

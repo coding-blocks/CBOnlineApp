@@ -38,12 +38,6 @@ class OnlineJsonApiPublicTest {
     }
 
     @Test
-    fun `GET sections`(){
-        val sections = api.getSections("1")
-        assertNotNull(sections)
-    }
-
-    @Test
     fun `GET carouselCards`(){
         val carouselCards = api.carouselCards.execute().body()
         assertNotNull(carouselCards)
