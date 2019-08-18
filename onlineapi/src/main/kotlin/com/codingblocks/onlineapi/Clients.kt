@@ -14,6 +14,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import okhttp3.ConnectionPool
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -68,6 +69,7 @@ object Clients {
     private val ClientInterceptor = OkHttpClient.Builder()
         .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
         .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
+        .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
         .addInterceptor { chain ->
             chain.proceed(
                 chain.request().newBuilder().addHeader(
