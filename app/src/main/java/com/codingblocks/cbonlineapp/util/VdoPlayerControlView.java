@@ -63,11 +63,13 @@ public class VdoPlayerControlView extends FrameLayout {
     private final ImageButton qualityButton;
     private final ImageButton enterFullscreenButton;
     private final ImageButton exitFullscreenButton;
+    public final ImageButton playNextButton;
     private final ProgressBar loaderView;
     private final ImageButton errorView;
     private final TextView errorTextView;
     private final View controlPanel;
     private final View controllerBackground;
+    private final View videoCompletePanel;
 
     private int ffwdMs;
     private int rewindMs;
@@ -123,31 +125,34 @@ public class VdoPlayerControlView extends FrameLayout {
         fastForwardButton.setOnClickListener(uiListener);
         rewindButton = findViewById(R.id.vdo_rewind);
         rewindButton.setOnClickListener(uiListener);
-        durationView = (TextView)findViewById(R.id.vdo_duration);
-        positionView = (TextView)findViewById(R.id.vdo_position);
-        seekBar = (SeekBar)findViewById(R.id.vdo_seekbar);
+        durationView = findViewById(R.id.vdo_duration);
+        positionView = findViewById(R.id.vdo_position);
+        seekBar = findViewById(R.id.vdo_seekbar);
         seekBar.setOnSeekBarChangeListener(uiListener);
-        speedControlButton = (Button)findViewById(R.id.vdo_speed);
+        speedControlButton = findViewById(R.id.vdo_speed);
         speedControlButton.setOnClickListener(uiListener);
-        captionsButton = (ImageButton)findViewById(R.id.vdo_captions);
+        captionsButton = findViewById(R.id.vdo_captions);
         captionsButton.setOnClickListener(uiListener);
-        qualityButton = (ImageButton)findViewById(R.id.vdo_quality);
+        qualityButton = findViewById(R.id.vdo_quality);
         qualityButton.setOnClickListener(uiListener);
-        enterFullscreenButton = (ImageButton)findViewById(R.id.vdo_enter_fullscreen);
+        playNextButton = findViewById(R.id.play_next);
+        playNextButton.setOnClickListener(uiListener);
+        enterFullscreenButton = findViewById(R.id.vdo_enter_fullscreen);
         enterFullscreenButton.setOnClickListener(uiListener);
-        exitFullscreenButton = (ImageButton)findViewById(R.id.vdo_exit_fullscreen);
+        exitFullscreenButton = findViewById(R.id.vdo_exit_fullscreen);
         exitFullscreenButton.setOnClickListener(uiListener);
         exitFullscreenButton.setVisibility(GONE);
-        loaderView = (ProgressBar)findViewById(R.id.vdo_loader);
+        loaderView = findViewById(R.id.vdo_loader);
         loaderView.setVisibility(GONE);
-        errorView = (ImageButton)findViewById(R.id.vdo_error);
+        errorView = findViewById(R.id.vdo_error);
         errorView.setOnClickListener(uiListener);
         errorView.setVisibility(GONE);
-        errorTextView = (TextView)findViewById(R.id.vdo_error_text);
+        errorTextView = findViewById(R.id.vdo_error_text);
         errorTextView.setOnClickListener(uiListener);
         errorTextView.setVisibility(GONE);
         controlPanel = findViewById(R.id.vdo_control_panel);
         controllerBackground = findViewById(R.id.vdo_controller_bg);
+        videoCompletePanel = findViewById(R.id.video_complete_container);
         setOnClickListener(uiListener);
     }
 
@@ -529,7 +534,8 @@ public class VdoPlayerControlView extends FrameLayout {
 
         @Override
         public void onMediaEnded(VdoPlayer.VdoInitParams vdoInitParams) {
-            // todo
+            controlPanel.setVisibility(GONE);
+            videoCompletePanel.setVisibility(VISIBLE);
         }
 
         @Override

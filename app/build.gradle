@@ -38,6 +38,11 @@ android {
         buildConfigField "String", "CLIENT_ID", '"' + CLIENT_ID + '"'
         buildConfigField "String", "REDIRECT_URI", '"' + REDIRECT_URI + '"'
         buildConfigField "String", "OAUTH_URL", '"' + OAUTH_URL + '"'
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas".toString())
+            }
+        }
     }
     lintOptions {
         abortOnError false

@@ -105,4 +105,29 @@
                 android:src="@drawable/ic_fullscreen_exit_white_24dp"/>
         </LinearLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/video_complete_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <ImageButton
+            android:id="@+id/play_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_play_arrow_white_24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Play Next"
+            android:textSize="20sp" />
+
+
+    </LinearLayout>
 </FrameLayout>

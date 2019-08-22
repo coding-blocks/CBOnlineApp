@@ -219,6 +219,8 @@ class VideoPlayerActivity : AppCompatActivity(),
 
         playerControlView?.setFullscreenActionListener(fullscreenToggleListener)
         playerControlView?.setControllerVisibilityListener(visibilityListener)
+        playerControlView?.playNextButton?.setOnClickListener {
+        }
         // load a media to the player
         val vdoParams: VdoPlayer.VdoInitParams? = if (download) {
             VdoPlayer.VdoInitParams.createParamsForOffline(videoId)
@@ -421,7 +423,7 @@ class VideoPlayerActivity : AppCompatActivity(),
         }
 
         override fun onMediaEnded(p0: VdoPlayer.VdoInitParams?) {
-            onBackPressed()
+//            onBackPressed()
         }
 
         override fun onError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
