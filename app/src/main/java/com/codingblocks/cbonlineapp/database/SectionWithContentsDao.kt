@@ -38,4 +38,15 @@ interface SectionWithContentsDao {
         ORDER BY s."sectionOrder", sc."order" LIMIT 1;
         """)
     fun resumeCourse(attemptId: String): LiveData<List<CourseContent>>
+
+
+//    @Query("""
+//        SELECT * FROM  CourseSection s
+//	    INNER JOIN SectionWithContent sc ON sc."section_id" = s."uid"
+//	    INNER JOIN CourseContent c ON c."uid" = sc."content_id"
+//	    WHERE s.attempt_id = :attemptId AND contentable = "lecture" OR contentable = "video" AND
+//        Select order FROM c WHERE id = :uid AND
+//        LIMIT 1;
+//        """)
+//    fun getNextVideo(attemptId: String): LiveData<List<CourseContent>>
 }

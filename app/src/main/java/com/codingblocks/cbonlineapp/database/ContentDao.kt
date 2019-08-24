@@ -48,4 +48,7 @@ abstract class ContentDao : BaseDao<CourseContent> {
 
     @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE qnaContentId = :contentid AND section_id = :section")
     abstract fun updateProgressQna(section: String, contentid: String, progress: String, progressId: String)
+
+    @Query("SELECT * FROM CourseContent WHERE section_id = :sectionId AND attempt_id =:attemptId AND 'order' = (SELECT 'order' FROM CourseContent where id = :uid) + 1 ")
+    abstract fun getNextItem(sectionId: String, attemptId: String, uid: String): LiveData<List<CourseContent>>
 }
