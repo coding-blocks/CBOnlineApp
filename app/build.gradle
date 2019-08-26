@@ -127,7 +127,7 @@ dependencies {
 
 
     // Image view libraries
-    implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'de.hdodenhof:circleimageview:3.0.1'
     implementation 'com.caverock:androidsvg-aar:1.4'
 
     //database
