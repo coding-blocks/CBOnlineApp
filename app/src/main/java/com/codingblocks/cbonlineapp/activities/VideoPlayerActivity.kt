@@ -36,7 +36,7 @@ import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.RunAttemptsId
-import com.crashlytics.android.core.CrashlyticsCore
+import com.crashlytics.android.Crashlytics
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
@@ -59,6 +59,7 @@ import kotlinx.android.synthetic.main.doubt_dialog.view.okBtn
 import kotlinx.android.synthetic.main.doubt_dialog.view.title
 import kotlinx.android.synthetic.main.doubt_dialog.view.titleLayout
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -91,6 +92,7 @@ class VideoPlayerActivity : AppCompatActivity(),
     private val viewModel by viewModel<VideoPlayerViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_player)
         rootLayout.layoutTransition
@@ -214,13 +216,30 @@ class VideoPlayerActivity : AppCompatActivity(),
     ) {
         videoPlayer = player
         player?.addPlaybackEventListener(playbackListener)
-        playerControlView?.setPlayer(player)
+        playerControlView?.apply {
+            setPlayer(player)
+            setFullscreenActionListener(fullscreenToggleListener)
+            setControllerVisibilityListener(visibilityListener)
+            playNextButton.setOnClickListener {
+                viewModel.getNextVideo(contentId, sectionId, attemptId).observer(this@VideoPlayerActivity) {
+                    info { it.toString() }
+//                    when (it.contentable) {
+//                        "lecture" -> {
+//                            startActivity(
+//                                intentFor<VideoPlayerActivity>(
+//                                    VIDEO_ID to it.contentLecture.lectureId,
+//                                    RUN_ATTEMPT_ID to it.attempt_id,
+//                                    CONTENT_ID to it.id,
+//                                    SECTION_ID to it.section_id,
+//                                    DOWNLOADED to it.contentLecture.isDownloaded
+//                                ).singleTop())
+//                        }
+//                    }
+                }
+            }
+        }
         showControls(true)
 
-        playerControlView?.setFullscreenActionListener(fullscreenToggleListener)
-        playerControlView?.setControllerVisibilityListener(visibilityListener)
-        playerControlView?.playNextButton?.setOnClickListener {
-        }
         // load a media to the player
         val vdoParams: VdoPlayer.VdoInitParams? = if (download) {
             VdoPlayer.VdoInitParams.createParamsForOffline(videoId)
@@ -418,7 +437,7 @@ class VideoPlayerActivity : AppCompatActivity(),
         }
 
         override fun onLoadError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
-            CrashlyticsCore.getInstance().log("Error Message: ${p1?.errorMsg}, " +
+            Crashlytics.log("Error Message: ${p1?.errorMsg}, " +
                 "Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}")
         }
 
@@ -427,7 +446,7 @@ class VideoPlayerActivity : AppCompatActivity(),
         }
 
         override fun onError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
-            CrashlyticsCore.getInstance().log("Error Message: ${p1?.errorMsg}," +
+            Crashlytics.log("Error Message: ${p1?.errorMsg}," +
                 " Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}")
 
             // 2013 not defined

@@ -17,7 +17,7 @@ import com.codingblocks.cbonlineapp.extensions.greater
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.CarouselCards
-import com.crashlytics.android.core.CrashlyticsCore
+import com.crashlytics.android.Crashlytics
 
 class HomeViewModel(
     private val courseWithInstructorDao: CourseWithInstructorDao,
@@ -152,10 +152,7 @@ class HomeViewModel(
                                                         completedContents = it["completedContents"] as Double
                                                         totalContents = it["totalContents"] as Double
                                                     } catch (e: Exception) {
-                                                        CrashlyticsCore.getInstance().apply {
-                                                            setString("Progress Error", e.localizedMessage)
-                                                            log("Null Pointer Exception")
-                                                        }
+                                                        Crashlytics.logException(e)
                                                     }
 
                                                     val newCourse = courseRun.course?.run {

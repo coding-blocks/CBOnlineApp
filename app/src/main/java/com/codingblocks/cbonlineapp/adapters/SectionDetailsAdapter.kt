@@ -27,7 +27,7 @@ import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.Animations.collapse
 import com.codingblocks.cbonlineapp.util.Animations.expand
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.Components.showconfirmation
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.DownloadStarter
 import com.codingblocks.cbonlineapp.util.FileUtils
@@ -151,7 +151,7 @@ class SectionDetailsAdapter(
                                             (itemView.downloadSectionBtn.image as AnimationDrawable).start()
                                             starter.startSectionDownlod(data.id)
                                         } else {
-                                            Components.showconfirmation(
+                                            showconfirmation(
                                                 context,
                                                 "wifi"
                                             )
@@ -235,7 +235,7 @@ class SectionDetailsAdapter(
                                                             downloadBtn
                                                         )
                                                     } else {
-                                                        Components.showconfirmation(
+                                                        showconfirmation(
                                                             context,
                                                             "wifi"
                                                         )
@@ -414,6 +414,13 @@ class SectionDetailsAdapter(
                                     }
                                 }
                             }
+                            content.contentable == "code_challenge" -> {
+                                contentType.setImageDrawable(context.getDrawable(R.drawable.ic_quiz))
+                                ll.addView(inflatedView)
+                                ll.setOnClickListener {
+                                    showconfirmation(it.context, "unavailable")
+                                }
+                            }
                         }
                     } else {
                         contentType.visibility = View.GONE
@@ -421,19 +428,19 @@ class SectionDetailsAdapter(
                         ll.addView(inflatedView)
                     }
 
-                    itemView.setOnClickListener {
-                        if (itemView.title.text.contains("Challenges", true))
-                            Components.showconfirmation(it.context, "unavailable")
-                        else
-                            showOrHide(ll, it)
-                    }
-
-                    itemView.arrow.setOnClickListener {
-                        if (itemView.title.text.contains("Challenges", true))
-                            Components.showconfirmation(it.context, "unavailable")
-                        else
-                            showOrHide(ll, it)
-                    }
+//                    itemView.setOnClickListener {
+//                        if (itemView.title.text.contains("Challenges", true))
+//                            Components.showconfirmation(it.context, "unavailable")
+//                        else
+//                            showOrHide(ll, it)
+//                    }
+//
+//                    itemView.arrow.setOnClickListener {
+//                        if (itemView.title.text.contains("Challenges", true))
+//                            Components.showconfirmation(it.context, "unavailable")
+//                        else
+//                            showOrHide(ll, it)
+//                    }
                 }
             }
         }

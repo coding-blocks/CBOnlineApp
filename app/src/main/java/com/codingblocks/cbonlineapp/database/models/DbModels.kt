@@ -131,7 +131,7 @@ data class CourseWithInstructor(
         entity = CourseRun::class,
         parentColumns = ["crUid"],
         childColumns = ["run_id"],
-        onDelete = ForeignKey.SET_NULL // or CASCADE
+        onDelete = ForeignKey.CASCADE // or CASCADE
     ))]
 )
 data class CourseSection(
@@ -151,7 +151,7 @@ data class CourseSection(
         entity = CourseSection::class,
         parentColumns = ["id"],
         childColumns = ["section_id"],
-        onDelete = ForeignKey.SET_NULL // or CASCADE
+        onDelete = ForeignKey.CASCADE // or CASCADE
     ))]
 )
 data class CourseContent(

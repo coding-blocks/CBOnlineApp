@@ -17,7 +17,7 @@ import com.codingblocks.cbonlineapp.util.NotificationReceivedHandler
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
-import com.crashlytics.android.core.CrashlyticsCore
+import com.crashlytics.android.Crashlytics
 import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
 import io.github.inflationx.calligraphy3.CalligraphyConfig
@@ -91,10 +91,7 @@ class CBOnlineApp : Application() {
                     VideoPlayerActivity::class.java
             })
         } catch (e: ConcurrentModificationException) {
-            CrashlyticsCore.getInstance().apply {
-                setString("Router not working", e.localizedMessage)
-                log("Concurrent Modification Exception")
-            }
+            Crashlytics.log("Router not working : ${e.localizedMessage}")
         }
     }
 

@@ -15,7 +15,7 @@ import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
-import com.crashlytics.android.core.CrashlyticsCore
+import com.crashlytics.android.Crashlytics
 import java.lang.Exception
 
 class VideoPlayerViewModel(
@@ -58,11 +58,11 @@ class VideoPlayerViewModel(
                     mPlaybackInfo = response.body()?.get("playbackInfo")?.asString
                     getOtpProgress.postValue(it.isSuccessful)
                     it.errorBody()?.let {
-                        CrashlyticsCore.getInstance().log("Erroe Fetching Otp: ${it.string()}")
+                        Crashlytics.log("Error Fetching Otp: ${it.string()}")
                     }
                 }
                 error?.let {
-                    CrashlyticsCore.getInstance().log("Erroe Fetching Otp: ${it.localizedMessage}")
+                    Crashlytics.log("Error Fetching Otp: ${it.message}")
                 }
             })
     }
@@ -160,7 +160,7 @@ class VideoPlayerViewModel(
                                 )
                             )
                         } catch (e: Exception) {
-                            Log.i("Error", "error" + e.localizedMessage)
+                            Log.i("Error", "error" + e.message)
                         }
                     }
                     if (networkList.size == notesList?.size) {
@@ -180,4 +180,16 @@ class VideoPlayerViewModel(
             }
         })
     }
+
+    fun getNextVideo(contentId: String, sectionId: String, attemptId: String) =
+        contentDao.getNextItem(sectionId = sectionId, attemptId = attemptId)
+
+//    fun updateProgress(contentId: String,attemptId: String) {
+//        val progressId = contentDao.getContentWithId(attemptId,contentId).progressId
+//
+//        if(progressId.isNullOrEmpty()){
+//            Clients.onlineV2JsonApi.setProgress()
+//        }
+//
+//    }
 }
