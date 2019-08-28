@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -28,15 +29,7 @@ import java.util.ArrayList;
  * A view for controlling playback via a VdoPlayer.
  */
 public class VdoPlayerControlView extends FrameLayout {
-    public interface ControllerVisibilityListener {
-        /**
-         * Called when the visibility of the controller ui changes.
-         *
-         * @param visibility new visibility of controller ui. Either {@link View#VISIBLE} or
-         * {@link View#GONE}.
-         */
-        void onControllerVisibilityChange(int visibility);
-    }
+    public final ImageView playNextButton;
 
     public interface FullscreenActionListener {
         /**
@@ -63,7 +56,17 @@ public class VdoPlayerControlView extends FrameLayout {
     private final ImageButton qualityButton;
     private final ImageButton enterFullscreenButton;
     private final ImageButton exitFullscreenButton;
-    public final ImageButton playNextButton;
+
+    /**
+     * Call if fullscreen in entered/exited in response to external triggers such as orientation
+     * change, back button etc.
+     *
+     * @param fullscreen true if fullscreen in new state
+     */
+    public void setFullscreenState(boolean fullscreen) {
+        this.fullscreen = fullscreen;
+        updateFullscreenButtons();
+    }
     private final ProgressBar loaderView;
     private final ImageButton errorView;
     private final TextView errorTextView;
@@ -198,13 +201,13 @@ public class VdoPlayerControlView extends FrameLayout {
     }
 
     /**
-     * Call if fullscreen in entered/exited in response to external triggers such as orientation
-     * change, back button etc.
-     * @param fullscreen true if fullscreen in new state
+     * Call to know the visibility of the playback controls ui. VdoPlayerControlView itself doesn't
+     * change visibility when hiding ui controls.
+     *
+     * @return true if playback controls are visible
      */
-    public void setFullscreenState(boolean fullscreen) {
-        this.fullscreen = fullscreen;
-        updateFullscreenButtons();
+    public boolean controllerVisible() {
+        return controlPanel.getVisibility() == VISIBLE;
     }
 
     @Override
@@ -220,13 +223,14 @@ public class VdoPlayerControlView extends FrameLayout {
         removeCallbacks(hideAction);
     }
 
-    /**
-     * Call to know the visibility of the playback controls ui. VdoPlayerControlView itself doesn't
-     * change visibility when hiding ui controls.
-     * @return true if playback controls are visible
-     */
-    public boolean controllerVisible() {
-        return controlPanel.getVisibility() == VISIBLE;
+    public interface ControllerVisibilityListener {
+        /**
+         * Called when the visibility of the controller ui changes.
+         *
+         * @param visibility new visibility of controller ui. Either {@link View#VISIBLE} or
+         *                   {@link View#GONE}.
+         */
+        void onControllerVisibilityChange(int visibility);
     }
 
     private void hideAfterTimeout() {
@@ -430,7 +434,8 @@ public class VdoPlayerControlView extends FrameLayout {
     private final class UiListener implements VdoPlayer.PlaybackEventListener,
             SeekBar.OnSeekBarChangeListener, OnClickListener {
         @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        }
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
@@ -496,17 +501,18 @@ public class VdoPlayerControlView extends FrameLayout {
         }
 
         @Override
-        public void onSeekTo(long millis) {}
+        public void onSeekTo(long millis) {
+        }
 
         @Override
         public void onProgress(long millis) {
-            positionView.setText(VideoUtils.INSTANCE.digitalClockTime((int)millis));
-            seekBar.setProgress((int)millis);
+            positionView.setText(VideoUtils.INSTANCE.digitalClockTime((int) millis));
+            seekBar.setProgress((int) millis);
         }
 
         @Override
         public void onBufferUpdate(long bufferTime) {
-            seekBar.setSecondaryProgress((int)bufferTime);
+            seekBar.setSecondaryProgress((int) bufferTime);
         }
 
         @Override
@@ -521,8 +527,8 @@ public class VdoPlayerControlView extends FrameLayout {
 
         @Override
         public void onLoaded(VdoPlayer.VdoInitParams vdoInitParams) {
-            durationView.setText(String.valueOf(VideoUtils.INSTANCE.digitalClockTime((int)player.getDuration())));
-            seekBar.setMax((int)player.getDuration());
+            durationView.setText(String.valueOf(VideoUtils.INSTANCE.digitalClockTime((int) player.getDuration())));
+            seekBar.setMax((int) player.getDuration());
             updateSpeedControlButton();
         }
 

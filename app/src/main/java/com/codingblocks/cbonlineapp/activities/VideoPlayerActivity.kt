@@ -61,6 +61,8 @@ import kotlinx.android.synthetic.main.doubt_dialog.view.titleLayout
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
+import org.jetbrains.anko.newTask
+import org.jetbrains.anko.intentFor
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class VideoPlayerActivity : AppCompatActivity(),
@@ -223,18 +225,18 @@ class VideoPlayerActivity : AppCompatActivity(),
             playNextButton.setOnClickListener {
                 viewModel.getNextVideo(contentId, sectionId, attemptId).observer(this@VideoPlayerActivity) {
                     info { it.toString() }
-//                    when (it.contentable) {
-//                        "lecture" -> {
-//                            startActivity(
-//                                intentFor<VideoPlayerActivity>(
-//                                    VIDEO_ID to it.contentLecture.lectureId,
-//                                    RUN_ATTEMPT_ID to it.attempt_id,
-//                                    CONTENT_ID to it.id,
-//                                    SECTION_ID to it.section_id,
-//                                    DOWNLOADED to it.contentLecture.isDownloaded
-//                                ).singleTop())
-//                        }
-//                    }
+                    when (it.contentable) {
+                        "lecture" -> {
+                            startActivity(
+                                intentFor<VideoPlayerActivity>(
+                                    VIDEO_ID to it.contentLecture.lectureId,
+                                    RUN_ATTEMPT_ID to it.attempt_id,
+                                    CONTENT_ID to it.id,
+                                    SECTION_ID to it.section_id,
+                                    DOWNLOADED to it.contentLecture.isDownloaded
+                                ).newTask())
+                        }
+                    }
                 }
             }
         }

@@ -112,22 +112,24 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:background="#be000000"
+        android:background="#a6000000"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
 
-        <ImageButton
+        <ImageView
             android:id="@+id/play_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_play_arrow_white_24dp" />
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:src="@drawable/ic_round_play_button" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Play Next"
-            android:textSize="20sp" />
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/nunitosans_bold"
+            android:textSize="32sp" />
 
 
     </LinearLayout>
