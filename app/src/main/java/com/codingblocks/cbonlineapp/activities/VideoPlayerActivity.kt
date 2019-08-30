@@ -61,8 +61,8 @@ import kotlinx.android.synthetic.main.doubt_dialog.view.titleLayout
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
-import org.jetbrains.anko.newTask
 import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class VideoPlayerActivity : AppCompatActivity(),
@@ -211,6 +211,14 @@ class VideoPlayerActivity : AppCompatActivity(),
         playerFragment.initialize(this)
     }
 
+    override fun onStart() {
+        super.onStart()
+        val data = this.intent.data
+        if (data != null && data.isHierarchical) {
+            setupUI()
+        }
+    }
+
     override fun onInitializationSuccess(
         playerHost: VdoPlayer.PlayerHost?,
         player: VdoPlayer?,
@@ -223,6 +231,7 @@ class VideoPlayerActivity : AppCompatActivity(),
             setFullscreenActionListener(fullscreenToggleListener)
             setControllerVisibilityListener(visibilityListener)
             playNextButton.setOnClickListener {
+                countDownTimer.cancel()
                 viewModel.getNextVideo(contentId, sectionId, attemptId).observer(this@VideoPlayerActivity) {
                     info { it.toString() }
                     when (it.contentable) {
@@ -234,7 +243,7 @@ class VideoPlayerActivity : AppCompatActivity(),
                                     CONTENT_ID to it.id,
                                     SECTION_ID to it.section_id,
                                     DOWNLOADED to it.contentLecture.isDownloaded
-                                ).newTask())
+                                ).singleTop())
                         }
                     }
                 }

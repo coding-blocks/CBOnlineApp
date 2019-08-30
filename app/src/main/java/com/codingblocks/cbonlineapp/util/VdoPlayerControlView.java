@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.util;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,12 +25,15 @@ import com.vdocipher.aegis.media.Track;
 import com.vdocipher.aegis.player.VdoPlayer;
 
 import java.util.ArrayList;
+import java.util.logging.Handler;
 
 /**
  * A view for controlling playback via a VdoPlayer.
  */
 public class VdoPlayerControlView extends FrameLayout {
     public final ImageView playNextButton;
+    public final TextView timer;
+    public CountDownTimer countDownTimer;
 
     public interface FullscreenActionListener {
         /**
@@ -67,6 +71,7 @@ public class VdoPlayerControlView extends FrameLayout {
         this.fullscreen = fullscreen;
         updateFullscreenButtons();
     }
+
     private final ProgressBar loaderView;
     private final ImageButton errorView;
     private final TextView errorTextView;
@@ -156,6 +161,7 @@ public class VdoPlayerControlView extends FrameLayout {
         controlPanel = findViewById(R.id.vdo_control_panel);
         controllerBackground = findViewById(R.id.vdo_controller_bg);
         videoCompletePanel = findViewById(R.id.video_complete_container);
+        timer = findViewById(R.id.timerTv);
         setOnClickListener(uiListener);
     }
 
@@ -542,6 +548,18 @@ public class VdoPlayerControlView extends FrameLayout {
         public void onMediaEnded(VdoPlayer.VdoInitParams vdoInitParams) {
             controlPanel.setVisibility(GONE);
             videoCompletePanel.setVisibility(VISIBLE);
+            countDownTimer = new CountDownTimer(8000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+                    timer.setText("Up Next in " + millisUntilFinished / 1000);
+                }
+
+                public void onFinish() {
+                    playNextButton.performClick();
+                }
+
+            };
+            countDownTimer.start();
         }
 
         @Override

@@ -106,31 +106,46 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/video_complete_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
         android:background="#a6000000"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
+
+        <TextView
+
+            android:id="@+id/timerTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_margin="8dp"
+            android:fontFamily="@font/nunitosans_bold"
+            android:text="Up next in"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
 
 
         <ImageView
+            android:layout_width="70dp"
             android:id="@+id/play_next"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_height="70dp"
+            android:layout_centerInParent="true"
+            android:tint="@color/white"
             android:src="@drawable/ic_round_play_button" />
 
         <TextView
+            android:layout_below="@id/play_next"
+            android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Play Next"
+            android:textColor="@color/white"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/nunitosans_bold"
-            android:textSize="32sp" />
+            android:textSize="24sp" />
 
 
-    </LinearLayout>
+    </RelativeLayout>
 </FrameLayout>

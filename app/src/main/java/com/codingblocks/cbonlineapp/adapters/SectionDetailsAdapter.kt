@@ -428,19 +428,19 @@ class SectionDetailsAdapter(
                         ll.addView(inflatedView)
                     }
 
-//                    itemView.setOnClickListener {
-//                        if (itemView.title.text.contains("Challenges", true))
-//                            Components.showconfirmation(it.context, "unavailable")
-//                        else
-//                            showOrHide(ll, it)
-//                    }
-//
-//                    itemView.arrow.setOnClickListener {
-//                        if (itemView.title.text.contains("Challenges", true))
-//                            Components.showconfirmation(it.context, "unavailable")
-//                        else
-//                            showOrHide(ll, it)
-//                    }
+                    itemView.setOnClickListener {
+                        if (itemView.title.text.contains("Challenges", true))
+                            showconfirmation(it.context, "unavailable")
+                        else
+                            showOrHide(ll, it)
+                    }
+
+                    itemView.arrow.setOnClickListener {
+                        if (itemView.title.text.contains("Challenges", true))
+                            showconfirmation(it.context, "unavailable")
+                        else
+                            showOrHide(ll, it)
+                    }
                 }
             }
         }

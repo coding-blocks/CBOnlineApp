@@ -19,7 +19,6 @@ import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
-import com.codingblocks.cbonlineapp.widgets.ZoomOutPageTransformer
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
@@ -104,7 +103,8 @@ class HomeFragment : Fragment(), AnkoLogger {
                 val endlessPagerAdapter = EndlessPagerAdapter(carouselSliderAdapter, ui.viewPager)
                 ui.viewPager.adapter = endlessPagerAdapter
                 ui.viewPager.currentItem = 1
-                ui.viewPager.setPageTransformer(true, ZoomOutPageTransformer())
+                // Todo - fix this
+//                ui.viewPager.setPageTransformer(true, ZoomOutPageTransformer())
                 val handler = Handler()
                 val update = Runnable {
                     ui.viewPager.setCurrentItem(ui.viewPager.currentItem + 1, true)
