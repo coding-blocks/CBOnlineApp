@@ -30,7 +30,7 @@ dependencies {
     api 'com.squareup.retrofit2:retrofit:2.6.1'
     api 'com.github.jasminb:jsonapi-converter:0.9'
     api 'com.squareup.retrofit2:converter-gson:2.6.1'
-    api "com.fasterxml.jackson.module:jackson-module-kotlin:2.10.0.pr1"
+    api "com.fasterxml.jackson.module:jackson-module-kotlin:2.10.0.pr2"
     implementation 'com.squareup.retrofit2:converter-jackson:2.6.1'
     testImplementation 'junit:junit:4.12'
 }
