@@ -18,7 +18,7 @@ import com.codingblocks.cbonlineapp.database.models.SectionWithContent
 
 @Database(
     entities = [CourseRun::class, CourseSection::class, CourseContent::class, Instructor::class, Notification::class,
-        CourseWithInstructor::class, SectionWithContent::class, DoubtsModel::class, NotesModel::class, Course::class,
+        CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, Course::class,
         JobsModel::class, CourseFeatures::class
     ], exportSchema = true, version = 20
 )

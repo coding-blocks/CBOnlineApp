@@ -3,7 +3,7 @@ package com.codingblocks.cbonlineapp.adapters
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import com.codingblocks.cbonlineapp.database.models.SectionContent
+import com.codingblocks.cbonlineapp.database.models.SectionWithContent
 
 /**
  * A  PagedListAdapter that binds SectionContent items into Section and their respectiv content.
@@ -19,7 +19,7 @@ import com.codingblocks.cbonlineapp.database.models.SectionContent
  * @see android.arch.paging.PagedListAdapter
  * @see android.arch.paging.AsyncPagedListDiffer
  */
-class SectionItemsAdapter : PagedListAdapter<SectionContent, SectionViewHolder>(diffCallback) {
+class SectionItemsAdapter : PagedListAdapter<SectionWithContent, SectionViewHolder>(diffCallback) {
     override fun onBindViewHolder(holder: SectionViewHolder, position: Int) {
         holder.bindTo(getItem(position))
     }
@@ -38,15 +38,15 @@ class SectionItemsAdapter : PagedListAdapter<SectionContent, SectionViewHolder>(
          *
          * @see android.support.v7.util.DiffUtil
          */
-        private val diffCallback = object : DiffUtil.ItemCallback<SectionContent>() {
-            override fun areItemsTheSame(oldItem: SectionContent, newItem: SectionContent): Boolean =
-                oldItem.content.ccid == newItem.content.ccid
+        private val diffCallback = object : DiffUtil.ItemCallback<SectionWithContent>() {
+            override fun areItemsTheSame(oldItem: SectionWithContent, newItem: SectionWithContent): Boolean =
+                oldItem.content == newItem.content
 
             /**
              * Note that in kotlin, == checking on data classes compares all contents, but in Java,
              * typically you'll implement Object#equals, and use it to compare object contents.
              */
-            override fun areContentsTheSame(oldItem: SectionContent, newItem: SectionContent): Boolean =
+            override fun areContentsTheSame(oldItem: SectionWithContent, newItem: SectionWithContent): Boolean =
                 oldItem == newItem
         }
     }

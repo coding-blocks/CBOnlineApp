@@ -2,12 +2,7 @@ package com.codingblocks.cbonlineapp.database.models
 
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.onlineapi.models.CourseId
@@ -187,38 +182,39 @@ data class CourseContent(
     var contentCsv: ContentCsvModel = ContentCsvModel()
 )
 
-@Entity(
-    primaryKeys = ["section_id", "content_id"],
-    indices = [
-        Index(value = ["section_id"]),
-        Index(value = ["content_id"])
-    ],
-    foreignKeys = [
-        ForeignKey(
-            entity = CourseSection::class,
-            parentColumns = ["csid"],
-            childColumns = ["section_id"]
-        ),
-        ForeignKey(
-            entity = CourseContent::class,
-            parentColumns = ["ccid"],
-            childColumns = ["content_id"]
-        )
-    ]
-)
+//@Entity(
+//    primaryKeys = ["section_id", "content_id"],
+//    indices = [
+//        Index(value = ["section_id"]),
+//        Index(value = ["content_id"])
+//    ],
+//    foreignKeys = [
+//        ForeignKey(
+//            entity = CourseSection::class,
+//            parentColumns = ["csid"],
+//            childColumns = ["section_id"]
+//        ),
+//        ForeignKey(
+//            entity = CourseContent::class,
+//            parentColumns = ["ccid"],
+//            childColumns = ["content_id"]
+//        )
+//    ]
+//)
+//data class SectionWithContent(
+////        @Nullable @PrimaryKey(autoGenerate = true) val id: Int?,
+//    @ColumnInfo(name = "section_id") val sectionId: String,
+//    @ColumnInfo(name = "content_id") val contentId: String,
+////    @Embedded public User user;
+////
+////@Relation(parentColumn = "id",
+////    entityColumn = "userId") public List<Repo> repoList;
+//    val order: Int
+//
+//)
 data class SectionWithContent(
-//        @Nullable @PrimaryKey(autoGenerate = true) val id: Int?,
-    @ColumnInfo(name = "section_id") val sectionId: String,
-    @ColumnInfo(name = "content_id") val contentId: String,
-    val order: Int
-
-)
-
-data class SectionContent(
-    @Embedded
-    public val section: CourseSection,
-    @Embedded
-    public val content: CourseContent
+    @Embedded val section: CourseSection,
+    @Relation(parentColumn = "csid", entityColumn = "section_id") val content: List<CourseContent>
 )
 
 @Entity

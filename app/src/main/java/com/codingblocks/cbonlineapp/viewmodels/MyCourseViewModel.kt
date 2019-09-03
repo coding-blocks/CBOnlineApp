@@ -62,9 +62,9 @@ class MyCourseViewModel(
 
     fun getRunAttempt(runId: String): String = runDao.getRunByRunId(runId).crAttemptId
 
-    fun getContentWithSectionId(id: String) = sectionWithContentsDao.getContentWithSectionId(id).getDistinct()
-
-    fun getSectionDownloadlist(id: String) = sectionWithContentsDao.getVideoIdsWithSectionId(id)
+//    fun getContentWithSectionId(id: String) = sectionWithContentsDao.getContentWithSectionId(id).getDistinct()
+//
+//    fun getSectionDownloadlist(id: String) = sectionWithContentsDao.getVideoIdsWithSectionId(id)
 
     fun updateContent(id: String, lectureContentId: String, s: String) = contentsDao.updateContent(id, lectureContentId, s)
 
@@ -258,15 +258,15 @@ class MyCourseViewModel(
                                                                             contentsDao.insert(
                                                                                 newContent
                                                                             )
-                                                                            sectionWithContentsDao.insert(
-                                                                                SectionWithContent(
-                                                                                    courseSection.id,
-                                                                                    content.id,
-                                                                                    content.sectionContent?.order
-                                                                                        ?: 0
-
-                                                                                )
-                                                                            )
+//                                                                            sectionWithContentsDao.insert(
+//                                                                                SectionWithContent(
+//                                                                                    courseSection.id,
+//                                                                                    content.id,
+//                                                                                    content.sectionContent?.order
+//                                                                                        ?: 0
+//
+//                                                                                )
+//                                                                            )
                                                                         } else if (oldContent != newContent) {
                                                                             contentLecture.isDownloaded =
                                                                                 oldContent.contentLecture.isDownloaded

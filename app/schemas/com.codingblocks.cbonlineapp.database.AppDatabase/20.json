@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 20,
-    "identityHash": "0ae29fdefdfafeaef6fa7cf4f92d39dc",
+    "identityHash": "cdac1e5743d9c1e4cc8db2be433235bd",
     "entities": [
       {
         "tableName": "CourseRun",
@@ -757,79 +757,6 @@
         ]
       },
       {
-        "tableName": "SectionWithContent",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`section_id` TEXT NOT NULL, `content_id` TEXT NOT NULL, `order` INTEGER NOT NULL, PRIMARY KEY(`section_id`, `content_id`), FOREIGN KEY(`section_id`) REFERENCES `CourseSection`(`csid`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`content_id`) REFERENCES `CourseContent`(`ccid`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
-        "fields": [
-          {
-            "fieldPath": "sectionId",
-            "columnName": "section_id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "contentId",
-            "columnName": "content_id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "order",
-            "columnName": "order",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "section_id",
-            "content_id"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [
-          {
-            "name": "index_SectionWithContent_section_id",
-            "unique": false,
-            "columnNames": [
-              "section_id"
-            ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_SectionWithContent_section_id` ON `${TABLE_NAME}` (`section_id`)"
-          },
-          {
-            "name": "index_SectionWithContent_content_id",
-            "unique": false,
-            "columnNames": [
-              "content_id"
-            ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_SectionWithContent_content_id` ON `${TABLE_NAME}` (`content_id`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "CourseSection",
-            "onDelete": "NO ACTION",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "section_id"
-            ],
-            "referencedColumns": [
-              "csid"
-            ]
-          },
-          {
-            "table": "CourseContent",
-            "onDelete": "NO ACTION",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "content_id"
-            ],
-            "referencedColumns": [
-              "ccid"
-            ]
-          }
-        ]
-      },
-      {
         "tableName": "DoubtsModel",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`dbtUid` TEXT NOT NULL, `title` TEXT NOT NULL, `body` TEXT NOT NULL, `contentId` TEXT NOT NULL, `status` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `discourseTopicId` TEXT NOT NULL, PRIMARY KEY(`dbtUid`), FOREIGN KEY(`contentId`) REFERENCES `CourseContent`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
@@ -1272,7 +1199,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0ae29fdefdfafeaef6fa7cf4f92d39dc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cdac1e5743d9c1e4cc8db2be433235bd')"
     ]
   }
 }

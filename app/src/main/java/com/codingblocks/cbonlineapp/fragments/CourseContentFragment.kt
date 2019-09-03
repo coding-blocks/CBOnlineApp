@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
@@ -100,12 +101,7 @@ class CourseContentFragment : Fragment(), AnkoLogger,
         view.rvExpendableView.adapter = sectionItemsAdapter
         view.sectionProgressBar.show()
 
-        viewModel.getAllContent().observer(viewLifecycleOwner) {
-            it.forEach {
-                info { it }
-            }
-        }
-
+        viewModel.getAllContent().observe(this, Observer(sectionItemsAdapter::submitList))
         viewModel.progress.observer(viewLifecycleOwner) {
             view.swiperefresh.isRefreshing = it
         }
