@@ -72,6 +72,7 @@ android {
     packagingOptions {
         exclude 'META-INF/atomicfu.kotlin_module'
     }
+    buildToolsVersion = '29.0.2'
 }
 
 ext {
@@ -111,15 +112,12 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'com.google.android.play:core:1.6.1'
     implementation 'androidx.core:core-ktx:1.0.2'
-    implementation "android.arch.paging:runtime:1.0.1"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-alpha03"
 
 
 
     // 3rd party libs
-    implementation 'com.ethanhua:skeleton:1.1.2'
-    implementation 'io.supercharge:shimmerlayout:2.1.0'
-    implementation 'io.github.inflationx:calligraphy3:3.0.0'
+    implementation 'io.github.inflationx:calligraphy3:3.1.1'
     implementation 'io.github.inflationx:viewpump:2.0.3'
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
     implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
@@ -133,19 +131,15 @@ dependencies {
     //database
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
-    implementation 'com.google.firebase:firebase-firestore-ktx:21.0.0'
-
-
 
 
     //VideoCipher library
-    implementation 'com.vdocipher.aegis:vdocipher-android:1.0.0-beta8'
-    implementation 'com.vdocipher.aegis:vdocipher-cast:1.0.0-beta8'
-    implementation 'com.google.android.gms:play-services-cast-framework:17.0.0'
+    implementation 'com.vdocipher.aegis:vdocipher-android:1.0.0-beta9'
+
+
     // Koin
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
-
 
 
     //Routers
@@ -157,11 +151,11 @@ dependencies {
         implementation "org.jetbrains.anko:anko-$name:$ankoVersion"
     }
     //Firebase
-    implementation 'com.google.firebase:firebase-core:17.1.0'
-    implementation 'com.google.firebase:firebase-messaging:19.0.1'
+    implementation 'com.google.firebase:firebase-core:17.2.0'
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
-    //update this with refactoring picasso call
-    implementation 'com.google.firebase:firebase-inappmessaging-display:18.0.1'
+    implementation 'com.google.firebase:firebase-firestore-ktx:21.0.0'
+    implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.0'
 
 
     implementation project(':onlineapi')
@@ -171,5 +165,4 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
 }

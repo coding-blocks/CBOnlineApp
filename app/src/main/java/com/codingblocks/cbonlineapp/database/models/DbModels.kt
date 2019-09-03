@@ -342,7 +342,6 @@ data class JobsModel(
     val company: Companies,
     val courseId: ArrayList<CourseId>
 )
-@Entity
 class FormModel(
     val name: String,
     val required: Boolean,
