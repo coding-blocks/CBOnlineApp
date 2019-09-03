@@ -47,6 +47,9 @@ class MyCourseViewModel(
 
     fun getResumeCourse() = sectionWithContentsDao.resumeCourse(attemptId)
 
+    fun getAllContent() = sectionWithContentsDao.getSectionWithContent(attemptId)
+
+
     fun getRunAttempt(runId: String): String = runDao.getRunByRunId(runId).crAttemptId
 
     fun getContentWithSectionId(id: String) = sectionWithContentsDao.getContentWithSectionId(id).getDistinct()
@@ -78,7 +81,7 @@ class MyCourseViewModel(
                                     val newSection = CourseSection(
                                         id, name,
                                         order, premium, status,
-                                        runId, attemptId, updatedAt
+                                        runId, attemptId
                                     )
                                     val oldSection = sectionDao.getSectionWithId(id)
                                     if (oldSection == null)
@@ -227,9 +230,6 @@ class MyCourseViewModel(
                                                                                 content.sectionContent?.sectionId
                                                                                     ?: "",
                                                                                 attemptId,
-                                                                                courseSection.premium,
-                                                                                content.sectionContent?.updatedAt
-                                                                                    ?: "",
                                                                                 contentLecture,
                                                                                 contentDocument,
                                                                                 contentVideo,

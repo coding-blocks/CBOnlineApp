@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 19,
-    "identityHash": "1f283c6f1034fa5b303bdc8800a48018",
+    "identityHash": "8be1e958517c95fe308b0f33a953c13e",
     "entities": [
       {
         "tableName": "CourseRun",
@@ -1286,7 +1286,16 @@
           ],
           "autoGenerate": true
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_CourseFeatures_crCourseId",
+            "unique": false,
+            "columnNames": [
+              "crCourseId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_CourseFeatures_crCourseId` ON `${TABLE_NAME}` (`crCourseId`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "Course",
@@ -1305,7 +1314,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1f283c6f1034fa5b303bdc8800a48018')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8be1e958517c95fe308b0f33a953c13e')"
     ]
   }
 }

@@ -19,7 +19,7 @@ abstract class ContentDao : BaseDao<CourseContent> {
     @Query("SElECT * FROM CourseContent where attempt_id = :attempt_id ")
     abstract fun getCourseContents(attempt_id: String): LiveData<List<CourseContent>>
 
-    @Query("SElECT * FROM CourseContent where attempt_id = :attempt_id AND uid = :id")
+    @Query("SElECT * FROM CourseContent where attempt_id = :attempt_id AND ccid = :id")
     abstract fun getContentWithId(attempt_id: String, id: String): CourseContent
 
     @Query("SElECT * FROM CourseContent where isDownloaded = :progress ORDER BY date")
@@ -49,6 +49,6 @@ abstract class ContentDao : BaseDao<CourseContent> {
     @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE qnaContentId = :contentid AND section_id = :section")
     abstract fun updateProgressQna(section: String, contentid: String, progress: String, progressId: String)
 
-    @Query("SELECT * FROM CourseContent WHERE section_id = :sectionId AND attempt_id =:attemptId AND `order` = ((SELECT `order` FROM CourseContent where id = :uid) + 1 ) LIMIT 1")
+    @Query("SELECT * FROM CourseContent WHERE section_id = :sectionId AND attempt_id =:attemptId AND `order` = ((SELECT `order` FROM CourseContent where ccid = :uid) + 1 ) LIMIT 1")
     abstract fun getNextItem(sectionId: String, attemptId: String, uid: String): LiveData<CourseContent>
 }

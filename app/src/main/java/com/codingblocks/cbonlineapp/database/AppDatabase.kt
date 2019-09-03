@@ -20,7 +20,7 @@ import com.codingblocks.cbonlineapp.database.models.SectionWithContent
     entities = [CourseRun::class, CourseSection::class, CourseContent::class, Instructor::class, Notification::class,
         CourseWithInstructor::class, SectionWithContent::class, DoubtsModel::class, NotesModel::class, Course::class,
         JobsModel::class, CourseFeatures::class
-    ], exportSchema = true, version = 19
+    ], exportSchema = true, version = 20
 )
 @TypeConverters(TimestampConverter::class, CourseIdList::class)
 abstract class AppDatabase : RoomDatabase() {

@@ -132,7 +132,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (viewModel.prefs.SP_USER_IMAGE.isNotEmpty())
             nav_view.getHeaderView(0).nav_header_imageView.apply {
                 setOnClickListener(this@HomeActivity)
-                Picasso.with(this@HomeActivity).load(viewModel.prefs.SP_USER_IMAGE)
+                Picasso.get().load(viewModel.prefs.SP_USER_IMAGE)
                     .placeholder(R.drawable.defaultavatar).fit().into(this)
             }
         viewModel.setJWTToken()
@@ -349,16 +349,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.home_notifications, menu)
-        val menuItem = menu.findItem(R.id.action_notifications)
-        if (viewModel.getNotificationCount() == 0) {
-            menuItem.icon = resources.getDrawable(R.drawable.ic_notification)
-        } else {
-            menuItem.icon = resources.getDrawable(R.drawable.ic_notification_active)
-        }
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        menuInflater.inflate(R.menu.home_notifications, menu)
+//        val menuItem = menu.findItem(R.id.action_notifications)
+//        if (viewModel.getNotificationCount() == 0) {
+//            menuItem.icon = resources.getDrawable(R.drawable.ic_notification)
+//        } else {
+//            menuItem.icon = resources.getDrawable(R.drawable.ic_notification_active)
+//        }
+//        return true
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_notifications -> {

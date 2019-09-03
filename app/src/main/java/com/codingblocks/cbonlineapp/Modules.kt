@@ -30,7 +30,7 @@ val viewModelModule = module {
     // Activities
     viewModel { CourseViewModel(get(), get()) }
     viewModel { VideoPlayerViewModel(get(), get(), get(), get(), get()) }
-    viewModel { HomeActivityViewModel(get()) }
+    viewModel { HomeActivityViewModel() }
     viewModel { SettingsViewModel(get()) }
     viewModel { JobsViewModel(get()) }
     viewModel { JobDetailViewModel(get(), get(), get(), get()) }

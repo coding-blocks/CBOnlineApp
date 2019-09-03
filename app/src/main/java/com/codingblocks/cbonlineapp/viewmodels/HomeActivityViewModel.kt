@@ -11,14 +11,12 @@ import com.codingblocks.onlineapi.models.Player
 import com.onesignal.OneSignal
 
 class HomeActivityViewModel(
-    private val notificationDao: NotificationDao
 ) : ViewModel() {
     internal var doubleBackToExitPressedOnce = false
     var mFragmentToSet: Fragment? = null
 
     lateinit var prefs: PreferenceHelper
 
-    fun getNotificationCount() = notificationDao.count
 
     var invalidateTokenProgress: MutableLiveData<Boolean> = MutableLiveData()
     var fetchTokenProgress: MutableLiveData<Boolean> = MutableLiveData()

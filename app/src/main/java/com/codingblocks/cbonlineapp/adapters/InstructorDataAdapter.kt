@@ -38,7 +38,7 @@ class InstructorDataAdapter(private var instructorData: ArrayList<Instructor>?) 
             ui.instructorDescription.text = instructor.description
             ui.instructorTextView.text = "${instructor.sub}, Coding Blocks"
             ui.instructorEmail.text = instructor.email
-            Picasso.with(itemView.context).load(instructor.photo).placeholder(R.drawable.defaultavatar).fit().into(ui.instructorImgView)
+            Picasso.get().load(instructor.photo).placeholder(R.drawable.defaultavatar).fit().into(ui.instructorImgView)
 
             ui.instructorEmail.setOnClickListener {
                 if (instructor.email?.isNotEmpty()!!) {

@@ -20,8 +20,6 @@ import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
 import com.codingblocks.onlineapi.models.CarouselCards
-import com.ethanhua.skeleton.Skeleton
-import com.ethanhua.skeleton.SkeletonScreen
 import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
@@ -34,7 +32,6 @@ import kotlin.collections.ArrayList
 class HomeFragment : Fragment(), AnkoLogger {
 
     private lateinit var courseDataAdapter: CourseDataAdapter
-    private lateinit var skeletonScreen: SkeletonScreen
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     val ui = HomeFragmentUi<Fragment>()
@@ -72,19 +69,8 @@ class HomeFragment : Fragment(), AnkoLogger {
         ui.rvCourses.adapter = courseDataAdapter
         ui.homeImg.visibility = View.GONE
 
-        skeletonScreen = Skeleton.bind(ui.rvCourses)
-            .adapter(courseDataAdapter)
-            .shimmer(true)
-            .angle(20)
-            .frozen(true)
-            .duration(1200)
-            .count(4)
-            .load(R.layout.item_skeleton_course_card)
-            .show()
-
         ui.swipeRefreshLayout.setOnRefreshListener {
             viewModel.progress.value = true
-            skeletonScreen.show()
             viewModel.fetchRecommendedCourses()
         }
 
@@ -125,8 +111,7 @@ class HomeFragment : Fragment(), AnkoLogger {
 
     private fun displayCourses(searchQuery: String = "") {
         viewModel.getRecommendedRuns().observer(viewLifecycleOwner) {
-            if (!it.isEmpty()) {
-                skeletonScreen.hide()
+            if (it.isNotEmpty()) {
                 courseDataAdapter.setData(it.shuffled().filter { c ->
                     c.title.contains(searchQuery, true) ||
                         c.summary.contains(searchQuery, true)

@@ -240,7 +240,7 @@ class VideoPlayerActivity : AppCompatActivity(),
                                 intentFor<VideoPlayerActivity>(
                                     VIDEO_ID to it.contentLecture.lectureId,
                                     RUN_ATTEMPT_ID to it.attempt_id,
-                                    CONTENT_ID to it.id,
+                                    CONTENT_ID to it.ccid,
                                     SECTION_ID to it.section_id,
                                     DOWNLOADED to it.contentLecture.isDownloaded
                                 ).singleTop())

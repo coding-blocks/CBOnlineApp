@@ -38,9 +38,11 @@ data class Course(
     var faq: String? = ""
 ) : BaseModel(uid, updated_at)
 
-@Entity(foreignKeys = [ForeignKey(entity = Course::class,
-    parentColumns = ["id"],
-    childColumns = ["crCourseId"])])
+@Entity(
+    indices = [Index("crCourseId")],
+    foreignKeys = [ForeignKey(entity = Course::class,
+        parentColumns = ["id"],
+        childColumns = ["crCourseId"])])
 data class CourseFeatures(
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,
@@ -135,27 +137,28 @@ data class CourseWithInstructor(
     ))]
 )
 data class CourseSection(
-    var uid: String,
+    @PrimaryKey
+    var csid: String,
     var name: String,
     var sectionOrder: Int,
     var premium: Boolean,
     var status: String,
     var run_id: String,
-    var attempt_id: String,
-    var updated_at: String
-) : BaseModel(uid, updated_at)
+    var attemptId: String
+)
 
 @Entity(
     indices = [Index("section_id")],
     foreignKeys = [(ForeignKey(
         entity = CourseSection::class,
-        parentColumns = ["id"],
+        parentColumns = ["csid"],
         childColumns = ["section_id"],
         onDelete = ForeignKey.CASCADE // or CASCADE
     ))]
 )
 data class CourseContent(
-    var uid: String,
+    @PrimaryKey
+    var ccid: String,
     var progress: String,
     var progressId: String,
     var title: String,
@@ -164,8 +167,6 @@ data class CourseContent(
     var order: Int,
     var section_id: String,
     var attempt_id: String,
-    var premium: Boolean,
-    var contentUpdatedAt: String,
     @Embedded
     @Nullable
     var contentLecture: ContentLecture = ContentLecture(),
@@ -184,7 +185,7 @@ data class CourseContent(
     @Embedded
     @Nullable
     var contentCsv: ContentCsvModel = ContentCsvModel()
-) : BaseModel(uid, contentUpdatedAt)
+)
 
 @Entity(
     primaryKeys = ["section_id", "content_id"],
@@ -195,12 +196,12 @@ data class CourseContent(
     foreignKeys = [
         ForeignKey(
             entity = CourseSection::class,
-            parentColumns = ["id"],
+            parentColumns = ["csid"],
             childColumns = ["section_id"]
         ),
         ForeignKey(
             entity = CourseContent::class,
-            parentColumns = ["id"],
+            parentColumns = ["ccid"],
             childColumns = ["content_id"]
         )
     ]
@@ -211,6 +212,13 @@ data class SectionWithContent(
     @ColumnInfo(name = "content_id") val contentId: String,
     val order: Int
 
+)
+
+data class SectionContent(
+    @Embedded
+    public val section: CourseSection,
+    @Embedded
+    public val content: CourseContent
 )
 
 @Entity
@@ -277,7 +285,7 @@ data class ContentCsvModel(
     indices = [Index("contentId")],
     foreignKeys = [(ForeignKey(
         entity = CourseContent::class,
-        parentColumns = ["id"],
+        parentColumns = ["ccid"],
         childColumns = ["contentId"],
         onDelete = ForeignKey.CASCADE // or CASCADE
     ))]
@@ -297,7 +305,7 @@ data class DoubtsModel(
     indices = [Index("contentId")],
     foreignKeys = [(ForeignKey(
         entity = CourseContent::class,
-        parentColumns = ["id"],
+        parentColumns = ["ccid"],
         childColumns = ["contentId"],
         onDelete = ForeignKey.CASCADE // or CASCADE
     ))]
@@ -342,12 +350,14 @@ data class JobsModel(
     val company: Companies,
     val courseId: ArrayList<CourseId>
 )
+
 class FormModel(
     val name: String,
     val required: Boolean,
     val title: String,
     val type: String
 )
+
 @Entity
 data class Companies(
     val id: String,

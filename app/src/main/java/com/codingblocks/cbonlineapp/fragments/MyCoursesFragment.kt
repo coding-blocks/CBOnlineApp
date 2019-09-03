@@ -33,8 +33,6 @@ import com.codingblocks.cbonlineapp.util.NetworkUtils.okHttpClient
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
-import com.ethanhua.skeleton.Skeleton
-import com.ethanhua.skeleton.SkeletonScreen
 import com.google.firebase.analytics.FirebaseAnalytics
 import okhttp3.Request
 import org.jetbrains.anko.AnkoContext
@@ -47,9 +45,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
     val ui = HomeFragmentUi<Fragment>()
     private lateinit var courseDataAdapter: CourseDataAdapter
-    private lateinit var skeletonScreen: SkeletonScreen
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-
     private val viewModel by viewModel<HomeViewModel>()
 
     override fun onCreateView(
@@ -57,6 +53,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = ui.createView(AnkoContext.create(ctx, this))
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -88,23 +85,12 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             adapter = courseDataAdapter
         }
 
-        skeletonScreen = Skeleton.bind(ui.rvCourses)
-            .adapter(courseDataAdapter)
-            .shimmer(true)
-            .angle(0)
-            .frozen(true)
-            .duration(1200)
-            .count(4)
-            .load(R.layout.item_skeleton_course_card)
-            .show()
-
         viewModel.fetchMyCourses()
 
         displayCourses()
 
         ui.swipeRefreshLayout.setOnRefreshListener {
             viewModel.progress.value = true
-            skeletonScreen.show()
             viewModel.fetchMyCourses(true)
         }
 
@@ -119,7 +105,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     private fun displayCourses(searchQuery: String = "") {
         viewModel.getMyRuns().observer(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
-                skeletonScreen.hide()
                 courseDataAdapter.setData(it.filter { c ->
                     c.title.contains(searchQuery, true) ||
                         c.summary.contains(searchQuery, true)
@@ -131,6 +116,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.home, menu)
         val item = menu.findItem(R.id.action_search)
         val searchView = item.actionView as SearchView
@@ -149,14 +135,13 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 return true
             }
         })
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     @TargetApi(N_MR1)
     fun createShortcut() {
 
         val sM = requireContext().getSystemService(ShortcutManager::class.java)
-        val shortcutList: MutableList<ShortcutInfo> = ArrayList()
+        val shortcutList = ArrayList<ShortcutInfo>()
 
         viewModel.getTopRun().observeOnce {
             doAsync {

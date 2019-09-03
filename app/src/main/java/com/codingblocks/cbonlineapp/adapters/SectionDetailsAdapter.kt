@@ -105,7 +105,7 @@ class SectionDetailsAdapter(
 
         fun bindView(data: CourseSection) {
             itemView.title.text = data.name
-            viewModel.getContentWithSectionId(data.id).observer(activity) { courseContent ->
+            viewModel.getContentWithSectionId(data.csid).observer(activity) { courseContent ->
                 val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
                 if (ll.visibility == View.VISIBLE) {
                     ll.removeAllViews()
@@ -140,7 +140,7 @@ class SectionDetailsAdapter(
 
 //                    if (!data.premium)
 //                        itemView.free.visibility = View.VISIBLE
-                    viewModel.getSectionDownloadlist(data.id).observer(activity) {
+                    viewModel.getSectionDownloadlist(data.csid).observer(activity) {
                         itemView.downloadSectionBtn.apply {
                             isVisible = it.isNotEmpty()
                             setOnClickListener {
@@ -149,7 +149,7 @@ class SectionDetailsAdapter(
                                         if (NetworkUtils.connectedToWifi(context) == true) {
                                             itemView.downloadSectionBtn.isEnabled = false
                                             (itemView.downloadSectionBtn.image as AnimationDrawable).start()
-                                            starter.startSectionDownlod(data.id)
+                                            starter.startSectionDownlod(data.csid)
                                         } else {
                                             showconfirmation(
                                                 context,
@@ -159,7 +159,7 @@ class SectionDetailsAdapter(
                                     } else {
                                         itemView.downloadSectionBtn.isEnabled = false
                                         (itemView.downloadSectionBtn.image as AnimationDrawable).start()
-                                        starter.startSectionDownlod(data.id)
+                                        starter.startSectionDownlod(data.csid)
                                     }
                                 } else {
                                     MediaUtils.isStoragePermissionGranted(context)
@@ -194,20 +194,20 @@ class SectionDetailsAdapter(
                                             if (content.progress == "UNDONE") {
                                                 if (content.progressId.isEmpty())
                                                     setProgress(
-                                                        content.id,
+                                                        content.ccid,
                                                         content.attempt_id,
                                                         content.contentable,
-                                                        data.id,
+                                                        data.csid,
                                                         content.contentLecture.lectureContentId
                                                     )
                                                 else
                                                     updateProgress(
-                                                        content.id,
+                                                        content.ccid,
                                                         content.attempt_id,
                                                         content.progressId,
                                                         "DONE",
                                                         content.contentable,
-                                                        data.id,
+                                                        data.csid,
                                                         content.contentLecture.lectureContentId
                                                     )
                                             }
@@ -215,7 +215,7 @@ class SectionDetailsAdapter(
                                                 it.context.intentFor<VideoPlayerActivity>(
                                                     VIDEO_ID to content.contentLecture.lectureId,
                                                     RUN_ATTEMPT_ID to content.attempt_id,
-                                                    CONTENT_ID to content.id,
+                                                    CONTENT_ID to content.ccid,
                                                     SECTION_ID to content.section_id,
                                                     DOWNLOADED to false
                                                 ).singleTop()
@@ -227,11 +227,11 @@ class SectionDetailsAdapter(
                                                     if (NetworkUtils.connectedToWifi(context) == true) {
                                                         startFileDownload(
                                                             content.contentLecture.lectureId,
-                                                            data.id,
+                                                            data.csid,
                                                             content.contentLecture.lectureContentId,
                                                             content.title,
                                                             content.attempt_id,
-                                                            content.id,
+                                                            content.ccid,
                                                             downloadBtn
                                                         )
                                                     } else {
@@ -243,11 +243,11 @@ class SectionDetailsAdapter(
                                                 } else {
                                                     startFileDownload(
                                                         content.contentLecture.lectureId,
-                                                        data.id,
+                                                        data.csid,
                                                         content.contentLecture.lectureContentId,
                                                         content.title,
                                                         content.attempt_id,
-                                                        content.id,
+                                                        content.ccid,
                                                         downloadBtn
                                                     )
                                                 }
@@ -268,7 +268,7 @@ class SectionDetailsAdapter(
                                                     )
                                                     MediaUtils.deleteRecursive(folderFile)
                                                     viewModel.updateContent(
-                                                        data.id,
+                                                        data.csid,
                                                         content.contentLecture.lectureContentId,
                                                         "false"
                                                     )
@@ -280,20 +280,20 @@ class SectionDetailsAdapter(
                                             if (content.progress == "UNDONE") {
                                                 if (content.progressId.isEmpty())
                                                     setProgress(
-                                                        content.id,
+                                                        content.ccid,
                                                         content.attempt_id,
                                                         content.contentable,
-                                                        data.id,
+                                                        data.csid,
                                                         content.contentLecture.lectureContentId
                                                     )
                                                 else
                                                     updateProgress(
-                                                        content.id,
+                                                        content.ccid,
                                                         content.attempt_id,
                                                         content.progressId,
                                                         "DONE",
                                                         content.contentable,
-                                                        data.id,
+                                                        data.csid,
                                                         content.contentLecture.lectureContentId
                                                     )
                                             }
@@ -301,8 +301,8 @@ class SectionDetailsAdapter(
                                                 it.context.intentFor<VideoPlayerActivity>(
                                                     VIDEO_ID to content.contentLecture.lectureId,
                                                     RUN_ATTEMPT_ID to content.attempt_id,
-                                                    CONTENT_ID to content.id,
-                                                    SECTION_ID to data.id,
+                                                    CONTENT_ID to content.ccid,
+                                                    SECTION_ID to data.csid,
                                                     DOWNLOADED to true
                                                 ).singleTop()
                                             )
@@ -318,20 +318,20 @@ class SectionDetailsAdapter(
                                         if (content.progress == "UNDONE") {
                                             if (content.progressId.isEmpty())
                                                 setProgress(
-                                                    content.id,
+                                                    content.ccid,
                                                     content.attempt_id,
                                                     content.contentable,
-                                                    data.id,
+                                                    data.csid,
                                                     content.contentDocument.documentContentId
                                                 )
                                             else
                                                 updateProgress(
-                                                    content.id,
+                                                    content.ccid,
                                                     content.attempt_id,
                                                     content.progressId,
                                                     "DONE",
                                                     content.contentable,
-                                                    data.id,
+                                                    data.csid,
                                                     content.contentDocument.documentContentId
                                                 )
                                         }
@@ -352,20 +352,20 @@ class SectionDetailsAdapter(
                                         if (content.progress == "UNDONE") {
                                             if (content.progressId.isEmpty())
                                                 setProgress(
-                                                    content.id,
+                                                    content.ccid,
                                                     content.attempt_id,
                                                     content.contentable,
-                                                    data.id,
+                                                    data.csid,
                                                     content.contentVideo.videoContentId
                                                 )
                                             else
                                                 updateProgress(
-                                                    content.id,
+                                                    content.ccid,
                                                     content.attempt_id,
                                                     content.progressId,
                                                     "DONE",
                                                     content.contentable,
-                                                    data.id,
+                                                    data.csid,
                                                     content.contentVideo.videoContentId
                                                 )
                                         }
@@ -373,7 +373,7 @@ class SectionDetailsAdapter(
                                             it.context.intentFor<VideoPlayerActivity>(
                                                 "videoUrl" to content.contentVideo.videoUrl,
                                                 RUN_ATTEMPT_ID to content.attempt_id,
-                                                CONTENT_ID to content.id
+                                                CONTENT_ID to content.ccid
                                             ).singleTop()
                                         )
                                     }
@@ -387,20 +387,20 @@ class SectionDetailsAdapter(
                                         if (content.progress == "UNDONE") {
                                             if (content.progressId.isEmpty())
                                                 setProgress(
-                                                    content.id,
+                                                    content.ccid,
                                                     content.attempt_id,
                                                     content.contentable,
-                                                    data.id,
+                                                    data.csid,
                                                     content.contentQna.qnaContentId
                                                 )
                                             else
                                                 updateProgress(
-                                                    content.id,
+                                                    content.ccid,
                                                     content.attempt_id,
                                                     content.progressId,
                                                     "DONE",
                                                     content.contentable,
-                                                    data.id,
+                                                    data.csid,
                                                     content.contentQna.qnaContentId
                                                 )
                                         }

@@ -41,12 +41,14 @@ import kotlinx.android.synthetic.main.activity_my_course.toolbar
 import kotlinx.android.synthetic.main.custom_dialog.view.cancelBtn
 import kotlinx.android.synthetic.main.custom_dialog.view.description
 import kotlinx.android.synthetic.main.report_dialog.view.okBtn
+import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
+import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
+class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, AnkoLogger {
 
     private val viewModel by viewModel<MyCourseViewModel>()
 
@@ -71,6 +73,13 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
             setupViewPager(viewModel.attemptId, viewModel.courseId)
         }
 
+        viewModel.getAllContent().observer(this) {
+
+            it.forEach {
+                info { it.toString() }
+            }
+        }
+
         resumeBtn.setOnClickListener {
             viewModel.getResumeCourse().observeOnce {
                 if (it.isNotEmpty())
@@ -80,7 +89,7 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
                                 startActivity(intentFor<VideoPlayerActivity>(
                                     VIDEO_ID to contentLecture.lectureId,
                                     RUN_ATTEMPT_ID to attempt_id,
-                                    CONTENT_ID to id,
+                                    CONTENT_ID to ccid,
                                     SECTION_ID to section_id,
                                     DOWNLOADED to contentLecture.isDownloaded
                                 ).singleTop()
@@ -96,7 +105,7 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
                                 startActivity(intentFor<VideoPlayerActivity>(
                                     VIDEO_URL to contentVideo.videoUrl,
                                     RUN_ATTEMPT_ID to attempt_id,
-                                    CONTENT_ID to id
+                                    CONTENT_ID to ccid
                                 ).singleTop())
                             }
                             else -> return@with

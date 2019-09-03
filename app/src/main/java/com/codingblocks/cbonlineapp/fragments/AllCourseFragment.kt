@@ -16,8 +16,6 @@ import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
-import com.ethanhua.skeleton.Skeleton
-import com.ethanhua.skeleton.SkeletonScreen
 import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
@@ -28,7 +26,6 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 
     val ui = HomeFragmentUi<Fragment>()
     private lateinit var courseDataAdapter: CourseDataAdapter
-    private lateinit var skeletonScreen: SkeletonScreen
     private val firebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(requireContext())
     }
@@ -72,21 +69,10 @@ class AllCourseFragment : Fragment(), AnkoLogger {
             adapter = courseDataAdapter
         }
 
-        skeletonScreen = Skeleton.bind(ui.rvCourses)
-            .adapter(courseDataAdapter)
-            .shimmer(true)
-            .angle(20)
-            .frozen(true)
-            .duration(1200)
-            .count(4)
-            .load(R.layout.item_skeleton_course_card)
-            .show()
-
         displayCourses()
 
         ui.swipeRefreshLayout.setOnRefreshListener {
             viewModel.progress.value = true
-            skeletonScreen.show()
             viewModel.fetchAllCourses()
         }
 
@@ -98,7 +84,6 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     private fun displayCourses(searchQuery: String = "") {
         viewModel.getAllRuns().observer(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
-                skeletonScreen.hide()
                 courseDataAdapter.setData(it.shuffled()
                     .filter { c ->
                         c.title.contains(searchQuery, true) ||

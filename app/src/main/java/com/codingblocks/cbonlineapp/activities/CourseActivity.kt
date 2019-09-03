@@ -28,8 +28,6 @@ import com.codingblocks.cbonlineapp.util.OnCartItemClickListener
 import com.codingblocks.cbonlineapp.viewmodels.CourseViewModel
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Sections
-import com.ethanhua.skeleton.Skeleton
-import com.ethanhua.skeleton.SkeletonScreen
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.youtube.player.YouTubeInitializationResult
@@ -87,7 +85,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class CourseActivity : AppCompatActivity(), AnkoLogger {
     lateinit var courseId: String
     lateinit var courseName: String
-    private lateinit var skeletonScreen: SkeletonScreen
     private lateinit var progressBar: Array<ProgressBar?>
     private lateinit var batchAdapter: BatchesAdapter
     private lateinit var instructorAdapter: InstructorDataAdapter
@@ -125,13 +122,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         setSupportActionBar(toolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        skeletonScreen = Skeleton.bind(courseRootView)
-            .shimmer(true)
-            .angle(20)
-            .duration(1200)
-            .load(R.layout.item_skeleton_course)
-            .show()
-
         viewModel.sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
         viewModel.sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
 
@@ -186,7 +176,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     private fun fetchCourse() {
         viewModel.fetchedCourse.observeOnce { course ->
-            skeletonScreen.hide()
 
             fetchInstructors(course.id)
             viewModel.getCourseFeatures(courseId).observer(this) {
