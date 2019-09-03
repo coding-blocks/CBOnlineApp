@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.Config
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import androidx.paging.toLiveData
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
@@ -42,9 +44,14 @@ class MyCourseViewModel(
     var resetProgres: MutableLiveData<Boolean> = MutableLiveData()
 
     private val extensions = MutableLiveData<List<ProductExtensionsItem>>()
+    val config = PagedList.Config.Builder()
+        .setEnablePlaceholders(false)
+        .setPageSize(20)
+        .build()
 
-    val getAllContent = sectionWithContentsDao.getSectionWithContent(attemptId).toLiveData(pageSize = 20)
-
+    //    val getAllContent = LivePagedListBuilder(sectionWithContentsDao.getSectionWithContent(attemptId),config).build()
+    //Use Function Here not a variable
+    fun getAllContent() = sectionWithContentsDao.getSectionWithContent(attemptId).toLiveData(pageSize = 20)
 
     fun updatehit(attemptId: String) {
         runDao.updateHit(attemptId)

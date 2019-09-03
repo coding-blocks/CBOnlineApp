@@ -100,20 +100,9 @@ class CourseContentFragment : Fragment(), AnkoLogger,
         view.rvExpendableView.adapter = sectionItemsAdapter
         view.sectionProgressBar.show()
 
-//        viewModel.getAllContent().observer(viewLifecycleOwner) {
-//            if (it.isNotEmpty()) {
-//            }
-//            viewModel.getRunByAtemptId(attemptId).observer(viewLifecycleOwner) { courseRun ->
-//                sectionAdapter.setData(
-//                    it as ArrayList<CourseSection>,
-//                    courseRun.premium,
-//                    courseRun.crStart
-//                )
-//            }
-//        }
-        viewModel.getAllContent.observer(viewLifecycleOwner) {
+        viewModel.getAllContent().observer(viewLifecycleOwner) {
             it.forEach {
-                info { it.toString() }
+                info { it }
             }
         }
 
