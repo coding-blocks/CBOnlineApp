@@ -3,6 +3,8 @@ package com.codingblocks.cbonlineapp.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.Config
+import androidx.paging.toLiveData
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.SectionDao
@@ -41,13 +43,14 @@ class MyCourseViewModel(
 
     private val extensions = MutableLiveData<List<ProductExtensionsItem>>()
 
+    val getAllContent = sectionWithContentsDao.getSectionWithContent(attemptId).toLiveData(pageSize = 20)
+
+
     fun updatehit(attemptId: String) {
         runDao.updateHit(attemptId)
     }
 
     fun getResumeCourse() = sectionWithContentsDao.resumeCourse(attemptId)
-
-    fun getAllContent() = sectionWithContentsDao.getSectionWithContent(attemptId)
 
 
     fun getRunAttempt(runId: String): String = runDao.getRunByRunId(runId).crAttemptId

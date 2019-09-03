@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
+import com.codingblocks.cbonlineapp.adapters.SectionItemsAdapter
 import com.codingblocks.cbonlineapp.database.models.CourseSection
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
@@ -26,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_course_content.view.rvExpendableV
 import kotlinx.android.synthetic.main.fragment_course_content.view.sectionProgressBar
 import kotlinx.android.synthetic.main.fragment_course_content.view.swiperefresh
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.startService
 import org.jetbrains.anko.yesButton
@@ -50,6 +53,7 @@ class CourseContentFragment : Fragment(), AnkoLogger,
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     lateinit var attemptId: String
     private val viewModel by sharedViewModel<MyCourseViewModel>()
+    private val sectionItemsAdapter = SectionItemsAdapter()
 
     override fun startDownload(
         videoId: String,
@@ -92,21 +96,24 @@ class CourseContentFragment : Fragment(), AnkoLogger,
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         val sectionsList = ArrayList<CourseSection>()
 
-        val sectionAdapter = SectionDetailsAdapter(sectionsList, viewLifecycleOwner, this, viewModel)
         view.rvExpendableView.layoutManager = LinearLayoutManager(context)
-        view.rvExpendableView.adapter = sectionAdapter
+        view.rvExpendableView.adapter = sectionItemsAdapter
         view.sectionProgressBar.show()
 
-        viewModel.getCourseSection(attemptId).observer(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
-                view.sectionProgressBar.hide()
-            }
-            viewModel.getRunByAtemptId(attemptId).observer(viewLifecycleOwner) { courseRun ->
-                sectionAdapter.setData(
-                    it as ArrayList<CourseSection>,
-                    courseRun.premium,
-                    courseRun.crStart
-                )
+//        viewModel.getAllContent().observer(viewLifecycleOwner) {
+//            if (it.isNotEmpty()) {
+//            }
+//            viewModel.getRunByAtemptId(attemptId).observer(viewLifecycleOwner) { courseRun ->
+//                sectionAdapter.setData(
+//                    it as ArrayList<CourseSection>,
+//                    courseRun.premium,
+//                    courseRun.crStart
+//                )
+//            }
+//        }
+        viewModel.getAllContent.observer(viewLifecycleOwner) {
+            it.forEach {
+                info { it.toString() }
             }
         }
 

@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.database
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -14,6 +15,7 @@ interface SectionWithContentsDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(join: SectionWithContent)
+
     @Query("""
         SELECT * FROM CourseContent
         INNER JOIN sectionwithcontent ON
@@ -36,7 +38,7 @@ interface SectionWithContentsDao {
 	    INNER JOIN SectionWithContent sc ON sc."section_id" = s."csid"
 	    INNER JOIN CourseContent c ON c."ccid" = sc."content_id"
 	    WHERE s.attemptId = :attemptId AND progress = "UNDONE"
-        ORDER BY s."sectionOrder", sc."order" LIMIT 1;
+        ORDER BY s."sectionOrder", sc."order" LIMIT 1
         """)
     fun resumeCourse(attemptId: String): LiveData<List<CourseContent>>
 
@@ -45,7 +47,7 @@ interface SectionWithContentsDao {
 	    INNER JOIN SectionWithContent sc ON sc."section_id" = s."csid"
 	    INNER JOIN CourseContent c ON c."ccid" = sc."content_id"
 	    WHERE s.attemptId = :attemptId
-        ORDER BY s."sectionOrder";
+        ORDER BY s."sectionOrder" ASC
         """)
-    fun getSectionWithContent(attemptId: String): LiveData<List<SectionContent>>
+    fun getSectionWithContent(attemptId: String): DataSource.Factory<Int, SectionContent>
 }

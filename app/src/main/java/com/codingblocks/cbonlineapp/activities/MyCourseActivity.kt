@@ -73,12 +73,6 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
             setupViewPager(viewModel.attemptId, viewModel.courseId)
         }
 
-        viewModel.getAllContent().observer(this) {
-
-            it.forEach {
-                info { it.toString() }
-            }
-        }
 
         resumeBtn.setOnClickListener {
             viewModel.getResumeCourse().observeOnce {
