@@ -6,39 +6,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.work.*
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
 import com.codingblocks.cbonlineapp.adapters.SectionItemsAdapter
-import com.codingblocks.cbonlineapp.database.models.CourseSection
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.services.DownloadService
 import com.codingblocks.cbonlineapp.services.SectionDownloadService
-import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.DownloadStarter
-import com.codingblocks.cbonlineapp.util.LECTURE_CONTENT_ID
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.SECTION_ID
-import com.codingblocks.cbonlineapp.util.VIDEO_ID
+import com.codingblocks.cbonlineapp.util.*
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_course_content.*
-import kotlinx.android.synthetic.main.fragment_course_content.view.rvExpendableView
-import kotlinx.android.synthetic.main.fragment_course_content.view.sectionProgressBar
-import kotlinx.android.synthetic.main.fragment_course_content.view.swiperefresh
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.startService
 import org.jetbrains.anko.yesButton
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.util.concurrent.TimeUnit
 
 class CourseContentFragment : Fragment(), AnkoLogger,
     DownloadStarter {
+
+
     override fun startSectionDownlod(sectionId: String) {
         startService<SectionDownloadService>(SECTION_ID to sectionId)
     }
@@ -64,11 +56,7 @@ class CourseContentFragment : Fragment(), AnkoLogger,
             CONTENT_ID to contentId)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         arguments?.let {
             attemptId = it.getString(RUN_ATTEMPT_ID) ?: ""
@@ -85,16 +73,18 @@ class CourseContentFragment : Fragment(), AnkoLogger,
 
         }
         val sectionItemsAdapter = SectionItemsAdapter()
+        sectionItemsAdapter.starter = this
         rvExpendableView.layoutManager = LinearLayoutManager(context)
         rvExpendableView.adapter = sectionItemsAdapter
 
-        viewModel.getAllContent().observe(this, Observer(sectionItemsAdapter::submitList))
 
+        viewModel.getAllContent().observe(this, Observer(sectionItemsAdapter::submitList))
 
         /**
          * Register a new observer to listen for data changes.
          * Otherwise list scrolls to bottom
-         */
+         **/
+
         sectionItemsAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                 if (positionStart == 0) {
@@ -123,6 +113,26 @@ class CourseContentFragment : Fragment(), AnkoLogger,
             }
         }
     }
+
+    override fun updateProgress(contentId: String) {
+        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+
+        val progressData = workDataOf(
+            CONTENT_ID to contentId,
+            RUN_ATTEMPT_ID to attemptId
+        )
+
+        val request: OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<ProgressWorker>()
+                .setConstraints(constraints)
+                .setInputData(progressData)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                .build()
+
+        WorkManager.getInstance()
+            .enqueue(request)
+    }
+
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)

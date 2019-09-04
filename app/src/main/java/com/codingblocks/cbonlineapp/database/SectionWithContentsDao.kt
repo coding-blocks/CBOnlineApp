@@ -2,10 +2,7 @@ package com.codingblocks.cbonlineapp.database
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.codingblocks.cbonlineapp.database.models.CourseContent
 import com.codingblocks.cbonlineapp.database.models.SectionWithContent
 
@@ -48,6 +45,7 @@ interface SectionWithContentsDao {
         """)
     fun resumeCourse(attemptId: String): LiveData<List<CourseContent>>
 
+    @Transaction
     @Query("""
         SELECT * FROM CourseSection s
 	    WHERE s.attemptId = :attemptId

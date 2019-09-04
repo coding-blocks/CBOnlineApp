@@ -3,7 +3,9 @@ package com.codingblocks.cbonlineapp.adapters
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
+import com.codingblocks.cbonlineapp.commons.NotificationClickListener
 import com.codingblocks.cbonlineapp.database.models.SectionWithContent
+import com.codingblocks.cbonlineapp.util.DownloadStarter
 
 /**
  * A  PagedListAdapter that binds SectionContent items into Section and their respectiv content.
@@ -20,8 +22,14 @@ import com.codingblocks.cbonlineapp.database.models.SectionWithContent
  * @see android.arch.paging.AsyncPagedListDiffer
  */
 class SectionItemsAdapter : PagedListAdapter<SectionWithContent, SectionViewHolder>(diffCallback) {
+
+    var starter: DownloadStarter? = null
+
     override fun onBindViewHolder(holder: SectionViewHolder, position: Int) {
-        holder.bindTo(getItem(position))
+        holder.apply {
+            bindTo(getItem(position))
+            starterListener = starter
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionViewHolder =

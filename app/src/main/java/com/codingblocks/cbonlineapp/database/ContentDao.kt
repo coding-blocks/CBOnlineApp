@@ -34,22 +34,8 @@ abstract class ContentDao : BaseDao<CourseContent> {
     @Query("UPDATE CourseContent SET isDownloaded = :downloadprogress WHERE lectureId = :videoId AND section_id = :section")
     abstract fun updateContentWithVideoId(section: String, videoId: String, downloadprogress: String)
 
-    // TODO use case with when instead of making 4 functions
-    // Dynamic paramters not working
     @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE ccid = :id AND attempt_id = :attemptId")
-    abstract fun updateProgress(contentid: String, attemptId: String, progress: String, progressId: String, id: String)
-
-    @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE lectureContentId = :contentid AND section_id = :section")
-    abstract fun updateProgressLecture(section: String, contentid: String, progress: String, progressId: String)
-
-    @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE documentContentId = :contentid AND section_id = :section")
-    abstract fun updateProgressDocument(section: String, contentid: String, progress: String, progressId: String)
-
-    @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE videoContentId = :contentid AND section_id = :section")
-    abstract fun updateProgressVideo(section: String, contentid: String, progress: String, progressId: String)
-
-    @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE qnaContentId = :contentid AND section_id = :section")
-    abstract fun updateProgressQna(section: String, contentid: String, progress: String, progressId: String)
+    abstract fun updateProgress(id: String, attemptId: String, progress: String, progressId: String)
 
     @Query("SELECT * FROM CourseContent WHERE section_id = :sectionId AND attempt_id =:attemptId AND `order` = ((SELECT `order` FROM CourseContent where ccid = :uid) + 1 ) LIMIT 1")
     abstract fun getNextItem(sectionId: String, attemptId: String, uid: String): LiveData<CourseContent>

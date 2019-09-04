@@ -11,4 +11,6 @@ interface DownloadStarter {
     )
 
     fun startSectionDownlod(sectionId: String)
+
+    fun updateProgress(contentId: String)
 }

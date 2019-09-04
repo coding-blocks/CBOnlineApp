@@ -10,12 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.SectionWithContent
 import com.codingblocks.cbonlineapp.util.Animations.expand
+import com.codingblocks.cbonlineapp.util.DownloadStarter
 import kotlinx.android.synthetic.main.item_section.view.*
 
 class SectionViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_section, parent, false)) {
 
     var sectionContent: SectionWithContent? = null
+    var starterListener: DownloadStarter? = null
 
     /**
      * Items might be null if they are not paged in yet. PagedListAdapter will re-bind the
@@ -41,6 +43,9 @@ class SectionViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             val downloadBtn = inflatedView.findViewById(R.id.downloadBtn) as ImageView
             val contentType = inflatedView.findViewById(R.id.contentType) as ImageView
             subTitle.text = content.title
+            inflatedView.setOnClickListener {
+                starterListener?.updateProgress(content.ccid)
+            }
             ll.addView(inflatedView)
 
             itemView.setOnClickListener {

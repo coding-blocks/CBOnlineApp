@@ -17,7 +17,6 @@ class ProgressWorker(context: Context, private val workerParameters: WorkerParam
         val contentDao: ContentDao by inject()
         val contentId = workerParameters.inputData.getString(CONTENT_ID)
         val attemptId = workerParameters.inputData.getString(RUN_ATTEMPT_ID)
-        val id = workerParameters.inputData.getString(ID)
         val progress = Progress()
         progress.status = "DONE"
         progress.runs = RunAttemptsId(attemptId)
@@ -25,7 +24,9 @@ class ProgressWorker(context: Context, private val workerParameters: WorkerParam
         val response = Clients.onlineV2JsonApi.setProgress(progress).execute()
 
         if (response.isSuccessful) {
-            contentDao.updateProgress(contentId!!, attemptId!!, "DONE", response.body()?.id!!, id!!)
+            response.body()?.let {
+                contentDao.updateProgress(it.contentId, it.runAttemptId, it.status, it.id)
+            }
             return Result.success()
         } else {
             if (response.code() in (500..599)) {

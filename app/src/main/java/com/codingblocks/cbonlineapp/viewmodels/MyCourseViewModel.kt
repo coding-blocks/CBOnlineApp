@@ -68,13 +68,13 @@ class MyCourseViewModel(
 
     fun updateContent(id: String, lectureContentId: String, s: String) = contentsDao.updateContent(id, lectureContentId, s)
 
-    fun updateProgressLecture(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressLecture(sectionId, contentId, s, s1)
-
-    fun updateProgressDocument(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressDocument(sectionId, contentId, s, s1)
-
-    fun updateProgressVideo(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressVideo(sectionId, contentId, s, s1)
-
-    fun updateProgressQna(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressQna(sectionId, contentId, s, s1)
+//    fun updateProgressLecture(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressLecture(sectionId, contentId, s, s1)
+//
+//    fun updateProgressDocument(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressDocument(sectionId, contentId, s, s1)
+//
+//    fun updateProgressVideo(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressVideo(sectionId, contentId, s, s1)
+//
+//    fun updateProgressQna(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressQna(sectionId, contentId, s, s1)
 
     fun getCourseSection(attemptId: String) = sectionDao.getCourseSection(attemptId)
 

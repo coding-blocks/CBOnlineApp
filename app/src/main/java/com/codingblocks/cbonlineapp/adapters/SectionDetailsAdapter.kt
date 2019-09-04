@@ -516,119 +516,119 @@ class SectionDetailsAdapter(
         }
     }
 
-    fun setProgress(
-        id: String,
-        attempt_id: String,
-        contentable: String,
-        sectionId: String,
-        contentId: String
-    ) {
-        doAsync {
-            val p = Progress()
-            p.status = "DONE"
-            p.runs = RunAttemptsId(attempt_id)
-            p.content = ContentsId(id)
-            Clients.onlineV2JsonApi.setProgress(p).enqueue(retrofitCallback { _, response ->
-
-                response?.body().let {
-                    val progressId = it?.id
-                    when (contentable) {
-                        "lecture" -> thread {
-                            viewModel.updateProgressLecture(
-                                sectionId, contentId, "DONE", progressId
-                                ?: ""
-                            )
-                        }
-
-                        "document" ->
-                            thread {
-                                viewModel.updateProgressDocument(
-                                    sectionId, contentId, "DONE", progressId
-                                    ?: ""
-                                )
-                            }
-                        "video" ->
-                            thread {
-                                viewModel.updateProgressVideo(
-                                    sectionId, contentId, "DONE", progressId
-                                    ?: ""
-                                )
-                            }
-                        "qna" ->
-                            thread {
-                                viewModel.updateProgressQna(
-                                    sectionId, contentId, "DONE", progressId
-                                    ?: ""
-                                )
-                            }
-                        else -> {
-                        }
-                    }
-                }
-            })
-        }
-    }
-
-    private fun updateProgress(
-        id: String,
-        attempt_id: String,
-        progressId: String,
-        status: String,
-        contentable: String,
-        sectionId: String,
-        contentId: String
-    ) {
-        doAsync {
-            val p = Progress()
-            p.id = progressId
-            p.status = status
-            p.runs = RunAttemptsId(attempt_id)
-            p.content = ContentsId(id)
-            Clients.onlineV2JsonApi.updateProgress(progressId, p)
-                .enqueue(retrofitCallback { _, response ->
-                    if (response != null) {
-                        if (response.isSuccessful) {
-                            when (contentable) {
-                                "lecture" -> thread {
-                                    viewModel.updateProgressLecture(
-                                        sectionId,
-                                        contentId,
-                                        status,
-                                        progressId
-                                    )
-                                }
-
-                                "document" ->
-                                    thread {
-                                        viewModel.updateProgressDocument(
-                                            sectionId,
-                                            contentId,
-                                            status,
-                                            progressId
-                                        )
-                                    }
-                                "video" ->
-                                    thread {
-                                        viewModel.updateProgressVideo(
-                                            sectionId,
-                                            contentId,
-                                            status,
-                                            progressId
-                                        )
-                                    }
-                                "qna" ->
-                                    thread {
-                                        viewModel.updateProgressQna(
-                                            sectionId,
-                                            contentId,
-                                            status,
-                                            progressId
-                                        )
-                                    }
-                            }
-                        }
-                    }
-                })
-        }
-    }
+//    fun setProgress(
+//        id: String,
+//        attempt_id: String,
+//        contentable: String,
+//        sectionId: String,
+//        contentId: String
+//    ) {
+//        doAsync {
+//            val p = Progress()
+//            p.status = "DONE"
+//            p.runs = RunAttemptsId(attempt_id)
+//            p.content = ContentsId(id)
+//            Clients.onlineV2JsonApi.setProgress(p).enqueue(retrofitCallback { _, response ->
+//
+//                response?.body().let {
+//                    val progressId = it?.id
+//                    when (contentable) {
+//                        "lecture" -> thread {
+//                            viewModel.updateProgressLecture(
+//                                sectionId, contentId, "DONE", progressId
+//                                ?: ""
+//                            )
+//                        }
+//
+//                        "document" ->
+//                            thread {
+//                                viewModel.updateProgressDocument(
+//                                    sectionId, contentId, "DONE", progressId
+//                                    ?: ""
+//                                )
+//                            }
+//                        "video" ->
+//                            thread {
+//                                viewModel.updateProgressVideo(
+//                                    sectionId, contentId, "DONE", progressId
+//                                    ?: ""
+//                                )
+//                            }
+//                        "qna" ->
+//                            thread {
+//                                viewModel.updateProgressQna(
+//                                    sectionId, contentId, "DONE", progressId
+//                                    ?: ""
+//                                )
+//                            }
+//                        else -> {
+//                        }
+//                    }
+//                }
+//            })
+//        }
+//    }
+//
+//    private fun updateProgress(
+//        id: String,
+//        attempt_id: String,
+//        progressId: String,
+//        status: String,
+//        contentable: String,
+//        sectionId: String,
+//        contentId: String
+//    ) {
+//        doAsync {
+//            val p = Progress()
+//            p.id = progressId
+//            p.status = status
+//            p.runs = RunAttemptsId(attempt_id)
+//            p.content = ContentsId(id)
+//            Clients.onlineV2JsonApi.updateProgress(progressId, p)
+//                .enqueue(retrofitCallback { _, response ->
+//                    if (response != null) {
+//                        if (response.isSuccessful) {
+//                            when (contentable) {
+//                                "lecture" -> thread {
+//                                    viewModel.updateProgressLecture(
+//                                        sectionId,
+//                                        contentId,
+//                                        status,
+//                                        progressId
+//                                    )
+//                                }
+//
+//                                "document" ->
+//                                    thread {
+//                                        viewModel.updateProgressDocument(
+//                                            sectionId,
+//                                            contentId,
+//                                            status,
+//                                            progressId
+//                                        )
+//                                    }
+//                                "video" ->
+//                                    thread {
+//                                        viewModel.updateProgressVideo(
+//                                            sectionId,
+//                                            contentId,
+//                                            status,
+//                                            progressId
+//                                        )
+//                                    }
+//                                "qna" ->
+//                                    thread {
+//                                        viewModel.updateProgressQna(
+//                                            sectionId,
+//                                            contentId,
+//                                            status,
+//                                            progressId
+//                                        )
+//                                    }
+//                            }
+//                        }
+//                    }
+//                })
+//        }
+//    }
 }
