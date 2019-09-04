@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.SectionDetailsAdapter
@@ -25,6 +26,7 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
+import kotlinx.android.synthetic.main.fragment_course_content.*
 import kotlinx.android.synthetic.main.fragment_course_content.view.rvExpendableView
 import kotlinx.android.synthetic.main.fragment_course_content.view.sectionProgressBar
 import kotlinx.android.synthetic.main.fragment_course_content.view.swiperefresh
@@ -41,20 +43,9 @@ class CourseContentFragment : Fragment(), AnkoLogger,
         startService<SectionDownloadService>(SECTION_ID to sectionId)
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String) =
-            CourseContentFragment().apply {
-                arguments = Bundle().apply {
-                    putString(RUN_ATTEMPT_ID, param1)
-                }
-            }
-    }
-
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     lateinit var attemptId: String
     private val viewModel by sharedViewModel<MyCourseViewModel>()
-    private val sectionItemsAdapter = SectionItemsAdapter()
 
     override fun startDownload(
         videoId: String,
@@ -73,38 +64,48 @@ class CourseContentFragment : Fragment(), AnkoLogger,
             CONTENT_ID to contentId)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
-        arguments?.let {
-            attemptId = it.getString(RUN_ATTEMPT_ID) ?: ""
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_course_content, container, false)
-        view.swiperefresh.setOnRefreshListener {
-            try {
-                (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
-            } catch (cce: ClassCastException) {
-            }
-        }
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
-        val sectionsList = ArrayList<CourseSection>()
+        arguments?.let {
+            attemptId = it.getString(RUN_ATTEMPT_ID) ?: ""
+        }
+        return inflater.inflate(R.layout.fragment_course_content, container, false)
+    }
 
-        view.rvExpendableView.layoutManager = LinearLayoutManager(context)
-        view.rvExpendableView.adapter = sectionItemsAdapter
-        view.sectionProgressBar.show()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        swiperefresh.setOnRefreshListener {
+            (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
+
+        }
+        val sectionItemsAdapter = SectionItemsAdapter()
+        rvExpendableView.layoutManager = LinearLayoutManager(context)
+        rvExpendableView.adapter = sectionItemsAdapter
 
         viewModel.getAllContent().observe(this, Observer(sectionItemsAdapter::submitList))
+
+
+        /**
+         * Register a new observer to listen for data changes.
+         * Otherwise list scrolls to bottom
+         */
+        sectionItemsAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                if (positionStart == 0) {
+                    rvExpendableView.scrollToPosition(0)
+                }
+            }
+        })
         viewModel.progress.observer(viewLifecycleOwner) {
-            view.swiperefresh.isRefreshing = it
+            swiperefresh.isRefreshing = it
         }
+
         viewModel.revoked.observer(viewLifecycleOwner) { value ->
             if (value) {
                 alert {
@@ -121,7 +122,6 @@ class CourseContentFragment : Fragment(), AnkoLogger,
                 }.show()
             }
         }
-        return view
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -134,5 +134,15 @@ class CourseContentFragment : Fragment(), AnkoLogger,
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
             }
         }
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(param1: String) =
+            CourseContentFragment().apply {
+                arguments = Bundle().apply {
+                    putString(RUN_ATTEMPT_ID, param1)
+                }
+            }
     }
 }

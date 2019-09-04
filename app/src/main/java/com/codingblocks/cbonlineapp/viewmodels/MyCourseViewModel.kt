@@ -45,13 +45,13 @@ class MyCourseViewModel(
 
     private val extensions = MutableLiveData<List<ProductExtensionsItem>>()
     val config = PagedList.Config.Builder()
-        .setEnablePlaceholders(false)
-        .setPageSize(20)
+        .setEnablePlaceholders(true)
+        .setPageSize(10)
         .build()
 
-    //    val getAllContent = LivePagedListBuilder(sectionWithContentsDao.getSectionWithContent(attemptId),config).build()
+    fun getAllContent() = LivePagedListBuilder(sectionWithContentsDao.getSectionWithContent(attemptId), config).build()
     //Use Function Here not a variable
-    fun getAllContent() = sectionWithContentsDao.getSectionWithContent(attemptId).toLiveData(pageSize = 20)
+//    fun getAllContent() = sectionWithContentsDao.getSectionWithContent(attemptId).toLiveData(pageSize = 20)
 
     fun updatehit(attemptId: String) {
         runDao.updateHit(attemptId)

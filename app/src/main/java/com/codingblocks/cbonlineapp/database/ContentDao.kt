@@ -36,6 +36,8 @@ abstract class ContentDao : BaseDao<CourseContent> {
 
     // TODO use case with when instead of making 4 functions
     // Dynamic paramters not working
+    @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE ccid = :id AND attempt_id = :attemptId")
+    abstract fun updateProgress(contentid: String, attemptId: String, progress: String, progressId: String, id: String)
 
     @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE lectureContentId = :contentid AND section_id = :section")
     abstract fun updateProgressLecture(section: String, contentid: String, progress: String, progressId: String)

@@ -27,7 +27,6 @@ class SectionViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
         if (ll.visibility == View.VISIBLE) {
             ll.removeAllViews()
-            expand(ll)
         } else {
             ll.removeAllViews()
             ll.visibility = View.GONE
@@ -45,11 +44,11 @@ class SectionViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             ll.addView(inflatedView)
 
             itemView.setOnClickListener {
-                expand(ll)
+                ll.visibility = if (ll.visibility == View.VISIBLE) View.GONE else View.VISIBLE
             }
 
             itemView.arrow.setOnClickListener {
-                expand(ll)
+                ll.visibility = if (ll.visibility == View.VISIBLE) View.GONE else View.VISIBLE
             }
         }
 

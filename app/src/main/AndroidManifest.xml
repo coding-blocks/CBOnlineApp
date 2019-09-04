@@ -20,7 +20,7 @@
         android:theme="@style/AppThemeMain">
 
         <activity
-            android:name=".URLRouterActivity"
+            android:name=".activities.URLRouterActivity"
             android:theme="@style/SplashTheme">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
