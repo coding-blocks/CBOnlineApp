@@ -119,7 +119,7 @@ interface OnlineJsonApi {
     ): Call<List<QuizAttempt>>
 
     @POST("progresses")
-    fun setProgress(@Body params: Progress): Call<ContentProgress>
+    fun setProgress(@Body params: Progress): Call<Progress>
 
     @GET("quiz_attempts/{id}")
     fun getQuizAttemptById(

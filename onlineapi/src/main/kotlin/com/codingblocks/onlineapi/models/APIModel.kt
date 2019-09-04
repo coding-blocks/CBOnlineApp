@@ -302,7 +302,9 @@ class Announcement : BaseModel() {
 @Type("progresses")
 class Progress : BaseModel() {
     @JvmField
-    var status: String? = null
+    var status: String = "UNDONE"
+    var runAttemptId: String = ""
+    var contentId: String = ""
     @Relationship("run-attempt")
     @JvmField
     var runs: RunAttemptsId? = null

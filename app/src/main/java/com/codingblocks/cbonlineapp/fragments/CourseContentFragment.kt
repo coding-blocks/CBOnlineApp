@@ -117,10 +117,7 @@ class CourseContentFragment : Fragment(), AnkoLogger,
     override fun updateProgress(contentId: String) {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
 
-        val progressData = workDataOf(
-            CONTENT_ID to contentId,
-            RUN_ATTEMPT_ID to attemptId
-        )
+        val progressData = workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to attemptId)
 
         val request: OneTimeWorkRequest =
             OneTimeWorkRequestBuilder<ProgressWorker>()
