@@ -19,7 +19,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.PdfActivity
 import com.codingblocks.cbonlineapp.activities.QuizActivity
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.database.models.CourseSection
+import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.extensions.getDurationBreakdown
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
@@ -61,7 +61,7 @@ import java.io.File
 import kotlin.concurrent.thread
 
 class SectionDetailsAdapter(
-    private var sectionData: ArrayList<CourseSection>?,
+    private var sectionData: ArrayList<SectionModel>?,
     private var activity: LifecycleOwner,
     private var starter: DownloadStarter,
     private var viewModel: MyCourseViewModel
@@ -73,7 +73,7 @@ class SectionDetailsAdapter(
 
     private lateinit var arrowAnimation: RotateAnimation
 
-    fun setData(sectionData: ArrayList<CourseSection>, premium: Boolean, crStart: String) {
+    fun setData(sectionData: ArrayList<SectionModel>, premium: Boolean, crStart: String) {
         this.sectionData = sectionData
         this.premium = premium
         this.courseStartDate = crStart
@@ -103,7 +103,7 @@ class SectionDetailsAdapter(
 
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindView(data: CourseSection) {
+        fun bindView(data: SectionModel) {
             itemView.title.text = data.name
 //            viewModel.getContentWithSectionId(data.csid).observer(activity) { courseContent ->
 //                val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)

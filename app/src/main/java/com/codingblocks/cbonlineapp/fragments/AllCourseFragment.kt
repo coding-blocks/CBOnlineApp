@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
-import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
@@ -49,14 +48,14 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 
         setHasOptionsMenu(true)
 
-        courseDataAdapter =
-            CourseDataAdapter(
-                ArrayList(),
-                viewModel.getCourseDao(),
-                requireContext(),
-                viewModel.getCourseWithInstructorDao(),
-                "allCourses"
-            )
+//        courseDataAdapter =
+//            CourseDataAdapter(
+//                ArrayList(),
+//                viewModel.getCourseDao(),
+//                requireContext(),
+//                viewModel.getCourseWithInstructorDao(),
+//                "allCourses"
+//            )
 
         ui.allcourseText.text = getString(R.string.all_courses)
         ui.titleText.visibility = View.GONE
@@ -82,17 +81,17 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        viewModel.getAllRuns().observer(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
-                courseDataAdapter.setData(it.shuffled()
-                    .filter { c ->
-                        c.title.contains(searchQuery, true) ||
-                            c.summary.contains(searchQuery, true)
-                    } as ArrayList<CourseRun>)
-            } else {
-                viewModel.fetchAllCourses()
-            }
-        }
+//        viewModel.getAllRuns().observer(viewLifecycleOwner) {
+//            if (it.isNotEmpty()) {
+//                courseDataAdapter.setData(it.shuffled()
+//                    .filter { c ->
+//                        c.title.contains(searchQuery, true) ||
+//                            c.summary.contains(searchQuery, true)
+//                    } as ArrayList<CourseRun>)
+//            } else {
+//                viewModel.fetchAllCourses()
+//            }
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

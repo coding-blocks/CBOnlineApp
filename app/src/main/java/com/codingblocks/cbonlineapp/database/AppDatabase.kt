@@ -3,27 +3,18 @@ package com.codingblocks.cbonlineapp.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.codingblocks.cbonlineapp.database.converters.CourseIdList
+import com.codingblocks.cbonlineapp.database.converters.TimestampConverter
 import com.codingblocks.cbonlineapp.database.models.*
 
 @Database(
-    entities = [CourseRun::class, CourseSection::class, CourseContent::class, Instructor::class, Notification::class,
-        CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, Course::class,
-        JobsModel::class, CourseFeatures::class
+    entities = [CourseModel::class, SectionModel::class, CourseContent::class, InstructorModel::class, Notification::class,
+        CourseInstructorHolder.CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, RunModel::class,
+        JobsModel::class, CourseFeatureModel::class
     ], exportSchema = true, version = 20
 )
 @TypeConverters(TimestampConverter::class, CourseIdList::class)
 abstract class AppDatabase : RoomDatabase() {
-
-    companion object {
-
-        fun groupInstructor(courseAndInstructor: List<CourseInstructorPair>): List<CourseAndItsInstructor> {
-            return mutableListOf<CourseAndItsInstructor>().also { items ->
-                courseAndInstructor
-                    .groupBy(keySelector = { it.course }, valueTransform = { it.instructor })
-                    .forEach { items.add(CourseAndItsInstructor(it.key, it.value)) }
-            }
-        }
-    }
 
     abstract fun courseRunDao(): CourseRunDao
 

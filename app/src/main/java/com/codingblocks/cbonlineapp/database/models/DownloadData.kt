@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.database
+package com.codingblocks.cbonlineapp.database.models
 
 import androidx.core.app.NotificationCompat
 import java.io.Serializable

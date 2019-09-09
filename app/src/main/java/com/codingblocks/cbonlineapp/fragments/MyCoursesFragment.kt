@@ -21,7 +21,8 @@ import com.caverock.androidsvg.SVG
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
-import com.codingblocks.cbonlineapp.database.models.CourseRun
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
@@ -38,6 +39,7 @@ import okhttp3.Request
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.ctx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -64,16 +66,21 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         }
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
 
-        courseDataAdapter =
-            CourseDataAdapter(
-                ArrayList(),
-                viewModel.getCourseDao(),
-                requireContext(),
-                viewModel.getCourseWithInstructorDao(),
-                "myCourses"
-            )
+//        courseDataAdapter =
+//            CourseDataAdapter(
+//                ArrayList(),
+//                viewModel.getCourseDao(),
+//                requireContext(),
+//                viewModel.getCourseWithInstructorDao(),
+//                "myCourses"
+//            )
 
         setHasOptionsMenu(true)
+
+        viewModel.getCourseWithInstructor().observer(this) {
+            val response = CourseInstructorHolder.groupInstructor(it)
+            info { response.toString() }
+        }
 
         ui.allcourseText.text = getString(R.string.my_courses)
         ui.titleText.visibility = View.GONE
@@ -103,16 +110,16 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        viewModel.getMyRuns().observer(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
-                courseDataAdapter.setData(it.filter { c ->
-                    c.title.contains(searchQuery, true) ||
-                        c.summary.contains(searchQuery, true)
-                } as ArrayList<CourseRun>)
-            } else {
-                viewModel.fetchMyCourses()
-            }
-        }
+//        viewModel.getMyRuns().observer(viewLifecycleOwner) {
+//            if (it.isNotEmpty()) {
+//                courseDataAdapter.setData(it.filter { c ->
+//                    c.title.contains(searchQuery, true) ||
+//                        c.summary.contains(searchQuery, true)
+//                } as ArrayList<CourseRun>)
+//            } else {
+//                viewModel.fetchMyCourses()
+//            }
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -158,8 +165,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
                     val shortcut = ShortcutInfo.Builder(requireContext(), "topcourse$index")
                     shortcut.setIntent(intent)
-                    shortcut.setLongLabel(courseRun.title)
-                    shortcut.setShortLabel(courseRun.title)
+//                    shortcut.setLongLabel(courseRun.title)
+//                    shortcut.setShortLabel(courseRun.title)
                     shortcut.setDisabledMessage("Login to open this")
 
                     okHttpClient.newCall(Request.Builder().url(data.logo).build())

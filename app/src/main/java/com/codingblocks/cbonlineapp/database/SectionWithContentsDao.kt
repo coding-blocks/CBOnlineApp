@@ -39,7 +39,7 @@ interface SectionWithContentsDao {
 //    fun resumeCourse(attemptId: String): LiveData<List<CourseContent>>
 
     @Query("""
-        SELECT * FROM  CourseSection s,CourseContent cc
+        SELECT * FROM  SectionModel s,CourseContent cc
 	    WHERE s.attemptId = :attemptId AND progress = "UNDONE"
         ORDER BY s."sectionOrder", cc."order" LIMIT 1
         """)
@@ -47,7 +47,7 @@ interface SectionWithContentsDao {
 
     @Transaction
     @Query("""
-        SELECT * FROM CourseSection s
+        SELECT * FROM SectionModel s
 	    WHERE s.attemptId = :attemptId
         ORDER BY s."sectionOrder"
         """)

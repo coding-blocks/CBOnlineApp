@@ -2,11 +2,7 @@ package com.codingblocks.cbonlineapp.fragments
 
 import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +10,6 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.CarouselSliderAdapter
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.adapters.EndlessPagerAdapter
-import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
@@ -25,8 +20,7 @@ import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.Timer
-import java.util.TimerTask
+import java.util.*
 import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment(), AnkoLogger {
@@ -56,17 +50,12 @@ class HomeFragment : Fragment(), AnkoLogger {
         setHasOptionsMenu(true)
 
         courseDataAdapter =
-            CourseDataAdapter(
-                ArrayList(),
-                viewModel.getCourseDao(),
-                requireContext(),
-                viewModel.getCourseWithInstructorDao(),
-                "allCourses"
-            )
-        ui.rvCourses.isNestedScrollingEnabled = false
-
-        ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
-        ui.rvCourses.adapter = courseDataAdapter
+            CourseDataAdapter(ArrayList())
+        ui.rvCourses.apply {
+            isNestedScrollingEnabled = false
+            layoutManager = LinearLayoutManager(ctx)
+            adapter = courseDataAdapter
+        }
         ui.homeImg.visibility = View.GONE
 
         ui.swipeRefreshLayout.setOnRefreshListener {
@@ -110,16 +99,16 @@ class HomeFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        viewModel.getRecommendedRuns().observer(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
-                courseDataAdapter.setData(it.shuffled().filter { c ->
-                    c.title.contains(searchQuery, true) ||
-                        c.summary.contains(searchQuery, true)
-                } as ArrayList<CourseRun>)
-            } else {
-                viewModel.fetchRecommendedCourses()
-            }
-        }
+//        viewModel.getRecommendedRuns().observer(viewLifecycleOwner) {
+//            if (it.isNotEmpty()) {
+//                courseDataAdapter.setData(it.shuffled().filter { c ->
+//                    c.title.contains(searchQuery, true) ||
+//                        c.summary.contains(searchQuery, true)
+//                } as ArrayList<CourseRun>)
+//            } else {
+//                viewModel.fetchRecommendedCourses()
+//            }
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

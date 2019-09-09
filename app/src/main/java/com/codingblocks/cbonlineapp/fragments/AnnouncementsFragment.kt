@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
-import com.codingblocks.cbonlineapp.database.models.Instructor
+import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.viewmodels.AnnouncementsViewModel
@@ -48,13 +48,13 @@ class AnnouncementsFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_annoucements, container, false)
 
-        val instructorList = ArrayList<Instructor>()
+        val instructorList = ArrayList<InstructorModel>()
         val instructorAdapter = InstructorDataAdapter(instructorList)
         view.instructorRv.layoutManager = LinearLayoutManager(context)
         view.instructorRv.adapter = instructorAdapter
 
         viewModel.getInstructorWithCourseId(courseId).observer(this) {
-            instructorAdapter.setData(it as ArrayList<Instructor>)
+            instructorAdapter.setData(it as ArrayList<InstructorModel>)
         }
 
         viewModel.getRunByAtemptId(attemptId).observer(this) {

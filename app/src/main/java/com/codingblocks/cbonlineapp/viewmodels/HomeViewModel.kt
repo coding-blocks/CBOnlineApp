@@ -36,6 +36,8 @@ class HomeViewModel(
 
     fun getTopRun() = runDao.getTopRun()
 
+    fun getCourseWithInstructor() = courseWithInstructorDao.getCourseInstructor()
+
     fun fetchRecommendedCourses(recommended: Boolean = true) {
         Clients.onlineV2JsonApi.getRecommendedCourses()
             .enqueue(retrofitCallback { _, response ->
@@ -45,7 +47,7 @@ class HomeViewModel(
                             courseList.forEach { course ->
                                 course.run {
                                     courseDao.insertNew(
-                                        Course(
+                                        CourseModel(
                                             id,
                                             title,
                                             subtitle,
@@ -62,7 +64,7 @@ class HomeViewModel(
                                         )
                                     )
                                     coursefeatures?.forEach {
-                                        featuresDao.insert(CourseFeatures(icon = it.icon, text = it.text, crCourseId = id))
+                                        featuresDao.insert(CourseFeatureModel(icon = it.icon, text = it.text, crCourseId = id))
                                     }
                                 }
                                 var list = course.runs?.filter { run ->
@@ -77,7 +79,7 @@ class HomeViewModel(
                                 list?.get(0)?.run {
                                     try {
                                         runDao.insertNew(
-                                            CourseRun(
+                                            RunModel(
                                                 id,
                                                 "",
                                                 name,
@@ -90,15 +92,13 @@ class HomeViewModel(
                                                 mrp ?: "",
                                                 course.id,
                                                 crUpdatedAt = updatedAt,
-                                                title = course.title,
-                                                recommended = recommended,
-                                                summary = course.summary
+                                                recommended = recommended
                                             )
                                         )
 
                                         course.instructors?.forEach { instructor ->
                                             instructorDao.insertNew(
-                                                Instructor(
+                                                InstructorModel(
                                                     instructor.id,
                                                     instructor.name,
                                                     instructor.description ?: "",
@@ -108,7 +108,7 @@ class HomeViewModel(
                                                 )
                                             )
                                             courseWithInstructorDao.insert(
-                                                CourseWithInstructor(course.id, instructor.id)
+                                                CourseInstructorHolder.CourseWithInstructor(course.id, instructor.id)
                                             )
                                         }
                                     } catch (e: Exception) {
@@ -147,7 +147,7 @@ class HomeViewModel(
                                                     }
 
                                                     val newCourse = courseRun.course?.run {
-                                                        Course(
+                                                        CourseModel(
                                                             id,
                                                             title,
                                                             subtitle,
@@ -163,7 +163,7 @@ class HomeViewModel(
                                                         )
                                                     }
                                                     courseRun.run {
-                                                        val newRun = CourseRun(
+                                                        val newRun = RunModel(
                                                             id,
                                                             runAttempts?.get(0)?.id ?: "",
                                                             name,
@@ -177,8 +177,6 @@ class HomeViewModel(
                                                             course?.id ?: "",
                                                             updatedAt,
                                                             progress,
-                                                            course?.title ?: "",
-                                                            summary = course?.summary ?: "",
                                                             premium = runAttempts?.get(0)?.premium
                                                                 ?: false,
                                                             whatsappLink = whatsappLink ?: "",
@@ -222,7 +220,7 @@ class HomeViewModel(
                                                                         instructorResponse.body()
                                                                             ?.run {
                                                                                 instructorDao.insertNew(
-                                                                                    Instructor(
+                                                                                    InstructorModel(
                                                                                         id,
                                                                                         name,
                                                                                         description
@@ -233,7 +231,7 @@ class HomeViewModel(
                                                                                     )
                                                                                 )
                                                                                 courseWithInstructorDao.insert(
-                                                                                    CourseWithInstructor(
+                                                                                    CourseInstructorHolder.CourseWithInstructor(
                                                                                         courseRun.course?.id
                                                                                             ?: "",
                                                                                         id
@@ -267,7 +265,7 @@ class HomeViewModel(
                             courseList.forEach { course ->
                                 course.run {
                                     courseDao.insertNew(
-                                        Course(
+                                        CourseModel(
                                             id,
                                             title,
                                             subtitle,
@@ -295,7 +293,7 @@ class HomeViewModel(
                                 }
                                 list?.get(0)?.run {
                                     runDao.insertNew(
-                                        CourseRun(
+                                        RunModel(
                                             id,
                                             "",
                                             name,
@@ -307,16 +305,14 @@ class HomeViewModel(
                                             price,
                                             mrp ?: "",
                                             course.id,
-                                            crUpdatedAt = updatedAt,
-                                            title = course.title,
-                                            summary = course.summary
+                                            crUpdatedAt = updatedAt
                                         )
                                     )
                                 }
 
                                 course.instructors?.forEach { instructor ->
                                     instructorDao.insertNew(
-                                        Instructor(
+                                        InstructorModel(
                                             instructor.id,
                                             instructor.name,
                                             instructor.description ?: "",
@@ -326,7 +322,7 @@ class HomeViewModel(
                                         )
                                     )
                                     courseWithInstructorDao.insert(
-                                        CourseWithInstructor(course.id, instructor.id)
+                                        CourseInstructorHolder.CourseWithInstructor(course.id, instructor.id)
                                     )
                                 }
                             }

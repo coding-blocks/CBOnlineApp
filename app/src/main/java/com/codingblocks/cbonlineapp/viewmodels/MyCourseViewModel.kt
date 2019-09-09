@@ -9,14 +9,7 @@ import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.SectionDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
-import com.codingblocks.cbonlineapp.database.models.ContentCodeChallenge
-import com.codingblocks.cbonlineapp.database.models.ContentCsvModel
-import com.codingblocks.cbonlineapp.database.models.ContentDocument
-import com.codingblocks.cbonlineapp.database.models.ContentLecture
-import com.codingblocks.cbonlineapp.database.models.ContentQna
-import com.codingblocks.cbonlineapp.database.models.ContentVideo
-import com.codingblocks.cbonlineapp.database.models.CourseContent
-import com.codingblocks.cbonlineapp.database.models.CourseSection
+import com.codingblocks.cbonlineapp.database.models.*
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.SingleLiveEvent
 import com.codingblocks.onlineapi.Clients
@@ -76,7 +69,7 @@ class MyCourseViewModel(
                         runAttempt.body()?.run?.sections?.let { sectionList ->
                             sectionList.forEach { courseSection ->
                                 courseSection.run {
-                                    val newSection = CourseSection(
+                                    val newSection = SectionModel(
                                         id, name,
                                         order, premium, status,
                                         runId, attemptId

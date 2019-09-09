@@ -5,31 +5,39 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.RoomWarnings
-import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
-import com.codingblocks.cbonlineapp.database.models.Instructor
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
+import com.codingblocks.cbonlineapp.database.models.InstructorModel
+
 
 @Dao
 interface CourseWithInstructorDao {
 
-    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("""
-        SELECT * FROM instructor
+        SELECT * FROM InstructorModel i
         INNER JOIN coursewithinstructor ON
-        instructor.uid = coursewithinstructor.instructor_id
+        i.uid = coursewithinstructor.instructor_id
         WHERE coursewithinstructor.course_id = :courseID
         """)
-    fun getInstructorWithCourseId(courseID: String): LiveData<List<Instructor>>
+    fun getInstructorWithCourseId(courseID: String): LiveData<List<InstructorModel>>
 
-    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("""
-        SELECT * FROM instructor
+        SELECT * FROM InstructorModel i
         INNER JOIN coursewithinstructor ON
-        instructor.uid = coursewithinstructor.instructor_id
+        i.uid = coursewithinstructor.instructor_id
         WHERE coursewithinstructor.course_id = :courseID
         """)
-    fun getInstructorWithCourseIdNonLive(courseID: String): List<Instructor>
+    fun getInstructorWithCourseIdNonLive(courseID: String): List<InstructorModel>
+
+
+    @Query("""
+    SELECT * FROM RunModel r,InstructorModel i
+	   INNER JOIN CourseModel c ON (c.cid = r.crCourseId AND c.cid = ci.course_id)
+	   INNER JOIN coursewithinstructor ci ON i.uid = ci.instructor_id
+	   where r.crAttemptId = "'"+"'" AND r.recommended = 1
+
+    """)
+    fun getCourseInstructor(): LiveData<List<CourseInstructorHolder.CourseInstructorPair>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(join: CourseWithInstructor)
+    fun insert(join: CourseInstructorHolder.CourseWithInstructor)
 }

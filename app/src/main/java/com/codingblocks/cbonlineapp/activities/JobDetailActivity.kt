@@ -16,7 +16,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
-import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.extensions.isotomillisecond
 import com.codingblocks.cbonlineapp.extensions.loadImage
@@ -79,14 +78,14 @@ class JobDetailActivity : AppCompatActivity() {
 
         viewModel.fetchJob(jobId)
 
-        courseDataAdapter =
-            CourseDataAdapter(
-                ArrayList(),
-                viewModel.getCourseDao(),
-                this,
-                viewModel.getCourseWithInstructorDao(),
-                "allCourses"
-            )
+//        courseDataAdapter =
+//            CourseDataAdapter(
+//                ArrayList(),
+//                viewModel.getCourseDao(),
+//                this,
+//                viewModel.getCourseWithInstructorDao(),
+//                "allCourses"
+//            )
 
         rvJobCourses.layoutManager = LinearLayoutManager(this)
         rvJobCourses.adapter = courseDataAdapter
@@ -117,9 +116,9 @@ class JobDetailActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.jobCourses.observer(this) {
-            courseDataAdapter.setData(it as ArrayList<CourseRun>)
-        }
+//        viewModel.jobCourses.observer(this) {
+//            courseDataAdapter.setData(it as ArrayList<CourseRun>)
+//        }
 
         viewModel.eligibleLiveData.observer(this) {
             when (it) {

@@ -8,155 +8,10 @@ import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.onlineapi.models.CourseId
 import java.sql.Date
 
-open class BaseModel(
-    @NonNull
-    @PrimaryKey
-    var id: String,
-    var updatedAt: String?
-)
-
-@Entity
-data class Course(
-    @PrimaryKey
-    var cid: String,
-    var title: String,
-    var subtitle: String,
-    var logo: String,
-    var summary: String,
-    var promoVideo: String,
-    var difficulty: String,
-    var reviewCount: Int,
-    var rating: Float,
-    var slug: String?,
-    var coverImage: String,
-    var categoryId: Int,
-    var faq: String? = ""
-)
-
-@Entity(
-    indices = [Index("crCourseId")],
-    foreignKeys = [ForeignKey(entity = Course::class,
-        parentColumns = ["cid"],
-        childColumns = ["crCourseId"])])
-data class CourseFeatures(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
-    val icon: String,
-    val text: String,
-    var crCourseId: String = ""
-)
-
-@Entity(
-    indices = [Index("crCourseId")],
-    foreignKeys = [
-        ForeignKey(
-            entity = Course::class,
-            parentColumns = ["cid"],
-            childColumns = ["crCourseId"]
-        )
-    ]
-)
-data class CourseRun(
-    @PrimaryKey
-    var crUid: String = "",
-    var crAttemptId: String = "",
-    var crName: String = "",
-    var crDescription: String = "",
-    var crEnrollmentStart: String = "",
-    var crEnrollmentEnd: String = "",
-    var crStart: String = "",
-    var crEnd: String = "",
-    var crPrice: String = "",
-    var crMrp: String = "",
-    var crCourseId: String = "",
-    var crUpdatedAt: String = "",
-    var progress: Double = 0.0,
-    var title: String = "",
-    var summary: String = "",
-    var premium: Boolean = false,
-    var hits: Int = 0,
-    var recommended: Boolean = false,
-    var whatsappLink: String = "",
-    var crRunEnd: String = "",
-    var totalContents: Int = 0,
-    var completedContents: Int = 0,
-    var mentorApproved: Boolean = false,
-    var completionThreshold: Int = 90,
-    var productId: Int = 0
-
-)
-
-@Entity
-data class Instructor(
-    @PrimaryKey
-    var uid: String,
-    var name: String?,
-    var description: String,
-    var photo: String?,
-    var email: String?,
-    var sub: String?
-)
-
-@Entity(
-    primaryKeys = ["course_id", "instructor_id"],
-    indices = [
-        Index(value = ["course_id"]),
-        Index(value = ["instructor_id"])
-    ],
-    foreignKeys = [
-        ForeignKey(
-            entity = Course::class,
-            parentColumns = ["cid"],
-            childColumns = ["course_id"]
-        ),
-        ForeignKey(
-            entity = Instructor::class,
-            parentColumns = ["uid"],
-            childColumns = ["instructor_id"]
-        )
-    ]
-)
-class CourseWithInstructor(
-    @ColumnInfo(name = "course_id") val courseId: String,
-    @ColumnInfo(name = "instructor_id") val instructorId: String
-)
-
-class CourseInstructorPair(
-    var course: Course,
-    @Embedded
-    var instructor: Instructor
-)
-
-data class CourseAndItsInstructor(
-    val course: Course,
-    val instructors: List<Instructor>
-)
-
-
-@Entity(
-    indices = [Index("run_id")],
-    foreignKeys = [(ForeignKey(
-        entity = CourseRun::class,
-        parentColumns = ["crUid"],
-        childColumns = ["run_id"],
-        onDelete = ForeignKey.CASCADE // or CASCADE
-    ))]
-)
-data class CourseSection(
-    @PrimaryKey
-    var csid: String,
-    var name: String,
-    var sectionOrder: Int,
-    var premium: Boolean,
-    var status: String,
-    var run_id: String,
-    var attemptId: String
-)
-
 @Entity(
     indices = [Index("section_id")],
     foreignKeys = [(ForeignKey(
-        entity = CourseSection::class,
+        entity = SectionModel::class,
         parentColumns = ["csid"],
         childColumns = ["section_id"],
         onDelete = ForeignKey.CASCADE // or CASCADE
@@ -224,7 +79,7 @@ data class CourseContent(
 //
 //)
 data class SectionWithContent(
-    @Embedded val section: CourseSection,
+    @Embedded val section: SectionModel,
     @Relation(parentColumn = "csid", entityColumn = "section_id") val content: List<CourseContent>
 )
 

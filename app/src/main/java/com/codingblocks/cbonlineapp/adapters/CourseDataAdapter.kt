@@ -6,24 +6,21 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.CourseDao
-import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.ui.MyCourseCardUi
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import kotlin.collections.ArrayList
 
 class CourseDataAdapter(
-    private var courseData: ArrayList<CourseRun>?,
-    private val courseDao: CourseDao,
-    private val context: Context,
-    private val courseWithInstructorDao: CourseWithInstructorDao,
-    private val type: String
+    private var courseData: ArrayList<CourseInstructorHolder.CourseAndItsInstructor>,
+    private val type: String = "allCourses"
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AnkoLogger {
 
     val ui = MyCourseCardUi()
 
-    fun setData(courseData: ArrayList<CourseRun>) {
+    fun setData(courseData: ArrayList<CourseInstructorHolder.CourseAndItsInstructor>) {
         this.courseData = courseData
 
         notifyDataSetChanged()
@@ -31,7 +28,7 @@ class CourseDataAdapter(
 
     override fun getItemCount(): Int {
 
-        return courseData?.size ?: 0
+        return courseData.size ?: 0
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -49,8 +46,8 @@ class CourseDataAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         courseData?.get(position)?.let {
             when (type) {
-                "myCourses" -> (holder as MyCoursesViewHolder).bindView(it, courseDao, courseWithInstructorDao, context)
-                "allCourses" -> (holder as AllCoursesViewHolder).bindView(it, ui, courseDao, courseWithInstructorDao, context)
+                "myCourses" -> (holder as MyCoursesViewHolder).bindView(it)
+                "allCourses" -> (holder as AllCoursesViewHolder).bindView(it, ui)
             }
         }
     }
