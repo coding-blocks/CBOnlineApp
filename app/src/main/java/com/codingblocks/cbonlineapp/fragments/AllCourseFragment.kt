@@ -68,7 +68,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
             layoutManager = LinearLayoutManager(ctx)
             adapter = courseDataAdapter
         }
-
+        ui.shimmerLayout.startShimmer()
         displayCourses()
 
         ui.swipeRefreshLayout.setOnRefreshListener {

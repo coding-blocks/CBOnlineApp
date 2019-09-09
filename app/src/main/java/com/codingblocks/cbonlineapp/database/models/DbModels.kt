@@ -17,7 +17,8 @@ open class BaseModel(
 
 @Entity
 data class Course(
-    var uid: String,
+    @PrimaryKey
+    var cid: String,
     var title: String,
     var subtitle: String,
     var logo: String,
@@ -28,15 +29,14 @@ data class Course(
     var rating: Float,
     var slug: String?,
     var coverImage: String,
-    var updated_at: String?,
     var categoryId: Int,
     var faq: String? = ""
-) : BaseModel(uid, updated_at)
+)
 
 @Entity(
     indices = [Index("crCourseId")],
     foreignKeys = [ForeignKey(entity = Course::class,
-        parentColumns = ["id"],
+        parentColumns = ["cid"],
         childColumns = ["crCourseId"])])
 data class CourseFeatures(
     @PrimaryKey(autoGenerate = true)
@@ -51,7 +51,7 @@ data class CourseFeatures(
     foreignKeys = [
         ForeignKey(
             entity = Course::class,
-            parentColumns = ["id"],
+            parentColumns = ["cid"],
             childColumns = ["crCourseId"]
         )
     ]
@@ -88,14 +88,14 @@ data class CourseRun(
 
 @Entity
 data class Instructor(
+    @PrimaryKey
     var uid: String,
     var name: String?,
     var description: String,
     var photo: String?,
-    var updated_at: String?,
     var email: String?,
     var sub: String?
-) : BaseModel(uid, updated_at)
+)
 
 @Entity(
     primaryKeys = ["course_id", "instructor_id"],
@@ -106,21 +106,32 @@ data class Instructor(
     foreignKeys = [
         ForeignKey(
             entity = Course::class,
-            parentColumns = ["id"],
+            parentColumns = ["cid"],
             childColumns = ["course_id"]
         ),
         ForeignKey(
             entity = Instructor::class,
-            parentColumns = ["id"],
+            parentColumns = ["uid"],
             childColumns = ["instructor_id"]
         )
     ]
 )
-data class CourseWithInstructor(
-//        @Nullable @PrimaryKey(autoGenerate = true) val id: Int?,
+class CourseWithInstructor(
     @ColumnInfo(name = "course_id") val courseId: String,
     @ColumnInfo(name = "instructor_id") val instructorId: String
 )
+
+class CourseInstructorPair(
+    var course: Course,
+    @Embedded
+    var instructor: Instructor
+)
+
+data class CourseAndItsInstructor(
+    val course: Course,
+    val instructors: List<Instructor>
+)
+
 
 @Entity(
     indices = [Index("run_id")],
@@ -362,3 +373,4 @@ data class Companies(
     val companyDescription: String,
     val website: String
 )
+

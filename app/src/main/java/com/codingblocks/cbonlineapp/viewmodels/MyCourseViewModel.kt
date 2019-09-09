@@ -3,10 +3,8 @@ package com.codingblocks.cbonlineapp.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.paging.Config
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import androidx.paging.toLiveData
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.SectionDao
@@ -19,8 +17,6 @@ import com.codingblocks.cbonlineapp.database.models.ContentQna
 import com.codingblocks.cbonlineapp.database.models.ContentVideo
 import com.codingblocks.cbonlineapp.database.models.CourseContent
 import com.codingblocks.cbonlineapp.database.models.CourseSection
-import com.codingblocks.cbonlineapp.database.models.SectionWithContent
-import com.codingblocks.cbonlineapp.extensions.getDistinct
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.SingleLiveEvent
 import com.codingblocks.onlineapi.Clients
@@ -41,7 +37,7 @@ class MyCourseViewModel(
     var courseId: String = ""
     private val mutablePopMessage = SingleLiveEvent<String>()
     val popMessage: LiveData<String> = mutablePopMessage
-    var resetProgres: MutableLiveData<Boolean> = MutableLiveData()
+    var resetProgress: MutableLiveData<Boolean> = MutableLiveData()
 
     private val extensions = MutableLiveData<List<ProductExtensionsItem>>()
     val config = PagedList.Config.Builder()
@@ -67,14 +63,6 @@ class MyCourseViewModel(
 //    fun getSectionDownloadlist(id: String) = sectionWithContentsDao.getVideoIdsWithSectionId(id)
 
     fun updateContent(id: String, lectureContentId: String, s: String) = contentsDao.updateContent(id, lectureContentId, s)
-
-//    fun updateProgressLecture(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressLecture(sectionId, contentId, s, s1)
-//
-//    fun updateProgressDocument(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressDocument(sectionId, contentId, s, s1)
-//
-//    fun updateProgressVideo(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressVideo(sectionId, contentId, s, s1)
-//
-//    fun updateProgressQna(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressQna(sectionId, contentId, s, s1)
 
     fun getCourseSection(attemptId: String) = sectionDao.getCourseSection(attemptId)
 
@@ -308,7 +296,7 @@ class MyCourseViewModel(
     fun resetProgress() {
         val resetCourse = ResetRunAttempt(attemptId)
         Clients.api.resetProgress(resetCourse).enqueue(retrofitCallback { _, response ->
-            resetProgres.value = response?.isSuccessful ?: false
+            resetProgress.value = response?.isSuccessful ?: false
         })
     }
 

@@ -3,16 +3,8 @@ package com.codingblocks.cbonlineapp.viewmodels
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.codingblocks.cbonlineapp.database.CourseDao
-import com.codingblocks.cbonlineapp.database.CourseRunDao
-import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
-import com.codingblocks.cbonlineapp.database.FeaturesDao
-import com.codingblocks.cbonlineapp.database.InstructorDao
-import com.codingblocks.cbonlineapp.database.models.Course
-import com.codingblocks.cbonlineapp.database.models.CourseFeatures
-import com.codingblocks.cbonlineapp.database.models.CourseRun
-import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
-import com.codingblocks.cbonlineapp.database.models.Instructor
+import com.codingblocks.cbonlineapp.database.*
+import com.codingblocks.cbonlineapp.database.models.*
 import com.codingblocks.cbonlineapp.extensions.greater
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
@@ -35,7 +27,8 @@ class HomeViewModel(
 
     fun getRecommendedRuns() = runDao.getRecommendedRuns()
 
-    fun getCourseById(id: String) = courseDao.getCourse(id)
+    fun getCourseById(id: String) = courseDao.getCourses().value!!.get(0)
+
 
     fun getAllRuns() = runDao.getAllRuns()
 
@@ -64,7 +57,6 @@ class HomeViewModel(
                                             rating,
                                             slug,
                                             coverImage,
-                                            updatedAt,
                                             categoryId,
                                             faq
                                         )
@@ -111,7 +103,6 @@ class HomeViewModel(
                                                     instructor.name,
                                                     instructor.description ?: "",
                                                     instructor.photo,
-                                                    instructor.updatedAt,
                                                     instructor.email,
                                                     instructor.sub
                                                 )
@@ -168,7 +159,6 @@ class HomeViewModel(
                                                             rating,
                                                             slug,
                                                             coverImage,
-                                                            updatedAt,
                                                             categoryId
                                                         )
                                                     }
@@ -238,7 +228,6 @@ class HomeViewModel(
                                                                                         description
                                                                                             ?: "",
                                                                                         photo,
-                                                                                        updatedAt,
                                                                                         email,
                                                                                         sub
                                                                                     )
@@ -290,7 +279,6 @@ class HomeViewModel(
                                             rating,
                                             slug,
                                             coverImage,
-                                            updatedAt,
                                             categoryId,
                                             faq
                                         )
@@ -333,7 +321,6 @@ class HomeViewModel(
                                             instructor.name,
                                             instructor.description ?: "",
                                             instructor.photo,
-                                            instructor.updatedAt,
                                             instructor.email,
                                             instructor.sub
                                         )

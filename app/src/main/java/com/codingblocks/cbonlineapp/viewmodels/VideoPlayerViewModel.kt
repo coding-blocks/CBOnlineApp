@@ -36,7 +36,7 @@ class VideoPlayerViewModel(
 
     fun getRunByAtemptId(id: String) = runDao.getRunByAtemptId(id)
 
-    fun getCourseById(id: String) = courseDao.getCourse(id)
+    fun getCourseById(id: String) = courseDao.getCourses().value!!.get(0)
 
     fun getContentWithId(attemptId: String, contentId: String) = contentDao.getContentWithId(attemptId, contentId)
 

@@ -42,7 +42,7 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
 
         thread {
             doAsync {
-                val data = courseDao.getCourse(courseRun.crCourseId)
+                val data = courseDao.getCourses().value!!.get(0)
                 uiThread {
                     data.run {
                         itemView.courseTitle.text = title
@@ -76,7 +76,7 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
                         itemView.courseBtn1.setOnClickListener {
                             it.context.startActivity(
                                 it.context.intentFor<MyCourseActivity>(
-                                    COURSE_ID to id,
+                                    COURSE_ID to cid,
                                     RUN_ATTEMPT_ID to courseRun.crAttemptId,
                                     COURSE_NAME to title,
                                     RUN_ID to courseRun.crUid
@@ -86,7 +86,7 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
                     }
 
                     // bind Instructors
-                    instructorDao.getInstructorWithCourseId(data.id).observer((context as LifecycleOwner)) {
+                    instructorDao.getInstructorWithCourseId(data.cid).observer((context as LifecycleOwner)) {
                         val instructorsList = it
 
                         var instructors = ""

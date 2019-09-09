@@ -3,18 +3,7 @@ package com.codingblocks.cbonlineapp.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.codingblocks.cbonlineapp.database.models.Course
-import com.codingblocks.cbonlineapp.database.models.CourseContent
-import com.codingblocks.cbonlineapp.database.models.CourseFeatures
-import com.codingblocks.cbonlineapp.database.models.CourseRun
-import com.codingblocks.cbonlineapp.database.models.CourseSection
-import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
-import com.codingblocks.cbonlineapp.database.models.DoubtsModel
-import com.codingblocks.cbonlineapp.database.models.Instructor
-import com.codingblocks.cbonlineapp.database.models.JobsModel
-import com.codingblocks.cbonlineapp.database.models.NotesModel
-import com.codingblocks.cbonlineapp.database.models.Notification
-import com.codingblocks.cbonlineapp.database.models.SectionWithContent
+import com.codingblocks.cbonlineapp.database.models.*
 
 @Database(
     entities = [CourseRun::class, CourseSection::class, CourseContent::class, Instructor::class, Notification::class,
@@ -24,6 +13,17 @@ import com.codingblocks.cbonlineapp.database.models.SectionWithContent
 )
 @TypeConverters(TimestampConverter::class, CourseIdList::class)
 abstract class AppDatabase : RoomDatabase() {
+
+    companion object {
+
+        fun groupInstructor(courseAndInstructor: List<CourseInstructorPair>): List<CourseAndItsInstructor> {
+            return mutableListOf<CourseAndItsInstructor>().also { items ->
+                courseAndInstructor
+                    .groupBy(keySelector = { it.course }, valueTransform = { it.instructor })
+                    .forEach { items.add(CourseAndItsInstructor(it.key, it.value)) }
+            }
+        }
+    }
 
     abstract fun courseRunDao(): CourseRunDao
 
@@ -48,4 +48,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun jobsDao(): JobsDao
 
     abstract fun featuresDao(): FeaturesDao
+
+
 }

@@ -19,14 +19,14 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bindView(courseRun: CourseRun, ui: MyCourseCardUi, courseDao: CourseDao, courseWithInstructorDao: CourseWithInstructorDao, context: Context) {
 
-        val data = courseDao.getCourse(courseRun.crCourseId)
+        val data = courseDao.getCourses().value!!.get(0)
         ui.courseTitle.text = data.title
         ui.courseRatingBar.rating = data.rating
         ui.courseRatingTv.text = data.rating.toString()
         data.subtitle
         ui.courseCoverImageView.loadImage(data.coverImage)
         ui.courselogo.loadImage(data.logo)
-        val instructorsList = courseWithInstructorDao.getInstructorWithCourseIdNonLive(data.id)
+        val instructorsList = courseWithInstructorDao.getInstructorWithCourseIdNonLive(data.cid)
         var instructors = ""
         for (i in 0 until instructorsList.size) {
             if (i == 0) {
@@ -72,7 +72,7 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.setOnClickListener {
             it.context.startActivity(
                 it.context.intentFor<CourseActivity>(
-                    "courseId" to data.id,
+                    "courseId" to data.cid,
                     "courseName" to data.title,
                     "courseLogo" to data.logo
                 )

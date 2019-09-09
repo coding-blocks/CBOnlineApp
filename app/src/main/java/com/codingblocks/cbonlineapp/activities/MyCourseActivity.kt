@@ -43,7 +43,6 @@ import kotlinx.android.synthetic.main.custom_dialog.view.description
 import kotlinx.android.synthetic.main.report_dialog.view.okBtn
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
-import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -115,7 +114,7 @@ class MyCourseActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListen
             confirmReset()
         }
 
-        viewModel.resetProgres.observe(this, Observer {
+        viewModel.resetProgress.observe(this, Observer {
             finish()
         })
     }

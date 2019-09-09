@@ -7,24 +7,18 @@ import android.view.View.TEXT_ALIGNMENT_CENTER
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.extensions.customViewPager
+import com.codingblocks.cbonlineapp.extensions.shimmerFrameLayout
 import com.codingblocks.cbonlineapp.widgets.ViewPagerCustomDuration
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.tabs.TabLayout
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.wrapContent
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.imageView
-import org.jetbrains.anko.view
-import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.*
 import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.nestedScrollView
@@ -39,6 +33,7 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
     lateinit var tabLayout: TabLayout
     lateinit var homeImg: ImageView
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    lateinit var shimmerLayout: ShimmerFrameLayout
 
     override fun createView(ui: AnkoContext<T>): View = with(ui) {
         swipeRefreshLayout {
@@ -117,8 +112,18 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                         startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                         endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
                         topToBottom = view.id
-                        bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
                     }
+                    shimmerLayout = shimmerFrameLayout {
+                        verticalLayout {
+                            include<CardView>(R.layout.item_skeleton_course_card)
+                            include<CardView>(R.layout.item_skeleton_course_card)
+                            include<CardView>(R.layout.item_skeleton_course_card)
+                        }
+
+                    }.lparams(width = matchParent, height = wrapContent) {
+                        topToBottom = rvCourses.id
+                    }
+
                 }.lparams(width = matchParent, height = matchParent) {
                     isFocusableInTouchMode = true
                     descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS

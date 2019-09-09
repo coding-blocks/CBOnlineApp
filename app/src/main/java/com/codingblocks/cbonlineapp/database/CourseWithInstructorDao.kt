@@ -16,7 +16,7 @@ interface CourseWithInstructorDao {
     @Query("""
         SELECT * FROM instructor
         INNER JOIN coursewithinstructor ON
-        instructor.id = coursewithinstructor.instructor_id
+        instructor.uid = coursewithinstructor.instructor_id
         WHERE coursewithinstructor.course_id = :courseID
         """)
     fun getInstructorWithCourseId(courseID: String): LiveData<List<Instructor>>
@@ -25,7 +25,7 @@ interface CourseWithInstructorDao {
     @Query("""
         SELECT * FROM instructor
         INNER JOIN coursewithinstructor ON
-        instructor.id = coursewithinstructor.instructor_id
+        instructor.uid = coursewithinstructor.instructor_id
         WHERE coursewithinstructor.course_id = :courseID
         """)
     fun getInstructorWithCourseIdNonLive(courseID: String): List<Instructor>
