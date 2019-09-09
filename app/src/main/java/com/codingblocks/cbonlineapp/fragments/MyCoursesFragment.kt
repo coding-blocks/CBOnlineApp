@@ -9,37 +9,27 @@ import android.graphics.drawable.PictureDrawable
 import android.os.Build
 import android.os.Build.VERSION_CODES.N_MR1
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.caverock.androidsvg.SVG
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
-import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
-import com.codingblocks.cbonlineapp.util.COURSE_ID
-import com.codingblocks.cbonlineapp.util.COURSE_NAME
-import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.*
 import com.codingblocks.cbonlineapp.util.NetworkUtils.okHttpClient
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
 import okhttp3.Request
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.ctx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -66,20 +56,21 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         }
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
 
-//        courseDataAdapter =
-//            CourseDataAdapter(
-//                ArrayList(),
-//                viewModel.getCourseDao(),
-//                requireContext(),
-//                viewModel.getCourseWithInstructorDao(),
-//                "myCourses"
-//            )
+        courseDataAdapter = CourseDataAdapter("myCourses")
 
         setHasOptionsMenu(true)
 
-        viewModel.getCourseWithInstructor().observer(this) {
-            val response = CourseInstructorHolder.groupInstructor(it)
-            info { response.toString() }
+        viewModel.getAllCourses().observer(this) {
+            if (it.size > 1) {
+                it.forEach {
+                    if (it != null) {
+                        it.toString()
+                    }
+                }
+                ui.shimmerLayout.stopShimmer()
+            }
+            ui.shimmerLayout.isVisible = it.isEmpty()
+
         }
 
         ui.allcourseText.text = getString(R.string.my_courses)

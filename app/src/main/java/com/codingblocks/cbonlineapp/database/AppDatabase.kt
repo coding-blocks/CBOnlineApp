@@ -11,7 +11,7 @@ import com.codingblocks.cbonlineapp.database.models.*
     entities = [CourseModel::class, SectionModel::class, CourseContent::class, InstructorModel::class, Notification::class,
         CourseInstructorHolder.CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, RunModel::class,
         JobsModel::class, CourseFeatureModel::class
-    ], exportSchema = true, version = 20
+    ], exportSchema = true, version = 21
 )
 @TypeConverters(TimestampConverter::class, CourseIdList::class)
 abstract class AppDatabase : RoomDatabase() {

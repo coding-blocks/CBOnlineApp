@@ -50,7 +50,7 @@ class HomeFragment : Fragment(), AnkoLogger {
         setHasOptionsMenu(true)
 
         courseDataAdapter =
-            CourseDataAdapter(ArrayList())
+            CourseDataAdapter()
         ui.rvCourses.apply {
             isNestedScrollingEnabled = false
             layoutManager = LinearLayoutManager(ctx)

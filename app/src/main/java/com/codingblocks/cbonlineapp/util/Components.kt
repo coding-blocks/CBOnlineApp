@@ -46,7 +46,7 @@ object Components {
         }
         updateView.okBtn.setOnClickListener {
             when (type) {
-                "trial" -> context.startActivity(context.intentFor<HomeActivity>("course" to "mycourses").singleTop())
+                "trial" -> context.startActivity(context.intentFor<HomeActivity>("courseRun" to "mycourses").singleTop())
                 "verify" -> {
                     openChrome(context, "https://account.codingblocks.com/users/me")
                 }

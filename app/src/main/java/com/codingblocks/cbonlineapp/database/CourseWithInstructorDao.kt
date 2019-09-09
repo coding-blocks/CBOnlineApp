@@ -1,12 +1,14 @@
 package com.codingblocks.cbonlineapp.database
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.database.models.InstructorModel
+import com.codingblocks.cbonlineapp.database.models.SectionWithContent
 
 
 @Dao
@@ -33,10 +35,17 @@ interface CourseWithInstructorDao {
     SELECT * FROM RunModel r,InstructorModel i
 	   INNER JOIN CourseModel c ON (c.cid = r.crCourseId AND c.cid = ci.course_id)
 	   INNER JOIN coursewithinstructor ci ON i.uid = ci.instructor_id
-	   where r.crAttemptId = "'"+"'" AND r.recommended = 1
-
+        where crAttemptId == + "'" + "'"
     """)
-    fun getCourseInstructor(): LiveData<List<CourseInstructorHolder.CourseInstructorPair>>
+    fun getAllCourses(): LiveData<List<CourseInstructorHolder.CourseInstructorPair>>
+
+    @Query("""
+    SELECT * FROM RunModel r,InstructorModel i
+	   INNER JOIN CourseModel c ON (c.cid = r.crCourseId AND c.cid = ci.course_id)
+	   INNER JOIN coursewithinstructor ci ON i.uid = ci.instructor_id
+        where crAttemptId != "'"+"'"
+    """)
+    fun getMyCourses(): DataSource.Factory<Int, CourseInstructorHolder.CourseInstructorPair>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(join: CourseInstructorHolder.CourseWithInstructor)

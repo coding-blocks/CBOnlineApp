@@ -39,7 +39,7 @@ class URLRouterActivity : AppCompatActivity() {
     }
 
     private fun openRouter(uri: Uri) {
-        Router.open("activity://course/$uri").otherwise { fallBack() }
+        Router.open("activity://courseRun/$uri").otherwise { fallBack() }
         finish()
     }
 }

@@ -35,7 +35,7 @@ class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Co
         view.button.text = list[position].buttonText
         view.imgView.loadImage(list[position].img)
         view.button.setOnClickListener {
-            Router.open("activity://course/" + list[position].buttonLink).otherwise {
+            Router.open("activity://courseRun/" + list[position].buttonLink).otherwise {
                 Components.openChrome(it.context, list[position].buttonLink)
             }
         }

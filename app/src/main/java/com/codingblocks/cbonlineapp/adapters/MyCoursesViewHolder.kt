@@ -1,40 +1,11 @@
 package com.codingblocks.cbonlineapp.adapters
 
-import android.content.Context
 import android.view.View
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.activities.MyCourseActivity
-import com.codingblocks.cbonlineapp.database.CourseDao
-import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
-import com.codingblocks.cbonlineapp.extensions.loadImage
-import com.codingblocks.cbonlineapp.extensions.observer
-import com.codingblocks.cbonlineapp.util.COURSE_ID
-import com.codingblocks.cbonlineapp.util.COURSE_NAME
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.my_course_card_horizontal.view.courseBtn1
-import kotlinx.android.synthetic.main.my_course_card_horizontal.view.courseCoverImgView
-import kotlinx.android.synthetic.main.my_course_card_horizontal.view.courseDescription
-import kotlinx.android.synthetic.main.my_course_card_horizontal.view.courseInstrucImgView1
-import kotlinx.android.synthetic.main.my_course_card_horizontal.view.courseInstrucImgView2
-import kotlinx.android.synthetic.main.my_course_card_horizontal.view.courseInstructors
-import kotlinx.android.synthetic.main.my_course_card_horizontal.view.courseLogo
-import kotlinx.android.synthetic.main.my_course_card_horizontal.view.courseProgress
-import kotlinx.android.synthetic.main.my_course_card_horizontal.view.courseRatingBar
-import kotlinx.android.synthetic.main.my_course_card_horizontal.view.courseRatingTv
-import kotlinx.android.synthetic.main.my_course_card_horizontal.view.courseRunDescription
-import kotlinx.android.synthetic.main.my_course_card_horizontal.view.courseTitle
-import kotlinx.android.synthetic.main.my_course_card_horizontal.view.trialTv
+import kotlinx.android.synthetic.main.my_course_card_horizontal.view.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.singleTop
-import org.jetbrains.anko.uiThread
-import kotlin.concurrent.thread
 
 class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), AnkoLogger {
 
@@ -44,8 +15,8 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
 //            doAsync {
 //                val data = courseDao.getCourses().value!!.get(0)
 //                uiThread {
-//                    data.run {
-//                        itemView.courseTitle.text = title
+//        data.run {
+        //                        itemView.courseTitle.text = title
 //                        itemView.courseDescription.text = subtitle
 //                        itemView.courseRatingTv.text = rating.toString()
 //                        itemView.courseRatingBar.rating = rating
@@ -85,31 +56,29 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
 //                        }
 //                    }
 //
-//                    // bind Instructors
-//                    instructorDao.getInstructorWithCourseId(data.cid).observer((context as LifecycleOwner)) {
-//                        val instructorsList = it
-//
-//                        var instructors = ""
-//
-//                        for (i in 0 until instructorsList.size) {
-//                            if (i == 0) {
-//                                Picasso.get().load(instructorsList[i].photo)
-//                                    .fit().into(itemView.courseInstrucImgView1)
-//                                instructors += instructorsList[i].name
-//                            } else if (i == 1) {
-//                                itemView.courseInstrucImgView2.visibility = View.VISIBLE
-//                                Picasso.get().load(instructorsList[i].photo)
-//                                    .fit().into(itemView.courseInstrucImgView2)
-//                                instructors += ", ${instructorsList[i].name}"
-//                            } else if (i >= 2) {
-//                                instructors += "+ " + (instructorsList.size - 2) + " more"
-//                                break
-//                            }
-//                        }
-//                        itemView.courseInstructors.text = instructors
-//                    }
-//                }
-//            }
-//        }
+
+        /*
+        Bind @InstructorModel
+         */
+        var instructors = ""
+        with(courseRun.instructors) {
+            for (i in this.indices) {
+                if (i == 0) {
+                    Picasso.get().load(this[i].photo)
+                        .fit().into(itemView.courseInstrucImgView1)
+                    instructors += this[i].name
+                } else if (i == 1) {
+                    itemView.courseInstrucImgView2.visibility = View.VISIBLE
+                    Picasso.get().load(this[i].photo)
+                        .fit().into(itemView.courseInstrucImgView2)
+                    instructors += ", ${this[i].name}"
+                } else if (i >= 2) {
+                    instructors += "+ " + (this.size - 2) + " more"
+                    break
+                }
+            }
+            itemView.courseInstructors.text = instructors
+        }
     }
 }
+

@@ -43,16 +43,28 @@ class CourseInstructorHolder {
 
 
     data class CourseAndItsInstructor(
-        val course: CourseRunPair,
+        val courseRun: CourseRunPair,
         val instructors: List<InstructorModel>
     )
 
     companion object {
         fun groupInstructor(courseAndInstructor: List<CourseInstructorPair>): List<CourseAndItsInstructor> {
             return mutableListOf<CourseAndItsInstructor>().also { items ->
+                val list = mutableListOf<String>()
                 courseAndInstructor
-                    .groupBy(keySelector = { it.courseRun }, valueTransform = { it.instructor })
-                    .forEach { items.add(CourseAndItsInstructor(it.key, it.value)) }
+                    .groupBy(keySelector = { it.courseRun.run }, valueTransform = { it.instructor })
+                    .forEach {
+                        courseAndInstructor.forEach { run ->
+                            it.key
+                            if (run.courseRun.run.crAttemptId == it.key.crAttemptId && !list.contains(it.key.crAttemptId)) {
+                                list.add(it.key.crAttemptId)
+                                items.add(CourseAndItsInstructor(CourseRunPair(it.key, run.courseRun.course), it.value))
+                                return@forEach
+                            }
+
+
+                        }
+                    }
             }
         }
     }

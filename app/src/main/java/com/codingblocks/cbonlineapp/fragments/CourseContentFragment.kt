@@ -101,7 +101,7 @@ class CourseContentFragment : Fragment(), AnkoLogger,
                 alert {
                     title = "Error Fetching Course"
                     message = """
-                        There was an error downloading course contents.
+                        There was an error downloading courseRun contents.
                         Please contact support@codingblocks.com
                         """.trimIndent()
                     yesButton {

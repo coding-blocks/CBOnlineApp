@@ -3,6 +3,8 @@ package com.codingblocks.cbonlineapp.viewmodels
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.database.models.*
 import com.codingblocks.cbonlineapp.extensions.greater
@@ -32,11 +34,15 @@ class HomeViewModel(
 
     fun getAllRuns() = runDao.getAllRuns()
 
-    fun getMyRuns() = runDao.getMyRuns()
+    fun getAllCourses() = courseWithInstructorDao.getAllCourses()
 
     fun getTopRun() = runDao.getTopRun()
+    private val config = PagedList.Config.Builder()
+        .setEnablePlaceholders(true)
+        .setPageSize(10)
+        .build()
 
-    fun getCourseWithInstructor() = courseWithInstructorDao.getCourseInstructor()
+    fun getMyRuns() = LivePagedListBuilder(courseWithInstructorDao.getMyCourses(), config).build()
 
     fun fetchRecommendedCourses(recommended: Boolean = true) {
         Clients.onlineV2JsonApi.getRecommendedCourses()

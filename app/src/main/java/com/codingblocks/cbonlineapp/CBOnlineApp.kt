@@ -83,11 +83,11 @@ class CBOnlineApp : Application() {
         // Configure Routers
         try {
             Router.initActivityRouter(applicationContext, IActivityRouteTableInitializer { router ->
-                router["activity://course/https://online.codingblocks.com/classroom/course/:s{$COURSE_ID}/run/:s{$RUN_ID}/:s{$COURSE_TAB}"] =
+                router["activity://courseRun/https://online.codingblocks.com/classroom/courseRun/:s{$COURSE_ID}/run/:s{$RUN_ID}/:s{$COURSE_TAB}"] =
                     MyCourseActivity::class.java
-                router["activity://course/https://online.codingblocks.com/courses/:s{courseId}"] =
+                router["activity://courseRun/https://online.codingblocks.com/courses/:s{courseId}"] =
                     CourseActivity::class.java
-                router["activity://course/https://online.codingblocks.com/player/:s{$RUN_ATTEMPT_ID}/content/:s{$SECTION_ID}/:s{$CONTENT_ID}"] =
+                router["activity://courseRun/https://online.codingblocks.com/player/:s{$RUN_ATTEMPT_ID}/content/:s{$SECTION_ID}/:s{$CONTENT_ID}"] =
                     VideoPlayerActivity::class.java
             })
         } catch (e: ConcurrentModificationException) {

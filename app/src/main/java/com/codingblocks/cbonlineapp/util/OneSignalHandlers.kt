@@ -22,7 +22,7 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
     override fun notificationOpened(result: OSNotificationOpenResult) {
         val url = result.notification.payload.launchURL
 
-        Router.open("activity://course/$url").otherwise {
+        Router.open("activity://courseRun/$url").otherwise {
             Components.openChrome(mInstance, url, true)
         }
         doAsync {

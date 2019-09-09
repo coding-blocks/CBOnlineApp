@@ -1,16 +1,13 @@
 package com.codingblocks.cbonlineapp.adapters
 
-import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.codingblocks.cbonlineapp.database.CourseDao
-import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.ui.MyCourseCardUi
 
 class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bindView(course: CourseInstructorHolder.CourseAndItsInstructor, ui: MyCourseCardUi) {
+    fun bindView(course: CourseInstructorHolder.CourseAndItsInstructor?, ui: MyCourseCardUi) {
 //
 //        val data = courseDao.getCourses().value!!.get(0)
 //        ui.courseTitle.text = data.title

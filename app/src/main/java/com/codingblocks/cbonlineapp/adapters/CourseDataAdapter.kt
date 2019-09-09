@@ -1,35 +1,22 @@
 package com.codingblocks.cbonlineapp.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.CourseDao
-import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.ui.MyCourseCardUi
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
-import kotlin.collections.ArrayList
 
 class CourseDataAdapter(
-    private var courseData: ArrayList<CourseInstructorHolder.CourseAndItsInstructor>,
     private val type: String = "allCourses"
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AnkoLogger {
+) : ListAdapter<CourseInstructorHolder.CourseAndItsInstructor, RecyclerView.ViewHolder>(diffCallback), AnkoLogger {
 
     val ui = MyCourseCardUi()
 
-    fun setData(courseData: ArrayList<CourseInstructorHolder.CourseAndItsInstructor>) {
-        this.courseData = courseData
-
-        notifyDataSetChanged()
-    }
-
-    override fun getItemCount(): Int {
-
-        return courseData.size ?: 0
-    }
 
     override fun getItemViewType(position: Int): Int {
         return position
@@ -44,11 +31,20 @@ class CourseDataAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        courseData?.get(position)?.let {
-            when (type) {
-                "myCourses" -> (holder as MyCoursesViewHolder).bindView(it)
-                "allCourses" -> (holder as AllCoursesViewHolder).bindView(it, ui)
-            }
+        when (type) {
+            "myCourses" -> (holder as MyCoursesViewHolder).bindView(getItem(position))
+            "allCourses" -> (holder as AllCoursesViewHolder).bindView(getItem(position), ui)
+        }
+    }
+
+    companion object {
+
+        private val diffCallback = object : DiffUtil.ItemCallback<CourseInstructorHolder.CourseAndItsInstructor>() {
+            override fun areItemsTheSame(oldItem: CourseInstructorHolder.CourseAndItsInstructor, newItem: CourseInstructorHolder.CourseAndItsInstructor): Boolean =
+                oldItem.courseRun.run.crUid == newItem.courseRun.run.crUid
+
+            override fun areContentsTheSame(oldItem: CourseInstructorHolder.CourseAndItsInstructor, newItem: CourseInstructorHolder.CourseAndItsInstructor): Boolean =
+                oldItem == newItem
         }
     }
 }

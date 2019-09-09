@@ -46,12 +46,12 @@ class NotificationsActivity : AppCompatActivity() {
                 videoId: String
             ) {
                 notificationDao.updateseen(notificationID)
-                if (url.contains("course", true) ||
+                if (url.contains("courseRun", true) ||
                     url.contains("classroom", true)
                 ) {
-                    Router.open("activity://course/$url")
+                    Router.open("activity://courseRun/$url")
                 } else if (url.contains("player", true)) {
-                    val activityRoute = Router.getRoute("activity://course/$url") as ActivityRoute
+                    val activityRoute = Router.getRoute("activity://courseRun/$url") as ActivityRoute
                     activityRoute
                         .withParams(VIDEO_ID, videoId)
                         .open()
