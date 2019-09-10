@@ -120,7 +120,6 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                                 }
                                 courseInstrucImgView2 = circleImageView {
                                     elevation = dip(2).toFloat()
-                                    visibility = View.GONE
                                 }.lparams(dip(45), dip(45)) {
                                     marginStart = dip(35)
                                     topMargin = dip(8)

@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.CarouselSliderAdapter
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.adapters.EndlessPagerAdapter
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
@@ -21,7 +23,6 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
-import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment(), AnkoLogger {
 
@@ -49,8 +50,7 @@ class HomeFragment : Fragment(), AnkoLogger {
 
         setHasOptionsMenu(true)
 
-        courseDataAdapter =
-            CourseDataAdapter()
+        courseDataAdapter = CourseDataAdapter()
         ui.rvCourses.apply {
             isNestedScrollingEnabled = false
             layoutManager = LinearLayoutManager(ctx)
@@ -99,16 +99,20 @@ class HomeFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-//        viewModel.getRecommendedRuns().observer(viewLifecycleOwner) {
-//            if (it.isNotEmpty()) {
-//                courseDataAdapter.setData(it.shuffled().filter { c ->
-//                    c.title.contains(searchQuery, true) ||
-//                        c.summary.contains(searchQuery, true)
-//                } as ArrayList<CourseRun>)
-//            } else {
-//                viewModel.fetchRecommendedCourses()
-//            }
-//        }
+        viewModel.getAllCourses().observer(this) {
+            if (it.isNotEmpty()) {
+                val response = CourseInstructorHolder.groupInstructorByCourse(it)
+                courseDataAdapter.submitList(response.filter { c ->
+                    c.courseRun.course.title.contains(searchQuery, true) ||
+                        c.courseRun.course.summary.contains(searchQuery, true)
+                })
+                ui.shimmerLayout.stopShimmer()
+            } else {
+                viewModel.fetchRecommendedCourses()
+            }
+            ui.shimmerLayout.isVisible = it.isEmpty()
+
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

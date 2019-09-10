@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 21,
-    "identityHash": "fa0fc3565a7ce637ad320c1202eb4f03",
+    "identityHash": "221949d5db3766b043fc1e50ced956f7",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -801,7 +801,7 @@
       },
       {
         "tableName": "RunModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`crUid` TEXT NOT NULL, `crAttemptId` TEXT NOT NULL, `crName` TEXT NOT NULL, `crDescription` TEXT NOT NULL, `crEnrollmentStart` TEXT NOT NULL, `crEnrollmentEnd` TEXT NOT NULL, `crStart` TEXT NOT NULL, `crEnd` TEXT NOT NULL, `crPrice` TEXT NOT NULL, `crMrp` TEXT NOT NULL, `crCourseId` TEXT NOT NULL, `crUpdatedAt` TEXT NOT NULL, `progress` REAL NOT NULL, `premium` INTEGER NOT NULL, `hits` INTEGER NOT NULL, `recommended` INTEGER NOT NULL, `whatsappLink` TEXT NOT NULL, `crRunEnd` TEXT NOT NULL, `totalContents` INTEGER NOT NULL, `completedContents` INTEGER NOT NULL, `mentorApproved` INTEGER NOT NULL, `completionThreshold` INTEGER NOT NULL, `productId` INTEGER NOT NULL, PRIMARY KEY(`crUid`), FOREIGN KEY(`crCourseId`) REFERENCES `CourseModel`(`cid`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`crUid` TEXT NOT NULL, `crAttemptId` TEXT, `crName` TEXT NOT NULL, `crDescription` TEXT NOT NULL, `crEnrollmentStart` TEXT NOT NULL, `crEnrollmentEnd` TEXT NOT NULL, `crStart` TEXT NOT NULL, `crEnd` TEXT NOT NULL, `crPrice` TEXT NOT NULL, `crMrp` TEXT NOT NULL, `crCourseId` TEXT NOT NULL, `crUpdatedAt` TEXT NOT NULL, `progress` REAL NOT NULL, `premium` INTEGER NOT NULL, `hits` INTEGER NOT NULL, `recommended` INTEGER NOT NULL, `whatsappLink` TEXT NOT NULL, `crRunEnd` TEXT NOT NULL, `totalContents` INTEGER NOT NULL, `completedContents` INTEGER NOT NULL, `mentorApproved` INTEGER NOT NULL, `completionThreshold` INTEGER NOT NULL, `productId` INTEGER NOT NULL, PRIMARY KEY(`crUid`), FOREIGN KEY(`crCourseId`) REFERENCES `CourseModel`(`cid`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "crUid",
@@ -813,7 +813,7 @@
             "fieldPath": "crAttemptId",
             "columnName": "crAttemptId",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "crName",
@@ -1151,7 +1151,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fa0fc3565a7ce637ad320c1202eb4f03')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '221949d5db3766b043fc1e50ced956f7')"
     ]
   }
 }

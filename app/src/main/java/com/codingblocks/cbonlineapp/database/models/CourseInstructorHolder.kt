@@ -48,7 +48,7 @@ class CourseInstructorHolder {
     )
 
     companion object {
-        fun groupInstructor(courseAndInstructor: List<CourseInstructorPair>): List<CourseAndItsInstructor> {
+        fun groupInstructorByRun(courseAndInstructor: List<CourseInstructorPair>): List<CourseAndItsInstructor> {
             return mutableListOf<CourseAndItsInstructor>().also { items ->
                 val list = mutableListOf<String>()
                 courseAndInstructor
@@ -57,8 +57,28 @@ class CourseInstructorHolder {
                         courseAndInstructor.forEach { run ->
                             it.key
                             if (run.courseRun.run.crAttemptId == it.key.crAttemptId && !list.contains(it.key.crAttemptId)) {
-                                list.add(it.key.crAttemptId)
+                                list.add(it.key.crAttemptId ?: "")
                                 items.add(CourseAndItsInstructor(CourseRunPair(it.key, run.courseRun.course), it.value))
+                                return@forEach
+                            }
+
+
+                        }
+                    }
+            }
+        }
+
+        fun groupInstructorByCourse(courseAndInstructor: List<CourseInstructorPair>): List<CourseAndItsInstructor> {
+            return mutableListOf<CourseAndItsInstructor>().also { items ->
+                val list = mutableListOf<String>()
+                courseAndInstructor
+                    .groupBy(keySelector = { it.courseRun.course }, valueTransform = { it.instructor })
+                    .forEach {
+                        courseAndInstructor.forEach { run ->
+                            it.key
+                            if (run.courseRun.course.cid == it.key.cid && !list.contains(it.key.cid)) {
+                                list.add(it.key.cid)
+                                items.add(CourseAndItsInstructor(CourseRunPair(run.courseRun.run, it.key), it.value))
                                 return@forEach
                             }
 

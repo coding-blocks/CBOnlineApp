@@ -23,26 +23,17 @@ class HomeViewModel(
     var carouselCards: MutableLiveData<List<CarouselCards>> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
 
-    fun getCourseDao() = courseDao
-
-    fun getCourseWithInstructorDao() = courseWithInstructorDao
-
-    fun getRecommendedRuns() = runDao.getRecommendedRuns()
-
-    fun getCourseById(id: String) = courseDao.getCourses().value!!.get(0)
-
-
-    fun getAllRuns() = runDao.getAllRuns()
-
-    fun getAllCourses() = courseWithInstructorDao.getAllCourses()
-
     fun getTopRun() = runDao.getTopRun()
+
     private val config = PagedList.Config.Builder()
         .setEnablePlaceholders(true)
-        .setPageSize(30)
+        .setPageSize(10)
         .build()
 
     fun getMyRuns() = LivePagedListBuilder(courseWithInstructorDao.getMyCourses(), config).build()
+
+    fun getAllCourses() = LivePagedListBuilder(courseWithInstructorDao.getAllCourses(), config).build()
+
 
     fun fetchRecommendedCourses(recommended: Boolean = true) {
         Clients.onlineV2JsonApi.getRecommendedCourses()
@@ -87,7 +78,7 @@ class HomeViewModel(
                                         runDao.insertNew(
                                             RunModel(
                                                 id,
-                                                "",
+                                                null,
                                                 name,
                                                 description,
                                                 enrollmentStart,

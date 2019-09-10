@@ -8,7 +8,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.database.models.InstructorModel
-import com.codingblocks.cbonlineapp.database.models.SectionWithContent
 
 
 @Dao
@@ -35,15 +34,15 @@ interface CourseWithInstructorDao {
     SELECT * FROM RunModel r,InstructorModel i
 	   INNER JOIN CourseModel c ON (c.cid = r.crCourseId AND c.cid = ci.course_id)
 	   INNER JOIN coursewithinstructor ci ON i.uid = ci.instructor_id
-        where crAttemptId == + "'" + "'"
+       WHERE r.crAttemptId IS NULL
     """)
-    fun getAllCourses(): LiveData<List<CourseInstructorHolder.CourseInstructorPair>>
+    fun getAllCourses(): DataSource.Factory<Int, CourseInstructorHolder.CourseInstructorPair>
 
     @Query("""
     SELECT * FROM RunModel r,InstructorModel i
 	   INNER JOIN CourseModel c ON (c.cid = r.crCourseId AND c.cid = ci.course_id)
 	   INNER JOIN coursewithinstructor ci ON i.uid = ci.instructor_id
-        where crAttemptId != "'"+"'"
+       WHERE r.crAttemptId IS NOT NULL ORDER BY hits DESC
     """)
     fun getMyCourses(): DataSource.Factory<Int, CourseInstructorHolder.CourseInstructorPair>
 

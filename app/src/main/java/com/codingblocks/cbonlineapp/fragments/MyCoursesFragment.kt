@@ -1,11 +1,8 @@
 package com.codingblocks.cbonlineapp.fragments
 
 import android.annotation.TargetApi
-import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
-import android.graphics.drawable.Icon
-import android.graphics.drawable.PictureDrawable
 import android.os.Build
 import android.os.Build.VERSION_CODES.N_MR1
 import android.os.Bundle
@@ -14,20 +11,15 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.caverock.androidsvg.SVG
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
-import com.codingblocks.cbonlineapp.util.*
-import com.codingblocks.cbonlineapp.util.NetworkUtils.okHttpClient
 import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
-import okhttp3.Request
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
@@ -61,16 +53,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
         setHasOptionsMenu(true)
 
-        viewModel.getMyRuns().observer(this) {
-            if (it.isNotEmpty()) {
-                val response = CourseInstructorHolder.groupInstructor(it)
-                courseDataAdapter.submitList(response)
-                ui.shimmerLayout.stopShimmer()
-            }
-            ui.shimmerLayout.isVisible = it.isEmpty()
-
-        }
-
         ui.allcourseText.text = getString(R.string.my_courses)
         ui.titleText.visibility = View.GONE
         ui.homeImg.visibility = View.GONE
@@ -80,9 +62,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             layoutManager = LinearLayoutManager(ctx)
             adapter = courseDataAdapter
         }
-
-        viewModel.fetchMyCourses()
-
         displayCourses()
 
         ui.swipeRefreshLayout.setOnRefreshListener {
@@ -99,16 +78,20 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-//        viewModel.getMyRuns().observer(viewLifecycleOwner) {
-//            if (it.isNotEmpty()) {
-//                courseDataAdapter.setData(it.filter { c ->
-//                    c.title.contains(searchQuery, true) ||
-//                        c.summary.contains(searchQuery, true)
-//                } as ArrayList<CourseRun>)
-//            } else {
-//                viewModel.fetchMyCourses()
-//            }
-//        }
+        viewModel.getMyRuns().observer(this) {
+            if (it.isNotEmpty()) {
+                val response = CourseInstructorHolder.groupInstructorByRun(it)
+                courseDataAdapter.submitList(response.filter { c ->
+                    c.courseRun.course.title.contains(searchQuery, true) ||
+                        c.courseRun.course.summary.contains(searchQuery, true)
+                })
+                ui.shimmerLayout.stopShimmer()
+            } else {
+                viewModel.fetchMyCourses()
+            }
+            ui.shimmerLayout.isVisible = it.isEmpty()
+
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -141,39 +124,39 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
         viewModel.getTopRun().observeOnce {
             doAsync {
-                it.forEachIndexed { index, courseRun ->
-                    val data = viewModel.getCourseById(courseRun.crCourseId)
-
-                    val intent = Intent(activity, MyCourseActivity::class.java).apply {
-                        action = Intent.ACTION_VIEW
-                        putExtra(COURSE_ID, courseRun.crCourseId)
-                        putExtra(RUN_ATTEMPT_ID, courseRun.crAttemptId)
-                        putExtra(COURSE_NAME, data.title)
-                        putExtra(RUN_ID, courseRun.crUid)
-                    }
-
-                    val shortcut = ShortcutInfo.Builder(requireContext(), "topcourse$index")
-                    shortcut.setIntent(intent)
-//                    shortcut.setLongLabel(courseRun.title)
-//                    shortcut.setShortLabel(courseRun.title)
-                    shortcut.setDisabledMessage("Login to open this")
-
-                    okHttpClient.newCall(Request.Builder().url(data.logo).build())
-                        .execute().body()?.let {
-                            with(SVG.getFromInputStream(it.byteStream())) {
-                                val picDrawable = PictureDrawable(
-                                    this.renderToPicture(
-                                        400, 400
-                                    )
-                                )
-                                val bitmap =
-                                    MediaUtils.getBitmapFromPictureDrawable(picDrawable)
-                                val circularBitmap = MediaUtils.getCircularBitmap(bitmap)
-                                shortcut.setIcon(Icon.createWithBitmap(circularBitmap))
-                                shortcutList.add(index, shortcut.build())
-                            }
-                        }
-                }
+                //                it.forEachIndexed { index, courseRun ->
+//                    val data = viewModel.getCourseById(courseRun.crCourseId)
+//
+//                    val intent = Intent(activity, MyCourseActivity::class.java).apply {
+//                        action = Intent.ACTION_VIEW
+//                        putExtra(COURSE_ID, courseRun.crCourseId)
+//                        putExtra(RUN_ATTEMPT_ID, courseRun.crAttemptId)
+//                        putExtra(COURSE_NAME, data.title)
+//                        putExtra(RUN_ID, courseRun.crUid)
+//                    }
+//
+//                    val shortcut = ShortcutInfo.Builder(requireContext(), "topcourse$index")
+//                    shortcut.setIntent(intent)
+////                    shortcut.setLongLabel(courseRun.title)
+////                    shortcut.setShortLabel(courseRun.title)
+//                    shortcut.setDisabledMessage("Login to open this")
+//
+//                    okHttpClient.newCall(Request.Builder().url(data.logo).build())
+//                        .execute().body()?.let {
+//                            with(SVG.getFromInputStream(it.byteStream())) {
+//                                val picDrawable = PictureDrawable(
+//                                    this.renderToPicture(
+//                                        400, 400
+//                                    )
+//                                )
+//                                val bitmap =
+//                                    MediaUtils.getBitmapFromPictureDrawable(picDrawable)
+//                                val circularBitmap = MediaUtils.getCircularBitmap(bitmap)
+//                                shortcut.setIcon(Icon.createWithBitmap(circularBitmap))
+//                                shortcutList.add(index, shortcut.build())
+//                            }
+//                        }
+//                }
                 sM?.dynamicShortcuts = shortcutList
             }
         }

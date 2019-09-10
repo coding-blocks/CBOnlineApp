@@ -3,36 +3,43 @@ package com.codingblocks.cbonlineapp.adapters
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
+import com.codingblocks.cbonlineapp.extensions.loadImage
 import com.codingblocks.cbonlineapp.ui.MyCourseCardUi
+import com.squareup.picasso.Picasso
 
 class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bindView(course: CourseInstructorHolder.CourseAndItsInstructor?, ui: MyCourseCardUi) {
-//
-//        val data = courseDao.getCourses().value!!.get(0)
-//        ui.courseTitle.text = data.title
-//        ui.courseRatingBar.rating = data.rating
-//        ui.courseRatingTv.text = data.rating.toString()
-//        data.subtitle
-//        ui.courseCoverImageView.loadImage(data.coverImage)
-//        ui.courselogo.loadImage(data.logo)
-//        val instructorsList = courseWithInstructorDao.getInstructorWithCourseIdNonLive(data.cid)
-//        var instructors = ""
-//        for (i in 0 until instructorsList.size) {
-//            if (i == 0) {
-//                Picasso.get().load(instructorsList[i].photo)
-//                    .fit().into(ui.courseInstrucImgView1)
-//                instructors += instructorsList[i].name
-//            } else if (i == 1) {
-//                ui.courseInstrucImgView2.visibility = View.VISIBLE
-//                Picasso.get().load(instructorsList[i].photo)
-//                    .fit().into(ui.courseInstrucImgView2)
-//                instructors += ", ${instructorsList[i].name}"
-//            } else if (i >= 2) {
-//                instructors += "+ " + (instructorsList.size - 2) + " more"
-//                break
-//            }
-//        }
+    fun bindView(model: CourseInstructorHolder.CourseAndItsInstructor, ui: MyCourseCardUi) {
+
+
+        with(model.courseRun.course) {
+            ui.courseTitle.text = title
+            ui.courseRatingTv.text = rating.toString()
+            ui.courseRatingBar.rating = rating
+            ui.courseCoverImageView.loadImage(coverImage)
+            ui.courselogo.loadImage(logo)
+        }
+
+        var instructors = ""
+        with(model.instructors) {
+            if (this.size < 2)
+                ui.courseInstrucImgView2.visibility = View.INVISIBLE
+            for (i in indices) {
+                if (i == 0) {
+                    Picasso.get().load(this[i].photo)
+                        .fit().into(ui.courseInstrucImgView1)
+                    instructors += this[i].name
+                } else if (i == 1) {
+                    Picasso.get().load(this[i].photo)
+                        .fit().into(ui.courseInstrucImgView2)
+                    instructors += ", ${this[i].name}"
+                } else if (i >= 2) {
+                    instructors += " + " + (this.size - 2) + " more"
+                    break
+                }
+            }
+            ui.courseInstructors.text = instructors
+        }
 //        if (instructorsList.size < 2) {
 //            ui.courseInstrucImgView2.visibility = View.GONE
 //        }

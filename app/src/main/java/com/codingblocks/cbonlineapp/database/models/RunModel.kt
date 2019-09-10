@@ -19,7 +19,7 @@ import androidx.room.PrimaryKey
 data class RunModel(
     @PrimaryKey
     var crUid: String = "",
-    var crAttemptId: String = "",
+    var crAttemptId: String? = null,
     var crName: String = "",
     var crDescription: String = "",
     var crEnrollmentStart: String = "",
