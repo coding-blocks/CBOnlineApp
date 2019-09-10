@@ -39,12 +39,13 @@ interface CourseWithInstructorDao {
     fun getAllCourses(): DataSource.Factory<Int, CourseInstructorHolder.CourseInstructorPair>
 
     @Query("""
-    SELECT * FROM RunModel r,InstructorModel i
-	   INNER JOIN CourseModel c ON (c.cid = r.crCourseId AND c.cid = ci.course_id)
-	   INNER JOIN coursewithinstructor ci ON i.uid = ci.instructor_id
+    SELECT * FROM RunModel r
+	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
+	   INNER JOIN coursewithinstructor ci ON ci.course_id = c.cid
+       INNER JOIN InstructorModel i ON i.uid = ci.instructor_id
        WHERE r.crAttemptId IS NOT NULL ORDER BY hits DESC
     """)
-    fun getMyCourses(): DataSource.Factory<Int, CourseInstructorHolder.CourseInstructorPair>
+    fun getMyCourses(): LiveData<List<CourseInstructorHolder.CourseInstructorPair>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(join: CourseInstructorHolder.CourseWithInstructor)

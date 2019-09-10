@@ -27,10 +27,10 @@ class HomeViewModel(
 
     private val config = PagedList.Config.Builder()
         .setEnablePlaceholders(true)
-        .setPageSize(10)
+        .setPageSize(5)
         .build()
 
-    fun getMyRuns() = LivePagedListBuilder(courseWithInstructorDao.getMyCourses(), config).build()
+    fun getMyRuns() = courseWithInstructorDao.getMyCourses()
 
     fun getAllCourses() = LivePagedListBuilder(courseWithInstructorDao.getAllCourses(), config).build()
 

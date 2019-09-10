@@ -40,7 +40,7 @@ class CourseDataAdapter(
 
         private val diffCallback = object : DiffUtil.ItemCallback<CourseInstructorHolder.CourseAndItsInstructor>() {
             override fun areItemsTheSame(oldItem: CourseInstructorHolder.CourseAndItsInstructor, newItem: CourseInstructorHolder.CourseAndItsInstructor): Boolean =
-                oldItem.courseRun.run.crUid == newItem.courseRun.run.crUid
+                oldItem.courseRun.crUid == newItem.courseRun.crUid
 
             override fun areContentsTheSame(oldItem: CourseInstructorHolder.CourseAndItsInstructor, newItem: CourseInstructorHolder.CourseAndItsInstructor): Boolean =
                 oldItem == newItem

@@ -16,7 +16,7 @@ import androidx.room.PrimaryKey
         )
     ]
 )
-data class RunModel(
+open class RunModel(
     @PrimaryKey
     var crUid: String = "",
     var crAttemptId: String? = null,

@@ -19,4 +19,8 @@ data class CourseModel(
     var coverImage: String,
     var categoryId: Int,
     var faq: String? = ""
-)
+) {
+    constructor() : this("", "", "", "", "",
+        "", "", 0, 0f, "",
+        "", -1, "")
+}

@@ -29,7 +29,7 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
             itemView.courseCoverImgView.loadImage(coverImage)
             itemView.courseLogo.loadImage(logo)
         }
-        with(model.courseRun.run) {
+        with(model.courseRun) {
             itemView.courseRunDescription.text = crDescription
             itemView.courseProgress.progress = progress.toInt()
             itemView.trialTv.isVisible = !premium
@@ -48,9 +48,9 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
                 it.context.startActivity(
                     it.context.intentFor<MyCourseActivity>(
                         COURSE_ID to model.courseRun.course.cid,
-                        RUN_ATTEMPT_ID to model.courseRun.run.crAttemptId,
+                        RUN_ATTEMPT_ID to model.courseRun.crAttemptId,
                         COURSE_NAME to model.courseRun.course.title,
-                        RUN_ID to model.courseRun.run.crUid
+                        RUN_ID to model.courseRun.crUid
                     ).singleTop()
                 )
             }

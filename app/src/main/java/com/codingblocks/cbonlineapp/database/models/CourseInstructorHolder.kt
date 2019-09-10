@@ -27,12 +27,11 @@ class CourseInstructorHolder {
         @ColumnInfo(name = "instructor_id") val instructorId: String
     )
 
-    class CourseRunPair(
+    class CourseRunPair : RunModel() {
         @Embedded
-        var run: RunModel,
-        @Embedded
-        var course: CourseModel
-    )
+        var course: CourseModel = CourseModel()
+
+    }
 
     class CourseInstructorPair(
         @Embedded
@@ -49,20 +48,17 @@ class CourseInstructorHolder {
 
     companion object {
         fun groupInstructorByRun(courseAndInstructor: List<CourseInstructorPair>): List<CourseAndItsInstructor> {
+            val list = mutableListOf<String>()
             return mutableListOf<CourseAndItsInstructor>().also { items ->
-                val list = mutableListOf<String>()
                 courseAndInstructor
-                    .groupBy(keySelector = { it.courseRun.run }, valueTransform = { it.instructor })
+                    .groupBy(keySelector = { it.courseRun.crUid }, valueTransform = { it.instructor })
                     .forEach {
                         courseAndInstructor.forEach { run ->
-                            it.key
-                            if (run.courseRun.run.crAttemptId == it.key.crAttemptId && !list.contains(it.key.crAttemptId)) {
-                                list.add(it.key.crAttemptId ?: "")
-                                items.add(CourseAndItsInstructor(CourseRunPair(it.key, run.courseRun.course), it.value))
+                            if (run.courseRun.crUid == it.key && !list.contains(it.key)) {
+                                list.add(it.key)
+                                items.add(CourseAndItsInstructor(run.courseRun, it.value))
                                 return@forEach
                             }
-
-
                         }
                     }
             }
@@ -70,20 +66,18 @@ class CourseInstructorHolder {
 
         fun groupInstructorByCourse(courseAndInstructor: List<CourseInstructorPair>): List<CourseAndItsInstructor> {
             return mutableListOf<CourseAndItsInstructor>().also { items ->
-                val list = mutableListOf<String>()
                 courseAndInstructor
                     .groupBy(keySelector = { it.courseRun.course }, valueTransform = { it.instructor })
                     .forEach {
                         courseAndInstructor.forEach { run ->
                             it.key
-                            if (run.courseRun.course.cid == it.key.cid && !list.contains(it.key.cid)) {
-                                list.add(it.key.cid)
-                                items.add(CourseAndItsInstructor(CourseRunPair(run.courseRun.run, it.key), it.value))
-                                return@forEach
-                            }
-
-
+//                            if (run.courseRun.course?.cid == it.key?.cid && !list.contains(it.key.cid)) {
+//                                list.add(it.key?.cid)
+//                                items.add(CourseAndItsInstructor(CourseRunPair(run.courseRun.run, it.key), it.value))
+                            return@forEach
                         }
+
+
                     }
             }
         }
