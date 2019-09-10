@@ -18,6 +18,7 @@ import com.caverock.androidsvg.SVG
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
@@ -60,13 +61,10 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
         setHasOptionsMenu(true)
 
-        viewModel.getAllCourses().observer(this) {
-            if (it.size > 1) {
-                it.forEach {
-                    if (it != null) {
-                        it.toString()
-                    }
-                }
+        viewModel.getMyRuns().observer(this) {
+            if (it.isNotEmpty()) {
+                val response = CourseInstructorHolder.groupInstructor(it)
+                courseDataAdapter.submitList(response)
                 ui.shimmerLayout.stopShimmer()
             }
             ui.shimmerLayout.isVisible = it.isEmpty()

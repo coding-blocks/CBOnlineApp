@@ -39,7 +39,7 @@ class HomeViewModel(
     fun getTopRun() = runDao.getTopRun()
     private val config = PagedList.Config.Builder()
         .setEnablePlaceholders(true)
-        .setPageSize(10)
+        .setPageSize(30)
         .build()
 
     fun getMyRuns() = LivePagedListBuilder(courseWithInstructorDao.getMyCourses(), config).build()
