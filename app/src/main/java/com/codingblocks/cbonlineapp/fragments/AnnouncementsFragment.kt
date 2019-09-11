@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
@@ -14,18 +15,16 @@ import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
-import com.codingblocks.cbonlineapp.viewmodels.AnnouncementsViewModel
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.codingblocks.cbonlineapp.util.ARG_COURSE_ID
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import kotlinx.android.synthetic.main.fragment_annoucements.view.joinWhatsAppGroupView
-import kotlinx.android.synthetic.main.fragment_annoucements.view.joinWhatsAppButton
-import kotlinx.android.synthetic.main.fragment_annoucements.view.instructorRv
+import com.codingblocks.cbonlineapp.viewmodels.AnnouncementsViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
+import kotlinx.android.synthetic.main.fragment_annoucements.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AnnouncementsFragment : Fragment() {
     lateinit var courseId: String
-    lateinit var whatsAppLink: String
+    var whatsAppLink: String? = null
     lateinit var attemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -59,11 +58,7 @@ class AnnouncementsFragment : Fragment() {
 
         viewModel.getRunByAtemptId(attemptId).observer(this) {
             whatsAppLink = it.whatsappLink
-            if (!it.premium || whatsAppLink.isEmpty()) {
-                view.joinWhatsAppGroupView.visibility = View.GONE
-            } else {
-                view.joinWhatsAppGroupView.visibility = View.VISIBLE
-            }
+            view.joinWhatsAppGroupView.isVisible = whatsAppLink?.run { true } ?: false
         }
 
         view.joinWhatsAppButton.setOnClickListener {

@@ -32,13 +32,13 @@ open class RunModel(
     var crUpdatedAt: String = "",
     var progress: Double = 0.0,
     var premium: Boolean = false,
-    var hits: Int = 0,
-    var recommended: Boolean = false,
-    var whatsappLink: String = "",
+    var whatsappLink: String? = "",
     var crRunEnd: String = "",
     var totalContents: Int = 0,
     var completedContents: Int = 0,
     var mentorApproved: Boolean = false,
     var completionThreshold: Int = 90,
-    var productId: Int = 0
+    var productId: Int = 0,
+    var recommended: Boolean = false,
+    var hits: Int = 0
 )
