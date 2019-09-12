@@ -8,5 +8,5 @@ class SettingsViewModel(
 ) : ViewModel() {
     fun getDownloads() = contentDao.getDownloads("true")
 
-    fun updateContent(section_id: String, lectureContentId: String, s: String) = contentDao.updateContent(section_id, lectureContentId, s)
+    fun updateContent(section_id: String, lectureContentId: String, s: String) = "Nothing"
 }

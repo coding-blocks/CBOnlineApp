@@ -55,11 +55,11 @@ class SettingsActivity : AppCompatActivity() {
                 list.forEach { content ->
                     val folderFile = File(file, "/${content.contentLecture.lectureId}")
                     MediaUtils.deleteRecursive(folderFile)
-                    viewModel.updateContent(
-                        content.section_id,
-                        content.contentLecture.lectureContentId,
-                        "false"
-                    )
+//                    viewModel.updateContent(
+//                        content.section_id,
+//                        content.contentLecture.lectureContentId,
+//                        "false"
+//                    )
                 }
             }
         }

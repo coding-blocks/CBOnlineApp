@@ -232,21 +232,20 @@ class VideoPlayerActivity : AppCompatActivity(),
             setControllerVisibilityListener(visibilityListener)
             playNextButton.setOnClickListener {
                 countDownTimer.cancel()
-                viewModel.getNextVideo(contentId, sectionId, attemptId).observer(this@VideoPlayerActivity) {
+//                viewModel.getNextVideo(contentId, sectionId, attemptId).obs.erver(this@VideoPlayerActivity) {
                     info { it.toString() }
-                    when (it.contentable) {
-                        "lecture" -> {
-                            startActivity(
-                                intentFor<VideoPlayerActivity>(
-                                    VIDEO_ID to it.contentLecture.lectureId,
-                                    RUN_ATTEMPT_ID to it.attempt_id,
-                                    CONTENT_ID to it.ccid,
-                                    SECTION_ID to it.section_id,
-                                    DOWNLOADED to it.contentLecture.isDownloaded
-                                ).singleTop())
-                        }
-                    }
-                }
+//                    when (it.contentable) {
+//                        "lecture" -> {
+//                            startActivity(
+//                                intentFor<VideoPlayerActivity>(
+//                                    VIDEO_ID to it.contentLecture.lectureId,
+//                                    RUN_ATTEMPT_ID to it.attempt_id,
+//                                    CONTENT_ID to it.ccid,
+//                                    SECTION_ID to it.section_id,
+//                                    DOWNLOADED to it.contentLecture.isDownloaded
+//                                ).singleTop())
+//                        }
+//                }
             }
         }
         showControls(true)

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 21,
-    "identityHash": "b786795ab95b8f91e2e5a8a2b8569518",
+    "identityHash": "8f6d73b81f844c094971e243f126d78d",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -174,8 +174,8 @@
         ]
       },
       {
-        "tableName": "CourseContent",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ccid` TEXT NOT NULL, `progress` TEXT NOT NULL, `progressId` TEXT NOT NULL, `title` TEXT NOT NULL, `contentDuration` INTEGER NOT NULL, `contentable` TEXT NOT NULL, `order` INTEGER NOT NULL, `section_id` TEXT NOT NULL, `attempt_id` TEXT NOT NULL, `lectureUid` TEXT NOT NULL, `lectureName` TEXT NOT NULL, `lectureDuration` INTEGER NOT NULL, `lectureId` TEXT NOT NULL, `lectureContentId` TEXT NOT NULL, `lectureUpdatedAt` TEXT NOT NULL, `isDownloaded` TEXT NOT NULL, `date` INTEGER NOT NULL, `documentUid` TEXT NOT NULL, `documentName` TEXT NOT NULL, `documentPdfLink` TEXT NOT NULL, `documentContentId` TEXT NOT NULL, `documentUpdatedAt` TEXT NOT NULL, `videoUid` TEXT NOT NULL, `videoName` TEXT NOT NULL, `videoDuration` INTEGER NOT NULL, `videoDescription` TEXT, `videoUrl` TEXT NOT NULL, `videoContentId` TEXT NOT NULL, `videoUpdatedAt` TEXT NOT NULL, `qnaUid` TEXT NOT NULL, `qnaName` TEXT NOT NULL, `qnaQid` INTEGER NOT NULL, `qnaContentId` TEXT NOT NULL, `qnaUpdatedAt` TEXT NOT NULL, `codeUid` TEXT NOT NULL, `codeName` TEXT NOT NULL, `codeProblemId` INTEGER NOT NULL, `codeContestId` INTEGER NOT NULL, `codeContentId` TEXT NOT NULL, `codeUpdatedAt` TEXT NOT NULL, `csvUid` TEXT NOT NULL, `csvName` TEXT NOT NULL, `csvDescription` TEXT NOT NULL, `csvContentId` TEXT NOT NULL, `csvUpdatedAt` TEXT NOT NULL, PRIMARY KEY(`ccid`), FOREIGN KEY(`section_id`) REFERENCES `SectionModel`(`csid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "tableName": "ContentModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ccid` TEXT NOT NULL, `progress` TEXT NOT NULL, `progressId` TEXT NOT NULL, `title` TEXT NOT NULL, `contentDuration` INTEGER NOT NULL, `contentable` TEXT NOT NULL, `order` INTEGER NOT NULL, `attempt_id` TEXT NOT NULL, `lectureUid` TEXT NOT NULL, `lectureName` TEXT NOT NULL, `lectureDuration` INTEGER NOT NULL, `lectureId` TEXT NOT NULL, `lectureContentId` TEXT NOT NULL, `lectureUpdatedAt` TEXT NOT NULL, `isDownloaded` TEXT NOT NULL, `date` INTEGER NOT NULL, `documentUid` TEXT NOT NULL, `documentName` TEXT NOT NULL, `documentPdfLink` TEXT NOT NULL, `documentContentId` TEXT NOT NULL, `documentUpdatedAt` TEXT NOT NULL, `videoUid` TEXT NOT NULL, `videoName` TEXT NOT NULL, `videoDuration` INTEGER NOT NULL, `videoDescription` TEXT, `videoUrl` TEXT NOT NULL, `videoContentId` TEXT NOT NULL, `videoUpdatedAt` TEXT NOT NULL, `qnaUid` TEXT NOT NULL, `qnaName` TEXT NOT NULL, `qnaQid` INTEGER NOT NULL, `qnaContentId` TEXT NOT NULL, `qnaUpdatedAt` TEXT NOT NULL, `codeUid` TEXT NOT NULL, `codeName` TEXT NOT NULL, `codeProblemId` INTEGER NOT NULL, `codeContestId` INTEGER NOT NULL, `codeContentId` TEXT NOT NULL, `codeUpdatedAt` TEXT NOT NULL, `csvUid` TEXT NOT NULL, `csvName` TEXT NOT NULL, `csvDescription` TEXT NOT NULL, `csvContentId` TEXT NOT NULL, `csvUpdatedAt` TEXT NOT NULL, PRIMARY KEY(`ccid`))",
         "fields": [
           {
             "fieldPath": "ccid",
@@ -217,12 +217,6 @@
             "fieldPath": "order",
             "columnName": "order",
             "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "section_id",
-            "columnName": "section_id",
-            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -454,29 +448,8 @@
           ],
           "autoGenerate": false
         },
-        "indices": [
-          {
-            "name": "index_CourseContent_section_id",
-            "unique": false,
-            "columnNames": [
-              "section_id"
-            ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_CourseContent_section_id` ON `${TABLE_NAME}` (`section_id`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "SectionModel",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "section_id"
-            ],
-            "referencedColumns": [
-              "csid"
-            ]
-          }
-        ]
+        "indices": [],
+        "foreignKeys": []
       },
       {
         "tableName": "InstructorModel",
@@ -647,7 +620,7 @@
       },
       {
         "tableName": "DoubtsModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`dbtUid` TEXT NOT NULL, `title` TEXT NOT NULL, `body` TEXT NOT NULL, `contentId` TEXT NOT NULL, `status` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `discourseTopicId` TEXT NOT NULL, PRIMARY KEY(`dbtUid`), FOREIGN KEY(`contentId`) REFERENCES `CourseContent`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`dbtUid` TEXT NOT NULL, `title` TEXT NOT NULL, `body` TEXT NOT NULL, `contentId` TEXT NOT NULL, `status` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `discourseTopicId` TEXT NOT NULL, PRIMARY KEY(`dbtUid`), FOREIGN KEY(`contentId`) REFERENCES `ContentModel`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "dbtUid",
@@ -710,7 +683,7 @@
         ],
         "foreignKeys": [
           {
-            "table": "CourseContent",
+            "table": "ContentModel",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -724,7 +697,7 @@
       },
       {
         "tableName": "NotesModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`nttUid` TEXT NOT NULL, `duration` REAL NOT NULL, `text` TEXT NOT NULL, `contentId` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `deletedAt` TEXT NOT NULL, PRIMARY KEY(`nttUid`), FOREIGN KEY(`contentId`) REFERENCES `CourseContent`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`nttUid` TEXT NOT NULL, `duration` REAL NOT NULL, `text` TEXT NOT NULL, `contentId` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `deletedAt` TEXT NOT NULL, PRIMARY KEY(`nttUid`), FOREIGN KEY(`contentId`) REFERENCES `ContentModel`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "nttUid",
@@ -787,7 +760,7 @@
         ],
         "foreignKeys": [
           {
-            "table": "CourseContent",
+            "table": "ContentModel",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -1146,12 +1119,85 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "SectionWithContent",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`section_id` TEXT NOT NULL, `content_id` TEXT NOT NULL, `order` INTEGER NOT NULL, PRIMARY KEY(`section_id`, `content_id`), FOREIGN KEY(`section_id`) REFERENCES `SectionModel`(`csid`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`content_id`) REFERENCES `ContentModel`(`ccid`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "sectionId",
+            "columnName": "section_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentId",
+            "columnName": "content_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "order",
+            "columnName": "order",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "section_id",
+            "content_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_SectionWithContent_section_id",
+            "unique": false,
+            "columnNames": [
+              "section_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_SectionWithContent_section_id` ON `${TABLE_NAME}` (`section_id`)"
+          },
+          {
+            "name": "index_SectionWithContent_content_id",
+            "unique": false,
+            "columnNames": [
+              "content_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_SectionWithContent_content_id` ON `${TABLE_NAME}` (`content_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "SectionModel",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "section_id"
+            ],
+            "referencedColumns": [
+              "csid"
+            ]
+          },
+          {
+            "table": "ContentModel",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "content_id"
+            ],
+            "referencedColumns": [
+              "ccid"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b786795ab95b8f91e2e5a8a2b8569518')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8f6d73b81f844c094971e243f126d78d')"
     ]
   }
 }

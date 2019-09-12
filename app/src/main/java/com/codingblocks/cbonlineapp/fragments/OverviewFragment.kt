@@ -18,11 +18,8 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.ProductExtensionsItem
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
-import kotlinx.android.synthetic.main.fragment_overview.buyBtn
-import kotlinx.android.synthetic.main.fragment_overview.completetionBtn
-import kotlinx.android.synthetic.main.fragment_overview.requestBtn
-import kotlinx.android.synthetic.main.fragment_overview.view.extensionsCard
-import kotlinx.android.synthetic.main.fragment_overview.view.extensionsRv
+import kotlinx.android.synthetic.main.fragment_overview.*
+import kotlinx.android.synthetic.main.fragment_overview.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.longToast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -62,7 +59,6 @@ class OverviewFragment : Fragment(), AnkoLogger {
             if (courseRun.progress > 90.0) {
                 completetionBtn.setImageResource(R.drawable.ic_status_white)
                 requestBtn.apply {
-                    background = resources.getDrawable(R.drawable.button_background)
                     isEnabled = true
                     setOnClickListener {
                         viewModel.requestApproval()
@@ -70,10 +66,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
                 }
             } else {
                 completetionBtn.setImageResource(R.drawable.ic_circle_white)
-                requestBtn.apply {
-                    background = resources.getDrawable(R.drawable.button_disable)
-                    isEnabled = false
-                }
+                requestBtn.isEnabled = false
             }
             if (courseRun.crRunEnd.toLong() * 1000 < System.currentTimeMillis() || courseRun.crRunEnd.toLong() * 1000 - System.currentTimeMillis() <= 2592000000)
                 viewModel.fetchExtensions(courseRun.productId).observer(viewLifecycleOwner) {
@@ -84,6 +77,10 @@ class OverviewFragment : Fragment(), AnkoLogger {
                         view.extensionsCard.isVisible = false
                     }
                 }
+        }
+
+        extensionsAdapter.checkedPosition.observer(viewLifecycleOwner) {
+            buyBtn.isEnabled = it != -1
         }
 
         buyBtn.setOnClickListener {

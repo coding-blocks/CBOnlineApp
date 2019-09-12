@@ -2,11 +2,10 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/overviewFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="24dp"
     android:fillViewport="true"
-    android:id="@+id/overviewFragment"
     android:overScrollMode="never"
     tools:context=".fragments.OverviewFragment">
 
@@ -15,14 +14,15 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
             android:id="@+id/extensionsCard"
-            android:layout_marginStart="16dp"
-            android:visibility="gone"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:visibility="gone"
             app:cardCornerRadius="15dp"
+            app:cardElevation="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -61,7 +61,8 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@drawable/button_background"
+                    android:background="@drawable/button_states"
+                    android:enabled="false"
                     android:paddingStart="24dp"
                     android:paddingTop="12dp"
                     android:paddingEnd="24dp"
@@ -76,6 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:orientation="horizontal"
+                    android:overScrollMode="never"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:itemCount="3"
                     tools:listitem="@layout/item_extension" />
@@ -88,40 +90,40 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView"
             android:layout_width="0dp"
-            android:layout_marginStart="16dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="8dp"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_medium"
+            app:cardCornerRadius="@dimen/corner_radius"
+            app:cardElevation="5dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/extensionsCard">
 
             <RelativeLayout
-                android:background="@drawable/blue_gradient"
                 android:layout_width="match_parent"
-                android:padding="16dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@drawable/blue_gradient"
+                android:padding="16dp">
 
                 <TextView
-                    android:layout_alignTop="@+id/requestBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/requestBtn"
                     android:layout_alignBottom="@+id/requestBtn"
                     android:layout_marginTop="0dp"
-                    android:gravity="center"
                     android:fontFamily="@font/nunitosans_bold"
+                    android:gravity="center"
                     android:text="Generate Certificate"
                     android:textColor="@color/white"
                     android:textSize="22sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="wrap_content"
                     android:id="@+id/requestBtn"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/button_disable"
                     android:layout_alignParentEnd="true"
+                    android:background="@drawable/button_states"
                     android:enabled="false"
                     android:fontFamily="@font/nunitosans_bold"
                     android:paddingStart="24dp"
@@ -141,8 +143,8 @@
                 <TextView
                     android:id="@+id/description"
                     android:layout_width="wrap_content"
-                    android:layout_below="@id/divider"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/divider"
                     android:layout_marginTop="8dp"
 
                     android:layout_marginEnd="16dp"
@@ -154,10 +156,10 @@
                 <LinearLayout
                     android:id="@+id/mentorContainer"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="8dp"
-
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/completionContainer">
+
+                    android:layout_below="@id/completionContainer"
+                    android:layout_marginTop="8dp">
 
                     <ImageView
                         android:id="@+id/approvalBtn"
@@ -182,11 +184,11 @@
                 <LinearLayout
                     android:id="@+id/completionContainer"
                     android:layout_width="match_parent"
-                    android:layout_toLeftOf="@id/imageView4"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
                     android:layout_below="@id/description"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_toLeftOf="@id/imageView4">
 
                     <ImageView
                         android:id="@+id/completetionBtn"
@@ -334,16 +336,16 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:fontFamily="@font/nunitosans_italic"
             android:text="@string/introdoubtsdescription"
             android:textColor="#666666"
             android:textSize="15.5sp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/introDoubtsTitle" />
-
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -181,8 +181,8 @@ class VideoPlayerViewModel(
         })
     }
 
-    fun getNextVideo(contentId: String, sectionId: String, attemptId: String) =
-        contentDao.getNextItem(sectionId, attemptId, contentId)
+    fun getNextVideo(contentId: String, sectionId: String, attemptId: String) = ""
+//        contentDao.getNextItem(sectionId, attemptId, contentId)
 
 //    fun updateProgress(contentId: String,attemptId: String) {
 //        val progressId = contentDao.getContentWithId(attemptId,contentId).progressId

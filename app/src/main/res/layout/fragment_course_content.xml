@@ -1,32 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swiperefresh"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+
+<!--    <androidx.core.widget.NestedScrollView xmlns:tools="http://schemas.android.com/tools"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        tools:context=".fragments.CourseContentFragment">-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/aboutTv"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_marginStart="@dimen/margin_medium"-->
+    <!--                android:layout_marginTop="@dimen/margin_medium"-->
+    <!--                android:fontFamily="@font/nunitosans_bold"-->
+    <!--                android:text="Course Curriculum"-->
+    <!--                android:textColor="@android:color/black"-->
+    <!--                android:textSize="22sp" />-->
+
+    <!--            <View-->
+    <!--                android:id="@+id/view1"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="2dp"-->
+    <!--                android:layout_marginStart="@dimen/margin_medium"-->
+    <!--                android:layout_marginTop="4dp"-->
+    <!--                android:layout_marginEnd="@dimen/margin_medium"-->
+    <!--                android:background="@color/black" />-->
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/sectionProgressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:theme="@style/AppTheme.SalmonAccent"
+        android:visibility="gone" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabIndicatorHeight="0dp"
+        app:tabMode="scrollable"
+        app:tabTextColor="@color/black">
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.CourseContentFragment">
-
-        <androidx.core.widget.ContentLoadingProgressBar
-            android:id="@+id/sectionProgressBar"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:theme="@style/AppTheme.SalmonAccent"
-            android:visibility="gone" />
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_medium">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvExpendableView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_medium"
+            tools:listitem="@layout/item_section" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    </FrameLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</LinearLayout>
+
+    <!--    </androidx.core.widget.NestedScrollView>-->

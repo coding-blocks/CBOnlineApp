@@ -179,7 +179,7 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
             val data = findDataWithId(videoId)
             if (data != null) {
                 doAsync {
-                    contentDao.updateContent(data.sectionId, data.lectureContentId, "true")
+                    //                    contentDao.updateContent(data.sectionId, data.lectureContentId, "true")
                 }
                 val intent = Intent(this, VideoPlayerActivity::class.java)
                 intent.putExtra(VIDEO_ID, data.videoId)

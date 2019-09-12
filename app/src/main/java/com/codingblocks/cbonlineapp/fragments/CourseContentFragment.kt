@@ -5,19 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.*
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.SectionItemsAdapter
+import com.codingblocks.cbonlineapp.database.ListObject
+import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.services.DownloadService
 import com.codingblocks.cbonlineapp.services.SectionDownloadService
 import com.codingblocks.cbonlineapp.util.*
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
@@ -26,6 +28,7 @@ import org.jetbrains.anko.support.v4.startService
 import org.jetbrains.anko.yesButton
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.concurrent.TimeUnit
+
 
 class CourseContentFragment : Fragment(), AnkoLogger,
     DownloadStarter {
@@ -76,9 +79,36 @@ class CourseContentFragment : Fragment(), AnkoLogger,
         sectionItemsAdapter.starter = this
         rvExpendableView.layoutManager = LinearLayoutManager(context)
         rvExpendableView.adapter = sectionItemsAdapter
+        val consolidatedList = ArrayList<ListObject>()
 
 
-        viewModel.getAllContent().observe(this, Observer(sectionItemsAdapter::submitList))
+        viewModel.getAllContent().observer(this) { SectionContent ->
+            val response = SectionContentHolder.groupContentBySection(SectionContent)
+            response.forEachIndexed { index, sectionContent ->
+                consolidatedList.add(sectionContent.section)
+                val pos = consolidatedList.size
+                consolidatedList.addAll(sectionContent.contents)
+
+                val tab = tabs.newTab()
+                tab.tag = pos - 1
+                tab.text = "Section ${index + 1}"
+                tabs.addTab(tab)
+            }
+            sectionItemsAdapter.submitList(consolidatedList)
+        }
+
+        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(p0: TabLayout.Tab?) {
+            }
+
+            override fun onTabUnselected(p0: TabLayout.Tab?) {
+            }
+
+            override fun onTabSelected(p0: TabLayout.Tab) {
+                rvExpendableView.scrollToPosition(p0.tag.toString().toInt())
+            }
+
+        })
 
         /**
          * Register a new observer to listen for data changes.
@@ -137,7 +167,7 @@ class CourseContentFragment : Fragment(), AnkoLogger,
             if (view != null) {
                 val params = Bundle()
                 params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
-                params.putString(FirebaseAnalytics.Param.ITEM_NAME, "CourseContent")
+                params.putString(FirebaseAnalytics.Param.ITEM_NAME, "ContentModel")
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
             }
         }

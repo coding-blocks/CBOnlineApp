@@ -22,7 +22,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_annoucements.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AnnouncementsFragment : Fragment() {
+class AboutFragment : Fragment() {
     lateinit var courseId: String
     var whatsAppLink: String? = null
     lateinit var attemptId: String
@@ -65,10 +65,10 @@ class AnnouncementsFragment : Fragment() {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setPackage("com.whatsapp")
             intent.data = Uri.parse(whatsAppLink)
-            if (this@AnnouncementsFragment.requireContext().packageManager.resolveActivity(intent, 0) != null) {
+            if (this@AboutFragment.requireContext().packageManager.resolveActivity(intent, 0) != null) {
                 startActivity(intent)
             } else {
-                Toast.makeText(this@AnnouncementsFragment.requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AboutFragment.requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -78,7 +78,7 @@ class AnnouncementsFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance(param1: String, attemptId: String) =
-            AnnouncementsFragment().apply {
+            AboutFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_COURSE_ID, param1)
                     putString(RUN_ATTEMPT_ID, attemptId)

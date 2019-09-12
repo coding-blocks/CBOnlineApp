@@ -8,9 +8,9 @@ import com.codingblocks.cbonlineapp.database.converters.TimestampConverter
 import com.codingblocks.cbonlineapp.database.models.*
 
 @Database(
-    entities = [CourseModel::class, SectionModel::class, CourseContent::class, InstructorModel::class, Notification::class,
+    entities = [CourseModel::class, SectionModel::class, ContentModel::class, InstructorModel::class, Notification::class,
         CourseInstructorHolder.CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, RunModel::class,
-        JobsModel::class, CourseFeatureModel::class
+        JobsModel::class, CourseFeatureModel::class, SectionContentHolder.SectionWithContent::class
     ], exportSchema = true, version = 21
 )
 @TypeConverters(TimestampConverter::class, CourseIdList::class)

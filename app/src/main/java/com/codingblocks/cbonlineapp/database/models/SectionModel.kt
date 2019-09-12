@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.codingblocks.cbonlineapp.database.ListObject
 
 @Entity(
     indices = [Index("run_id")],
@@ -23,4 +24,7 @@ data class SectionModel(
     var status: String,
     var run_id: String,
     var attemptId: String
-)
+) : ListObject() {
+    override fun getType(): Int = TYPE_SECTION
+
+}

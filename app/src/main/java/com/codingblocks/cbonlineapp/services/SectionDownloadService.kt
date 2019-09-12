@@ -165,7 +165,7 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
 
         completedCount++
         doAsync {
-            sectionId?.let { contentDao.updateContentWithVideoId(it, videoId, "true") }
+            //            sectionId?.let { contentDao.updateContentWithVideoId(it, videoId, "true") }
         }
         notification.apply {
             setProgress(totalCount, completedCount, false)

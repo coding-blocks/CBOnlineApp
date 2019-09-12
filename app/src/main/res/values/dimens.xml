@@ -22,5 +22,8 @@
     <dimen name="centre_head_name">18sp</dimen>
     <dimen name="centre_container_s_vertical">8dp</dimen>
     <dimen name="centre_container_xs_vertical">4dp</dimen>
+    <dimen name="margin_medium">12dp</dimen>
+    <dimen name="corner_radius">15dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
 
 </resources>

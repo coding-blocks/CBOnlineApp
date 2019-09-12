@@ -34,11 +34,11 @@ class MyCourseViewModel(
 
     private val extensions = MutableLiveData<List<ProductExtensionsItem>>()
     val config = PagedList.Config.Builder()
-        .setEnablePlaceholders(true)
+        .setEnablePlaceholders(false)
         .setPageSize(10)
         .build()
 
-    fun getAllContent() = LivePagedListBuilder(sectionWithContentsDao.getSectionWithContent(attemptId), config).build()
+    fun getAllContent() = sectionWithContentsDao.getSectionWithContent(attemptId)
     //Use Function Here not a variable
 //    fun getAllContent() = sectionWithContentsDao.getSectionWithContent(attemptId).toLiveData(pageSize = 20)
 
@@ -46,7 +46,7 @@ class MyCourseViewModel(
         runDao.updateHit(attemptId)
     }
 
-    fun getResumeCourse() = sectionWithContentsDao.resumeCourse(attemptId)
+//    fun getResumeCourse() = sectionWithContentsDao.resumeCourse(attemptId)
 
 
     fun getRunAttempt(runId: String): String = runDao.getRunByRunId(runId).crAttemptId ?: ""
@@ -55,7 +55,7 @@ class MyCourseViewModel(
 //
 //    fun getSectionDownloadlist(id: String) = sectionWithContentsDao.getVideoIdsWithSectionId(id)
 
-    fun updateContent(id: String, lectureContentId: String, s: String) = contentsDao.updateContent(id, lectureContentId, s)
+//    fun updateContent(id: String, lectureContentId: String, s: String) = contentsDao.updateContent(id, lectureContentId, s)
 
     fun getCourseSection(attemptId: String) = sectionDao.getCourseSection(attemptId)
 
@@ -208,7 +208,7 @@ class MyCourseViewModel(
                                                                         }
 
                                                                         val newContent =
-                                                                            CourseContent(
+                                                                            ContentModel(
                                                                                 content.id,
                                                                                 status,
                                                                                 progressId,
@@ -218,8 +218,6 @@ class MyCourseViewModel(
                                                                                 content.contentable,
                                                                                 content.sectionContent?.order
                                                                                     ?: 0,
-                                                                                content.sectionContent?.sectionId
-                                                                                    ?: "",
                                                                                 attemptId,
                                                                                 contentLecture,
                                                                                 contentDocument,
@@ -239,15 +237,15 @@ class MyCourseViewModel(
                                                                             contentsDao.insert(
                                                                                 newContent
                                                                             )
-//                                                                            sectionWithContentsDao.insert(
-//                                                                                SectionWithContent(
-//                                                                                    courseSection.id,
-//                                                                                    content.id,
-//                                                                                    content.sectionContent?.order
-//                                                                                        ?: 0
-//
-//                                                                                )
-//                                                                            )
+                                                                            sectionWithContentsDao.insert(
+                                                                                SectionContentHolder.SectionWithContent(
+                                                                                    courseSection.id,
+                                                                                    content.id,
+                                                                                    content.sectionContent?.order
+                                                                                        ?: 0
+
+                                                                                )
+                                                                            )
                                                                         } else if (oldContent != newContent) {
                                                                             contentLecture.isDownloaded =
                                                                                 oldContent.contentLecture.isDownloaded
@@ -270,20 +268,6 @@ class MyCourseViewModel(
                 }
             })
 
-//            try {
-//                sectionWithContentsDao.insert(
-//                    SectionWithContent(
-//                        sectionId,
-//                        contentId
-//                    )
-//                )
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//                Log.e("CRASH", "COURSE ID : $sectionId")
-//                Log.e("CRASH", "INSTRUCTOR ID : $contentId")
-//            }
-//        }
-//    }
     }
 
     fun resetProgress() {

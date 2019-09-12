@@ -4,23 +4,23 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.models.SectionModel
+import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.util.DownloadStarter
-import kotlinx.android.synthetic.main.item_section.view.*
+import kotlinx.android.synthetic.main.item_section_detailed_info.view.*
 
-class SectionViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_section, parent, false)) {
+class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+    LayoutInflater.from(parent.context).inflate(R.layout.item_section_detailed_info, parent, false)) {
 
-    var section: SectionModel? = null
+    var content: ContentModel? = null
     var starterListener: DownloadStarter? = null
 
     /**
      * Items might be null if they are not paged in yet. PagedListAdapter will re-bind the
      * ViewHolder when Item is loaded.
      */
-    fun bindTo(section: SectionModel) {
-        this.section = section
-        itemView.title.text = section.name
+    fun bindTo(content: ContentModel) {
+        this.content = content
+        itemView.textView15.text = content.title
 //        val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
 //        if (ll.visibility == View.VISIBLE) {
 //            ll.removeAllViews()
