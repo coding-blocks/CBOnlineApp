@@ -24,9 +24,10 @@ interface CourseWithInstructorDao {
     fun getInstructorWithCourseId(courseID: String): LiveData<List<InstructorModel>>
 
     @Query("""
-    SELECT r.*,i.*,c.* FROM RunModel r,InstructorModel i
-	   INNER JOIN CourseModel c ON (c.cid = r.crCourseId AND c.cid = ci.course_id)
-	   INNER JOIN coursewithinstructor ci ON i.uid = ci.instructor_id
+    SELECT c.*,r.*,i.* FROM RunModel r
+	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
+	   INNER JOIN CourseWithInstructor ci ON ci.course_id = c.cid
+       INNER JOIN InstructorModel i ON i.uid = ci.instructor_id
        WHERE r.crAttemptId IS NULL
     """)
     fun getAllCourses(): DataSource.Factory<Int, CourseInstructorHolder.CourseInstructorPair>

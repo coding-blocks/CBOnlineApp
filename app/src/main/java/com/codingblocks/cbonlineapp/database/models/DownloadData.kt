@@ -8,7 +8,6 @@ data class DownloadData(
     val videoId: String,
     val attemptId: String,
     val contentId: String,
-    val lectureContentId: String,
     val notificationId: Int,
     val notificationBuilder: NotificationCompat.Builder
 ) : Serializable

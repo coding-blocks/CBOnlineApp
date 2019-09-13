@@ -20,9 +20,11 @@ import com.codingblocks.cbonlineapp.util.QNA
 import com.codingblocks.cbonlineapp.util.QUIZ_ID
 import com.codingblocks.cbonlineapp.util.QUIZ_QNA
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import kotlinx.android.synthetic.main.item_content.view.*
+
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.textColor
@@ -40,36 +42,38 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     fun bindTo(content: ContentModel) {
         this.contentModel = content
         with(itemView) {
-            if (content.progress == "DONE") {
-                title.textColor = resources.getColor(R.color.green)
-                downloadBtn.setImageDrawable(context.getDrawable(R.drawable.ic_status_done))
-            } else {
-                title.textColor = resources.getColor(R.color.black)
-            }
-            title.text = content.title
 
+            title.text = content.title
             when (content.contentable) {
                 LECTURE -> {
-                    contentType.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
+                    contentType.setImageResource(R.drawable.ic_lecture)
                     downloadBtn.setOnClickListener {
                         checkDownloadStatus()
                     }
                 }
                 DOCUMENT -> {
-                    contentType.setImageDrawable(context.getDrawable(R.drawable.ic_document))
+                    contentType.setImageResource(R.drawable.ic_document)
                 }
 
                 VIDEO -> {
-                    contentType.setImageDrawable(context.getDrawable(R.drawable.ic_youtube_video))
+                    contentType.setImageResource(R.drawable.ic_youtube_video)
                 }
 
                 QNA -> {
-                    contentType.setImageDrawable(context.getDrawable(R.drawable.ic_quiz))
+                    contentType.setImageResource(R.drawable.ic_quiz)
                 }
 
                 CODE -> {
-                    contentType.setImageDrawable(context.getDrawable(R.drawable.ic_code))
+                    contentType.setImageResource(R.drawable.ic_code)
                 }
+            }
+
+            if (content.progress == "DONE") {
+                title.textColor = resources.getColor(R.color.green)
+                downloadBtn.setImageResource(R.drawable.ic_status_done)
+            } else {
+                downloadBtn.setImageResource(0)
+                title.textColor = resources.getColor(R.color.black)
             }
 
             setOnClickListener {
@@ -102,6 +106,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                                 VIDEO_ID to content.contentLecture.lectureId,
                                 RUN_ATTEMPT_ID to content.attempt_id,
                                 CONTENT_ID to content.ccid,
+                                SECTION_ID to content.sectionId,
                                 DOWNLOADED to content.contentLecture.isDownloaded
                             ).singleTop()
                         )
@@ -120,7 +125,8 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                 contentModel.contentLecture.lectureId,
                 contentModel.ccid,
                 contentModel.title,
-                contentModel.attempt_id
+                contentModel.attempt_id,
+                contentModel.sectionId
             )
         }
     }

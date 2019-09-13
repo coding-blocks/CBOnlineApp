@@ -5,7 +5,8 @@ interface DownloadStarter {
         videoId: String,
         contentId: String,
         title: String,
-        attemptId: String
+        attemptId: String,
+        sectionId: String
     )
 
     fun startSectionDownlod(sectionId: String)

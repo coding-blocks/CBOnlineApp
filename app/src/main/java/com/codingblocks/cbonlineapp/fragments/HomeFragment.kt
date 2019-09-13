@@ -107,7 +107,7 @@ class HomeFragment : Fragment(), AnkoLogger {
     private fun displayCourses(searchQuery: String = "") {
         viewModel.getAllCourses().observer(this) {
             if (it.isNotEmpty()) {
-                val response = CourseInstructorHolder.groupInstructorByCourse(it)
+                val response = CourseInstructorHolder.groupInstructorByRun(it)
                 courseDataAdapter.submitList(response.filter { c ->
                     c.courseRun.course.title.contains(searchQuery, true) ||
                         c.courseRun.course.summary.contains(searchQuery, true)

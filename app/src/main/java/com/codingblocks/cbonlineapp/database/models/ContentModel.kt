@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.database.models
 import androidx.annotation.Nullable
 import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.codingblocks.cbonlineapp.database.ListObject
 
@@ -36,5 +37,10 @@ data class ContentModel(
     @Nullable
     var contentCsv: ContentCsvModel = ContentCsvModel()
 ) : ListObject() {
+    @Ignore
     override fun getType(): Int = TYPE_CONTENT
+
+    @Ignore
+    var sectionId: String = ""
+
 }

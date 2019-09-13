@@ -56,11 +56,13 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         videoId: String,
         contentId: String,
         title: String,
-        attemptId: String
+        attemptId: String,
+        sectionId: String
     ) {
         startService<DownloadService>(
             VIDEO_ID to videoId,
             "title" to title,
+            SECTION_ID to sectionId,
             RUN_ATTEMPT_ID to attemptId,
             CONTENT_ID to contentId)
     }
@@ -88,10 +90,9 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         val layoutManager = LinearLayoutManager(context)
         rvExpendableView.layoutManager = layoutManager
         rvExpendableView.adapter = sectionItemsAdapter
-
+        val consolidatedList = ArrayList<ListObject>()
         viewModel.getAllContent().observer(this) { SectionContent ->
             val response = SectionContentHolder.groupContentBySection(SectionContent)
-            val consolidatedList = ArrayList<ListObject>()
             tabs.removeAllTabs()
             response.forEach { sectionContent ->
                 var duration: Long = 0
@@ -100,11 +101,15 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                     if (content.progress == "DONE") {
                         sectionComplete++
                     }
+
                     if (content.contentable == "lecture")
                         duration += content.contentLecture.lectureDuration
                     else if (content.contentable == "video") {
                         duration += content.contentVideo.videoDuration
                     }
+                    //Map SectionId to ContentModel
+                    content.sectionId = sectionContent.section.csid
+
                 }
                 consolidatedList.add(sectionContent.section.apply {
                     totalContent = sectionContent.contents.size
@@ -119,8 +124,10 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
                 tab.text = sectionContent.section.name.substring(0, 5)
                 tabs.addTab(tab)
+                sectionItemsAdapter.notifyDataSetChanged()
             }
             sectionItemsAdapter.submitList(consolidatedList)
+
         }
 
         tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

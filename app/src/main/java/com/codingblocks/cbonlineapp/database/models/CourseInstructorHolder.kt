@@ -65,21 +65,5 @@ class CourseInstructorHolder {
                     }
             }
         }
-
-        fun groupInstructorByCourse(courseAndInstructor: List<CourseInstructorPair>): List<CourseAndItsInstructor> {
-            return mutableListOf<CourseAndItsInstructor>().also { items ->
-                courseAndInstructor
-                    .groupBy(keySelector = { it.courseRun.course }, valueTransform = { it.instructor })
-                    .forEach {
-                        courseAndInstructor.forEach { run ->
-                            it.key
-//                            if (run.courseRun.course?.cid == it.key?.cid && !list.contains(it.key.cid)) {
-//                                list.add(it.key?.cid)
-//                                items.add(CourseAndItsInstructor(CourseRunPair(run.courseRun.run, it.key), it.value))
-                            return@forEach
-                        }
-                    }
-            }
-        }
     }
 }

@@ -53,7 +53,6 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
                 intent.getStringExtra(VIDEO_ID),
                 intent.getStringExtra(RUN_ATTEMPT_ID),
                 intent.getStringExtra(CONTENT_ID),
-                intent.getStringExtra(LECTURE_CONTENT_ID),
                 notificationId++,
                 NotificationCompat.Builder(this, DOWNLOAD_CHANNEL_ID).apply {
                     setSmallIcon(R.drawable.ic_file_download)
