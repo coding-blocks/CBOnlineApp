@@ -26,7 +26,7 @@ class MyCoursesViewModel(
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
 
-    //Todo : Fix page list
+    // Todo : Fix page list
     fun getMyRuns() = courseWithInstructorDao.getMyRuns().toLiveData(Config(5, enablePlaceholders = false))
 
     fun fetchMyCourses(refresh: Boolean = false) {
@@ -164,5 +164,4 @@ class MyCoursesViewModel(
     }
 
     fun getTopRun() = courseWithInstructorDao.getTopRun()
-
 }

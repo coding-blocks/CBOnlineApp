@@ -41,7 +41,6 @@ class MyCourseViewModel(
     val popMessage: LiveData<String> = mutablePopMessage
     var resetProgress: MutableLiveData<Boolean> = MutableLiveData()
 
-
     fun getAllContent() = sectionWithContentsDao.getSectionWithContent(attemptId)
 
     fun updatehit(attemptId: String) {
@@ -49,7 +48,6 @@ class MyCourseViewModel(
     }
 
     fun getResumeCourse() = ""
-
 
     fun getRun() = runDao.getRun(runId)
 
@@ -259,7 +257,6 @@ class MyCourseViewModel(
                     }
                 }
             })
-
     }
 
     fun resetProgress() {
@@ -299,6 +296,4 @@ class MyCourseViewModel(
     }
 
     fun getInstructor() = instructorDao.getInstructorWithCourseId(courseId)
-
-
 }

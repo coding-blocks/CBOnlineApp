@@ -1,6 +1,10 @@
 package com.codingblocks.cbonlineapp.database.models
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 
 class CourseInstructorHolder {
     @Entity(
@@ -30,7 +34,6 @@ class CourseInstructorHolder {
     class CourseRunPair : RunModel() {
         @Embedded
         var course: CourseModel = CourseModel()
-
     }
 
     class CourseInstructorPair(
@@ -39,7 +42,6 @@ class CourseInstructorHolder {
         @Embedded
         var instructor: InstructorModel
     )
-
 
     data class CourseAndItsInstructor(
         val courseRun: CourseRunPair,
@@ -76,12 +78,8 @@ class CourseInstructorHolder {
 //                                items.add(CourseAndItsInstructor(CourseRunPair(run.courseRun.run, it.key), it.value))
                             return@forEach
                         }
-
-
                     }
             }
         }
     }
-
-
 }

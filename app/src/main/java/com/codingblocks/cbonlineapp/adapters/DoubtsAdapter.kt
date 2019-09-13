@@ -33,7 +33,7 @@ class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>) : RecyclerVi
         context = parent.context
 
         return DoubtsViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.doubt_header_item, parent, false))
+            .inflate(R.layout.doubt_header_item, parent, false))
     }
 
     inner class DoubtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -46,10 +46,10 @@ class DoubtsAdapter(private var doubtsData: ArrayList<TopicsItem?>) : RecyclerVi
             itemView.setOnClickListener {
                 val DOUBT_ID = data.id
                 val builder = CustomTabsIntent.Builder()
-                        .enableUrlBarHiding()
-                        .setToolbarColor(context.resources.getColor(R.color.colorPrimaryDark))
-                        .setShowTitle(true)
-                        .setSecondaryToolbarColor(context.resources.getColor(R.color.colorPrimary))
+                    .enableUrlBarHiding()
+                    .setToolbarColor(context.resources.getColor(R.color.colorPrimaryDark))
+                    .setShowTitle(true)
+                    .setSecondaryToolbarColor(context.resources.getColor(R.color.colorPrimary))
                 val customTabsIntent = builder.build()
                 customTabsIntent.launchUrl(context, Uri.parse("http://discuss.codingblocks.com/t/$DOUBT_ID"))
             }

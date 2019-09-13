@@ -3,20 +3,17 @@ package com.codingblocks.cbonlineapp.viewmodels
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Player
 import com.onesignal.OneSignal
 
-class HomeActivityViewModel(
-) : ViewModel() {
+class HomeActivityViewModel : ViewModel() {
     internal var doubleBackToExitPressedOnce = false
     var mFragmentToSet: Fragment? = null
 
     lateinit var prefs: PreferenceHelper
-
 
     var invalidateTokenProgress: MutableLiveData<Boolean> = MutableLiveData()
     var fetchTokenProgress: MutableLiveData<Boolean> = MutableLiveData()

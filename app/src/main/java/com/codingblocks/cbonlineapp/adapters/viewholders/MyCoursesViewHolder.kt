@@ -80,4 +80,3 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
         }
     }
 }
-

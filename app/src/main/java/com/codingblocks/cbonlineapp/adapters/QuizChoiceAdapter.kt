@@ -69,7 +69,7 @@ class QuizChoiceAdapter(
             }
 
             itemView.setOnClickListener {
-                listener.onItemClick(position, choice.id!!)
+                listener.onItemClick(position, choice.id)
                 this@QuizChoiceAdapter.notifyDataSetChanged()
             }
         }

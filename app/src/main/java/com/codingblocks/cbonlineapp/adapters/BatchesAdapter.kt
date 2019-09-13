@@ -47,7 +47,7 @@ class BatchesAdapter(private var batchesData: ArrayList<Runs>?, var listener: On
                 if (price != mrp && mrp != "") {
                     ui.courseMrp.text = "₹ $mrp"
                     ui.courseMrp.paintFlags = ui.courseMrp.paintFlags or
-                            Paint.STRIKE_THRU_TEXT_FLAG
+                        Paint.STRIKE_THRU_TEXT_FLAG
                 }
                 val sdf = SimpleDateFormat("MMM dd yyyy")
                 var startDate: String? = ""

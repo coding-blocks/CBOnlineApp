@@ -1,6 +1,10 @@
 package com.codingblocks.cbonlineapp.database.models
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 
 class SectionContentHolder {
     @Entity(
@@ -25,8 +29,8 @@ class SectionContentHolder {
     data class SectionWithContent(
         @ColumnInfo(name = "section_id") val sectionId: String,
         @ColumnInfo(name = "content_id") val contentId: String,
-        val order: Int)
-
+        val order: Int
+    )
 
     class SectionContentPair(
         @Embedded
@@ -34,7 +38,6 @@ class SectionContentHolder {
         @Embedded
         var content: ContentModel
     )
-
 
     data class SectionAndItsContents(
         val section: SectionModel,
@@ -47,8 +50,6 @@ class SectionContentHolder {
                 sectionAndContent
                     .groupBy(keySelector = { it.section }, valueTransform = { it.content })
                     .forEach { items.add(SectionAndItsContents(it.key, it.value)) }
-
-
             }
         }
     }

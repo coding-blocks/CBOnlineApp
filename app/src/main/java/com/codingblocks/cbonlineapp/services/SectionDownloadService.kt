@@ -3,17 +3,13 @@ package com.codingblocks.cbonlineapp.services
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Environment
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
-import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
-import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.onlineapi.Clients
 import com.vdocipher.aegis.media.ErrorDescription
@@ -54,7 +50,7 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
 //                    setSmallIcon(R.drawable.ic_file_download)
 //                    setContentTitle("Downloading Section")
 //                    setOnlyAlertOnce(true)
-////                    addAction(0, "Cancel Download", stopIntent)
+// //                    addAction(0, "Cancel Download", stopIntent)
 //                    setLargeIcon(BitmapFactory.decodeResource(this@SectionDownloadService.resources, R.mipmap.ic_launcher))
 //                    setContentText("0 out of $totalCount downloaded")
 //                    setProgress(totalCount, 0, false)

@@ -29,7 +29,6 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.longToast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-
 class OverviewFragment : Fragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
@@ -107,7 +106,6 @@ class OverviewFragment : Fragment(), AnkoLogger {
             buyBtn.isEnabled = it != -1
         }
 
-
         viewModel.resetProgress.observer(viewLifecycleOwner) {
             requireActivity().finish()
         }
@@ -175,5 +173,4 @@ class OverviewFragment : Fragment(), AnkoLogger {
             }
         }
     }
-
 }

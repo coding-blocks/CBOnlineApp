@@ -20,9 +20,7 @@ import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_notifications.emptyTv
-import kotlinx.android.synthetic.main.activity_notifications.notificationRv
-import kotlinx.android.synthetic.main.activity_notifications.notificationToolbar
+import kotlinx.android.synthetic.main.activity_notifications.*
 import org.koin.android.ext.android.inject
 
 class NotificationsActivity : AppCompatActivity() {

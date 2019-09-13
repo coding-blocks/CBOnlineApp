@@ -18,11 +18,22 @@ import com.codingblocks.cbonlineapp.extensions.shimmerFrameLayout
 import com.codingblocks.cbonlineapp.widgets.ViewPagerCustomDuration
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.tabs.TabLayout
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.constraint.layout.constraintLayout
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.imageView
+import org.jetbrains.anko.include
+import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.nestedScrollView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.view
+import org.jetbrains.anko.wrapContent
 
 class HomeFragmentUi<T> : AnkoComponent<T> {
 
@@ -119,11 +130,9 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
                             include<CardView>(R.layout.item_skeleton_course_card)
                             include<CardView>(R.layout.item_skeleton_course_card)
                         }
-
                     }.lparams(width = matchParent, height = wrapContent) {
                         topToBottom = rvCourses.id
                     }
-
                 }.lparams(width = matchParent, height = matchParent) {
                     isFocusableInTouchMode = true
                     descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS

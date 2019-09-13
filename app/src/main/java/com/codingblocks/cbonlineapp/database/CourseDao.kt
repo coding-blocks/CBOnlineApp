@@ -10,5 +10,4 @@ abstract class CourseDao : BaseDao<CourseModel> {
 
     @Query("SElECT * FROM CourseModel ")
     abstract fun getCourses(): LiveData<List<CourseModel>>
-
 }

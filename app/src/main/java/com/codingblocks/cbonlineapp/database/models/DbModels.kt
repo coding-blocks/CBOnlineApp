@@ -1,11 +1,14 @@
 package com.codingblocks.cbonlineapp.database.models
 
-import androidx.room.*
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.onlineapi.models.CourseId
 import java.sql.Date
-
 
 @Entity
 data class ContentLecture(
@@ -152,4 +155,3 @@ data class Companies(
     val companyDescription: String,
     val website: String
 )
-

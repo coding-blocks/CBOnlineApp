@@ -1,6 +1,10 @@
 package com.codingblocks.cbonlineapp.database.models
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Ignore
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.codingblocks.cbonlineapp.database.ListObject
 
 @Entity(
@@ -33,5 +37,4 @@ data class SectionModel(
     var completedContent = 0
     @Ignore
     var totalTime = 0L
-
 }

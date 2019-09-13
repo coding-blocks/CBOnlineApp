@@ -76,7 +76,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
             bottom_navigation.selectedItemId = R.id.navigation_curriculum
         }
 
-
 //        resumeBtn.setOnClickListener {
 //            viewModel.getResumeCourse().observeOnce {
 //                if (it.isNotEmpty())
@@ -115,7 +114,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
 //        }
 //
     }
-
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))

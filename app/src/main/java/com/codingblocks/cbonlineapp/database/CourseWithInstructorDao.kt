@@ -9,7 +9,6 @@ import androidx.room.Query
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.database.models.InstructorModel
 
-
 @Dao
 interface CourseWithInstructorDao {
 
@@ -47,5 +46,4 @@ interface CourseWithInstructorDao {
        WHERE r.crAttemptId IS NOT NULL ORDER BY hits DESC LIMIT 2
     """)
     fun getTopRun(): LiveData<List<CourseInstructorHolder.CourseRunPair>>
-
 }

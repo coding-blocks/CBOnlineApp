@@ -290,7 +290,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     private fun fetchRating(id: String) {
         viewModel.getCourseRating(id).observeOnce {
-            it?.apply {
+            it.apply {
                 coursePageRatingCountTv.text = "$count Rating"
                 coursePageRatingTv.text = "$rating out of 5 stars"
                 coursePageRatingBar.rating = rating.toFloat()
@@ -299,10 +299,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     progressBar[i]?.progress = it.stats[i].toInt() * 1000
 
                     // Todo Add Animation on Focus
-//                    val anim =
-//                        ProgressBarAnimation(progressBar[i], 0F, it.stats[i].toInt() * 1000F)
-//                    anim.duration = 1500
-//                    progressBar[i]?.startAnimation(anim)
+                    //                    val anim =
+                    //                        ProgressBarAnimation(progressBar[i], 0F, it.stats[i].toInt() * 1000F)
+                    //                    anim.duration = 1500
+                    //                    progressBar[i]?.startAnimation(anim)
                 }
             }
         }

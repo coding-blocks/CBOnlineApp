@@ -32,7 +32,7 @@ class ViewPagerCustomDuration : ViewPager {
             val scroller = viewpager.getDeclaredField("mScroller")
             scroller.isAccessible = true
             mScroller = FixedSpeedScroller(context,
-                    DecelerateInterpolator())
+                DecelerateInterpolator())
             scroller.set(this, mScroller)
         } catch (ignored: Exception) {
         }

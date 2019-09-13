@@ -1,7 +1,11 @@
 package com.codingblocks.cbonlineapp.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 
 @Dao
@@ -29,16 +33,16 @@ interface SectionWithContentsDao {
 //
 //    @Query("""
 //        SELECT * FROM  CourseSection s
-//	    INNER JOIN SectionWithContent sc ON sc."section_id" = s."csid"
-//	    INNER JOIN ContentModel c ON c."ccid" = sc."content_id"
-//	    WHERE s.attemptId = :attemptId AND progress = "UNDONE"
+// 	    INNER JOIN SectionWithContent sc ON sc."section_id" = s."csid"
+// 	    INNER JOIN ContentModel c ON c."ccid" = sc."content_id"
+// 	    WHERE s.attemptId = :attemptId AND progress = "UNDONE"
 //        ORDER BY s."sectionOrder", sc."order" LIMIT 1
 //        """)
 //    fun resumeCourse(attemptId: String): LiveData<List<ContentModel>>
 //
 //    @Query("""
 //        SELECT * FROM  SectionModel s,ContentModel cc
-//	    WHERE s.attemptId = :attemptId AND progress = "UNDONE"
+// 	    WHERE s.attemptId = :attemptId AND progress = "UNDONE"
 //        ORDER BY s."sectionOrder", cc."order" LIMIT 1
 //        """)
 //    fun resumeCourse(attemptId: String): LiveData<List<ContentModel>>

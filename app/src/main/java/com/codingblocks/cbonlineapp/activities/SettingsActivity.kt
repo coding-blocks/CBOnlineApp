@@ -7,10 +7,10 @@ import android.os.StatFs
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.extensions.getPrefs
-import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.extensions.folderSize
+import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.readableFileSize
+import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.viewmodels.SettingsViewModel
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -47,7 +47,7 @@ class SettingsActivity : AppCompatActivity() {
         spaceUsedTv.text = String.format("%s used", file?.let {
             folderSize(
                 it
-        ).readableFileSize()
+            ).readableFileSize()
         })
 
         deleteAllTv.setOnClickListener {

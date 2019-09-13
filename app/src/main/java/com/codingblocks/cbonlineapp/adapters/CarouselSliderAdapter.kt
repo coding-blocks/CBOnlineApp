@@ -12,10 +12,7 @@ import com.codingblocks.cbonlineapp.extensions.loadImage
 import com.codingblocks.cbonlineapp.extensions.otherwise
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.onlineapi.models.CarouselCards
-import kotlinx.android.synthetic.main.item_carousel.view.button
-import kotlinx.android.synthetic.main.item_carousel.view.imgView
-import kotlinx.android.synthetic.main.item_carousel.view.subTitle
-import kotlinx.android.synthetic.main.item_carousel.view.title
+import kotlinx.android.synthetic.main.item_carousel.view.*
 
 class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Context?) :
     PagerAdapter() {

@@ -4,18 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.animation.RotateAnimation
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Sections
-import kotlinx.android.synthetic.main.item_section.view.lectureTime
-import kotlinx.android.synthetic.main.item_section.view.lectures
-import kotlinx.android.synthetic.main.item_section.view.title
+import kotlinx.android.synthetic.main.item_section.view.*
 
 class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : RecyclerView.Adapter<SectionsDataAdapter.CourseViewHolder>() {
 
@@ -35,6 +29,7 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
 
         return sectionData?.size ?: 0
     }
+
     override fun getItemViewType(position: Int): Int {
         return position
     }
@@ -43,7 +38,7 @@ class SectionsDataAdapter(private var sectionData: ArrayList<Sections>?) : Recyc
         context = parent.context
 
         return CourseViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_section, parent, false))
+            .inflate(R.layout.item_section, parent, false))
     }
 
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

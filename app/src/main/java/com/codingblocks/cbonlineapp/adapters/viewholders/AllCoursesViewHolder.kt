@@ -11,7 +11,6 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bindView(model: CourseInstructorHolder.CourseAndItsInstructor, ui: MyCourseCardUi) {
 
-
         with(model.courseRun.course) {
             ui.courseTitle.text = title
             ui.courseRatingTv.text = rating.toString()
@@ -45,7 +44,7 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 //        }
 //        ui.courseInstructors.text = instructors
 //
-////                    //bind Runs
+// //                    //bind Runs
 //        courseRun.run {
 //            ui.coursePrice.text = "₹ $crPrice"
 //            if (crPrice != crMrp && crMrp != "") {

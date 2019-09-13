@@ -37,5 +37,4 @@ data class ContentModel(
     var contentCsv: ContentCsvModel = ContentCsvModel()
 ) : ListObject() {
     override fun getType(): Int = TYPE_CONTENT
-
 }

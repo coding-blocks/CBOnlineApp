@@ -7,10 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.onlineapi.models.ProductExtensionsItem
-import kotlinx.android.synthetic.main.item_extension.view.cardView
-import kotlinx.android.synthetic.main.item_extension.view.date
-import kotlinx.android.synthetic.main.item_extension.view.price
-import kotlinx.android.synthetic.main.item_extension.view.title
+import kotlinx.android.synthetic.main.item_extension.view.*
 
 class ExtensionsAdapter(var list: ArrayList<ProductExtensionsItem>) : RecyclerView.Adapter<ExtensionsAdapter.ExtensionViewHolder>() {
 

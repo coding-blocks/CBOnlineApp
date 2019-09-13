@@ -10,7 +10,7 @@ import com.codingblocks.cbonlineapp.util.QUIZ_ID
 import com.codingblocks.cbonlineapp.util.QUIZ_QNA
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_quiz.quiz_toolbar
+import kotlinx.android.synthetic.main.activity_quiz.*
 
 class QuizActivity : AppCompatActivity() {
     private val quizId: String by lazy {

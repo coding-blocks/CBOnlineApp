@@ -19,7 +19,6 @@ class CourseDataAdapter(
 
     val ui = MyCourseCardUi()
 
-
     override fun getItemViewType(position: Int): Int {
         return position
     }

@@ -44,17 +44,13 @@ import org.jetbrains.anko.yesButton
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.concurrent.TimeUnit
 
-
 class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
-
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     lateinit var attemptId: String
     private val sectionItemsAdapter = SectionItemsAdapter()
 
-
     private val viewModel by sharedViewModel<MyCourseViewModel>()
-
 
     override fun startDownload(
         videoId: String,
@@ -77,7 +73,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         return inflater.inflate(R.layout.fragment_course_content, container, false)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -93,8 +88,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         val layoutManager = LinearLayoutManager(context)
         rvExpendableView.layoutManager = layoutManager
         rvExpendableView.adapter = sectionItemsAdapter
-
-
 
         viewModel.getAllContent().observer(this) { SectionContent ->
             val response = SectionContentHolder.groupContentBySection(SectionContent)
@@ -121,7 +114,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 val pos = consolidatedList.size
                 consolidatedList.addAll(sectionContent.contents)
 
-
                 val tab = tabs.newTab()
                 tab.tag = pos - 1
 
@@ -130,8 +122,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             }
             sectionItemsAdapter.submitList(consolidatedList)
         }
-
-
 
         tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(p0: TabLayout.Tab?) {
@@ -148,7 +138,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 smoothScroller.targetPosition = p0.tag.toString().toInt()
                 layoutManager.startSmoothScroll(smoothScroller)
             }
-
         })
 
         /**
@@ -207,7 +196,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             .enqueue(request)
     }
 
-
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
@@ -219,7 +207,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             }
         }
     }
-
 
     override fun startSectionDownlod(sectionId: String) {
         startService<SectionDownloadService>(SECTION_ID to sectionId)
@@ -234,5 +221,4 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 }
             }
     }
-
 }

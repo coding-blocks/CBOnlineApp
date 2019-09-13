@@ -9,7 +9,11 @@ import android.graphics.drawable.PictureDrawable
 import android.os.Build
 import android.os.Build.VERSION_CODES.N_MR1
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -22,8 +26,12 @@ import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
-import com.codingblocks.cbonlineapp.util.*
+import com.codingblocks.cbonlineapp.util.COURSE_ID
+import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.NetworkUtils.okHttpClient
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.viewmodels.MyCoursesViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
 import okhttp3.Request
@@ -48,7 +56,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         savedInstanceState: Bundle?
     ): View? = ui.createView(AnkoContext.create(ctx, this))
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
@@ -57,7 +64,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             putString(FirebaseAnalytics.Param.ITEM_NAME, "MyCourses")
         }
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
-
 
         setHasOptionsMenu(true)
 
@@ -98,7 +104,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 viewModel.fetchMyCourses()
             }
             ui.shimmerLayout.isVisible = it.isEmpty()
-
         }
     }
 

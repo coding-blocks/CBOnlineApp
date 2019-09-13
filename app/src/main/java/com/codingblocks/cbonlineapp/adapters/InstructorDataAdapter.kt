@@ -24,11 +24,11 @@ class InstructorDataAdapter(private var instructorData: ArrayList<InstructorMode
     }
 
     override fun getItemCount(): Int {
-        return instructorData!!.size
+        return instructorData.size
     }
 
     override fun onBindViewHolder(holder: InstructorViewHolder, position: Int) {
-        holder.bindView(instructorData!![position])
+        holder.bindView(instructorData[position])
     }
 
     inner class InstructorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

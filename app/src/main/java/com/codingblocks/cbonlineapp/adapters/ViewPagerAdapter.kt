@@ -13,11 +13,11 @@ import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.OnItemClickListener
 import com.codingblocks.cbonlineapp.viewmodels.QuizViewModel
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.QuizResult
 import com.codingblocks.onlineapi.models.Choice
 import com.codingblocks.onlineapi.models.QuizAttempt
-import com.codingblocks.onlineapi.models.Quizqnas
+import com.codingblocks.onlineapi.models.QuizResult
 import com.codingblocks.onlineapi.models.QuizSubmission
+import com.codingblocks.onlineapi.models.Quizqnas
 import kotlinx.android.synthetic.main.quizlayout.view.*
 import org.jetbrains.anko.AnkoLogger
 

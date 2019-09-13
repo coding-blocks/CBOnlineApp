@@ -16,14 +16,7 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizqnas
 import com.codingblocks.onlineapi.models.RunAttemptsId
-import kotlinx.android.synthetic.main.fragment_about_quiz.aboutQuiz
-import kotlinx.android.synthetic.main.fragment_about_quiz.quizAttemptLv
-import kotlinx.android.synthetic.main.fragment_about_quiz.quizDescription
-import kotlinx.android.synthetic.main.fragment_about_quiz.quizMarks
-import kotlinx.android.synthetic.main.fragment_about_quiz.quizQuestion
-import kotlinx.android.synthetic.main.fragment_about_quiz.quizTitle
-import kotlinx.android.synthetic.main.fragment_about_quiz.quizType
-import kotlinx.android.synthetic.main.fragment_about_quiz.startQuiz
+import kotlinx.android.synthetic.main.fragment_about_quiz.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 

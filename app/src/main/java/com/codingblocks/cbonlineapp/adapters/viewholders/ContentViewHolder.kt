@@ -69,11 +69,8 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
                 CODE -> {
                     contentType.setImageDrawable(context.getDrawable(R.drawable.ic_code))
-
                 }
-
             }
-
 
             setOnClickListener {
                 if (content.contentable != CODE) {
@@ -127,7 +124,4 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             )
         }
     }
-
 }
-
-

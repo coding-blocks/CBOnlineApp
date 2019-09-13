@@ -14,16 +14,7 @@ import com.codingblocks.cbonlineapp.extensions.isotomillisecond
 import com.codingblocks.cbonlineapp.extensions.loadImage
 import com.codingblocks.cbonlineapp.extensions.timeAgo
 import com.codingblocks.cbonlineapp.util.JOB_ID
-import kotlinx.android.synthetic.main.item_job.view.btnApply
-import kotlinx.android.synthetic.main.item_job.view.companyLogo
-import kotlinx.android.synthetic.main.item_job.view.companyTv
-import kotlinx.android.synthetic.main.item_job.view.ctcTv
-import kotlinx.android.synthetic.main.item_job.view.deadlineTv
-import kotlinx.android.synthetic.main.item_job.view.experienceTv
-import kotlinx.android.synthetic.main.item_job.view.jobTitleTv
-import kotlinx.android.synthetic.main.item_job.view.locationTv
-import kotlinx.android.synthetic.main.item_job.view.postedAgoTv
-import kotlinx.android.synthetic.main.item_job.view.typeTv
+import kotlinx.android.synthetic.main.item_job.view.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 
@@ -59,7 +50,7 @@ class JobsAdapter(diffCallback: JobsDiffCallback) :
                 companyTv.text = job.company.name
                 postedAgoTv.text = timeAgo(job.postedOn.isotomillisecond())
                 locationTv.text =
-                    getSpannableSring("Job Location: ", job.location ?: "No experience required")
+                    getSpannableSring("Job Location: ", job.location)
                 experienceTv.text = getSpannableSring("Experience: ", job.experience)
                 typeTv.text = getSpannableSring("Job Type: ", job.type)
                 ctcTv.text = getSpannableSring("CTC: ", job.ctc)

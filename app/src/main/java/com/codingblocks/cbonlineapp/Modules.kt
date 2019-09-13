@@ -2,7 +2,18 @@ package com.codingblocks.cbonlineapp
 
 import androidx.room.Room
 import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.viewmodels.*
+import com.codingblocks.cbonlineapp.viewmodels.CourseViewModel
+import com.codingblocks.cbonlineapp.viewmodels.HomeActivityViewModel
+import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
+import com.codingblocks.cbonlineapp.viewmodels.JobDetailViewModel
+import com.codingblocks.cbonlineapp.viewmodels.JobsViewModel
+import com.codingblocks.cbonlineapp.viewmodels.LeaderboardViewModel
+import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
+import com.codingblocks.cbonlineapp.viewmodels.MyCoursesViewModel
+import com.codingblocks.cbonlineapp.viewmodels.NotificationViewModel
+import com.codingblocks.cbonlineapp.viewmodels.QuizViewModel
+import com.codingblocks.cbonlineapp.viewmodels.SettingsViewModel
+import com.codingblocks.cbonlineapp.viewmodels.VideoPlayerViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
@@ -24,7 +35,6 @@ val viewModelModule = module {
     viewModel { SettingsViewModel(get()) }
     viewModel { JobsViewModel(get()) }
     viewModel { JobDetailViewModel(get(), get(), get(), get()) }
-
 }
 val databaseModule = module {
 

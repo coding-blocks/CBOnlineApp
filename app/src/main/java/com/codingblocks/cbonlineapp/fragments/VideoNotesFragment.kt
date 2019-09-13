@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.VideosNotesAdapter
 import com.codingblocks.cbonlineapp.database.models.NotesModel
-import com.codingblocks.cbonlineapp.util.OnItemClickListener
 import com.codingblocks.cbonlineapp.extensions.observer
+import com.codingblocks.cbonlineapp.util.OnItemClickListener
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.viewmodels.VideoPlayerViewModel
 import kotlinx.android.synthetic.main.fragment_notes.view.*
