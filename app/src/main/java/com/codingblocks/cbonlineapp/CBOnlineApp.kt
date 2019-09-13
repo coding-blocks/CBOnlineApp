@@ -72,7 +72,7 @@ class CBOnlineApp : Application() {
                 .addInterceptor(
                     CalligraphyInterceptor(
                         CalligraphyConfig.Builder()
-                            .setDefaultFontPath("fonts/nunitosans_semibold.ttf")
+                            .setDefaultFontPath("fonts/nunitosans_regular.ttf")
                             .setFontAttrId(R.attr.fontPath)
                             .build()
                     )

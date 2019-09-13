@@ -7,9 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
-import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.work.*
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.SectionItemsAdapter
 import com.codingblocks.cbonlineapp.database.ListObject
@@ -18,13 +24,20 @@ import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.services.DownloadService
 import com.codingblocks.cbonlineapp.services.SectionDownloadService
-import com.codingblocks.cbonlineapp.util.*
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.DownloadStarter
+import com.codingblocks.cbonlineapp.util.PROGRESS_ID
+import com.codingblocks.cbonlineapp.util.ProgressWorker
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.analytics.FirebaseAnalytics
+import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.startService
 import org.jetbrains.anko.yesButton
@@ -32,30 +45,25 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.concurrent.TimeUnit
 
 
-class CourseContentFragment : Fragment(), AnkoLogger,
-    DownloadStarter {
+class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
-
-    override fun startSectionDownlod(sectionId: String) {
-        startService<SectionDownloadService>(SECTION_ID to sectionId)
-    }
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     lateinit var attemptId: String
+    private val sectionItemsAdapter = SectionItemsAdapter()
+
+
     private val viewModel by sharedViewModel<MyCourseViewModel>()
+
 
     override fun startDownload(
         videoId: String,
-        sectionId: String,
-        lectureContentId: String,
+        contentId: String,
         title: String,
-        attemptId: String,
-        contentId: String
+        attemptId: String
     ) {
         startService<DownloadService>(
-            SECTION_ID to sectionId,
             VIDEO_ID to videoId,
-            LECTURE_CONTENT_ID to lectureContentId,
             "title" to title,
             RUN_ATTEMPT_ID to attemptId,
             CONTENT_ID to contentId)
@@ -78,12 +86,9 @@ class CourseContentFragment : Fragment(), AnkoLogger,
                 return SNAP_TO_START
             }
         }
-
-
         swiperefresh.setOnRefreshListener {
             (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
         }
-        val sectionItemsAdapter = SectionItemsAdapter()
         sectionItemsAdapter.starter = this
         val layoutManager = LinearLayoutManager(context)
         rvExpendableView.layoutManager = layoutManager
@@ -95,7 +100,7 @@ class CourseContentFragment : Fragment(), AnkoLogger,
             val response = SectionContentHolder.groupContentBySection(SectionContent)
             val consolidatedList = ArrayList<ListObject>()
             tabs.removeAllTabs()
-            response.forEachIndexed { index, sectionContent ->
+            response.forEach { sectionContent ->
                 var duration: Long = 0
                 var sectionComplete = 0
                 sectionContent.contents.forEach { content ->
@@ -120,7 +125,7 @@ class CourseContentFragment : Fragment(), AnkoLogger,
                 val tab = tabs.newTab()
                 tab.tag = pos - 1
 
-                tab.text = sectionContent.section.name.substring(0, 10)
+                tab.text = sectionContent.section.name.substring(0, 5)
                 tabs.addTab(tab)
             }
             sectionItemsAdapter.submitList(consolidatedList)
@@ -181,10 +186,13 @@ class CourseContentFragment : Fragment(), AnkoLogger,
         }
     }
 
-    override fun updateProgress(contentId: String) {
+    override fun updateProgress(contentId: String, progressId: String) {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-
-        val progressData = workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to attemptId)
+        val progressData: Data = if (progressId.isNotEmpty()) {
+            workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to attemptId, PROGRESS_ID to progressId)
+        } else {
+            workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to attemptId)
+        }
 
         val request: OneTimeWorkRequest =
             OneTimeWorkRequestBuilder<ProgressWorker>()
@@ -192,6 +200,8 @@ class CourseContentFragment : Fragment(), AnkoLogger,
                 .setInputData(progressData)
                 .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
                 .build()
+        Snackbar.make(contentRoot, "Progress Will Be Synced Once Your Device Get Online", Snackbar.LENGTH_SHORT)
+            .setAnchorView(bottom_navigation).show()
 
         WorkManager.getInstance()
             .enqueue(request)
@@ -208,6 +218,11 @@ class CourseContentFragment : Fragment(), AnkoLogger,
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
             }
         }
+    }
+
+
+    override fun startSectionDownlod(sectionId: String) {
+        startService<SectionDownloadService>(SECTION_ID to sectionId)
     }
 
     companion object {

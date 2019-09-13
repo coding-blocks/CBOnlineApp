@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.adapters.viewholders.AllCoursesViewHolder
+import com.codingblocks.cbonlineapp.adapters.viewholders.MyCoursesViewHolder
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.ui.MyCourseCardUi
 import org.jetbrains.anko.AnkoContext

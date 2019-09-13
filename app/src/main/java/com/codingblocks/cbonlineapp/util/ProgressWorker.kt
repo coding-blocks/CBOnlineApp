@@ -10,6 +10,7 @@ import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.RunAttemptsId
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
+import retrofit2.Response
 
 class ProgressWorker(context: Context, private val workerParameters: WorkerParameters) : Worker(context, workerParameters), KoinComponent {
 
@@ -17,14 +18,23 @@ class ProgressWorker(context: Context, private val workerParameters: WorkerParam
         val contentDao: ContentDao by inject()
         val contentId = workerParameters.inputData.getString(CONTENT_ID)
         val attemptId = workerParameters.inputData.getString(RUN_ATTEMPT_ID)
+        val progressId = workerParameters.inputData.getString(PROGRESS_ID)
+
         val progress = Progress()
         progress.status = "DONE"
         progress.runs = RunAttemptsId(attemptId)
         progress.content = ContentsId(contentId)
-        val response = Clients.onlineV2JsonApi.setProgress(progress).execute()
+        val response: Response<Progress>
+        if (progressId.isNullOrEmpty()) {
+            response = Clients.onlineV2JsonApi.setProgress(progress).execute()
+        } else {
+            progress.id = progressId
+            response = Clients.onlineV2JsonApi.updateProgress(progressId, progress).execute()
+        }
 
         if (response.isSuccessful) {
             response.body()?.let {
+                //TODO -  Fix this db call
                 contentDao.updateProgress(it.contentId, it.runAttemptId, it.status, it.id)
             }
             return Result.success()

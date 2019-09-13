@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<!--    <androidx.core.widget.NestedScrollView xmlns:tools="http://schemas.android.com/tools"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        tools:context=".fragments.CourseContentFragment">-->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/contentRoot"
     android:orientation="vertical">
 
     <!--            <TextView-->
@@ -63,13 +57,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvExpendableView"
-            android:overScrollMode="never"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
             android:layout_marginTop="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_small"
             android:layout_marginBottom="@dimen/margin_medium"
+            android:overScrollMode="never"
             tools:listitem="@layout/item_section" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

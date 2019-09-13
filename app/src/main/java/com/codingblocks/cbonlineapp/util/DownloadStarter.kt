@@ -3,14 +3,12 @@ package com.codingblocks.cbonlineapp.util
 interface DownloadStarter {
     fun startDownload(
         videoId: String,
-        sectionId: String,
-        lectureContentId: String,
+        contentId: String,
         title: String,
-        attemptId: String,
-        contentId: String
+        attemptId: String
     )
 
     fun startSectionDownlod(sectionId: String)
 
-    fun updateProgress(contentId: String)
+    fun updateProgress(contentId: String, progressId: String)
 }

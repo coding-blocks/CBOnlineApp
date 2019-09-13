@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.adapters
+package com.codingblocks.cbonlineapp.adapters.viewholders
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

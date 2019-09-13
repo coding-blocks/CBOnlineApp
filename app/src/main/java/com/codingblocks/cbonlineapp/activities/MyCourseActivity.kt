@@ -77,20 +77,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
         }
 
 
-        // Intent in = new  Intent(this,MainActi.class)
-        //i.putSTRING("KEY",user)
-//
-//        if (viewModel.attemptId.isEmpty()) {
-//            viewModel.attemptId = viewModel.getRunAttempt(viewModel.runId)
-//        }
-//        if (savedInstanceState == null) {
-//
-//            viewModel.updatehit(viewModel.attemptId)
-//            viewModel.fetchCourse(viewModel.attemptId)
-//            setupViewPager(viewModel.attemptId, viewModel.courseId)
-//        }
-//
-//
 //        resumeBtn.setOnClickListener {
 //            viewModel.getResumeCourse().observeOnce {
 //                if (it.isNotEmpty())
@@ -135,51 +121,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
-    //    private fun confirmReset() {
-//        val builder = android.app.AlertDialog.Builder(this)
-//        val inflater = layoutInflater
-//        val customView = inflater.inflate(R.layout.custom_dialog, null)
-//        customView.okBtn.text = "Yes"
-//        customView.cancelBtn.text = "No"
-//        customView.description.text = "Are you sure you want to reset progress?"
-//        builder.setCancelable(false)
-//        builder.setView(customView)
-//        val dialog = builder.create()
-//        customView.cancelBtn.setOnClickListener {
-//            dialog.dismiss()
-//        }
-//        customView.okBtn.setOnClickListener {
-//            viewModel.resetProgress()
-//        }
-//        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-//        dialog.show()
-//    }
-//
-//    override fun onStart() {
-//        super.onStart()
-//
-
-    //    }
-//
-//    private fun setupViewPager(crUid: String, crCourseId: String) {
-//        val adapter = TabLayoutAdapter(supportFragmentManager)
-//        adapter.add(OverviewFragment.newInstance(viewModel.attemptId, crUid), "Dashboard")
-//        adapter.add(CourseContentFragment.newInstance(viewModel.attemptId), "Course Content")
-//        adapter.add(LeaderboardFragment.newInstance(viewModel.runId), "Leaderboard")
-//        adapter.add(DoubtsFragment.newInstance(viewModel.attemptId, crCourseId), "Doubts")
-//        adapter.add(AboutFragment.newInstance(viewModel.courseId, viewModel.attemptId), "About")
-//
-//        htab_viewpager.adapter = adapter
-//        htab_tabs.setupWithViewPager(htab_viewpager)
-//        htab_tabs.getTabAt(0)?.setIcon(R.drawable.ic_chart_line)
-//        htab_tabs.getTabAt(1)?.setIcon(R.drawable.ic_docs)
-//        htab_tabs.getTabAt(2)?.setIcon(R.drawable.ic_leaderboard)
-//        htab_tabs.getTabAt(3)?.setIcon(R.drawable.ic_announcement)
-//        htab_tabs.getTabAt(4)?.setIcon(R.drawable.ic_menu)
-//        htab_tabs.getTabAt(1)?.select()
-//        htab_viewpager.offscreenPageLimit = 4
-//    }
-//
     override fun onRefresh() {
         viewModel.fetchCourse(viewModel.attemptId)
     }

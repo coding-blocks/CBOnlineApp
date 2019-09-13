@@ -3,10 +3,20 @@ package com.codingblocks.cbonlineapp.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
-import com.codingblocks.cbonlineapp.database.*
-import com.codingblocks.cbonlineapp.database.models.*
+import com.codingblocks.cbonlineapp.database.ContentDao
+import com.codingblocks.cbonlineapp.database.CourseRunDao
+import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.database.SectionDao
+import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
+import com.codingblocks.cbonlineapp.database.models.ContentCodeChallenge
+import com.codingblocks.cbonlineapp.database.models.ContentCsvModel
+import com.codingblocks.cbonlineapp.database.models.ContentDocument
+import com.codingblocks.cbonlineapp.database.models.ContentLecture
+import com.codingblocks.cbonlineapp.database.models.ContentModel
+import com.codingblocks.cbonlineapp.database.models.ContentQna
+import com.codingblocks.cbonlineapp.database.models.ContentVideo
+import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
+import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.SingleLiveEvent
 import com.codingblocks.onlineapi.Clients
@@ -40,7 +50,6 @@ class MyCourseViewModel(
 
     fun getResumeCourse() = ""
 
-    fun getSectionDownloadlist(id: String) = ""
 
     fun getRun() = runDao.getRun(runId)
 

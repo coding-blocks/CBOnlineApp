@@ -4,6 +4,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.adapters.viewholders.ContentViewHolder
+import com.codingblocks.cbonlineapp.adapters.viewholders.SectionViewHolder
 import com.codingblocks.cbonlineapp.database.ListObject
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
@@ -38,6 +40,7 @@ class SectionItemsAdapter : ListAdapter<ListObject, RecyclerView.ViewHolder>(dif
                 val content = getItem(position) as ContentModel
                 val contentViewHolder = holder as ContentViewHolder
                 contentViewHolder.bindTo(content)
+                contentViewHolder.starterListener = starter
             }
         }
     }
@@ -54,16 +57,6 @@ class SectionItemsAdapter : ListAdapter<ListObject, RecyclerView.ViewHolder>(dif
     }
 
     companion object {
-        /**
-         * This diff callback informs the PagedListAdapter how to compute list differences when new
-         * PagedLists arrive.
-         * <p>
-         * When you add a Cheese with the 'Add' button, the PagedListAdapter uses diffCallback to
-         * detect there's only a single item difference from before, so it only needs to animate and
-         * rebind a single view.
-         *
-         * @see android.support.v7.util.DiffUtil
-         */
         private val diffCallback = object : DiffUtil.ItemCallback<ListObject>() {
             override fun areItemsTheSame(oldItem: ListObject, newItem: ListObject): Boolean =
                 oldItem.equals(newItem)

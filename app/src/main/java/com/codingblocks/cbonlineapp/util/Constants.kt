@@ -6,6 +6,8 @@ const val SECTION_ID: String = "sectionId"
 
 const val VIDEO_ID: String = "videoId"
 
+val PROGRESS_ID = "progressId"
+
 const val TITLE: String = "title"
 
 const val ID: String = "id"
@@ -41,6 +43,10 @@ const val LECTURE = "lecture"
 const val DOCUMENT = "document"
 
 const val VIDEO = "video"
+
+const val QNA = "qna"
+
+const val CODE = "code-challenge"
 
 const val FILE_NAME = "fileName"
 
