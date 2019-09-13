@@ -8,6 +8,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.fragments.AboutFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
+import com.codingblocks.cbonlineapp.fragments.LeaderboardFragment
 import com.codingblocks.cbonlineapp.fragments.OverviewFragment
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
@@ -41,14 +42,14 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_leaderboard -> {
-                val fragment = OverviewFragment.newInstance(viewModel.attemptId, viewModel.runId)
+                val fragment = LeaderboardFragment.newInstance(viewModel.attemptId)
                 supportFragmentManager.commit {
                     replace(R.id.container_course, fragment)
                 }
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_about -> {
-                val fragment = AboutFragment.newInstance(viewModel.attemptId, viewModel.runId)
+                val fragment = AboutFragment.newInstance(viewModel.courseId, viewModel.attemptId)
                 supportFragmentManager.commit {
                     replace(R.id.container_course, fragment)
                 }
@@ -127,13 +128,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
 //            }
 //        }
 //
-//        resetBtn.setOnClickListener {
-//            confirmReset()
-//        }
-//
-//        viewModel.resetProgress.observe(this, Observer {
-//            finish()
-//        })
     }
 
 
@@ -164,12 +158,8 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
 //    override fun onStart() {
 //        super.onStart()
 //
-//        viewModel.getRunByAtemptId(viewModel.attemptId).observer(this) {
-//            courseProgress.progress = it.progress.toInt()
-//            contentCompletedTv.text = "${it.completedContents} of ${it.totalContents} Contents Completed"
-//            batchEndTv.text = "Batch Ends ${getDateForTime(it.crRunEnd)}"
-//        }
-//    }
+
+    //    }
 //
 //    private fun setupViewPager(crUid: String, crCourseId: String) {
 //        val adapter = TabLayoutAdapter(supportFragmentManager)

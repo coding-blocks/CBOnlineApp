@@ -17,10 +17,10 @@ import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.util.ARG_COURSE_ID
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.viewmodels.AnnouncementsViewModel
+import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
-import kotlinx.android.synthetic.main.fragment_annoucements.view.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlinx.android.synthetic.main.fragment_annoucements.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class AboutFragment : Fragment() {
     lateinit var courseId: String
@@ -28,7 +28,7 @@ class AboutFragment : Fragment() {
     lateinit var attemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    private val viewModel by viewModel<AnnouncementsViewModel>()
+    private val viewModel by sharedViewModel<MyCourseViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,24 +44,28 @@ class AboutFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_annoucements, container, false)
+
+        return inflater.inflate(R.layout.fragment_annoucements, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val instructorList = ArrayList<InstructorModel>()
         val instructorAdapter = InstructorDataAdapter(instructorList)
-        view.instructorRv.layoutManager = LinearLayoutManager(context)
-        view.instructorRv.adapter = instructorAdapter
+        instructorRv.layoutManager = LinearLayoutManager(context)
+        instructorRv.adapter = instructorAdapter
 
-        viewModel.getInstructorWithCourseId(courseId).observer(this) {
+        viewModel.getInstructor().observer(this) {
             instructorAdapter.setData(it as ArrayList<InstructorModel>)
         }
 
-        viewModel.getRunByAtemptId(attemptId).observer(this) {
+        viewModel.getRun().observer(this) {
             whatsAppLink = it.whatsappLink
-            view.joinWhatsAppGroupView.isVisible = whatsAppLink?.run { true } ?: false
+            joinWhatsAppGroupView.isVisible = whatsAppLink?.run { true } ?: false
         }
 
-        view.joinWhatsAppButton.setOnClickListener {
+        joinWhatsAppButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setPackage("com.whatsapp")
             intent.data = Uri.parse(whatsAppLink)
@@ -71,8 +75,6 @@ class AboutFragment : Fragment() {
                 Toast.makeText(this@AboutFragment.requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
             }
         }
-
-        return view
     }
 
     companion object {

@@ -9,23 +9,26 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.ExtensionsAdapter
+import com.codingblocks.cbonlineapp.extensions.getDateForTime
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
+import com.codingblocks.cbonlineapp.util.ARG_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.ProductExtensionsItem
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
+import kotlinx.android.synthetic.main.custom_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.fragment_overview.view.*
+import kotlinx.android.synthetic.main.fragment_overview.view.description
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.longToast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-private const val ARG_ATTEMPT_ID = "attempt_id"
-private const val ARG__RUN_ID = "run_id"
 
 class OverviewFragment : Fragment(), AnkoLogger {
 
@@ -55,7 +58,28 @@ class OverviewFragment : Fragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getRunByAtemptId(viewModel.attemptId).observer(viewLifecycleOwner) { courseRun ->
+
+        setUpObservers(view)
+
+        buyBtn.setOnClickListener {
+            extensionsAdapter.getSelected()?.id?.let { it1 ->
+                Clients.api.buyExtension(it1).enqueue(retrofitCallback { throwable, response ->
+                    response.let {
+                    }
+                    Components.openChrome(requireContext(), "https://dukaan.codingblocks.com/mycart")
+                })
+            } ?: run {
+                longToast("Atleast Select One Before Proceding !!")
+            }
+        }
+
+        resetBtn.setOnClickListener {
+            confirmReset()
+        }
+    }
+
+    private fun setUpObservers(view: View) {
+        viewModel.getRun().observer(viewLifecycleOwner) { courseRun ->
             if (courseRun.progress > 90.0) {
                 completetionBtn.setImageResource(R.drawable.ic_status_white)
                 requestBtn.apply {
@@ -83,21 +107,40 @@ class OverviewFragment : Fragment(), AnkoLogger {
             buyBtn.isEnabled = it != -1
         }
 
-        buyBtn.setOnClickListener {
-            extensionsAdapter.getSelected()?.id?.let { it1 ->
-                Clients.api.buyExtension(it1).enqueue(retrofitCallback { throwable, response ->
-                    response.let {
-                    }
-                    Components.openChrome(requireContext(), "https://dukaan.codingblocks.com/mycart")
-                })
-            } ?: run {
-                longToast("Atleast Select One Before Proceding !!")
-            }
+
+        viewModel.resetProgress.observer(viewLifecycleOwner) {
+            requireActivity().finish()
         }
 
         viewModel.popMessage.observer(viewLifecycleOwner) { message ->
             Snackbar.make(view.rootView, message, Snackbar.LENGTH_LONG).show()
         }
+
+        viewModel.getRun().observer(this) {
+            courseProgress.progress = it.progress.toInt()
+            contentCompletedTv.text = String.format("%d of %d", it.completedContents, it.totalContents)
+            batchEndTv.text = String.format("Batch Ends %s", getDateForTime(it.crRunEnd))
+        }
+    }
+
+    private fun confirmReset() {
+        val builder = android.app.AlertDialog.Builder(requireContext())
+        val inflater = layoutInflater
+        val customView = inflater.inflate(R.layout.custom_dialog, null)
+        customView.okBtn.text = "Yes"
+        customView.cancelBtn.text = "No"
+        customView.description.text = "Are you sure you want to reset progress?"
+        builder.setCancelable(false)
+        builder.setView(customView)
+        val dialog = builder.create()
+        customView.cancelBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        customView.okBtn.setOnClickListener {
+            viewModel.resetProgress()
+        }
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -105,7 +148,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
         arguments?.let {
             attemptId = it.getString(ARG_ATTEMPT_ID)!!
-            runId = it.getString(ARG__RUN_ID)!!
+            runId = it.getString(RUN_ID)!!
         }
     }
 
@@ -116,7 +159,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
             OverviewFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_ATTEMPT_ID, param1)
-                    putString(ARG__RUN_ID, crUid)
+                    putString(RUN_ID, crUid)
                 }
             }
     }
@@ -132,4 +175,5 @@ class OverviewFragment : Fragment(), AnkoLogger {
             }
         }
     }
+
 }

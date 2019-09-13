@@ -1,9 +1,6 @@
 package com.codingblocks.cbonlineapp.database.models
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.codingblocks.cbonlineapp.database.ListObject
 
 @Entity(
@@ -25,6 +22,16 @@ data class SectionModel(
     var run_id: String,
     var attemptId: String
 ) : ListObject() {
+    @Ignore
     override fun getType(): Int = TYPE_SECTION
+
+    @Ignore
+    var idList = ArrayList<String>()
+    @Ignore
+    var totalContent = 0
+    @Ignore
+    var completedContent = 0
+    @Ignore
+    var totalTime = 0L
 
 }

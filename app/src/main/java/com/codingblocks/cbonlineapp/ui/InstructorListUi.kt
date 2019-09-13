@@ -24,7 +24,6 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
     lateinit var instructorImgView: CircleImageView
     lateinit var instructorEmail: TextView
     lateinit var instructorTextView: TextView
-    lateinit var font: Typeface
 
     override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui) {
 
@@ -41,7 +40,6 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
             instructorTextView = textView {
                 id = View.generateViewId()
                 textSize = 18f
-                typeface = font
                 textColor = Color.parseColor("#ff6666")
             }.lparams(width = 0, height = wrapContent) {
                 marginStart = dip(16)
@@ -55,7 +53,6 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
                 id = View.generateViewId()
                 textColor = Color.parseColor("#000000")
                 textSize = 22f
-                typeface = font
             }.lparams(width = dip(0), height = dip(wrapContent)) {
                 marginStart = dip(16)
                 marginEnd = dip(8)
@@ -67,7 +64,6 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
                 id = View.generateViewId()
                 textColor = Color.parseColor("#000000")
                 textSize = 14f
-                typeface = font
             }.lparams(width = 0, height = wrapContent) {
                 marginStart = dip(16)
                 marginEnd = dip(8)
@@ -79,7 +75,6 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
                 id = View.generateViewId()
                 textColor = Color.parseColor("#000000")
                 textSize = 14f
-                typeface = font
             }.lparams(width = dip(0), height = dip(wrapContent)) {
                 marginStart = dip(16)
                 topMargin = dip(8)

@@ -13,8 +13,11 @@ import com.codingblocks.cbonlineapp.database.models.InstructorModel
 @Dao
 interface CourseWithInstructorDao {
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(join: CourseInstructorHolder.CourseWithInstructor)
+
     @Query("""
-        SELECT * FROM InstructorModel i
+        SELECT i.* FROM InstructorModel i
         INNER JOIN coursewithinstructor ON
         i.uid = coursewithinstructor.instructor_id
         WHERE coursewithinstructor.course_id = :courseID
@@ -22,16 +25,7 @@ interface CourseWithInstructorDao {
     fun getInstructorWithCourseId(courseID: String): LiveData<List<InstructorModel>>
 
     @Query("""
-        SELECT * FROM InstructorModel i
-        INNER JOIN coursewithinstructor ON
-        i.uid = coursewithinstructor.instructor_id
-        WHERE coursewithinstructor.course_id = :courseID
-        """)
-    fun getInstructorWithCourseIdNonLive(courseID: String): List<InstructorModel>
-
-
-    @Query("""
-    SELECT * FROM RunModel r,InstructorModel i
+    SELECT r.*,i.*,c.* FROM RunModel r,InstructorModel i
 	   INNER JOIN CourseModel c ON (c.cid = r.crCourseId AND c.cid = ci.course_id)
 	   INNER JOIN coursewithinstructor ci ON i.uid = ci.instructor_id
        WHERE r.crAttemptId IS NULL
@@ -54,6 +48,4 @@ interface CourseWithInstructorDao {
     """)
     fun getTopRun(): LiveData<List<CourseInstructorHolder.CourseRunPair>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(join: CourseInstructorHolder.CourseWithInstructor)
 }

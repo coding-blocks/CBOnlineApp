@@ -47,7 +47,6 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabIndicatorHeight="0dp"
         app:tabMode="scrollable"
         app:tabTextColor="@color/black">
 
@@ -64,6 +63,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvExpendableView"
+            android:overScrollMode="never"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"

@@ -454,27 +454,6 @@ class SectionDetailsAdapter(
         }
     }
 
-    fun showOrHide(ll: View, itemView: View) {
-        if (ll.visibility == View.GONE) {
-            expand(ll)
-            arrowAnimation = RotateAnimation(
-                0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                0.5f
-            )
-            arrowAnimation.fillAfter = true
-            arrowAnimation.duration = 200
-            itemView.arrow.startAnimation(arrowAnimation)
-        } else {
-            collapse(ll)
-            arrowAnimation = RotateAnimation(
-                180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                0.5f
-            )
-            arrowAnimation.fillAfter = true
-            arrowAnimation.duration = 200
-            itemView.arrow.startAnimation(arrowAnimation)
-        }
-    }
 
 //    fun setProgress(
 //        id: String,

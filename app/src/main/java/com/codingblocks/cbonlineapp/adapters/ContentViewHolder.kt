@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.util.DownloadStarter
-import kotlinx.android.synthetic.main.item_section_detailed_info.view.*
+import kotlinx.android.synthetic.main.item_content.view.*
 
 class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_section_detailed_info, parent, false)) {
+    LayoutInflater.from(parent.context).inflate(R.layout.item_content, parent, false)) {
 
     var content: ContentModel? = null
     var starterListener: DownloadStarter? = null
@@ -20,7 +20,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
      */
     fun bindTo(content: ContentModel) {
         this.content = content
-        itemView.textView15.text = content.title
+        itemView.title.text = content.title
 //        val ll = itemView.findViewById<LinearLayout>(R.id.sectionContents)
 //        if (ll.visibility == View.VISIBLE) {
 //            ll.removeAllViews()

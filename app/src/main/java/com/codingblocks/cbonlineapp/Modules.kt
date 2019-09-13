@@ -11,11 +11,10 @@ val viewModelModule = module {
     viewModel { HomeViewModel(get(), get(), get(), get(), get()) }
     viewModel { MyCoursesViewModel(get(), get(), get(), get()) }
 
-    viewModel { MyCourseViewModel(get(), get(), get(), get()) }
+    viewModel { MyCourseViewModel(get(), get(), get(), get(), get()) }
     viewModel { LeaderboardViewModel() }
     viewModel { NotificationViewModel(get()) }
 
-    viewModel { AnnouncementsViewModel(get(), get()) }
     viewModel { QuizViewModel() }
 
     // Activities

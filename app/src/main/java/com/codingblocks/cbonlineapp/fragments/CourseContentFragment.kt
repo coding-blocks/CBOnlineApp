@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.*
@@ -23,6 +24,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.startService
 import org.jetbrains.anko.yesButton
@@ -71,31 +73,60 @@ class CourseContentFragment : Fragment(), AnkoLogger,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val smoothScroller = object : LinearSmoothScroller(requireContext()) {
+            override fun getVerticalSnapPreference(): Int {
+                return SNAP_TO_START
+            }
+        }
+
+
         swiperefresh.setOnRefreshListener {
             (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
-
         }
         val sectionItemsAdapter = SectionItemsAdapter()
         sectionItemsAdapter.starter = this
-        rvExpendableView.layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
+        rvExpendableView.layoutManager = layoutManager
         rvExpendableView.adapter = sectionItemsAdapter
-        val consolidatedList = ArrayList<ListObject>()
+
 
 
         viewModel.getAllContent().observer(this) { SectionContent ->
             val response = SectionContentHolder.groupContentBySection(SectionContent)
+            val consolidatedList = ArrayList<ListObject>()
+            tabs.removeAllTabs()
             response.forEachIndexed { index, sectionContent ->
-                consolidatedList.add(sectionContent.section)
+                var duration: Long = 0
+                var sectionComplete = 0
+                sectionContent.contents.forEach { content ->
+                    if (content.progress == "DONE") {
+                        sectionComplete++
+                    }
+                    if (content.contentable == "lecture")
+                        duration += content.contentLecture.lectureDuration
+                    else if (content.contentable == "video") {
+                        duration += content.contentVideo.videoDuration
+                    }
+                }
+                consolidatedList.add(sectionContent.section.apply {
+                    totalContent = sectionContent.contents.size
+                    totalTime = duration
+                    completedContent = sectionComplete
+                })
                 val pos = consolidatedList.size
                 consolidatedList.addAll(sectionContent.contents)
 
+
                 val tab = tabs.newTab()
                 tab.tag = pos - 1
-                tab.text = "Section ${index + 1}"
+
+                tab.text = sectionContent.section.name.substring(0, 10)
                 tabs.addTab(tab)
             }
             sectionItemsAdapter.submitList(consolidatedList)
         }
+
+
 
         tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(p0: TabLayout.Tab?) {
@@ -105,7 +136,12 @@ class CourseContentFragment : Fragment(), AnkoLogger,
             }
 
             override fun onTabSelected(p0: TabLayout.Tab) {
-                rvExpendableView.scrollToPosition(p0.tag.toString().toInt())
+
+                /**
+                 * Smooth Scrolls RecyclerView to a specific position using tag of the selected tab
+                 **/
+                smoothScroller.targetPosition = p0.tag.toString().toInt()
+                layoutManager.startSmoothScroll(smoothScroller)
             }
 
         })
@@ -115,13 +151,14 @@ class CourseContentFragment : Fragment(), AnkoLogger,
          * Otherwise list scrolls to bottom
          **/
 
-        sectionItemsAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                if (positionStart == 0) {
-                    rvExpendableView.scrollToPosition(0)
-                }
-            }
-        })
+//        sectionItemsAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+//            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+//                if (positionStart == 0) {
+//                    rvExpendableView.scrollToPosition(0)
+//                }
+//            }
+//        })
+
         viewModel.progress.observer(viewLifecycleOwner) {
             swiperefresh.isRefreshing = it
         }
@@ -182,4 +219,5 @@ class CourseContentFragment : Fragment(), AnkoLogger,
                 }
             }
     }
+
 }

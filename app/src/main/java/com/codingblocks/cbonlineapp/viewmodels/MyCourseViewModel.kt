@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.codingblocks.cbonlineapp.database.ContentDao
-import com.codingblocks.cbonlineapp.database.CourseRunDao
-import com.codingblocks.cbonlineapp.database.SectionDao
-import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
+import com.codingblocks.cbonlineapp.database.*
 import com.codingblocks.cbonlineapp.database.models.*
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.SingleLiveEvent
@@ -20,7 +17,8 @@ class MyCourseViewModel(
     private val runDao: CourseRunDao,
     private val sectionWithContentsDao: SectionWithContentsDao,
     private val contentsDao: ContentDao,
-    private val sectionDao: SectionDao
+    private val sectionDao: SectionDao,
+    private val instructorDao: CourseWithInstructorDao
 ) : ViewModel() {
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
@@ -29,37 +27,22 @@ class MyCourseViewModel(
     var runId: String = ""
     var courseId: String = ""
     private val mutablePopMessage = SingleLiveEvent<String>()
+    private val extensions = MutableLiveData<List<ProductExtensionsItem>>()
     val popMessage: LiveData<String> = mutablePopMessage
     var resetProgress: MutableLiveData<Boolean> = MutableLiveData()
 
-    private val extensions = MutableLiveData<List<ProductExtensionsItem>>()
-    val config = PagedList.Config.Builder()
-        .setEnablePlaceholders(false)
-        .setPageSize(10)
-        .build()
 
     fun getAllContent() = sectionWithContentsDao.getSectionWithContent(attemptId)
-    //Use Function Here not a variable
-//    fun getAllContent() = sectionWithContentsDao.getSectionWithContent(attemptId).toLiveData(pageSize = 20)
 
     fun updatehit(attemptId: String) {
         runDao.updateHit(attemptId)
     }
 
-//    fun getResumeCourse() = sectionWithContentsDao.resumeCourse(attemptId)
+    fun getResumeCourse() = ""
 
+    fun getSectionDownloadlist(id: String) = ""
 
-    fun getRunAttempt(runId: String): String = runDao.getRunByRunId(runId).crAttemptId ?: ""
-
-//    fun getContentWithSectionId(id: String) = sectionWithContentsDao.getContentWithSectionId(id).getDistinct()
-//
-//    fun getSectionDownloadlist(id: String) = sectionWithContentsDao.getVideoIdsWithSectionId(id)
-
-//    fun updateContent(id: String, lectureContentId: String, s: String) = contentsDao.updateContent(id, lectureContentId, s)
-
-    fun getCourseSection(attemptId: String) = sectionDao.getCourseSection(attemptId)
-
-    fun getRunByAtemptId(attemptId: String) = runDao.getRunByAtemptId(attemptId)
+    fun getRun() = runDao.getRun(runId)
 
     fun fetchCourse(attemptId: String) {
         Clients.onlineV2JsonApi.enrolledCourseById(attemptId)
@@ -305,4 +288,8 @@ class MyCourseViewModel(
         })
         return extensions
     }
+
+    fun getInstructor() = instructorDao.getInstructorWithCourseId(courseId)
+
+
 }

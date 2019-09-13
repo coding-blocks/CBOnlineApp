@@ -23,9 +23,6 @@ abstract class CourseRunDao : BaseDao<RunModel> {
     @Query("SELECT * FROM RunModel where crAttemptId = :attemptId")
     abstract fun getRunById(attemptId: String): RunModel
 
-    @Query("SELECT * FROM RunModel where crUid = :runId")
-    abstract fun getRunByRunId(runId: String): RunModel
-
     @Query("UPDATE RunModel SET hits = hits+1 where crAttemptId = :attemptId")
     abstract fun updateHit(attemptId: String)
 
@@ -34,4 +31,7 @@ abstract class CourseRunDao : BaseDao<RunModel> {
 
     @Query("SELECT * FROM RunModel where crCourseId IN (:courses)")
     abstract fun getJobCourses(courses: ArrayList<String>): List<RunModel>
+
+    @Query("SELECT * FROM RunModel where crUid = :runId")
+    abstract fun getRun(runId: String): LiveData<RunModel>
 }
