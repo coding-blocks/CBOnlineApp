@@ -9,6 +9,7 @@ import com.codingblocks.cbonlineapp.adapters.viewholders.SectionViewHolder
 import com.codingblocks.cbonlineapp.database.ListObject
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
+import com.codingblocks.cbonlineapp.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.DownloadStarter
 
 /**
@@ -56,17 +57,20 @@ class SectionItemsAdapter : ListAdapter<ListObject, RecyclerView.ViewHolder>(dif
         return getItem(position).getType()
     }
 
+
     companion object {
+
         private val diffCallback = object : DiffUtil.ItemCallback<ListObject>() {
             override fun areItemsTheSame(oldItem: ListObject, newItem: ListObject): Boolean =
-                oldItem.equals(newItem)
+                oldItem.sameAndEqual(newItem)
+
 
             /**
              * Note that in kotlin, == checking on data classes compares all contents, but in Java,
              * typically you'll implement Object#equals, and use it to compare object contents.
              */
             override fun areContentsTheSame(oldItem: ListObject, newItem: ListObject): Boolean =
-                oldItem.equals(newItem)
+                oldItem.sameAndEqual(newItem)
         }
     }
 }
