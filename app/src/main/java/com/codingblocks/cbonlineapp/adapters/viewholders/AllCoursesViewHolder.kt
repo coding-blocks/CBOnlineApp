@@ -73,7 +73,5 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
             ui.courseInstructors.text = instructors
         }
-
-
     }
 }

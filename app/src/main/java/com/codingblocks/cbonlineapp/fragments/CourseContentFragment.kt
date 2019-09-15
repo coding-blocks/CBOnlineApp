@@ -33,7 +33,6 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
@@ -93,7 +92,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         val consolidatedList = ArrayList<ListObject>()
         viewModel.getAllContent().observer(this) { SectionContent ->
             val response = SectionContentHolder.groupContentBySection(SectionContent)
-            tabs.removeAllTabs()
             response.forEach { sectionContent ->
                 var duration: Long = 0
                 var sectionComplete = 0
@@ -107,9 +105,8 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                     else if (content.contentable == "video") {
                         duration += content.contentVideo.videoDuration
                     }
-                    //Map SectionId to ContentModel
+                    // Map SectionId to ContentModel
                     content.sectionId = sectionContent.section.csid
-
                 }
                 consolidatedList.add(sectionContent.section.apply {
                     totalContent = sectionContent.contents.size
@@ -119,33 +116,10 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 val pos = consolidatedList.size
                 consolidatedList.addAll(sectionContent.contents)
 
-                val tab = tabs.newTab()
-                tab.tag = pos - 1
-
-                tab.text = sectionContent.section.name.substring(0, 5)
-                tabs.addTab(tab)
                 sectionItemsAdapter.notifyDataSetChanged()
             }
             sectionItemsAdapter.submitList(consolidatedList)
-
         }
-
-        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(p0: TabLayout.Tab?) {
-            }
-
-            override fun onTabUnselected(p0: TabLayout.Tab?) {
-            }
-
-            override fun onTabSelected(p0: TabLayout.Tab) {
-
-                /**
-                 * Smooth Scrolls RecyclerView to a specific position using tag of the selected tab
-                 **/
-                smoothScroller.targetPosition = p0.tag.toString().toInt()
-                layoutManager.startSmoothScroll(smoothScroller)
-            }
-        })
 
         /**
          * Register a new observer to listen for data changes.

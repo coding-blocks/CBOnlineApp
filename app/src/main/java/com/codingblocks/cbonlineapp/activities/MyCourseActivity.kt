@@ -3,9 +3,9 @@ package com.codingblocks.cbonlineapp.activities
 import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.commit
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.fragments.AboutFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
 import com.codingblocks.cbonlineapp.fragments.LeaderboardFragment
@@ -21,47 +21,44 @@ import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
+class MyCourseActivity : AppCompatActivity, AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
 
     private val viewModel by viewModel<MyCourseViewModel>()
+    private val pagerAdapter by lazy {
+        TabLayoutAdapter(supportFragmentManager)
+    }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
         when (menuItem.itemId) {
             R.id.navigation_overview -> {
-                val fragment = OverviewFragment.newInstance(viewModel.attemptId, viewModel.runId)
-                supportFragmentManager.commit {
-                    replace(R.id.container_course, fragment)
-                }
+                course_pager.currentItem = 0
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_curriculum -> {
-                val fragment = CourseContentFragment.newInstance(viewModel.attemptId)
-                supportFragmentManager.commit {
-                    replace(R.id.container_course, fragment)
-                }
+                course_pager.currentItem = 1
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_leaderboard -> {
-                val fragment = LeaderboardFragment.newInstance(viewModel.attemptId)
-                supportFragmentManager.commit {
-                    replace(R.id.container_course, fragment)
-                }
+                course_pager.currentItem = 2
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_about -> {
-                val fragment = AboutFragment.newInstance(viewModel.courseId, viewModel.attemptId)
-                supportFragmentManager.commit {
-                    replace(R.id.container_course, fragment)
-                }
+                course_pager.currentItem = 3
                 return@OnNavigationItemSelectedListener true
             }
         }
         false
     }
 
+    constructor()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_course)
+
+        setSupportActionBar(toolbar_mycourse)
+        supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         viewModel.courseId = intent.getStringExtra(COURSE_ID) ?: ""
         title = intent.getStringExtra(COURSE_NAME)
@@ -74,6 +71,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
             viewModel.updatehit(viewModel.attemptId)
             viewModel.fetchCourse(viewModel.attemptId)
             bottom_navigation.selectedItemId = R.id.navigation_curriculum
+            setupViewPager()
         }
 
 //        resumeBtn.setOnClickListener {
@@ -115,16 +113,24 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
 //
     }
 
+    private fun setupViewPager() {
+        pagerAdapter.apply {
+            add(OverviewFragment.newInstance(viewModel.attemptId, viewModel.runId))
+            add(CourseContentFragment.newInstance(viewModel.attemptId))
+            add(LeaderboardFragment.newInstance(viewModel.attemptId))
+            add(AboutFragment.newInstance(viewModel.courseId, viewModel.attemptId))
+        }
+        course_pager.apply {
+            adapter = pagerAdapter
+            offscreenPageLimit = 4
+        }
+    }
+
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
     override fun onRefresh() {
         viewModel.fetchCourse(viewModel.attemptId)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        bottom_navigation.selectedItemId = R.id.navigation_curriculum
     }
 }

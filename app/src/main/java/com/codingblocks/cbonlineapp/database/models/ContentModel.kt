@@ -42,5 +42,4 @@ data class ContentModel(
 
     @Ignore
     var sectionId: String = ""
-
 }

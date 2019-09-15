@@ -57,13 +57,11 @@ class SectionItemsAdapter : ListAdapter<ListObject, RecyclerView.ViewHolder>(dif
         return getItem(position).getType()
     }
 
-
     companion object {
 
         private val diffCallback = object : DiffUtil.ItemCallback<ListObject>() {
             override fun areItemsTheSame(oldItem: ListObject, newItem: ListObject): Boolean =
                 oldItem.sameAndEqual(newItem)
-
 
             /**
              * Note that in kotlin, == checking on data classes compares all contents, but in Java,
