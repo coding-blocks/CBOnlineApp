@@ -5,17 +5,17 @@
     android:id="@+id/overviewFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:overScrollMode="never"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".fragments.OverviewFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/overviewTv"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="@dimen/margin_medium"
@@ -23,14 +23,11 @@
             android:fontFamily="@font/nunitosans_bold"
             android:text="Overview"
             android:textColor="@android:color/black"
-            android:textSize="22sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="22sp" />
 
         <View
             android:id="@+id/view2"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
@@ -49,10 +46,7 @@
             android:layout_marginEnd="@dimen/margin_medium"
             android:visibility="visible"
             app:cardCornerRadius="15dp"
-            app:cardElevation="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view2">
+            app:cardElevation="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -152,7 +146,7 @@
             android:layout_marginStart="@dimen/margin_medium"
             android:layout_marginTop="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_medium"
-            android:visibility="visible"
+            android:visibility="gone"
             app:cardCornerRadius="15dp"
             app:cardElevation="5dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -221,18 +215,14 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_medium"
             android:layout_marginTop="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_medium"
             app:cardCornerRadius="@dimen/corner_radius"
             app:cardElevation="5dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/extensionsCard">
+            android:layout_marginBottom="16dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -349,6 +339,7 @@
                 <ImageView
                     android:id="@+id/imageView4"
                     android:layout_width="120dp"
+                    android:adjustViewBounds="true"
                     android:layout_height="120dp"
                     android:layout_below="@id/divider"
                     android:layout_alignParentEnd="true"
@@ -362,5 +353,5 @@
         </com.google.android.material.card.MaterialCardView>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </androidx.core.widget.NestedScrollView>

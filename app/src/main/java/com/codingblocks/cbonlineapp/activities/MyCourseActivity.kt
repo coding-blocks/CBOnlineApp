@@ -20,8 +20,11 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 
-class MyCourseActivity : AppCompatActivity, AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
+class MyCourseActivity : AppCompatActivity, AnkoLogger, SwipeRefreshLayout.OnRefreshListener, MyCallbacks {
+    override val coordinatorLayoutRoot: CoordinatorLayout
+        get() = root_course
 
     private val viewModel by viewModel<MyCourseViewModel>()
     private val pagerAdapter by lazy {
@@ -122,6 +125,7 @@ class MyCourseActivity : AppCompatActivity, AnkoLogger, SwipeRefreshLayout.OnRef
         }
         course_pager.apply {
             adapter = pagerAdapter
+            currentItem = 1
             offscreenPageLimit = 4
         }
     }
@@ -133,4 +137,8 @@ class MyCourseActivity : AppCompatActivity, AnkoLogger, SwipeRefreshLayout.OnRef
     override fun onRefresh() {
         viewModel.fetchCourse(viewModel.attemptId)
     }
+}
+
+interface MyCallbacks {
+    val coordinatorLayoutRoot: CoordinatorLayout
 }

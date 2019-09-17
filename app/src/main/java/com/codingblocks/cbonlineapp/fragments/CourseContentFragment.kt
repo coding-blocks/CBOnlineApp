@@ -82,6 +82,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 return SNAP_TO_START
             }
         }
+
         swiperefresh.setOnRefreshListener {
             (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
         }
@@ -89,8 +90,8 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         val layoutManager = LinearLayoutManager(context)
         rvExpendableView.layoutManager = layoutManager
         rvExpendableView.adapter = sectionItemsAdapter
-        val consolidatedList = ArrayList<ListObject>()
         viewModel.getAllContent().observer(this) { SectionContent ->
+            val consolidatedList = ArrayList<ListObject>()
             val response = SectionContentHolder.groupContentBySection(SectionContent)
             response.forEach { sectionContent ->
                 var duration: Long = 0
@@ -115,10 +116,8 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 })
                 val pos = consolidatedList.size
                 consolidatedList.addAll(sectionContent.contents)
-
-                sectionItemsAdapter.notifyDataSetChanged()
+                sectionItemsAdapter.submitList(consolidatedList)
             }
-            sectionItemsAdapter.submitList(consolidatedList)
         }
 
         /**

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AHBottomNavigationBehavior_Params">
+        <attr name="tabLayoutId" format="reference" />
+        <attr name="selectedBackgroundVisible" format="boolean" />
+        <attr name="translucentNavigationEnabled" format="boolean" />
+        <attr name="colored" format="boolean" />
+        <attr name="accentColor" format="color" />
+        <attr name="inactiveColor" format="color" />
+        <attr name="disableColor" format="color" />
+        <attr name="coloredActive" format="color" />
+        <attr name="coloredInactive" format="color" />
+    </declare-styleable>
+</resources>
