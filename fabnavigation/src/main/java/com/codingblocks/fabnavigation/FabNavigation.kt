@@ -1294,18 +1294,18 @@ class FabNavigation : FrameLayout {
      */
     @JvmOverloads
     fun hideBottomNavigation(withAnimation: Boolean = true) {
-        if (bottomNavigationBehavior != null) {
-            bottomNavigationBehavior!!.hideView(this, bottomNavigationHeight, withAnimation)
-        } else if (parent is CoordinatorLayout) {
-            needHideBottomNavigation = true
-            hideBottomNavigationWithAnimation = withAnimation
-        } else {
-            // Hide bottom navigation
-            ViewCompat.animate(this)
-                .translationY(bottomNavigationHeight.toFloat())
-                .setInterpolator(LinearOutSlowInInterpolator())
-                .setDuration((if (withAnimation) 300 else 0).toLong())
-                .start()
+        when {
+            bottomNavigationBehavior != null -> bottomNavigationBehavior!!.hideView(this, bottomNavigationHeight, withAnimation)
+            parent is CoordinatorLayout -> {
+                needHideBottomNavigation = true
+                hideBottomNavigationWithAnimation = withAnimation
+            }
+            else -> // Hide bottom navigation
+                ViewCompat.animate(this)
+                    .translationY(bottomNavigationHeight.toFloat())
+                    .setInterpolator(LinearOutSlowInInterpolator())
+                    .setDuration((if (withAnimation) 300 else 0).toLong())
+                    .start()
         }
     }
 

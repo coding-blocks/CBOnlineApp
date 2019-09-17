@@ -7,7 +7,7 @@ import com.codingblocks.fabnavigation.FabNavigation
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
-class FabNavigationButtonBehaviour(navigationBarHeight: Int) : CoordinatorLayout.Behavior<View>() {
+class FabNavigationButtonBehaviour(navigationBarHeight: Int) : CoordinatorLayout.Behavior<ExtendedFloatingActionButton>() {
 
     private var navigationBarHeight = 0
     private var lastSnackbarUpdate: Long = 0
@@ -16,16 +16,16 @@ class FabNavigationButtonBehaviour(navigationBarHeight: Int) : CoordinatorLayout
         this.navigationBarHeight = navigationBarHeight
     }
 
-    fun layoutDependsOn(parent: CoordinatorLayout, child: ExtendedFloatingActionButton, dependency: View?): Boolean {
+    override fun layoutDependsOn(parent: CoordinatorLayout, child: ExtendedFloatingActionButton, dependency: View): Boolean {
         if (dependency != null && dependency is Snackbar.SnackbarLayout) {
             return true
         } else if (dependency != null && dependency is FabNavigation) {
             return true
         }
-        return super.layoutDependsOn(parent, child, dependency!!)
+        return super.layoutDependsOn(parent, child, dependency)
     }
 
-    fun onDependentViewChanged(parent: CoordinatorLayout, child: ExtendedFloatingActionButton, dependency: View): Boolean {
+    override fun onDependentViewChanged(parent: CoordinatorLayout, child: ExtendedFloatingActionButton, dependency: View): Boolean {
         updateFloatingActionButton(child, dependency)
         return super.onDependentViewChanged(parent, child, dependency)
     }

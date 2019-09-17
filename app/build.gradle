@@ -101,7 +101,6 @@ spotless {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.android.material:material:1.1.0-alpha10'
     // Android Support
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
@@ -163,6 +162,7 @@ dependencies {
 
 
     implementation project(':onlineapi')
+    implementation project(':fabnavigation')
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
 
     // Test Deps

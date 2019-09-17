@@ -1,8 +1,13 @@
 package com.codingblocks.cbonlineapp.activities
 
+import android.animation.Animator
 import android.content.Context
 import android.os.Bundle
+import android.view.View
+import android.view.animation.OvershootInterpolator
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
@@ -15,14 +20,14 @@ import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.codingblocks.fabnavigation.FabNavigation
+import com.codingblocks.fabnavigation.FabNavigationAdapter
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 
-class MyCourseActivity : AppCompatActivity, AnkoLogger, SwipeRefreshLayout.OnRefreshListener, MyCallbacks {
+class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener, MyCallbacks {
     override val coordinatorLayoutRoot: CoordinatorLayout
         get() = root_course
 
@@ -30,30 +35,7 @@ class MyCourseActivity : AppCompatActivity, AnkoLogger, SwipeRefreshLayout.OnRef
     private val pagerAdapter by lazy {
         TabLayoutAdapter(supportFragmentManager)
     }
-
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
-        when (menuItem.itemId) {
-            R.id.navigation_overview -> {
-                course_pager.currentItem = 0
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_curriculum -> {
-                course_pager.currentItem = 1
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_leaderboard -> {
-                course_pager.currentItem = 2
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_about -> {
-                course_pager.currentItem = 3
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
-
-    constructor()
+    private lateinit var navigationAdapter: FabNavigationAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,13 +50,11 @@ class MyCourseActivity : AppCompatActivity, AnkoLogger, SwipeRefreshLayout.OnRef
         viewModel.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
         viewModel.runId = intent.getStringExtra(RUN_ID) ?: ""
 
-        bottom_navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        initUI()
 
         if (savedInstanceState == null) {
             viewModel.updatehit(viewModel.attemptId)
             viewModel.fetchCourse(viewModel.attemptId)
-            bottom_navigation.selectedItemId = R.id.navigation_curriculum
-            setupViewPager()
         }
 
 //        resumeBtn.setOnClickListener {
@@ -116,6 +96,30 @@ class MyCourseActivity : AppCompatActivity, AnkoLogger, SwipeRefreshLayout.OnRef
 //
     }
 
+    private fun initUI() {
+        navigationAdapter = FabNavigationAdapter(this, R.menu.bottom_navigation_menu)
+        navigationAdapter.setupWithBottomNavigation(bottom_navigation)
+        setupViewPager()
+
+        bottom_navigation.manageFloatingActionButtonBehavior(fab)
+        bottom_navigation.accentColor = R.color.salmon
+        bottom_navigation.titleState = FabNavigation.TitleState.ALWAYS_SHOW
+        bottom_navigation.isTranslucentNavigationEnabled = true
+        bottom_navigation.setOnTabSelectedListener(object : FabNavigation.OnTabSelectedListener {
+            override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
+                course_pager.setCurrentItem(position, false)
+                if (position == 1) {
+                    fab.animateVisibility(View.VISIBLE)
+                } else {
+                    if (fab.visibility == View.VISIBLE) {
+                        fab.animateVisibility(View.GONE)
+                    }
+                }
+                return true
+            }
+        })
+    }
+
     private fun setupViewPager() {
         pagerAdapter.apply {
             add(OverviewFragment.newInstance(viewModel.attemptId, viewModel.runId))
@@ -125,8 +129,7 @@ class MyCourseActivity : AppCompatActivity, AnkoLogger, SwipeRefreshLayout.OnRef
         }
         course_pager.apply {
             adapter = pagerAdapter
-            currentItem = 1
-            offscreenPageLimit = 4
+            offscreenPageLimit = 3
         }
     }
 
@@ -137,6 +140,45 @@ class MyCourseActivity : AppCompatActivity, AnkoLogger, SwipeRefreshLayout.OnRef
     override fun onRefresh() {
         viewModel.fetchCourse(viewModel.attemptId)
     }
+}
+
+private fun View.animateVisibility(visible: Int) {
+    if (visible == View.VISIBLE) {
+        visibility = View.VISIBLE
+        alpha = 0f
+        scaleX = 0f
+        scaleY = 0f
+    }
+    val value = if (visible == View.VISIBLE) 1f else 0f
+    animate()
+        .alpha(value)
+        .scaleX(value)
+        .scaleY(value)
+        .setDuration(300)
+        .setInterpolator(OvershootInterpolator())
+        .setListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {
+            }
+
+            override fun onAnimationEnd(animation: Animator) {
+                if (visible == View.GONE)
+                    visibility = View.GONE
+                else
+                    animate()
+                        .setInterpolator(LinearOutSlowInInterpolator())
+                        .start()
+            }
+
+            override fun onAnimationCancel(animation: Animator) {
+                if (visible == View.GONE) {
+                    visibility = View.GONE
+                }
+            }
+
+            override fun onAnimationRepeat(animation: Animator) {
+            }
+        })
+        .start()
 }
 
 interface MyCallbacks {

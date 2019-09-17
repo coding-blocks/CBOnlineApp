@@ -17,7 +17,7 @@
             app:theme="@style/ToolBarStyle" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.codingblocks.cbonlineapp.widgets.NonSwipeableViewPager
+    <com.codingblocks.fabnavigation.FabNavigationViewPager
         android:id="@+id/course_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,24 +29,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
-        android:layout_margin="24dp"
-        android:layout_marginBottom="88dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="64dp"
         android:text="Sections"
         android:textColor="@color/white"
         app:backgroundTint="@color/colorPrimary"
         app:icon="@drawable/ic_menu"
         app:iconTint="@color/white" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <com.codingblocks.fabnavigation.FabNavigation
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:itemIconTint="@drawable/bottom_navigation_colors"
-        app:itemTextColor="@drawable/bottom_navigation_colors"
-        app:labelVisibilityMode="labeled"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-        app:menu="@menu/bottom_navigation_menu" />
+        app:selectedBackgroundVisible="false" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
