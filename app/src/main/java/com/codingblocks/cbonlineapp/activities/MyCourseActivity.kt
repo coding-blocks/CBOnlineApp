@@ -1,16 +1,13 @@
 package com.codingblocks.cbonlineapp.activities
 
-import android.animation.Animator
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.view.animation.OvershootInterpolator
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
+import com.codingblocks.cbonlineapp.extensions.animateVisibility
 import com.codingblocks.cbonlineapp.fragments.AboutFragment
 import com.codingblocks.cbonlineapp.fragments.CourseContentFragment
 import com.codingblocks.cbonlineapp.fragments.LeaderboardFragment
@@ -19,6 +16,7 @@ import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
+import com.codingblocks.cbonlineapp.util.SingleLiveEvent
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.fabnavigation.FabNavigationAdapter
@@ -27,15 +25,17 @@ import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener, MyCallbacks {
-    override val coordinatorLayoutRoot: CoordinatorLayout
-        get() = root_course
+class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
 
     private val viewModel by viewModel<MyCourseViewModel>()
     private val pagerAdapter by lazy {
         TabLayoutAdapter(supportFragmentManager)
     }
     private lateinit var navigationAdapter: FabNavigationAdapter
+
+    companion object {
+        val fabClickEvent = SingleLiveEvent<Void>()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,43 +57,15 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
             viewModel.fetchCourse(viewModel.attemptId)
         }
 
-//        resumeBtn.setOnClickListener {
-//            viewModel.getResumeCourse().observeOnce {
-//                if (it.isNotEmpty())
-//                    with(it[0]) {
-//                        when (contentable) {
-//                            LECTURE -> {
-//                                startActivity(intentFor<VideoPlayerActivity>(
-//                                    VIDEO_ID to contentLecture.lectureId,
-//                                    RUN_ATTEMPT_ID to attempt_id,
-//                                    CONTENT_ID to ccid,
-//                                    SECTION_ID to section_id,
-//                                    DOWNLOADED to contentLecture.isDownloaded
-//                                ).singleTop()
-//                                )
-//                            }
-//                            DOCUMENT -> {
-//                                startActivity(intentFor<PdfActivity>(
-//                                    FILE_URL to contentDocument.documentPdfLink,
-//                                    FILE_NAME to contentDocument.documentName + ".pdf"
-//                                ).singleTop())
-//                            }
-//                            VIDEO -> {
-//                                startActivity(intentFor<VideoPlayerActivity>(
-//                                    VIDEO_URL to contentVideo.videoUrl,
-//                                    RUN_ATTEMPT_ID to attempt_id,
-//                                    CONTENT_ID to ccid
-//                                ).singleTop())
-//                            }
-//                            else -> return@with
-//                        }
-//                    }
-//                else {
-//                    snackbar(rootView, "Nothing to show here")
-//                }
-//            }
-//        }
-//
+        fab.setOnClickListener {
+
+            fabClickEvent.call()
+            if (fab.isExtended) {
+                fab.shrink()
+            } else {
+                fab.extend()
+            }
+        }
     }
 
     private fun initUI() {
@@ -102,7 +74,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
         setupViewPager()
 
         bottom_navigation.manageFloatingActionButtonBehavior(fab)
-        bottom_navigation.accentColor = R.color.salmon
+//        bottom_navigation.accentColor = R.color.salmon
         bottom_navigation.titleState = FabNavigation.TitleState.ALWAYS_SHOW
         bottom_navigation.isTranslucentNavigationEnabled = true
         bottom_navigation.setOnTabSelectedListener(object : FabNavigation.OnTabSelectedListener {
@@ -129,6 +101,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
         }
         course_pager.apply {
             adapter = pagerAdapter
+            currentItem = 1
             offscreenPageLimit = 3
         }
     }
@@ -140,47 +113,4 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
     override fun onRefresh() {
         viewModel.fetchCourse(viewModel.attemptId)
     }
-}
-
-private fun View.animateVisibility(visible: Int) {
-    if (visible == View.VISIBLE) {
-        visibility = View.VISIBLE
-        alpha = 0f
-        scaleX = 0f
-        scaleY = 0f
-    }
-    val value = if (visible == View.VISIBLE) 1f else 0f
-    animate()
-        .alpha(value)
-        .scaleX(value)
-        .scaleY(value)
-        .setDuration(300)
-        .setInterpolator(OvershootInterpolator())
-        .setListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator) {
-            }
-
-            override fun onAnimationEnd(animation: Animator) {
-                if (visible == View.GONE)
-                    visibility = View.GONE
-                else
-                    animate()
-                        .setInterpolator(LinearOutSlowInInterpolator())
-                        .start()
-            }
-
-            override fun onAnimationCancel(animation: Animator) {
-                if (visible == View.GONE) {
-                    visibility = View.GONE
-                }
-            }
-
-            override fun onAnimationRepeat(animation: Animator) {
-            }
-        })
-        .start()
-}
-
-interface MyCallbacks {
-    val coordinatorLayoutRoot: CoordinatorLayout
 }

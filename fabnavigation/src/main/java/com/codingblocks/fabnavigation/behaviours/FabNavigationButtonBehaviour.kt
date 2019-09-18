@@ -7,7 +7,7 @@ import com.codingblocks.fabnavigation.FabNavigation
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
-class FabNavigationButtonBehaviour(navigationBarHeight: Int) : CoordinatorLayout.Behavior<ExtendedFloatingActionButton>() {
+class FabNavigationButtonBehaviour(navigationBarHeight: Int) : CoordinatorLayout.Behavior<View>() {
 
     private var navigationBarHeight = 0
     private var lastSnackbarUpdate: Long = 0
@@ -16,7 +16,7 @@ class FabNavigationButtonBehaviour(navigationBarHeight: Int) : CoordinatorLayout
         this.navigationBarHeight = navigationBarHeight
     }
 
-    override fun layoutDependsOn(parent: CoordinatorLayout, child: ExtendedFloatingActionButton, dependency: View): Boolean {
+    override fun layoutDependsOn(parent: CoordinatorLayout, child: View, dependency: View): Boolean {
         if (dependency != null && dependency is Snackbar.SnackbarLayout) {
             return true
         } else if (dependency != null && dependency is FabNavigation) {
@@ -25,7 +25,7 @@ class FabNavigationButtonBehaviour(navigationBarHeight: Int) : CoordinatorLayout
         return super.layoutDependsOn(parent, child, dependency)
     }
 
-    override fun onDependentViewChanged(parent: CoordinatorLayout, child: ExtendedFloatingActionButton, dependency: View): Boolean {
+    override fun onDependentViewChanged(parent: CoordinatorLayout, child: View, dependency: View): Boolean {
         updateFloatingActionButton(child, dependency)
         return super.onDependentViewChanged(parent, child, dependency)
     }
@@ -33,7 +33,7 @@ class FabNavigationButtonBehaviour(navigationBarHeight: Int) : CoordinatorLayout
     /**
      * Update floating action button bottom margin
      */
-    private fun updateFloatingActionButton(child: ExtendedFloatingActionButton?, dependency: View?) {
+    private fun updateFloatingActionButton(child: View?, dependency: View?) {
         if (child != null && dependency != null && dependency is Snackbar.SnackbarLayout) {
             lastSnackbarUpdate = System.currentTimeMillis()
             val p = child.layoutParams as ViewGroup.MarginLayoutParams

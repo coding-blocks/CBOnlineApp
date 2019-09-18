@@ -168,6 +168,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                         }
                 }
             }
+
+            // Todo Crash Here null pointer
             sM?.updateShortcuts(shortcutList)
         }
     }

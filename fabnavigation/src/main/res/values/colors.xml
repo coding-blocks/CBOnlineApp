@@ -2,7 +2,7 @@
 <resources>
     <color name="colorBottomNavigationPrimary">#3F51B5</color>
     <color name="colorBottomNavigationPrimaryDark">#303F9F</color>
-    <color name="colorBottomNavigationAccent">#FF4081</color>
+    <color name="colorBottomNavigationAccent">#ff6666</color>
     <color name="colorBottomNavigationInactive">#747474</color>
     <color name="colorBottomNavigationDisable">#3A000000</color>
     <color name="colorBottomNavigationActiveColored">#FFFFFF</color>

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -17,6 +18,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.adapters.SectionItemsAdapter
 import com.codingblocks.cbonlineapp.database.ListObject
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
@@ -32,9 +34,7 @@ import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
-import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.alert
@@ -48,6 +48,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     lateinit var attemptId: String
     private val sectionItemsAdapter = SectionItemsAdapter()
+    var areLecturesLoaded: Boolean = false
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
 
@@ -83,6 +84,9 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             }
         }
 
+        MyCourseActivity.fabClickEvent.observe(this) {
+        }
+
         swiperefresh.setOnRefreshListener {
             (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
         }
@@ -90,6 +94,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         val layoutManager = LinearLayoutManager(context)
         rvExpendableView.layoutManager = layoutManager
         rvExpendableView.adapter = sectionItemsAdapter
+
         viewModel.getAllContent().observer(this) { SectionContent ->
             val consolidatedList = ArrayList<ListObject>()
             val response = SectionContentHolder.groupContentBySection(SectionContent)
@@ -124,14 +129,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
          * Register a new observer to listen for data changes.
          * Otherwise list scrolls to bottom
          **/
-
-//        sectionItemsAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-//            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-//                if (positionStart == 0) {
-//                    rvExpendableView.scrollToPosition(0)
-//                }
-//            }
-//        })
 
         viewModel.progress.observer(viewLifecycleOwner) {
             swiperefresh.isRefreshing = it
@@ -169,8 +166,8 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 .setInputData(progressData)
                 .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
                 .build()
-        Snackbar.make(contentRoot, "Progress Will Be Synced Once Your Device Get Online", Snackbar.LENGTH_SHORT)
-            .setAnchorView(bottom_navigation).show()
+//        Snackbar.make(contentRoot, "Progress Will Be Synced Once Your Device Get Online", Snackbar.LENGTH_SHORT)
+//            .setAnchorView(bottom_navigation).show()
 
         WorkManager.getInstance()
             .enqueue(request)
@@ -178,7 +175,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser) {
+        if (isVisibleToUser && !areLecturesLoaded) {
             if (view != null) {
                 val params = Bundle()
                 params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)

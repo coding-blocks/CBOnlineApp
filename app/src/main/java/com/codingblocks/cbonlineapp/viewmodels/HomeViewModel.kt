@@ -29,7 +29,9 @@ class HomeViewModel(
     var carouselCards: MutableLiveData<List<CarouselCards>> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
 
-    fun getAllCourses() = courseWithInstructorDao.getAllCourses().toLiveData(Config(5, enablePlaceholders = false))
+    fun getAllCourses() = courseWithInstructorDao.getCourses().toLiveData(Config(5, enablePlaceholders = false))
+
+    fun getRecommendedCourses() = courseWithInstructorDao.getRecommendedCourses().toLiveData(Config(5, enablePlaceholders = false))
 
     fun fetchRecommendedCourses() {
         Clients.onlineV2JsonApi.getRecommendedCourses()

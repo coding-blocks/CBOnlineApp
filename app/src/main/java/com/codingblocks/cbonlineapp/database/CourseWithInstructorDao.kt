@@ -28,9 +28,18 @@ interface CourseWithInstructorDao {
 	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
 	   INNER JOIN CourseWithInstructor ci ON ci.course_id = c.cid
        INNER JOIN InstructorModel i ON i.uid = ci.instructor_id
-       WHERE r.crAttemptId IS NULL
+       WHERE r.crAttemptId IS NULL AND recommended = 1
     """)
-    fun getAllCourses(): DataSource.Factory<Int, CourseInstructorHolder.CourseInstructorPair>
+    fun getCourses(): DataSource.Factory<Int, CourseInstructorHolder.CourseInstructorPair>
+
+    @Query("""
+    SELECT c.*,r.*,i.* FROM RunModel r
+	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
+	   INNER JOIN CourseWithInstructor ci ON ci.course_id = c.cid
+       INNER JOIN InstructorModel i ON i.uid = ci.instructor_id
+       WHERE r.crAttemptId IS NULL 
+    """)
+    fun getRecommendedCourses(): DataSource.Factory<Int, CourseInstructorHolder.CourseInstructorPair>
 
     @Query("""
     SELECT c.*,r.*,i.* FROM RunModel r

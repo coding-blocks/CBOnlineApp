@@ -1280,7 +1280,7 @@ class FabNavigation : FrameLayout {
      * Manage the floating action button behavior with AHBottomNavigation
      * @param fab Floating Action Button
      */
-    fun manageFloatingActionButtonBehavior(fab: ExtendedFloatingActionButton) {
+    fun manageFloatingActionButtonBehavior(fab: View) {
         if (fab.parent is CoordinatorLayout) {
             val fabBehavior = FabNavigationButtonBehaviour(navigationBarHeight)
             (fab.layoutParams as CoordinatorLayout.LayoutParams).behavior = fabBehavior

@@ -27,6 +27,7 @@ class AboutFragment : Fragment() {
     var whatsAppLink: String? = null
     lateinit var attemptId: String
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+    var firstTime: Boolean = false
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
 
@@ -50,20 +51,6 @@ class AboutFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val instructorList = ArrayList<InstructorModel>()
-        val instructorAdapter = InstructorDataAdapter(instructorList)
-        instructorRv.layoutManager = LinearLayoutManager(context)
-        instructorRv.adapter = instructorAdapter
-
-        viewModel.getInstructor().observer(this) {
-            instructorAdapter.setData(it as ArrayList<InstructorModel>)
-        }
-
-        viewModel.getRun().observer(this) {
-            whatsAppLink = it.whatsappLink
-            joinWhatsAppGroupView.isVisible = whatsAppLink?.run { true } ?: false
-        }
 
         joinWhatsAppButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
@@ -90,7 +77,21 @@ class AboutFragment : Fragment() {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser) {
+        if (isVisibleToUser && !firstTime) {
+            val instructorList = ArrayList<InstructorModel>()
+            val instructorAdapter = InstructorDataAdapter(instructorList)
+            instructorRv.layoutManager = LinearLayoutManager(context)
+            instructorRv.adapter = instructorAdapter
+            firstTime = true
+            viewModel.getInstructor().observer(this) {
+                instructorAdapter.setData(it as ArrayList<InstructorModel>)
+            }
+
+            viewModel.getRun().observer(this) {
+                whatsAppLink = it.whatsappLink
+                joinWhatsAppGroupView.isVisible = whatsAppLink?.run { true } ?: false
+            }
+
             if (view != null) {
                 val params = Bundle()
                 params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)

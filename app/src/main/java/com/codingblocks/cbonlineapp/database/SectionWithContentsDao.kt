@@ -29,18 +29,18 @@ interface SectionWithContentsDao {
 //        WHERE swc.section_id = :sectionID AND cc.contentable = "lecture"
 //        AND isDownloaded = "false" ORDER BY `order`
 
-//        """)
+    //        """)
 //    fun getVideoIdsWithSectionId(sectionID: String): LiveData<List<ContentModel>>
 //
-@Transaction
-@Query("""
+    @Transaction
+    @Query("""
         SELECT s.*,c.* FROM SectionModel s
 	    INNER JOIN SectionWithContent sc ON sc."section_id" = s."csid"
 	    INNER JOIN ContentModel c ON c."ccid" = sc."content_id"
 	    WHERE s.attemptId = :attemptId AND progress = "UNDONE"
         ORDER BY s."sectionOrder",sc.`order` LIMIT 1
         """)
-fun resumeCourse(attemptId: String): LiveData<List<SectionContentHolder.SectionContentPair>>
+    fun resumeCourse(attemptId: String): LiveData<List<SectionContentHolder.SectionContentPair>>
 
     @Transaction
     @Query("""
