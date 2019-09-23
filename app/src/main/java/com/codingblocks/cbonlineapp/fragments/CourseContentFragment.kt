@@ -24,10 +24,10 @@ import com.codingblocks.cbonlineapp.database.ListObject
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
-import com.codingblocks.cbonlineapp.services.DownloadService
 import com.codingblocks.cbonlineapp.services.SectionDownloadService
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DownloadStarter
+import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.PROGRESS_ID
 import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
@@ -59,12 +59,24 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         attemptId: String,
         sectionId: String
     ) {
-        startService<DownloadService>(
-            VIDEO_ID to videoId,
+
+        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+
+        val videoData = workDataOf(VIDEO_ID to videoId,
             "title" to title,
             SECTION_ID to sectionId,
             RUN_ATTEMPT_ID to attemptId,
             CONTENT_ID to contentId)
+
+        val request: OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<DownloadWorker>()
+                .setConstraints(constraints)
+                .setInputData(videoData)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                .build()
+
+        WorkManager.getInstance()
+            .enqueue(request)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -96,7 +108,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         rvExpendableView.adapter = sectionItemsAdapter
 
         viewModel.getAllContent().observer(this) { SectionContent ->
-
 
             val consolidatedList = ArrayList<ListObject>()
             val response = SectionContentHolder.groupContentBySection(SectionContent)

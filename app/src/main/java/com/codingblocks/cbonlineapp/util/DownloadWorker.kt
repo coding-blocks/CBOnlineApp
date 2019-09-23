@@ -14,7 +14,6 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.models.DownloadData
-import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
@@ -39,6 +38,8 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
         applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
+    val contentDao: ContentDao by inject()
+
     override fun onStopped() {
         super.onStopped()
         for (data in downloadList) {
@@ -47,7 +48,6 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
     }
 
     override fun doWork(): Result {
-        val contentDao: ContentDao by inject()
         val contentId = workerParameters.inputData.getString(CONTENT_ID) ?: ""
         val attemptId = workerParameters.inputData.getString(RUN_ATTEMPT_ID) ?: ""
         val videoId = workerParameters.inputData.getString(VIDEO_ID) ?: ""
@@ -134,7 +134,6 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
         notificationManager.notify(data.notificationId, data.notificationBuilder.build())
     }
 
-
     private fun findDataWithId(videoId: String): DownloadData? {
         for (data in downloadList) {
             if (videoId == data.videoId)
@@ -167,7 +166,6 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
         }
     }
 
-
     override fun onQueued(videoId: String?, downloadStatus: DownloadStatus?) {
     }
 
@@ -176,7 +174,7 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
             val data = findDataWithId(videoId)
             if (data != null) {
                 doAsync {
-                    //                    contentDao.updateContent(data.sectionId, data.lectureContentId, "true")
+                    contentDao.updateContent(data.contentId, "true")
                 }
                 val intent = Intent(applicationContext, VideoPlayerActivity::class.java)
                 intent.putExtra(VIDEO_ID, data.videoId)
@@ -199,7 +197,6 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
             }
         }
     }
-
 
     companion object {
         @JvmStatic

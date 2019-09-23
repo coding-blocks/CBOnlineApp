@@ -12,7 +12,6 @@ import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.DownloadStarter
 
-
 class SectionItemsAdapter : ListAdapter<ListObject, RecyclerView.ViewHolder>(diffCallback) {
 
     var starter: DownloadStarter? = null

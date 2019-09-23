@@ -1,8 +1,10 @@
 package com.codingblocks.cbonlineapp.adapters.viewholders
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.PdfActivity
 import com.codingblocks.cbonlineapp.activities.QuizActivity
@@ -14,6 +16,7 @@ import com.codingblocks.cbonlineapp.util.Components.showconfirmation
 import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.DownloadStarter
+import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.QNA
@@ -24,7 +27,6 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import kotlinx.android.synthetic.main.item_content.view.*
-
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.textColor
@@ -48,7 +50,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                 LECTURE -> {
                     contentType.setImageResource(R.drawable.ic_lecture)
                     downloadBtn.setOnClickListener {
-                        checkDownloadStatus()
+                        checkDownloadStatus(it)
                     }
                 }
                 DOCUMENT -> {
@@ -68,7 +70,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                 }
             }
 
-            if (content.progress == "DONE") {
+            if (content.progress == "DONE" || content.progress == "0") {
                 title.textColor = resources.getColor(R.color.green)
                 downloadBtn.setImageResource(R.drawable.ic_status_done)
             } else {
@@ -107,7 +109,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                                 RUN_ATTEMPT_ID to content.attempt_id,
                                 CONTENT_ID to content.ccid,
                                 SECTION_ID to content.sectionId,
-                                DOWNLOADED to content.contentLecture.isDownloaded
+                                DOWNLOADED to (content.contentLecture.isDownloaded.toBoolean() || FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, content.contentLecture.lectureId))
                             ).singleTop()
                         )
                     }
@@ -119,8 +121,9 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         }
     }
 
-    private fun checkDownloadStatus() {
+    private fun checkDownloadStatus(it: View) {
         if (MediaUtils.checkPermission(itemView.context)) {
+            it.isEnabled = false
             starterListener?.startDownload(
                 contentModel.contentLecture.lectureId,
                 contentModel.ccid,

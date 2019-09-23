@@ -34,8 +34,7 @@ class ProgressWorker(context: Context, private val workerParameters: WorkerParam
 
         if (response.isSuccessful) {
             response.body()?.let {
-                // TODO -  Fix this db call
-                contentDao.updateProgress(it.contentId, it.runAttemptId, it.status, it.id)
+                contentDao.updateProgress(it.contentId, it.runAttemptId, it.id)
             }
             return Result.success()
         } else {
