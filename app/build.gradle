@@ -78,7 +78,7 @@ android {
 ext {
     ankoVersion = '0.10.6'
     room_version = "2.2.0-beta01"
-    koin_version = "1.0.2"
+    koin_version = "2.0.1"
     ankoLibs = [
             // commons
             'commons',
@@ -124,7 +124,7 @@ dependencies {
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
     implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
     implementation 'com.onesignal:OneSignal:3.11.2'
-    implementation 'com.facebook.shimmer:shimmer:0.4.0'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
 
     // Image view libraries
