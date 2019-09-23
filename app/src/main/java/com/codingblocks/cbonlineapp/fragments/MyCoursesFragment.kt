@@ -76,6 +76,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             layoutManager = LinearLayoutManager(ctx)
             adapter = courseDataAdapter
         }
+        viewModel.fetchMyCourses(true)
+
         displayCourses()
 
         ui.swipeRefreshLayout.setOnRefreshListener {

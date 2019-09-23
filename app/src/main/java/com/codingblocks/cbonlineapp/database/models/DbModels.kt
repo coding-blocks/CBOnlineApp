@@ -18,7 +18,7 @@ data class ContentLecture(
     var lectureId: String = "",
     var lectureContentId: String = "",
     var lectureUpdatedAt: String = "",
-    var isDownloaded: String = FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, lectureId).toString(),
+    var isDownloaded: Boolean = FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, lectureId),
     var date: Date = Date(0L)
 )
 
