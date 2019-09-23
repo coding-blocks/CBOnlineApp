@@ -38,11 +38,11 @@ class OnlineJsonApiAuthenticatedTest {
         assertNotNull(course)
     }
 
-    @Test
-    fun `GET getSectionContents`() {
-        val section = jsonapi.getSectionContents("/sections/6874/relationships/contents").execute().body()
-        assertNotNull(section)
-    }
+//    @Test
+//    fun `GET getSectionContents`() {
+//        val section = jsonapi.getSectionContents("/sections/6874/relationships/contents").execute().body()
+//        assertNotNull(section)
+//    }
 
     @Test
     fun `GET QuizById`() {

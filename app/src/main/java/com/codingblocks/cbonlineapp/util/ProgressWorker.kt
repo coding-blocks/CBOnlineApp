@@ -34,7 +34,8 @@ class ProgressWorker(context: Context, private val workerParameters: WorkerParam
 
         if (response.isSuccessful) {
             response.body()?.let {
-                contentDao.updateProgress(it.contentId, it.runAttemptId, it.id)
+                contentDao.updateProgress(it.contentId, it.runAttemptId, "DONE")
+                contentDao.updateProgressID(it.contentId, it.runAttemptId, it.id)
             }
             return Result.success()
         } else {

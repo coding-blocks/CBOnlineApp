@@ -38,6 +38,8 @@ class HomeActivityViewModel : ViewModel() {
                     prefs.SP_JWT_TOKEN_KEY = jwt
                     prefs.SP_JWT_REFRESH_TOKEN = rt
                     Clients.authJwt = jwt
+                    Clients.refreshToken = rt
+
                     val status = OneSignal.getPermissionSubscriptionState()
                     // Set Player ID For OneSignal
                     Clients.onlineV2JsonApi.setPlayerId(Player(playerId = status.subscriptionStatus.userId))
@@ -77,6 +79,7 @@ class HomeActivityViewModel : ViewModel() {
 
     fun setJWTToken() {
         Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
+        Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
     }
 
     fun refreshToken() {

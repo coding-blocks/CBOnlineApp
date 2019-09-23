@@ -28,6 +28,8 @@ object Clients {
         .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
 
     var authJwt = ""
+    var refreshToken = ""
+
 
     private val onlineApiResourceConverter = ResourceConverter(
         om, Instructor::class.java, Course::class.java, Sections::class.java, MyCourseRuns::class.java,

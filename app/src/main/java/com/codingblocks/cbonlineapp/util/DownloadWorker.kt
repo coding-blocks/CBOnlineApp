@@ -174,7 +174,7 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
             val data = findDataWithId(videoId)
             if (data != null) {
                 doAsync {
-                    contentDao.updateContent(data.contentId, "true")
+                    contentDao.updateContent(data.contentId, 1)
                 }
                 val intent = Intent(applicationContext, VideoPlayerActivity::class.java)
                 intent.putExtra(VIDEO_ID, data.videoId)

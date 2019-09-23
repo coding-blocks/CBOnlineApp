@@ -55,7 +55,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
             title.text = content.title
 
-            if (content.progress == "DONE" || content.progress == "0") {
+            if (content.progress == "DONE") {
                 title.textColor = resources.getColor(R.color.green)
                 downloadBtn.setImageResource(R.drawable.ic_status_done)
             } else {

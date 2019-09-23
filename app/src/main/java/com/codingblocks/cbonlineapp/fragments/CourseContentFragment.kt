@@ -52,33 +52,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
 
-    override fun startDownload(
-        videoId: String,
-        contentId: String,
-        title: String,
-        attemptId: String,
-        sectionId: String
-    ) {
-
-        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-
-        val videoData = workDataOf(VIDEO_ID to videoId,
-            "title" to title,
-            SECTION_ID to sectionId,
-            RUN_ATTEMPT_ID to attemptId,
-            CONTENT_ID to contentId)
-
-        val request: OneTimeWorkRequest =
-            OneTimeWorkRequestBuilder<DownloadWorker>()
-                .setConstraints(constraints)
-                .setInputData(videoData)
-                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
-                .build()
-
-        WorkManager.getInstance()
-            .enqueue(request)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         arguments?.let {
@@ -181,6 +154,34 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 .build()
 //        Snackbar.make(contentRoot, "Progress Will Be Synced Once Your Device Get Online", Snackbar.LENGTH_SHORT)
 //            .setAnchorView(bottom_navigation).show()
+
+        WorkManager.getInstance()
+            .enqueue(request)
+    }
+
+    override fun startDownload(
+        videoId: String,
+        contentId: String,
+        title: String,
+        attemptId: String,
+        sectionId: String
+    ) {
+        val constraints = if (getPrefs()?.SP_WIFI == true)
+            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
+        else
+            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val videoData = workDataOf(VIDEO_ID to videoId,
+            "title" to title,
+            SECTION_ID to sectionId,
+            RUN_ATTEMPT_ID to attemptId,
+            CONTENT_ID to contentId)
+
+        val request: OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<DownloadWorker>()
+                .setConstraints(constraints)
+                .setInputData(videoData)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                .build()
 
         WorkManager.getInstance()
             .enqueue(request)
