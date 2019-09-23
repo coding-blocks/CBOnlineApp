@@ -34,8 +34,8 @@ object MediaUtils {
         var vId = ""
         // TODO fix regex pattern
         val pattern = Pattern.compile(
-                "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$",
-                Pattern.CASE_INSENSITIVE
+            "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$",
+            Pattern.CASE_INSENSITIVE
         )
         val matcher = pattern.matcher(videoUrl)
         if (matcher.matches()) {
@@ -47,12 +47,12 @@ object MediaUtils {
     fun checkPermission(context: Context): Boolean {
 
         val readExternal = ContextCompat.checkSelfPermission(
-                context.applicationContext,
-                Manifest.permission.READ_EXTERNAL_STORAGE
+            context.applicationContext,
+            Manifest.permission.READ_EXTERNAL_STORAGE
         )
         val writeExternal = ContextCompat.checkSelfPermission(
-                context.applicationContext,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            context.applicationContext,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
 
         return readExternal == PackageManager.PERMISSION_GRANTED && writeExternal == PackageManager.PERMISSION_GRANTED
@@ -65,9 +65,9 @@ object MediaUtils {
             } else {
 
                 ActivityCompat.requestPermissions(
-                        context as Activity,
-                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        1
+                    context as Activity,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    1
                 )
                 false
             }

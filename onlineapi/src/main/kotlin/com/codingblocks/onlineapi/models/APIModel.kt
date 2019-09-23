@@ -90,8 +90,8 @@ open class Instructor(
     val name: String?,
     val description: String?,
     val photo: String?,
-    val email:String?,
-    val sub:String?
+    val email: String?,
+    val sub: String?
 ) : BaseModel()
 
 class SectionContent(
@@ -279,16 +279,11 @@ class ContentVideoType : BaseModel() {
 }
 
 @Type("progress")
-class ContentProgress : BaseModel() {
-    @JvmField
-    var contentId: String? = null
-    @JvmField
-    var createdAt: String? = null
-    @JvmField
-    var status: String? = null
-    @JvmField
-    var runAttemptId: String? = null
-}
+class ContentProgress(
+    var contentId: String,
+    var createdAt: String,
+    var status: String,
+    var runAttemptId: String) : BaseModel()
 
 @Type("announcement")
 class Announcement : BaseModel() {
@@ -307,7 +302,9 @@ class Announcement : BaseModel() {
 @Type("progresses")
 class Progress : BaseModel() {
     @JvmField
-    var status: String? = null
+    var status: String = "UNDONE"
+    var runAttemptId: String = ""
+    var contentId: String = ""
     @Relationship("run-attempt")
     @JvmField
     var runs: RunAttemptsId? = null
@@ -592,7 +589,7 @@ data class Applications(
     val resumeLink: String = "",
     @Relationship("job")
     val job: JobId
-):BaseModel()
+) : BaseModel()
 
 @Type("jobs")
 class JobId(

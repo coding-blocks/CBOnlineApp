@@ -23,27 +23,27 @@ fun ImageView.loadSvg(svgUrl: String, onDrawableCreated: ((Drawable) -> Unit)?) 
 
     doAsync {
         okHttpClient.newCall((Request.Builder().url(svgUrl).build()))
-                .execute().body()?.let {
+            .execute().body()?.let {
 
-                    with(SVG.getFromInputStream(it.byteStream())) {
-                        uiThread {
-                            val picDrawable = PictureDrawable(renderToPicture(
-                                    400, 400
-                            ))
-                            setImageDrawable(picDrawable)
-                            onDrawableCreated?.let { it(picDrawable) }
-                        }
+                with(SVG.getFromInputStream(it.byteStream())) {
+                    uiThread {
+                        val picDrawable = PictureDrawable(renderToPicture(
+                            400, 400
+                        ))
+                        setImageDrawable(picDrawable)
+                        onDrawableCreated?.let { it(picDrawable) }
                     }
                 }
+            }
     }
 }
 
 fun ImageView.loadImage(imgUrl: String, scale: Boolean = false) {
     if (imgUrl.takeLast(3) == "png") {
         if (scale)
-            Picasso.with(context).load(imgUrl).resize(72, 72).into(this)
+            Picasso.get().load(imgUrl).resize(72, 72).into(this)
         else
-            Picasso.with(context).load(imgUrl).into(this)
+            Picasso.get().load(imgUrl).into(this)
     } else {
         loadSvg(imgUrl, null)
     }

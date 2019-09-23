@@ -3,17 +3,15 @@ package com.codingblocks.cbonlineapp.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.onlineapi.models.ProductExtensionsItem
-import kotlinx.android.synthetic.main.item_extension.view.cardView
-import kotlinx.android.synthetic.main.item_extension.view.date
-import kotlinx.android.synthetic.main.item_extension.view.price
-import kotlinx.android.synthetic.main.item_extension.view.title
+import kotlinx.android.synthetic.main.item_extension.view.*
 
 class ExtensionsAdapter(var list: ArrayList<ProductExtensionsItem>) : RecyclerView.Adapter<ExtensionsAdapter.ExtensionViewHolder>() {
 
-    private var checkedPosition = -1
+    var checkedPosition = MutableLiveData<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
         ExtensionViewHolder {
@@ -24,6 +22,7 @@ class ExtensionsAdapter(var list: ArrayList<ProductExtensionsItem>) : RecyclerVi
     fun setData(extensionData: ArrayList<ProductExtensionsItem>) {
         this.list = extensionData
         notifyDataSetChanged()
+        checkedPosition.postValue(-1)
     }
 
     override fun getItemCount(): Int = list.size
@@ -33,8 +32,8 @@ class ExtensionsAdapter(var list: ArrayList<ProductExtensionsItem>) : RecyclerVi
     }
 
     fun getSelected(): ProductExtensionsItem? {
-        return if (checkedPosition != -1) {
-            list[checkedPosition]
+        return if (checkedPosition.value != -1) {
+            list[checkedPosition.value!!]
         } else null
     }
 
@@ -44,20 +43,20 @@ class ExtensionsAdapter(var list: ArrayList<ProductExtensionsItem>) : RecyclerVi
             itemView.title.text = extension.description
             itemView.date.text = "${extension.duration} Days"
             itemView.price.text = "Rs. ${extension.mrp?.div(100)}"
-            if (checkedPosition == -1) {
+            if (checkedPosition.value == -1) {
                 itemView.cardView.setBackgroundColor(itemView.context.resources.getColor(R.color.white))
             } else {
-                if (checkedPosition == adapterPosition) {
-                    itemView.cardView.setBackgroundColor(itemView.context.resources.getColor(R.color.dark_transparent))
+                if (checkedPosition.value == adapterPosition) {
+                    itemView.cardView.setBackgroundColor(itemView.context.resources.getColor(R.color.light_transparent))
                 } else {
                     itemView.cardView.setBackgroundColor(itemView.context.resources.getColor(R.color.white))
                 }
             }
             itemView.setOnClickListener {
-                itemView.cardView.setBackgroundColor(itemView.context.resources.getColor(R.color.dark_transparent))
-                if (checkedPosition != adapterPosition) {
-                    notifyItemChanged(checkedPosition)
-                    checkedPosition = adapterPosition
+                itemView.cardView.setBackgroundColor(itemView.context.resources.getColor(R.color.light_transparent))
+                if (checkedPosition.value != adapterPosition) {
+                    notifyItemChanged(checkedPosition.value!!)
+                    checkedPosition.postValue(adapterPosition)
                 }
             }
         }

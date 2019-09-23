@@ -9,14 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.adapters.DoubtsAdapter
+import com.codingblocks.cbonlineapp.extensions.retrofitCallback
+import com.codingblocks.cbonlineapp.util.ARG_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_doubts.*
 import org.jetbrains.anko.AnkoLogger
-
-private const val ARG_ATTEMPT_ID = "attempt_id"
-private const val ARG_COURSE_ID = "course_id"
 
 class DoubtsFragment : Fragment(), AnkoLogger {
 
@@ -24,7 +23,7 @@ class DoubtsFragment : Fragment(), AnkoLogger {
         arguments?.getString(ARG_ATTEMPT_ID) ?: ""
     }
     private val courseId: String by lazy {
-        arguments?.getString(ARG_COURSE_ID) ?: ""
+        arguments?.getString(COURSE_ID) ?: ""
     }
 
     override fun onCreateView(
@@ -32,7 +31,7 @@ class DoubtsFragment : Fragment(), AnkoLogger {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ):
-            View? = inflater.inflate(R.layout.fragment_doubts, container, false).apply {
+        View? = inflater.inflate(R.layout.fragment_doubts, container, false).apply {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -54,11 +53,11 @@ class DoubtsFragment : Fragment(), AnkoLogger {
 
         @JvmStatic
         fun newInstance(param1: String, crUid: String) =
-                DoubtsFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_ATTEMPT_ID, param1)
-                        putString(ARG_COURSE_ID, crUid)
-                    }
+            DoubtsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_ATTEMPT_ID, param1)
+                    putString(COURSE_ID, crUid)
                 }
+            }
     }
 }

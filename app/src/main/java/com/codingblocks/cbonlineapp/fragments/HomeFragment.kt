@@ -8,20 +8,19 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.CarouselSliderAdapter
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.adapters.EndlessPagerAdapter
-import com.codingblocks.cbonlineapp.database.models.CourseRun
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
 import com.codingblocks.onlineapi.models.CarouselCards
-import com.ethanhua.skeleton.Skeleton
-import com.ethanhua.skeleton.SkeletonScreen
 import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
@@ -34,7 +33,6 @@ import kotlin.collections.ArrayList
 class HomeFragment : Fragment(), AnkoLogger {
 
     private lateinit var courseDataAdapter: CourseDataAdapter
-    private lateinit var skeletonScreen: SkeletonScreen
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     val ui = HomeFragmentUi<Fragment>()
@@ -58,33 +56,16 @@ class HomeFragment : Fragment(), AnkoLogger {
 
         setHasOptionsMenu(true)
 
-        courseDataAdapter =
-            CourseDataAdapter(
-                ArrayList(),
-                viewModel.getCourseDao(),
-                requireContext(),
-                viewModel.getCourseWithInstructorDao(),
-                "allCourses"
-            )
-        ui.rvCourses.isNestedScrollingEnabled = false
-
-        ui.rvCourses.layoutManager = LinearLayoutManager(ctx)
-        ui.rvCourses.adapter = courseDataAdapter
+        courseDataAdapter = CourseDataAdapter()
+        ui.rvCourses.apply {
+            isNestedScrollingEnabled = false
+            layoutManager = LinearLayoutManager(ctx)
+            adapter = courseDataAdapter
+        }
         ui.homeImg.visibility = View.GONE
-
-        skeletonScreen = Skeleton.bind(ui.rvCourses)
-            .adapter(courseDataAdapter)
-            .shimmer(true)
-            .angle(20)
-            .frozen(true)
-            .duration(1200)
-            .count(4)
-            .load(R.layout.item_skeleton_course_card)
-            .show()
 
         ui.swipeRefreshLayout.setOnRefreshListener {
             viewModel.progress.value = true
-            skeletonScreen.show()
             viewModel.fetchRecommendedCourses()
         }
 
@@ -124,16 +105,18 @@ class HomeFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        viewModel.getRecommendedRuns().observer(viewLifecycleOwner) {
-            if (!it.isEmpty()) {
-                skeletonScreen.hide()
-                courseDataAdapter.setData(it.shuffled().filter { c ->
-                    c.title.contains(searchQuery, true) ||
-                        c.summary.contains(searchQuery, true)
-                } as ArrayList<CourseRun>)
+        viewModel.getAllCourses().observer(this) {
+            if (it.isNotEmpty()) {
+                val response = CourseInstructorHolder.groupInstructorByRun(it)
+                courseDataAdapter.submitList(response.filter { c ->
+                    c.courseRun.course.title.contains(searchQuery, true) ||
+                        c.courseRun.course.summary.contains(searchQuery, true)
+                })
+                ui.shimmerLayout.stopShimmer()
             } else {
                 viewModel.fetchRecommendedCourses()
             }
+            ui.shimmerLayout.isVisible = it.isEmpty()
         }
     }
 

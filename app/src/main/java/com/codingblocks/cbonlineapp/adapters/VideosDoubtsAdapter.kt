@@ -22,13 +22,7 @@ import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.RunAttemptsId
-import kotlinx.android.synthetic.main.item_doubt.view.commentll
-import kotlinx.android.synthetic.main.item_doubt.view.doubtComment
-import kotlinx.android.synthetic.main.item_doubt.view.doubtDescription
-import kotlinx.android.synthetic.main.item_doubt.view.doubtTitle
-import kotlinx.android.synthetic.main.item_doubt.view.doubtTopic
-import kotlinx.android.synthetic.main.item_doubt.view.resolveDoubtTv
-import kotlinx.android.synthetic.main.item_doubt.view.showCommentsTv
+import kotlinx.android.synthetic.main.item_doubt.view.*
 
 class VideosDoubtsAdapter(
     private var doubtsData: ArrayList<DoubtsModel>,

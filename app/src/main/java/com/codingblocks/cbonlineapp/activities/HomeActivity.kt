@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
@@ -31,6 +30,7 @@ import com.codingblocks.cbonlineapp.fragments.HomeFragment
 import com.codingblocks.cbonlineapp.fragments.MyCoursesFragment
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
+import com.codingblocks.cbonlineapp.util.Utils
 import com.codingblocks.cbonlineapp.viewmodels.HomeActivityViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -39,16 +39,13 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_home.drawer_layout
-import kotlinx.android.synthetic.main.activity_home.nav_view
-import kotlinx.android.synthetic.main.app_bar_home.toolbar
+import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.app_bar_home.*
 import kotlinx.android.synthetic.main.custom_dialog.view.cancelBtn
 import kotlinx.android.synthetic.main.custom_dialog.view.description
-import kotlinx.android.synthetic.main.nav_header_home.view.login_button
-import kotlinx.android.synthetic.main.nav_header_home.view.nav_header_imageView
-import kotlinx.android.synthetic.main.report_dialog.view.descriptionEdtv
+import kotlinx.android.synthetic.main.nav_header_home.view.*
+import kotlinx.android.synthetic.main.report_dialog.view.*
 import kotlinx.android.synthetic.main.report_dialog.view.okBtn
-import kotlinx.android.synthetic.main.report_dialog.view.titleEdtv
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.intentFor
@@ -59,8 +56,14 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     AnkoLogger, View.OnClickListener, DrawerLayout.DrawerListener {
 
-    private var updateUIReceiver: BroadcastReceiver? = null
-    private var filter: IntentFilter? = null
+    private var updateUIReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            invalidateOptionsMenu()
+        }
+    }
+    private var filter = IntentFilter()
+
     private val viewModel by viewModel<HomeActivityViewModel>()
 
     private val appUpdateManager by lazy {
@@ -77,8 +80,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         viewModel.prefs = getPrefs()
 
-        setSupportActionBar(toolbar)
-        title = "Coding Blocks"
+        Utils.setToolbar(this, "Coding Blocks")
 
         val toggle = ActionBarDrawerToggle(
             this,
@@ -96,28 +98,17 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (savedInstanceState == null) {
             setUpFragment()
         }
+        filter.addAction("com.codingblocks.notification")
 
         // adding label to nav drawer items
 //        nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
-
-        filter = IntentFilter()
-
-        filter?.addAction("com.codingblocks.notification")
-
-        updateUIReceiver = object : BroadcastReceiver() {
-
-            override fun onReceive(context: Context, intent: Intent) {
-                invalidateOptionsMenu()
-            }
-        }
     }
 
     private fun setUpFragment() {
         val transaction = supportFragmentManager.beginTransaction()
         if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN) {
             // Update User Token on Login
-            if (!BuildConfig.DEBUG)
-                viewModel.refreshToken()
+            viewModel.refreshToken()
             val navMenu = nav_view.menu
             navMenu.findItem(R.id.nav_my_courses).isVisible = true
             transaction.replace(R.id.fragment_holder, MyCoursesFragment()).commit()
@@ -132,7 +123,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (viewModel.prefs.SP_USER_IMAGE.isNotEmpty())
             nav_view.getHeaderView(0).nav_header_imageView.apply {
                 setOnClickListener(this@HomeActivity)
-                Picasso.with(this@HomeActivity).load(viewModel.prefs.SP_USER_IMAGE)
+                Picasso.get().load(viewModel.prefs.SP_USER_IMAGE)
                     .placeholder(R.drawable.defaultavatar).fit().into(this)
             }
         viewModel.setJWTToken()
@@ -349,16 +340,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.home_notifications, menu)
-        val menuItem = menu.findItem(R.id.action_notifications)
-        if (viewModel.getNotificationCount() == 0) {
-            menuItem.icon = resources.getDrawable(R.drawable.ic_notification)
-        } else {
-            menuItem.icon = resources.getDrawable(R.drawable.ic_notification_active)
-        }
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        menuInflater.inflate(R.menu.home_notifications, menu)
+//        val menuItem = menu.findItem(R.id.action_notifications)
+//        if (viewModel.getNotificationCount() == 0) {
+//            menuItem.icon = resources.getDrawable(R.drawable.ic_notification)
+//        } else {
+//            menuItem.icon = resources.getDrawable(R.drawable.ic_notification_active)
+//        }
+//        return true
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_notifications -> {

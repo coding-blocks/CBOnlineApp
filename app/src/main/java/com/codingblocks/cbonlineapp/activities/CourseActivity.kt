@@ -18,7 +18,6 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.BatchesAdapter
 import com.codingblocks.cbonlineapp.adapters.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.adapters.SectionsDataAdapter
-import com.codingblocks.cbonlineapp.database.models.Instructor
 import com.codingblocks.cbonlineapp.extensions.loadImage
 import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
@@ -28,55 +27,14 @@ import com.codingblocks.cbonlineapp.util.OnCartItemClickListener
 import com.codingblocks.cbonlineapp.viewmodels.CourseViewModel
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Sections
-import com.ethanhua.skeleton.Skeleton
-import com.ethanhua.skeleton.SkeletonScreen
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_course.batchRv
-import kotlinx.android.synthetic.main.activity_course.buyBtn
-import kotlinx.android.synthetic.main.activity_course.coursePageLogo
-import kotlinx.android.synthetic.main.activity_course.coursePageMentors
-import kotlinx.android.synthetic.main.activity_course.coursePageRatingBar
-import kotlinx.android.synthetic.main.activity_course.coursePageRatingCountTv
-import kotlinx.android.synthetic.main.activity_course.coursePageRatingTv
-import kotlinx.android.synthetic.main.activity_course.coursePageSubtitle
-import kotlinx.android.synthetic.main.activity_course.coursePageSummary
-import kotlinx.android.synthetic.main.activity_course.coursePageTitle
-import kotlinx.android.synthetic.main.activity_course.coursePagevtags
-import kotlinx.android.synthetic.main.activity_course.courseProgress1
-import kotlinx.android.synthetic.main.activity_course.courseProgress2
-import kotlinx.android.synthetic.main.activity_course.courseProgress3
-import kotlinx.android.synthetic.main.activity_course.courseProgress4
-import kotlinx.android.synthetic.main.activity_course.courseProgress5
-import kotlinx.android.synthetic.main.activity_course.courseRootView
-import kotlinx.android.synthetic.main.activity_course.faqMarkdown
-import kotlinx.android.synthetic.main.activity_course.faqTitleTv
-import kotlinx.android.synthetic.main.activity_course.faqView
-import kotlinx.android.synthetic.main.activity_course.feature_icon_1
-import kotlinx.android.synthetic.main.activity_course.feature_icon_2
-import kotlinx.android.synthetic.main.activity_course.feature_icon_3
-import kotlinx.android.synthetic.main.activity_course.feature_icon_4
-import kotlinx.android.synthetic.main.activity_course.features_text_1
-import kotlinx.android.synthetic.main.activity_course.features_text_2
-import kotlinx.android.synthetic.main.activity_course.features_text_3
-import kotlinx.android.synthetic.main.activity_course.features_text_4
-import kotlinx.android.synthetic.main.activity_course.instructorRv
-import kotlinx.android.synthetic.main.activity_course.rvExpendableView
-import kotlinx.android.synthetic.main.activity_course.scrollView
-import kotlinx.android.synthetic.main.activity_course.tagsChipgroup
-import kotlinx.android.synthetic.main.activity_course.tagstv
-import kotlinx.android.synthetic.main.activity_course.toolbar
-import kotlinx.android.synthetic.main.activity_course.trialBtn
-import kotlinx.android.synthetic.main.bottom_cart_sheet.bottom_sheet
-import kotlinx.android.synthetic.main.bottom_cart_sheet.checkoutBtn
-import kotlinx.android.synthetic.main.bottom_cart_sheet.continueBtn
-import kotlinx.android.synthetic.main.bottom_cart_sheet.newImage
-import kotlinx.android.synthetic.main.bottom_cart_sheet.newTitle
-import kotlinx.android.synthetic.main.bottom_cart_sheet.oldTitle
+import kotlinx.android.synthetic.main.activity_course.*
+import kotlinx.android.synthetic.main.bottom_cart_sheet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -87,7 +45,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class CourseActivity : AppCompatActivity(), AnkoLogger {
     lateinit var courseId: String
     lateinit var courseName: String
-    private lateinit var skeletonScreen: SkeletonScreen
     private lateinit var progressBar: Array<ProgressBar?>
     private lateinit var batchAdapter: BatchesAdapter
     private lateinit var instructorAdapter: InstructorDataAdapter
@@ -125,13 +82,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         setSupportActionBar(toolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        skeletonScreen = Skeleton.bind(courseRootView)
-            .shimmer(true)
-            .angle(20)
-            .duration(1200)
-            .load(R.layout.item_skeleton_course)
-            .show()
-
         viewModel.sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
         viewModel.sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
 
@@ -167,26 +117,25 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         instructorRv.layoutManager = LinearLayoutManager(this)
         instructorRv.adapter = instructorAdapter
 
-        viewModel.getInstructorWithCourseId(id).observer(this) {
-            instructorAdapter.setData(it as ArrayList<Instructor>)
-            var instructors = "Mentors: "
-            for (i in 0 until it.size) {
-                if (i == 0) {
-                    instructors += it[i].name
-                } else if (i == 1) {
-                    instructors += ", ${it[i].name}"
-                } else if (i >= 2) {
-                    instructors += "+ " + (it.size - 2) + " more"
-                    break
-                }
-                coursePageMentors.text = instructors
-            }
-        }
+//        viewModel.getInstructorWithCourseId(id).observer(this) {
+//            instructorAdapter.setData(it as ArrayList<Instructor>)
+//            var instructors = "Mentors: "
+//            for (i in 0 until it.size) {
+//                if (i == 0) {
+//                    instructors += it[i].name
+//                } else if (i == 1) {
+//                    instructors += ", ${it[i].name}"
+//                } else if (i >= 2) {
+//                    instructors += "+ " + (it.size - 2) + " more"
+//                    break
+//                }
+//                coursePageMentors.text = instructors
+//            }
+//        }
     }
 
     private fun fetchCourse() {
         viewModel.fetchedCourse.observeOnce { course ->
-            skeletonScreen.hide()
 
             fetchInstructors(course.id)
             viewModel.getCourseFeatures(courseId).observer(this) {
@@ -341,7 +290,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     private fun fetchRating(id: String) {
         viewModel.getCourseRating(id).observeOnce {
-            it?.apply {
+            it.apply {
                 coursePageRatingCountTv.text = "$count Rating"
                 coursePageRatingTv.text = "$rating out of 5 stars"
                 coursePageRatingBar.rating = rating.toFloat()
@@ -350,10 +299,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     progressBar[i]?.progress = it.stats[i].toInt() * 1000
 
                     // Todo Add Animation on Focus
-//                    val anim =
-//                        ProgressBarAnimation(progressBar[i], 0F, it.stats[i].toInt() * 1000F)
-//                    anim.duration = 1500
-//                    progressBar[i]?.startAnimation(anim)
+                    //                    val anim =
+                    //                        ProgressBarAnimation(progressBar[i], 0F, it.stats[i].toInt() * 1000F)
+                    //                    anim.duration = 1500
+                    //                    progressBar[i]?.startAnimation(anim)
                 }
             }
         }

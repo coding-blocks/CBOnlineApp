@@ -8,27 +8,42 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.activities.PdfActivity
+import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.adapters.ExtensionsAdapter
-import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.extensions.getDateForTime
+import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
+import com.codingblocks.cbonlineapp.util.ARG_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.DOCUMENT
+import com.codingblocks.cbonlineapp.util.DOWNLOADED
+import com.codingblocks.cbonlineapp.util.FILE_NAME
+import com.codingblocks.cbonlineapp.util.FILE_URL
+import com.codingblocks.cbonlineapp.util.LECTURE
+import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.RUN_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.VIDEO
+import com.codingblocks.cbonlineapp.util.VIDEO_ID
+import com.codingblocks.cbonlineapp.util.VIDEO_URL
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.ProductExtensionsItem
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
-import kotlinx.android.synthetic.main.fragment_overview.buyBtn
-import kotlinx.android.synthetic.main.fragment_overview.completetionBtn
-import kotlinx.android.synthetic.main.fragment_overview.requestBtn
-import kotlinx.android.synthetic.main.fragment_overview.view.extensionsCard
-import kotlinx.android.synthetic.main.fragment_overview.view.extensionsRv
+import kotlinx.android.synthetic.main.custom_dialog.view.*
+import kotlinx.android.synthetic.main.fragment_overview.*
+import kotlinx.android.synthetic.main.fragment_overview.view.*
+import kotlinx.android.synthetic.main.fragment_overview.view.description
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.longToast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-
-private const val ARG_ATTEMPT_ID = "attempt_id"
-private const val ARG__RUN_ID = "run_id"
 
 class OverviewFragment : Fragment(), AnkoLogger {
 
@@ -48,6 +63,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
 
         extensionsAdapter = ExtensionsAdapter(ArrayList())
         view.extensionsRv.apply {
+            isNestedScrollingEnabled = false
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
@@ -58,33 +74,8 @@ class OverviewFragment : Fragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getRunByAtemptId(viewModel.attemptId).observer(viewLifecycleOwner) { courseRun ->
-            if (courseRun.progress > 90.0) {
-                completetionBtn.setImageResource(R.drawable.ic_status_white)
-                requestBtn.apply {
-                    background = resources.getDrawable(R.drawable.button_background)
-                    isEnabled = true
-                    setOnClickListener {
-                        viewModel.requestApproval()
-                    }
-                }
-            } else {
-                completetionBtn.setImageResource(R.drawable.ic_circle_white)
-                requestBtn.apply {
-                    background = resources.getDrawable(R.drawable.button_disable)
-                    isEnabled = false
-                }
-            }
-            if (courseRun.crRunEnd.toLong() * 1000 < System.currentTimeMillis() || courseRun.crRunEnd.toLong() * 1000 - System.currentTimeMillis() <= 2592000000)
-                viewModel.fetchExtensions(courseRun.productId).observer(viewLifecycleOwner) {
-                    if (it.isNotEmpty()) {
-                        view.extensionsCard.isVisible = true
-                        extensionsAdapter.setData(it as ArrayList<ProductExtensionsItem>)
-                    } else {
-                        view.extensionsCard.isVisible = false
-                    }
-                }
-        }
+
+        setUpObservers(view)
 
         buyBtn.setOnClickListener {
             extensionsAdapter.getSelected()?.id?.let { it1 ->
@@ -98,9 +89,103 @@ class OverviewFragment : Fragment(), AnkoLogger {
             }
         }
 
+        resetBtn.setOnClickListener {
+            confirmReset()
+        }
+        resumeBtn.setOnClickListener {
+            viewModel.getResumeCourse().observeOnce {
+                if (it.isNotEmpty())
+                    with(it[0]) {
+                        when (content.contentable) {
+                            LECTURE -> {
+                                startActivity(intentFor<VideoPlayerActivity>(
+                                    VIDEO_ID to content.contentLecture.lectureId,
+                                    RUN_ATTEMPT_ID to content.attempt_id,
+                                    CONTENT_ID to content.ccid,
+                                    SECTION_ID to section.csid,
+                                    DOWNLOADED to content.contentLecture.isDownloaded
+                                ).singleTop()
+                                )
+                            }
+                            DOCUMENT -> {
+                                startActivity(intentFor<PdfActivity>(
+                                    FILE_URL to content.contentDocument.documentPdfLink,
+                                    FILE_NAME to content.contentDocument.documentName + ".pdf"
+                                ).singleTop())
+                            }
+                            VIDEO -> {
+                                startActivity(intentFor<VideoPlayerActivity>(
+                                    VIDEO_URL to content.contentVideo.videoUrl,
+                                    RUN_ATTEMPT_ID to content.attempt_id,
+                                    CONTENT_ID to content.ccid
+                                ).singleTop())
+                            }
+                            else -> return@with
+                        }
+                    }
+            }
+        }
+    }
+
+    private fun setUpObservers(view: View) {
+        viewModel.getRun().observer(viewLifecycleOwner) { courseRun ->
+            courseProgress.progress = courseRun.progress.toInt()
+            contentCompletedTv.text = String.format("%d of %d", courseRun.completedContents, courseRun.totalContents)
+            batchEndTv.text = String.format("Batch Ends %s", getDateForTime(courseRun.crRunEnd))
+            if (courseRun.progress > 90.0) {
+                completetionBtn.setImageResource(R.drawable.ic_status_white)
+                requestBtn.apply {
+                    isEnabled = true
+                    setOnClickListener {
+                        viewModel.requestApproval()
+                    }
+                }
+            } else {
+                completetionBtn.setImageResource(R.drawable.ic_circle_white)
+                requestBtn.isEnabled = false
+            }
+            if (courseRun.crRunEnd.toLong() * 1000 < System.currentTimeMillis() || courseRun.crRunEnd.toLong() * 1000 - System.currentTimeMillis() <= 2592000000)
+                viewModel.fetchExtensions(courseRun.productId).observer(viewLifecycleOwner) {
+                    if (it.isNotEmpty()) {
+                        view.extensionsCard.isVisible = true
+                        extensionsAdapter.setData(it as ArrayList<ProductExtensionsItem>)
+                    } else {
+                        view.extensionsCard.isVisible = false
+                    }
+                }
+        }
+
+        extensionsAdapter.checkedPosition.observer(viewLifecycleOwner) {
+            buyBtn.isEnabled = it != -1
+        }
+
+        viewModel.resetProgress.observer(viewLifecycleOwner) {
+            requireActivity().finish()
+        }
+
         viewModel.popMessage.observer(viewLifecycleOwner) { message ->
             Snackbar.make(view.rootView, message, Snackbar.LENGTH_LONG).show()
         }
+    }
+
+    private fun confirmReset() {
+        val builder = android.app.AlertDialog.Builder(requireContext())
+        val inflater = layoutInflater
+        val customView = inflater.inflate(R.layout.custom_dialog, null)
+        customView.okBtn.text = "Yes"
+        customView.cancelBtn.text = "No"
+        customView.description.text = "Are you sure you want to reset progress?"
+        builder.setCancelable(false)
+        builder.setView(customView)
+        val dialog = builder.create()
+        customView.cancelBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        customView.okBtn.setOnClickListener {
+            viewModel.resetProgress()
+        }
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -108,7 +193,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
         arguments?.let {
             attemptId = it.getString(ARG_ATTEMPT_ID)!!
-            runId = it.getString(ARG__RUN_ID)!!
+            runId = it.getString(RUN_ID)!!
         }
     }
 
@@ -119,7 +204,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
             OverviewFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_ATTEMPT_ID, param1)
-                    putString(ARG__RUN_ID, crUid)
+                    putString(RUN_ID, crUid)
                 }
             }
     }
@@ -129,7 +214,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
         if (isVisibleToUser) {
             if (view != null) {
                 val params = Bundle()
-                params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
+                params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs(requireContext()).SP_ONEAUTH_ID)
                 params.putString(FirebaseAnalytics.Param.ITEM_NAME, "CourseOverview")
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
             }

@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.database
+package com.codingblocks.cbonlineapp.database.converters
 
 import androidx.room.TypeConverter
 import com.codingblocks.onlineapi.models.CourseId

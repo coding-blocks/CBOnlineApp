@@ -14,6 +14,10 @@ class TabLayoutAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         fragments.add(fragment)
     }
 
+    fun add(fragment: Fragment) {
+        fragments.add(fragment)
+    }
+
     override fun getCount(): Int {
         return fragments.size
     }

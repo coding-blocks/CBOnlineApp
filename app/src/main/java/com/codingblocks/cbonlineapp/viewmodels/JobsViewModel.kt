@@ -2,9 +2,9 @@ package com.codingblocks.cbonlineapp.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.codingblocks.cbonlineapp.database.FilterData
 import com.codingblocks.cbonlineapp.database.JobsDao
 import com.codingblocks.cbonlineapp.database.models.Companies
+import com.codingblocks.cbonlineapp.database.models.FilterData
 import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.extensions.getDate
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback

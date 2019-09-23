@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.ui
 
 import android.graphics.Color
-import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -11,11 +10,11 @@ import com.codingblocks.cbonlineapp.extensions.circleImageView
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.wrapContent
 import org.jetbrains.anko.constraint.layout.constraintLayout
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.wrapContent
 
 class InstructorListUi : AnkoComponent<ViewGroup> {
 
@@ -24,12 +23,10 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
     lateinit var instructorImgView: CircleImageView
     lateinit var instructorEmail: TextView
     lateinit var instructorTextView: TextView
-    lateinit var font: Typeface
 
     override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui) {
 
         constraintLayout {
-            font = Typeface.createFromAsset(context.assets, "fonts/NunitoSans-Regular.ttf")
             // write this before using its id on another layout
             instructorImgView = circleImageView {
                 id = View.generateViewId()
@@ -42,7 +39,6 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
             instructorTextView = textView {
                 id = View.generateViewId()
                 textSize = 18f
-                typeface = font
                 textColor = Color.parseColor("#ff6666")
             }.lparams(width = 0, height = wrapContent) {
                 marginStart = dip(16)
@@ -56,7 +52,6 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
                 id = View.generateViewId()
                 textColor = Color.parseColor("#000000")
                 textSize = 22f
-                typeface = font
             }.lparams(width = dip(0), height = dip(wrapContent)) {
                 marginStart = dip(16)
                 marginEnd = dip(8)
@@ -68,7 +63,6 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
                 id = View.generateViewId()
                 textColor = Color.parseColor("#000000")
                 textSize = 14f
-                typeface = font
             }.lparams(width = 0, height = wrapContent) {
                 marginStart = dip(16)
                 marginEnd = dip(8)
@@ -80,7 +74,6 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
                 id = View.generateViewId()
                 textColor = Color.parseColor("#000000")
                 textSize = 14f
-                typeface = font
             }.lparams(width = dip(0), height = dip(wrapContent)) {
                 marginStart = dip(16)
                 topMargin = dip(8)

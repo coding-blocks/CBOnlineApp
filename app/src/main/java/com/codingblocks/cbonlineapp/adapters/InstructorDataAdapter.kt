@@ -4,17 +4,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.models.Instructor
+import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.ui.InstructorListUi
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.email
 
-class InstructorDataAdapter(private var instructorData: ArrayList<Instructor>?) : RecyclerView.Adapter<InstructorDataAdapter.InstructorViewHolder>() {
+class InstructorDataAdapter(private var instructorData: ArrayList<InstructorModel>) : RecyclerView.Adapter<InstructorDataAdapter.InstructorViewHolder>() {
 
     val ui = InstructorListUi()
 
-    fun setData(instructorData: ArrayList<Instructor>) {
+    fun setData(instructorData: ArrayList<InstructorModel>) {
         this.instructorData = instructorData
         notifyDataSetChanged()
     }
@@ -24,21 +24,21 @@ class InstructorDataAdapter(private var instructorData: ArrayList<Instructor>?) 
     }
 
     override fun getItemCount(): Int {
-        return instructorData!!.size
+        return instructorData.size
     }
 
     override fun onBindViewHolder(holder: InstructorViewHolder, position: Int) {
-        holder.bindView(instructorData!![position])
+        holder.bindView(instructorData[position])
     }
 
     inner class InstructorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindView(instructor: Instructor) {
+        fun bindView(instructor: InstructorModel) {
             ui.instructorTitle.text = instructor.name
             ui.instructorDescription.text = instructor.description
             ui.instructorTextView.text = "${instructor.sub}, Coding Blocks"
             ui.instructorEmail.text = instructor.email
-            Picasso.with(itemView.context).load(instructor.photo).placeholder(R.drawable.defaultavatar).fit().into(ui.instructorImgView)
+            Picasso.get().load(instructor.photo).placeholder(R.drawable.defaultavatar).fit().into(ui.instructorImgView)
 
             ui.instructorEmail.setOnClickListener {
                 if (instructor.email?.isNotEmpty()!!) {

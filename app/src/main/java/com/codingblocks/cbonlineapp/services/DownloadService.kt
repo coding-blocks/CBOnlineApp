@@ -13,12 +13,11 @@ import androidx.core.app.NotificationCompat
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.database.ContentDao
-import com.codingblocks.cbonlineapp.database.DownloadData
+import com.codingblocks.cbonlineapp.database.models.DownloadData
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
-import com.codingblocks.cbonlineapp.util.LECTURE_CONTENT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
@@ -53,7 +52,6 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
                 intent.getStringExtra(VIDEO_ID),
                 intent.getStringExtra(RUN_ATTEMPT_ID),
                 intent.getStringExtra(CONTENT_ID),
-                intent.getStringExtra(LECTURE_CONTENT_ID),
                 notificationId++,
                 NotificationCompat.Builder(this, DOWNLOAD_CHANNEL_ID).apply {
                     setSmallIcon(R.drawable.ic_file_download)
@@ -179,7 +177,7 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
             val data = findDataWithId(videoId)
             if (data != null) {
                 doAsync {
-                    contentDao.updateContent(data.sectionId, data.lectureContentId, "true")
+                    //                    contentDao.updateContent(data.sectionId, data.lectureContentId, "true")
                 }
                 val intent = Intent(this, VideoPlayerActivity::class.java)
                 intent.putExtra(VIDEO_ID, data.videoId)

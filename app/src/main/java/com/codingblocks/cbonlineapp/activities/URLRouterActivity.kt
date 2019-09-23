@@ -1,11 +1,10 @@
-package com.codingblocks.cbonlineapp
+package com.codingblocks.cbonlineapp.activities
 
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
 import cn.campusapp.router.Router
-import com.codingblocks.cbonlineapp.activities.HomeActivity
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.otherwise
 import org.jetbrains.anko.intentFor
@@ -40,7 +39,7 @@ class URLRouterActivity : AppCompatActivity() {
     }
 
     private fun openRouter(uri: Uri) {
-        Router.open("activity://course/$uri").otherwise { fallBack() }
+        Router.open("activity://courseRun/$uri").otherwise { fallBack() }
         finish()
     }
 }

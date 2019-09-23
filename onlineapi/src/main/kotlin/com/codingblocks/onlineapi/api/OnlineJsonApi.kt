@@ -4,7 +4,6 @@ import com.codingblocks.onlineapi.models.Applications
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Company
-import com.codingblocks.onlineapi.models.ContentProgress
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Instructor
@@ -119,7 +118,7 @@ interface OnlineJsonApi {
     ): Call<List<QuizAttempt>>
 
     @POST("progresses")
-    fun setProgress(@Body params: Progress): Call<ContentProgress>
+    fun setProgress(@Body params: Progress): Call<Progress>
 
     @GET("quiz_attempts/{id}")
     fun getQuizAttemptById(
@@ -169,7 +168,7 @@ interface OnlineJsonApi {
 
 
     @PATCH("progresses/{id}")
-    fun updateProgress(@Path("id") id: String, @Body params: Progress): Call<ContentProgress>
+    fun updateProgress(@Path("id") id: String, @Body params: Progress): Call<Progress>
 
     @get:GET("carousel_cards?sort=order")
     val carouselCards: Call<ArrayList<CarouselCards>>

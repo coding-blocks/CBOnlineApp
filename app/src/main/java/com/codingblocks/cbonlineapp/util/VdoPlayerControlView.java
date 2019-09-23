@@ -25,7 +25,6 @@ import com.vdocipher.aegis.media.Track;
 import com.vdocipher.aegis.player.VdoPlayer;
 
 import java.util.ArrayList;
-import java.util.logging.Handler;
 
 /**
  * A view for controlling playback via a VdoPlayer.
@@ -93,8 +92,8 @@ public class VdoPlayerControlView extends FrameLayout {
     private FullscreenActionListener fullscreenActionListener;
     private ControllerVisibilityListener visibilityListener;
 
-    private static final float allowedSpeedList[] = new float[]{0.5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f, 2f};
-    private static final CharSequence allowedSpeedStrList[] =
+    private static final float[] allowedSpeedList = new float[]{0.5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f, 2f};
+    private static final CharSequence[] allowedSpeedStrList =
             new CharSequence[]{"0.5x", "0.75x", "1x", "1.25x", "1.5x", "1.75x", "2x"};
     private int chosenSpeedIndex = 2;
 
@@ -533,7 +532,7 @@ public class VdoPlayerControlView extends FrameLayout {
 
         @Override
         public void onLoaded(VdoPlayer.VdoInitParams vdoInitParams) {
-            durationView.setText(String.valueOf(VideoUtils.INSTANCE.digitalClockTime((int) player.getDuration())));
+            durationView.setText(VideoUtils.INSTANCE.digitalClockTime((int) player.getDuration()));
             seekBar.setMax((int) player.getDuration());
             updateSpeedControlButton();
         }

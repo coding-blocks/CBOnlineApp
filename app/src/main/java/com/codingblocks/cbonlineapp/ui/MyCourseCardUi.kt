@@ -16,21 +16,21 @@ import com.codingblocks.cbonlineapp.extensions.styledRatingBar
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.alignParentBottom
 import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.cardview.v7.cardView
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.frameLayout
 import org.jetbrains.anko.imageView
 import org.jetbrains.anko.linearLayout
 import org.jetbrains.anko.margin
 import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.relativeLayout
 import org.jetbrains.anko.textColor
 import org.jetbrains.anko.textView
 import org.jetbrains.anko.topPadding
 import org.jetbrains.anko.view
 import org.jetbrains.anko.wrapContent
-import org.jetbrains.anko.cardview.v7.cardView
-import org.jetbrains.anko.relativeLayout
-import org.jetbrains.anko.alignParentBottom
 
 class MyCourseCardUi : AnkoComponent<ViewGroup> {
     lateinit var courseTitle: TextView
@@ -120,7 +120,6 @@ class MyCourseCardUi : AnkoComponent<ViewGroup> {
                                 }
                                 courseInstrucImgView2 = circleImageView {
                                     elevation = dip(2).toFloat()
-                                    visibility = View.GONE
                                 }.lparams(dip(45), dip(45)) {
                                     marginStart = dip(35)
                                     topMargin = dip(8)

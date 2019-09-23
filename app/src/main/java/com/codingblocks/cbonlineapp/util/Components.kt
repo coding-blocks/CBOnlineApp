@@ -9,9 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabsIntent
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.activities.HomeActivity
-import kotlinx.android.synthetic.main.custom_dialog.view.cancelBtn
-import kotlinx.android.synthetic.main.custom_dialog.view.description
-import kotlinx.android.synthetic.main.custom_dialog.view.okBtn
+import kotlinx.android.synthetic.main.custom_dialog.view.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.singleTop
@@ -46,7 +44,7 @@ object Components {
         }
         updateView.okBtn.setOnClickListener {
             when (type) {
-                "trial" -> context.startActivity(context.intentFor<HomeActivity>("course" to "mycourses").singleTop())
+                "trial" -> context.startActivity(context.intentFor<HomeActivity>("courseRun" to "mycourses").singleTop())
                 "verify" -> {
                     openChrome(context, "https://account.codingblocks.com/users/me")
                 }

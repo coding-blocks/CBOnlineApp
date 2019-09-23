@@ -20,9 +20,7 @@ import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_notifications.emptyTv
-import kotlinx.android.synthetic.main.activity_notifications.notificationRv
-import kotlinx.android.synthetic.main.activity_notifications.notificationToolbar
+import kotlinx.android.synthetic.main.activity_notifications.*
 import org.koin.android.ext.android.inject
 
 class NotificationsActivity : AppCompatActivity() {
@@ -46,12 +44,12 @@ class NotificationsActivity : AppCompatActivity() {
                 videoId: String
             ) {
                 notificationDao.updateseen(notificationID)
-                if (url.contains("course", true) ||
+                if (url.contains("courseRun", true) ||
                     url.contains("classroom", true)
                 ) {
-                    Router.open("activity://course/$url")
+                    Router.open("activity://courseRun/$url")
                 } else if (url.contains("player", true)) {
-                    val activityRoute = Router.getRoute("activity://course/$url") as ActivityRoute
+                    val activityRoute = Router.getRoute("activity://courseRun/$url") as ActivityRoute
                     activityRoute
                         .withParams(VIDEO_ID, videoId)
                         .open()

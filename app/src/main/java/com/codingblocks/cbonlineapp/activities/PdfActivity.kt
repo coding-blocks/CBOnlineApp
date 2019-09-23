@@ -15,7 +15,7 @@ import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.crashlytics.android.Crashlytics
 import es.voghdev.pdfviewpager.library.PDFViewPager
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter
-import kotlinx.android.synthetic.main.activity_pdf.root
+import kotlinx.android.synthetic.main.activity_pdf.*
 import org.jetbrains.anko.AnkoLogger
 import java.io.File
 

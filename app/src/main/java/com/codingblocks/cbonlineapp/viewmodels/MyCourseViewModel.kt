@@ -5,18 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
+import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.SectionDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.database.models.ContentCodeChallenge
 import com.codingblocks.cbonlineapp.database.models.ContentCsvModel
 import com.codingblocks.cbonlineapp.database.models.ContentDocument
 import com.codingblocks.cbonlineapp.database.models.ContentLecture
+import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.ContentQna
 import com.codingblocks.cbonlineapp.database.models.ContentVideo
-import com.codingblocks.cbonlineapp.database.models.CourseContent
-import com.codingblocks.cbonlineapp.database.models.CourseSection
-import com.codingblocks.cbonlineapp.database.models.SectionWithContent
-import com.codingblocks.cbonlineapp.extensions.getDistinct
+import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
+import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.SingleLiveEvent
 import com.codingblocks.onlineapi.Clients
@@ -27,7 +27,8 @@ class MyCourseViewModel(
     private val runDao: CourseRunDao,
     private val sectionWithContentsDao: SectionWithContentsDao,
     private val contentsDao: ContentDao,
-    private val sectionDao: SectionDao
+    private val sectionDao: SectionDao,
+    private val instructorDao: CourseWithInstructorDao
 ) : ViewModel() {
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
@@ -36,10 +37,11 @@ class MyCourseViewModel(
     var runId: String = ""
     var courseId: String = ""
     private val mutablePopMessage = SingleLiveEvent<String>()
-    val popMessage: LiveData<String> = mutablePopMessage
-    var resetProgres: MutableLiveData<Boolean> = MutableLiveData()
-
     private val extensions = MutableLiveData<List<ProductExtensionsItem>>()
+    val popMessage: LiveData<String> = mutablePopMessage
+    var resetProgress: MutableLiveData<Boolean> = MutableLiveData()
+
+    fun getAllContent() = sectionWithContentsDao.getSectionWithContent(attemptId)
 
     fun updatehit(attemptId: String) {
         runDao.updateHit(attemptId)
@@ -47,25 +49,7 @@ class MyCourseViewModel(
 
     fun getResumeCourse() = sectionWithContentsDao.resumeCourse(attemptId)
 
-    fun getRunAttempt(runId: String): String = runDao.getRunByRunId(runId).crAttemptId
-
-    fun getContentWithSectionId(id: String) = sectionWithContentsDao.getContentWithSectionId(id).getDistinct()
-
-    fun getSectionDownloadlist(id: String) = sectionWithContentsDao.getVideoIdsWithSectionId(id)
-
-    fun updateContent(id: String, lectureContentId: String, s: String) = contentsDao.updateContent(id, lectureContentId, s)
-
-    fun updateProgressLecture(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressLecture(sectionId, contentId, s, s1)
-
-    fun updateProgressDocument(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressDocument(sectionId, contentId, s, s1)
-
-    fun updateProgressVideo(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressVideo(sectionId, contentId, s, s1)
-
-    fun updateProgressQna(sectionId: String, contentId: String, s: String, s1: String) = contentsDao.updateProgressQna(sectionId, contentId, s, s1)
-
-    fun getCourseSection(attemptId: String) = sectionDao.getCourseSection(attemptId)
-
-    fun getRunByAtemptId(attemptId: String) = runDao.getRunByAtemptId(attemptId)
+    fun getRun() = runDao.getRun(runId)
 
     fun fetchCourse(attemptId: String) {
         Clients.onlineV2JsonApi.enrolledCourseById(attemptId)
@@ -75,10 +59,10 @@ class MyCourseViewModel(
                         runAttempt.body()?.run?.sections?.let { sectionList ->
                             sectionList.forEach { courseSection ->
                                 courseSection.run {
-                                    val newSection = CourseSection(
+                                    val newSection = SectionModel(
                                         id, name,
                                         order, premium, status,
-                                        runId, attemptId, updatedAt
+                                        runId, attemptId
                                     )
                                     val oldSection = sectionDao.getSectionWithId(id)
                                     if (oldSection == null)
@@ -214,7 +198,7 @@ class MyCourseViewModel(
                                                                         }
 
                                                                         val newContent =
-                                                                            CourseContent(
+                                                                            ContentModel(
                                                                                 content.id,
                                                                                 status,
                                                                                 progressId,
@@ -224,12 +208,7 @@ class MyCourseViewModel(
                                                                                 content.contentable,
                                                                                 content.sectionContent?.order
                                                                                     ?: 0,
-                                                                                content.sectionContent?.sectionId
-                                                                                    ?: "",
                                                                                 attemptId,
-                                                                                courseSection.premium,
-                                                                                content.sectionContent?.updatedAt
-                                                                                    ?: "",
                                                                                 contentLecture,
                                                                                 contentDocument,
                                                                                 contentVideo,
@@ -249,7 +228,7 @@ class MyCourseViewModel(
                                                                                 newContent
                                                                             )
                                                                             sectionWithContentsDao.insert(
-                                                                                SectionWithContent(
+                                                                                SectionContentHolder.SectionWithContent(
                                                                                     courseSection.id,
                                                                                     content.id,
                                                                                     content.sectionContent?.order
@@ -278,27 +257,12 @@ class MyCourseViewModel(
                     }
                 }
             })
-
-//            try {
-//                sectionWithContentsDao.insert(
-//                    SectionWithContent(
-//                        sectionId,
-//                        contentId
-//                    )
-//                )
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//                Log.e("CRASH", "COURSE ID : $sectionId")
-//                Log.e("CRASH", "INSTRUCTOR ID : $contentId")
-//            }
-//        }
-//    }
     }
 
     fun resetProgress() {
         val resetCourse = ResetRunAttempt(attemptId)
         Clients.api.resetProgress(resetCourse).enqueue(retrofitCallback { _, response ->
-            resetProgres.value = response?.isSuccessful ?: false
+            resetProgress.value = response?.isSuccessful ?: false
         })
     }
 
@@ -330,4 +294,6 @@ class MyCourseViewModel(
         })
         return extensions
     }
+
+    fun getInstructor() = instructorDao.getInstructorWithCourseId(courseId)
 }

@@ -11,8 +11,8 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.VideosDoubtsAdapter
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.extensions.observer
-import com.codingblocks.cbonlineapp.viewmodels.VideoPlayerViewModel
 import com.codingblocks.cbonlineapp.util.ARG_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.viewmodels.VideoPlayerViewModel
 import kotlinx.android.synthetic.main.fragment_video_doubt.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel

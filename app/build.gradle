@@ -78,7 +78,7 @@ android {
 ext {
     ankoVersion = '0.10.6'
     room_version = "2.2.0-beta01"
-    koin_version = "1.0.2"
+    koin_version = "2.0.1"
     ankoLibs = [
             // commons
             'commons',
@@ -101,18 +101,20 @@ spotless {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.android.material:material:1.0.0'
     // Android Support
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0'
     implementation 'androidx.browser:browser:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    implementation 'com.google.android.play:core:1.6.1'
-    implementation 'androidx.core:core-ktx:1.0.2'
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-alpha03"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'com.google.android.play:core:1.6.3'
+    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-alpha04"
+    implementation "androidx.paging:paging-runtime-ktx:2.1.0"
+    implementation "android.arch.work:work-runtime-ktx:1.0.1"
+    implementation "androidx.fragment:fragment-ktx:1.1.0"
 
 
 
@@ -122,6 +124,7 @@ dependencies {
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
     implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
     implementation 'com.onesignal:OneSignal:3.11.2'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
 
     // Image view libraries
@@ -154,11 +157,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.2.0'
     implementation 'com.google.firebase:firebase-messaging:20.0.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
-    implementation 'com.google.firebase:firebase-firestore-ktx:21.0.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:21.1.0'
     implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.0'
 
 
     implementation project(':onlineapi')
+    implementation project(':fabnavigation')
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
 
     // Test Deps

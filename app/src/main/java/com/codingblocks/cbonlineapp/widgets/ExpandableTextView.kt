@@ -24,7 +24,7 @@ class ExpandableTextView @JvmOverloads constructor(context: Context, attrs: Attr
         this.trimLength = typedArray.getInt(R.styleable.ExpandableTextView_trimLength, DEFAULT_TRIM_LENGTH)
         typedArray.recycle()
 
-        setOnClickListener { v ->
+        setOnClickListener {
             trim = !trim
             setText()
             requestFocusFromTouch()
@@ -37,12 +37,12 @@ class ExpandableTextView @JvmOverloads constructor(context: Context, attrs: Attr
 
     override fun setText(text: CharSequence, type: TextView.BufferType) {
         originalText = text
-        trimmedText = getTrimmedText(text)
+        trimmedText = getTrimmedText()
         bufferType = type
         setText()
     }
 
-    private fun getTrimmedText(text: CharSequence?): CharSequence? {
+    private fun getTrimmedText(): CharSequence? {
         return if (originalText != null && originalText!!.length > trimLength) {
             SpannableStringBuilder(originalText, 0, trimLength + 1).append(ELLIPSIS)
         } else {
@@ -52,7 +52,7 @@ class ExpandableTextView @JvmOverloads constructor(context: Context, attrs: Attr
 
     fun setTrimLength(trimLength: Int) {
         this.trimLength = trimLength
-        trimmedText = getTrimmedText(originalText)
+        trimmedText = getTrimmedText()
         setText()
     }
 

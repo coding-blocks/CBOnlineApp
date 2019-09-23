@@ -3,24 +3,26 @@ package com.codingblocks.cbonlineapp.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.codingblocks.cbonlineapp.database.models.Course
-import com.codingblocks.cbonlineapp.database.models.CourseContent
-import com.codingblocks.cbonlineapp.database.models.CourseFeatures
-import com.codingblocks.cbonlineapp.database.models.CourseRun
-import com.codingblocks.cbonlineapp.database.models.CourseSection
-import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
+import com.codingblocks.cbonlineapp.database.converters.CourseIdList
+import com.codingblocks.cbonlineapp.database.converters.TimestampConverter
+import com.codingblocks.cbonlineapp.database.models.ContentModel
+import com.codingblocks.cbonlineapp.database.models.CourseFeatureModel
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
+import com.codingblocks.cbonlineapp.database.models.CourseModel
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
-import com.codingblocks.cbonlineapp.database.models.Instructor
+import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.database.models.Notification
-import com.codingblocks.cbonlineapp.database.models.SectionWithContent
+import com.codingblocks.cbonlineapp.database.models.RunModel
+import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
+import com.codingblocks.cbonlineapp.database.models.SectionModel
 
 @Database(
-    entities = [CourseRun::class, CourseSection::class, CourseContent::class, Instructor::class, Notification::class,
-        CourseWithInstructor::class, SectionWithContent::class, DoubtsModel::class, NotesModel::class, Course::class,
-        JobsModel::class, CourseFeatures::class
-    ], exportSchema = true, version = 19
+    entities = [CourseModel::class, SectionModel::class, ContentModel::class, InstructorModel::class, Notification::class,
+        CourseInstructorHolder.CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, RunModel::class,
+        JobsModel::class, CourseFeatureModel::class, SectionContentHolder.SectionWithContent::class
+    ], exportSchema = true, version = 21
 )
 @TypeConverters(TimestampConverter::class, CourseIdList::class)
 abstract class AppDatabase : RoomDatabase() {

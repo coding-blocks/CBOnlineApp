@@ -9,8 +9,8 @@ import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.JobsDao
 import com.codingblocks.cbonlineapp.database.models.Companies
-import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.database.models.JobsModel
+import com.codingblocks.cbonlineapp.database.models.RunModel
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Applications
@@ -32,7 +32,7 @@ class JobDetailViewModel(
 
     val formData: MutableLiveData<ArrayList<Form>> = MutableLiveData()
 
-    val jobCourses: MutableLiveData<List<CourseRun>> = MutableLiveData()
+    val jobCourses: MutableLiveData<List<RunModel>> = MutableLiveData()
 
     fun getJobById(id: String) = jobsDao.getJobById(id)
 

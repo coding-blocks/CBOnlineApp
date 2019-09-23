@@ -16,11 +16,7 @@ import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.item_notes.view.bodyTv
-import kotlinx.android.synthetic.main.item_notes.view.contentTitleTv
-import kotlinx.android.synthetic.main.item_notes.view.deleteTv
-import kotlinx.android.synthetic.main.item_notes.view.editTv
-import kotlinx.android.synthetic.main.item_notes.view.timeTv
+import kotlinx.android.synthetic.main.item_notes.view.*
 import org.jetbrains.anko.design.snackbar
 
 class VideosNotesAdapter(
@@ -57,7 +53,7 @@ class VideosNotesAdapter(
 
         fun bindView(note: NotesModel, position: Int) {
             itemView.contentTitleTv.text =
-                viewModel.getContentWithId(note.runAttemptId, note.contentId)?.title ?: " "
+                viewModel.getContentWithId(note.runAttemptId, note.contentId).title
             itemView.bodyTv.setText(note.text)
             itemView.timeTv.text = secToTime(note.duration)
 

@@ -3,11 +3,11 @@ package com.codingblocks.cbonlineapp.viewmodels
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.codingblocks.cbonlineapp.database.DoubtsDao
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseDao
-import com.codingblocks.cbonlineapp.database.NotesDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
+import com.codingblocks.cbonlineapp.database.DoubtsDao
+import com.codingblocks.cbonlineapp.database.NotesDao
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.extensions.observeOnce
@@ -16,7 +16,6 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
 import com.crashlytics.android.Crashlytics
-import java.lang.Exception
 
 class VideoPlayerViewModel(
     private val doubtsDao: DoubtsDao,
@@ -36,7 +35,7 @@ class VideoPlayerViewModel(
 
     fun getRunByAtemptId(id: String) = runDao.getRunByAtemptId(id)
 
-    fun getCourseById(id: String) = courseDao.getCourse(id)
+    fun getCourseById(id: String) = courseDao.getCourses().value!!.get(0)
 
     fun getContentWithId(attemptId: String, contentId: String) = contentDao.getContentWithId(attemptId, contentId)
 
@@ -181,8 +180,8 @@ class VideoPlayerViewModel(
         })
     }
 
-    fun getNextVideo(contentId: String, sectionId: String, attemptId: String) =
-        contentDao.getNextItem(sectionId, attemptId, contentId)
+    fun getNextVideo(contentId: String, sectionId: String, attemptId: String) = ""
+//        contentDao.getNextItem(sectionId, attemptId, contentId)
 
 //    fun updateProgress(contentId: String,attemptId: String) {
 //        val progressId = contentDao.getContentWithId(attemptId,contentId).progressId

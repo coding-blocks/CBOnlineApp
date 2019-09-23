@@ -46,23 +46,11 @@ import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_video_player.displayYoutubeVideo
-import kotlinx.android.synthetic.main.activity_video_player.pagerFrame
-import kotlinx.android.synthetic.main.activity_video_player.player_tabs
-import kotlinx.android.synthetic.main.activity_video_player.player_viewpager
-import kotlinx.android.synthetic.main.activity_video_player.rootLayout
-import kotlinx.android.synthetic.main.activity_video_player.videoContainer
-import kotlinx.android.synthetic.main.activity_video_player.videoFab
-import kotlinx.android.synthetic.main.doubt_dialog.view.cancelBtn
-import kotlinx.android.synthetic.main.doubt_dialog.view.descriptionLayout
-import kotlinx.android.synthetic.main.doubt_dialog.view.okBtn
-import kotlinx.android.synthetic.main.doubt_dialog.view.title
-import kotlinx.android.synthetic.main.doubt_dialog.view.titleLayout
+import kotlinx.android.synthetic.main.activity_video_player.*
+import kotlinx.android.synthetic.main.doubt_dialog.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class VideoPlayerActivity : AppCompatActivity(),
@@ -232,21 +220,20 @@ class VideoPlayerActivity : AppCompatActivity(),
             setControllerVisibilityListener(visibilityListener)
             playNextButton.setOnClickListener {
                 countDownTimer.cancel()
-                viewModel.getNextVideo(contentId, sectionId, attemptId).observer(this@VideoPlayerActivity) {
-                    info { it.toString() }
-                    when (it.contentable) {
-                        "lecture" -> {
-                            startActivity(
-                                intentFor<VideoPlayerActivity>(
-                                    VIDEO_ID to it.contentLecture.lectureId,
-                                    RUN_ATTEMPT_ID to it.attempt_id,
-                                    CONTENT_ID to it.id,
-                                    SECTION_ID to it.section_id,
-                                    DOWNLOADED to it.contentLecture.isDownloaded
-                                ).singleTop())
-                        }
-                    }
-                }
+//                viewModel.getNextVideo(contentId, sectionId, attemptId).obs.erver(this@VideoPlayerActivity) {
+                info { it.toString() }
+//                    when (it.contentable) {
+//                        "lecture" -> {
+//                            startActivity(
+//                                intentFor<VideoPlayerActivity>(
+//                                    VIDEO_ID to it.contentLecture.lectureId,
+//                                    RUN_ATTEMPT_ID to it.attempt_id,
+//                                    CONTENT_ID to it.ccid,
+//                                    SECTION_ID to it.section_id,
+//                                    DOWNLOADED to it.contentLecture.isDownloaded
+//                                ).singleTop())
+//                        }
+//                }
             }
         }
         showControls(true)

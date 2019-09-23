@@ -1,27 +1,27 @@
 package com.codingblocks.cbonlineapp.activities
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.JobsAdapter
 import com.codingblocks.cbonlineapp.commons.JobsDiffCallback
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.viewmodels.JobsViewModel
-import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_jobs.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import android.annotation.SuppressLint
-import android.view.View
-import androidx.appcompat.widget.AppCompatButton
-import androidx.core.view.children
 import com.codingblocks.cbonlineapp.widgets.SheetDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.tabs.TabLayout
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
+import kotlinx.android.synthetic.main.activity_jobs.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class JobsActivity : AppCompatActivity() {
 
@@ -78,7 +78,7 @@ class JobsActivity : AppCompatActivity() {
         bottomSheetDialog.setContentView(sheetView)
 
         val bottomSheetBehavior = BottomSheetBehavior.from(sheetView.parent as View)
-        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior.bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(p0: View, p1: Float) {
             }
 
@@ -88,7 +88,7 @@ class JobsActivity : AppCompatActivity() {
                     bottomSheetDialog.cancel()
                 }
             }
-        })
+        }
     }
 
     private fun applyFilters() {

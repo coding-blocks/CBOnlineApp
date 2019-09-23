@@ -5,8 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.Components
-import kotlinx.android.synthetic.main.activity_login.loginBtn
-import kotlinx.android.synthetic.main.activity_login.skipBtn
+import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop

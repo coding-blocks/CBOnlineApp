@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.database
+package com.codingblocks.cbonlineapp.database.converters
 
 import androidx.room.TypeConverter
 import java.sql.Date

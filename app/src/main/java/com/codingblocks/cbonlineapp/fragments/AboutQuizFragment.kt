@@ -16,16 +16,7 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizqnas
 import com.codingblocks.onlineapi.models.RunAttemptsId
-import com.ethanhua.skeleton.Skeleton
-import com.ethanhua.skeleton.SkeletonScreen
-import kotlinx.android.synthetic.main.fragment_about_quiz.aboutQuiz
-import kotlinx.android.synthetic.main.fragment_about_quiz.quizAttemptLv
-import kotlinx.android.synthetic.main.fragment_about_quiz.quizDescription
-import kotlinx.android.synthetic.main.fragment_about_quiz.quizMarks
-import kotlinx.android.synthetic.main.fragment_about_quiz.quizQuestion
-import kotlinx.android.synthetic.main.fragment_about_quiz.quizTitle
-import kotlinx.android.synthetic.main.fragment_about_quiz.quizType
-import kotlinx.android.synthetic.main.fragment_about_quiz.startQuiz
+import kotlinx.android.synthetic.main.fragment_about_quiz.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 
@@ -47,7 +38,6 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
     private lateinit var quizId: String
     private lateinit var attemptId: String
     private lateinit var qnaId: String
-    lateinit var skeletonScreen: SkeletonScreen
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,12 +51,6 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        skeletonScreen = Skeleton.bind(aboutQuiz)
-            .shimmer(true)
-            .angle(20)
-            .duration(1200)
-            .load(R.layout.item_skeleton_quiz)
-            .show()
 
         arguments?.let {
             quizId = it.getString(QUIZ_ID) ?: ""
@@ -108,7 +92,6 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         Clients.onlineV2JsonApi.getQuizById(quizId)
             .enqueue(retrofitCallback { _, response ->
                 response?.body()?.let { quiz ->
-                    skeletonScreen.hide()
                     quizTitle.text = quiz.title
                     quizDescription.text = quiz.description
                     quizQuestion.text = String.format("%d Question", quiz.questions?.size)

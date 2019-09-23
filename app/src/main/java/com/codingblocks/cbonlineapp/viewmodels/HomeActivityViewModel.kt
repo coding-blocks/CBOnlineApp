@@ -3,22 +3,17 @@ package com.codingblocks.cbonlineapp.viewmodels
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Player
 import com.onesignal.OneSignal
 
-class HomeActivityViewModel(
-    private val notificationDao: NotificationDao
-) : ViewModel() {
+class HomeActivityViewModel : ViewModel() {
     internal var doubleBackToExitPressedOnce = false
     var mFragmentToSet: Fragment? = null
 
     lateinit var prefs: PreferenceHelper
-
-    fun getNotificationCount() = notificationDao.count
 
     var invalidateTokenProgress: MutableLiveData<Boolean> = MutableLiveData()
     var fetchTokenProgress: MutableLiveData<Boolean> = MutableLiveData()
@@ -43,6 +38,8 @@ class HomeActivityViewModel(
                     prefs.SP_JWT_TOKEN_KEY = jwt
                     prefs.SP_JWT_REFRESH_TOKEN = rt
                     Clients.authJwt = jwt
+                    Clients.refreshToken = rt
+
                     val status = OneSignal.getPermissionSubscriptionState()
                     // Set Player ID For OneSignal
                     Clients.onlineV2JsonApi.setPlayerId(Player(playerId = status.subscriptionStatus.userId))
@@ -82,6 +79,7 @@ class HomeActivityViewModel(
 
     fun setJWTToken() {
         Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
+        Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
     }
 
     fun refreshToken() {

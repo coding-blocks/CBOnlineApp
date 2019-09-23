@@ -7,17 +7,16 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
-import com.codingblocks.cbonlineapp.database.models.CourseRun
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.cbonlineapp.viewmodels.HomeViewModel
-import com.ethanhua.skeleton.Skeleton
-import com.ethanhua.skeleton.SkeletonScreen
 import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
@@ -28,7 +27,6 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 
     val ui = HomeFragmentUi<Fragment>()
     private lateinit var courseDataAdapter: CourseDataAdapter
-    private lateinit var skeletonScreen: SkeletonScreen
     private val firebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(requireContext())
     }
@@ -52,14 +50,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 
         setHasOptionsMenu(true)
 
-        courseDataAdapter =
-            CourseDataAdapter(
-                ArrayList(),
-                viewModel.getCourseDao(),
-                requireContext(),
-                viewModel.getCourseWithInstructorDao(),
-                "allCourses"
-            )
+        courseDataAdapter = CourseDataAdapter()
 
         ui.allcourseText.text = getString(R.string.all_courses)
         ui.titleText.visibility = View.GONE
@@ -72,21 +63,11 @@ class AllCourseFragment : Fragment(), AnkoLogger {
             adapter = courseDataAdapter
         }
 
-        skeletonScreen = Skeleton.bind(ui.rvCourses)
-            .adapter(courseDataAdapter)
-            .shimmer(true)
-            .angle(20)
-            .frozen(true)
-            .duration(1200)
-            .count(4)
-            .load(R.layout.item_skeleton_course_card)
-            .show()
-
+        ui.shimmerLayout.startShimmer()
         displayCourses()
 
         ui.swipeRefreshLayout.setOnRefreshListener {
             viewModel.progress.value = true
-            skeletonScreen.show()
             viewModel.fetchAllCourses()
         }
 
@@ -96,17 +77,18 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        viewModel.getAllRuns().observer(viewLifecycleOwner) {
+        viewModel.getRecommendedCourses().observer(this) {
             if (it.isNotEmpty()) {
-                skeletonScreen.hide()
-                courseDataAdapter.setData(it.shuffled()
-                    .filter { c ->
-                        c.title.contains(searchQuery, true) ||
-                            c.summary.contains(searchQuery, true)
-                    } as ArrayList<CourseRun>)
+                val response = CourseInstructorHolder.groupInstructorByRun(it)
+                courseDataAdapter.submitList(response.filter { c ->
+                    c.courseRun.course.title.contains(searchQuery, true) ||
+                        c.courseRun.course.summary.contains(searchQuery, true)
+                })
+                ui.shimmerLayout.stopShimmer()
             } else {
                 viewModel.fetchAllCourses()
             }
+            ui.shimmerLayout.isVisible = it.isEmpty()
         }
     }
 

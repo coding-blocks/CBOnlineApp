@@ -16,7 +16,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
-import com.codingblocks.cbonlineapp.database.models.CourseRun
 import com.codingblocks.cbonlineapp.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.extensions.isotomillisecond
 import com.codingblocks.cbonlineapp.extensions.loadImage
@@ -32,27 +31,9 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.JsonObject
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import kotlinx.android.synthetic.main.activity_job_detail.addResumeBtn
-import kotlinx.android.synthetic.main.activity_job_detail.cardJobDescription
-import kotlinx.android.synthetic.main.activity_job_detail.companyDescriptionTv
-import kotlinx.android.synthetic.main.activity_job_detail.eligibleTv
-import kotlinx.android.synthetic.main.activity_job_detail.jobDescriptionBtn
-import kotlinx.android.synthetic.main.activity_job_detail.jobDescriptionTv
-import kotlinx.android.synthetic.main.activity_job_detail.rvJobCourses
-import kotlinx.android.synthetic.main.activity_job_detail.statusTv
-import kotlinx.android.synthetic.main.activity_job_detail.toolbar
-import kotlinx.android.synthetic.main.custom_form_dialog.view.cancelBtn
-import kotlinx.android.synthetic.main.custom_form_dialog.view.form
-import kotlinx.android.synthetic.main.custom_form_dialog.view.okBtn
-import kotlinx.android.synthetic.main.item_job.companyLogo
-import kotlinx.android.synthetic.main.item_job.companyTv
-import kotlinx.android.synthetic.main.item_job.ctcTv
-import kotlinx.android.synthetic.main.item_job.deadlinell
-import kotlinx.android.synthetic.main.item_job.experienceTv
-import kotlinx.android.synthetic.main.item_job.jobTitleTv
-import kotlinx.android.synthetic.main.item_job.locationTv
-import kotlinx.android.synthetic.main.item_job.postedAgoTv
-import kotlinx.android.synthetic.main.item_job.typeTv
+import kotlinx.android.synthetic.main.activity_job_detail.*
+import kotlinx.android.synthetic.main.custom_form_dialog.view.*
+import kotlinx.android.synthetic.main.item_job.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class JobDetailActivity : AppCompatActivity() {
@@ -79,14 +60,14 @@ class JobDetailActivity : AppCompatActivity() {
 
         viewModel.fetchJob(jobId)
 
-        courseDataAdapter =
-            CourseDataAdapter(
-                ArrayList(),
-                viewModel.getCourseDao(),
-                this,
-                viewModel.getCourseWithInstructorDao(),
-                "allCourses"
-            )
+//        courseDataAdapter =
+//            CourseDataAdapter(
+//                ArrayList(),
+//                viewModel.getCourseDao(),
+//                this,
+//                viewModel.getCourseWithInstructorDao(),
+//                "allCourses"
+//            )
 
         rvJobCourses.layoutManager = LinearLayoutManager(this)
         rvJobCourses.adapter = courseDataAdapter
@@ -117,9 +98,9 @@ class JobDetailActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.jobCourses.observer(this) {
-            courseDataAdapter.setData(it as ArrayList<CourseRun>)
-        }
+//        viewModel.jobCourses.observer(this) {
+//            courseDataAdapter.setData(it as ArrayList<CourseRun>)
+//        }
 
         viewModel.eligibleLiveData.observer(this) {
             when (it) {
@@ -186,7 +167,7 @@ class JobDetailActivity : AppCompatActivity() {
                             inputLayout.hint = it.title
                         }
                     }
-                    inputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_OUTLINE)
+                    inputLayout.boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_OUTLINE
                     inputLayout.setBoxCornerRadii(20f, 20f, 20f, 20f)
                     val edittext = TextInputEditText(inputLayout.context)
                     edittext.setOnFocusChangeListener { view, b ->
@@ -235,13 +216,14 @@ class JobDetailActivity : AppCompatActivity() {
                         val group = formlayout.findViewWithTag<RadioGroup>(form.name)
                         val radioButton = findViewById<RadioButton>(group.checkedRadioButtonId)
                         val optionsArray = form.options?.split(",")
-                        val selected_value: String = radioButton?.text?.toString() ?: (optionsArray?.get(0) ?: "")
+                        val selected_value: String = radioButton?.text?.toString()
+                            ?: (optionsArray?.get(0) ?: "")
                         jsonObject.addProperty(form.name, selected_value)
                     }
                 }
                 formDialog.dismiss()
 //                if (!BuildConfig.DEBUG)
-                    viewModel.applyJob(Applications(jsonObject, job = JobId(jobId)))
+                viewModel.applyJob(Applications(jsonObject, job = JobId(jobId)))
             }
             formView.cancelBtn.setOnClickListener { view ->
                 it.forEach { form ->

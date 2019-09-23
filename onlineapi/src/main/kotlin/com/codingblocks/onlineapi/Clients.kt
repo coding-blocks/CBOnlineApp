@@ -28,6 +28,8 @@ object Clients {
         .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
 
     var authJwt = ""
+    var refreshToken = ""
+
 
     private val onlineApiResourceConverter = ResourceConverter(
         om, Instructor::class.java, Course::class.java, Sections::class.java, MyCourseRuns::class.java,
@@ -43,22 +45,8 @@ object Clients {
         Applications::class.java, ApplicationId::class.java
     )
 
-    private val relationshipResolver = RelationshipResolver {
-        var url = it
-        if (!it.contains("https")) {
-            url = "https://api-online.cb.lk$url"
-        }
-
-        OkHttpClient()
-            .newCall(Request.Builder().addHeader("Authorization", "JWT $authJwt").url(url).build())
-            .execute()
-            .body()
-            ?.bytes()
-    }
-
     //type resolver
     init {
-        onlineApiResourceConverter.setGlobalResolver(relationshipResolver)
         onlineApiResourceConverter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_INCLUSIONS)
         onlineApiResourceConverter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_TYPE_IN_RELATIONSHIP)
     }
@@ -79,18 +67,6 @@ object Clients {
             )
         }
         .build()
-
-    @Throws(IOException::class)
-    private fun onOnIntercept(chain: Interceptor.Chain): Response {
-        try {
-            return chain.proceed(chain.request())
-        } catch (exception: SocketTimeoutException) {
-            exception.printStackTrace()
-        }
-
-
-        return chain.proceed(chain.request())
-    }
 
 
     private val onlineV2JsonRetrofit = Retrofit.Builder()
