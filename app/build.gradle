@@ -78,7 +78,7 @@ android {
 ext {
     ankoVersion = '0.10.6'
     room_version = "2.2.0-beta01"
-    koin_version = "2.0.1"
+    koin_version = "1.0.2"
     ankoLibs = [
             // commons
             'commons',
@@ -101,6 +101,7 @@ spotless {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.android.material:material:1.1.0-alpha10'
     // Android Support
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

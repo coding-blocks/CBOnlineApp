@@ -77,6 +77,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
 //        bottom_navigation.accentColor = R.color.salmon
         bottom_navigation.titleState = FabNavigation.TitleState.ALWAYS_SHOW
         bottom_navigation.isTranslucentNavigationEnabled = true
+        bottom_navigation.setCurrentItem(1)
         bottom_navigation.setOnTabSelectedListener(object : FabNavigation.OnTabSelectedListener {
             override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
                 course_pager.setCurrentItem(position, false)
