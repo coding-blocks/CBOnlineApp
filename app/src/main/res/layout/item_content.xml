@@ -28,8 +28,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:layout_weight="0.6"
-        android:fontFamily="@font/nunitosans_semibold"
+        fontPath="fonts/nunitosans_semibold.ttf"
         android:textSize="16sp"
+        tools:ignore="MissingPrefix"
         tools:text="Course Introduction" />
 
 

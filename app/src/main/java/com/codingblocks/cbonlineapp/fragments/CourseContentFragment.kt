@@ -96,6 +96,8 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         rvExpendableView.adapter = sectionItemsAdapter
 
         viewModel.getAllContent().observer(this) { SectionContent ->
+
+
             val consolidatedList = ArrayList<ListObject>()
             val response = SectionContentHolder.groupContentBySection(SectionContent)
             response.forEach { sectionContent ->

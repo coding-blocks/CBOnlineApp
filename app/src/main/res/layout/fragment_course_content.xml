@@ -52,10 +52,8 @@
                 android:id="@+id/rvExpendableView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
-                android:layout_marginTop="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_small"
-                android:layout_marginBottom="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_small"
                 tools:listitem="@layout/item_section" />
         </LinearLayout>
 
