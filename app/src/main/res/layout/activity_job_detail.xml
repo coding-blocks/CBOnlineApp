@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.codingblocks.cbonlineapp.activities.JobDetailActivity">
+    tools:context="com.codingblocks.cbonlineapp.jobs.jobdetails.JobDetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -28,7 +28,7 @@
             android:fillViewport="true"
             android:overScrollMode="never"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:context=".activities.CourseActivity">
+            tools:context=".course.CourseActivity">
 
             <LinearLayout
                 android:id="@+id/courseRootView"

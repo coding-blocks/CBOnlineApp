@@ -6,7 +6,7 @@
     android:animateLayoutChanges="true"
     android:background="@color/grey850"
     android:fitsSystemWindows="true"
-    tools:context=".fragments.VideoDoubtFragment">
+    tools:context=".player.doubts.VideoDoubtFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/doubtsRv"

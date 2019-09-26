@@ -9,7 +9,7 @@
         android:id="@+id/contentRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.CourseContentFragment">
+        tools:context=".mycourse.content.CourseContentFragment">
 
         <LinearLayout
             android:layout_width="match_parent"

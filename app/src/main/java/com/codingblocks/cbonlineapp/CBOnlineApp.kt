@@ -5,9 +5,9 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import cn.campusapp.router.Router
 import cn.campusapp.router.router.IActivityRouteTableInitializer
-import com.codingblocks.cbonlineapp.activities.CourseActivity
-import com.codingblocks.cbonlineapp.activities.MyCourseActivity
-import com.codingblocks.cbonlineapp.activities.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.course.CourseActivity
+import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
+import com.codingblocks.cbonlineapp.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_TAB

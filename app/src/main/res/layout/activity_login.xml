@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_grey"
-    tools:context=".activities.LoginActivity">
+    tools:context=".LoginActivity">
 
     <ImageView
         android:id="@+id/logoIv"

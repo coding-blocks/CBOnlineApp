@@ -9,7 +9,7 @@
         android:shortcutShortLabel="@string/all_courses">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="com.codingblocks.cbonlineapp.activities.HomeActivity"
+            android:targetClass="com.codingblocks.cbonlineapp.home.HomeActivity"
             android:targetPackage="com.codingblocks.cbonlineapp">
             <extra
                 android:name="course"

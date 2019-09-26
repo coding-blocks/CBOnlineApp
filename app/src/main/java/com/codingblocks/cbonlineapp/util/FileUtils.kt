@@ -4,8 +4,8 @@ import android.content.Context
 import android.os.Environment
 import androidx.appcompat.app.AlertDialog
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.extensions.folderSize
-import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.extensions.folderSize
+import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import kotlinx.android.synthetic.main.custom_dialog.view.*
 import org.jetbrains.anko.layoutInflater
 import java.io.File
