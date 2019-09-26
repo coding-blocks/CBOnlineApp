@@ -37,4 +37,6 @@ data class SectionModel(
     var completedContent = 0
     @Ignore
     var totalTime = 0L
+    @Ignore
+    var pos = 0
 }

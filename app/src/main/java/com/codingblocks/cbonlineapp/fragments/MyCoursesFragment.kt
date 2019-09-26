@@ -24,6 +24,7 @@ import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.adapters.CourseDataAdapter
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.extensions.getPrefs
+import com.codingblocks.cbonlineapp.extensions.observeOnce
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.ui.HomeFragmentUi
 import com.codingblocks.cbonlineapp.util.COURSE_ID
@@ -135,23 +136,23 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     fun createShortcut() {
 
         val sM = requireContext().getSystemService(ShortcutManager::class.java)
-        val shortcutList = ArrayList<ShortcutInfo>()
+        val shortcutList: MutableList<ShortcutInfo> = ArrayList()
+        viewModel.getTopRun().observeOnce {
+            doAsync {
 
-        viewModel.getTopRun().observer(viewLifecycleOwner) {
-            it.forEachIndexed { index, courseRun ->
-                val intent = Intent(activity, MyCourseActivity::class.java).apply {
-                    action = Intent.ACTION_VIEW
-                    putExtra(COURSE_ID, courseRun.crCourseId)
-                    putExtra(RUN_ATTEMPT_ID, courseRun.crAttemptId)
-                    putExtra(COURSE_NAME, courseRun.course.title)
-                    putExtra(RUN_ID, courseRun.crUid)
-                }
+                it.forEachIndexed { index, courseRun ->
+                    val intent = Intent(activity, MyCourseActivity::class.java).apply {
+                        action = Intent.ACTION_VIEW
+                        putExtra(COURSE_ID, courseRun.crCourseId)
+                        putExtra(RUN_ATTEMPT_ID, courseRun.crAttemptId)
+                        putExtra(COURSE_NAME, courseRun.course.title)
+                        putExtra(RUN_ID, courseRun.crUid)
+                    }
 
-                val shortcut = ShortcutInfo.Builder(requireContext(), "topcourse$index")
-                shortcut.setIntent(intent)
-                shortcut.setLongLabel(courseRun.course.title)
-                shortcut.setShortLabel(courseRun.course.title)
-                doAsync {
+                    val shortcut = ShortcutInfo.Builder(requireContext(), "topcourse$index")
+                    shortcut.setIntent(intent)
+                    shortcut.setLongLabel(courseRun.course.title)
+                    shortcut.setShortLabel(courseRun.course.title)
 
                     okHttpClient.newCall(Request.Builder().url(courseRun.course.logo).build())
                         .execute().body()?.let {
@@ -170,9 +171,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                         }
                 }
             }
-
             // Todo Crash Here null pointer
-            sM?.updateShortcuts(shortcutList)
+            sM?.dynamicShortcuts = shortcutList
         }
     }
 }

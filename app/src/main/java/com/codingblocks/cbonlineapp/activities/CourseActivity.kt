@@ -208,7 +208,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 rvExpendableView.adapter = sectionAdapter
                 runOnUiThread {
                     sections?.forEachIndexed { index, section ->
-                        GlobalScope.launch(Dispatchers.Main) {
+                        GlobalScope.launch(Dispatchers.IO) {
                             val response2 = viewModel.getCourseSection(section.id)
                             if (response2.isSuccessful) {
                                 val value = response2.body()

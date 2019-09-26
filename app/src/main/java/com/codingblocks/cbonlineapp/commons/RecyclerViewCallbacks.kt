@@ -13,3 +13,10 @@ interface NotificationClickListener {
      */
     fun onClick(notificationID: Long, url: String, videoId: String)
 }
+
+
+interface SectionListClickListener {
+
+    fun onClick(pos: Int)
+
+}

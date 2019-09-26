@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
@@ -18,10 +17,12 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.activities.MyCourseActivity
 import com.codingblocks.cbonlineapp.adapters.SectionItemsAdapter
+import com.codingblocks.cbonlineapp.adapters.SectionListAdapter
+import com.codingblocks.cbonlineapp.commons.SectionListClickListener
 import com.codingblocks.cbonlineapp.database.ListObject
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
+import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.extensions.getPrefs
 import com.codingblocks.cbonlineapp.extensions.observer
 import com.codingblocks.cbonlineapp.services.SectionDownloadService
@@ -35,6 +36,7 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.viewmodels.MyCourseViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
+import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.alert
@@ -50,6 +52,11 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     private val sectionItemsAdapter = SectionItemsAdapter()
     var areLecturesLoaded: Boolean = false
 
+
+    var sectionitem = ArrayList<SectionModel>()
+
+    private val sectionListAdapter = SectionListAdapter(sectionitem)
+
     private val viewModel by sharedViewModel<MyCourseViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -57,31 +64,28 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         arguments?.let {
             attemptId = it.getString(RUN_ATTEMPT_ID) ?: ""
         }
+        sectionItemsAdapter.starter = this
         return inflater.inflate(R.layout.fragment_course_content, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val smoothScroller = object : LinearSmoothScroller(requireContext()) {
-            override fun getVerticalSnapPreference(): Int {
-                return SNAP_TO_START
-            }
-        }
+        activity?.sectionList?.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = sectionListAdapter
 
-        MyCourseActivity.fabClickEvent.observe(this) {
         }
-
         swiperefresh.setOnRefreshListener {
             (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
         }
-        sectionItemsAdapter.starter = this
-        val layoutManager = LinearLayoutManager(context)
-        rvExpendableView.layoutManager = layoutManager
-        rvExpendableView.adapter = sectionItemsAdapter
+        rvExpendableView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = sectionItemsAdapter
+        }
 
         viewModel.getAllContent().observer(this) { SectionContent ->
-
+            sectionitem.clear()
             val consolidatedList = ArrayList<ListObject>()
             val response = SectionContentHolder.groupContentBySection(SectionContent)
             response.forEach { sectionContent ->
@@ -104,8 +108,11 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                     totalContent = sectionContent.contents.size
                     totalTime = duration
                     completedContent = sectionComplete
+                    pos = consolidatedList.size
                 })
-                val pos = consolidatedList.size
+                sectionitem.add(sectionContent.section)
+                sectionListAdapter.notifyDataSetChanged()
+
                 consolidatedList.addAll(sectionContent.contents)
                 sectionItemsAdapter.submitList(consolidatedList)
             }
@@ -136,6 +143,14 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 }.show()
             }
         }
+
+        val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
+            override fun onClick(pos: Int) {
+                rvExpendableView.smoothScrollToPosition(pos)
+            }
+
+        }
+        sectionListAdapter.onSectionListClick = sectionListClickListener
     }
 
     override fun updateProgress(contentId: String, progressId: String) {
@@ -187,6 +202,11 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             .enqueue(request)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+    }
+
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser && !areLecturesLoaded) {
@@ -213,3 +233,5 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             }
     }
 }
+
+

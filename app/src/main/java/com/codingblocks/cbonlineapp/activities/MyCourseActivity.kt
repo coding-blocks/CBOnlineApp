@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.adapters.TabLayoutAdapter
@@ -33,10 +34,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
     }
     private lateinit var navigationAdapter: FabNavigationAdapter
 
-    companion object {
-        val fabClickEvent = SingleLiveEvent<Void>()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_course)
@@ -58,11 +55,11 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
         }
 
         fab.setOnClickListener {
-
-            fabClickEvent.call()
             if (fab.isExtended) {
                 fab.shrink()
+                sectionView.isVisible = true
             } else {
+                sectionView.isVisible = false
                 fab.extend()
             }
         }
