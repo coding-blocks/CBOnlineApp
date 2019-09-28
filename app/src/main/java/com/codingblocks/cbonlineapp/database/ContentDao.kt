@@ -25,9 +25,9 @@ abstract class ContentDao : BaseDao<ContentModel> {
     @Query("SElECT * FROM ContentModel where isDownloaded = :progress ORDER BY date")
     abstract fun getDownloads(progress: String): List<ContentModel>
 
-    @Query("UPDATE ContentModel SET isDownloaded = :status WHERE ccid = :contentid")
-    abstract fun updateContent(contentid: String, status: Int)
-//
+    @Query("UPDATE ContentModel SET isDownloaded = :status WHERE ccid = :contentId")
+    abstract fun updateContent(contentId: String, status: Int)
+
 //    @Query("UPDATE ContentModel SET isDownloaded = :downloadprogress WHERE lectureId = :videoId AND section_id = :section")
 //    abstract fun updateContentWithVideoId(section: String, videoId: String, downloadprogress: String)
 
@@ -37,6 +37,12 @@ abstract class ContentDao : BaseDao<ContentModel> {
     @Query("UPDATE ContentModel SET progress = :status WHERE ccid = :id AND attempt_id = :attemptId")
     abstract fun updateProgress(id: String, attemptId: String, status: String)
 
-//    @Query("SELECT * FROM ContentModel WHERE section_id = :sectionId AND attempt_id =:attemptId AND `order` = ((SELECT `order` FROM ContentModel where ccid = :uid) + 1 ) LIMIT 1")
-//    abstract fun getNextItem(sectionId: String, attemptId: String, uid: String): LiveData<ContentModel>
+    @Query("""
+        SELECT c.* FROM ContentModel c
+        INNER JOIN SectionModel s ON c."ccid" = sc."content_id"
+        INNER JOIN SectionWithContent sc ON sc."section_id" = s."csid"
+        WHERE s.csid =:sectionId AND c.attempt_id =:attemptId AND
+        c.`order` = ((SELECT `order` FROM ContentModel where ccid = :uid) + 1 ) LIMIT 1
+    """)
+    abstract fun getNextItem(sectionId: String, attemptId: String, uid: String): LiveData<ContentModel>
 }

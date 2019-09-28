@@ -19,7 +19,7 @@ import com.crashlytics.android.Crashlytics
 
 class VideoPlayerViewModel(
     private val doubtsDao: DoubtsDao,
-    val notesDao: NotesDao,
+    private val notesDao: NotesDao,
     private val courseDao: CourseDao,
     private val runDao: CourseRunDao,
     private val contentDao: ContentDao
@@ -180,15 +180,6 @@ class VideoPlayerViewModel(
         })
     }
 
-    fun getNextVideo(contentId: String, sectionId: String, attemptId: String) = ""
-//        contentDao.getNextItem(sectionId, attemptId, contentId)
-
-//    fun updateProgress(contentId: String,attemptId: String) {
-//        val progressId = contentDao.getContentWithId(attemptId,contentId).progressId
-//
-//        if(progressId.isNullOrEmpty()){
-//            Clients.onlineV2JsonApi.setProgress()
-//        }
-//
-//    }
+    fun getNextVideo(contentId: String, sectionId: String, attemptId: String) =
+        contentDao.getNextItem(sectionId, attemptId, contentId)
 }

@@ -23,10 +23,13 @@ import com.codingblocks.cbonlineapp.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.player.notes.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
+import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
+import com.codingblocks.cbonlineapp.util.VIDEO_URL
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.pageChangeCallback
@@ -48,7 +51,8 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.doubt_dialog.view.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -219,20 +223,29 @@ class VideoPlayerActivity : AppCompatActivity(),
             setControllerVisibilityListener(visibilityListener)
             playNextButton.setOnClickListener {
                 countDownTimer.cancel()
-//                viewModel.getNextVideo(contentId, sectionId, attemptId).obs.erver(this@VideoPlayerActivity) {
-                info { it.toString() }
-//                    when (it.contentable) {
-//                        "lecture" -> {
-//                            startActivity(
-//                                intentFor<VideoPlayerActivity>(
-//                                    VIDEO_ID to it.contentLecture.lectureId,
-//                                    RUN_ATTEMPT_ID to it.attempt_id,
-//                                    CONTENT_ID to it.ccid,
-//                                    SECTION_ID to it.section_id,
-//                                    DOWNLOADED to it.contentLecture.isDownloaded
-//                                ).singleTop())
-//                        }
-//                }
+                viewModel.getNextVideo(contentId, sectionId, attemptId).observer(this@VideoPlayerActivity) {
+                    when (it.contentable) {
+                        LECTURE -> {
+                            startActivity(
+                                intentFor<VideoPlayerActivity>(
+                                    VIDEO_ID to it.contentLecture.lectureId,
+                                    RUN_ATTEMPT_ID to it.attempt_id,
+                                    CONTENT_ID to it.ccid,
+                                    SECTION_ID to sectionId,
+                                    DOWNLOADED to it.contentLecture.isDownloaded
+                                ))
+                            finish()
+                        }
+                        VIDEO -> {
+                            startActivity(intentFor<VideoPlayerActivity>(
+                                VIDEO_URL to it.contentVideo.videoUrl,
+                                RUN_ATTEMPT_ID to it.attempt_id,
+                                CONTENT_ID to it.ccid
+                            ).singleTop())
+                            finish()
+                        }
+                    }
+                }
             }
         }
         showControls(true)
