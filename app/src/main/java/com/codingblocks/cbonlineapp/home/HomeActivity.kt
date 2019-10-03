@@ -30,7 +30,6 @@ import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
-import com.codingblocks.cbonlineapp.util.Utils
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -81,8 +80,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_home)
 
         viewModel.prefs = getPrefs()
-
-        Utils.setToolbar(this, "Coding Blocks")
 
         val toggle = ActionBarDrawerToggle(
             this,
