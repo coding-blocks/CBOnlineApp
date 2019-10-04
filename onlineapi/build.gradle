@@ -27,7 +27,7 @@ test {
 dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    api 'com.squareup.retrofit2:retrofit:2.6.1'
+    api 'com.squareup.retrofit2:retrofit:2.6.2'
     api 'com.github.jasminb:jsonapi-converter:0.9'
     api 'com.squareup.retrofit2:converter-gson:2.6.1'
     api "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.6"
