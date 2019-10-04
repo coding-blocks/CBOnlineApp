@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.PopupWindow
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
@@ -32,6 +35,7 @@ import com.codingblocks.cbonlineapp.util.SectionDownloadService
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
@@ -48,6 +52,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     lateinit var attemptId: String
     private val sectionItemsAdapter = SectionItemsAdapter()
     var areLecturesLoaded: Boolean = false
+    var popupWindowDogs: PopupWindow? = null
 
     var sectionitem = ArrayList<SectionModel>()
 
@@ -67,9 +72,16 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.sectionList?.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = sectionListAdapter
+        popupWindowDogs = popUpWindowSection()
+
+        activity?.fab?.setOnClickListener {
+            it as ExtendedFloatingActionButton
+            if (it.isExtended) {
+                it.shrink()
+            } else {
+                it.extend()
+            }
+            popupWindowDogs?.showAsDropDown(it, it.width - popupWindowDogs?.getWidth()!!, 0)
         }
         swiperefresh.setOnRefreshListener {
             (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
@@ -214,6 +226,20 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
     override fun startSectionDownlod(sectionId: String) {
         startService<SectionDownloadService>(SECTION_ID to sectionId)
+    }
+
+    fun popUpWindowSection(): PopupWindow {
+
+        val popupWindow = PopupWindow(requireContext())
+        val listViewDogs = RecyclerView(requireContext())
+        listViewDogs.adapter = sectionListAdapter
+        listViewDogs.layoutManager = LinearLayoutManager(requireContext())
+        popupWindow.isFocusable = true
+        popupWindow.width = 500
+        popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
+        popupWindow.contentView = listViewDogs
+
+        return popupWindow
     }
 
     companion object {

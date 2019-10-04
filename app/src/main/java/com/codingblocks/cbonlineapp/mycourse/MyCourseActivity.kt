@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
@@ -54,9 +53,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
         fab.setOnClickListener {
             if (fab.isExtended) {
                 fab.shrink()
-                sectionView.isVisible = true
             } else {
-                sectionView.isVisible = false
                 fab.extend()
             }
         }
