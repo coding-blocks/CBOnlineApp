@@ -26,7 +26,7 @@ class MyCoursesViewModel(
     var progress: MutableLiveData<Boolean> = MutableLiveData()
 
     // Todo : Fix page list
-    fun getMyRuns() = courseWithInstructorDao.getMyRuns().toLiveData(Config(5, enablePlaceholders = false))
+    fun getMyRuns() = courseWithInstructorDao.getMyRuns()
 
     fun fetchMyCourses(refresh: Boolean = false) {
         progress.postValue(true)

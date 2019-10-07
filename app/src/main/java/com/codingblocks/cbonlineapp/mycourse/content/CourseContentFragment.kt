@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -107,6 +108,8 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             adapter = sectionItemsAdapter
         }
 
+
+
         viewModel.getAllContent().observer(this) { SectionContent ->
             sectionitem.clear()
             val consolidatedList = ArrayList<ListObject>()
@@ -138,7 +141,12 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
                 consolidatedList.addAll(sectionContent.contents)
                 sectionItemsAdapter.submitList(consolidatedList)
+
+            }.also {
+                contentShimmer.stopShimmer()
             }
+            contentShimmer.isVisible = SectionContent.isEmpty()
+
         }
 
         /**

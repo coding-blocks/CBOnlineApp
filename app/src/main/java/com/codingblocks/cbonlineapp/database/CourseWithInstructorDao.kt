@@ -46,9 +46,9 @@ interface CourseWithInstructorDao {
 	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
 	   INNER JOIN CourseWithInstructor ci ON ci.course_id = c.cid
        INNER JOIN InstructorModel i ON i.uid = ci.instructor_id
-       WHERE r.crAttemptId IS NOT NULL ORDER BY hits DESC
+       WHERE r.crAttemptId IS NOT NULL ORDER BY hits DESC,crEnrollmentEnd DESC
     """)
-    fun getMyRuns(): DataSource.Factory<Int, CourseInstructorHolder.CourseInstructorPair>
+    fun getMyRuns(): LiveData<List<CourseInstructorHolder.CourseInstructorPair>>
 
     @Query("""
         SELECT c.*,r.* FROM RunModel r
