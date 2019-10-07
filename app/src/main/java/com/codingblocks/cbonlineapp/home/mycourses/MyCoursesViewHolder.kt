@@ -34,6 +34,7 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
             itemView.courseProgress.progress = progress.toInt()
             itemView.trialTv.isVisible = !premium
             if (crRunEnd.toLong() * 1000 > System.currentTimeMillis()) {
+                itemView.courseBtn1.background = itemView.context.getDrawable(R.drawable.button_background)
                 if (progress == 0.0) {
                     itemView.courseBtn1.text = "Start"
                 } else {
@@ -61,6 +62,8 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
             with(model.instructors) {
                 if (this.size < 2)
                     itemView.courseInstrucImgView2.visibility = View.INVISIBLE
+                else
+                    itemView.courseInstrucImgView2.visibility = View.VISIBLE
                 for (i in indices) {
                     if (i == 0) {
                         Picasso.get().load(this[i].photo)

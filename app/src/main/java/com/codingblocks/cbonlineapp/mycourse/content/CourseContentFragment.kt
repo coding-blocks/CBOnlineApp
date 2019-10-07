@@ -1,13 +1,14 @@
 package com.codingblocks.cbonlineapp.mycourse.content
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.BackoffPolicy
@@ -46,6 +47,7 @@ import org.jetbrains.anko.yesButton
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.concurrent.TimeUnit
 
+
 class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -69,10 +71,17 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         return inflater.inflate(R.layout.fragment_course_content, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         popupWindowDogs = popUpWindowSection()
+
+        val smoothScroller = object : LinearSmoothScroller(context) {
+            override fun getVerticalSnapPreference(): Int {
+                return LinearSmoothScroller.SNAP_TO_START
+            }
+        }
 
         activity?.fab?.setOnClickListener {
             it as ExtendedFloatingActionButton
@@ -81,13 +90,20 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             } else {
                 it.extend()
             }
-            popupWindowDogs?.showAsDropDown(it, it.width - popupWindowDogs?.getWidth()!!, 0)
+            popupWindowDogs?.showAtLocation(it, Gravity.RIGHT, 0, it.getHeight())
+
+//            popupWindowDogs?.showAtLocation(it, Gravity.BOTTOM, 0,
+//                it.getBottom() - 60)
+//
+//            popupWindowDogs?.showAsDropDown(it)
         }
         swiperefresh.setOnRefreshListener {
             (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
         }
+        val layoutManager = LinearLayoutManager(requireContext())
+
         rvExpendableView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            this.layoutManager = layoutManager
             adapter = sectionItemsAdapter
         }
 
@@ -153,7 +169,10 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
         val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
             override fun onClick(pos: Int) {
-                rvExpendableView.smoothScrollToPosition(pos)
+                smoothScroller.targetPosition = pos
+                layoutManager.startSmoothScroll(smoothScroller)
+
+
             }
         }
         sectionListAdapter.onSectionListClick = sectionListClickListener
@@ -228,7 +247,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         startService<SectionDownloadService>(SECTION_ID to sectionId)
     }
 
-    fun popUpWindowSection(): PopupWindow {
+    private fun popUpWindowSection(): PopupWindow {
 
         val popupWindow = PopupWindow(requireContext())
         val listViewDogs = RecyclerView(requireContext())
@@ -236,7 +255,9 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         listViewDogs.layoutManager = LinearLayoutManager(requireContext())
         popupWindow.isFocusable = true
         popupWindow.width = 500
-        popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
+        popupWindow.isOutsideTouchable = true
+        popupWindow.isFocusable = true
+        popupWindow.height = 1000
         popupWindow.contentView = listViewDogs
 
         return popupWindow

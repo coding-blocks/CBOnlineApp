@@ -37,6 +37,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import okhttp3.Request
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.ctx
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -86,6 +87,10 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
         viewModel.progress.observer(viewLifecycleOwner) {
             ui.swipeRefreshLayout.isRefreshing = it
+        }
+
+        viewModel.message.observer(viewLifecycleOwner) {
+            ui.snackbarView.longSnackbar(getString(R.string.offline_message))
         }
 
         if (Build.VERSION.SDK_INT >= N_MR1)

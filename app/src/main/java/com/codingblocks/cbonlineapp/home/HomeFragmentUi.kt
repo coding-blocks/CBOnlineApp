@@ -17,6 +17,7 @@ import com.codingblocks.cbonlineapp.util.extensions.customViewPager
 import com.codingblocks.cbonlineapp.util.extensions.shimmerFrameLayout
 import com.codingblocks.cbonlineapp.widgets.ViewPagerCustomDuration
 import com.facebook.shimmer.ShimmerFrameLayout
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
@@ -40,17 +41,19 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
     lateinit var rvCourses: RecyclerView
     lateinit var allcourseText: TextView
     lateinit var titleText: TextView
+    lateinit var snackbarView: View
     lateinit var viewPager: ViewPagerCustomDuration
     lateinit var tabLayout: TabLayout
     lateinit var homeImg: ImageView
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
     lateinit var shimmerLayout: ShimmerFrameLayout
 
+
     override fun createView(ui: AnkoContext<T>): View = with(ui) {
         swipeRefreshLayout {
             swipeRefreshLayout = this
             nestedScrollView {
-                constraintLayout {
+                snackbarView = constraintLayout {
                     titleText = textView {
                         text = context.resources.getString(R.string.learn_to_code_interactively)
                         id = View.generateViewId()
