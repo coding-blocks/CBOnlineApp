@@ -6,6 +6,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3871ba02cd654b9585f1d9c8bc0f4365)](https://www.codacy.com/app/championswimmer/CBOnlineApp?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=coding-blocks/CBOnlineApp&amp;utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.org/coding-blocks/CBOnlineApp.svg?branch=development)](https://travis-ci.org/coding-blocks/CBOnlineApp)
 [![CircleCI](https://circleci.com/gh/coding-blocks/CBOnlineApp.svg?style=svg)](https://circleci.com/gh/coding-blocks/CBOnlineApp)
+[![GitHub license](https://img.shields.io/github/license/coding-blocks/CBOnlineApp)](https://github.com/coding-blocks/CBOnlineApp/blob/development/LICENSE)
 
 An app to consume online courses available at https://online.codingblocks.com
 
