@@ -51,7 +51,7 @@ interface CourseWithInstructorDao {
     fun getMyRuns(): LiveData<List<CourseInstructorHolder.CourseInstructorPair>>
 
     @Query("""
-        SELECT c.*,r.* FROM RunModel r
+        SELECT * FROM RunModel r
 	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
        WHERE r.crAttemptId IS NOT NULL ORDER BY hits DESC LIMIT 2
     """)

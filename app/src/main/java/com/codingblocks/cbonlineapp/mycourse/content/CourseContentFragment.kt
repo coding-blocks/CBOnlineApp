@@ -35,6 +35,8 @@ import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.SectionDownloadService
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
+import com.codingblocks.cbonlineapp.util.extensions.applyDim
+import com.codingblocks.cbonlineapp.util.extensions.clearDim
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -55,6 +57,9 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     private val sectionItemsAdapter = SectionItemsAdapter()
     var areLecturesLoaded: Boolean = false
     var popupWindowDogs: PopupWindow? = null
+    val mLayoutManager by lazy {
+        LinearLayoutManager(requireContext())
+    }
 
     var sectionitem = ArrayList<SectionModel>()
 
@@ -68,43 +73,40 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             attemptId = it.getString(RUN_ATTEMPT_ID) ?: ""
         }
         sectionItemsAdapter.starter = this
+
         return inflater.inflate(R.layout.fragment_course_content, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        popupWindowDogs = popUpWindowSection()
-
-        val smoothScroller = object : LinearSmoothScroller(context) {
+        val smoothScroller: RecyclerView.SmoothScroller = object : LinearSmoothScroller(context) {
             override fun getVerticalSnapPreference(): Int {
-                return LinearSmoothScroller.SNAP_TO_START
+                return SNAP_TO_START
             }
         }
 
+        popupWindowDogs = popUpWindowSection()
         activity?.fab?.setOnClickListener {
             it as ExtendedFloatingActionButton
             if (it.isExtended) {
                 it.shrink()
+                popupWindowDogs?.showAsDropDown(it, 0, 0, Gravity.BOTTOM)
+                view.applyDim(0.5F)
             } else {
                 it.extend()
             }
-            popupWindowDogs?.showAtLocation(it, Gravity.RIGHT, 0, it.getHeight())
+        }
 
-//            popupWindowDogs?.showAtLocation(it, Gravity.BOTTOM, 0,
-//                it.getBottom() - 60)
-//
-//            popupWindowDogs?.showAsDropDown(it)
+        popupWindowDogs?.setOnDismissListener {
+            activity?.fab?.extend()
+            view.clearDim()
         }
         swiperefresh.setOnRefreshListener {
             (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
         }
-        val layoutManager = LinearLayoutManager(requireContext())
-
-        rvExpendableView.apply {
-            this.layoutManager = layoutManager
-            adapter = sectionItemsAdapter
-        }
+        rvExpendableView.layoutManager = mLayoutManager
+        rvExpendableView.adapter = sectionItemsAdapter
 
         viewModel.getAllContent().observer(this) { SectionContent ->
             sectionitem.clear()
@@ -141,11 +143,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             contentShimmer.isVisible = SectionContent.isEmpty()
         }
 
-        /**
-         * Register a new observer to listen for data changes.
-         * Otherwise list scrolls to bottom
-         **/
-
         viewModel.progress.observer(viewLifecycleOwner) {
             swiperefresh.isRefreshing = it
         }
@@ -169,8 +166,11 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
         val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
             override fun onClick(pos: Int) {
+                popupWindowDogs?.dismiss()
+                // Todo - Improvise the scroll
+                mLayoutManager.scrollToPosition(pos - 10)
                 smoothScroller.targetPosition = pos
-                layoutManager.startSmoothScroll(smoothScroller)
+                mLayoutManager.startSmoothScroll(smoothScroller)
             }
         }
         sectionListAdapter.onSectionListClick = sectionListClickListener
@@ -225,10 +225,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             .enqueue(request)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser && !areLecturesLoaded) {
@@ -252,9 +248,8 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         listViewDogs.adapter = sectionListAdapter
         listViewDogs.layoutManager = LinearLayoutManager(requireContext())
         popupWindow.isFocusable = true
-        popupWindow.width = 500
+        popupWindow.setBackgroundDrawable(resources.getDrawable(R.drawable.background_custom_radio_buttons_unselected_state, null))
         popupWindow.isOutsideTouchable = true
-        popupWindow.isFocusable = true
         popupWindow.height = 1000
         popupWindow.contentView = listViewDogs
 

@@ -5,55 +5,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/contentRoot"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".mycourse.content.CourseContentFragment">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/aboutTv"
+            fontPath="fonts/nunitosans_semibold.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:text="Course Curriculum"
+            android:textColor="@android:color/black"
+            android:textSize="22sp"
+            tools:ignore="MissingPrefix" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:background="@color/black" />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/contentShimmer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_margin="4dp">
 
-            <TextView
-                android:id="@+id/aboutTv"
-                fontPath="fonts/nunitosans_semibold.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
-                android:layout_marginTop="@dimen/margin_medium"
-                android:text="Course Curriculum"
-                android:textColor="@android:color/black"
-                android:textSize="22sp"
-                tools:ignore="MissingPrefix" />
+            <include layout="@layout/item_skeleton_content" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
-            <View
-                android:id="@+id/view1"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginStart="@dimen/margin_small"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:background="@color/black" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvExpendableView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
+            tools:listitem="@layout/item_section" />
+    </LinearLayout>
 
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/contentShimmer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp">
-
-                <include layout="@layout/item_skeleton_content" />
-            </com.facebook.shimmer.ShimmerFrameLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvExpendableView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginBottom="@dimen/margin_small"
-                tools:listitem="@layout/item_section" />
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

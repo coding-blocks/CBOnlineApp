@@ -12,6 +12,7 @@ import com.codingblocks.cbonlineapp.mycourse.leaderboard.LeaderboardFragment
 import com.codingblocks.cbonlineapp.mycourse.overview.OverviewFragment
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.extensions.animateVisibility
@@ -44,18 +45,12 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
         viewModel.runId = intent.getStringExtra(RUN_ID) ?: ""
 
         initUI()
-
+        if (!MediaUtils.checkPermission(this)) {
+            MediaUtils.isStoragePermissionGranted(this)
+        }
         if (savedInstanceState == null) {
             viewModel.updatehit(viewModel.attemptId)
             viewModel.fetchCourse(viewModel.attemptId)
-        }
-
-        fab.setOnClickListener {
-            if (fab.isExtended) {
-                fab.shrink()
-            } else {
-                fab.extend()
-            }
         }
     }
 
@@ -88,7 +83,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
         pagerAdapter.apply {
             add(OverviewFragment.newInstance(viewModel.attemptId, viewModel.runId))
             add(CourseContentFragment.newInstance(viewModel.attemptId))
-            add(LeaderboardFragment.newInstance(viewModel.attemptId))
+            add(LeaderboardFragment.newInstance(viewModel.runId))
             add(AboutFragment.newInstance(viewModel.courseId, viewModel.attemptId))
         }
         course_pager.apply {
