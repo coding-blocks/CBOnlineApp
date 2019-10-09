@@ -110,6 +110,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             viewModel.refreshToken()
             val navMenu = nav_view.menu
             navMenu.findItem(R.id.nav_my_courses).isVisible = true
+            nav_view.setCheckedItem(R.id.nav_my_courses)
             transaction.replace(R.id.fragment_holder, MyCoursesFragment()).commit()
             setUser()
         } else {
@@ -419,7 +420,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onClick(v: View) {
         when (v.id) {
             R.id.login_button -> {
-                confirmLogout()
+                if (viewModel.prefs.SP_ACCESS_TOKEN_KEY == PreferenceHelper.ACCESS_TOKEN) {
+                    startActivity(intentFor<LoginActivity>().singleTop())
+                    finish()
+                } else
+                    confirmLogout()
             }
             R.id.nav_header_imageView -> Components.openChrome(
                 this,

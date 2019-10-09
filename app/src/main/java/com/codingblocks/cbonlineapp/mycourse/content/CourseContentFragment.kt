@@ -1,11 +1,16 @@
 package com.codingblocks.cbonlineapp.mycourse.content
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupWindow
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
@@ -32,6 +37,7 @@ import com.codingblocks.cbonlineapp.util.SectionDownloadService
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
@@ -48,6 +54,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     lateinit var attemptId: String
     private val sectionItemsAdapter = SectionItemsAdapter()
     var areLecturesLoaded: Boolean = false
+    var popupWindowDogs: PopupWindow? = null
 
     var sectionitem = ArrayList<SectionModel>()
 
@@ -67,15 +74,35 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.sectionList?.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = sectionListAdapter
+        popupWindowDogs = popUpWindowSection()
+
+        val smoothScroller = object : LinearSmoothScroller(context) {
+            override fun getVerticalSnapPreference(): Int {
+                return LinearSmoothScroller.SNAP_TO_START
+            }
+        }
+
+        activity?.fab?.setOnClickListener {
+            it as ExtendedFloatingActionButton
+            if (it.isExtended) {
+                it.shrink()
+            } else {
+                it.extend()
+            }
+            popupWindowDogs?.showAtLocation(it, Gravity.RIGHT, 0, it.getHeight())
+
+//            popupWindowDogs?.showAtLocation(it, Gravity.BOTTOM, 0,
+//                it.getBottom() - 60)
+//
+//            popupWindowDogs?.showAsDropDown(it)
         }
         swiperefresh.setOnRefreshListener {
             (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
         }
+        val layoutManager = LinearLayoutManager(requireContext())
+
         rvExpendableView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            this.layoutManager = layoutManager
             adapter = sectionItemsAdapter
         }
 
@@ -111,6 +138,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 consolidatedList.addAll(sectionContent.contents)
                 sectionItemsAdapter.submitList(consolidatedList)
             }
+            contentShimmer.isVisible = SectionContent.isEmpty()
         }
 
         /**
@@ -141,7 +169,8 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
         val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
             override fun onClick(pos: Int) {
-                rvExpendableView.smoothScrollToPosition(pos)
+                smoothScroller.targetPosition = pos
+                layoutManager.startSmoothScroll(smoothScroller)
             }
         }
         sectionListAdapter.onSectionListClick = sectionListClickListener
@@ -214,6 +243,22 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
     override fun startSectionDownlod(sectionId: String) {
         startService<SectionDownloadService>(SECTION_ID to sectionId)
+    }
+
+    private fun popUpWindowSection(): PopupWindow {
+
+        val popupWindow = PopupWindow(requireContext())
+        val listViewDogs = RecyclerView(requireContext())
+        listViewDogs.adapter = sectionListAdapter
+        listViewDogs.layoutManager = LinearLayoutManager(requireContext())
+        popupWindow.isFocusable = true
+        popupWindow.width = 500
+        popupWindow.isOutsideTouchable = true
+        popupWindow.isFocusable = true
+        popupWindow.height = 1000
+        popupWindow.contentView = listViewDogs
+
+        return popupWindow
     }
 
     companion object {

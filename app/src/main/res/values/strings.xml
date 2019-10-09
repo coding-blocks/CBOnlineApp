@@ -115,4 +115,5 @@
     <string name="extension_title">Your course will expire soon!</string>
     <string name="filter_location">Location</string>
     <string name="filter_job_type">Job Type</string>
+    <string name="offline_message">Progress will be updated when your device goes online.</string>
 </resources>

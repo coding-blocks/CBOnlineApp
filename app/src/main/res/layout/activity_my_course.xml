@@ -45,23 +45,4 @@
         android:layout_gravity="bottom"
         app:selectedBackgroundVisible="false" />
 
-    <LinearLayout
-        android:id="@+id/sectionView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/grey_transparent"
-        android:gravity="end"
-        android:visibility="gone">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/sectionList"
-            android:layout_width="250dp"
-            android:layout_height="400dp"
-            android:layout_gravity="bottom"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="124dp"
-            android:background="@color/grey850" />
-    </LinearLayout>
-
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

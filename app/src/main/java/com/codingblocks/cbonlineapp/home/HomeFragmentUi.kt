@@ -40,6 +40,7 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
     lateinit var rvCourses: RecyclerView
     lateinit var allcourseText: TextView
     lateinit var titleText: TextView
+    lateinit var snackbarView: View
     lateinit var viewPager: ViewPagerCustomDuration
     lateinit var tabLayout: TabLayout
     lateinit var homeImg: ImageView
@@ -50,7 +51,7 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
         swipeRefreshLayout {
             swipeRefreshLayout = this
             nestedScrollView {
-                constraintLayout {
+                snackbarView = constraintLayout {
                     titleText = textView {
                         text = context.resources.getString(R.string.learn_to_code_interactively)
                         id = View.generateViewId()
