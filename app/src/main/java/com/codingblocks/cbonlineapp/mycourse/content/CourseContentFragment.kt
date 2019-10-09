@@ -137,8 +137,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
                 consolidatedList.addAll(sectionContent.contents)
                 sectionItemsAdapter.submitList(consolidatedList)
-            }.also {
-                contentShimmer.stopShimmer()
             }
             contentShimmer.isVisible = SectionContent.isEmpty()
         }

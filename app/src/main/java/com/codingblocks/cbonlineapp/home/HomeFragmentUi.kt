@@ -17,7 +17,6 @@ import com.codingblocks.cbonlineapp.util.extensions.customViewPager
 import com.codingblocks.cbonlineapp.util.extensions.shimmerFrameLayout
 import com.codingblocks.cbonlineapp.widgets.ViewPagerCustomDuration
 import com.facebook.shimmer.ShimmerFrameLayout
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
@@ -47,7 +46,6 @@ class HomeFragmentUi<T> : AnkoComponent<T> {
     lateinit var homeImg: ImageView
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
     lateinit var shimmerLayout: ShimmerFrameLayout
-
 
     override fun createView(ui: AnkoContext<T>): View = with(ui) {
         swipeRefreshLayout {

@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.view.animation.Animation
 import android.view.animation.Transformation
 import androidx.viewpager.widget.ViewPager
-import com.codingblocks.cbonlineapp.commons.EndlessPagerAdapter
 
 class WrappingViewPager : ViewPager {
 
@@ -22,13 +21,13 @@ class WrappingViewPager : ViewPager {
         if ((!mAnimStarted) && null != adapter) {
             var height = 0
 //            val child = vie
-////            if (child != null) {
-////                child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
-////                height = child.measuredHeight
-////                if (height < minimumHeight) {
-////                    height = minimumHeight
-////                }
-////            }
+// //            if (child != null) {
+// //                child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
+// //                height = child.measuredHeight
+// //                if (height < minimumHeight) {
+// //                    height = minimumHeight
+// //                }
+// //            }
 
             // Not the best place to put this animation, but it works pretty good.
             val newHeight = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
