@@ -2,8 +2,6 @@ package com.codingblocks.cbonlineapp.home.mycourses
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.paging.Config
-import androidx.paging.toLiveData
 import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
@@ -158,7 +156,6 @@ class MyCoursesViewModel(
                 error?.let {
                     message.postValue(it.localizedMessage)
                     progress.value = false
-
                 }
             })
     }

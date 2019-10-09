@@ -48,7 +48,6 @@ import org.jetbrains.anko.yesButton
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.concurrent.TimeUnit
 
-
 class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -71,7 +70,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         sectionItemsAdapter.starter = this
         return inflater.inflate(R.layout.fragment_course_content, container, false)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -108,8 +106,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             adapter = sectionItemsAdapter
         }
 
-
-
         viewModel.getAllContent().observer(this) { SectionContent ->
             sectionitem.clear()
             val consolidatedList = ArrayList<ListObject>()
@@ -141,12 +137,10 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
                 consolidatedList.addAll(sectionContent.contents)
                 sectionItemsAdapter.submitList(consolidatedList)
-
             }.also {
                 contentShimmer.stopShimmer()
             }
             contentShimmer.isVisible = SectionContent.isEmpty()
-
         }
 
         /**
@@ -179,8 +173,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             override fun onClick(pos: Int) {
                 smoothScroller.targetPosition = pos
                 layoutManager.startSmoothScroll(smoothScroller)
-
-
             }
         }
         sectionListAdapter.onSectionListClick = sectionListClickListener
