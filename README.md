@@ -37,7 +37,7 @@ Application is available here:
 - Picasso [Docs](http://square.github.io/picasso/)
 - JSON API Converter [Docs](https://github.com/jasminb/jsonapi-converter)
 - VideoCipher [Docs](https://legacysite.vdocipher.com/files/android_javadoc/1.0.0-beta1/)
-- AndROuter [Docs](https://github.com/campusappcn/AndRouter)
+- AndRouter [Docs](https://github.com/campusappcn/AndRouter)
 - Koin [Docs](https://github.com/InsertKoinIO/koin)
 
 
@@ -49,10 +49,12 @@ First time contributors can read [CONTRIBUTING.md](/CONTRIBUTING.md) file for he
 
 ### Branch Policy
 
-We have the following branches
+We have the following branches:
 
- * **development** All development goes on in this branch. If you're making a contribution, you are supposed to make a pull request to _development_. PRs to development branch must pass a build check and a unit-test check on Circle CI.
- * **master** This contains shipped code. After significant features/bugfixes are accumulated on development, we make a version update and make a release.
+* **master** This contains shipped code. After significant features/bugfixes are accumulated on development, we make a version update and make a release.
+* **development** All development goes on in this branch. If you're making a contribution, you are supposed to make a pull request to _development_. PRs to development branch must pass a build check and a unit-test check on Circle CI.
+
+ 
 ### Code practices
 
 Please help us follow the best practices to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics.
