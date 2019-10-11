@@ -45,7 +45,7 @@ You’ll now have a local copy of your version of the original CBOnlineApp repos
 `git push` them back to github. These will go to your version of the repository.
 
 #### Squashing your's changes
-Before you make Pull Request , you should squash your commits into one.
+Before you make Pull Request, you should squash your commits into one.
 
 Go into the directory for the project and type:
 
@@ -54,7 +54,7 @@ Go into the directory for the project and type:
 `git commit`
 `git push --force origin my_branch`
 
-where 'Number' is number of commits to squash and 'my_branch 'is your branch name.
+where 'Number' is the number of commits to squash and 'my_branch 'is your branch name.
 
 This will squash your commits into one single commit.
 
