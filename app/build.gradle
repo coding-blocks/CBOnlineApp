@@ -51,7 +51,7 @@ android {
         debug {
             minifyEnabled false
             versionNameSuffix '-debug-version'
-            applicationIdSuffix = 'debug'
+            applicationIdSuffix = '.debug'
 
         }
         release {
