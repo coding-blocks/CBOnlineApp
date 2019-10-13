@@ -21,13 +21,13 @@ Application is available here:
           <td><img src = "app/screenshots/3.png" height = "480" width="270"></td>
         </tr>
         <tr>
-        <td><img src = "app/screenshots/4.png" height = "480" width="270"></td>
-        <td><img src = "app/screenshots/5.png" height = "480" width="270"></td>
-        <td><img src = "app/screenshots/6.png" height = "480" width="270"></td>
+         <td><img src = "app/screenshots/4.png" height = "480" width="270"></td>
+         <td><img src = "app/screenshots/5.png" height = "480" width="270"></td>
+         <td><img src = "app/screenshots/6.png" height = "480" width="270"></td>
         </tr>
         <tr>
-        <td><img src = "app/screenshots/7.png" height = "480" width="270"></td>
-        <td><img src = "app/screenshots/8.png" height = "480" width="270"></td>
+         <td><img src = "app/screenshots/7.png" height = "480" width="270"></td>
+         <td><img src = "app/screenshots/8.png" height = "480" width="270"></td>
         </tr>
 </table>    
 
@@ -43,7 +43,7 @@ Application is available here:
 
 ## Contributions Best Practices
 
-### For first time Contributors
+### For First-time Contributors
 
 First-time contributors can read [CONTRIBUTING.md](/CONTRIBUTING.md) file for help regarding creating issues and sending pull requests.
 
@@ -57,7 +57,7 @@ We have the following branches
 
 Please help us follow the best practices to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics.
 
- * Single commit per pull request
+ * Single commit per pull request.
  * For writing commit messages please read the COMMITSTYLE carefully. Kindly adhere to the guidelines.
  * Follow uniform design practices. The design language must be consistent throughout the app.
  * The pull request will not get merged until and unless the commits are squashed. In case there are multiple commits on the PR, the commit author needs to squash them and not the maintainers cherrypicking and merging squashes.
@@ -65,9 +65,9 @@ Please help us follow the best practices to make it easy for the reviewer as wel
 
 ### Join the development
 
-* Before you join the development, please set up the project on your local machine, run it and go through the application completely. Press on any button you can find and see where it leads to. Explore. (Don't worry ... Nothing will happen to the app or you due to the exploring :wink: Only thing that will happen is, you'll be more familiar with what is where and might even get some cool ideas on how to improve various aspects of the app.)
+* Before you join the development, please set up the project on your local machine, run it and go through the application completely. Press on any button you can find and see where it leads to. Explore. (Don't worry ... Nothing will happen to the app or you due to the exploring :wink: Only thing that will happen is, you'll be more familiar with what is where and might even get some cool ideas on how to improve various aspects of the app.).
 * If you would like to work on an issue, drop in a comment at the issue. If it is already assigned to someone, but there is no sign of any work being done, please free to drop in a comment so that the issue can be assigned to you if the previous assignee has dropped it entirely.
 
 ## For Testers: Testing the App
 If you are a tester and want to test the app, you have two ways to do that:
-1. **Installing APK on your device:** You can get debug APK as well as Release APK in the apk branch of the repository. After each PR merge, both the APKs are automatically updated. So, just download the APK you want and install it on your device. The APKs will always be the latest one.
+1. **Installing APK on your device:** You can get debug APK as well as the Release APK in apk branch of the repository. After each PR merge, both the APKs are automatically updated. So, just download the APK you want and install it on your device. The APKs will always be the latest one.
