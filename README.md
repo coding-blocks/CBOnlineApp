@@ -71,3 +71,6 @@ Please help us follow the best practices to make it easy for the reviewer as wel
 ## For Testers: Testing the App
 If you are a tester and want to test the app, you have two ways to do that:
 1. **Installing APK on your device:** You can get debug APK as well as Release APK in the apk branch of the repository. After each PR merge, both the APKs are automatically updated. So, just download the APK you want and install it on your device. The APKs will always be the latest one.
+
+## License
+The CBOnlineApp repository is available under the [GNU General Public License v3.0](https://github.com/coding-blocks/CBOnlineApp/blob/development/LICENSE).
