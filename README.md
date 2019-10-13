@@ -69,5 +69,5 @@ Please help us follow the best practices to make it easy for the reviewer as wel
 * If you would like to work on an issue, drop in a comment at the issue. If it is already assigned to someone, but there is no sign of any work being done, please free to drop in a comment so that the issue can be assigned to you if the previous assignee has dropped it entirely.
 
 ## For Testers: Testing the App
-If you are a tester and want to test the app, you have two ways to do that:
-1. **Installing APK on your device:** You can get debug APK as well as Release APK in the apk branch of the repository. After each PR merge, both the APKs are automatically updated. So, just download the APK you want and install it on your device. The APKs will always be the latest one.
+If you are a tester and want to test the app, here is a way to contribute:
+* **Installing APK on your device:** You can get debug APK as well as Release APK in the apk branch of the repository. After each PR merge, both the APKs are automatically updated. So, just download the APK you want and install it on your device. The APKs will always be the latest one.
