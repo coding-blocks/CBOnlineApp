@@ -182,4 +182,7 @@ class VideoPlayerViewModel(
 
     fun getNextVideo(contentId: String, sectionId: String, attemptId: String) =
         contentDao.getNextItem(sectionId, attemptId, contentId)
+
+    fun deleteVideo(contentId: String) =
+        contentDao.updateContent(contentId, 0)
 }

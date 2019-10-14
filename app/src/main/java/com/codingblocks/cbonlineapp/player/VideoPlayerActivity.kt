@@ -9,6 +9,7 @@ import android.content.res.Configuration
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Rational
 import android.view.View
 import android.view.WindowManager
@@ -50,11 +51,17 @@ import com.vdocipher.aegis.player.VdoPlayerFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.doubt_dialog.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
 
 class VideoPlayerActivity : AppCompatActivity(),
     OnItemClickListener, AnkoLogger,
@@ -449,6 +456,10 @@ class VideoPlayerActivity : AppCompatActivity(),
         override fun onLoadError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
             Crashlytics.log("Error Message: ${p1?.errorMsg}, " +
                 "Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}")
+            if (p1?.errorCode == 4101) {
+                toast("Seems like your download was incomplete please try again")
+                viewModel.deleteVideo(contentId)
+            }
         }
 
         override fun onMediaEnded(p0: VdoPlayer.VdoInitParams?) {

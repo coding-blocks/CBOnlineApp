@@ -62,7 +62,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                 downloadBtn.setImageResource(0)
                 title.textColor = resources.getColor(R.color.black)
             }
-
+            downloadBtn.background = null
             when (content.contentable) {
                 LECTURE -> {
                     contentType.setImageResource(R.drawable.ic_lecture)
@@ -71,9 +71,6 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                         downloadBtn.setImageDrawable(null)
                         downloadBtn.background =
                             itemView.context.getDrawable(android.R.drawable.stat_sys_download)
-                    } else {
-                        downloadBtn.background = null
-                        downloadBtn.setImageResource(R.drawable.ic_delete)
                     }
                     downloadBtn.setOnClickListener {
                         it as ImageView

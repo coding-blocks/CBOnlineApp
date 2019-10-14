@@ -84,6 +84,9 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
             }
             return Result.success()
         } else {
+            for (data in downloadList) {
+                notificationManager.cancel(data.notificationId)
+            }
             if (response.code() in (500..599)) {
                 // try again if there is a server error
                 return Result.retry()
