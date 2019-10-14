@@ -11,7 +11,6 @@
         android:id="@+id/quiz_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:elevation="4dp"
         android:gravity="center_vertical"
         app:theme="@style/ToolBarStyle" />
