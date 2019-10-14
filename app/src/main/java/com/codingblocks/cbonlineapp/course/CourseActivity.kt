@@ -216,7 +216,9 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                                 }
                                 if (sectionsList.size == sections.size) {
                                     sectionsList.sortBy { it.order }
-                                    sectionAdapter.setData(sectionsList)
+                                    runOnUiThread {
+                                        sectionAdapter.setData(sectionsList)
+                                    }
                                 }
                             } else {
                                 toast("Error ${response2.code()}")
