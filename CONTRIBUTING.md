@@ -10,11 +10,11 @@
 
 #### Sending pull requests:
 
-Go to the repository on github at https://github.com/coding-blocks/CBOnlineApp.
+Go to the repository on GitHub at https://github.com/coding-blocks/CBOnlineApp.
 
 Click the “Fork” button at the top right.
 
-You’ll now have your own copy of the original CBOnlineApp repository in your github account.
+You’ll now have your copy of the original CBOnlineApp repository in your GitHub account.
 
 Open a terminal/shell.
 
@@ -42,10 +42,10 @@ You’ll now have a local copy of your version of the original CBOnlineApp repos
 
 `git add` and `git commit` those changes
 
-`git push` them back to github. These will go to your version of the repository.
+`git push` them back to GitHub. These will go to your version of the repository.
 
 #### Squashing your's changes
-Before you make Pull Request , you should squash your commits into one.
+Before you make Pull Request, you should squash your commits into one.
 
 Go into the directory for the project and type:
 
@@ -54,14 +54,14 @@ Go into the directory for the project and type:
 `git commit`
 `git push --force origin my_branch`
 
-where 'Number' is number of commits to squash and 'my_branch 'is your branch name.
+where 'Number' is the number of commits to squash and 'my_branch 'is your branch name.
 
 This will squash your commits into one single commit.
 
 Now push them and Create A PR.
 
 #### Now Create a PR (Pull Request)
-Go to your version of the repository on github.
+Go to your version of the repository on GitHub.
 
 Click the “New pull request” button at the top.
 
@@ -79,7 +79,7 @@ Go into the directory for the project and type:
 
 This will pull down and merge all of the changes that have been made in the original CBOnlineApp repository.
 
-Now push them back to your github repository.
+Now push them back to your Github repository.
 
 `$ git push origin development`
 
