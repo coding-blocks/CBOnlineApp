@@ -9,7 +9,6 @@ import android.content.res.Configuration
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Rational
 import android.view.View
 import android.view.WindowManager
@@ -51,17 +50,11 @@ import com.vdocipher.aegis.player.VdoPlayerFragment
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.doubt_dialog.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.File
 
 class VideoPlayerActivity : AppCompatActivity(),
     OnItemClickListener, AnkoLogger,

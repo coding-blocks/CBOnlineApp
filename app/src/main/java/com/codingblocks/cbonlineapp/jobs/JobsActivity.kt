@@ -75,7 +75,7 @@ class JobsActivity : AppCompatActivity() {
         bottomSheetDialog.setContentView(sheetView)
 
         val bottomSheetBehavior = BottomSheetBehavior.from(sheetView.parent as View)
-        bottomSheetBehavior.bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(p0: View, p1: Float) {
             }
 
@@ -85,7 +85,7 @@ class JobsActivity : AppCompatActivity() {
                     bottomSheetDialog.cancel()
                 }
             }
-        }
+        })
     }
 
     private fun applyFilters() {
