@@ -17,6 +17,7 @@ import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.OnCartItemClickListener
 import com.codingblocks.cbonlineapp.course.batches.BatchesAdapter
+import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.insturctors.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
@@ -24,6 +25,7 @@ import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.models.Course
+import com.codingblocks.onlineapi.models.Instructor
 import com.codingblocks.onlineapi.models.Sections
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
@@ -115,21 +117,21 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         instructorRv.layoutManager = LinearLayoutManager(this)
         instructorRv.adapter = instructorAdapter
 
-//        viewModel.getInstructorWithCourseId(id).observer(this) {
-//            instructorAdapter.setData(it as ArrayList<Instructor>)
-//            var instructors = "Mentors: "
-//            for (i in 0 until it.size) {
-//                if (i == 0) {
-//                    instructors += it[i].name
-//                } else if (i == 1) {
-//                    instructors += ", ${it[i].name}"
-//                } else if (i >= 2) {
-//                    instructors += "+ " + (it.size - 2) + " more"
-//                    break
-//                }
-//                coursePageMentors.text = instructors
-//            }
-//        }
+        viewModel.getInstructorWithCourseId(id).observer(this) {
+            instructorAdapter.setData(it as ArrayList<InstructorModel>)
+            var instructors = "Mentors: "
+            for (i in it.indices) {
+                if (i == 0) {
+                    instructors += it[i].name
+                } else if (i == 1) {
+                    instructors += ", ${it[i].name}"
+                } else if (i >= 2) {
+                    instructors += "+ " + (it.size - 2) + " more"
+                    break
+                }
+                coursePageMentors.text = instructors
+            }
+        }
     }
 
     private fun fetchCourse() {

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    app:cardCornerRadius="8dp">
+
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/sectionRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/header"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:layout_toStartOf="@id/downloadSectionBtn"
+                android:fontFamily="@font/nunitosans_semibold"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/lectureTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/lectures"
+                android:fontFamily="@font/nunitosans_semibold"
+                android:maxLines="1"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="13sp"
+                tools:text="30 Mins" />
+
+            <TextView
+                android:id="@+id/lectures"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/nunitosans_semibold"
+                android:maxLines="1"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="13sp"
+                tools:text="3 Lectures" />
+
+            <ImageView
+                android:id="@+id/downloadSectionBtn"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                android:src="@android:drawable/stat_sys_download"
+                android:tint="@color/colorPrimary"
+                android:visibility="gone" />
+
+
+        </RelativeLayout>
+
+        <ImageButton
+            android:id="@+id/arrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/plus"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/sectionContents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
