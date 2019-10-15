@@ -1,5 +1,4 @@
 language: android
-sudo: required
 group: stable
 dist: precise
 jdk: oraclejdk8
