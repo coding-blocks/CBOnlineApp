@@ -24,7 +24,6 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.DownloadStarter
 import com.codingblocks.cbonlineapp.commons.SectionListClickListener
 import com.codingblocks.cbonlineapp.database.ListObject
-import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
@@ -111,8 +110,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         viewModel.getAllContent().observer(this) { SectionContent ->
             sectionitem.clear()
             val consolidatedList = ArrayList<ListObject>()
-            val response = SectionContentHolder.groupContentBySection(SectionContent)
-            response.forEach { sectionContent ->
+            SectionContent.forEach { sectionContent ->
                 var duration: Long = 0
                 var sectionComplete = 0
                 sectionContent.contents.forEach { content ->

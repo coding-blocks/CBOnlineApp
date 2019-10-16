@@ -19,7 +19,8 @@ import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
+import java.util.TimerTask
+import java.util.Timer
 
 class HomeFragment : Fragment(), AnkoLogger {
 
@@ -29,7 +30,6 @@ class HomeFragment : Fragment(), AnkoLogger {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = ui.createView(AnkoContext.create(ctx, this))
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,7 +49,6 @@ class HomeFragment : Fragment(), AnkoLogger {
         viewModel.fetchCards()
         displayCourses()
         attachObservers()
-
     }
 
     private fun attachObservers() {

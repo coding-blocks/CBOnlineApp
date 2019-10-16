@@ -34,7 +34,6 @@ interface CourseWithInstructorDao {
     """)
     fun getCourses(): DataSource.Factory<Int, CourseInstructorPair>
 
-
     @Transaction
     @Query("""
         SELECT c.*,r.* FROM RunModel r

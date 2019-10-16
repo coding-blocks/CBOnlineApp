@@ -37,5 +37,3 @@ data class CourseInstructorPair(
     )
     var instructor: List<InstructorModel>
 )
-
-
