@@ -74,7 +74,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        viewModel.getRecommendedCourses().observer(this) {
+        viewModel.getAllCourses().observer(this) {
             if (it.isNotEmpty()) {
                 val response = CourseInstructorHolder.groupInstructorByRun(it)
                 courseDataAdapter.submitList(response.filter { c ->

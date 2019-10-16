@@ -1,9 +1,8 @@
 package com.codingblocks.cbonlineapp.home
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.paging.Config
-import androidx.paging.toLiveData
 import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
@@ -18,6 +17,11 @@ import com.codingblocks.cbonlineapp.util.extensions.greater
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.CarouselCards
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val courseWithInstructorDao: CourseWithInstructorDao,
@@ -27,11 +31,20 @@ class HomeViewModel(
     private val featuresDao: FeaturesDao
 ) : ViewModel() {
     var carouselCards: MutableLiveData<List<CarouselCards>> = MutableLiveData()
+    var carouselError: MutableLiveData<String> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
+    private val courses = MutableLiveData<List<CourseInstructorHolder.CourseInstructorPair>>()
 
-    fun getAllCourses() = courseWithInstructorDao.getCourses().toLiveData(Config(5, enablePlaceholders = false))
+    fun getAllCourses() = courseWithInstructorDao.getCourses()
 
-    fun getRecommendedCourses() = courseWithInstructorDao.getRecommendedCourses().toLiveData(Config(5, enablePlaceholders = false))
+    fun getRecommendedCourses(): LiveData<List<CourseInstructorHolder.CourseInstructorPair>> {
+        ioMain({
+            courseWithInstructorDao.getRecommendedCourses()
+        }) {
+            courses.value = it
+        }
+        return courses
+    }
 
     fun fetchRecommendedCourses() {
         Clients.onlineV2JsonApi.getRecommendedCourses()
@@ -196,10 +209,27 @@ class HomeViewModel(
     }
 
     fun fetchCards() {
-        Clients.onlineV2JsonApi.carouselCards.enqueue(retrofitCallback { fallback, response ->
+        Clients.onlineV2JsonApi.carouselCards.enqueue(retrofitCallback { error, response ->
             response?.body()?.let {
                 carouselCards.value = it
             }
+            error?.let {
+                carouselError.postValue(it.message)
+            }
         })
     }
+
+    fun <T : Any> ioMain(
+        work: suspend (() -> T?),
+        callback: ((T?) -> Unit)? = null
+    ): Job =
+        CoroutineScope(Dispatchers.Main).launch {
+            val data = CoroutineScope(Dispatchers.IO).async {
+                return@async work()
+            }.await()
+
+            callback?.let {
+                it(data)
+            }
+        }
 }

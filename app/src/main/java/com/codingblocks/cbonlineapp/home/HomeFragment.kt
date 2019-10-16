@@ -14,41 +14,26 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.EndlessPagerAdapter
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.models.CarouselCards
-import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.TimerTask
-import java.util.Timer
+import java.util.*
 
 class HomeFragment : Fragment(), AnkoLogger {
 
     private lateinit var courseDataAdapter: CourseDataAdapter
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
-
     val ui = HomeFragmentUi<Fragment>()
-
     private val viewModel by viewModel<HomeViewModel>()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ):
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = ui.createView(AnkoContext.create(ctx, this))
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
-        val params = Bundle()
-        params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
-        params.putString(FirebaseAnalytics.Param.ITEM_NAME, "Home")
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
-
         setHasOptionsMenu(true)
 
         courseDataAdapter = CourseDataAdapter()
@@ -58,15 +43,17 @@ class HomeFragment : Fragment(), AnkoLogger {
             adapter = courseDataAdapter
         }
         ui.homeImg.visibility = View.GONE
-
         ui.swipeRefreshLayout.setOnRefreshListener {
             viewModel.progress.value = true
             viewModel.fetchRecommendedCourses()
         }
-
         viewModel.fetchCards()
-
         displayCourses()
+        attachObservers()
+
+    }
+
+    private fun attachObservers() {
         viewModel.carouselCards.observer(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 ui.viewPager.visibility = View.GONE
@@ -100,7 +87,7 @@ class HomeFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        viewModel.getAllCourses().observer(this) {
+        viewModel.getRecommendedCourses().observer(this) {
             if (it.isNotEmpty()) {
                 val response = CourseInstructorHolder.groupInstructorByRun(it)
                 courseDataAdapter.submitList(response.filter { c ->

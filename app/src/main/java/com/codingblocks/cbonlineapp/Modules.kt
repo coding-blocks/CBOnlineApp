@@ -44,7 +44,6 @@ val databaseModule = module {
             AppDatabase::class.java, "app-database"
         )
             .fallbackToDestructiveMigration()
-            .allowMainThreadQueries()
             .build()
     }
 
