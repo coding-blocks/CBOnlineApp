@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 21,
-    "identityHash": "8c269f4fae021f1939ad01a6079e8b4c",
+    "identityHash": "0f91a99b60077f2a008b3e888d8f08bc",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -553,7 +553,7 @@
       },
       {
         "tableName": "CourseWithInstructor",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`course_id` TEXT NOT NULL, `instructor_id` TEXT NOT NULL, PRIMARY KEY(`course_id`, `instructor_id`), FOREIGN KEY(`course_id`) REFERENCES `CourseModel`(`cid`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`instructor_id`) REFERENCES `InstructorModel`(`uid`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`course_id` TEXT NOT NULL, `instructor_id` TEXT NOT NULL, PRIMARY KEY(`course_id`, `instructor_id`))",
         "fields": [
           {
             "fieldPath": "courseId",
@@ -593,30 +593,7 @@
             "createSql": "CREATE INDEX IF NOT EXISTS `index_CourseWithInstructor_instructor_id` ON `${TABLE_NAME}` (`instructor_id`)"
           }
         ],
-        "foreignKeys": [
-          {
-            "table": "CourseModel",
-            "onDelete": "NO ACTION",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "course_id"
-            ],
-            "referencedColumns": [
-              "cid"
-            ]
-          },
-          {
-            "table": "InstructorModel",
-            "onDelete": "NO ACTION",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "instructor_id"
-            ],
-            "referencedColumns": [
-              "uid"
-            ]
-          }
-        ]
+        "foreignKeys": []
       },
       {
         "tableName": "DoubtsModel",
@@ -1197,7 +1174,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8c269f4fae021f1939ad01a6079e8b4c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0f91a99b60077f2a008b3e888d8f08bc')"
     ]
   }
 }

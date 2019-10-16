@@ -2,12 +2,14 @@ package com.codingblocks.cbonlineapp.home.mycourses
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.Config
+import androidx.paging.toLiveData
 import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.InstructorDao
-import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.database.models.CourseModel
+import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
 import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.database.models.RunModel
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
@@ -24,7 +26,7 @@ class MyCoursesViewModel(
     var progress: MutableLiveData<Boolean> = MutableLiveData()
 
     // Todo : Fix page list
-    fun getMyRuns() = courseWithInstructorDao.getMyRuns()
+    fun getMyRuns() = courseWithInstructorDao.getMyRuns().toLiveData(Config(5, enablePlaceholders = false))
 
     fun fetchMyCourses(refresh: Boolean = false) {
         progress.postValue(true)
@@ -134,7 +136,7 @@ class MyCoursesViewModel(
                                                                                 )
                                                                             )
                                                                             courseWithInstructorDao.insert(
-                                                                                CourseInstructorHolder.CourseWithInstructor(
+                                                                                CourseWithInstructor(
                                                                                     courseRun.course?.id
                                                                                         ?: "",
                                                                                     id

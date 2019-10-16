@@ -1,16 +1,17 @@
 package com.codingblocks.cbonlineapp.home
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.Config
+import androidx.paging.toLiveData
 import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.FeaturesDao
 import com.codingblocks.cbonlineapp.database.InstructorDao
 import com.codingblocks.cbonlineapp.database.models.CourseFeatureModel
-import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.database.models.CourseModel
+import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
 import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.database.models.RunModel
 import com.codingblocks.cbonlineapp.util.extensions.greater
@@ -33,18 +34,10 @@ class HomeViewModel(
     var carouselCards: MutableLiveData<List<CarouselCards>> = MutableLiveData()
     var carouselError: MutableLiveData<String> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
-    private val courses = MutableLiveData<List<CourseInstructorHolder.CourseInstructorPair>>()
 
-    fun getAllCourses() = courseWithInstructorDao.getCourses()
+    fun getAllCourses() = courseWithInstructorDao.getCourses().toLiveData(Config(5, enablePlaceholders = false))
 
-    fun getRecommendedCourses(): LiveData<List<CourseInstructorHolder.CourseInstructorPair>> {
-        ioMain({
-            courseWithInstructorDao.getRecommendedCourses()
-        }) {
-            courses.value = it
-        }
-        return courses
-    }
+    fun getRecommendedCourses() = courseWithInstructorDao.getRecommendedCourses().toLiveData(Config(5, enablePlaceholders = false))
 
     fun fetchRecommendedCourses() {
         Clients.onlineV2JsonApi.getRecommendedCourses()
@@ -116,7 +109,7 @@ class HomeViewModel(
                                                 )
                                             )
                                             courseWithInstructorDao.insert(
-                                                CourseInstructorHolder.CourseWithInstructor(course.id, instructor.id)
+                                                CourseWithInstructor(course.id, instructor.id)
                                             )
                                         }
                                     } catch (e: Exception) {
@@ -197,7 +190,7 @@ class HomeViewModel(
                                         )
                                     )
                                     courseWithInstructorDao.insert(
-                                        CourseInstructorHolder.CourseWithInstructor(course.id, instructor.id)
+                                        CourseWithInstructor(course.id, instructor.id)
                                     )
                                 }
                             }

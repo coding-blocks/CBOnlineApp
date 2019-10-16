@@ -2,18 +2,18 @@ package com.codingblocks.cbonlineapp.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.home.mycourses.MyCoursesViewHolder
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 
 class CourseDataAdapter(
     private val type: String = "allCourses"
-) : ListAdapter<CourseInstructorHolder.CourseAndItsInstructor, RecyclerView.ViewHolder>(diffCallback), AnkoLogger {
+) : PagedListAdapter<CourseInstructorPair, RecyclerView.ViewHolder>(diffCallback), AnkoLogger {
 
     val ui = CourseCardUi()
 
@@ -37,11 +37,11 @@ class CourseDataAdapter(
 
     companion object {
 
-        private val diffCallback = object : DiffUtil.ItemCallback<CourseInstructorHolder.CourseAndItsInstructor>() {
-            override fun areItemsTheSame(oldItem: CourseInstructorHolder.CourseAndItsInstructor, newItem: CourseInstructorHolder.CourseAndItsInstructor): Boolean =
+        private val diffCallback = object : DiffUtil.ItemCallback<CourseInstructorPair>() {
+            override fun areItemsTheSame(oldItem: CourseInstructorPair, newItem: CourseInstructorPair): Boolean =
                 oldItem.courseRun.crUid == newItem.courseRun.crUid
 
-            override fun areContentsTheSame(oldItem: CourseInstructorHolder.CourseAndItsInstructor, newItem: CourseInstructorHolder.CourseAndItsInstructor): Boolean =
+            override fun areContentsTheSame(oldItem: CourseInstructorPair, newItem: CourseInstructorPair): Boolean =
                 oldItem == newItem
         }
     }

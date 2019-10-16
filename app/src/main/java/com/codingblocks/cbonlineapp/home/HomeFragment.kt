@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.EndlessPagerAdapter
-import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.models.CarouselCards
 import org.jetbrains.anko.AnkoContext
@@ -89,11 +88,7 @@ class HomeFragment : Fragment(), AnkoLogger {
     private fun displayCourses(searchQuery: String = "") {
         viewModel.getRecommendedCourses().observer(this) {
             if (it.isNotEmpty()) {
-                val response = CourseInstructorHolder.groupInstructorByRun(it)
-                courseDataAdapter.submitList(response.filter { c ->
-                    c.courseRun.course.title.contains(searchQuery, true) ||
-                        c.courseRun.course.summary.contains(searchQuery, true)
-                })
+                courseDataAdapter.submitList(it)
                 ui.shimmerLayout.stopShimmer()
             } else {
                 viewModel.fetchRecommendedCourses()

@@ -4,7 +4,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
@@ -19,9 +19,9 @@ import org.jetbrains.anko.singleTop
 
 class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), AnkoLogger {
 
-    fun bindView(model: CourseInstructorHolder.CourseAndItsInstructor) {
+    fun bindView(model: CourseInstructorPair?) {
 
-        with(model.courseRun.course) {
+        with(model!!.courseRun.course) {
             itemView.courseTitle.text = title
             itemView.courseDescription.text = subtitle
             itemView.courseRatingTv.text = rating.toString()
@@ -59,7 +59,7 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
             Bind @InstructorModel
              */
             var instructors = ""
-            with(model.instructors) {
+            with(model.instructor) {
                 if (this.size < 2)
                     itemView.courseInstrucImgView2.visibility = View.INVISIBLE
                 else
