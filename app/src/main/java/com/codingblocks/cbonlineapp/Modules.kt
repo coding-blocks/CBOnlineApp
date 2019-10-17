@@ -6,6 +6,7 @@ import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.home.HomeActivityViewModel
 import com.codingblocks.cbonlineapp.home.HomeRepository
 import com.codingblocks.cbonlineapp.home.HomeViewModel
+import com.codingblocks.cbonlineapp.home.mycourses.MyCoursesRepository
 import com.codingblocks.cbonlineapp.home.mycourses.MyCoursesViewModel
 import com.codingblocks.cbonlineapp.jobs.JobsViewModel
 import com.codingblocks.cbonlineapp.jobs.jobdetails.JobDetailViewModel
@@ -21,7 +22,7 @@ import org.koin.dsl.module.module
 
 val viewModelModule = module {
     viewModel { HomeViewModel(get()) }
-    viewModel { MyCoursesViewModel(get(), get(), get(), get()) }
+    viewModel { MyCoursesViewModel(get()) }
 
     viewModel { MyCourseViewModel(get(), get(), get(), get(), get()) }
     viewModel { LeaderboardViewModel() }
@@ -37,6 +38,7 @@ val viewModelModule = module {
     viewModel { JobsViewModel(get()) }
     viewModel { JobDetailViewModel(get(), get(), get(), get()) }
     single { HomeRepository(get(), get(), get(), get(), get()) }
+    single { MyCoursesRepository(get(), get(), get(), get()) }
 }
 val databaseModule = module {
 
