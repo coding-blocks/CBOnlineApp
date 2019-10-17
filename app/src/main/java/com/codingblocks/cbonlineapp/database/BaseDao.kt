@@ -21,7 +21,7 @@ interface BaseDao<T> {
      * @param obj the object to be inserted.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNew(obj: T)
+    suspend fun insertNew(obj: T)
 
     /**
      * Insert an list of object in the database.

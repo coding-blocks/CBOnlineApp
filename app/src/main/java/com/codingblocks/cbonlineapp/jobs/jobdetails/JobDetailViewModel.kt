@@ -77,7 +77,7 @@ class JobDetailViewModel(
                         if (application != null) {
                             eligibleLiveData.value = mInstance.getString(R.string.applied)
                         }
-                        jobsDao.insertNew(job)
+                        jobsDao.insert(job)
                     }
                 }
             }

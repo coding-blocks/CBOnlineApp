@@ -56,7 +56,7 @@ class JobsViewModel(
                                             job.courses ?: arrayListOf()
                                         )
 
-                                        jobsDao.insertNew(job)
+                                        jobsDao.insert(job)
                                     }
                                 })
                         }
