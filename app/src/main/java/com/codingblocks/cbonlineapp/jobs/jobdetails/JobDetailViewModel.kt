@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.jobs.jobdetails
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.CourseDao
@@ -16,6 +17,7 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Applications
 import com.codingblocks.onlineapi.models.CourseId
 import com.codingblocks.onlineapi.models.Form
+import kotlinx.coroutines.launch
 
 class JobDetailViewModel(
     private val jobsDao: JobsDao,
@@ -77,7 +79,9 @@ class JobDetailViewModel(
                         if (application != null) {
                             eligibleLiveData.value = mInstance.getString(R.string.applied)
                         }
-                        jobsDao.insert(job)
+                        viewModelScope.launch {
+                            jobsDao.insert(job)
+                        }
                     }
                 }
             }

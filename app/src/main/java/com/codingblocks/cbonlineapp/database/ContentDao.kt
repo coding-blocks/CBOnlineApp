@@ -11,7 +11,7 @@ import com.codingblocks.cbonlineapp.database.models.ContentModel
 abstract class ContentDao : BaseDao<ContentModel> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract override fun insert(obj: ContentModel)
+    abstract override suspend fun insert(obj: ContentModel)
 
     @Query("SElECT * FROM ContentModel ")
     abstract fun getContent(): LiveData<List<ContentModel>>

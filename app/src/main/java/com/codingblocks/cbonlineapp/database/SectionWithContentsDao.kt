@@ -12,7 +12,7 @@ import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 interface SectionWithContentsDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(join: SectionContentHolder.SectionWithContent)
+    suspend fun insert(join: SectionContentHolder.SectionWithContent)
 
     //    @Query("""
 //        SELECT * FROM ContentModel
