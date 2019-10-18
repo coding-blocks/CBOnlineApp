@@ -10,6 +10,7 @@ import com.codingblocks.cbonlineapp.home.mycourses.MyCoursesRepository
 import com.codingblocks.cbonlineapp.home.mycourses.MyCoursesViewModel
 import com.codingblocks.cbonlineapp.jobs.JobsViewModel
 import com.codingblocks.cbonlineapp.jobs.jobdetails.JobDetailViewModel
+import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.leaderboard.LeaderboardViewModel
 import com.codingblocks.cbonlineapp.notifications.NotificationViewModel
@@ -24,7 +25,7 @@ val viewModelModule = module {
     viewModel { HomeViewModel(get()) }
     viewModel { MyCoursesViewModel(get()) }
 
-    viewModel { MyCourseViewModel(get(), get(), get(), get(), get()) }
+    viewModel { MyCourseViewModel(get()) }
     viewModel { LeaderboardViewModel() }
     viewModel { NotificationViewModel(get()) }
 
@@ -37,8 +38,10 @@ val viewModelModule = module {
     viewModel { SettingsViewModel(get()) }
     viewModel { JobsViewModel(get()) }
     viewModel { JobDetailViewModel(get(), get(), get(), get()) }
+
     single { HomeRepository(get(), get(), get(), get(), get()) }
     single { MyCoursesRepository(get(), get(), get(), get()) }
+    single { MyCourseRepository(get(), get(), get(), get(), get()) }
 }
 val databaseModule = module {
 

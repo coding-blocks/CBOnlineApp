@@ -16,7 +16,7 @@ import com.codingblocks.cbonlineapp.database.models.InstructorModel
 interface CourseWithInstructorDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(join: CourseWithInstructor)
+    suspend fun insert(join: CourseWithInstructor)
 
     @Query("""
         SELECT i.* FROM InstructorModel i

@@ -34,11 +34,9 @@ interface SectionWithContentsDao {
 //
     @Transaction
     @Query("""
-        SELECT s.*,c.* FROM SectionModel s
-	    INNER JOIN SectionWithContent sc ON sc."section_id" = s."csid"
-	    INNER JOIN ContentModel c ON c."ccid" = sc."content_id"
+        SELECT s.* FROM SectionModel s,ContentModel c 
 	    WHERE s.attemptId = :attemptId AND progress = "UNDONE"
-        ORDER BY s."sectionOrder",sc.`order` LIMIT 1
+        ORDER BY s."sectionOrder" LIMIT 1
         """)
     fun resumeCourse(attemptId: String): LiveData<List<SectionContentHolder.SectionContentPair>>
 

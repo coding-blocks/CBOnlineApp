@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Config
 import androidx.paging.toLiveData
-import com.codingblocks.cbonlineapp.util.extensions.greater
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.CarouselCards
@@ -51,10 +50,7 @@ class HomeViewModel(
                                     viewModelScope.launch {
                                         repository.insertCourse(course, false)
                                     }
-
                                 }
-
-
                             }
                         }
                     }
@@ -73,5 +69,4 @@ class HomeViewModel(
             }
         })
     }
-
 }

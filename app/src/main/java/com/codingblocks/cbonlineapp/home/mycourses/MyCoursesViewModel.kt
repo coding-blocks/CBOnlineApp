@@ -11,7 +11,6 @@ import com.crashlytics.android.Crashlytics
 import kotlinx.coroutines.launch
 
 class MyCoursesViewModel(
-
     private val repository: MyCoursesRepository
 ) : ViewModel() {
     var message: MutableLiveData<String> = MutableLiveData()
