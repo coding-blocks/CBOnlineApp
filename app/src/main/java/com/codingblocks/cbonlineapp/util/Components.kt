@@ -41,6 +41,11 @@ object Components {
                 updateView.description.text =
                     "This section is unavailable on mobile, please view it on the browser instead!"
             }
+            "expired" -> {
+                updateView.okBtn.text = "Ok"
+                updateView.description.text =
+                    "This section is unavailable as your course has been expired.Please buy an extension to watch your videos"
+            }
         }
         updateView.okBtn.setOnClickListener {
             when (type) {

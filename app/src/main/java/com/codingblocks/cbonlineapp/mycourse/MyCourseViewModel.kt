@@ -17,6 +17,7 @@ class MyCourseViewModel(
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
     var revoked: MutableLiveData<Boolean> = MutableLiveData()
+    var expired: SingleLiveEvent<Boolean> = SingleLiveEvent()
     var attemptId: String = ""
     var runId: String = ""
     var courseId: String = ""
@@ -42,6 +43,7 @@ class MyCourseViewModel(
             .enqueue(retrofitCallback { _, response ->
                 response?.let { runAttempt ->
                     if (runAttempt.isSuccessful) {
+                        expired.value = runAttempt.body()?.end!!.toLong() * 1000 < System.currentTimeMillis()
                         runAttempt.body()?.run?.sections?.let { sectionList ->
                             viewModelScope.launch {
                                 repository.insertSections(sectionList, attemptId)

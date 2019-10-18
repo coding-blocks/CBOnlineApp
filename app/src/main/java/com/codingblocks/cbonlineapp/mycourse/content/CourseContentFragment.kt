@@ -72,6 +72,9 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             attemptId = it.getString(RUN_ATTEMPT_ID) ?: ""
         }
         sectionItemsAdapter.starter = this
+        viewModel.expired.observer(viewLifecycleOwner) {
+            sectionItemsAdapter.setExpiry(it)
+        }
 
         return inflater.inflate(R.layout.fragment_course_content, container, false)
     }
@@ -114,6 +117,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 var duration: Long = 0
                 var sectionComplete = 0
                 sectionContent.contents.forEach { content ->
+                    content.premium = sectionContent.section.premium
                     if (content.progress == "DONE") {
                         sectionComplete++
                     }

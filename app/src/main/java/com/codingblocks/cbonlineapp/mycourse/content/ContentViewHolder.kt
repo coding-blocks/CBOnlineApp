@@ -49,7 +49,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
      * Items might be null if they are not paged in yet. PagedListAdapter will re-bind the
      * ViewHolder when Item is loaded.
      */
-    fun bindTo(content: ContentModel) {
+    fun bindTo(content: ContentModel, expired: Boolean) {
         this.contentModel = content
         with(itemView) {
 
@@ -99,7 +99,9 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             }
 
             setOnClickListener {
-                if (content.contentable != CODE) {
+                if (expired && content.premium) {
+                    showconfirmation(it.context, "expired")
+                } else if (content.contentable != CODE) {
                     when (content.contentable) {
                         DOCUMENT -> context.startActivity(
                             context.intentFor<PdfActivity>(

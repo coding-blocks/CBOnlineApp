@@ -39,6 +39,7 @@ import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.crashlytics.android.Crashlytics
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
@@ -51,6 +52,7 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.doubt_dialog.view.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
@@ -449,8 +451,8 @@ class VideoPlayerActivity : AppCompatActivity(),
         override fun onLoadError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
             Crashlytics.log("Error Message: ${p1?.errorMsg}, " +
                 "Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}")
-            if (p1?.errorCode == 4101) {
-                toast("Seems like your download was incomplete please try again")
+            if (p1?.errorCode == 4101 || p1?.errorCode == 5110) {
+                rootLayout.snackbar("Seems like your download was corrupted.Please Download Again")
                 viewModel.deleteVideo(contentId)
             }
         }
