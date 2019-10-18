@@ -2,16 +2,11 @@ package com.codingblocks.cbonlineapp.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 
 @Dao
 abstract class ContentDao : BaseDao<ContentModel> {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract override suspend fun insert(obj: ContentModel)
 
     @Query("SElECT * FROM ContentModel ")
     abstract fun getContent(): LiveData<List<ContentModel>>

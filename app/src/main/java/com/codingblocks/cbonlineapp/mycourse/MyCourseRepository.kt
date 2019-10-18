@@ -43,12 +43,7 @@ class MyCourseRepository(
                     order, premium, status,
                     runId, attemptId
                 )
-                val oldSection = sectionDao.getSectionWithId(id)
-                if (oldSection == null)
-                    sectionDao.insert(newSection)
-                else if (oldSection == newSection) {
-                    sectionDao.update(newSection)
-                }
+                sectionDao.insert(newSection)
             }
         }
     }
@@ -190,7 +185,7 @@ class MyCourseRepository(
                     contentCodeChallenge,
                     contentCsv
                 )
-            contentsDao.insert(
+            contentsDao.insertNew(
                 newContent
             )
             sectionWithContentsDao.insert(
