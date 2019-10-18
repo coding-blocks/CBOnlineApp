@@ -12,7 +12,7 @@ import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 interface SectionWithContentsDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(join: SectionContentHolder.SectionWithContent)
+    suspend fun insert(join: SectionContentHolder.SectionWithContent)
 
     //    @Query("""
 //        SELECT * FROM ContentModel
@@ -34,21 +34,17 @@ interface SectionWithContentsDao {
 //
     @Transaction
     @Query("""
-        SELECT s.*,c.* FROM SectionModel s
-	    INNER JOIN SectionWithContent sc ON sc."section_id" = s."csid"
-	    INNER JOIN ContentModel c ON c."ccid" = sc."content_id"
+        SELECT s.* FROM SectionModel s,ContentModel c 
 	    WHERE s.attemptId = :attemptId AND progress = "UNDONE"
-        ORDER BY s."sectionOrder",sc.`order` LIMIT 1
+        ORDER BY s."sectionOrder" LIMIT 1
         """)
     fun resumeCourse(attemptId: String): LiveData<List<SectionContentHolder.SectionContentPair>>
 
     @Transaction
     @Query("""
-        SELECT s.*,c.* FROM SectionModel s
-	    INNER JOIN SectionWithContent sc ON sc."section_id" = s."csid"
-	    INNER JOIN ContentModel c ON c."ccid" = sc."content_id"
+        SELECT s.* FROM SectionModel s
 	    WHERE s.attemptId = :attemptId
-        ORDER BY s."sectionOrder",sc.`order`
+        ORDER BY s."sectionOrder"
         """)
     fun getSectionWithContent(attemptId: String): LiveData<List<SectionContentHolder.SectionContentPair>>
 }

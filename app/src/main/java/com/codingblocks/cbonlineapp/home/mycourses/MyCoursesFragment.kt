@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.caverock.androidsvg.SVG
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.home.CourseDataAdapter
 import com.codingblocks.cbonlineapp.home.HomeFragmentUi
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
@@ -100,12 +99,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     private fun displayCourses(searchQuery: String = "") {
         viewModel.getMyRuns().observer(this) {
             if (!it.isNullOrEmpty()) {
-                val response = CourseInstructorHolder.groupInstructorByRun(it)
-                courseDataAdapter.submitList(response.filter { c ->
-                    c.courseRun.course.title.contains(searchQuery, true) ||
-                        c.courseRun.course.summary.contains(searchQuery, true)
-                })
-
+                courseDataAdapter.submitList(it)
                 ui.shimmerLayout.stopShimmer()
             } else {
                 viewModel.fetchMyCourses()

@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.jobs
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.codingblocks.cbonlineapp.database.JobsDao
 import com.codingblocks.cbonlineapp.database.models.Companies
 import com.codingblocks.cbonlineapp.database.models.FilterData
@@ -9,6 +10,7 @@ import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.util.extensions.getDate
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
+import kotlinx.coroutines.launch
 
 class JobsViewModel(
     private val jobsDao: JobsDao
@@ -55,8 +57,9 @@ class JobsViewModel(
                                             },
                                             job.courses ?: arrayListOf()
                                         )
-
-                                        jobsDao.insertNew(job)
+                                        viewModelScope.launch {
+                                            jobsDao.insert(job)
+                                        }
                                     }
                                 })
                         }

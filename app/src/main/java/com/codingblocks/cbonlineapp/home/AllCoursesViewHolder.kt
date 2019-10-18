@@ -4,7 +4,7 @@ import android.graphics.Paint
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.course.CourseActivity
-import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.intentFor
@@ -13,9 +13,9 @@ import java.util.Date
 
 class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bindView(model: CourseInstructorHolder.CourseAndItsInstructor, ui: CourseCardUi) {
+    fun bindView(model: CourseInstructorPair?, ui: CourseCardUi) {
 
-        with(model.courseRun.course) {
+        with(model!!.courseRun.course) {
             ui.courseTitle.text = title
             ui.courseRatingTv.text = rating.toString()
             ui.courseRatingBar.rating = rating
@@ -53,7 +53,7 @@ class AllCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         var instructors = ""
-        with(model.instructors) {
+        with(model.instructor) {
             if (this.size < 2)
                 ui.courseInstrucImgView2.visibility = View.INVISIBLE
             for (i in indices) {

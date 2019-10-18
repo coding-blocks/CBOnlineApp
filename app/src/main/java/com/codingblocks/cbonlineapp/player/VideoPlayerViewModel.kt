@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.player
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
@@ -16,6 +17,7 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
 import com.crashlytics.android.Crashlytics
+import kotlinx.coroutines.launch
 
 class VideoPlayerViewModel(
     private val doubtsDao: DoubtsDao,
@@ -72,12 +74,14 @@ class VideoPlayerViewModel(
                 try {
                     if ((response?.isSuccessful == true))
                         response.body()?.let {
-                            doubtsDao.insert(
-                                DoubtsModel(
-                                    it.id, it.title, it.body, it.contents?.id
-                                    ?: "", it.status, attemptId
+                            viewModelScope.launch {
+                                doubtsDao.insert(
+                                    DoubtsModel(
+                                        it.id, it.title, it.body, it.contents?.id
+                                        ?: "", it.status, attemptId
+                                    )
                                 )
-                            )
+                            }
                         }
                 } catch (e: Exception) {
                     createDoubtProgress.value = false
@@ -94,17 +98,19 @@ class VideoPlayerViewModel(
                     if (responseNote.isSuccessful)
                         responseNote.body().let {
                             try {
-                                notesDao.insert(
-                                    NotesModel(
-                                        it?.id ?: "",
-                                        it?.duration ?: 0.0,
-                                        it?.text ?: "",
-                                        it?.content?.id ?: "",
-                                        attemptId,
-                                        it?.createdAt ?: "",
-                                        it?.deletedAt ?: ""
+                                viewModelScope.launch {
+                                    notesDao.insert(
+                                        NotesModel(
+                                            it?.id ?: "",
+                                            it?.duration ?: 0.0,
+                                            it?.text ?: "",
+                                            it?.content?.id ?: "",
+                                            attemptId,
+                                            it?.createdAt ?: "",
+                                            it?.deletedAt ?: ""
+                                        )
                                     )
-                                )
+                                }
                             } catch (e: Exception) {
                                 createNoteProgress.value = false
                             }
@@ -121,13 +127,15 @@ class VideoPlayerViewModel(
                 if (response != null && response.isSuccessful) {
                     doubts?.forEach {
                         try {
-                            doubtsDao.insert(
-                                DoubtsModel(
-                                    it.id, it.title, it.body, it.content?.id
-                                    ?: "", it.status, it.runAttempt?.id ?: "",
-                                    it.discourseTopicId
+                            viewModelScope.launch {
+                                doubtsDao.insert(
+                                    DoubtsModel(
+                                        it.id, it.title, it.body, it.content?.id
+                                        ?: "", it.status, it.runAttempt?.id ?: "",
+                                        it.discourseTopicId
+                                    )
                                 )
-                            )
+                            }
                         } catch (e: Exception) {
                             e.printStackTrace()
                             Log.e("CRASH", "DOUBT ID : $it.id")

@@ -7,27 +7,13 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.codingblocks.cbonlineapp.PdfActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.ARG_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.DOCUMENT
-import com.codingblocks.cbonlineapp.util.DOWNLOADED
-import com.codingblocks.cbonlineapp.util.FILE_NAME
-import com.codingblocks.cbonlineapp.util.FILE_URL
-import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
-import com.codingblocks.cbonlineapp.util.SECTION_ID
-import com.codingblocks.cbonlineapp.util.VIDEO
-import com.codingblocks.cbonlineapp.util.VIDEO_ID
-import com.codingblocks.cbonlineapp.util.VIDEO_URL
 import com.codingblocks.cbonlineapp.util.extensions.getDateForTime
-import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
@@ -39,8 +25,6 @@ import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.fragment_overview.view.*
 import kotlinx.android.synthetic.main.fragment_overview.view.description
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.singleTop
-import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.longToast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -91,39 +75,39 @@ class OverviewFragment : Fragment(), AnkoLogger {
         resetBtn.setOnClickListener {
             confirmReset()
         }
-        resumeBtn.setOnClickListener {
-            viewModel.getResumeCourse().observeOnce {
-                if (it.isNotEmpty())
-                    with(it[0]) {
-                        when (content.contentable) {
-                            LECTURE -> {
-                                startActivity(intentFor<VideoPlayerActivity>(
-                                    VIDEO_ID to content.contentLecture.lectureId,
-                                    RUN_ATTEMPT_ID to content.attempt_id,
-                                    CONTENT_ID to content.ccid,
-                                    SECTION_ID to section.csid,
-                                    DOWNLOADED to content.contentLecture.isDownloaded
-                                ).singleTop()
-                                )
-                            }
-                            DOCUMENT -> {
-                                startActivity(intentFor<PdfActivity>(
-                                    FILE_URL to content.contentDocument.documentPdfLink,
-                                    FILE_NAME to content.contentDocument.documentName + ".pdf"
-                                ).singleTop())
-                            }
-                            VIDEO -> {
-                                startActivity(intentFor<VideoPlayerActivity>(
-                                    VIDEO_URL to content.contentVideo.videoUrl,
-                                    RUN_ATTEMPT_ID to content.attempt_id,
-                                    CONTENT_ID to content.ccid
-                                ).singleTop())
-                            }
-                            else -> return@with
-                        }
-                    }
-            }
-        }
+//        resumeBtn.setOnClickListener {
+//            viewModel.getResumeCourse().observeOnce {
+//                if (it.isNotEmpty())
+//                    with(it[0]) {
+//                        when (content.contentable) {
+//                            LECTURE -> {
+//                                startActivity(intentFor<VideoPlayerActivity>(
+//                                    VIDEO_ID to content.contentLecture.lectureId,
+//                                    RUN_ATTEMPT_ID to content.attempt_id,
+//                                    CONTENT_ID to content.ccid,
+//                                    SECTION_ID to section.csid,
+//                                    DOWNLOADED to content.contentLecture.isDownloaded
+//                                ).singleTop()
+//                                )
+//                            }
+//                            DOCUMENT -> {
+//                                startActivity(intentFor<PdfActivity>(
+//                                    FILE_URL to content.contentDocument.documentPdfLink,
+//                                    FILE_NAME to content.contentDocument.documentName + ".pdf"
+//                                ).singleTop())
+//                            }
+//                            VIDEO -> {
+//                                startActivity(intentFor<VideoPlayerActivity>(
+//                                    VIDEO_URL to content.contentVideo.videoUrl,
+//                                    RUN_ATTEMPT_ID to content.attempt_id,
+//                                    CONTENT_ID to content.ccid
+//                                ).singleTop())
+//                            }
+//                            else -> return@with
+//                        }
+//                    }
+//            }
+//        }
     }
 
     private fun setUpObservers(view: View) {

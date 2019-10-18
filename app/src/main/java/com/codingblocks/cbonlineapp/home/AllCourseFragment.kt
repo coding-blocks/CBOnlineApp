@@ -11,7 +11,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.models.CourseInstructorHolder
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -74,13 +73,9 @@ class AllCourseFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        viewModel.getRecommendedCourses().observer(this) {
+        viewModel.getAllCourses().observer(this) {
             if (it.isNotEmpty()) {
-                val response = CourseInstructorHolder.groupInstructorByRun(it)
-                courseDataAdapter.submitList(response.filter { c ->
-                    c.courseRun.course.title.contains(searchQuery, true) ||
-                        c.courseRun.course.summary.contains(searchQuery, true)
-                })
+                courseDataAdapter.submitList(it)
                 ui.shimmerLayout.stopShimmer()
             } else {
                 viewModel.fetchAllCourses()

@@ -29,6 +29,7 @@ import com.codingblocks.cbonlineapp.jobs.JobsActivity
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
@@ -105,7 +106,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setUpFragment() {
         val transaction = supportFragmentManager.beginTransaction()
-        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN) {
+        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN && !JWTUtils.isExpired(viewModel.prefs.SP_JWT_TOKEN_KEY)) {
             // Update User Token on Login
             viewModel.refreshToken()
             val navMenu = nav_view.menu
@@ -405,7 +406,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                     removeShortcuts()
                 }
-                deleteDatabase("app-database")
                 viewModel.invalidateToken()
             }
             CBOnlineApp.mInstance.clearApplicationData()
