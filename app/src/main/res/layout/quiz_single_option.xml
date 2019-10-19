@@ -11,7 +11,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:background="@drawable/ic_circle"
+        android:background="@mipmap/ic_launcher_round"
         android:gravity="center"
         android:textColor="@color/black" />
 
