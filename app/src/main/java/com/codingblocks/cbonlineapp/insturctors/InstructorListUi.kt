@@ -75,7 +75,6 @@ class InstructorListUi : AnkoComponent<ViewGroup> {
                 textColor = Color.parseColor("#000000")
                 textSize = 14f
             }.lparams(width = dip(0), height = dip(wrapContent)) {
-                marginStart = dip(16)
                 topMargin = dip(8)
                 marginEnd = dip(8)
                 topToBottom = instructorImgView.id
