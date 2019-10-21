@@ -1,10 +1,10 @@
 ## How to Contribute
 
 ### Raising an issue:
- This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well.
+ This is an Open Source project and we would be happy to invite contributors who report bugs, file feature requests, and submit pull requests.
  This project adheres to the Contributor Covenant code of conduct.
  By participating, you are expected to uphold this code style.
- Please report issues here [Issues - coding-blocks/CBOnlineApp](https://github.com/coding-blocks/CBOnlineApp/issues)
+ Please report issues here: [Issues - coding-blocks/CBOnlineApp](https://github.com/coding-blocks/CBOnlineApp/issues)
 
 ### Branch Policy
 
@@ -14,7 +14,7 @@ Go to the repository on GitHub at https://github.com/coding-blocks/CBOnlineApp.
 
 Click the “Fork” button at the top right.
 
-You’ll now have your copy of the original CBOnlineApp repository in your GitHub account.
+Now, You’ll have your copy of the original CBOnlineApp repository in your GitHub account.
 
 Open a terminal/shell.
 
@@ -24,9 +24,9 @@ Type
 
 where 'username' is your username.
 
-You’ll now have a local copy of your version of the original CBOnlineApp repository.
+You’ll now have a local copy of the original CBOnlineApp repository.
 
-#### Change into that project directory (CBOnlineApp):
+#### Change into your local version of project directory (CBOnlineApp):
 
 `$ cd CBOnlineApp`
 
@@ -44,7 +44,7 @@ You’ll now have a local copy of your version of the original CBOnlineApp repos
 
 `git push` them back to GitHub. These will go to your version of the repository.
 
-#### Squashing your's changes
+#### Squashing yours's changes
 Before you make Pull Request, you should squash your commits into one.
 
 Go into the directory for the project and type:
