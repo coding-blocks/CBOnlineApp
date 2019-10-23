@@ -10,4 +10,7 @@ abstract class CourseDao : BaseDao<CourseModel> {
 
     @Query("SElECT * FROM CourseModel ")
     abstract fun getCourses(): LiveData<List<CourseModel>>
+
+    @Query("DELETE FROM CourseModel")
+    abstract suspend fun nukeTable()
 }

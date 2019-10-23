@@ -9,7 +9,9 @@ import androidx.room.PrimaryKey
     indices = [Index("crCourseId")],
     foreignKeys = [ForeignKey(entity = CourseModel::class,
         parentColumns = ["cid"],
-        childColumns = ["crCourseId"])])
+        childColumns = ["crCourseId"],
+        onDelete = ForeignKey.CASCADE
+    )])
 data class CourseFeatureModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,

@@ -29,7 +29,6 @@ import com.codingblocks.cbonlineapp.jobs.JobsActivity
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
@@ -106,8 +105,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setUpFragment() {
         val transaction = supportFragmentManager.beginTransaction()
-        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN && !JWTUtils.isExpired(viewModel.prefs.SP_JWT_TOKEN_KEY)) {
+        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN) {
             // Update User Token on Login
+//            if (JWTUtils.isExpired(viewModel.prefs.SP_JWT_TOKEN_KEY))
             viewModel.refreshToken()
             val navMenu = nav_view.menu
             navMenu.findItem(R.id.nav_my_courses).isVisible = true

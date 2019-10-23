@@ -39,7 +39,6 @@ import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.crashlytics.android.Crashlytics
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment

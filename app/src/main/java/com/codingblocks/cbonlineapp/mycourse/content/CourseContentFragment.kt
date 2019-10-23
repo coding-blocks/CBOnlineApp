@@ -139,7 +139,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 sectionitem.add(sectionContent.section)
                 sectionListAdapter.notifyDataSetChanged()
 
-                consolidatedList.addAll(sectionContent.contents)
+                consolidatedList.addAll(sectionContent.contents.sortedBy { it.order })
                 sectionItemsAdapter.submitList(consolidatedList)
             }
             contentShimmer.isVisible = SectionContent.isEmpty()
