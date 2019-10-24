@@ -3,8 +3,6 @@ package com.codingblocks.cbonlineapp.home.mycourses
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Config
-import androidx.paging.toLiveData
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.crashlytics.android.Crashlytics
@@ -16,7 +14,7 @@ class MyCoursesViewModel(
     var message: MutableLiveData<String> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
 
-    fun getMyRuns() = repository.getMyRuns().toLiveData(Config(5, enablePlaceholders = false))
+    fun getMyRuns() = repository.getMyRuns()
 
     fun getTopRun() = repository.getTopRun()
 
@@ -61,8 +59,7 @@ class MyCoursesViewModel(
                                                                 if (instructorResponse.isSuccessful) {
                                                                     instructorResponse.body()?.run {
                                                                         viewModelScope.launch {
-                                                                            courseRun.course?.id?.let { it1
-                                                                                ->
+                                                                            courseRun.course?.id?.let { it1 ->
                                                                                 repository.insertInstructor(this@run, it1)
                                                                             }
                                                                         }

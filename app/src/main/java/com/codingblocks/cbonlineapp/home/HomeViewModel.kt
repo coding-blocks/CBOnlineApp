@@ -3,8 +3,6 @@ package com.codingblocks.cbonlineapp.home
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Config
-import androidx.paging.toLiveData
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.CarouselCards
@@ -17,9 +15,9 @@ class HomeViewModel(
     var carouselError: MutableLiveData<String> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
 
-    fun getAllCourses() = repository.getAllCourses().toLiveData(Config(5, enablePlaceholders = false))
+    fun getAllCourses() = repository.getAllCourses()
 
-    fun getRecommendedCourses() = repository.getRecommendedCourses().toLiveData(Config(5, enablePlaceholders = false))
+    fun getRecommendedCourses() = repository.getRecommendedCourses()
 
     fun fetchRecommendedCourses() {
         Clients.onlineV2JsonApi.getRecommendedCourses()

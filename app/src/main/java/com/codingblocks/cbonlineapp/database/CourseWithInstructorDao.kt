@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.database
 
 import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -35,7 +34,7 @@ interface CourseWithInstructorDao {
 	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
        WHERE r.crAttemptId IS NULL
     """)
-    fun getCourses(): DataSource.Factory<Int, CourseInstructorPair>
+    fun getCourses(): LiveData<List<CourseInstructorPair>>
 
     @Transaction
     @Query("""
@@ -43,7 +42,7 @@ interface CourseWithInstructorDao {
 	    INNER JOIN CourseModel c ON c.cid = r.crCourseId
         WHERE r.crAttemptId IS NULL AND recommended = 1
             """)
-    fun getRecommendedCourses(): DataSource.Factory<Int, CourseInstructorPair>
+    fun getRecommendedCourses(): LiveData<List<CourseInstructorPair>>
 
     @Transaction
     @Query("""
@@ -51,7 +50,7 @@ interface CourseWithInstructorDao {
 	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
        WHERE r.crAttemptId IS NOT NULL ORDER BY hits DESC,crEnrollmentEnd DESC
     """)
-    fun getMyRuns(): DataSource.Factory<Int, CourseInstructorPair>
+    fun getMyRuns(): LiveData<List<CourseInstructorPair>>
 
     @Query("""
         SELECT * FROM RunModel r

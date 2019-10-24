@@ -11,9 +11,7 @@ import androidx.room.PrimaryKey
         ForeignKey(
             entity = CourseModel::class,
             parentColumns = ["cid"],
-            childColumns = ["crCourseId"],
-            onDelete = ForeignKey.CASCADE
-        )
+            childColumns = ["crCourseId"])
     ]
 )
 open class RunModel(

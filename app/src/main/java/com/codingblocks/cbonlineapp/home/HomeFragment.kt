@@ -19,8 +19,8 @@ import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.TimerTask
 import java.util.Timer
+import java.util.TimerTask
 
 class HomeFragment : Fragment(), AnkoLogger {
 
@@ -85,14 +85,20 @@ class HomeFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        viewModel.getRecommendedCourses().observer(this) {
-            if (it.isNotEmpty()) {
-                courseDataAdapter.submitList(it)
+        viewModel.getRecommendedCourses().observer(this) { list ->
+            if (list.isNotEmpty()) {
+                list.forEach {
+                    if (it.instructor.isEmpty()) {
+                        return@forEach
+                    } else {
+                        courseDataAdapter.submitList(list)
+                    }
+                }
                 ui.shimmerLayout.stopShimmer()
             } else {
                 viewModel.fetchRecommendedCourses()
             }
-            ui.shimmerLayout.isVisible = it.isEmpty()
+            ui.shimmerLayout.isVisible = list.isEmpty()
         }
     }
 
