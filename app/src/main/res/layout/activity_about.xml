@@ -52,7 +52,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:letterSpacing="0.5"
+                android:letterSpacing="0.25"
                 android:text="@string/tollfree_number"
                 android:textAlignment="center"
                 android:textColor="@color/black"
