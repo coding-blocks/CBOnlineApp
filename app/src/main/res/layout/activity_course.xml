@@ -444,6 +444,12 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="72dp"
                         android:id="@+id/feature_icon_1"
@@ -459,6 +465,14 @@
                         android:maxWidth="100dp"
                         android:text="100 + lecture\n Video Content"
                         android:textColor="@android:color/black" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="72dp"
@@ -476,6 +490,8 @@
                         android:text="Revisit and\nRevise Topics"
                         android:textColor="@android:color/black" />
 
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -486,6 +502,12 @@
                     android:layout_marginEnd="24dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="72dp"
@@ -503,6 +525,14 @@
                         android:text="Certificate of\nCompletion"
                         android:textColor="@android:color/black" />
 
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="72dp"
                         android:id="@+id/feature_icon_4"
@@ -519,6 +549,8 @@
                         android:maxWidth="100dp"
                         android:text="24x7 Mentor\nSupport"
                         android:textColor="@android:color/black" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
                 <TextView
