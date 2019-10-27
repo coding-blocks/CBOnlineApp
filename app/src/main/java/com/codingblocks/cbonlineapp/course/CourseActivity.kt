@@ -116,119 +116,124 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         instructorRv.layoutManager = LinearLayoutManager(this)
         instructorRv.adapter = instructorAdapter
 
-        viewModel.getInstructorWithCourseId(id).observer(this) {
-            instructorAdapter.setData(it as ArrayList<InstructorModel>)
-            var instructors = "Mentors: "
-            for (i in it.indices) {
-                if (i == 0) {
-                    instructors += it[i].name
-                } else if (i == 1) {
-                    instructors += ", ${it[i].name}"
-                } else if (i >= 2) {
-                    instructors += "+ " + (it.size - 2) + " more"
-                    break
+        viewModel.getInstructors(id)
+            .observer(this) {
+                if (!it.isNullOrEmpty()) {
+                    instructorAdapter.setData(it as ArrayList<InstructorModel>)
+                    var instructors = "Mentors: "
+                    for (i in it.indices) {
+                        if (i == 0) {
+                            instructors += it[i].name
+                        } else if (i == 1) {
+                            instructors += ", ${it[i].name}"
+                        } else if (i >= 2) {
+                            instructors += "+ " + (it.size - 2) + " more"
+                            break
+                        }
+                        coursePageMentors.text = instructors
+                    }
                 }
-                coursePageMentors.text = instructors
             }
-        }
     }
 
     private fun fetchCourse() {
-        viewModel.fetchedCourse.observeOnce { course ->
 
-            fetchInstructors(course.id)
-            viewModel.getCourseFeatures(courseId).observer(this) {
-                it.forEachIndexed { index, courseFeatures ->
-                    when (index) {
-                        0 -> {
-                            feature_icon_1.loadImage(courseFeatures.icon, scale = true)
-                            features_text_1.text = courseFeatures.text
-                        }
-                        1 -> {
-                            feature_icon_2.loadImage(courseFeatures.icon, scale = true)
-                            features_text_2.text = courseFeatures.text
-                        }
-                        2 -> {
-                            feature_icon_3.loadImage(courseFeatures.icon, scale = true)
-                            features_text_3.text = courseFeatures.text
-                        }
-                        3 -> {
-                            feature_icon_4.loadImage(courseFeatures.icon, scale = true)
-                            features_text_4.text = courseFeatures.text
-                        }
-                    }
-                }
-            }
-
-            batchAdapter = BatchesAdapter(ArrayList(), object : OnCartItemClickListener {
-                override fun onItemClick(id: String, name: String) {
-                    addToCart(id, name)
-                }
-            })
-            batchRv.layoutManager =
-                LinearLayoutManager(this@CourseActivity, LinearLayoutManager.HORIZONTAL, false)
-            batchRv.adapter = batchAdapter
-            batchSnapHelper.attachToRecyclerView(batchRv)
-            setImageAndTitle(course.logo, course.title)
-            coursePageSubtitle.text = course.subtitle
-            if (course.faq.isNullOrEmpty()) {
-                faqMarkdown.isVisible = false
-                faqTitleTv.isVisible = false
-                faqView.isVisible = false
-            } else {
-                faqMarkdown.loadMarkdown(course.faq)
-            }
-            coursePageSummary.loadMarkdown(course.summary)
-            trialBtn.setOnClickListener {
-                if (course.runs != null) {
-                    viewModel.enrollTrialProgress.observeOnce {
-                        Components.showconfirmation(this@CourseActivity, "trial")
-                    }
-                    viewModel.enrollTrial(course.runs?.get(0)?.id ?: "")
-                } else {
-                    toast("No available runs right now ! Please check back later")
-                }
-            }
-            course.runs?.let { batchAdapter.setData(it) }
-            buyBtn.setOnClickListener {
-                if (course.runs != null) {
-                    focusOnView(scrollView, batchRv)
-                } else {
-                    toast("No available runs right now ! Please check back later")
-                }
-            }
-            fetchTags(course)
-            showPromoVideo(course.promoVideo)
-            fetchRating(course.id)
-            if (!course.runs.isNullOrEmpty()) {
-                val sections = course.runs?.get(0)?.sections
-                val sectionsList = ArrayList<Sections>()
-                rvExpendableView.layoutManager = LinearLayoutManager(this@CourseActivity)
-                rvExpendableView.adapter = sectionAdapter
-                runOnUiThread {
-                    sections?.forEachIndexed { index, section ->
-                        GlobalScope.launch(Dispatchers.IO) {
-                            val response2 = viewModel.getCourseSection(section.id)
-                            if (response2.isSuccessful) {
-                                val value = response2.body()
-                                value?.order = index
-                                if (value != null) {
-                                    sectionsList.add(value)
+        viewModel.fetchedCourse
+            .observer(this) { course ->
+                fetchInstructors(course.id)
+                viewModel.getCourseFeatures(courseId).observer(this) {
+                    if (it.isNotEmpty())
+                        it.forEachIndexed { index, courseFeatures ->
+                            when (index) {
+                                0 -> {
+                                    feature_icon_1.loadImage(courseFeatures.icon, scale = true)
+                                    features_text_1.text = courseFeatures.text
                                 }
-                                if (sectionsList.size == sections.size) {
-                                    sectionsList.sortBy { it.order }
-                                    runOnUiThread {
-                                        sectionAdapter.setData(sectionsList)
+                                1 -> {
+                                    feature_icon_2.loadImage(courseFeatures.icon, scale = true)
+                                    features_text_2.text = courseFeatures.text
+                                }
+                                2 -> {
+                                    feature_icon_3.loadImage(courseFeatures.icon, scale = true)
+                                    features_text_3.text = courseFeatures.text
+                                }
+                                3 -> {
+                                    feature_icon_4.loadImage(courseFeatures.icon, scale = true)
+                                    features_text_4.text = courseFeatures.text
+                                }
+                            }
+                        }
+                }
+
+                batchAdapter = BatchesAdapter(ArrayList(), object : OnCartItemClickListener {
+                    override fun onItemClick(id: String, name: String) {
+                        addToCart(id, name)
+                    }
+                })
+                batchRv.layoutManager =
+                    LinearLayoutManager(this@CourseActivity, LinearLayoutManager.HORIZONTAL, false)
+                batchRv.adapter = batchAdapter
+                batchSnapHelper.attachToRecyclerView(batchRv)
+                setImageAndTitle(course.logo, course.title)
+                coursePageSubtitle.text = course.subtitle
+                if (course.faq.isNullOrEmpty()) {
+                    faqMarkdown.isVisible = false
+                    faqTitleTv.isVisible = false
+                    faqView.isVisible = false
+                } else {
+                    faqMarkdown.loadMarkdown(course.faq)
+                }
+                coursePageSummary.loadMarkdown(course.summary)
+                trialBtn.setOnClickListener {
+                    if (course.runs != null) {
+                        viewModel.enrollTrialProgress.observeOnce {
+                            Components.showconfirmation(this@CourseActivity, "trial")
+                        }
+                        viewModel.enrollTrial(course.runs?.get(0)?.id ?: "")
+                    } else {
+                        toast("No available runs right now ! Please check back later")
+                    }
+                }
+                course.runs?.let { batchAdapter.setData(it) }
+                buyBtn.setOnClickListener {
+                    if (course.runs != null) {
+                        focusOnView(scrollView, batchRv)
+                    } else {
+                        toast("No available runs right now ! Please check back later")
+                    }
+                }
+                fetchTags(course)
+                showPromoVideo(course.promoVideo)
+                fetchRating(course.id)
+                if (!course.runs.isNullOrEmpty()) {
+                    val sections = course.runs?.get(0)?.sections
+                    val sectionsList = ArrayList<Sections>()
+                    rvExpendableView.layoutManager = LinearLayoutManager(this@CourseActivity)
+                    rvExpendableView.adapter = sectionAdapter
+                    runOnUiThread {
+                        sections?.forEachIndexed { index, section ->
+                            GlobalScope.launch(Dispatchers.IO) {
+                                val response2 = viewModel.getCourseSection(section.id)
+                                if (response2.isSuccessful) {
+                                    val value = response2.body()
+                                    value?.order = index
+                                    if (value != null) {
+                                        sectionsList.add(value)
                                     }
+                                    if (sectionsList.size == sections.size) {
+                                        sectionsList.sortBy { it.order }
+                                        runOnUiThread {
+                                            sectionAdapter.setData(sectionsList)
+                                        }
+                                    }
+                                } else {
+                                    toast("Error ${response2.code()}")
                                 }
-                            } else {
-                                toast("Error ${response2.code()}")
                             }
                         }
                     }
                 }
             }
-        }
         viewModel.getCourse(courseId)
     }
 

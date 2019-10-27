@@ -30,6 +30,7 @@ import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
+import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.ACCESS_TOKEN
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -143,7 +144,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 fetchToken(data)
             }
         }
-
         checkForUpdates()
     }
 
@@ -174,7 +174,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun fetchToken(data: Uri) {
         val grantCode = data.getQueryParameter("code") as String
-        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY == PreferenceHelper.ACCESS_TOKEN) {
+        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY == ACCESS_TOKEN) {
             viewModel.fetchToken(grantCode)
             viewModel.fetchTokenProgress.observeOnce {
                 if (it) {
@@ -317,6 +317,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+        val data = this.intent.data
+        if (data != null && data.isHierarchical) {
+            if (data.getQueryParameter("code") != null) {
+                fetchToken(data)
+            }
+        }
     }
 
     override fun onResume() {

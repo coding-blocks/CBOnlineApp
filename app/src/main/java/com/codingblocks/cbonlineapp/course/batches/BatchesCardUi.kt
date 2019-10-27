@@ -111,7 +111,7 @@ class BatchesCardUi : AnkoComponent<ViewGroup> {
                         enrollBtn = button("Enroll Now") {
                             textColor = resources.getColor(R.color.white)
                             typeface = font
-                            background = resources.getDrawable(R.drawable.button_background)
+                            background = context.getDrawable(R.drawable.button_background)
                         }.lparams {
                             marginStart = dip(4)
                             bottomMargin = dip(4)
@@ -137,7 +137,7 @@ class BatchesCardUi : AnkoComponent<ViewGroup> {
                         trialBtn = button("Start Free Trial") {
                             textColor = resources.getColor(R.color.salmon)
                             typeface = font
-                            background = resources.getDrawable(R.drawable.button_background_outline)
+                            background = context.getDrawable(R.drawable.button_background_outline)
                         }
                     }.lparams(width = matchParent, height = wrapContent) {
                     }

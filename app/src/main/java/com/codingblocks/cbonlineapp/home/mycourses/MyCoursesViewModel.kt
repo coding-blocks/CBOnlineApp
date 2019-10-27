@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.home.mycourses
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.crashlytics.android.Crashlytics
@@ -11,7 +12,7 @@ import kotlinx.coroutines.launch
 class MyCoursesViewModel(
     private val repository: MyCoursesRepository
 ) : ViewModel() {
-    var message: MutableLiveData<String> = MutableLiveData()
+    var message: MutableLiveData<Throwable> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getMyRuns() = repository.getMyRuns()
@@ -73,11 +74,14 @@ class MyCoursesViewModel(
                                 }
                             }
                         }
+                        progress.postValue(false)
+                    } else if (response.code() == 401) {
+                        message.postValue(Throwable(UNAUTHORIZED))
                         progress.value = false
                     }
                 }
                 error?.let {
-                    message.postValue(it.localizedMessage)
+                    message.postValue(it)
                     progress.value = false
                 }
             })

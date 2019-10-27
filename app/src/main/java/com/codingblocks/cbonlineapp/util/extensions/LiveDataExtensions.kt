@@ -61,3 +61,11 @@ fun pageChangeCallback(
             fnScrolled(position, positionOffset, positionOffsetPixels)
     }
 }
+
+class NonNullMediatorLiveData<T> : MediatorLiveData<T>()
+
+fun <T> LiveData<T>.nonNull(): NonNullMediatorLiveData<T> {
+    val mediator: NonNullMediatorLiveData<T> = NonNullMediatorLiveData()
+    mediator.addSource(this) { nullable -> nullable?.let { mediator.value = it } }
+    return mediator
+}

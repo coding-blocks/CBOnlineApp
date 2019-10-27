@@ -28,6 +28,14 @@ interface CourseWithInstructorDao {
         """)
     fun getInstructorWithCourseId(courseID: String): LiveData<List<InstructorModel>>
 
+    @Query("""
+        SELECT i.* FROM InstructorModel i
+        INNER JOIN coursewithinstructor ON
+        i.uid = coursewithinstructor.instructor_id
+        WHERE coursewithinstructor.course_id = :courseID
+        """)
+    suspend fun getInstructors(courseID: String): List<InstructorModel>
+
     @Transaction
     @Query("""
        SELECT c.*,r.* FROM RunModel r

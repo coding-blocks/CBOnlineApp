@@ -1,15 +1,20 @@
 package com.codingblocks.cbonlineapp.course
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.FeaturesDao
+import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Course
+import com.codingblocks.onlineapi.models.CourseFeatures
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CourseViewModel(
     private val courseWithInstructorDao: CourseWithInstructorDao,
@@ -22,15 +27,33 @@ class CourseViewModel(
 
     var image: MutableLiveData<String> = MutableLiveData()
     var name: MutableLiveData<String> = MutableLiveData()
+    lateinit var instructors: MutableLiveData<List<InstructorModel>>
+    lateinit var features: MutableLiveData<List<CourseFeatures>>
 
     var fetchedCourse: MutableLiveData<Course> = MutableLiveData()
-
     var addedToCartProgress: MutableLiveData<Boolean> = MutableLiveData()
     var clearCartProgress: MutableLiveData<Boolean> = MutableLiveData()
     var enrollTrialProgress: MutableLiveData<Boolean> = MutableLiveData()
 
-    fun getInstructorWithCourseId(id: String) = courseWithInstructorDao.getInstructorWithCourseId(id)
+    fun getInstructors(id: String): LiveData<List<InstructorModel>> {
+        if (!::instructors.isInitialized) {
+            instructors = MutableLiveData()
+            viewModelScope.launch {
+                instructors.postValue(courseWithInstructorDao.getInstructors(id))
+            }
+        }
+        return instructors
+    }
 
+    fun getCourseFeatures(id: String): LiveData<List<CourseFeatures>> {
+        if (!::features.isInitialized) {
+            features = MutableLiveData()
+            viewModelScope.launch {
+                features.postValue(featuresDao.getFeatures(id))
+            }
+        }
+        return features
+    }
     fun getCart() {
         Clients.api.getCart().enqueue(retrofitCallback { _, response ->
             response?.body().let { json ->
@@ -56,8 +79,6 @@ class CourseViewModel(
                 fetchedCourse.value = response.body()
         })
     }
-
-    fun getCourseFeatures(courseId: String) = featuresDao.getfeatures(courseId)
 
     fun getCourseRating(id: String) = liveData(Dispatchers.IO) {
         emit(repository.getRating(id))

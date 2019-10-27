@@ -19,16 +19,20 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.caverock.androidsvg.SVG
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.home.CourseDataAdapter
 import com.codingblocks.cbonlineapp.home.HomeFragmentUi
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.NetworkUtils.okHttpClient
+import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.ACCESS_TOKEN
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
+import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -88,8 +92,23 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             ui.swipeRefreshLayout.isRefreshing = it
         }
 
-        viewModel.message.observer(viewLifecycleOwner) {
-            ui.snackbarView.longSnackbar(getString(R.string.offline_message))
+        viewModel.message.observer(viewLifecycleOwner) { error ->
+            if (error.message == UNAUTHORIZED) {
+                getPrefs()?.SP_ACCESS_TOKEN_KEY = ACCESS_TOKEN
+                Components.showconfirmation(requireContext(), UNAUTHORIZED) { status, dialog ->
+                    if (status) {
+                        Components.openChrome(
+                            requireContext(),
+                            "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
+                        )
+                    } else {
+                        requireActivity().onBackPressed()
+                    }
+                    dialog.dismiss()
+                }
+            } else {
+                ui.snackbarView.longSnackbar(getString(R.string.offline_message))
+            }
         }
 
         if (Build.VERSION.SDK_INT >= N_MR1)

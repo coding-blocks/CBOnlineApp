@@ -15,7 +15,7 @@ import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.singleTop
 
 object Components {
-    fun showconfirmation(context: Context, type: String) {
+    fun showconfirmation(context: Context, type: String, callback: (state: Boolean, dialog: AlertDialog) -> Unit = { status: Boolean, dialog: AlertDialog -> }) {
         val confirmDialog = AlertDialog.Builder(context).create()
         val updateView = context.layoutInflater.inflate(R.layout.custom_dialog, null)
         when (type) {
@@ -46,6 +46,11 @@ object Components {
                 updateView.description.text =
                     "This section is unavailable as your course has been expired.Please buy an extension to watch your videos"
             }
+            UNAUTHORIZED -> {
+                updateView.okBtn.text = "Log In"
+                updateView.description.text =
+                    "You have been logged out of this account.Please login again to Continue"
+            }
         }
         updateView.okBtn.setOnClickListener {
             when (type) {
@@ -62,10 +67,20 @@ object Components {
                 "unavailable" -> {
                     confirmDialog.dismiss()
                 }
+                UNAUTHORIZED -> {
+                    callback(true, confirmDialog)
+                }
             }
         }
         updateView.cancelBtn.setOnClickListener {
-            confirmDialog.dismiss()
+            when (type) {
+                UNAUTHORIZED -> {
+                    callback(true, confirmDialog)
+                }
+                else -> {
+                    confirmDialog.dismiss()
+                }
+            }
         }
         confirmDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         confirmDialog.setView(updateView)
