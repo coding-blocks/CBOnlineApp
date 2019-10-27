@@ -280,7 +280,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 p2: Boolean
             ) {
                 if (!p2) {
-                    youtubePlayerInstance?.loadVideo(getYotubeVideoId(promoVideo))
+                    youtubePlayerInstance?.cueVideo(getYotubeVideoId(promoVideo))
                 }
             }
         }
