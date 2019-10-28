@@ -12,7 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class SheetDialog(context: Context, @StyleRes theme: Int) : BottomSheetDialog(context, SheetDialog.getThemeResId(context, theme)) {
 
-    override fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window!!.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
