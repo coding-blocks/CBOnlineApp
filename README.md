@@ -1,4 +1,5 @@
-# CBOnlineApp
+<h1 align="center"><a href="https://online.codingblocks.com">
+   <img src="https://user-images.githubusercontent.com/5569219/58253396-0422f400-7d86-11e9-812e-68b0e11c1dc9.png" alt="Coding Blocks Online App"/></h1>
 😎⚡️Online App for Coding Blocks Online
 
 [![codebeat badge](https://codebeat.co/badges/29c4e81e-f936-47a5-8d9f-2ac15cd9b13d)](https://codebeat.co/projects/github-com-coding-blocks-cbonlineapp-development)
