@@ -187,7 +187,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 trialBtn.setOnClickListener {
                     if (course.runs != null) {
                         viewModel.enrollTrialProgress.observeOnce {
-                            Components.showconfirmation(this@CourseActivity, "trial")
+                            Components.showConfirmation(this@CourseActivity, "trial")
                         }
                         viewModel.enrollTrial(course.runs?.get(0)?.id ?: "")
                     } else {

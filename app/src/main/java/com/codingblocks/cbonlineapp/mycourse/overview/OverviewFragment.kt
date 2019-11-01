@@ -20,10 +20,8 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.ProductExtensionsItem
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
-import kotlinx.android.synthetic.main.custom_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.fragment_overview.view.*
-import kotlinx.android.synthetic.main.fragment_overview.view.description
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.longToast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -152,23 +150,11 @@ class OverviewFragment : Fragment(), AnkoLogger {
     }
 
     private fun confirmReset() {
-        val builder = android.app.AlertDialog.Builder(requireContext())
-        val inflater = layoutInflater
-        val customView = inflater.inflate(R.layout.custom_dialog, null)
-        customView.okBtn.text = "Yes"
-        customView.cancelBtn.text = "No"
-        customView.description.text = "Are you sure you want to reset progress?"
-        builder.setCancelable(false)
-        builder.setView(customView)
-        val dialog = builder.create()
-        customView.cancelBtn.setOnClickListener {
-            dialog.dismiss()
+        Components.showConfirmation(requireContext(), "reset") {
+            if (it) {
+                viewModel.resetProgress()
+            }
         }
-        customView.okBtn.setOnClickListener {
-            viewModel.resetProgress()
-        }
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.show()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

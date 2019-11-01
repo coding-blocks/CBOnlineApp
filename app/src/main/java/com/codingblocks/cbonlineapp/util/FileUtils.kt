@@ -2,12 +2,9 @@ package com.codingblocks.cbonlineapp.util
 
 import android.content.Context
 import android.os.Environment
-import androidx.appcompat.app.AlertDialog
-import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.folderSize
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import kotlinx.android.synthetic.main.custom_dialog.view.*
-import org.jetbrains.anko.layoutInflater
 import java.io.File
 
 const val FILE_THRESHOLD = 256000
@@ -55,25 +52,10 @@ object FileUtils {
     }
 
     fun showIfCleanDialog(context: Context, onCleanDialogListener: OnCleanDialogListener) {
-        val confirmDialog = AlertDialog.Builder(context).create()
-        val dialogView = context.layoutInflater.inflate(R.layout.custom_dialog, null)
-        dialogView.title.text = context.getString(R.string.clean_dialog_title)
-        dialogView.description.text = context.getString(R.string.clean_dialog_description)
-        dialogView.okBtn.text = context.getString(R.string.clean_dialog_okBtn)
-        dialogView.cancelBtn.text = context.getString(R.string.clean_dialog_cancelBtn)
-
-        dialogView.okBtn.setOnClickListener {
+        Components.showConfirmation(context, "file") {
             clearOldestDirectory(context)
             onCleanDialogListener.onComplete()
-            confirmDialog.dismiss()
         }
-        dialogView.cancelBtn.setOnClickListener {
-            confirmDialog.dismiss()
-        }
-        confirmDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        confirmDialog.setView(dialogView)
-        confirmDialog.setCancelable(false)
-        confirmDialog.show()
     }
 
     fun checkDownloadFileExists(context: Context, lectureId: String): Boolean {

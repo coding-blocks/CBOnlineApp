@@ -68,7 +68,7 @@ class BatchesAdapter(private var batchesData: ArrayList<Runs>?, var listener: On
                 ui.trialBtn.setOnClickListener {
                     Clients.api.enrollTrial(this.id).enqueue(retrofitCallback { throwable, response ->
                         if (response?.isSuccessful!!) {
-                            Components.showconfirmation(context, "trial")
+                            Components.showConfirmation(context, "trial")
                         }
                     })
                 }

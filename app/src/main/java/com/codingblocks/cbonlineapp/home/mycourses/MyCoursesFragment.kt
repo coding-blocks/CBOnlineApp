@@ -95,7 +95,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         viewModel.message.observer(viewLifecycleOwner) { error ->
             if (error.message == UNAUTHORIZED) {
                 getPrefs()?.SP_ACCESS_TOKEN_KEY = ACCESS_TOKEN
-                Components.showconfirmation(requireContext(), UNAUTHORIZED) { status, dialog ->
+                Components.showConfirmation(requireContext(), UNAUTHORIZED) { status ->
                     if (status) {
                         Components.openChrome(
                             requireContext(),
@@ -104,7 +104,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                     } else {
                         requireActivity().onBackPressed()
                     }
-                    dialog.dismiss()
                 }
             } else {
                 ui.snackbarView.longSnackbar(getString(R.string.offline_message))
@@ -191,5 +190,9 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             // Todo Crash Here null pointer
             sM?.dynamicShortcuts = shortcutList
         }
+    }
+
+    fun refreshCourses() {
+        viewModel.fetchMyCourses(true)
     }
 }

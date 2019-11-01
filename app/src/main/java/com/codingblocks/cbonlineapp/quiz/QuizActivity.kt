@@ -43,7 +43,7 @@ class QuizActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount == 0) {
-            Components.showconfirmation(this, "exit")
+            Components.showConfirmation(this, "exit")
         } else {
             supportFragmentManager.popBackStack()
         }

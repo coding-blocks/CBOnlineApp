@@ -15,7 +15,7 @@ import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.singleTop
 
 object Components {
-    fun showconfirmation(context: Context, type: String, callback: (state: Boolean, dialog: AlertDialog) -> Unit = { status: Boolean, dialog: AlertDialog -> }) {
+    fun showConfirmation(context: Context, type: String, callback: (state: Boolean) -> Unit = { status: Boolean -> }) {
         val confirmDialog = AlertDialog.Builder(context).create()
         val updateView = context.layoutInflater.inflate(R.layout.custom_dialog, null)
         when (type) {
@@ -46,6 +46,29 @@ object Components {
                 updateView.description.text =
                     "This section is unavailable as your course has been expired.Please buy an extension to watch your videos"
             }
+            "logout" -> {
+                updateView.okBtn.text = "Yes"
+                updateView.cancelBtn.text = "No"
+                updateView.description.text = "Are you sure you want to logout?"
+            }
+            "reset" -> {
+                updateView.okBtn.text = "Yes"
+                updateView.cancelBtn.text = "No"
+                updateView.description.text = "Are you sure you want to reset progress?"
+            }
+            "quiz" -> {
+                updateView.okBtn.text = "Yes"
+                updateView.cancelBtn.text = "Cancel"
+                updateView.description.text = "Are you sure to submit the quiz?"
+            }
+            "file" -> {
+                updateView.apply {
+                    title.text = context.getString(R.string.clean_dialog_title)
+                    description.text = context.getString(R.string.clean_dialog_description)
+                    okBtn.text = context.getString(R.string.clean_dialog_okBtn)
+                    cancelBtn.text = context.getString(R.string.clean_dialog_cancelBtn)
+                }
+            }
             UNAUTHORIZED -> {
                 updateView.okBtn.text = "Log In"
                 updateView.description.text =
@@ -53,6 +76,7 @@ object Components {
             }
         }
         updateView.okBtn.setOnClickListener {
+            confirmDialog.dismiss()
             when (type) {
                 "trial" -> context.startActivity(context.intentFor<HomeActivity>("courseRun" to "mycourses").singleTop())
                 "verify" -> {
@@ -64,21 +88,16 @@ object Components {
                 "wifi" -> {
                     context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
                 }
-                "unavailable" -> {
-                    confirmDialog.dismiss()
-                }
-                UNAUTHORIZED -> {
-                    callback(true, confirmDialog)
+                else -> {
+                    callback(true)
                 }
             }
         }
         updateView.cancelBtn.setOnClickListener {
+            confirmDialog.dismiss()
             when (type) {
                 UNAUTHORIZED -> {
-                    callback(true, confirmDialog)
-                }
-                else -> {
-                    confirmDialog.dismiss()
+                    callback(false)
                 }
             }
         }

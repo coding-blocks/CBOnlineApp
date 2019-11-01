@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.quiz
 
-import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.util.SparseArray
@@ -13,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.viewpager.widget.ViewPager
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.QUIZ_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.QUIZ_ID
 import com.codingblocks.cbonlineapp.util.QUIZ_QNA
@@ -163,24 +163,9 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     }
 
     private fun confirmSubmitQuiz() {
-        val builder = AlertDialog.Builder(activity)
-        val inflater = requireActivity().layoutInflater
-        val customView = inflater.inflate(R.layout.custom_dialog, null)
-        customView.okBtn.text = "Yes"
-        customView.cancelBtn.text = "Cancel"
-        customView.description.text = "Are you sure to submit the quiz?"
-        builder.setCancelable(false)
-        builder.setView(customView)
-        val dialog = builder.create()
-        customView.cancelBtn.setOnClickListener {
-            dialog.dismiss()
-        }
-        customView.okBtn.setOnClickListener {
+        Components.showConfirmation(requireContext(), "quiz") {
             submitQuiz()
-            dialog.dismiss()
         }
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.show()
     }
 
     override fun onPageScrollStateChanged(state: Int) {

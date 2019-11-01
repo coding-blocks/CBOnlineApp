@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.home
 
-import android.annotation.TargetApi
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -10,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
@@ -29,7 +29,6 @@ import com.codingblocks.cbonlineapp.jobs.JobsActivity
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.ACCESS_TOKEN
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
@@ -43,11 +42,8 @@ import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_home.*
-import kotlinx.android.synthetic.main.custom_dialog.view.cancelBtn
-import kotlinx.android.synthetic.main.custom_dialog.view.description
 import kotlinx.android.synthetic.main.nav_header_home.view.*
 import kotlinx.android.synthetic.main.report_dialog.view.*
-import kotlinx.android.synthetic.main.report_dialog.view.okBtn
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.intentFor
@@ -106,7 +102,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setUpFragment() {
         val transaction = supportFragmentManager.beginTransaction()
-        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN) {
+        if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != ACCESS_TOKEN) {
             // Update User Token on Login
 //            if (JWTUtils.isExpired(viewModel.prefs.SP_JWT_TOKEN_KEY))
             viewModel.refreshToken()
@@ -128,7 +124,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Picasso.get().load(viewModel.prefs.SP_USER_IMAGE)
                     .placeholder(R.drawable.defaultavatar).fit().into(this)
             }
-        viewModel.setJWTToken()
         nav_view.getHeaderView(0).login_button.apply {
             text = resources.getString(R.string.logout)
         }
@@ -181,7 +176,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     fetchUser()
                     Toast.makeText(this@HomeActivity, "Logged In", Toast.LENGTH_SHORT).show()
                 } else {
-                    Components.showconfirmation(this@HomeActivity, "verify")
+                    Components.showConfirmation(this@HomeActivity, "verify")
                 }
             }
         }
@@ -191,6 +186,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewModel.getMe()
         viewModel.getMeProgress.observer(this) {
             if (it) {
+                (supportFragmentManager.findFragmentById(R.id.fragment_holder) as MyCoursesFragment?)?.refreshCourses()
                 setUser()
             }
         }
@@ -347,16 +343,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        menuInflater.inflate(R.menu.home_notifications, menu)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.home_notifications, menu)
 //        val menuItem = menu.findItem(R.id.action_notifications)
 //        if (viewModel.getNotificationCount() == 0) {
 //            menuItem.icon = resources.getDrawable(R.drawable.ic_notification)
 //        } else {
 //            menuItem.icon = resources.getDrawable(R.drawable.ic_notification_active)
 //        }
-//        return true
-//    }
+        return true
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_notifications -> {
@@ -371,10 +367,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         unregisterReceiver(updateUIReceiver)
     }
 
-    @TargetApi(25)
     private fun removeShortcuts() {
-        val shortcutManager = getSystemService(ShortcutManager::class.java)
-        shortcutManager.removeAllDynamicShortcuts()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            val shortcutManager = getSystemService(ShortcutManager::class.java) as ShortcutManager
+            shortcutManager.removeAllDynamicShortcuts()
+        }
     }
 
     // Navigation Drawer Methods
@@ -395,38 +392,25 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onDrawerOpened(drawerView: View) {}
 
     private fun confirmLogout() {
-        val builder = android.app.AlertDialog.Builder(this)
-        val inflater = layoutInflater
-        val customView = inflater.inflate(R.layout.custom_dialog, null)
-        customView.okBtn.text = "Yes"
-        customView.cancelBtn.text = "No"
-        customView.description.text = "Are you sure you want to logout?"
-        builder.setCancelable(false)
-        builder.setView(customView)
-        val dialog = builder.create()
-        customView.cancelBtn.setOnClickListener {
-            dialog.dismiss()
-        }
-        customView.okBtn.setOnClickListener {
-            if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != PreferenceHelper.ACCESS_TOKEN) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                    removeShortcuts()
+        Components.showConfirmation(this, "logout") {
+            if (it) {
+                if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != ACCESS_TOKEN) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                        removeShortcuts()
+                    }
+                    viewModel.invalidateToken()
                 }
-                viewModel.invalidateToken()
+                CBOnlineApp.mInstance.clearApplicationData()
+                startActivity(intentFor<LoginActivity>().singleTop())
+                finish()
             }
-            CBOnlineApp.mInstance.clearApplicationData()
-            startActivity(intentFor<LoginActivity>().singleTop())
-            finish()
-            dialog.dismiss()
         }
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.show()
     }
 
     override fun onClick(v: View) {
         when (v.id) {
             R.id.login_button -> {
-                if (viewModel.prefs.SP_ACCESS_TOKEN_KEY == PreferenceHelper.ACCESS_TOKEN) {
+                if (viewModel.prefs.SP_ACCESS_TOKEN_KEY == ACCESS_TOKEN) {
                     startActivity(intentFor<LoginActivity>().singleTop())
                     finish()
                 } else
@@ -437,10 +421,5 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 "https://account.codingblocks.com"
             )
         }
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
-        setUpFragment()
     }
 }

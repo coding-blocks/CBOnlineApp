@@ -16,7 +16,7 @@ import com.codingblocks.cbonlineapp.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CODE
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.Components.showconfirmation
+import com.codingblocks.cbonlineapp.util.Components.showConfirmation
 import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.FileUtils
@@ -100,7 +100,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
             setOnClickListener {
                 if (expired && content.premium) {
-                    showconfirmation(it.context, "expired")
+                    showConfirmation(it.context, "expired")
                 } else if (content.contentable != CODE) {
                     when (content.contentable) {
                         DOCUMENT -> context.startActivity(
@@ -137,7 +137,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                     }
                     starterListener?.updateProgress(content.ccid, content.progressId)
                 } else {
-                    showconfirmation(it.context, "unavailable")
+                    showConfirmation(it.context, "unavailable")
                 }
             }
         }
