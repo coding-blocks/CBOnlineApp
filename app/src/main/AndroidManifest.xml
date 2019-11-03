@@ -20,7 +20,6 @@
         android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:largeHeap="true"
-        android:hardwareAccelerated="false"
         android:allowClearUserData="true"         
         android:theme="@style/AppThemeMain">
         <activity
