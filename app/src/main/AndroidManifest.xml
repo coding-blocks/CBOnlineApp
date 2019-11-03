@@ -17,6 +17,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:largeHeap="true"
+        android:hardwareAccelerated="false"
+        android:allowClearUserData="true"         
         android:theme="@style/AppThemeMain">
         <activity
             android:name=".URLRouterActivity"
@@ -126,6 +131,21 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeMain" />
 
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.codingblocks.cbonlineapp"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+        
+        
         <receiver android:name=".util.DownloadBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
@@ -156,6 +176,7 @@
         <meta-data
             android:name="android.app.shortcuts"
             android:resource="@xml/shortcut" />
+        
     </application>
 
 </manifest>
