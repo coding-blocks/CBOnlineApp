@@ -25,5 +25,7 @@
     <dimen name="margin_medium">12dp</dimen>
     <dimen name="corner_radius">15dp</dimen>
     <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_extra_small">4dp</dimen>
+
 
 </resources>

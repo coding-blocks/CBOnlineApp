@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -56,9 +57,8 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     private val sectionItemsAdapter = SectionItemsAdapter()
     private var areLecturesLoaded: Boolean = false
     var popupWindowDogs: PopupWindow? = null
-    val mLayoutManager by lazy {
-        LinearLayoutManager(requireContext())
-    }
+    val mLayoutManager by lazy { LinearLayoutManager(requireContext()) }
+    private var filters: MutableLiveData<String> = MutableLiveData("")
 
     var sectionitem = ArrayList<SectionModel>()
 
@@ -88,6 +88,10 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             }
         }
 
+        completeSwitch.setOnClickListener {
+            filters.postValue(if (completeSwitch.isChecked) "UNDONE" else "")
+        }
+
         popupWindowDogs = popUpWindowSection()
         activity?.fab?.setOnClickListener {
             it as ExtendedFloatingActionButton
@@ -110,39 +114,8 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         rvExpendableView.layoutManager = mLayoutManager
         rvExpendableView.adapter = sectionItemsAdapter
 
-        viewModel.getAllContent().observer(this) { SectionContent ->
-            sectionitem.clear()
-            val consolidatedList = ArrayList<ListObject>()
-            SectionContent.forEach { sectionContent ->
-                var duration: Long = 0
-                var sectionComplete = 0
-                sectionContent.contents.forEach { content ->
-                    content.premium = sectionContent.section.premium
-                    if (content.progress == "DONE") {
-                        sectionComplete++
-                    }
-
-                    if (content.contentable == "lecture")
-                        duration += content.contentLecture.lectureDuration
-                    else if (content.contentable == "video") {
-                        duration += content.contentVideo.videoDuration
-                    }
-                    // Map SectionId to ContentModel
-                    content.sectionId = sectionContent.section.csid
-                }
-                consolidatedList.add(sectionContent.section.apply {
-                    totalContent = sectionContent.contents.size
-                    totalTime = duration
-                    completedContent = sectionComplete
-                    pos = consolidatedList.size
-                })
-                sectionitem.add(sectionContent.section)
-                sectionListAdapter.notifyDataSetChanged()
-
-                consolidatedList.addAll(sectionContent.contents.sortedBy { it.order })
-                sectionItemsAdapter.submitList(consolidatedList)
-            }
-            contentShimmer.isVisible = SectionContent.isEmpty()
+        filters.observer(this) {
+            getContent(it)
         }
 
         viewModel.progress.observer(viewLifecycleOwner) {
@@ -176,6 +149,49 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             }
         }
         sectionListAdapter.onSectionListClick = sectionListClickListener
+    }
+
+    private fun getContent(value: String) {
+
+        viewModel.getAllContent().observer(this) { SectionContent ->
+            sectionitem.clear()
+            val consolidatedList = ArrayList<ListObject>()
+            SectionContent.forEach { sectionContent ->
+                var duration: Long = 0
+                var sectionComplete = 0
+                sectionContent.contents.forEach { content ->
+                    content.premium = sectionContent.section.premium
+                    if (content.progress == "DONE") {
+                        sectionComplete++
+                    }
+
+                    if (content.contentable == "lecture")
+                        duration += content.contentLecture.lectureDuration
+                    else if (content.contentable == "video") {
+                        duration += content.contentVideo.videoDuration
+                    }
+                    // Map SectionId to ContentModel
+                    content.sectionId = sectionContent.section.csid
+                }
+                consolidatedList.add(sectionContent.section.apply {
+                    totalContent = sectionContent.contents.size
+                    totalTime = duration
+                    completedContent = sectionComplete
+                    pos = consolidatedList.size
+                })
+                sectionitem.add(sectionContent.section)
+                sectionListAdapter.notifyDataSetChanged()
+                if (value.isEmpty()) {
+                    consolidatedList.addAll(sectionContent.contents.sortedBy { it.order })
+                } else {
+                    consolidatedList.addAll(sectionContent.contents
+                        .filter { it.progress == value }
+                        .sortedBy { it.order })
+                }
+                sectionItemsAdapter.submitList(consolidatedList)
+            }
+            contentShimmer.isVisible = SectionContent.isEmpty()
+        }
     }
 
     override fun updateProgress(contentId: String, progressId: String) {

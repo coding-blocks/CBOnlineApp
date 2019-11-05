@@ -11,17 +11,34 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/aboutTv"
-            fontPath="fonts/nunitosans_semibold.ttf"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:layout_marginStart="@dimen/margin_small"
             android:layout_marginTop="@dimen/margin_medium"
-            android:text="Course Curriculum"
-            android:textColor="@android:color/black"
-            android:textSize="22sp"
-            tools:ignore="MissingPrefix" />
+            android:layout_marginEnd="@dimen/margin_small"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/aboutTv"
+                fontPath="fonts/nunitosans_semibold.ttf"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/course_curriculum"
+                android:textColor="@android:color/black"
+                android:textSize="22sp"
+                tools:ignore="MissingPrefix" />
+
+            <Switch
+                android:id="@+id/completeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show Completed "
+                app:theme="@style/ColorSwitchStyle" />
+
+        </LinearLayout>
 
         <View
             android:id="@+id/view1"
@@ -29,7 +46,7 @@
             android:layout_height="2dp"
             android:layout_marginStart="@dimen/margin_small"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_small"
             android:background="@color/black" />
 
         <HorizontalScrollView
@@ -40,7 +57,7 @@
             android:scrollbars="none">
 
             <com.google.android.material.chip.ChipGroup
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:singleLine="true"
                 app:singleSelection="true">
@@ -92,7 +109,7 @@
             android:id="@+id/rvExpendableView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_extra_small"
             android:layout_marginBottom="@dimen/margin_small"
             tools:listitem="@layout/item_section" />
     </LinearLayout>
