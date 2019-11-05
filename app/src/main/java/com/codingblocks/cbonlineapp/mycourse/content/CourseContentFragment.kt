@@ -54,7 +54,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     lateinit var attemptId: String
     private val sectionItemsAdapter = SectionItemsAdapter()
-    var areLecturesLoaded: Boolean = false
+    private var areLecturesLoaded: Boolean = false
     var popupWindowDogs: PopupWindow? = null
     val mLayoutManager by lazy {
         LinearLayoutManager(requireContext())

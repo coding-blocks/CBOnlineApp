@@ -117,7 +117,6 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.1.0"
 
 
-
     // 3rd party libs
     implementation 'io.github.inflationx:calligraphy3:3.1.1'
     implementation 'io.github.inflationx:viewpump:2.0.3'
@@ -126,7 +125,7 @@ dependencies {
     implementation 'com.onesignal:OneSignal:3.11.2'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'com.github.aggarwalpulkit596:FabNavigation:1.0'
-
+    implementation 'com.razorpay:checkout:1.5.12'
 
 
     // Image view libraries

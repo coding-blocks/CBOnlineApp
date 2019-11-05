@@ -103,14 +103,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun setUpFragment() {
         val transaction = supportFragmentManager.beginTransaction()
         if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != ACCESS_TOKEN) {
-            // Update User Token on Login
-//            if (JWTUtils.isExpired(viewModel.prefs.SP_JWT_TOKEN_KEY))
-            viewModel.refreshToken()
+            setUser()
             val navMenu = nav_view.menu
             navMenu.findItem(R.id.nav_my_courses).isVisible = true
             nav_view.setCheckedItem(R.id.nav_my_courses)
             transaction.replace(R.id.fragment_holder, MyCoursesFragment()).commit()
-            setUser()
         } else {
             transaction.replace(R.id.fragment_holder, HomeFragment()).commit()
         }
@@ -118,6 +115,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun setUser() {
+        viewModel.setJWTToken()
         if (viewModel.prefs.SP_USER_IMAGE.isNotEmpty())
             nav_view.getHeaderView(0).nav_header_imageView.apply {
                 setOnClickListener(this@HomeActivity)
@@ -186,7 +184,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewModel.getMe()
         viewModel.getMeProgress.observer(this) {
             if (it) {
-                (supportFragmentManager.findFragmentById(R.id.fragment_holder) as MyCoursesFragment?)?.refreshCourses()
+                if ((supportFragmentManager.findFragmentById(R.id.fragment_holder) is MyCoursesFragment)) {
+                    (supportFragmentManager.findFragmentById(R.id.fragment_holder) as MyCoursesFragment).refreshCourses()
+                }
                 setUser()
             }
         }

@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.home
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
@@ -81,9 +82,12 @@ class HomeActivityViewModel : ViewModel() {
     fun setJWTToken() {
         Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
         Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
+        //            Update User Token on Login
+        if (JWTUtils.isExpired(prefs.SP_JWT_TOKEN_KEY))
+            refreshToken()
     }
 
-    fun refreshToken() {
+    private fun refreshToken() {
         Clients.api.refreshToken(prefs.SP_JWT_REFRESH_TOKEN)
             .enqueue(retrofitCallback { throwable, response ->
                 response?.body().let {
