@@ -58,6 +58,7 @@
 
             <com.google.android.material.chip.ChipGroup
                 android:layout_width="wrap_content"
+                android:id="@+id/typeChipGroup"
                 android:layout_height="wrap_content"
                 app:singleLine="true"
                 app:singleSelection="true">
@@ -65,12 +66,14 @@
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
+                    android:id="@+id/webinarChip"
                     android:layout_height="wrap_content"
                     android:text="Webinars" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
+                    android:id="@+id/lectureChip"
                     android:layout_height="wrap_content"
                     android:text="Lectures" />
 
@@ -78,17 +81,20 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/quizChip"
                     android:text="Quizzes" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
+                    android:id="@+id/documentChip"
                     android:layout_height="wrap_content"
                     android:text="Documents" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
+                    android:id="@+id/codeChip"
                     android:layout_height="wrap_content"
                     android:text="Code Challenge" />
 

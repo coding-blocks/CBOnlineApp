@@ -27,13 +27,18 @@ import com.codingblocks.cbonlineapp.commons.SectionListClickListener
 import com.codingblocks.cbonlineapp.database.ListObject
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
+import com.codingblocks.cbonlineapp.util.CODE
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.DownloadWorker
+import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.PROGRESS_ID
 import com.codingblocks.cbonlineapp.util.ProgressWorker
+import com.codingblocks.cbonlineapp.util.QNA
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.SectionDownloadService
+import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
@@ -59,6 +64,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     var popupWindowDogs: PopupWindow? = null
     val mLayoutManager by lazy { LinearLayoutManager(requireContext()) }
     private var filters: MutableLiveData<String> = MutableLiveData("")
+    private var complete: MutableLiveData<String> = MutableLiveData("")
 
     var sectionitem = ArrayList<SectionModel>()
 
@@ -89,7 +95,18 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         }
 
         completeSwitch.setOnClickListener {
-            filters.postValue(if (completeSwitch.isChecked) "UNDONE" else "")
+            complete.value = (if (completeSwitch.isChecked) "UNDONE" else "")
+        }
+
+        typeChipGroup.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.webinarChip -> filters.value = (VIDEO)
+                R.id.lectureChip -> filters.value = (LECTURE)
+                R.id.quizChip -> filters.value = (QNA)
+                R.id.codeChip -> filters.value = (CODE)
+                R.id.documentChip -> filters.value = (DOCUMENT)
+                View.NO_ID -> filters.value = ("")
+            }
         }
 
         popupWindowDogs = popUpWindowSection()
@@ -115,7 +132,10 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         rvExpendableView.adapter = sectionItemsAdapter
 
         filters.observer(this) {
-            getContent(it)
+            getContent(type = it)
+        }
+        complete.observer(this) {
+            getContent(done = it)
         }
 
         viewModel.progress.observer(viewLifecycleOwner) {
@@ -151,7 +171,10 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         sectionListAdapter.onSectionListClick = sectionListClickListener
     }
 
-    private fun getContent(value: String) {
+    private fun getContent(
+        done: String = complete.value ?: "",
+        type: String = filters.value ?: ""
+    ) {
 
         viewModel.getAllContent().observer(this) { SectionContent ->
             sectionitem.clear()
@@ -181,11 +204,20 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 })
                 sectionitem.add(sectionContent.section)
                 sectionListAdapter.notifyDataSetChanged()
-                if (value.isEmpty()) {
+                if (done.isEmpty() && type.isEmpty()) {
                     consolidatedList.addAll(sectionContent.contents.sortedBy { it.order })
+                } else if (type.isEmpty()) {
+                    consolidatedList.addAll(sectionContent.contents
+                        .filter { it.progress == done }
+                        .sortedBy { it.order })
+                } else if (done.isEmpty()) {
+                    consolidatedList.addAll(sectionContent.contents
+                        .filter { it.contentable == type }
+                        .sortedBy { it.order })
                 } else {
                     consolidatedList.addAll(sectionContent.contents
-                        .filter { it.progress == value }
+                        .filter { it.contentable == type }
+                        .filter { it.progress == done }
                         .sortedBy { it.order })
                 }
                 sectionItemsAdapter.submitList(consolidatedList)
