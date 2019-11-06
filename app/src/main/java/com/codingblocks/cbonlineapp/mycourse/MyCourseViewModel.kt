@@ -34,9 +34,10 @@ class MyCourseViewModel(
 
     fun getRun() = repository.run(runId)
 
-    fun updatehit(attemptId: String) {
+    fun updateHit(attemptId: String) = viewModelScope.launch {
         repository.updateHit(attemptId)
     }
+
 
     fun fetchCourse(attemptId: String) {
         Clients.onlineV2JsonApi.enrolledCourseById(attemptId)

@@ -45,7 +45,7 @@ interface BaseDao<T> {
      * @param obj the object to be updated
      */
     @Update
-    fun update(obj: T)
+    suspend fun update(obj: T)
 
     /**
      * Delete an object from the database

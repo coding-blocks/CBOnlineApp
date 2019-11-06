@@ -43,7 +43,7 @@ class VideoPlayerViewModel(
 
     fun deleteNoteByID(id: String) = notesDao.deleteNoteByID(id)
 
-    fun updateNote(notes: NotesModel) = notesDao.update(notes)
+    fun updateNote(notes: NotesModel) = viewModelScope.launch { notesDao.update(notes) }
 
     fun updateDoubtStatus(uid: String, status: String) = doubtsDao.updateStatus(uid, status)
 

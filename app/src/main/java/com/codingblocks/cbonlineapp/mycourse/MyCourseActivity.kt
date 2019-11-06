@@ -49,7 +49,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
             MediaUtils.isStoragePermissionGranted(this)
         }
         if (savedInstanceState == null) {
-            viewModel.updatehit(viewModel.attemptId)
+            viewModel.updateHit(viewModel.attemptId)
             viewModel.fetchCourse(viewModel.attemptId)
         }
     }

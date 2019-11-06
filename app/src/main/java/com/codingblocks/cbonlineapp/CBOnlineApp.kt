@@ -52,7 +52,6 @@ class CBOnlineApp : Application() {
         }
         startKoin {
             androidContext(this@CBOnlineApp)
-            androidLogger(Level.DEBUG)
             modules(listOf(viewModelModule,
                 databaseModule))
         }
