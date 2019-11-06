@@ -63,8 +63,8 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     private var areLecturesLoaded: Boolean = false
     var popupWindowDogs: PopupWindow? = null
     val mLayoutManager by lazy { LinearLayoutManager(requireContext()) }
-    private var filters: MutableLiveData<String> = MutableLiveData("")
-    private var complete: MutableLiveData<String> = MutableLiveData("")
+    private var filters: MutableLiveData<String> = MutableLiveData()
+    private var complete: MutableLiveData<String> = MutableLiveData()
 
     var sectionitem = ArrayList<SectionModel>()
 
@@ -95,17 +95,18 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         }
 
         completeSwitch.setOnClickListener {
-            complete.value = (if (completeSwitch.isChecked) "UNDONE" else "")
+            if (completeSwitch.isChecked) getContent("UNDONE") else getContent("")
         }
 
         typeChipGroup.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
-                R.id.webinarChip -> filters.value = (VIDEO)
-                R.id.lectureChip -> filters.value = (LECTURE)
-                R.id.quizChip -> filters.value = (QNA)
-                R.id.codeChip -> filters.value = (CODE)
-                R.id.documentChip -> filters.value = (DOCUMENT)
-                View.NO_ID -> filters.value = ("")
+                R.id.webinarChip -> getContent(type = VIDEO)
+                R.id.lectureChip -> getContent(type = LECTURE)
+                R.id.quizChip -> getContent(type = QNA)
+                R.id.codeChip -> getContent(type = CODE)
+                R.id.documentChip -> getContent(type = DOCUMENT)
+                View.NO_ID -> getContent(type = "")
+
             }
         }
 
@@ -131,12 +132,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         rvExpendableView.layoutManager = mLayoutManager
         rvExpendableView.adapter = sectionItemsAdapter
 
-        filters.observer(this) {
-            getContent(type = it)
-        }
-        complete.observer(this) {
-            getContent(done = it)
-        }
+        getContent()
 
         viewModel.progress.observer(viewLifecycleOwner) {
             swiperefresh.isRefreshing = it
@@ -176,7 +172,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         type: String = filters.value ?: ""
     ) {
 
-        viewModel.getAllContent().observer(this) { SectionContent ->
+        viewModel.getAllContent().observer(viewLifecycleOwner) { SectionContent ->
             sectionitem.clear()
             val consolidatedList = ArrayList<ListObject>()
             SectionContent.forEach { sectionContent ->

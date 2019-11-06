@@ -21,7 +21,7 @@ abstract class CourseRunDao : BaseDao<RunModel> {
     abstract fun getTopRun(): LiveData<List<RunModel>>
 
     @Query("SELECT * FROM RunModel where crAttemptId = :attemptId")
-    abstract fun getRunById(attemptId: String): RunModel
+    abstract suspend fun getRunById(attemptId: String): RunModel
 
     @Query("UPDATE RunModel SET hits = hits+1 where crAttemptId = :attemptId")
     abstract fun updateHit(attemptId: String)

@@ -94,7 +94,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
         viewModel.message.observer(viewLifecycleOwner) { error ->
             if (error.message == UNAUTHORIZED) {
-                getPrefs()?.SP_ACCESS_TOKEN_KEY = ACCESS_TOKEN
                 Components.showConfirmation(requireContext(), UNAUTHORIZED) { status ->
                     if (status) {
                         Components.openChrome(
@@ -153,43 +152,43 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
         val sM = requireContext().getSystemService(ShortcutManager::class.java)
         val shortcutList: MutableList<ShortcutInfo> = ArrayList()
-        viewModel.getTopRun().observeOnce {
-            doAsync {
-                if (it.isNotEmpty())
-                    it.forEachIndexed { index, courseRun ->
-                        val intent = Intent(activity, MyCourseActivity::class.java).apply {
-                            action = Intent.ACTION_VIEW
-                            putExtra(COURSE_ID, courseRun.crCourseId)
-                            putExtra(RUN_ATTEMPT_ID, courseRun.crAttemptId)
-                            putExtra(COURSE_NAME, courseRun.course.title)
-                            putExtra(RUN_ID, courseRun.crUid)
-                        }
-
-                        val shortcut = ShortcutInfo.Builder(requireContext(), "topcourse$index")
-                        shortcut.setIntent(intent)
-                        shortcut.setLongLabel(courseRun.course.title)
-                        shortcut.setShortLabel(courseRun.course.title)
-
-                        okHttpClient.newCall(Request.Builder().url(courseRun.course.logo).build())
-                            .execute().body()?.let {
-                                with(SVG.getFromInputStream(it.byteStream())) {
-                                    val picDrawable = PictureDrawable(
-                                        this.renderToPicture(
-                                            400, 400
-                                        )
-                                    )
-                                    val bitmap =
-                                        MediaUtils.getBitmapFromPictureDrawable(picDrawable)
-                                    val circularBitmap = MediaUtils.getCircularBitmap(bitmap)
-                                    shortcut.setIcon(Icon.createWithBitmap(circularBitmap))
-                                    shortcutList.add(index, shortcut.build())
-                                }
-                            }
-                    }
-            }
-            // Todo Crash Here null pointer
-            sM?.dynamicShortcuts = shortcutList
-        }
+//        viewModel.getTopRun().observeOnce {
+//            doAsync {
+//                if (it.isNotEmpty())
+//                    it.forEachIndexed { index, courseRun ->
+//                        val intent = Intent(activity, MyCourseActivity::class.java).apply {
+//                            action = Intent.ACTION_VIEW
+//                            putExtra(COURSE_ID, courseRun.crCourseId)
+//                            putExtra(RUN_ATTEMPT_ID, courseRun.crAttemptId)
+//                            putExtra(COURSE_NAME, courseRun.course.title)
+//                            putExtra(RUN_ID, courseRun.crUid)
+//                        }
+//
+//                        val shortcut = ShortcutInfo.Builder(requireContext(), "topcourse$index")
+//                        shortcut.setIntent(intent)
+//                        shortcut.setLongLabel(courseRun.course.title)
+//                        shortcut.setShortLabel(courseRun.course.title)
+//
+//                        okHttpClient.newCall(Request.Builder().url(courseRun.course.logo).build())
+//                            .execute().body()?.let {
+//                                with(SVG.getFromInputStream(it.byteStream())) {
+//                                    val picDrawable = PictureDrawable(
+//                                        this.renderToPicture(
+//                                            400, 400
+//                                        )
+//                                    )
+//                                    val bitmap =
+//                                        MediaUtils.getBitmapFromPictureDrawable(picDrawable)
+//                                    val circularBitmap = MediaUtils.getCircularBitmap(bitmap)
+//                                    shortcut.setIcon(Icon.createWithBitmap(circularBitmap))
+//                                    shortcutList.add(index, shortcut.build())
+//                                }
+//                            }
+//                    }
+//            }
+//            // Todo Crash Here null pointer
+//            sM?.dynamicShortcuts = shortcutList
+//        }
     }
 
     fun refreshCourses() {

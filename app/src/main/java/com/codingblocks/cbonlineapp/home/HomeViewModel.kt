@@ -1,11 +1,15 @@
 package com.codingblocks.cbonlineapp.home
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
+import com.codingblocks.cbonlineapp.util.extensions.NonNullMediatorLiveData
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.CarouselCards
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -14,10 +18,17 @@ class HomeViewModel(
     var carouselCards: MutableLiveData<List<CarouselCards>> = MutableLiveData()
     var carouselError: MutableLiveData<String> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
+    var courses: LiveData<List<CourseInstructorPair>> = MutableLiveData()
 
     fun getAllCourses() = repository.getAllCourses()
 
-    fun getRecommendedCourses() = repository.getRecommendedCourses()
+    init {
+        getRecommendedCourses()
+    }
+
+    private fun getRecommendedCourses() {
+        courses = repository.getRecommendedCourses()
+    }
 
     fun fetchRecommendedCourses() {
         Clients.onlineV2JsonApi.getRecommendedCourses()

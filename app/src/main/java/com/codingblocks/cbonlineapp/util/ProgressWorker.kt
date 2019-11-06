@@ -8,8 +8,8 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.RunAttemptsId
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import retrofit2.Response
 
 class ProgressWorker(context: Context, private val workerParameters: WorkerParameters) : Worker(context, workerParameters), KoinComponent {

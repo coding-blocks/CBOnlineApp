@@ -18,8 +18,8 @@ import com.codingblocks.cbonlineapp.player.VideoPlayerViewModel
 import com.codingblocks.cbonlineapp.quiz.QuizViewModel
 import com.codingblocks.cbonlineapp.settings.SettingsViewModel
 import org.koin.android.ext.koin.androidApplication
-import org.koin.androidx.viewmodel.ext.koin.viewModel
-import org.koin.dsl.module.module
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel { HomeViewModel(get()) }
@@ -51,7 +51,6 @@ val databaseModule = module {
             AppDatabase::class.java, "app-database"
         )
             .fallbackToDestructiveMigration()
-            .allowMainThreadQueries()
             .build()
     }
 

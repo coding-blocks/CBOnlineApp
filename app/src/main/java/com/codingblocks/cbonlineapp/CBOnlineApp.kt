@@ -24,7 +24,10 @@ import io.github.inflationx.calligraphy3.CalligraphyConfig
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor
 import io.github.inflationx.viewpump.ViewPump
 import org.jetbrains.anko.notificationManager
-import org.koin.android.ext.android.startKoin
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 import java.io.File
 
 class CBOnlineApp : Application() {
@@ -47,14 +50,13 @@ class CBOnlineApp : Application() {
 
             notificationManager.createNotificationChannel(notificationChannel)
         }
+        startKoin {
+            androidContext(this@CBOnlineApp)
+            androidLogger(Level.DEBUG)
+            modules(listOf(viewModelModule,
+                databaseModule))
+        }
 
-        startKoin(
-            this,
-            listOf(
-                viewModelModule,
-                databaseModule
-            )
-        )
 
         Picasso.setSingletonInstance(Picasso.Builder(this).build())
 

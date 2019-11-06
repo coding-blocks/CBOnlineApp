@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.home.mycourses
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
@@ -17,7 +18,7 @@ class MyCoursesViewModel(
 
     fun getMyRuns() = repository.getMyRuns()
 
-    fun getTopRun() = repository.getTopRun()
+//    fun getTopRun() = MutableLiveData<CourseInstructorPair>()
 
     fun fetchMyCourses(refresh: Boolean = false) {
         progress.postValue(true)

@@ -11,11 +11,11 @@ import com.onesignal.OSNotification
 import com.onesignal.OSNotificationOpenResult
 import com.onesignal.OneSignal
 import org.jetbrains.anko.doAsync
-import org.koin.standalone.StandAloneContext
+import org.koin.core.context.GlobalContext
 
 var position: Long = 0
 
-private val notificationDao = StandAloneContext.getKoin().koinContext.get<NotificationDao>()
+private val notificationDao = GlobalContext.get().koin.get<NotificationDao>()
 
 class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
 

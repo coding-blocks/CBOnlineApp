@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.EndlessPagerAdapter
+import com.codingblocks.cbonlineapp.util.extensions.nonNull
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.models.CarouselCards
 import org.jetbrains.anko.AnkoContext
@@ -47,11 +48,11 @@ class HomeFragment : Fragment(), AnkoLogger {
             viewModel.fetchRecommendedCourses()
         }
         viewModel.fetchCards()
-        displayCourses()
         attachObservers()
     }
 
     private fun attachObservers() {
+        displayCourses()
         viewModel.carouselCards.observer(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 ui.viewPager.visibility = View.GONE
@@ -85,18 +86,12 @@ class HomeFragment : Fragment(), AnkoLogger {
     }
 
     private fun displayCourses(searchQuery: String = "") {
-        viewModel.getRecommendedCourses().observer(this) { list ->
-            if (list.isNotEmpty()) {
-                list.forEach {
-                    if (it.instructor.isEmpty()) {
-                        return@forEach
-                    } else {
-                        courseDataAdapter.submitList(list)
-                    }
-                }
-                ui.shimmerLayout.stopShimmer()
-            } else {
+        viewModel.courses.nonNull().observer(this) { list ->
+            if (list.isEmpty()) {
                 viewModel.fetchRecommendedCourses()
+            } else {
+                courseDataAdapter.submitList(list)
+                ui.shimmerLayout.stopShimmer()
             }
             ui.shimmerLayout.isVisible = list.isEmpty()
         }
