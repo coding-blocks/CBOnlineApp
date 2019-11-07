@@ -128,7 +128,6 @@ dependencies {
     implementation 'com.onesignal:OneSignal:3.11.2'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
-
     // Image view libraries
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'com.caverock:androidsvg-aar:1.4'
