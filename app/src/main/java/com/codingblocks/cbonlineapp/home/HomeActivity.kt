@@ -1,9 +1,7 @@
 package com.codingblocks.cbonlineapp.home
 
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.ShortcutManager
 import android.net.Uri
 import android.os.Build
@@ -54,14 +52,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     AnkoLogger, View.OnClickListener, DrawerLayout.DrawerListener {
 
-    private var updateUIReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-
-        override fun onReceive(context: Context, intent: Intent) {
-            invalidateOptionsMenu()
-        }
-    }
-    private var filter = IntentFilter()
-
     private val viewModel by viewModel<HomeActivityViewModel>()
 
     private val appUpdateManager by lazy {
@@ -94,10 +84,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (savedInstanceState == null) {
             setUpFragment()
         }
-        filter.addAction("com.codingblocks.notification")
-
         // adding label to nav drawer items
-//        nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
+        //nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
     }
 
     private fun setUpFragment() {
@@ -323,8 +311,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onResume() {
         super.onResume()
-        registerReceiver(updateUIReceiver, filter)
-        invalidateOptionsMenu()
 
         appUpdateManager
             .appUpdateInfo
@@ -345,12 +331,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.home_notifications, menu)
-//        val menuItem = menu.findItem(R.id.action_notifications)
-//        if (viewModel.getNotificationCount() == 0) {
-//            menuItem.icon = resources.getDrawable(R.drawable.ic_notification)
-//        } else {
-//            menuItem.icon = resources.getDrawable(R.drawable.ic_notification_active)
-//        }
         return true
     }
 
@@ -362,10 +342,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onPause() {
-        super.onPause()
-        unregisterReceiver(updateUIReceiver)
-    }
 
     private fun removeShortcuts() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {

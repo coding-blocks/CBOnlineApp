@@ -38,7 +38,7 @@ class CourseViewModel(
     fun getInstructors(id: String): LiveData<List<InstructorModel>> {
         if (!::instructors.isInitialized) {
             instructors = MutableLiveData()
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 instructors.postValue(courseWithInstructorDao.getInstructors(id))
             }
         }
@@ -48,7 +48,7 @@ class CourseViewModel(
     fun getCourseFeatures(id: String): LiveData<List<CourseFeatures>> {
         if (!::features.isInitialized) {
             features = MutableLiveData()
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 features.postValue(featuresDao.getFeatures(id))
             }
         }

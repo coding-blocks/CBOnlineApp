@@ -2,15 +2,19 @@ package com.codingblocks.cbonlineapp.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
-import com.codingblocks.cbonlineapp.util.extensions.NonNullMediatorLiveData
+import com.codingblocks.cbonlineapp.util.extensions.filterList
+import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.CarouselCards
-import kotlinx.coroutines.async
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 
 class HomeViewModel(
     private val repository: HomeRepository
@@ -19,15 +23,17 @@ class HomeViewModel(
     var carouselError: MutableLiveData<String> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
     var courses: LiveData<List<CourseInstructorPair>> = MutableLiveData()
+    var courseFilter = MutableLiveData<String>("")
+
 
     fun getAllCourses() = repository.getAllCourses()
 
     init {
-        getRecommendedCourses()
-    }
-
-    private fun getRecommendedCourses() {
-        courses = repository.getRecommendedCourses()
+        courses = Transformations.switchMap(courseFilter) { query ->
+            repository.getRecommendedCourses().getDistinct().filterList {
+                (it?.courseRun?.course?.title ?: "").contains(query, true)
+            }
+        }
     }
 
     fun fetchRecommendedCourses() {
@@ -37,7 +43,7 @@ class HomeViewModel(
                     if (response.isSuccessful) {
                         it.body()?.let { courseList ->
                             courseList.forEach { course ->
-                                viewModelScope.launch {
+                                viewModelScope.launch(Dispatchers.IO) {
                                     repository.insertCourse(course)
                                 }
                             }
@@ -56,7 +62,7 @@ class HomeViewModel(
                         it.body()?.let { courseList ->
                             courseList.forEach { course ->
                                 course.run {
-                                    viewModelScope.launch {
+                                    viewModelScope.launch(Dispatchers.IO) {
                                         repository.insertCourse(course, false)
                                     }
                                 }

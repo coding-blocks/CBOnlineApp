@@ -9,6 +9,7 @@ import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.ProductExtensionsItem
 import com.codingblocks.onlineapi.models.ResetRunAttempt
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MyCourseViewModel(
@@ -34,10 +35,9 @@ class MyCourseViewModel(
 
     fun getRun() = repository.run(runId)
 
-    fun updateHit(attemptId: String) = viewModelScope.launch {
+    fun updateHit(attemptId: String) = viewModelScope.launch(Dispatchers.IO) {
         repository.updateHit(attemptId)
     }
-
 
     fun fetchCourse(attemptId: String) {
         Clients.onlineV2JsonApi.enrolledCourseById(attemptId)
@@ -46,7 +46,7 @@ class MyCourseViewModel(
                     if (runAttempt.isSuccessful) {
                         expired.value = runAttempt.body()?.end!!.toLong() * 1000 < System.currentTimeMillis()
                         runAttempt.body()?.run?.sections?.let { sectionList ->
-                            viewModelScope.launch {
+                            viewModelScope.launch(Dispatchers.IO) {
                                 repository.insertSections(sectionList, attemptId)
                             }
                             sectionList.forEach { courseSection ->
@@ -56,7 +56,7 @@ class MyCourseViewModel(
                                             .enqueue(retrofitCallback { _, contentResponse ->
                                                 contentResponse?.let { contentList ->
                                                     if (contentList.isSuccessful) {
-                                                        viewModelScope.launch {
+                                                        viewModelScope.launch(Dispatchers.IO) {
                                                             contentList.body()?.let { repository.insertContents(it, attemptId, courseSection.id) }
                                                         }
                                                     }

@@ -106,7 +106,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 R.id.codeChip -> getContent(type = CODE)
                 R.id.documentChip -> getContent(type = DOCUMENT)
                 View.NO_ID -> getContent(type = "")
-
             }
         }
 

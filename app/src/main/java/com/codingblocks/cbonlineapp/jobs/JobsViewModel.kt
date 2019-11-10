@@ -10,6 +10,7 @@ import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.util.extensions.getDate
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class JobsViewModel(
@@ -57,7 +58,7 @@ class JobsViewModel(
                                             },
                                             job.courses ?: arrayListOf()
                                         )
-                                        viewModelScope.launch {
+                                        viewModelScope.launch(Dispatchers.IO) {
                                             jobsDao.insert(job)
                                         }
                                     }

@@ -17,6 +17,7 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Applications
 import com.codingblocks.onlineapi.models.CourseId
 import com.codingblocks.onlineapi.models.Form
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class JobDetailViewModel(
@@ -79,7 +80,7 @@ class JobDetailViewModel(
                         if (application != null) {
                             eligibleLiveData.value = mInstance.getString(R.string.applied)
                         }
-                        viewModelScope.launch {
+                        viewModelScope.launch(Dispatchers.IO) {
                             jobsDao.insert(job)
                         }
                     }

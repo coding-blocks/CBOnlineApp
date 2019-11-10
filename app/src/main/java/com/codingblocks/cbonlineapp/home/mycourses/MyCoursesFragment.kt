@@ -1,11 +1,8 @@
 package com.codingblocks.cbonlineapp.home.mycourses
 
 import android.annotation.TargetApi
-import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
-import android.graphics.drawable.Icon
-import android.graphics.drawable.PictureDrawable
 import android.os.Build
 import android.os.Build.VERSION_CODES.N_MR1
 import android.os.Bundle
@@ -18,30 +15,18 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.caverock.androidsvg.SVG
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.home.CourseDataAdapter
 import com.codingblocks.cbonlineapp.home.HomeFragmentUi
-import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
-import com.codingblocks.cbonlineapp.util.COURSE_ID
-import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.NetworkUtils.okHttpClient
-import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.ACCESS_TOKEN
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
-import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.google.firebase.analytics.FirebaseAnalytics
-import okhttp3.Request
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.longSnackbar
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.ctx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

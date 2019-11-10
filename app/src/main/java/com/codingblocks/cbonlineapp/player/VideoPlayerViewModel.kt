@@ -17,6 +17,7 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
 import com.crashlytics.android.Crashlytics
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class VideoPlayerViewModel(
@@ -43,7 +44,7 @@ class VideoPlayerViewModel(
 
     fun deleteNoteByID(id: String) = notesDao.deleteNoteByID(id)
 
-    fun updateNote(notes: NotesModel) = viewModelScope.launch { notesDao.update(notes) }
+    fun updateNote(notes: NotesModel) = viewModelScope.launch(Dispatchers.IO) { notesDao.update(notes) }
 
     fun updateDoubtStatus(uid: String, status: String) = doubtsDao.updateStatus(uid, status)
 
@@ -74,7 +75,7 @@ class VideoPlayerViewModel(
                 try {
                     if ((response?.isSuccessful == true))
                         response.body()?.let {
-                            viewModelScope.launch {
+                            viewModelScope.launch(Dispatchers.IO) {
                                 doubtsDao.insert(
                                     DoubtsModel(
                                         it.id, it.title, it.body, it.contents?.id
@@ -98,7 +99,7 @@ class VideoPlayerViewModel(
                     if (responseNote.isSuccessful)
                         responseNote.body().let {
                             try {
-                                viewModelScope.launch {
+                                viewModelScope.launch(Dispatchers.IO) {
                                     notesDao.insert(
                                         NotesModel(
                                             it?.id ?: "",
@@ -127,7 +128,7 @@ class VideoPlayerViewModel(
                 if (response != null && response.isSuccessful) {
                     doubts?.forEach {
                         try {
-                            viewModelScope.launch {
+                            viewModelScope.launch(Dispatchers.IO) {
                                 doubtsDao.insert(
                                     DoubtsModel(
                                         it.id, it.title, it.body, it.content?.id
