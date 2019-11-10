@@ -12,7 +12,7 @@ import org.jetbrains.anko.AnkoLogger
 
 class CourseDataAdapter(
     private val type: String = "allCourses",
-    var list: List<CourseInstructorPair> = arrayListOf()
+    var list: ArrayList<CourseInstructorPair> = arrayListOf()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), AnkoLogger {
 
     override fun getItemCount(): Int = list.size
@@ -24,7 +24,8 @@ class CourseDataAdapter(
     }
 
     fun submitList(courses: List<CourseInstructorPair>) {
-        this.list = courses
+        list.clear()
+        list.addAll(courses)
         notifyDataSetChanged()
     }
 

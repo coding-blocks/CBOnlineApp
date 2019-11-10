@@ -22,6 +22,7 @@ import com.codingblocks.cbonlineapp.home.HomeFragmentUi
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.extensions.nonNull
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.google.firebase.analytics.FirebaseAnalytics
 import org.jetbrains.anko.AnkoContext
@@ -65,14 +66,19 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
             layoutManager = LinearLayoutManager(ctx)
             adapter = courseDataAdapter
         }
-        viewModel.fetchMyCourses(true)
 
-        displayCourses()
+        attachObservers()
+        viewModel.fetchMyCourses(true)
 
         ui.swipeRefreshLayout.setOnRefreshListener {
             viewModel.fetchMyCourses(true)
         }
 
+        if (Build.VERSION.SDK_INT >= N_MR1)
+            createShortcut()
+    }
+
+    private fun attachObservers() {
         viewModel.progress.observer(viewLifecycleOwner) {
             ui.swipeRefreshLayout.isRefreshing = it
         }
@@ -93,18 +99,12 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 ui.snackbarView.longSnackbar(getString(R.string.offline_message))
             }
         }
-
-        if (Build.VERSION.SDK_INT >= N_MR1)
-            createShortcut()
-    }
-
-    private fun displayCourses(searchQuery: String = "") {
-        viewModel.getMyRuns().observer(this) {
-            if (it.isNotEmpty()) {
+        viewModel.courses.nonNull().observer(this) {
+            if (it.isEmpty()) {
+                viewModel.fetchMyCourses()
+            } else {
                 courseDataAdapter.submitList(it)
                 ui.shimmerLayout.stopShimmer()
-            } else {
-                viewModel.fetchMyCourses()
             }
             ui.shimmerLayout.isVisible = it.isEmpty()
         }
@@ -116,8 +116,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         val item = menu.findItem(R.id.action_search)
         val searchView = item.actionView as SearchView
         searchView.setOnCloseListener {
-            displayCourses()
-            false
+            viewModel.courseFilter.value = ""
+            true
         }
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -126,11 +126,12 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.isNotEmpty())
-                    displayCourses(newText)
+                    viewModel.courseFilter.value = newText
                 return true
             }
         })
     }
+
 
     @TargetApi(N_MR1)
     fun createShortcut() {

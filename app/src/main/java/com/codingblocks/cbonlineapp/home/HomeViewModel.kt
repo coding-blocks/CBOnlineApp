@@ -4,17 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.util.extensions.filterList
-import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.CarouselCards
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
 
 class HomeViewModel(
     private val repository: HomeRepository
@@ -25,12 +22,11 @@ class HomeViewModel(
     var courses: LiveData<List<CourseInstructorPair>> = MutableLiveData()
     var courseFilter = MutableLiveData<String>("")
 
-
     fun getAllCourses() = repository.getAllCourses()
 
     init {
         courses = Transformations.switchMap(courseFilter) { query ->
-            repository.getRecommendedCourses().getDistinct().filterList {
+            repository.getRecommendedCourses().filterList {
                 (it?.courseRun?.course?.title ?: "").contains(query, true)
             }
         }

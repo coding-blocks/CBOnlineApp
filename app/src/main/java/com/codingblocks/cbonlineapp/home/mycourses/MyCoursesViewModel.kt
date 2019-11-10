@@ -1,9 +1,13 @@
 package com.codingblocks.cbonlineapp.home.mycourses
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
+import com.codingblocks.cbonlineapp.util.extensions.filterList
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.crashlytics.android.Crashlytics
@@ -15,8 +19,16 @@ class MyCoursesViewModel(
 ) : ViewModel() {
     var message: MutableLiveData<Throwable> = MutableLiveData()
     var progress: MutableLiveData<Boolean> = MutableLiveData()
+    var courses: LiveData<List<CourseInstructorPair>> = MutableLiveData()
+    var courseFilter = MutableLiveData<String>("")
 
-    fun getMyRuns() = repository.getMyRuns()
+    init {
+        courses = Transformations.switchMap(courseFilter) { query ->
+            repository.getMyRuns().filterList {
+                (it?.courseRun?.course?.title ?: "").contains(query, true)
+            }
+        }
+    }
 
 //    fun getTopRun() = MutableLiveData<CourseInstructorPair>()
 

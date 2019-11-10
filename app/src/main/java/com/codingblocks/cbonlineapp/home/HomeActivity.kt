@@ -65,9 +65,18 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-
         viewModel.prefs = getPrefs()
+        initLayout()
 
+        if (savedInstanceState == null) {
+            setUpFragment()
+        }
+        // adding label to nav drawer items
+        // nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
+    }
+
+    private fun initLayout() {
+        setSupportActionBar(toolbar)
         val toggle = ActionBarDrawerToggle(
             this,
             drawer_layout,
@@ -80,12 +89,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.addDrawerListener(this)
         nav_view.setNavigationItemSelectedListener(this)
-
-        if (savedInstanceState == null) {
-            setUpFragment()
-        }
-        // adding label to nav drawer items
-        //nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
     }
 
     private fun setUpFragment() {
@@ -341,7 +344,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         else -> super.onOptionsItemSelected(item)
     }
-
 
     private fun removeShortcuts() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
