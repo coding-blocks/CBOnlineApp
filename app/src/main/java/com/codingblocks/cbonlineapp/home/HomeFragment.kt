@@ -13,14 +13,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.EndlessPagerAdapter
+import com.codingblocks.cbonlineapp.util.extensions.nonNull
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.models.CarouselCards
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.Timer
-import java.util.TimerTask
+import java.util.*
 
 class HomeFragment : Fragment(), AnkoLogger {
 
@@ -47,11 +47,21 @@ class HomeFragment : Fragment(), AnkoLogger {
             viewModel.fetchRecommendedCourses()
         }
         viewModel.fetchCards()
-        displayCourses()
         attachObservers()
     }
 
     private fun attachObservers() {
+
+        viewModel.courses.nonNull().observer(this) { list ->
+            if (list.isEmpty()) {
+                viewModel.fetchRecommendedCourses()
+            } else {
+                courseDataAdapter.submitList(list)
+                ui.shimmerLayout.stopShimmer()
+            }
+            ui.shimmerLayout.isVisible = list.isEmpty()
+        }
+
         viewModel.carouselCards.observer(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 ui.viewPager.visibility = View.GONE
@@ -84,30 +94,13 @@ class HomeFragment : Fragment(), AnkoLogger {
         }
     }
 
-    private fun displayCourses(searchQuery: String = "") {
-        viewModel.getRecommendedCourses().observer(this) { list ->
-            if (list.isNotEmpty()) {
-                list.forEach {
-                    if (it.instructor.isEmpty()) {
-                        return@forEach
-                    } else {
-                        courseDataAdapter.submitList(list)
-                    }
-                }
-                ui.shimmerLayout.stopShimmer()
-            } else {
-                viewModel.fetchRecommendedCourses()
-            }
-            ui.shimmerLayout.isVisible = list.isEmpty()
-        }
-    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.home, menu)
         val item = menu.findItem(R.id.action_search)
         val searchView = item.actionView as SearchView
         searchView.setOnCloseListener {
-            displayCourses()
+            viewModel.courseFilter.value = ""
             false
         }
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -117,7 +110,7 @@ class HomeFragment : Fragment(), AnkoLogger {
 
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.isNotEmpty())
-                    displayCourses(newText)
+                    viewModel.courseFilter.value = newText
                 return true
             }
         })

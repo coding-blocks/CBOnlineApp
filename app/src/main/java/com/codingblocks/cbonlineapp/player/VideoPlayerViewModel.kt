@@ -17,6 +17,7 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Notes
 import com.crashlytics.android.Crashlytics
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class VideoPlayerViewModel(
@@ -37,13 +38,13 @@ class VideoPlayerViewModel(
 
     fun getRunByAtemptId(id: String) = runDao.getRunByAtemptId(id)
 
-    fun getCourseById(id: String) = courseDao.getCourses().value!!.get(0)
+    fun getCourseById(id: String) = courseDao.getCourses().value!![0]
 
     fun getContentWithId(attemptId: String, contentId: String) = contentDao.getContentWithId(attemptId, contentId)
 
     fun deleteNoteByID(id: String) = notesDao.deleteNoteByID(id)
 
-    fun updateNote(notes: NotesModel) = notesDao.update(notes)
+    fun updateNote(notes: NotesModel) = viewModelScope.launch(Dispatchers.IO) { notesDao.update(notes) }
 
     fun updateDoubtStatus(uid: String, status: String) = doubtsDao.updateStatus(uid, status)
 
@@ -74,7 +75,7 @@ class VideoPlayerViewModel(
                 try {
                     if ((response?.isSuccessful == true))
                         response.body()?.let {
-                            viewModelScope.launch {
+                            viewModelScope.launch(Dispatchers.IO) {
                                 doubtsDao.insert(
                                     DoubtsModel(
                                         it.id, it.title, it.body, it.contents?.id
@@ -98,7 +99,7 @@ class VideoPlayerViewModel(
                     if (responseNote.isSuccessful)
                         responseNote.body().let {
                             try {
-                                viewModelScope.launch {
+                                viewModelScope.launch(Dispatchers.IO) {
                                     notesDao.insert(
                                         NotesModel(
                                             it?.id ?: "",
@@ -127,7 +128,7 @@ class VideoPlayerViewModel(
                 if (response != null && response.isSuccessful) {
                     doubts?.forEach {
                         try {
-                            viewModelScope.launch {
+                            viewModelScope.launch(Dispatchers.IO) {
                                 doubtsDao.insert(
                                     DoubtsModel(
                                         it.id, it.title, it.body, it.content?.id
@@ -171,7 +172,7 @@ class VideoPlayerViewModel(
                         }
                     }
                     if (networkList.size == notesList?.size) {
-                        notesDao.insertAll(networkList)
+                        viewModelScope.launch(Dispatchers.IO) { notesDao.insertAll(networkList) }
                         notesDao.getNotes(param).observeOnce { list ->
                             // remove items which are deleted
                             val sum = list + networkList
@@ -188,9 +189,8 @@ class VideoPlayerViewModel(
         })
     }
 
-    fun getNextVideo(contentId: String, sectionId: String, attemptId: String) =
-        contentDao.getNextItem(sectionId, attemptId, contentId)
+    fun getNextVideo(contentId: String, sectionId: String, attemptId: String) = contentDao.getNextItem(sectionId, attemptId, contentId)
 
     fun deleteVideo(contentId: String) =
-        contentDao.updateContent(contentId, 0)
+        viewModelScope.launch { contentDao.updateContent(contentId, 0) }
 }

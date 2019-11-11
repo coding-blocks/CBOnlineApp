@@ -1,9 +1,7 @@
 package com.codingblocks.cbonlineapp.home
 
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.ShortcutManager
 import android.net.Uri
 import android.os.Build
@@ -54,14 +52,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     AnkoLogger, View.OnClickListener, DrawerLayout.DrawerListener {
 
-    private var updateUIReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-
-        override fun onReceive(context: Context, intent: Intent) {
-            invalidateOptionsMenu()
-        }
-    }
-    private var filter = IntentFilter()
-
     private val viewModel by viewModel<HomeActivityViewModel>()
 
     private val appUpdateManager by lazy {
@@ -75,9 +65,18 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-
         viewModel.prefs = getPrefs()
+        initLayout()
 
+        if (savedInstanceState == null) {
+            setUpFragment()
+        }
+        // adding label to nav drawer items
+        // nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
+    }
+
+    private fun initLayout() {
+        setSupportActionBar(toolbar)
         val toggle = ActionBarDrawerToggle(
             this,
             drawer_layout,
@@ -90,27 +89,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.addDrawerListener(this)
         nav_view.setNavigationItemSelectedListener(this)
-
-        if (savedInstanceState == null) {
-            setUpFragment()
-        }
-        filter.addAction("com.codingblocks.notification")
-
-        // adding label to nav drawer items
-//        nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
     }
 
     private fun setUpFragment() {
         val transaction = supportFragmentManager.beginTransaction()
         if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != ACCESS_TOKEN) {
-            // Update User Token on Login
-//            if (JWTUtils.isExpired(viewModel.prefs.SP_JWT_TOKEN_KEY))
-            viewModel.refreshToken()
+            setUser()
             val navMenu = nav_view.menu
             navMenu.findItem(R.id.nav_my_courses).isVisible = true
             nav_view.setCheckedItem(R.id.nav_my_courses)
             transaction.replace(R.id.fragment_holder, MyCoursesFragment()).commit()
-            setUser()
         } else {
             transaction.replace(R.id.fragment_holder, HomeFragment()).commit()
         }
@@ -118,6 +106,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun setUser() {
+        viewModel.setJWTToken()
         if (viewModel.prefs.SP_USER_IMAGE.isNotEmpty())
             nav_view.getHeaderView(0).nav_header_imageView.apply {
                 setOnClickListener(this@HomeActivity)
@@ -186,7 +175,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewModel.getMe()
         viewModel.getMeProgress.observer(this) {
             if (it) {
-                (supportFragmentManager.findFragmentById(R.id.fragment_holder) as MyCoursesFragment?)?.refreshCourses()
+                if ((supportFragmentManager.findFragmentById(R.id.fragment_holder) is MyCoursesFragment)) {
+                    (supportFragmentManager.findFragmentById(R.id.fragment_holder) as MyCoursesFragment).refreshCourses()
+                }
                 setUser()
             }
         }
@@ -323,8 +314,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onResume() {
         super.onResume()
-        registerReceiver(updateUIReceiver, filter)
-        invalidateOptionsMenu()
 
         appUpdateManager
             .appUpdateInfo
@@ -345,12 +334,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.home_notifications, menu)
-//        val menuItem = menu.findItem(R.id.action_notifications)
-//        if (viewModel.getNotificationCount() == 0) {
-//            menuItem.icon = resources.getDrawable(R.drawable.ic_notification)
-//        } else {
-//            menuItem.icon = resources.getDrawable(R.drawable.ic_notification_active)
-//        }
         return true
     }
 
@@ -360,11 +343,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             true
         }
         else -> super.onOptionsItemSelected(item)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        unregisterReceiver(updateUIReceiver)
     }
 
     private fun removeShortcuts() {

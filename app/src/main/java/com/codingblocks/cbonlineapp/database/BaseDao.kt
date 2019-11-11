@@ -29,7 +29,7 @@ interface BaseDao<T> {
      * @param obj the object to be inserted.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(obj: ArrayList<T>)
+    suspend fun insertAll(obj: ArrayList<T>)
 
     /**
      * Insert an object in the database and returns its id.
@@ -45,7 +45,7 @@ interface BaseDao<T> {
      * @param obj the object to be updated
      */
     @Update
-    fun update(obj: T)
+    suspend fun update(obj: T)
 
     /**
      * Delete an object from the database

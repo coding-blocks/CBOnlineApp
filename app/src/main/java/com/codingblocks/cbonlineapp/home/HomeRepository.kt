@@ -47,6 +47,7 @@ class HomeRepository(
                     faq
 
                 ))
+            course.instructors?.let { insertInstructor(it, course.id) }
             coursefeatures?.let { insertCourseFeatures(it, id) }
             var list = course.runs?.filter { run ->
                 !run.enrollmentStart.greater() && run.enrollmentEnd.greater() && !run.unlisted
@@ -58,7 +59,6 @@ class HomeRepository(
                 }
             }
             list?.get(0)?.let { insertRun(it, course.id, recommended) }
-            course.instructors?.let { insertInstructor(it, course.id) }
         }
     }
 

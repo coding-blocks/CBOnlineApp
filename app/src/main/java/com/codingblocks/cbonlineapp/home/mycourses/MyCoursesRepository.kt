@@ -20,7 +20,7 @@ class MyCoursesRepository(
 ) {
     fun getMyRuns() = courseWithInstructorDao.getMyRuns()
 
-    fun getTopRun() = courseWithInstructorDao.getTopRun()
+//    fun getTopRun() = courseWithInstructorDao.getTopRun()
 
     suspend fun insertCourse(course: MyCourse) {
         with(course) {
@@ -83,20 +83,18 @@ class MyCoursesRepository(
     }
 
     suspend fun insertInstructor(instructor: Instructor, id: String) {
-        with(instructor) {
-            instructorDao.insertNew(
-                InstructorModel(
-                    instructor.id,
-                    instructor.name,
-                    instructor.description ?: "",
-                    instructor.photo,
-                    instructor.email,
-                    instructor.sub
-                )
+        instructorDao.insertNew(
+            InstructorModel(
+                instructor.id,
+                instructor.name,
+                instructor.description ?: "",
+                instructor.photo,
+                instructor.email,
+                instructor.sub
             )
-            courseWithInstructorDao.insert(
-                CourseWithInstructor(courseId = id, instructorId = instructor.id)
-            )
-        }
+        )
+        courseWithInstructorDao.insert(
+            CourseWithInstructor(courseId = id, instructorId = instructor.id)
+        )
     }
 }

@@ -26,13 +26,18 @@ import com.codingblocks.cbonlineapp.commons.SectionListClickListener
 import com.codingblocks.cbonlineapp.database.ListObject
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
+import com.codingblocks.cbonlineapp.util.CODE
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.DownloadWorker
+import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.PROGRESS_ID
 import com.codingblocks.cbonlineapp.util.ProgressWorker
+import com.codingblocks.cbonlineapp.util.QNA
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.SectionDownloadService
+import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
@@ -54,13 +59,12 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     lateinit var attemptId: String
     private val sectionItemsAdapter = SectionItemsAdapter()
-    var areLecturesLoaded: Boolean = false
+    private var areLecturesLoaded: Boolean = false
     var popupWindowDogs: PopupWindow? = null
-    val mLayoutManager by lazy {
-        LinearLayoutManager(requireContext())
-    }
-
+    val mLayoutManager by lazy { LinearLayoutManager(requireContext()) }
     var sectionitem = ArrayList<SectionModel>()
+    var done: String = ""
+    var type: String = ""
 
     private val sectionListAdapter = SectionListAdapter(sectionitem)
 
@@ -88,7 +92,42 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             }
         }
 
+        completeSwitch.setOnClickListener {
+            if (completeSwitch.isChecked)
+                viewModel.complete.value = "UNDONE".also {
+                    done = "UNDONE"
+                }
+            else
+                viewModel.complete.value = "".also {
+                    done = ""
+                }
+        }
+
+        typeChipGroup.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.webinarChip -> viewModel.filters.value = VIDEO.also {
+                    type = VIDEO
+                }
+                R.id.lectureChip -> viewModel.filters.value = LECTURE.also {
+                    type = LECTURE
+                }
+                R.id.quizChip -> viewModel.filters.value = QNA.also {
+                    type = QNA
+                }
+                R.id.codeChip -> viewModel.filters.value = CODE.also {
+                    type = CODE
+                }
+                R.id.documentChip -> viewModel.filters.value = DOCUMENT.also {
+                    type = DOCUMENT
+                }
+                View.NO_ID -> viewModel.filters.value = "".also {
+                    type = ""
+                }
+            }
+        }
+
         popupWindowDogs = popUpWindowSection()
+
         activity?.fab?.setOnClickListener {
             it as ExtendedFloatingActionButton
             if (it.isExtended) {
@@ -104,13 +143,53 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             activity?.fab?.extend()
             view.clearDim()
         }
+
         swiperefresh.setOnRefreshListener {
             (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
         }
+
         rvExpendableView.layoutManager = mLayoutManager
         rvExpendableView.adapter = sectionItemsAdapter
 
-        viewModel.getAllContent().observer(this) { SectionContent ->
+        attachObservers()
+
+
+        val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
+            override fun onClick(pos: Int) {
+                popupWindowDogs?.dismiss()
+                // Todo - Improvise the scroll
+                mLayoutManager.scrollToPosition(pos - 10)
+                smoothScroller.targetPosition = pos
+                mLayoutManager.startSmoothScroll(smoothScroller)
+            }
+        }
+        sectionListAdapter.onSectionListClick = sectionListClickListener
+    }
+
+    private fun attachObservers() {
+
+        viewModel.progress.observer(viewLifecycleOwner) {
+            swiperefresh.isRefreshing = it
+        }
+
+        viewModel.revoked.observer(viewLifecycleOwner) { value ->
+            if (value) {
+                alert {
+                    title = "Error Fetching Course"
+                    message = """
+                        There was an error downloading courseRun contents.
+                        Please contact support@codingblocks.com
+                        """.trimIndent()
+                    yesButton {
+                        it.dismiss()
+                        activity?.finish()
+                    }
+                    isCancelable = false
+                }.show()
+            }
+        }
+
+        viewModel.content.observer(viewLifecycleOwner) { SectionContent ->
             sectionitem.clear()
             val consolidatedList = ArrayList<ListObject>()
             SectionContent.forEach { sectionContent ->
@@ -138,45 +217,28 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 })
                 sectionitem.add(sectionContent.section)
                 sectionListAdapter.notifyDataSetChanged()
-
-                consolidatedList.addAll(sectionContent.contents.sortedBy { it.order })
+                if (done.isEmpty() && type.isEmpty()) {
+                    consolidatedList.addAll(sectionContent.contents.sortedBy { it.order })
+                } else if (type.isEmpty()) {
+                    consolidatedList.addAll(sectionContent.contents
+                        .filter { it.progress == done }
+                        .sortedBy { it.order })
+                } else if (done.isEmpty()) {
+                    consolidatedList.addAll(sectionContent.contents
+                        .filter { it.contentable == type }
+                        .sortedBy { it.order })
+                } else {
+                    consolidatedList.addAll(sectionContent.contents
+                        .filter { it.contentable == type }
+                        .filter { it.progress == done }
+                        .sortedBy { it.order })
+                }
                 sectionItemsAdapter.submitList(consolidatedList)
             }
             contentShimmer.isVisible = SectionContent.isEmpty()
         }
-
-        viewModel.progress.observer(viewLifecycleOwner) {
-            swiperefresh.isRefreshing = it
-        }
-
-        viewModel.revoked.observer(viewLifecycleOwner) { value ->
-            if (value) {
-                alert {
-                    title = "Error Fetching Course"
-                    message = """
-                        There was an error downloading courseRun contents.
-                        Please contact support@codingblocks.com
-                        """.trimIndent()
-                    yesButton {
-                        it.dismiss()
-                        activity?.finish()
-                    }
-                    isCancelable = false
-                }.show()
-            }
-        }
-
-        val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
-            override fun onClick(pos: Int) {
-                popupWindowDogs?.dismiss()
-                // Todo - Improvise the scroll
-                mLayoutManager.scrollToPosition(pos - 10)
-                smoothScroller.targetPosition = pos
-                mLayoutManager.startSmoothScroll(smoothScroller)
-            }
-        }
-        sectionListAdapter.onSectionListClick = sectionListClickListener
     }
+
 
     override fun updateProgress(contentId: String, progressId: String) {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
@@ -192,8 +254,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 .setInputData(progressData)
                 .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
                 .build()
-//        Snackbar.make(contentRoot, "Progress Will Be Synced Once Your Device Get Online", Snackbar.LENGTH_SHORT)
-//            .setAnchorView(bottom_navigation).show()
 
         WorkManager.getInstance()
             .enqueue(request)

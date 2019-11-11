@@ -14,12 +14,11 @@
         android:contentDescription="@null"
         android:layout_marginTop="86dp"
         android:src="@drawable/cblogosplash"
-        android:transitionName="trans1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/loginBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -18,6 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeMain">
+        <activity android:name=".checkout.CheckoutActivity"></activity>
         <activity
             android:name=".URLRouterActivity"
             android:theme="@style/SplashTheme">
@@ -35,7 +36,6 @@
                 <data android:pathPrefix="/player" />
             </intent-filter>
         </activity> <!-- <meta-data android:name="android.max_aspect" android:value="2.1" /> -->
-
         <activity
             android:name=".LoginActivity"
             android:theme="@style/SplashTheme">
@@ -86,6 +86,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.codingblocks.cbonlineapp.home.HomeActivity" />

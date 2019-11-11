@@ -78,7 +78,7 @@ android {
 ext {
     ankoVersion = '0.10.6'
     room_version = "2.2.1"
-    koin_version = "1.0.2"
+    koin_version = "2.0.1"
     ankoLibs = [
             // commons
             'commons',
@@ -117,7 +117,6 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.1.0"
 
 
-
     // 3rd party libs
     implementation 'io.github.inflationx:calligraphy3:3.1.1'
     implementation 'io.github.inflationx:viewpump:2.0.3'
@@ -126,7 +125,7 @@ dependencies {
     implementation 'com.onesignal:OneSignal:3.11.2'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'com.github.aggarwalpulkit596:FabNavigation:1.0'
-
+    implementation 'com.razorpay:checkout:1.5.12'
 
 
     // Image view libraries
@@ -140,7 +139,8 @@ dependencies {
 
 
     //VideoCipher library
-    implementation 'com.vdocipher.aegis:vdocipher-android:1.0.0-beta9'
+    implementation 'com.vdocipher.aegis:vdocipher-android:1.2.0'
+
 
 
     // Koin

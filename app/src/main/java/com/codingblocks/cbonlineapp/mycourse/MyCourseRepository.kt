@@ -29,7 +29,7 @@ class MyCourseRepository(
 
     fun getSectionWithContent(attemptId: String) = sectionWithContentsDao.getSectionWithContent(attemptId)
 
-    fun updateHit(attemptId: String) = runDao.updateHit(attemptId)
+    suspend fun updateHit(attemptId: String) = runDao.updateHit(attemptId)
 
     fun resumeCourse(attemptId: String) = sectionWithContentsDao.resumeCourse(attemptId)
 

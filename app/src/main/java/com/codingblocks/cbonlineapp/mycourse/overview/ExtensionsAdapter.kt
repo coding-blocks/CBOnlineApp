@@ -22,7 +22,7 @@ class ExtensionsAdapter(var list: ArrayList<ProductExtensionsItem>) : RecyclerVi
     fun setData(extensionData: ArrayList<ProductExtensionsItem>) {
         this.list = extensionData
         notifyDataSetChanged()
-        checkedPosition.postValue(-1)
+        checkedPosition.value = -1
     }
 
     override fun getItemCount(): Int = list.size
@@ -56,7 +56,7 @@ class ExtensionsAdapter(var list: ArrayList<ProductExtensionsItem>) : RecyclerVi
                 itemView.cardView.setBackgroundColor(itemView.context.resources.getColor(R.color.light_transparent))
                 if (checkedPosition.value != adapterPosition) {
                     notifyItemChanged(checkedPosition.value!!)
-                    checkedPosition.postValue(adapterPosition)
+                    checkedPosition.value = adapterPosition
                 }
             }
         }

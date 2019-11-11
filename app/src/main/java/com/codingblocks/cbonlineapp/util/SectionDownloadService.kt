@@ -79,7 +79,7 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
         }
     }
 
-    private fun initializeDownload(mOtp: String?, mPlaybackInfo: String?, videoId: String) {
+    private fun initializeDownload(mOtp: String, mPlaybackInfo: String, videoId: String) {
         val optionsDownloader = OptionsDownloader()
         // assuming we have otp and playbackInfo
         optionsDownloader.downloadOptionsWithOtp(
@@ -129,7 +129,7 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
     override fun onChanged(p0: String?, p1: DownloadStatus?) {
         notification.apply {
             setProgress(totalCount, completedCount, false)
-            setContentText("$completedCount out of $totalCount downloaded(Current ${p1?.downloadPercent}% completed)")
+            setContentText("$completedCount out of $totalCount downloaded(Current ${p1?.downloadPercent}% filters)")
         }
         notificationManager.notify(1, notification.build())
     }

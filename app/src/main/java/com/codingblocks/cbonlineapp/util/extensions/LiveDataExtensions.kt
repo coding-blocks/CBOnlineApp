@@ -66,6 +66,35 @@ class NonNullMediatorLiveData<T> : MediatorLiveData<T>()
 
 fun <T> LiveData<T>.nonNull(): NonNullMediatorLiveData<T> {
     val mediator: NonNullMediatorLiveData<T> = NonNullMediatorLiveData()
-    mediator.addSource(this) { nullable -> nullable?.let { mediator.value = it } }
+    mediator.addSource(this) { it?.let { mediator.value = it } }
     return mediator
 }
+
+fun <T> NonNullMediatorLiveData<T>.observe(owner: LifecycleOwner, observer: (t: T) -> Unit) {
+    this.observe(owner, Observer {
+        it?.let(observer)
+    })
+}
+
+/**
+ * Emits the items that pass through the predicate
+ */
+inline fun <T> LiveData<List<T>>.filterList(crossinline predicate: (T?) -> Boolean): LiveData<List<T>> {
+    val mutableLiveData: MediatorLiveData<List<T>> = MediatorLiveData()
+    mutableLiveData.addSource(this) {
+        val destination = ArrayList<T>()
+        for (element in it)
+            if (predicate(element)) destination.add(element)
+        mutableLiveData.value = destination
+    }
+    return mutableLiveData
+}
+
+class DoubleTrigger<A, B>(a: LiveData<A>, b: LiveData<B>) : MediatorLiveData<Pair<A?, B?>>() {
+    init {
+        addSource(a) { value = it to b.value }
+        addSource(b) { value = a.value to it }
+    }
+}
+
+
