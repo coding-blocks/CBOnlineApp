@@ -40,7 +40,6 @@ class ProgressWorker(context: Context, private val workerParameters: WorkerParam
                 GlobalScope.launch(Dispatchers.IO) {
                     contentDao.update(it.contentId, it.runAttemptId, it.id, "DONE")
                 }
-
             }
             return Result.success()
         } else {

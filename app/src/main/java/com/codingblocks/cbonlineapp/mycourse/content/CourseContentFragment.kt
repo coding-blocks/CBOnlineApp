@@ -153,7 +153,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
         attachObservers()
 
-
         val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
             override fun onClick(pos: Int) {
                 popupWindowDogs?.dismiss()
@@ -238,7 +237,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             contentShimmer.isVisible = SectionContent.isEmpty()
         }
     }
-
 
     override fun updateProgress(contentId: String, progressId: String) {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()

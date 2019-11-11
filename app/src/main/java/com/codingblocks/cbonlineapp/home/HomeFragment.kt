@@ -20,7 +20,8 @@ import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.ctx
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
+import java.util.TimerTask
+import java.util.Timer
 
 class HomeFragment : Fragment(), AnkoLogger {
 
@@ -93,7 +94,6 @@ class HomeFragment : Fragment(), AnkoLogger {
             ui.swipeRefreshLayout.isRefreshing = it
         }
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.home, menu)

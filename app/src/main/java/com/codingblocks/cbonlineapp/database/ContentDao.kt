@@ -29,7 +29,6 @@ interface ContentDao : BaseDao<ContentModel> {
     @Query("UPDATE ContentModel SET progressId = :progressId WHERE ccid = :id AND attempt_id = :attemptId")
     suspend fun updateProgressID(id: String, attemptId: String, progressId: String)
 
-
     @Query("UPDATE ContentModel SET progress = :status WHERE ccid = :id AND attempt_id = :attemptId")
     suspend fun updateProgress(id: String, attemptId: String, status: String)
 

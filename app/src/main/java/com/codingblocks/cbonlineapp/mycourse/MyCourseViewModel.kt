@@ -33,13 +33,11 @@ class MyCourseViewModel(
     var complete: MutableLiveData<String> = MutableLiveData("")
     var content: LiveData<List<SectionContentHolder.SectionContentPair>> = MutableLiveData()
 
-
     init {
         content = Transformations.switchMap(DoubleTrigger(complete, filters)) {
             repository.getSectionWithContent(attemptId)
         }
     }
-
 
     fun getInstructor() = repository.getInstructorWithCourseId(courseId)
 

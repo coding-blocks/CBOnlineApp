@@ -124,7 +124,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 viewModel.courseFilter.value = ""
                 return true
             }
-
         })
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -143,7 +142,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         viewModel.courseFilter.value = ""
         super.onOptionsMenuClosed(menu)
     }
-
 
     @TargetApi(N_MR1)
     fun createShortcut() {
