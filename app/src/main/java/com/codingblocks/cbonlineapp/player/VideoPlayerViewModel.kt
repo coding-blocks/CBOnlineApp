@@ -38,7 +38,7 @@ class VideoPlayerViewModel(
 
     fun getRunByAtemptId(id: String) = runDao.getRunByAtemptId(id)
 
-    fun getCourseById(id: String) = courseDao.getCourses().value!!.get(0)
+    fun getCourseById(id: String) = courseDao.getCourses().value!![0]
 
     fun getContentWithId(attemptId: String, contentId: String) = contentDao.getContentWithId(attemptId, contentId)
 
@@ -172,7 +172,7 @@ class VideoPlayerViewModel(
                         }
                     }
                     if (networkList.size == notesList?.size) {
-                        notesDao.insertAll(networkList)
+                        viewModelScope.launch(Dispatchers.IO) { notesDao.insertAll(networkList) }
                         notesDao.getNotes(param).observeOnce { list ->
                             // remove items which are deleted
                             val sum = list + networkList
@@ -189,9 +189,8 @@ class VideoPlayerViewModel(
         })
     }
 
-    fun getNextVideo(contentId: String, sectionId: String, attemptId: String) =
-        contentDao.getNextItem(sectionId, attemptId, contentId)
+    fun getNextVideo(contentId: String, sectionId: String, attemptId: String) = contentDao.getNextItem(sectionId, attemptId, contentId)
 
     fun deleteVideo(contentId: String) =
-        contentDao.updateContent(contentId, 0)
+        viewModelScope.launch { contentDao.updateContent(contentId, 0) }
 }

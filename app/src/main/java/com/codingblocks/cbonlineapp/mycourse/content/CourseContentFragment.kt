@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -63,10 +62,9 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     private var areLecturesLoaded: Boolean = false
     var popupWindowDogs: PopupWindow? = null
     val mLayoutManager by lazy { LinearLayoutManager(requireContext()) }
-    private var filters: MutableLiveData<String> = MutableLiveData()
-    private var complete: MutableLiveData<String> = MutableLiveData()
-
     var sectionitem = ArrayList<SectionModel>()
+    var done: String = ""
+    var type: String = ""
 
     private val sectionListAdapter = SectionListAdapter(sectionitem)
 
@@ -95,21 +93,41 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         }
 
         completeSwitch.setOnClickListener {
-            if (completeSwitch.isChecked) getContent("UNDONE") else getContent("")
+            if (completeSwitch.isChecked)
+                viewModel.complete.value = "UNDONE".also {
+                    done = "UNDONE"
+                }
+            else
+                viewModel.complete.value = "".also {
+                    done = ""
+                }
         }
 
-        typeChipGroup.setOnCheckedChangeListener { group, checkedId ->
+        typeChipGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.webinarChip -> getContent(type = VIDEO)
-                R.id.lectureChip -> getContent(type = LECTURE)
-                R.id.quizChip -> getContent(type = QNA)
-                R.id.codeChip -> getContent(type = CODE)
-                R.id.documentChip -> getContent(type = DOCUMENT)
-                View.NO_ID -> getContent(type = "")
+                R.id.webinarChip -> viewModel.filters.value = VIDEO.also {
+                    type = VIDEO
+                }
+                R.id.lectureChip -> viewModel.filters.value = LECTURE.also {
+                    type = LECTURE
+                }
+                R.id.quizChip -> viewModel.filters.value = QNA.also {
+                    type = QNA
+                }
+                R.id.codeChip -> viewModel.filters.value = CODE.also {
+                    type = CODE
+                }
+                R.id.documentChip -> viewModel.filters.value = DOCUMENT.also {
+                    type = DOCUMENT
+                }
+                View.NO_ID -> viewModel.filters.value = "".also {
+                    type = ""
+                }
             }
         }
 
         popupWindowDogs = popUpWindowSection()
+
         activity?.fab?.setOnClickListener {
             it as ExtendedFloatingActionButton
             if (it.isExtended) {
@@ -125,13 +143,30 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             activity?.fab?.extend()
             view.clearDim()
         }
+
         swiperefresh.setOnRefreshListener {
             (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
         }
+
         rvExpendableView.layoutManager = mLayoutManager
         rvExpendableView.adapter = sectionItemsAdapter
 
-        getContent()
+        attachObservers()
+
+
+        val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
+            override fun onClick(pos: Int) {
+                popupWindowDogs?.dismiss()
+                // Todo - Improvise the scroll
+                mLayoutManager.scrollToPosition(pos - 10)
+                smoothScroller.targetPosition = pos
+                mLayoutManager.startSmoothScroll(smoothScroller)
+            }
+        }
+        sectionListAdapter.onSectionListClick = sectionListClickListener
+    }
+
+    private fun attachObservers() {
 
         viewModel.progress.observer(viewLifecycleOwner) {
             swiperefresh.isRefreshing = it
@@ -154,24 +189,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             }
         }
 
-        val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
-            override fun onClick(pos: Int) {
-                popupWindowDogs?.dismiss()
-                // Todo - Improvise the scroll
-                mLayoutManager.scrollToPosition(pos - 10)
-                smoothScroller.targetPosition = pos
-                mLayoutManager.startSmoothScroll(smoothScroller)
-            }
-        }
-        sectionListAdapter.onSectionListClick = sectionListClickListener
-    }
-
-    private fun getContent(
-        done: String = complete.value ?: "",
-        type: String = filters.value ?: ""
-    ) {
-
-        viewModel.getAllContent().observer(viewLifecycleOwner) { SectionContent ->
+        viewModel.content.observer(viewLifecycleOwner) { SectionContent ->
             sectionitem.clear()
             val consolidatedList = ArrayList<ListObject>()
             SectionContent.forEach { sectionContent ->
@@ -221,6 +239,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         }
     }
 
+
     override fun updateProgress(contentId: String, progressId: String) {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
         val progressData: Data = if (progressId.isNotEmpty()) {
@@ -235,8 +254,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 .setInputData(progressData)
                 .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
                 .build()
-//        Snackbar.make(contentRoot, "Progress Will Be Synced Once Your Device Get Online", Snackbar.LENGTH_SHORT)
-//            .setAnchorView(bottom_navigation).show()
 
         WorkManager.getInstance()
             .enqueue(request)

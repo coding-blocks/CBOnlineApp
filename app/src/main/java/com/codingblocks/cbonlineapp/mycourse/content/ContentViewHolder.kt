@@ -63,7 +63,23 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                 title.textColor = resources.getColor(R.color.black)
             }
             downloadBtn.background = null
+            downloadBtn.setOnClickListener(null)
             when (content.contentable) {
+                DOCUMENT -> {
+                    contentType.setImageResource(R.drawable.ic_document)
+                }
+
+                VIDEO -> {
+                    contentType.setImageResource(R.drawable.ic_youtube_video)
+                }
+
+                QNA -> {
+                    contentType.setImageResource(R.drawable.ic_quiz)
+                }
+
+                CODE -> {
+                    contentType.setImageResource(R.drawable.ic_code)
+                }
                 LECTURE -> {
                     contentType.setImageResource(R.drawable.ic_lecture)
                     val downloadStatus = !FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, content.contentLecture.lectureId)
@@ -80,21 +96,6 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                             deletFile()
                         }
                     }
-                }
-                DOCUMENT -> {
-                    contentType.setImageResource(R.drawable.ic_document)
-                }
-
-                VIDEO -> {
-                    contentType.setImageResource(R.drawable.ic_youtube_video)
-                }
-
-                QNA -> {
-                    contentType.setImageResource(R.drawable.ic_quiz)
-                }
-
-                CODE -> {
-                    contentType.setImageResource(R.drawable.ic_code)
                 }
             }
 

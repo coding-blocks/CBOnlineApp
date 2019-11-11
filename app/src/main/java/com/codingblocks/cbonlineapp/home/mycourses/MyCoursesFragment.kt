@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
@@ -115,10 +116,16 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         inflater.inflate(R.menu.home, menu)
         val item = menu.findItem(R.id.action_search)
         val searchView = item.actionView as SearchView
-        searchView.setOnCloseListener {
-            viewModel.courseFilter.value = ""
-            true
-        }
+
+        item.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(p0: MenuItem?): Boolean = true
+
+            override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                viewModel.courseFilter.value = ""
+                return true
+            }
+
+        })
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return false
@@ -130,6 +137,11 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                 return true
             }
         })
+    }
+
+    override fun onOptionsMenuClosed(menu: Menu) {
+        viewModel.courseFilter.value = ""
+        super.onOptionsMenuClosed(menu)
     }
 
 

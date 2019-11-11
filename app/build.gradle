@@ -139,7 +139,8 @@ dependencies {
 
 
     //VideoCipher library
-    implementation 'com.vdocipher.aegis:vdocipher-android:1.0.0-beta9'
+    implementation 'com.vdocipher.aegis:vdocipher-android:1.2.0'
+
 
 
     // Koin

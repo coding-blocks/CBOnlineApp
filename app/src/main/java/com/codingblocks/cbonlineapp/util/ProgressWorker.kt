@@ -8,6 +8,9 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.RunAttemptsId
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import retrofit2.Response
@@ -34,8 +37,10 @@ class ProgressWorker(context: Context, private val workerParameters: WorkerParam
 
         if (response.isSuccessful) {
             response.body()?.let {
-                contentDao.updateProgress(it.contentId, it.runAttemptId, "DONE")
-                contentDao.updateProgressID(it.contentId, it.runAttemptId, it.id)
+                GlobalScope.launch(Dispatchers.IO) {
+                    contentDao.update(it.contentId, it.runAttemptId, it.id, "DONE")
+                }
+
             }
             return Result.success()
         } else {

@@ -2,9 +2,12 @@ package com.codingblocks.cbonlineapp.mycourse
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.util.SingleLiveEvent
+import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.ProductExtensionsItem
@@ -26,8 +29,17 @@ class MyCourseViewModel(
     private val extensions = MutableLiveData<List<ProductExtensionsItem>>()
     val popMessage: LiveData<String> = mutablePopMessage
     var resetProgress: MutableLiveData<Boolean> = MutableLiveData()
+    var filters: MutableLiveData<String> = MutableLiveData()
+    var complete: MutableLiveData<String> = MutableLiveData("")
+    var content: LiveData<List<SectionContentHolder.SectionContentPair>> = MutableLiveData()
 
-    fun getAllContent() = repository.getSectionWithContent(attemptId)
+
+    init {
+        content = Transformations.switchMap(DoubleTrigger(complete, filters)) {
+            repository.getSectionWithContent(attemptId)
+        }
+    }
+
 
     fun getInstructor() = repository.getInstructorWithCourseId(courseId)
 

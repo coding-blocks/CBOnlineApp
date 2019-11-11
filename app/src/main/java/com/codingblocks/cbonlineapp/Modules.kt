@@ -50,6 +50,7 @@ val databaseModule = module {
             androidApplication(),
             AppDatabase::class.java, "app-database"
         )
+            .allowMainThreadQueries()
             .fallbackToDestructiveMigration()
             .build()
     }

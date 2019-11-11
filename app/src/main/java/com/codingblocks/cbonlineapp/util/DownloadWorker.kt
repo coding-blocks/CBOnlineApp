@@ -23,7 +23,9 @@ import com.vdocipher.aegis.offline.DownloadSelections
 import com.vdocipher.aegis.offline.DownloadStatus
 import com.vdocipher.aegis.offline.OptionsDownloader
 import com.vdocipher.aegis.offline.VdoDownloadManager
-import org.jetbrains.anko.doAsync
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import retrofit2.Response
@@ -67,7 +69,7 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
                 setContentText("Waiting to Download")
                 setProgress(100, 0, false)
                 color = applicationContext.resources.getColor(R.color.colorPrimaryDark)
-                setOngoing(true) // THIS is the important line
+                setOngoing(false) // THIS is the important line
                 setAutoCancel(false)
             }
         )
@@ -95,7 +97,7 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
         }
     }
 
-    private fun initializeDownload(mOtp: String?, mPlaybackInfo: String?, videoId: String) {
+    private fun initializeDownload(mOtp: String, mPlaybackInfo: String, videoId: String) {
         val optionsDownloader = OptionsDownloader()
         // assuming we have otp and playbackInfo
         optionsDownloader.downloadOptionsWithOtp(
@@ -176,7 +178,7 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
         if (videoId != null) {
             val data = findDataWithId(videoId)
             if (data != null) {
-                doAsync {
+                GlobalScope.launch(Dispatchers.IO) {
                     contentDao.updateContent(data.contentId, 1)
                 }
                 val intent = Intent(applicationContext, VideoPlayerActivity::class.java)

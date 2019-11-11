@@ -79,7 +79,7 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
         }
     }
 
-    private fun initializeDownload(mOtp: String?, mPlaybackInfo: String?, videoId: String) {
+    private fun initializeDownload(mOtp: String, mPlaybackInfo: String, videoId: String) {
         val optionsDownloader = OptionsDownloader()
         // assuming we have otp and playbackInfo
         optionsDownloader.downloadOptionsWithOtp(
