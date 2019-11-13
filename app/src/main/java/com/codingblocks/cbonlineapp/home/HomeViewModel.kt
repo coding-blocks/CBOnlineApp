@@ -12,6 +12,8 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.CarouselCards
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class HomeViewModel(
     private val repository: HomeRepository
@@ -25,6 +27,8 @@ class HomeViewModel(
     fun getAllCourses() = repository.getAllCourses()
 
     init {
+        fetchRecommendedCourses()
+        fetchCards()
         courses = Transformations.switchMap(courseFilter) { query ->
             repository.getRecommendedCourses().filterList {
                 (it?.courseRun?.course?.title ?: "").contains(query, true)
@@ -56,21 +60,22 @@ class HomeViewModel(
                 response?.let {
                     if (response.isSuccessful) {
                         it.body()?.let { courseList ->
-                            courseList.forEach { course ->
-                                course.run {
-                                    viewModelScope.launch(Dispatchers.IO) {
+                            runBlocking {
+                                courseList.forEach { course ->
+                                    withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
                                         repository.insertCourse(course, false)
                                     }
                                 }
+                            }.also {
+                                progress.value = false
                             }
                         }
                     }
-                    progress.value = false
                 }
             })
     }
 
-    fun fetchCards() {
+    private fun fetchCards() {
         Clients.onlineV2JsonApi.carouselCards.enqueue(retrofitCallback { error, response ->
             response?.body()?.let {
                 carouselCards.value = it

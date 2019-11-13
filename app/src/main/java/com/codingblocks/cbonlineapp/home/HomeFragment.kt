@@ -47,7 +47,6 @@ class HomeFragment : Fragment(), AnkoLogger {
             viewModel.progress.value = true
             viewModel.fetchRecommendedCourses()
         }
-        viewModel.fetchCards()
         attachObservers()
     }
 

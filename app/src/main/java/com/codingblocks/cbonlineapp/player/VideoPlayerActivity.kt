@@ -258,7 +258,6 @@ class VideoPlayerActivity : AppCompatActivity(),
             VdoPlayer.VdoInitParams.Builder()
                 .setOtp(viewModel.mOtp)
                 .setPlaybackInfo(viewModel.mPlaybackInfo)
-
                 .setPreferredCaptionsLanguage("en")
                 .build()
         }
@@ -447,12 +446,14 @@ class VideoPlayerActivity : AppCompatActivity(),
             getPrefs().SP_PLAYBACK_SPEED = speed
         }
 
-        override fun onLoadError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
-            Crashlytics.log("Error Message: ${p1?.errorMsg}, " +
+        override fun onLoadError(p0: VdoPlayer.VdoInitParams, p1: ErrorDescription) {
+            Crashlytics.log("Error Message: ${p1.errorMsg}, " +
                 "Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}")
-            if (p1?.errorCode == 4101 || p1?.errorCode == 5110) {
+            if (p1.errorCode == 4101 || p1.errorCode == 5110) {
                 rootLayout.snackbar("Seems like your download was corrupted.Please Download Again")
                 viewModel.deleteVideo(contentId)
+            } else if (p1.errorCode in (2010..2020)) {
+                viewModel.getOtp(videoId, sectionId, attemptId)
             }
         }
 

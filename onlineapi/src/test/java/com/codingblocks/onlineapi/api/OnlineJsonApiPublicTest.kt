@@ -32,13 +32,13 @@ class OnlineJsonApiPublicTest {
     }
 
     @Test
-    fun `GET allcourses`(){
+    fun `GET allcourses`() {
         val courses = api.getAllCourses().execute().body()
         assertNotNull(courses)
     }
 
     @Test
-    fun `GET carouselCards`(){
+    fun `GET carouselCards`() {
         val carouselCards = api.carouselCards.execute().body()
         assertNotNull(carouselCards)
     }
