@@ -7,8 +7,11 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.children
+import androidx.core.view.isVisible
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.widgets.SheetDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -18,6 +21,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.tabs.TabLayout
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_jobs.*
+import org.jetbrains.anko.design.indefiniteSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class JobsActivity : AppCompatActivity() {
@@ -44,7 +48,22 @@ class JobsActivity : AppCompatActivity() {
         viewModel.getAllJobs().observer(this) { jobs ->
             viewModel.allJobList.clear()
             viewModel.allJobList.addAll(jobs)
-            jobsAdapter.submitList(viewModel.allJobList)
+
+            /*
+            * To solve the problem with listAdapter.submitList() with referencing
+            * the list. i.e.
+            *
+            *  if(oldList == newList){
+            *       return;
+            *  }
+            *
+            *  therefore, make different object
+             */
+            val updatedJobs = mutableListOf<JobsModel>().apply {
+                addAll(viewModel.allJobList)
+            }
+
+            jobsAdapter.submitList(updatedJobs)
             locationList = jobs.map { it.location }.distinct()
             jobtypeList = jobs.map { it.type }.distinct()
             setupBottomFilterSheet()
@@ -53,6 +72,25 @@ class JobsActivity : AppCompatActivity() {
         viewModel.filteredJobsProgress.observer(this) {
             if (it) {
                 jobsAdapter.notifyDataSetChanged()
+            }
+        }
+
+        viewModel.jobProgress.observe(this) {
+            if (it) {
+                shimmerJobs.isVisible = true
+                rvJobs.isVisible = false
+            } else {
+                shimmerJobs.isVisible = false
+                rvJobs.isVisible = true
+            }
+        }
+
+        viewModel.fetchError.observe(this) {
+            if (it) {
+                shimmerJobs.isVisible = false
+                rootJobs.indefiniteSnackbar("Error Fetching Jobs", "Retry") {
+                    viewModel.getJobs()
+                }
             }
         }
 
