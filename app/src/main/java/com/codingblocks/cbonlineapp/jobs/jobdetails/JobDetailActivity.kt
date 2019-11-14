@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.distinctUntilChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.home.CourseDataAdapter
@@ -20,6 +21,7 @@ import com.codingblocks.cbonlineapp.util.JOB_ID
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.isotomillisecond
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.util.extensions.nonNull
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
@@ -59,15 +61,7 @@ class JobDetailActivity : AppCompatActivity() {
 
         viewModel.fetchJob(jobId)
 
-//        courseDataAdapter =
-//            CourseDataAdapter(
-//                ArrayList(),
-//                viewModel.getCourseDao(),
-//                this,
-//                viewModel.getCourseWithInstructorDao(),
-//                "allCourses"
-//            )
-
+        courseDataAdapter = CourseDataAdapter()
         rvJobCourses.layoutManager = LinearLayoutManager(this)
         rvJobCourses.adapter = courseDataAdapter
 
@@ -93,14 +87,13 @@ class JobDetailActivity : AppCompatActivity() {
                 jobDescriptionTv.text = description
                 companyDescriptionTv.text = company.companyDescription
                 eligibleTv.text = "Eligibility:    $eligibility"
-                viewModel.getCourses(courseId)
+                viewModel.courseIdList.postValue(courseId)
             }
         }
 
-//        viewModel.jobCourses.observer(this) {
-//            courseDataAdapter.setData(it as ArrayList<CourseRun>)
-//        }
-
+        viewModel.jobCourses.distinctUntilChanged().nonNull().observer(this) {
+            courseDataAdapter.submitList(it)
+        }
         viewModel.eligibleLiveData.observer(this) {
             when (it) {
                 "eligible" -> statusTv.text = getString(R.string.job_eligible)
@@ -167,7 +160,7 @@ class JobDetailActivity : AppCompatActivity() {
                         }
                     }
                     inputLayout.boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_OUTLINE
-                    inputLayout.setBoxCornerRadii(20f, 20f, 20f, 20f)
+//                    inputLayout.setBoxCornerRadii(20f, 20f, 20f, 20f)
                     val edittext = TextInputEditText(inputLayout.context)
                     edittext.setOnFocusChangeListener { view, b ->
                     }

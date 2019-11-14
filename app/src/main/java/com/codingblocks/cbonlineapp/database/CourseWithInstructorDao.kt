@@ -46,6 +46,14 @@ interface CourseWithInstructorDao {
 
     @Transaction
     @Query("""
+       SELECT c.*,r.* FROM RunModel r
+	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
+       WHERE r.crCourseId IN (:courses) AND r.crAttemptId IS NULL 
+    """)
+    fun getJobCourses(courses: ArrayList<String>): LiveData<List<CourseInstructorPair>>
+
+    @Transaction
+    @Query("""
         SELECT c.*,r.* FROM RunModel r
 	    INNER JOIN CourseModel c ON c.cid = r.crCourseId
         WHERE r.crAttemptId IS NULL AND recommended = 1

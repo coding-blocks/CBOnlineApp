@@ -37,7 +37,7 @@ val viewModelModule = module {
     viewModel { HomeActivityViewModel() }
     viewModel { SettingsViewModel(get()) }
     viewModel { JobsViewModel(get()) }
-    viewModel { JobDetailViewModel(get(), get(), get(), get()) }
+    viewModel { JobDetailViewModel(get(), get()) }
 
     single { HomeRepository(get(), get(), get(), get(), get()) }
     single { MyCoursesRepository(get(), get(), get(), get()) }
