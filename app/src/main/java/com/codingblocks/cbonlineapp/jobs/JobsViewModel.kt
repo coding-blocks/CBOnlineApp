@@ -20,14 +20,19 @@ class JobsViewModel(
     var searchFilters = FilterData()
     val allJobList = mutableListOf<JobsModel>()
 
+    var jobProgress = MutableLiveData<Boolean>(false)
+    var fetchError = MutableLiveData<Boolean>(false)
+
     fun getAllJobs() = jobsDao.getAllJobs()
 
     fun getJobs() {
+        jobProgress.value = true
         Clients.onlineV2JsonApi.getJobs(
             getDate(),
             getDate()
-        ).enqueue(retrofitCallback { _, response ->
+        ).enqueue(retrofitCallback { t, response ->
             response?.body().let {
+                fetchError.value = false
                 if (response?.isSuccessful == true) {
                     response.body()?.run {
                         forEach { job ->
@@ -64,8 +69,13 @@ class JobsViewModel(
                                     }
                                 })
                         }
+                        jobProgress.value = false
                     }
                 }
+            }
+
+            t?.let {
+                fetchError.value = true
             }
         })
     }
