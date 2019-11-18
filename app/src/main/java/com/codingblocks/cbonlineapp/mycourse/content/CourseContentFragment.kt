@@ -63,7 +63,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     var popupWindowDogs: PopupWindow? = null
     val mLayoutManager by lazy { LinearLayoutManager(requireContext()) }
     var sectionitem = ArrayList<SectionModel>()
-    var done: String = ""
     var type: String = ""
 
     private val sectionListAdapter = SectionListAdapter(sectionitem)
@@ -94,13 +93,9 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
         completeSwitch.setOnClickListener {
             if (completeSwitch.isChecked)
-                viewModel.complete.value = "UNDONE".also {
-                    done = "UNDONE"
-                }
+                viewModel.complete.postValue("UNDONE")
             else
-                viewModel.complete.value = "".also {
-                    done = ""
-                }
+                viewModel.complete.postValue("")
         }
 
         typeChipGroup.setOnCheckedChangeListener { _, checkedId ->
@@ -216,20 +211,20 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 })
                 sectionitem.add(sectionContent.section)
                 sectionListAdapter.notifyDataSetChanged()
-                if (done.isEmpty() && type.isEmpty()) {
+                if (viewModel.complete.value!!.isEmpty() && type.isEmpty()) {
                     consolidatedList.addAll(sectionContent.contents.sortedBy { it.order })
                 } else if (type.isEmpty()) {
                     consolidatedList.addAll(sectionContent.contents
-                        .filter { it.progress == done }
+                        .filter { it.progress == viewModel.complete.value }
                         .sortedBy { it.order })
-                } else if (done.isEmpty()) {
+                } else if (viewModel.complete.value!!.isEmpty()) {
                     consolidatedList.addAll(sectionContent.contents
                         .filter { it.contentable == type }
                         .sortedBy { it.order })
                 } else {
                     consolidatedList.addAll(sectionContent.contents
                         .filter { it.contentable == type }
-                        .filter { it.progress == done }
+                        .filter { it.progress == viewModel.complete.value!! }
                         .sortedBy { it.order })
                 }
                 sectionItemsAdapter.submitList(consolidatedList)

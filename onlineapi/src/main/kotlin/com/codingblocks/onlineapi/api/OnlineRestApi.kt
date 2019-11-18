@@ -1,5 +1,6 @@
 package com.codingblocks.onlineapi.api
 
+import com.codingblocks.onlineapi.models.DoubtStats
 import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Extension
 import com.codingblocks.onlineapi.models.Leaderboard
@@ -80,6 +81,9 @@ interface OnlineRestApi {
 
     @POST("v2/runs/extensions/{id}/buy")
     fun buyExtension(@Path("id") extensionId: Int): Call<JsonObject>
+
+    @GET("v2/doubts/stats/{id}")
+    suspend fun doubtStats(@Path("id") userId: Int): Call<DoubtStats>
 
 
 }

@@ -154,7 +154,6 @@ class VideoPlayerActivity : AppCompatActivity(),
                         }
                     }
                 },
-                fnState = {},
                 fnScrolled = { _: Int, _: Float, _: Int ->
                 })
         )
@@ -464,8 +463,6 @@ class VideoPlayerActivity : AppCompatActivity(),
         override fun onError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
             Crashlytics.log("Error Message: ${p1?.errorMsg}," +
                 " Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}")
-
-            // 2013 not defined
         }
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {

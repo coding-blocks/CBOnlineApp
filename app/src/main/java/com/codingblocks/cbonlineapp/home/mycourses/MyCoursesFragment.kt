@@ -21,6 +21,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.home.CourseDataAdapter
 import com.codingblocks.cbonlineapp.home.HomeFragmentUi
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.nonNull
@@ -69,7 +70,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         }
 
         attachObservers()
-        viewModel.fetchMyCourses(true)
 
         ui.swipeRefreshLayout.setOnRefreshListener {
             viewModel.fetchMyCourses(true)
@@ -86,6 +86,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
 
         viewModel.message.observer(viewLifecycleOwner) { error ->
             if (error.message == UNAUTHORIZED) {
+                getPrefs()?.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
                 Components.showConfirmation(requireContext(), UNAUTHORIZED) { status ->
                     if (status) {
                         Components.openChrome(
@@ -93,7 +94,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
                             "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
                         )
                     } else {
-                        requireActivity().onBackPressed()
+                        requireActivity().finish()
                     }
                 }
             } else {

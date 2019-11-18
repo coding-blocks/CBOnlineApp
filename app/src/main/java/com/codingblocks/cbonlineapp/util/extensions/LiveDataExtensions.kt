@@ -46,8 +46,8 @@ fun <T> LiveData<T>.getDistinct(): LiveData<T> {
 }
 
 fun pageChangeCallback(
-    fnState: (Int) -> Unit,
-    fnSelected: (Int) -> Unit,
+    fnState: (Int) -> Unit = { },
+    fnSelected: (Int) -> Unit = { },
     fnScrolled: (Int, Float, Int) -> Unit
 ): ViewPager.OnPageChangeListener {
     return object : ViewPager.OnPageChangeListener {

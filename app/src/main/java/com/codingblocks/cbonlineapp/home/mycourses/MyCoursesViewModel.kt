@@ -23,6 +23,7 @@ class MyCoursesViewModel(
     var courseFilter = MutableLiveData<String>("")
 
     init {
+        fetchMyCourses(true)
         courses = Transformations.switchMap(courseFilter) { query ->
             repository.getMyRuns().filterList {
                 (it?.courseRun?.course?.title ?: "").contains(query, true)
