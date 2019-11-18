@@ -17,7 +17,6 @@ interface CourseWithInstructorDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(join: CourseWithInstructor)
 
-
     @Query("""
         SELECT i.* FROM InstructorModel i
         INNER JOIN coursewithinstructor ON

@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 
 class AdminViewModel(private val repository: AdminRepository) : ViewModel() {
 
-
     fun doubtStats(id: Int) = liveData(Dispatchers.IO) {
         val retrivedStats = repository.getDoubtStats(id)
         emit(retrivedStats)
