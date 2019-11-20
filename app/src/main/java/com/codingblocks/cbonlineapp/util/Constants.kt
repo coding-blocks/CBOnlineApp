@@ -22,6 +22,9 @@ const val COURSE_NAME = "course_name"
 
 const val COURSE_ID = "courseId"
 
+const val ROLE_ID = "courseId"
+
+
 const val RUN_ID = "runId"
 
 const val DOWNLOADED = "downloaded"

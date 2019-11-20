@@ -19,6 +19,7 @@ import com.codingblocks.onlineapi.models.Question
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.Sections
+import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -199,6 +200,9 @@ interface OnlineJsonApi {
 
     @POST("applications")
     fun applyJob(@Body params: Applications): Call<ResponseBody>
+
+    @GET("users/me")
+    fun getMe(): Call<JsonObject>
 
 //    @GET("projects/{id}")
 //    fun getProject(@Path("id") id: String): Call<Projects>

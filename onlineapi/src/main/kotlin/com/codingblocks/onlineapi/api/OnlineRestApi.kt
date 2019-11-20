@@ -10,6 +10,7 @@ import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -83,7 +84,7 @@ interface OnlineRestApi {
     fun buyExtension(@Path("id") extensionId: Int): Call<JsonObject>
 
     @GET("v2/doubts/stats/{id}")
-    suspend fun doubtStats(@Path("id") userId: Int): Call<DoubtStats>
+    suspend fun doubtStats(@Path("id") userId: Int): Response<DoubtStats>
 
 
 }
