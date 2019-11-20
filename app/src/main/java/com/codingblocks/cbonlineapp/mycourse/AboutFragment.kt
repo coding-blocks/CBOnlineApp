@@ -52,14 +52,31 @@ class AboutFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         joinWhatsAppButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.setPackage("com.whatsapp")
-            intent.data = Uri.parse(whatsAppLink)
-            if (this@AboutFragment.requireContext().packageManager.resolveActivity(intent, 0) != null) {
-                startActivity(intent)
+            if (whatsAppLink.isNullOrEmpty()) {
+                Toast.makeText(this@AboutFragment.requireContext(), "Whatsapp Group Not Available for Trial Courses", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this@AboutFragment.requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setPackage("com.whatsapp")
+                intent.data = Uri.parse(whatsAppLink)
+                if (this@AboutFragment.requireContext().packageManager.resolveActivity(intent, 0) != null) {
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this@AboutFragment.requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
+                }
             }
+        }
+        val instructorList = ArrayList<InstructorModel>()
+        val instructorAdapter = InstructorDataAdapter(instructorList)
+        instructorRv.layoutManager = LinearLayoutManager(context)
+        instructorRv.adapter = instructorAdapter
+        firstTime = true
+        viewModel.getInstructor().observer(this) {
+            instructorAdapter.setData(it as ArrayList<InstructorModel>)
+        }
+
+        viewModel.getRun().observer(this) {
+            whatsAppLink = it.whatsappLink
+            joinWhatsAppGroupView.isVisible = whatsAppLink?.run { true } ?: false
         }
     }
 
@@ -77,20 +94,6 @@ class AboutFragment : Fragment() {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser && !firstTime) {
-            val instructorList = ArrayList<InstructorModel>()
-            val instructorAdapter = InstructorDataAdapter(instructorList)
-            instructorRv.layoutManager = LinearLayoutManager(context)
-            instructorRv.adapter = instructorAdapter
-            firstTime = true
-            viewModel.getInstructor().observer(this) {
-                instructorAdapter.setData(it as ArrayList<InstructorModel>)
-            }
-
-            viewModel.getRun().observer(this) {
-                whatsAppLink = it.whatsappLink
-                joinWhatsAppGroupView.isVisible = whatsAppLink?.run { true } ?: false
-            }
-
             if (view != null) {
                 val params = Bundle()
                 params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
