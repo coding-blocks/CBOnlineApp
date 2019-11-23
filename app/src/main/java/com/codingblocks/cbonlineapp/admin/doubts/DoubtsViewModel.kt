@@ -3,29 +3,35 @@ package com.codingblocks.cbonlineapp.admin.doubts
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.ResultWrapper
+import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
 
     var listDoubtsResponse: MutableLiveData<List<DoubtsJsonApi>> = MutableLiveData()
+    var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
     init {
         fetchDoubts()
     }
 
-    fun fetchDoubts() {
-        viewModelScope.launch {
+    private fun fetchDoubts() {
+        viewModelScope.launch(Dispatchers.IO) {
             when (val response = repo.getLiveDoubts()) {
-                is ResultWrapper.GenericError -> response.code?.let { showError(it) }
-                is ResultWrapper.Success -> {
-                    with(response.value) {
-                        if (isSuccessful)
+                is ResultWrapper.GenericError -> showError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful)
+                        if (body().isNullOrEmpty()) {
+                            showError(ErrorStatus.EMPTY_RESPONSE)
+                        } else {
                             listDoubtsResponse.postValue(body())
-                        else {
-                            showError(code())
                         }
+                    else {
+                        showError(fetchError(code()))
                     }
                 }
             }
@@ -33,8 +39,10 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
         }
     }
 
-    private fun showError(error: Int) {
+
+    private fun showError(error: String) {
         //Show Appropriate UI
+        errorLiveData.postValue(error)
 
     }
 }

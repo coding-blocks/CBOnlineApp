@@ -6,10 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.onlineapi.ErrorStatus
+import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class DoubtsFragment : Fragment() {
+class DoubtsFragment : Fragment(), AnkoLogger {
 
     companion object {
         fun newInstance() = DoubtsFragment()
@@ -24,10 +27,35 @@ class DoubtsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.listDoubtsResponse.observer(viewLifecycleOwner) {
+
+        }
+
+        viewModel.errorLiveData.observer(viewLifecycleOwner)
+        {
+            when (it) {
+                ErrorStatus.EMPTY_RESPONSE -> {
+
+                }
+                ErrorStatus.NO_CONNECTION -> {
+
+                }
+                ErrorStatus.UNAUTHORIZED -> {
+
+                }
+                ErrorStatus.TIMEOUT -> {
+
+                }
+            }
+        }
+
+
     }
 
 }
