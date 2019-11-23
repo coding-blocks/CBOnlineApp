@@ -397,7 +397,7 @@ class QuizQuestion : BaseModel() {
 class Quizqnas : BaseModel()
 
 @Type("doubt")
-class Doubts(
+data class Doubts(
     val body: String,
     val title: String,
     var status: String = "PENDING",

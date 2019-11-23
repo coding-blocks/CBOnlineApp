@@ -2,13 +2,12 @@ package com.codingblocks.cbonlineapp.admin.doubts
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Doubts
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import retrofit2.Response
 
 class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
 
@@ -20,45 +19,35 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
     }
 
     private fun fetchDoubts() {
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val response = repo.getLiveDoubts()) {
-                is ResultWrapper.GenericError -> showError(response.error)
-                is ResultWrapper.Success -> with(response.value) {
-                    if (isSuccessful)
-                        if (body().isNullOrEmpty()) {
-                            showError(ErrorStatus.EMPTY_RESPONSE)
-                        } else {
-                            listDoubtsResponse.postValue(body())
-                        }
-                    else {
-                        showError(fetchError(code()))
-                    }
-                }
-            }
-
+        runIO {
+            val response = repo.getLiveDoubts()
+            assignValues(response)
         }
     }
 
     private fun fetchMyDoubts(id: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val response = repo.getMyDoubts(id)) {
-                is ResultWrapper.GenericError -> showError(response.error)
-                is ResultWrapper.Success -> with(response.value) {
-                    if (isSuccessful)
-                        if (body().isNullOrEmpty()) {
-                            showError(ErrorStatus.EMPTY_RESPONSE)
-                        } else {
-                            listDoubtsResponse.postValue(body())
-                        }
-                    else {
-                        showError(fetchError(code()))
-                    }
-                }
-            }
-
+        runIO {
+            val response = repo.getMyDoubts(id)
+            assignValues(response)
         }
     }
 
+    private fun assignValues(response: ResultWrapper<Response<List<Doubts>>>) {
+        when (response) {
+            is ResultWrapper.GenericError -> showError(response.error)
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful)
+                    if (body().isNullOrEmpty()) {
+                        showError(ErrorStatus.EMPTY_RESPONSE)
+                    } else {
+                        listDoubtsResponse.postValue(body())
+                    }
+                else {
+                    showError(fetchError(code()))
+                }
+            }
+        }
+    }
 
     private fun showError(error: String) {
         //Show Appropriate UI
@@ -66,3 +55,4 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
 
     }
 }
+
