@@ -3,6 +3,8 @@ package com.codingblocks.cbonlineapp.admin
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.admin.doubts.DoubtsFragment
+import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewFragment
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.util.Components
@@ -54,7 +56,7 @@ class AdminActivity : AppCompatActivity() {
         pagerAdmin.apply {
             adapter = pagerAdapter
             currentItem = 0
-            offscreenPageLimit = 3
+            offscreenPageLimit = 1
         }
     }
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.codingblocks.cbonlineapp.admin.AdminOverviewFragment">
+    tools:context="com.codingblocks.cbonlineapp.admin.overview.AdminOverviewFragment">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/userIv"

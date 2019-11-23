@@ -1,6 +1,8 @@
 package com.codingblocks.cbonlineapp
 
 import androidx.room.Room
+import com.codingblocks.cbonlineapp.admin.doubts.DoubtRepository
+import com.codingblocks.cbonlineapp.admin.doubts.DoubtsViewModel
 import com.codingblocks.cbonlineapp.course.CourseViewModel
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.home.HomeActivityViewModel
@@ -33,6 +35,7 @@ val viewModelModule = module {
 
     // Activities
     viewModel { CourseViewModel(get(), get()) }
+    viewModel { DoubtsViewModel(get()) }
     viewModel { VideoPlayerViewModel(get(), get(), get(), get(), get()) }
     viewModel { HomeActivityViewModel() }
     viewModel { SettingsViewModel(get()) }
@@ -42,6 +45,8 @@ val viewModelModule = module {
     single { HomeRepository(get(), get(), get(), get(), get()) }
     single { MyCoursesRepository(get(), get(), get(), get()) }
     single { MyCourseRepository(get(), get(), get(), get(), get()) }
+    single { DoubtRepository() }
+
 }
 val databaseModule = module {
 

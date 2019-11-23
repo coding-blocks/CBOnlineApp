@@ -5,6 +5,7 @@ import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Company
 import com.codingblocks.onlineapi.models.Course
+import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Instructor
 import com.codingblocks.onlineapi.models.Jobs
@@ -203,6 +204,16 @@ interface OnlineJsonApi {
 
     @GET("users/me")
     fun getMe(): Call<JsonObject>
+
+    @GET("doubts")
+    suspend fun getLiveDoubts(
+        @Query("exclude") query: String = "content.*",
+        @Query("filter[status]") filter: String = "PENDING",
+        @Query("include") include: String = "content",
+        @Query("page[limit]") page: String = "10",
+        @Query("page[offset]") offset: String = "0",
+        @Query("sort") sort: String = "-createdAt"
+    ): Response<List<DoubtsJsonApi>>
 
 //    @GET("projects/{id}")
 //    fun getProject(@Path("id") id: String): Call<Projects>

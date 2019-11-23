@@ -406,6 +406,8 @@ class DoubtsJsonApi : BaseModel() {
     var title: String = ""
     @JvmField
     var status: String = "PENDING"
+    var createdAt: String = ""
+
     @JvmField
     var discourseTopicId: String = ""
     @JvmField

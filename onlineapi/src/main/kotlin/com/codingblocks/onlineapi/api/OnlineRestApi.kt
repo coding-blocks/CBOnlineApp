@@ -84,7 +84,7 @@ interface OnlineRestApi {
     fun buyExtension(@Path("id") extensionId: Int): Call<JsonObject>
 
     @GET("v2/doubts/stats/{id}")
-    suspend fun doubtStats(@Path("id") userId: Int): Response<DoubtStats>
+    suspend fun doubtStats(@Path("id") userId: String): Response<DoubtStats>
 
 
 }

@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.admin
+package com.codingblocks.cbonlineapp.admin.overview
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -10,10 +10,6 @@ import com.codingblocks.cbonlineapp.R
 
 class AdminOverviewFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = AdminOverviewFragment()
-    }
-
     private lateinit var viewModel: AdminOverviewViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -23,8 +19,6 @@ class AdminOverviewFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(AdminOverviewViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }
