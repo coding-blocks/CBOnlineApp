@@ -14,7 +14,7 @@ import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.DoubtsJsonApi
+import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Notes
 import com.crashlytics.android.Crashlytics
 import kotlinx.coroutines.Dispatchers
@@ -69,7 +69,7 @@ class VideoPlayerViewModel(
             })
     }
 
-    fun createDoubt(doubt: DoubtsJsonApi, attemptId: String) {
+    fun createDoubt(doubt: Doubts, attemptId: String) {
         Clients.onlineV2JsonApi.createDoubt(doubt)
             .enqueue(retrofitCallback { _, response ->
                 try {

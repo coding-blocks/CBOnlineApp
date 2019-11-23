@@ -2,15 +2,6 @@ package com.codingblocks.onlineapi.models
 
 import com.google.gson.annotations.SerializedName
 
-data class Doubts(
-
-    @field:SerializedName("primary_groups")
-    val primaryGroups: List<Any?>? = null,
-
-    @field:SerializedName("topic_list")
-    val topicList: TopicList? = null
-)
-
 
 data class DoubtStats(
     val avgFirstResponse: Int,

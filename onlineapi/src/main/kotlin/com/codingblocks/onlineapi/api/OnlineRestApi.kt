@@ -1,7 +1,6 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.DoubtStats
-import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Extension
 import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.PostStream
@@ -56,7 +55,7 @@ interface OnlineRestApi {
     ): Call<List<Leaderboard>>
 
     @GET("v2/courses/{runid}/doubts?order=latest")
-    fun getDoubts(@Path("runid") id: String): Call<Doubts>
+    fun getDoubts(@Path("runid") id: String): Call<ResponseBody>
 
     @GET("v2/courses/doubts/{doubtid}")
     fun getDoubtById(@Path("doubtid") id: Int): Call<PostStream>

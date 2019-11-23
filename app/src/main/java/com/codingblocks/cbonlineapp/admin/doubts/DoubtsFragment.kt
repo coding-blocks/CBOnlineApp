@@ -18,6 +18,8 @@ class DoubtsFragment : Fragment(), AnkoLogger {
         fun newInstance() = DoubtsFragment()
     }
 
+    private val doubtsAdapter = DoubtsAdapter()
+
     private val viewModel by viewModel<DoubtsViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +36,7 @@ class DoubtsFragment : Fragment(), AnkoLogger {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.listDoubtsResponse.observer(viewLifecycleOwner) {
-
+            doubtsAdapter.submitList(it)
         }
 
         viewModel.errorLiveData.observer(viewLifecycleOwner)

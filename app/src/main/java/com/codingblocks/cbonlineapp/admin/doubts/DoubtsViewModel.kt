@@ -6,22 +6,42 @@ import androidx.lifecycle.viewModelScope
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
-import com.codingblocks.onlineapi.models.DoubtsJsonApi
+import com.codingblocks.onlineapi.models.Doubts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
 
-    var listDoubtsResponse: MutableLiveData<List<DoubtsJsonApi>> = MutableLiveData()
+    var listDoubtsResponse: MutableLiveData<List<Doubts>> = MutableLiveData()
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
     init {
-        fetchDoubts()
+        fetchMyDoubts("238594")
     }
 
     private fun fetchDoubts() {
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = repo.getLiveDoubts()) {
+                is ResultWrapper.GenericError -> showError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful)
+                        if (body().isNullOrEmpty()) {
+                            showError(ErrorStatus.EMPTY_RESPONSE)
+                        } else {
+                            listDoubtsResponse.postValue(body())
+                        }
+                    else {
+                        showError(fetchError(code()))
+                    }
+                }
+            }
+
+        }
+    }
+
+    private fun fetchMyDoubts(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val response = repo.getMyDoubts(id)) {
                 is ResultWrapper.GenericError -> showError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful)

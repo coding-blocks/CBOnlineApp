@@ -6,7 +6,6 @@ import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Company
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Doubts
-import com.codingblocks.onlineapi.models.DoubtsJsonApi
 import com.codingblocks.onlineapi.models.Instructor
 import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
@@ -133,10 +132,10 @@ interface OnlineJsonApi {
     ): Call<QuizAttempt>
 
     @POST("doubts")
-    fun createDoubt(@Body params: DoubtsJsonApi): Call<DoubtsJsonApi>
+    fun createDoubt(@Body params: Doubts): Call<Doubts>
 
     @PATCH("doubts/{doubtid}")
-    fun resolveDoubt(@Path("doubtid") id: String, @Body params: DoubtsJsonApi): Call<DoubtsJsonApi>
+    fun resolveDoubt(@Path("doubtid") id: String, @Body params: Doubts): Call<Doubts>
 
     @POST("comments")
     fun createComment(@Body params: Comment): Call<Comment>
@@ -145,7 +144,7 @@ interface OnlineJsonApi {
     fun getCommentsById(@Path("comentid") id: String): Call<List<Comment>>
 
     @GET("run_attempts/{runAttemptId}/relationships/doubts")
-    fun getDoubtByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<DoubtsJsonApi>>
+    fun getDoubtByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<Doubts>>
 
     @GET("run_attempts/{runAttemptId}/relationships/notes")
     fun getNotesByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<Note>>
@@ -213,7 +212,18 @@ interface OnlineJsonApi {
         @Query("page[limit]") page: String = "10",
         @Query("page[offset]") offset: String = "0",
         @Query("sort") sort: String = "-createdAt"
-    ): Response<List<DoubtsJsonApi>>
+    ): Response<List<Doubts>>
+
+    @GET("doubts")
+    suspend fun getMyDoubts(
+        @Query("exclude") query: String = "content.*",
+        @Query("filter[acknowledgedById]") acknowledgedId: String,
+        @Query("filter[status]") filter: String = "ACKNOWLEDGED",
+        @Query("include") include: String = "content",
+        @Query("page[limit]") page: String = "10",
+        @Query("page[offset]") offset: String = "0",
+        @Query("sort") sort: String = "-acknowledgedAt"
+    ): Response<List<Doubts>>
 
 //    @GET("projects/{id}")
 //    fun getProject(@Path("id") id: String): Call<Projects>

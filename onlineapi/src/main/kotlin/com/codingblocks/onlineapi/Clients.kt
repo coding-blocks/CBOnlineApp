@@ -6,20 +6,14 @@ import com.codingblocks.onlineapi.models.*
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.github.jasminb.jsonapi.RelationshipResolver
 import com.github.jasminb.jsonapi.ResourceConverter
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import com.google.gson.GsonBuilder
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
 import okhttp3.ConnectionPool
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
-import java.io.IOException
-import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
 object Clients {
@@ -38,7 +32,7 @@ object Clients {
         CourseSection::class.java, ContentLectureType::class.java, ContentCodeChallenge::class.java,
         ContentQna::class.java, Announcement::class.java, Progress::class.java, Quizzes::class.java,
         Question::class.java, Choice::class.java, QuizAttempt::class.java,
-        Quizqnas::class.java, DoubtsJsonApi::class.java, ContentCsv::class.java, Comment::class.java,
+        Quizqnas::class.java, Doubts::class.java, ContentCsv::class.java, Comment::class.java,
         Note::class.java, Notes::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
         RunAttemptId::class.java, RunAttemptsId::class.java, ContentId::class.java, ContentsId::class.java,
         Jobs::class.java, Company::class.java, CourseId::class.java, JobId::class.java,

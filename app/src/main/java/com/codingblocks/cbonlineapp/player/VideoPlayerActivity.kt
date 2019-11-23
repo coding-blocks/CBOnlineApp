@@ -35,7 +35,7 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.pageChangeCallback
 import com.codingblocks.cbonlineapp.widgets.VdoPlayerControlView
 import com.codingblocks.onlineapi.models.ContentsId
-import com.codingblocks.onlineapi.models.DoubtsJsonApi
+import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.crashlytics.android.Crashlytics
@@ -318,23 +318,24 @@ class VideoPlayerActivity : AppCompatActivity(),
                         doubtView.descriptionLayout.error = getString(R.string.doubt_description_error)
                         doubtView.titleLayout.error = ""
                     } else {
-                        doubtView.descriptionLayout.error = ""
-                        val doubt = DoubtsJsonApi()
-                        doubt.body = doubtView.descriptionLayout.editText?.text.toString()
-                        doubt.title = doubtView.titleLayout.editText?.text.toString()
-                        doubt.category = categoryId
-                        doubt.status = "PENDING"
-                        doubt.postrunAttempt = RunAttemptsId(attemptId)
-                        doubt.contents = ContentsId(contentId)
-                        viewModel.createDoubtProgress.observer(this) { progress ->
-                            if (progress)
-                                doubtDialog.dismiss()
-                            else {
-                                doubtDialog.dismiss()
-                                toast("there was some error please try again")
-                            }
-                        }
-                        viewModel.createDoubt(doubt, attemptId)
+//                        doubtView.descriptionLayout.error = ""
+//                        val doubt = Doubts(
+//                            doubtView.descriptionLayout.editText?.text.toString(),
+//                            doubtView.titleLayout.editText?.text.toString(),
+//                            "PENDING",
+//                            categoryId = categoryId,
+//                            )
+//                        doubt.postrunAttempt = RunAttemptsId(attemptId)
+//                        doubt.contents = ContentsId(contentId)
+//                        viewModel.createDoubtProgress.observer(this) { progress ->
+//                            if (progress)
+//                                doubtDialog.dismiss()
+//                            else {
+//                                doubtDialog.dismiss()
+//                                toast("there was some error please try again")
+//                            }
+//                        }
+//                        viewModel.createDoubt(doubt, attemptId)
                     }
                 }
 
