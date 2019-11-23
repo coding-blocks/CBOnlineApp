@@ -14,45 +14,70 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
     var listDoubtsResponse: MutableLiveData<List<Doubts>> = MutableLiveData()
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
-    init {
-        fetchMyDoubts("238594")
-    }
 
-    private fun fetchDoubts() {
+    fun fetchLiveDoubts() {
         runIO {
             val response = repo.getLiveDoubts()
-            assignValues(response)
+            assignResponse(response)
         }
     }
 
-    private fun fetchMyDoubts(id: String) {
+    fun fetchMyDoubts(id: String) {
         runIO {
             val response = repo.getMyDoubts(id)
-            assignValues(response)
+            assignResponse(response)
         }
     }
 
-    private fun assignValues(response: ResultWrapper<Response<List<Doubts>>>) {
-        when (response) {
-            is ResultWrapper.GenericError -> showError(response.error)
-            is ResultWrapper.Success -> with(response.value) {
-                if (isSuccessful)
-                    if (body().isNullOrEmpty()) {
-                        showError(ErrorStatus.EMPTY_RESPONSE)
-                    } else {
-                        listDoubtsResponse.postValue(body())
+    fun resolveDoubt(id: String, doubts: Doubts) {
+        runIO {
+            when (val response = repo.resolveDoubt(id, doubts)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        fetchMyDoubts("238594")
+                    else {
+                        setError(fetchError(response.value.code()))
                     }
-                else {
-                    showError(fetchError(code()))
                 }
             }
         }
     }
 
-    private fun showError(error: String) {
-        //Show Appropriate UI
-        errorLiveData.postValue(error)
+    fun acknowledgeDoubt(id: String, doubts: Doubts) {
+        runIO {
+            when (val response = repo.acknowledgeDoubt(id, doubts)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        fetchLiveDoubts()
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
 
+    private fun assignResponse(response: ResultWrapper<Response<List<Doubts>>>) {
+        when (response) {
+            is ResultWrapper.GenericError -> setError(response.error)
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful)
+                    if (body().isNullOrEmpty()) {
+                        setError(ErrorStatus.EMPTY_RESPONSE)
+                    } else {
+                        listDoubtsResponse.postValue(body())
+                    }
+                else {
+                    setError(fetchError(code()))
+                }
+            }
+        }
+    }
+
+    private fun setError(error: String) {
+        errorLiveData.postValue(error)
     }
 }
 

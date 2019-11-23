@@ -4,6 +4,7 @@ import com.github.jasminb.jsonapi.Links
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.RelationshipLinks
+import com.github.jasminb.jsonapi.annotations.RelationshipMeta
 import com.github.jasminb.jsonapi.annotations.Type
 import com.google.gson.JsonObject
 
@@ -414,7 +415,9 @@ data class Doubts(
     @Relationship("content")
     val content: LectureContent? = null,
     @Relationship("resolved-by")
-    val resolvedBy: UserId? = null
+    val resolvedBy: UserId? = null,
+    @RelationshipMeta("pagination")
+    val pageMeta: PageMeta? = null
 ) : BaseModel() {
     @Relationship("run-attempt")
     @JvmField
@@ -423,6 +426,16 @@ data class Doubts(
     @JvmField
     var contents: ContentsId? = null
 }
+
+data class PageMeta(
+    val count: Int,
+    val currentOffset: Int,
+    val currentPage: Int,
+    val totalPages: Int,
+    val nextOffset: Int? = null,
+    val prevOffset: Int? = null
+)
+
 
 @Type("comment")
 class Comment : BaseModel() {

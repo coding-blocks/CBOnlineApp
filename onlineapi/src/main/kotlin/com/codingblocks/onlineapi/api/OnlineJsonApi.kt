@@ -204,6 +204,11 @@ interface OnlineJsonApi {
     @GET("users/me")
     fun getMe(): Call<JsonObject>
 
+
+    /**
+     * Admin Side API"s
+     */
+
     @GET("doubts")
     suspend fun getLiveDoubts(
         @Query("exclude") query: String = "content.*",
@@ -224,6 +229,12 @@ interface OnlineJsonApi {
         @Query("page[offset]") offset: String = "0",
         @Query("sort") sort: String = "-acknowledgedAt"
     ): Response<List<Doubts>>
+
+    @PATCH("doubts/{id}")
+    suspend fun resolveAdminDoubt(@Path("id") doubtId: String, @Body params: Doubts): Response<List<Doubts>>
+
+    @PATCH("doubts/{id}")
+    suspend fun acknowledgeDoubt(@Path("id") doubtId: String, @Body params: Doubts): Response<List<Doubts>>
 
 //    @GET("projects/{id}")
 //    fun getProject(@Path("id") id: String): Call<Projects>
