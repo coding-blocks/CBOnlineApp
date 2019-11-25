@@ -43,6 +43,12 @@ class DoubtViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), AnkoL
 
                     override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
                         resolvBtn.isVisible = position != 0
+                        when (position) {
+                            1 -> doubt.status = "RESOLVED"
+                            2 -> doubt.status = "TRIAGE"
+                            3 -> doubt.status = "MENTOR ATTENTION REQUIRED"
+                            4 -> doubt.status = "IGNORED"
+                        }
                         resolvBtn.setOnClickListener {
                             resolveClickListener?.onClick(doubt.id, doubt)
                         }

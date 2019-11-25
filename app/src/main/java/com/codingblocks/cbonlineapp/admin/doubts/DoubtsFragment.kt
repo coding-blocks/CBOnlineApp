@@ -13,12 +13,16 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Doubts
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.doubts_fragment.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
@@ -32,12 +36,21 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
 
     private val doubtsAdapter = DoubtsAdapter()
     private val viewModel by viewModel<DoubtsViewModel>()
+    private var job = Job()
 
 
     private val ackClickListener: AckClickListener by lazy {
         object : AckClickListener {
             override fun onClick(doubtId: String, doubt: Doubts) {
                 viewModel.acknowledgeDoubt(doubtId, doubt)
+            }
+        }
+    }
+
+    private val resolveClickListener: ResolveClickListener by lazy {
+        object : ResolveClickListener {
+            override fun onClick(doubtId: String, doubt: Doubts) {
+                viewModel.acknowledgeDoubt(doubtId, doubt, "238594")
             }
         }
     }
@@ -88,7 +101,7 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
         {
             when (it) {
                 ErrorStatus.EMPTY_RESPONSE -> {
-                    doubtsAdapter.clear()
+
                 }
                 ErrorStatus.NO_CONNECTION -> {
 
@@ -106,6 +119,7 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
             onAckClick = ackClickListener
             onChatClick = chatClickListener
             onDiscussClick = discussClickListener
+            onResolveClick = resolveClickListener
         }
 
     }
@@ -117,11 +131,20 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
     }
 
     override fun onTabSelected(tab: TabLayout.Tab) {
+        //Clear Doubts While Changing the tab
+        doubtsAdapter.clear()
+
         when (tab.position) {
             0 -> {
+                viewModel.fetchLiveDoubts()
+//                CoroutineScope(Dispatchers.Default + job).launch {
+//                    repeat(12) {
+//                        delay(10000)
+//                        viewModel.fetchLiveDoubts()
+//                    }
+//                }
             }
-            1 -> viewModel.fetchLiveDoubts()
-            2 -> {
+            1 -> {
                 viewModel.fetchMyDoubts("238594")
             }
         }
@@ -140,6 +163,9 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
     override fun onDestroyView() {
         doubtsAdapter.apply {
             onAckClick = null
+            onResolveClick = null
+            onChatClick = null
+            onDiscussClick = null
         }
         super.onDestroyView()
     }

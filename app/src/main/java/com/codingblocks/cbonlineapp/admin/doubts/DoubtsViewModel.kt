@@ -48,13 +48,17 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
         }
     }
 
-    fun acknowledgeDoubt(id: String, doubts: Doubts) {
+    fun acknowledgeDoubt(id: String, doubts: Doubts, myDoubts: String = "") {
         runIO {
             when (val response = repo.acknowledgeDoubt(id, doubts)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
-                        fetchLiveDoubts()
+                        if (myDoubts.isNullOrEmpty())
+                            fetchLiveDoubts()
+                        else {
+                            fetchMyDoubts(myDoubts)
+                        }
                     else {
                         setError(fetchError(response.value.code()))
                     }
