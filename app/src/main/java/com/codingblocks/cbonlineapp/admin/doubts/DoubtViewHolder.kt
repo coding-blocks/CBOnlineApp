@@ -15,7 +15,6 @@ class DoubtViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var resolveClickListener: ResolveClickListener? = null
     var discussClickListener: DiscussClickListener? = null
 
-
     fun bind(doubt: Doubts, position: Int) {
         with(itemView) {
             titleTv.text = doubt.title
@@ -52,7 +51,6 @@ class DoubtViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                             resolveClickListener?.onClick(doubt.id, doubt)
                         }
                     }
-
                 }
                 chatBtn.setOnClickListener {
                     chatClickListener?.onClick(doubt.conversationId ?: "")
@@ -61,10 +59,7 @@ class DoubtViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 discussBtn.setOnClickListener {
                     discussClickListener?.onClick(doubt.discourseTopicId)
                 }
-
-
             }
-
         }
     }
 }

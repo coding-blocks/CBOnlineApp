@@ -21,9 +21,11 @@ class AdminOverviewFragment : Fragment() {
     private val viewModel by viewModel<AdminOverviewViewModel>()
     private val leaderBoardListAdapter = AdminLeaderBoardListAdapter()
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         viewModel.prefs = PreferenceHelper.getPrefs(requireContext())
         return inflater.inflate(R.layout.admin_overview_fragment, container, false)
     }
@@ -40,12 +42,10 @@ class AdminOverviewFragment : Fragment() {
         usernameTv.text = viewModel.prefs.SP_USER_NAME
         userIdTv.text = "Account Id :${viewModel.prefs.SP_ONEAUTH_ID}"
 
-
         adminLeaderboardRv.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = leaderBoardListAdapter
         }
-
 
         viewModel.doubtStats.observer(viewLifecycleOwner) {
             doubtResolvedTv.text = it.totalResolvedDoubts.toString()
@@ -54,21 +54,17 @@ class AdminOverviewFragment : Fragment() {
             responseTv.text = it.avgFirstResponse.toString()
             badReviewTv.text = it.totalBadReviews.toString()
             resolutionTv.text = it.avgResolution.toString()
-
         }
 
         viewModel.listLeaderboard.observer(viewLifecycleOwner) {
             leaderBoardListAdapter.submitList(it)
         }
 
-        viewModel.errorLiveData.observer(viewLifecycleOwner)
-        {
+        viewModel.errorLiveData.observer(viewLifecycleOwner) {
             when (it) {
                 ErrorStatus.EMPTY_RESPONSE -> {
-
                 }
                 ErrorStatus.NO_CONNECTION -> {
-
                 }
                 ErrorStatus.UNAUTHORIZED -> {
                     Components.showConfirmation(requireContext(), UNAUTHORIZED) {
@@ -76,7 +72,6 @@ class AdminOverviewFragment : Fragment() {
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
-
                 }
             }
         }
@@ -95,6 +90,4 @@ class AdminOverviewFragment : Fragment() {
             }
         }
     }
-
-
 }

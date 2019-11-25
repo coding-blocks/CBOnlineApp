@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.activity_admin.*
 import org.jetbrains.anko.contentView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class AdminActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<MyCourseViewModel>()
@@ -56,7 +55,6 @@ class AdminActivity : AppCompatActivity() {
                     true
                 }
                 else -> false
-
             }
         }
         pagerAdapter.add(AdminOverviewFragment())
@@ -109,5 +107,4 @@ class AdminActivity : AppCompatActivity() {
         contentView!!.viewTreeObserver
             .removeOnGlobalLayoutListener(mLayoutKeyboardVisibilityListener)
     }
-
 }

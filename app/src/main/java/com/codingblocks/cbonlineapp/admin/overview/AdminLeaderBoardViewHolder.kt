@@ -14,5 +14,4 @@ class AdminLeaderBoardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemV
             userRatingTv.text = doubtLeaderBoard.ratingAll.round(2).toString()
         }
     }
-
 }

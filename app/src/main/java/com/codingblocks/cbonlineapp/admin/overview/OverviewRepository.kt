@@ -17,5 +17,4 @@ class OverviewRepository {
     suspend fun getLeaderBoard(offSet: Int): ResultWrapper<Response<JSONAPIDocument<List<DoubtLeaderBoard>>>> {
         return safeApiCall { Clients.onlineV2JsonApi.getLeaderBoard(offset = offSet) }
     }
-
 }

@@ -24,7 +24,6 @@ const val COURSE_ID = "courseId"
 
 const val ROLE_ID = "roleId"
 
-
 const val RUN_ID = "runId"
 
 const val DOWNLOADED = "downloaded"

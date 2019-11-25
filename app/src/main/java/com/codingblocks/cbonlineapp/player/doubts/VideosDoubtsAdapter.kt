@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.player.doubts
 
-import android.app.Activity
 import android.content.Context
 import android.text.Editable
 import android.view.LayoutInflater
@@ -15,13 +14,8 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.player.VideoPlayerViewModel
 import com.codingblocks.cbonlineapp.util.extensions.formatDate
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Comment
-import com.codingblocks.onlineapi.models.ContentsId
-import com.codingblocks.onlineapi.models.Doubts
-import com.codingblocks.onlineapi.models.RunAttemptsId
 import kotlinx.android.synthetic.main.item_doubt.view.*
 
 class VideosDoubtsAdapter(

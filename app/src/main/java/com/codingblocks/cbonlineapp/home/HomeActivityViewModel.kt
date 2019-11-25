@@ -20,7 +20,6 @@ class HomeActivityViewModel : ViewModel() {
     var clearData: MutableLiveData<Boolean> = MutableLiveData(false)
     var isAdmin: MutableLiveData<Boolean> = MutableLiveData(false)
 
-
     fun invalidateToken() {
         prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
         Clients.api.logout().enqueue(retrofitCallback { _, response ->
@@ -71,7 +70,6 @@ class HomeActivityViewModel : ViewModel() {
                         prefs.SP_ROLE_ID = it.roleId
                         if (it.roleId == 1 || it.roleId == 3)
                             isAdmin.postValue(true)
-
                     }
                     getMeProgress.value = true
                 } else {

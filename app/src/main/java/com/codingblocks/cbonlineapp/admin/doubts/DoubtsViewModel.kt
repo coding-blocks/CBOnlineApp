@@ -18,7 +18,6 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
     var nextOffSet: MutableLiveData<Int> = MutableLiveData(0)
     var prevOffSet: MutableLiveData<Int> = MutableLiveData(0)
 
-
     fun fetchLiveDoubts(offSet: Int = 0) {
         runIO {
             val response = repo.getLiveDoubts(offSet)
@@ -86,9 +85,7 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
         }
     }
 
-
     private fun setError(error: String) {
         errorLiveData.postValue(error)
     }
 }
-

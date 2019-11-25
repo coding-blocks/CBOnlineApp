@@ -35,7 +35,6 @@ val viewModelModule = module {
     viewModel { DoubtsViewModel(get()) }
     viewModel { AdminOverviewViewModel(get()) }
 
-
     viewModel { QuizViewModel() }
 
     // Activities
@@ -51,8 +50,6 @@ val viewModelModule = module {
     single { MyCourseRepository(get(), get(), get(), get(), get()) }
     single { DoubtRepository() }
     single { OverviewRepository() }
-
-
 }
 val databaseModule = module {
 

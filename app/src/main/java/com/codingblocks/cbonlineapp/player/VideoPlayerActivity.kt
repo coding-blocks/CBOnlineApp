@@ -35,7 +35,6 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.pageChangeCallback
 import com.codingblocks.cbonlineapp.widgets.VdoPlayerControlView
 import com.codingblocks.onlineapi.models.ContentsId
-import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.crashlytics.android.Crashlytics

@@ -55,7 +55,6 @@ class CBOnlineApp : Application() {
 
             notificationManager.createNotificationChannel(notificationChannel)
             notificationManager.createNotificationChannel(adminNotificationChannel)
-
         }
         startKoin {
             androidContext(this@CBOnlineApp)

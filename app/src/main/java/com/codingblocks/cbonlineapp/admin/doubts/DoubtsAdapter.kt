@@ -15,7 +15,6 @@ class DoubtsAdapter : ListAdapter<Doubts, DoubtViewHolder>(diffCallback) {
     var onChatClick: ChatClickListener? = null
     var onDiscussClick: DiscussClickListener? = null
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoubtViewHolder {
         return DoubtViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.item_admin_doubt, parent, false))
@@ -30,7 +29,6 @@ class DoubtsAdapter : ListAdapter<Doubts, DoubtViewHolder>(diffCallback) {
                 resolveClickListener = onResolveClick
                 chatClickListener = onChatClick
                 discussClickListener = onDiscussClick
-
             }
     }
 
@@ -51,7 +49,6 @@ class DoubtsAdapter : ListAdapter<Doubts, DoubtViewHolder>(diffCallback) {
                 oldItem.id.sameAndEqual(newItem.id)
         }
     }
-
 }
 
 interface AckClickListener {

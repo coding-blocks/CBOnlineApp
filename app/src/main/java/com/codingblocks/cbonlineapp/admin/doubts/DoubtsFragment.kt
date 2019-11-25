@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.Constraints
@@ -18,15 +19,11 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Doubts
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.admin_overview_fragment.*
 import kotlinx.android.synthetic.main.doubts_fragment.*
-import kotlinx.android.synthetic.main.doubts_fragment.nextBtn
-import kotlinx.android.synthetic.main.doubts_fragment.prevBtn
 import kotlinx.coroutines.Job
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
-
 
 class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
 
@@ -37,7 +34,6 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
     private val doubtsAdapter = DoubtsAdapter()
     private val viewModel by viewModel<DoubtsViewModel>()
     private var job = Job()
-
 
     private val ackClickListener: AckClickListener by lazy {
         object : AckClickListener {
@@ -70,9 +66,11 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
         }
     }
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.doubts_fragment, container, false)
     }
 
@@ -82,29 +80,36 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
         setupWorker()
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         adminTabLayout.addOnTabSelectedListener(this)
 
         doubtRv.apply {
+            doubtRv.isVisible = true
             layoutManager = LinearLayoutManager(requireContext())
             adapter = doubtsAdapter
         }
 
         viewModel.listDoubtsResponse.observer(viewLifecycleOwner) {
             doubtsAdapter.submitList(it)
+
+            doubtRv.isVisible = it.isNotEmpty()
+            emptyll.isVisible = it.isEmpty()
         }
 
-        viewModel.errorLiveData.observer(viewLifecycleOwner)
-        {
+        viewModel.errorLiveData.observer(viewLifecycleOwner) {
             when (it) {
                 ErrorStatus.EMPTY_RESPONSE -> {
-
+                    if (adminTabLayout.selectedTabPosition == 0) {
+                        emptyMessageTv.text = requireContext().resources.getString(R.string.empty_live_doubt)
+                    } else {
+                        emptyMessageTv.text = requireContext().resources.getString(R.string.empty_my_doubt)
+                    }
+                    emptyll.isVisible = true
+                    doubtRv.isVisible = false
                 }
                 ErrorStatus.NO_CONNECTION -> {
-
                 }
                 ErrorStatus.UNAUTHORIZED -> {
                     Components.showConfirmation(requireContext(), UNAUTHORIZED) {
@@ -112,7 +117,6 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
-
                 }
             }
         }
@@ -136,7 +140,6 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
                 viewModel.fetchLiveDoubts(offSet)
             }
         }
-
     }
 
     override fun onTabReselected(tab: TabLayout.Tab) {
@@ -146,7 +149,7 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
     }
 
     override fun onTabSelected(tab: TabLayout.Tab) {
-        //Clear Doubts While Changing the tab
+        // Clear Doubts While Changing the tab
         doubtsAdapter.clear()
 
         when (tab.position) {
@@ -184,5 +187,4 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
         }
         super.onDestroyView()
     }
-
 }

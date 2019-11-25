@@ -1,6 +1,6 @@
 package com.codingblocks.cbonlineapp.mycourse.doubts
 
-//class DoubtsFragment : Fragment(), AnkoLogger {
+// class DoubtsFragment : Fragment(), AnkoLogger {
 //
 //    private val attemptId: String by lazy {
 //        arguments?.getString(ARG_ATTEMPT_ID) ?: ""
@@ -19,17 +19,17 @@ package com.codingblocks.cbonlineapp.mycourse.doubts
 //
 //    override fun onActivityCreated(savedInstanceState: Bundle?) {
 //        super.onActivityCreated(savedInstanceState)
-////        val doubtsAdapter = DoubtsAdapter(ArrayList())
-////        doubtsRv.layoutManager = LinearLayoutManager(context)
-////        doubtsRv.adapter = doubtsAdapter
+// //        val doubtsAdapter = DoubtsAdapter(ArrayList())
+// //        doubtsRv.layoutManager = LinearLayoutManager(context)
+// //        doubtsRv.adapter = doubtsAdapter
 //        val itemDecorator = DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL)
 //        itemDecorator.setDrawable(ContextCompat.getDrawable(context!!, R.drawable.divider_black)!!)
 //        doubtsRv.addItemDecoration(itemDecorator)
-////        Clients.api.getDoubts(courseId).enqueue(retrofitCallback { _, doubtsresponse ->
-////            doubtsresponse?.body().let {
-////                it?.topicList?.topics?.let { it1 -> doubtsAdapter.setData(it1) }
-////            }
-////        })
+// //        Clients.api.getDoubts(courseId).enqueue(retrofitCallback { _, doubtsresponse ->
+// //            doubtsresponse?.body().let {
+// //                it?.topicList?.topics?.let { it1 -> doubtsAdapter.setData(it1) }
+// //            }
+// //        })
 //    }
 //
 //    companion object {
@@ -43,4 +43,4 @@ package com.codingblocks.cbonlineapp.mycourse.doubts
 //                }
 //            }
 //    }
-//}
+// }

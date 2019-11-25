@@ -24,6 +24,4 @@ class DoubtRepository {
     suspend fun acknowledgeDoubt(doubtId: String, doubt: Doubts): ResultWrapper<Response<List<Doubts>>> {
         return safeApiCall { Clients.onlineV2JsonApi.acknowledgeDoubt(doubtId, doubt) }
     }
-
-
 }

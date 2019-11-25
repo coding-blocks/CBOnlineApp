@@ -22,7 +22,6 @@ class AdminOverviewViewModel(private val repo: OverviewRepository) : ViewModel()
     var prevOffSet: MutableLiveData<Int> = MutableLiveData(0)
     lateinit var prefs: PreferenceHelper
 
-
     init {
         fetchLeaderBoard()
     }
@@ -76,5 +75,4 @@ class AdminOverviewViewModel(private val repo: OverviewRepository) : ViewModel()
     private fun setError(error: String) {
         errorLiveData.postValue(error)
     }
-
 }
