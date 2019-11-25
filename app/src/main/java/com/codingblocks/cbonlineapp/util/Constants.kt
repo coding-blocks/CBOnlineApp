@@ -59,4 +59,6 @@ const val VIDEO_URL = "videoUrl"
 
 const val DOWNLOAD_CHANNEL_ID = "downloadChannel"
 
+const val ADMIN_CHANNEL_ID = "adminChannel"
+
 const val UNAUTHORIZED = "Unauthorized"

@@ -8,6 +8,7 @@ import cn.campusapp.router.router.IActivityRouteTableInitializer
 import com.codingblocks.cbonlineapp.course.CourseActivity
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.util.ADMIN_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_TAB
@@ -46,7 +47,15 @@ class CBOnlineApp : Application() {
                 NotificationManager.IMPORTANCE_DEFAULT
             )
 
+            val adminNotificationChannel = NotificationChannel(
+                ADMIN_CHANNEL_ID,
+                "Admin Notification",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+
             notificationManager.createNotificationChannel(notificationChannel)
+            notificationManager.createNotificationChannel(adminNotificationChannel)
+
         }
         startKoin {
             androidContext(this@CBOnlineApp)

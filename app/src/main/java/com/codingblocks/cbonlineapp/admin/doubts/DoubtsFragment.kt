@@ -6,8 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Doubts
@@ -15,6 +21,7 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.doubts_fragment.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.concurrent.TimeUnit
 
 
 class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
@@ -59,7 +66,9 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.fetchLiveDoubts()
+        setupWorker()
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -113,10 +122,19 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
             }
             1 -> viewModel.fetchLiveDoubts()
             2 -> {
-
                 viewModel.fetchMyDoubts("238594")
             }
         }
+    }
+
+    private fun setupWorker() {
+        val constraints =
+            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val request = PeriodicWorkRequestBuilder<DoubtWorker>(PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS, TimeUnit.MILLISECONDS)
+            .setConstraints(constraints)
+            .build()
+        WorkManager.getInstance()
+            .enqueue(request)
     }
 
     override fun onDestroyView() {
