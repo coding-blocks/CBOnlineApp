@@ -413,28 +413,18 @@ data class Doubts(
     @Relationship("run-attempt")
     val runAttempt: RunAttemptId? = null,
     @Relationship("content")
-    val content: LectureContent? = null,
+    val content: ContentId? = null,
     @Relationship("resolved-by")
-    val resolvedBy: UserId? = null,
-    @RelationshipMeta("pagination")
-    val pageMeta: PageMeta? = null
+    val resolvedBy: UserId? = null
 ) : BaseModel() {
-    @Relationship("run-attempt")
-    @JvmField
-    var postrunAttempt: RunAttemptsId? = null
-    @Relationship("content")
-    @JvmField
-    var contents: ContentsId? = null
+//    @Relationship("run-attempt")
+//    @JvmField
+//    var postrunAttempt: RunAttemptsId? = null
+//    @Relationship("content")
+//    @JvmField
+//    var contents: ContentsId? = null
 }
 
-data class PageMeta(
-    val count: Int,
-    val currentOffset: Int,
-    val currentPage: Int,
-    val totalPages: Int,
-    val nextOffset: Int? = null,
-    val prevOffset: Int? = null
-)
 
 
 @Type("comment")
@@ -510,7 +500,10 @@ class RunAttemptsId(
 class ContentId(
     @Id
     val id: String?
-)
+) {
+    val title: String? = null
+
+}
 
 @Type("contents")
 open class ContentsId(

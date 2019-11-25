@@ -78,7 +78,7 @@ class VideoPlayerViewModel(
                             viewModelScope.launch(Dispatchers.IO) {
                                 doubtsDao.insert(
                                     DoubtsModel(
-                                        it.id, it.title, it.body, it.contents?.id
+                                        it.id, it.title, it.body, it.content?.id
                                         ?: "", it.status, attemptId
                                     )
                                 )

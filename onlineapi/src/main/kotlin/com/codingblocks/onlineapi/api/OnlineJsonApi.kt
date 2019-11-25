@@ -19,6 +19,7 @@ import com.codingblocks.onlineapi.models.Question
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.Sections
+import com.github.jasminb.jsonapi.JSONAPIDocument
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -217,7 +218,7 @@ interface OnlineJsonApi {
         @Query("page[limit]") page: String = "10",
         @Query("page[offset]") offset: String = "0",
         @Query("sort") sort: String = "-createdAt"
-    ): Response<List<Doubts>>
+    ): Response<JSONAPIDocument<List<Doubts>>>
 
     @GET("doubts")
     suspend fun getMyDoubts(
@@ -228,7 +229,7 @@ interface OnlineJsonApi {
         @Query("page[limit]") page: String = "10",
         @Query("page[offset]") offset: String = "0",
         @Query("sort") sort: String = "-acknowledgedAt"
-    ): Response<List<Doubts>>
+    ): Response<JSONAPIDocument<List<Doubts>>>
 
     @PATCH("doubts/{id}")
     suspend fun resolveAdminDoubt(@Path("id") doubtId: String, @Body params: Doubts): Response<List<Doubts>>

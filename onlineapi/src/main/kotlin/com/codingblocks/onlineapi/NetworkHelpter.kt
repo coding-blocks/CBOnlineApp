@@ -32,3 +32,9 @@ fun fetchError(code: Int): String {
     return ErrorStatus.NOT_DEFINED
 }
 
+@Suppress("UNCHECKED_CAST")
+fun getMeta(meta: MutableMap<String, *>?, key: String): Int? {
+    val map = meta?.get("pagination") as HashMap<String, Int>
+    return map[key]
+}
+

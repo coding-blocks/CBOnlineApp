@@ -4,16 +4,17 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.safeApiCall
+import com.github.jasminb.jsonapi.JSONAPIDocument
 import kotlinx.coroutines.Dispatchers
 import retrofit2.Response
 
 class DoubtRepository {
 
-    suspend fun getLiveDoubts(): ResultWrapper<Response<List<Doubts>>> {
+    suspend fun getLiveDoubts(): ResultWrapper<Response<JSONAPIDocument<List<Doubts>>>> {
         return safeApiCall(Dispatchers.IO) { Clients.onlineV2JsonApi.getLiveDoubts() }
     }
 
-    suspend fun getMyDoubts(acknowledgedId: String): ResultWrapper<Response<List<Doubts>>> {
+    suspend fun getMyDoubts(acknowledgedId: String): ResultWrapper<Response<JSONAPIDocument<List<Doubts>>>> {
         return safeApiCall(Dispatchers.IO) { Clients.onlineV2JsonApi.getMyDoubts(acknowledgedId = acknowledgedId) }
     }
 

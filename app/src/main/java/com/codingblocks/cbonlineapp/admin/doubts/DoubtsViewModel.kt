@@ -6,13 +6,17 @@ import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
+import com.codingblocks.onlineapi.getMeta
 import com.codingblocks.onlineapi.models.Doubts
+import com.github.jasminb.jsonapi.JSONAPIDocument
 import retrofit2.Response
 
 class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
 
     var listDoubtsResponse: MutableLiveData<List<Doubts>> = MutableLiveData()
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
+    var nextOffSet: MutableLiveData<Int> = MutableLiveData()
+    var prevOffSet: MutableLiveData<Int> = MutableLiveData()
 
 
     fun fetchLiveDoubts() {
@@ -59,15 +63,17 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
         }
     }
 
-    private fun assignResponse(response: ResultWrapper<Response<List<Doubts>>>) {
+    private fun assignResponse(response: ResultWrapper<Response<JSONAPIDocument<List<Doubts>>>>) {
         when (response) {
             is ResultWrapper.GenericError -> setError(response.error)
             is ResultWrapper.Success -> with(response.value) {
                 if (isSuccessful)
-                    if (body().isNullOrEmpty()) {
+                    if (body()?.get().isNullOrEmpty()) {
                         setError(ErrorStatus.EMPTY_RESPONSE)
                     } else {
-                        listDoubtsResponse.postValue(body())
+                        nextOffSet.postValue(getMeta(body()?.meta, "nextOffSet"))
+                        prevOffSet.postValue(getMeta(body()?.meta, "prevOffSet"))
+                        listDoubtsResponse.postValue(body()?.get())
                     }
                 else {
                     setError(fetchError(code()))
@@ -75,6 +81,7 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
             }
         }
     }
+
 
     private fun setError(error: String) {
         errorLiveData.postValue(error)

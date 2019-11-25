@@ -4,17 +4,34 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.RunAttemptsId
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 
+@Suppress("UNCHECKED_CAST")
 class OnlineJsonApiAuthenticatedTest {
     val jsonapi = Clients.onlineV2JsonApi
 
     @Before
     fun `set JWT`() {
         Clients.authJwt =
-            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTI4ODE1LCJmaXJzdG5hbWUiOiJSYWh1bCIsImxhc3RuYW1lIjoiUmF5IiwidXNlcm5hbWUiOiJSYWh1bC1SYXktMjM0OTI2MDg3MjAxOTQ4OCIsImVtYWlsIjoicmFodWw5NjUwcmF5QGdtYWlsLmNvbSIsInZlcmlmaWVkZW1haWwiOiJyYWh1bDk2NTByYXlAZ21haWwuY29tIiwidmVyaWZpZWRtb2JpbGUiOm51bGwsIm1vYmlsZSI6Iis5MS05NjUwMTI0NzU2Iiwib25lYXV0aF9pZCI6IjMyODIyIiwibGFzdF9yZWFkX25vdGlmaWNhdGlvbiI6IjAiLCJwaG90byI6Imh0dHBzOi8vZ3JhcGguZmFjZWJvb2suY29tLzIzNDkyNjA4NzIwMTk0ODgvcGljdHVyZT90eXBlPWxhcmdlIiwiY29sbGVnZSI6IjAtLS1PVEhFUiAvIE5PVCBMSVNURUQgLyBOTyBDT0xMRUdFIC0tLTAiLCJvcmdhbml6YXRpb24iOm51bGwsInJvbGVJZCI6MiwiY3JlYXRlZEF0IjoiMjAxOS0wNS0xNFQxODowNToxOC44NTRaIiwidXBkYXRlZEF0IjoiMjAxOS0wNy0yMFQxNTozMjo1OS43OTZaIiwicm9sZSI6eyJpZCI6MiwibmFtZSI6IlN0dWRlbnQiLCJjcmVhdGVkQXQiOiIyMDE3LTA5LTA3VDEwOjU4OjE5Ljk5M1oiLCJ1cGRhdGVkQXQiOiIyMDE3LTA5LTA3VDEwOjU4OjE5Ljk5M1oifSwiY2xpZW50SWQiOiI0MmIzZTNkNy00ZDE4LTQ1ZjAtOTBlMS1lNzlhNDIyZjgyYTgiLCJjbGllbnQiOiJhbmRyb2lkIiwiaWF0IjoxNTYzNjM2Nzc5LCJleHAiOjE1NjkwMzY3Nzl9.S-q6uYhnDQZQdIJABMzeJDDW9THQcefZ6YXo-6IMUM7gZlxS2G8W3zOGgS-DmsH6MMXJwu2u7oNeJh3OgI5hgp41PuCzehYuW2lrOZuf1FU2xdDdPrATo35M7qjpJLGIE2rIZOZQh-3EE6mPePrblUG0M9YwoQFi1ITDn19FS3YGlfsy5PNrvkyuNCx2wfkEvNLJKvmsvKQNVDorruLMm6zbTcFbGTEAHiryxWeJUyI2u9LxJrIEsph6NEnoDMsilUY5-fUGSQ-UB_FMvseG1rYPtClJjrrOYNjWPpK-MqCashceH6XukNtN8JjMl776EEaHio775-ULZ13A-upSxg"
+            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjM4NTk0LCJmaXJzdG5hbWUiOiJ0ZXN0IiwibGFzdG5hbWUiOiJkdW1teSIsInVzZXJuYW1lIjoidGVzdGR1bW15IiwiZW1haWwiOiJzYXJ0aGFrajI0OThAZ21haWwuY29tIiwidmVyaWZpZWRlbWFpbCI6InNhcnRoYWtqMjQ5OEBnbWFpbC5jb20iLCJ2ZXJpZmllZG1vYmlsZSI6bnVsbCwibW9iaWxlIjoiKzkxLTEyMzQ1Njc4OTAiLCJvbmVhdXRoX2lkIjoiNDY0MTAiLCJsYXN0X3JlYWRfbm90aWZpY2F0aW9uIjoiMCIsInBob3RvIjpudWxsLCJjb2xsZWdlIjoiQUJFUyBFbmdpbmVlcmluZyBDb2xsZWdlLCBOZXcgRGVsaGkiLCJncmFkdWF0aW9ueWVhciI6IjIwMjMiLCJvcmdhbml6YXRpb24iOm51bGwsInJvbGVJZCI6MywiY3JlYXRlZEF0IjoiMjAxOS0wOC0wNFQxODowMTozOC45NTNaIiwidXBkYXRlZEF0IjoiMjAxOS0xMS0yM1QxMzo1NjoxMy4wMzlaIiwicm9sZSI6eyJpZCI6MywibmFtZSI6Ik1vZGVyYXRvciIsImNyZWF0ZWRBdCI6IjIwMTgtMDktMDRUMTM6Mzg6MzEuODg1WiIsInVwZGF0ZWRBdCI6IjIwMTgtMDktMDRUMTM6Mzg6MzEuODg1WiJ9LCJjbGllbnRJZCI6ImRjODlhZDkzLWNiYTYtNGNmOS1hOGQzLTkxNDU0ODZkYjY5MCIsImNsaWVudCI6IndlYi1hZG1pbiIsImlhdCI6MTU3NDUxNzM3MywiZXhwIjoxNTc0NTE3NjczfQ.X9cux9xVeFof4VU6CRrxBzj0skmROd8zFf0qN7mskTuGh1jTMW_5U_SMQ2lmO34rLVDszxxqPUyXECKsdMSoSZL4EqkOPUrSwp6qbBCmMYtijX0UjVBhbrd9grWvyYcmxBcbDo8H3j9h64UV5Xwl1xkaSj5VlGwQA9Bhi6yxZkETBoIcntEwkffa1oYvj-Dhmwf9mj1IwyA1Ajxs5HeENO0Anr-NiVPgY6KE-gEs5A7GI_nRGk7cK7-HNBRRG4RurelV9WynBdtwqi-dKhiwEGd6COj65U6WURi2383uTJCkDQmOoiDi9h5iIK-mgdzIMelCn7Z-1tbvkEJLMrvaNg"
+    }
+
+
+    @Test
+    fun getDoubts() {
+        runBlocking {
+            val doubts = GlobalScope.async { Clients.onlineV2JsonApi.getMyDoubts(acknowledgedId = "238594") }
+            val response = doubts.await()
+            val meta: HashMap<String, Any> = response.body()?.meta?.get("pagination") as HashMap<String, Any>
+            assertNotNull(meta)
+            assertNotNull(response.body())
+
+        }
     }
 
     @Test
