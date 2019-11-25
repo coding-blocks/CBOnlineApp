@@ -56,7 +56,7 @@ class AdminActivity : AppCompatActivity() {
         pagerAdmin.apply {
             adapter = pagerAdapter
             currentItem = 0
-            offscreenPageLimit = 1
+            offscreenPageLimit = 0
         }
     }
 }

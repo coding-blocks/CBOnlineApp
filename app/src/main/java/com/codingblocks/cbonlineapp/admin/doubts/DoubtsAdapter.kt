@@ -4,19 +4,41 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.Doubts
 
 class DoubtsAdapter : ListAdapter<Doubts, DoubtViewHolder>(diffCallback) {
+
+    var onAckClick: AckClickListener? = null
+    var onResolveClick: ResolveClickListener? = null
+    var onChatClick: ChatClickListener? = null
+    var onDiscussClick: DiscussClickListener? = null
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoubtViewHolder {
         return DoubtViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.item_admin_doubt, parent, false))
     }
 
     override fun onBindViewHolder(holder: DoubtViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val doubt = getItem(position)
+        if (doubt != null)
+            holder.apply {
+                bind(doubt, position)
+                ackClickListener = onAckClick
+                resolveClickListener = onResolveClick
+                chatClickListener = onChatClick
+                discussClickListener = onDiscussClick
+
+            }
+    }
+
+    /**
+     * The function to call when the adapter has to be cleared of items
+     */
+    fun clear() {
+        this.submitList(null)
     }
 
     companion object {
@@ -29,4 +51,21 @@ class DoubtsAdapter : ListAdapter<Doubts, DoubtViewHolder>(diffCallback) {
                 oldItem.id.sameAndEqual(newItem.id)
         }
     }
+
+}
+
+interface AckClickListener {
+    fun onClick(doubtId: String, doubt: Doubts)
+}
+
+interface ResolveClickListener {
+    fun onClick(doubtId: String, doubt: Doubts)
+}
+
+interface ChatClickListener {
+    fun onClick(convId: String)
+}
+
+interface DiscussClickListener {
+    fun onClick(discordId: String)
 }

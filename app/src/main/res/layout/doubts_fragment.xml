@@ -2,12 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    app:layout_behavior=""
     android:layout_height="match_parent"
     tools:context="com.codingblocks.cbonlineapp.admin.doubts.DoubtsFragment">
 
 
     <com.google.android.material.tabs.TabLayout
         android:layout_width="match_parent"
+        android:id="@+id/adminTabLayout"
         android:layout_height="wrap_content">
 
         <com.google.android.material.tabs.TabItem
@@ -25,6 +29,18 @@
             android:layout_height="wrap_content"
             android:text="My Doubts" />
     </com.google.android.material.tabs.TabLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/doubtRv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_admin_doubt" />
+    </FrameLayout>
 
 
 </LinearLayout>
