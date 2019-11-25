@@ -20,6 +20,7 @@ import com.codingblocks.onlineapi.models.Question
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.Sections
+import com.codingblocks.onlineapi.models.User
 import com.github.jasminb.jsonapi.JSONAPIDocument
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
@@ -204,7 +205,7 @@ interface OnlineJsonApi {
     fun applyJob(@Body params: Applications): Call<ResponseBody>
 
     @GET("users/me")
-    fun getMe(): Call<JsonObject>
+    fun getMe(): Call<User>
 
 
     /**
@@ -217,7 +218,7 @@ interface OnlineJsonApi {
         @Query("filter[status]") filter: String = "PENDING",
         @Query("include") include: String = "content",
         @Query("page[limit]") page: String = "10",
-        @Query("page[offset]") offset: String = "0",
+        @Query("page[offset]") offset: Int = 0,
         @Query("sort") sort: String = "-createdAt"
     ): Response<JSONAPIDocument<List<Doubts>>>
 

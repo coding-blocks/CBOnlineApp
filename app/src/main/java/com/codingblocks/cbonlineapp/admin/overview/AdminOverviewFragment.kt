@@ -8,9 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.ErrorStatus
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.admin_overview_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -22,6 +24,7 @@ class AdminOverviewFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        viewModel.prefs = PreferenceHelper.getPrefs(requireContext())
         return inflater.inflate(R.layout.admin_overview_fragment, container, false)
     }
 
@@ -32,6 +35,11 @@ class AdminOverviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Picasso.get().load(viewModel.prefs.SP_USER_IMAGE).placeholder(R.drawable.defaultavatar).into(userIv)
+        usernameTv.text = viewModel.prefs.SP_USER_NAME
+        userIdTv.text = "Account Id :${viewModel.prefs.SP_ONEAUTH_ID}"
+
 
         adminLeaderboardRv.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -85,7 +93,6 @@ class AdminOverviewFragment : Fragment() {
             prevBtn.setOnClickListener {
                 viewModel.fetchLeaderBoard(offSet)
             }
-
         }
     }
 

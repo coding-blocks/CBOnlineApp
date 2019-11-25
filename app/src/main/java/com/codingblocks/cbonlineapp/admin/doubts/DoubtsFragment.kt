@@ -18,7 +18,10 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Doubts
 import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.admin_overview_fragment.*
 import kotlinx.android.synthetic.main.doubts_fragment.*
+import kotlinx.android.synthetic.main.doubts_fragment.nextBtn
+import kotlinx.android.synthetic.main.doubts_fragment.prevBtn
 import kotlinx.coroutines.Job
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -119,6 +122,19 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
             onChatClick = chatClickListener
             onDiscussClick = discussClickListener
             onResolveClick = resolveClickListener
+        }
+        viewModel.nextOffSet.observer(viewLifecycleOwner) { offSet ->
+            nextBtn.isEnabled = offSet != 0
+            nextBtn.setOnClickListener {
+                viewModel.fetchLiveDoubts(offSet)
+            }
+        }
+
+        viewModel.prevOffSet.observer(viewLifecycleOwner) { offSet ->
+            prevBtn.isEnabled = offSet != 0
+            prevBtn.setOnClickListener {
+                viewModel.fetchLiveDoubts(offSet)
+            }
         }
 
     }

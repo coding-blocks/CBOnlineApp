@@ -18,6 +18,8 @@ class HomeActivityViewModel : ViewModel() {
     var fetchTokenProgress: MutableLiveData<Boolean> = MutableLiveData()
     var getMeProgress: MutableLiveData<Boolean> = MutableLiveData()
     var clearData: MutableLiveData<Boolean> = MutableLiveData(false)
+    var isAdmin: MutableLiveData<Boolean> = MutableLiveData(false)
+
 
     fun invalidateToken() {
         prefs.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
@@ -55,22 +57,21 @@ class HomeActivityViewModel : ViewModel() {
 
     fun getMe() {
         setJWTToken()
-        Clients.api.getMe().enqueue(retrofitCallback { _, resp ->
+        Clients.onlineV2JsonApi.getMe().enqueue(retrofitCallback { _, resp ->
             resp.let {
                 if (resp?.isSuccessful == true) {
                     resp.body()?.let {
-                        try {
-                            if (prefs.SP_ONEAUTH_ID == PreferenceHelper.ONEAUTH_ID) {
-                                clearData.postValue(true)
-                            }
-                            val jSONObject = it.getAsJsonObject("data").getAsJsonObject("attributes")
-                            prefs.SP_USER_ID = it.getAsJsonObject("data").get("id").asString
-                            prefs.SP_ONEAUTH_ID = jSONObject.get("oneauth-id").asString
-                            prefs.SP_USER_IMAGE = jSONObject.get("photo").asString
-                            prefs.SP_USER_NAME = jSONObject.get("firstname").asString + " " + jSONObject.get("lastname").asString
-
-                        } catch (e: Exception) {
+                        if (prefs.SP_ONEAUTH_ID == PreferenceHelper.ONEAUTH_ID) {
+                            clearData.postValue(true)
                         }
+                        prefs.SP_USER_ID = it.id
+                        prefs.SP_ONEAUTH_ID = it.oneauthId
+                        prefs.SP_USER_IMAGE = it.photo ?: "Empty"
+                        prefs.SP_USER_NAME = it.firstname + " " + it.lastname
+                        prefs.SP_ROLE_ID = it.roleId
+                        if (it.roleId == 1 || it.roleId == 3)
+                            isAdmin.postValue(true)
+
                     }
                     getMeProgress.value = true
                 } else {

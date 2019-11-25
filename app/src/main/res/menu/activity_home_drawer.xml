@@ -33,6 +33,12 @@
             android:id="@+id/nav_preferences"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="@string/title_activity_settings" />
+
+        <item
+            android:id="@+id/nav_admin"
+            android:icon="@drawable/ic_library_books_black_24dp"
+            android:title="Admin Panel"
+            android:visible="false" />
     </group>
     <group
         android:id="@+id/communication"

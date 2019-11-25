@@ -4,7 +4,6 @@ import com.github.jasminb.jsonapi.Links
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.RelationshipLinks
-import com.github.jasminb.jsonapi.annotations.RelationshipMeta
 import com.github.jasminb.jsonapi.annotations.Type
 import com.google.gson.JsonObject
 
@@ -426,7 +425,6 @@ data class Doubts(
 }
 
 
-
 @Type("comment")
 class Comment : BaseModel() {
     @JvmField
@@ -499,7 +497,9 @@ class User(
     val oneauthId: String,
     val photo: String?,
     val verifiedemail: String?,
-    val verifiedmobile: String?
+    val verifiedmobile: String?,
+    val roleId: Int = 0
+
 ) : BaseModel()
 
 @Type("doubt_leaderboard")

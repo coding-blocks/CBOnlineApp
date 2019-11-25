@@ -10,7 +10,7 @@ import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewFragment
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.ROLE_ID
+import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import kotlinx.android.synthetic.main.activity_admin.*
 import org.jetbrains.anko.contentView
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -30,13 +30,13 @@ class AdminActivity : AppCompatActivity() {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val roleId = intent.getIntExtra(ROLE_ID, -1)
-        if (roleId == 1 || roleId == 2) {
+        val roleId = getPrefs().SP_ROLE_ID
+        if (roleId == 1 || roleId == 3) {
+            initializeUI()
+        } else {
             Components.showConfirmation(this, "admin") {
                 finish()
             }
-        } else {
-            initializeUI()
         }
     }
 
@@ -65,7 +65,7 @@ class AdminActivity : AppCompatActivity() {
         pagerAdmin.apply {
             adapter = pagerAdapter
             currentItem = 0
-            offscreenPageLimit = 0
+            offscreenPageLimit = 3
         }
     }
 

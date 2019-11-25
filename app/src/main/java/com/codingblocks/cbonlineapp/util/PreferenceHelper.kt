@@ -14,6 +14,9 @@ class PreferenceHelper private constructor() {
         const val ONEAUTH_ID = "oneauth_id"
         const val USER_ID = "user_id"
         const val USER_NAME = "user_name"
+        const val ROLE_ID = "role_id"
+        const val ROLE_ID_DEFAULT = 0
+
         const val WIFI = "wifi"
         const val WIFI_DEFAULT = false
         const val DATA_LIMIT = "data_limit"
@@ -52,7 +55,7 @@ class PreferenceHelper private constructor() {
             prefs?.edit()?.putString(REFRESH_TOKEN, value)?.apply()
         }
     var SP_USER_IMAGE: String
-        get() = prefs?.getString(USER_IMAGE, USER_IMAGE) ?: ""
+        get() = prefs?.getString(USER_IMAGE, USER_IMAGE) ?: "Empty"
         set(value) {
             prefs?.edit()?.putString(USER_IMAGE, value)?.apply()
         }
@@ -72,6 +75,12 @@ class PreferenceHelper private constructor() {
         get() = prefs?.getString(USER_NAME, USER_NAME) ?: ""
         set(value) {
             prefs?.edit()?.putString(USER_NAME, value)?.apply()
+        }
+
+    var SP_ROLE_ID: Int
+        get() = prefs?.getInt(ROLE_ID, ROLE_ID_DEFAULT) ?: ROLE_ID_DEFAULT
+        set(value) {
+            prefs?.edit()?.putInt(ROLE_ID, value)?.apply()
         }
 
     var SP_WIFI: Boolean

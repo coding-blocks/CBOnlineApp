@@ -15,13 +15,13 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
 
     var listDoubtsResponse: MutableLiveData<List<Doubts>> = MutableLiveData()
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
-    var nextOffSet: MutableLiveData<Int> = MutableLiveData()
-    var prevOffSet: MutableLiveData<Int> = MutableLiveData()
+    var nextOffSet: MutableLiveData<Int> = MutableLiveData(0)
+    var prevOffSet: MutableLiveData<Int> = MutableLiveData(0)
 
 
-    fun fetchLiveDoubts() {
+    fun fetchLiveDoubts(offSet: Int = 0) {
         runIO {
-            val response = repo.getLiveDoubts()
+            val response = repo.getLiveDoubts(offSet)
             assignResponse(response)
         }
     }

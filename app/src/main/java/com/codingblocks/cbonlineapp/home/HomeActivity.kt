@@ -22,6 +22,7 @@ import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.LoginActivity
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.home.mycourses.MyCoursesFragment
 import com.codingblocks.cbonlineapp.jobs.JobsActivity
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
@@ -71,6 +72,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (savedInstanceState == null) {
             setUpFragment()
         }
+        viewModel.isAdmin.observer(this) {
+            val navMenu = nav_view.menu
+            navMenu.findItem(R.id.nav_admin).isVisible = it
+        }
         // adding label to nav drawer items
         // nav_view.menu.getItem(3).setActionView(R.layout.menu_new)
     }
@@ -107,6 +112,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setUser() {
         viewModel.setJWTToken()
+        with(viewModel.prefs.SP_ROLE_ID) {
+            if (this == 1 || this == 3)
+                viewModel.isAdmin.postValue(true)
+        }
         if (viewModel.prefs.SP_USER_IMAGE.isNotEmpty())
             nav_view.getHeaderView(0).nav_header_imageView.apply {
                 setOnClickListener(this@HomeActivity)
@@ -229,6 +238,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_contactUs -> {
                 startActivity(intentFor<AboutActivity>().singleTop())
+            }
+            R.id.nav_admin -> {
+                startActivity(intentFor<AdminActivity>().singleTop())
             }
             R.id.report_bug -> {
                 showReportDialog()

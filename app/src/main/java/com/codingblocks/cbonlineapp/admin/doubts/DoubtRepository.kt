@@ -9,8 +9,8 @@ import retrofit2.Response
 
 class DoubtRepository {
 
-    suspend fun getLiveDoubts(): ResultWrapper<Response<JSONAPIDocument<List<Doubts>>>> {
-        return safeApiCall { Clients.onlineV2JsonApi.getLiveDoubts() }
+    suspend fun getLiveDoubts(offSet: Int): ResultWrapper<Response<JSONAPIDocument<List<Doubts>>>> {
+        return safeApiCall { Clients.onlineV2JsonApi.getLiveDoubts(offset = offSet) }
     }
 
     suspend fun getMyDoubts(acknowledgedId: String): ResultWrapper<Response<JSONAPIDocument<List<Doubts>>>> {

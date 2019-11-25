@@ -86,7 +86,7 @@ interface OnlineRestApi {
     suspend fun doubtStats(@Path("id") userId: String): Response<DoubtStats>
 
     @GET("v2/users/me/chatSignature")
-    suspend fun getSignature(): Call<JsonObject>
+    fun getSignature(): Call<JsonObject>
 
 
 }

@@ -7,7 +7,7 @@ s=a.createElement('script');s.async=1;s.src="https://cdn.talkjs.com/talk.js";a.h
 </script>
 
 <!-- container element in which TalkJS will display a chat UI -->
-<div id="talkjs-container" style="width: 90%; margin: 10px; height: 80%"><i>Loading chat...</i>
+<div id="talkjs-container" style="width: 90%; margin: 10px; height: 85%"><i>Loading chat...</i>
 </div>
 
 <!-- TalkJS initialization code, which we'll customize in the next steps -->
@@ -17,22 +17,13 @@ Talk.ready.then(function() {
         id: "238594",
         name: "Pulkit",
         email: "alice@example.com",
-        photoUrl: "https://demo.talkjs.com/img/alice.jpg",
-        welcomeMessage: "Hey there! How are you? :-)"
+        photoUrl: "https://demo.talkjs.com/img/alice.jpg"
     });
     window.talkSession = new Talk.Session({
         appId: "2LhQvB3j",
         me: me,
         signature: "3dc087cd8b5c339a6e90c63253c095e5e6335c9362def51d28bf601e4a8c5f76"
     });
-    var other = new Talk.User({
-        id: "654321",
-        name: "Sebastian",
-        email: "Sebastian@example.com",
-        photoUrl: "https://demo.talkjs.com/img/sebastian.jpg",
-        welcomeMessage: "Hey, how can I help?"
-    });
-
     var inbox = talkSession.createInbox();
     inbox.mount(document.getElementById("talkjs-container"));
 });

@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.admin.overview
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.ResultWrapper
@@ -19,12 +20,14 @@ class AdminOverviewViewModel(private val repo: OverviewRepository) : ViewModel()
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
     var nextOffSet: MutableLiveData<Int> = MutableLiveData(0)
     var prevOffSet: MutableLiveData<Int> = MutableLiveData(0)
+    lateinit var prefs: PreferenceHelper
+
 
     init {
         fetchLeaderBoard()
     }
 
-    fun fetchDoubtStats(userId: String = "238594") {
+    fun fetchDoubtStats(userId: String = prefs.SP_USER_ID) {
         runIO {
             val response = repo.getDoubtStats(userId)
             assignResponse(response)

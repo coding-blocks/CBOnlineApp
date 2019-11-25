@@ -1,15 +1,12 @@
 package com.codingblocks.cbonlineapp.admin
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.ClientCertRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_inbox.*
 
@@ -26,27 +23,20 @@ class InboxFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        webView.settings.javaScriptEnabled = true
-        webView.settings.builtInZoomControls = true
-        webView.settings.javaScriptCanOpenWindowsAutomatically = true
-        webView.settings.allowFileAccess = true
-        webView.settings.allowFileAccessFromFileURLs = true
-//        runClients.api.getSignature()
-        webView.webViewClient = object : WebViewClient() {
-
-            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                super.onPageStarted(view, url, favicon)
-//                val script: String =
-//                    "?id=${user.id}&name=${user.firstname}&email=&photo=&signature=&appId="
-
-            }
-
+        webView.settings.apply {
+            javaScriptEnabled = true
+            webView.settings.javaScriptCanOpenWindowsAutomatically = true
+            webView.settings.allowFileAccess = true
+            webView.settings.allowFileAccessFromFileURLs = true
         }
-        webView.loadUrl("file:///android_asset/Chat.html")
-//        webView.webViewClient = WebViewClient()
+        Clients.api.getSignature().enqueue(retrofitCallback { _, response ->
+            val signature = response?.body()?.get("signature")
+            webView.loadUrl("file:///android_asset/Chat.html")
+        })
 
 
     }
+
 }
 
 
