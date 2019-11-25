@@ -7,9 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.util.extensions.formatDate
 import com.codingblocks.onlineapi.models.Doubts
 import kotlinx.android.synthetic.main.item_admin_doubt.view.*
-import org.jetbrains.anko.AnkoLogger
 
-class DoubtViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), AnkoLogger {
+class DoubtViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     var ackClickListener: AckClickListener? = null
     var chatClickListener: ChatClickListener? = null

@@ -490,6 +490,27 @@ class UserId(
     val id: String?
 )
 
+@Type("user")
+class User(
+    val email: String,
+    val firstname: String,
+    val lastReadNotification: String,
+    val lastname: String,
+    val oneauthId: String,
+    val photo: String?,
+    val verifiedemail: String?,
+    val verifiedmobile: String?
+) : BaseModel()
+
+@Type("doubt_leaderboard")
+class DoubtLeaderBoard(
+    val ratingAll: Double,
+    val ratingMonth: Double,
+    val ratingWeek: Double,
+    @Relationship("user")
+    var user: User?
+) : BaseModel()
+
 @Type("run-attempts")
 class RunAttemptsId(
     @Id

@@ -1,15 +1,13 @@
 package com.codingblocks.cbonlineapp.admin.doubts
 
-import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
-import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.ADMIN_CHANNEL_ID
-import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.extensions.isotomillisecond
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
@@ -32,7 +30,8 @@ class DoubtWorker(val context: Context, private val workerParameters: WorkerPara
                     if (isSuccessful)
                         if (!body()?.get().isNullOrEmpty()) {
                             body()?.get()?.get(0)?.apply {
-                                if (System.currentTimeMillis() - createdAt.isotomillisecond() < 900000) {
+                                Log.i("Notification Worker", "CurrentTime ${System.currentTimeMillis()} AckTime ${createdAt.isotomillisecond()}")
+                                if ((System.currentTimeMillis() - createdAt.isotomillisecond()) / 1000 < 900000) {
                                     showNotification()
                                 }
                             }

@@ -5,6 +5,7 @@ import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Company
 import com.codingblocks.onlineapi.models.Course
+import com.codingblocks.onlineapi.models.DoubtLeaderBoard
 import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Instructor
 import com.codingblocks.onlineapi.models.Jobs
@@ -230,6 +231,15 @@ interface OnlineJsonApi {
         @Query("page[offset]") offset: String = "0",
         @Query("sort") sort: String = "-acknowledgedAt"
     ): Response<JSONAPIDocument<List<Doubts>>>
+
+    @GET("doubt_leaderboards")
+    suspend fun getLeaderBoard(
+        @Query("filter[visible_all]") filter: String = "true",
+        @Query("include") include: String = "user",
+        @Query("sort") sort: String = "-rating_all",
+        @Query("page[limit]") page: String = "10",
+        @Query("page[offset]") offset: Int = 0
+    ): Response<JSONAPIDocument<List<DoubtLeaderBoard>>>
 
     @PATCH("doubts/{id}")
     suspend fun resolveAdminDoubt(@Path("id") doubtId: String, @Body params: Doubts): Response<List<Doubts>>

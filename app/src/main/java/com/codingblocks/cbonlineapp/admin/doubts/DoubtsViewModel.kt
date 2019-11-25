@@ -75,8 +75,8 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
                     if (body()?.get().isNullOrEmpty()) {
                         setError(ErrorStatus.EMPTY_RESPONSE)
                     } else {
-                        nextOffSet.postValue(getMeta(body()?.meta, "nextOffSet"))
-                        prevOffSet.postValue(getMeta(body()?.meta, "prevOffSet"))
+                        nextOffSet.postValue(getMeta(body()?.meta, "nextOffset"))
+                        prevOffSet.postValue(getMeta(body()?.meta, "prevOffset"))
                         listDoubtsResponse.postValue(body()?.get())
                     }
                 else {

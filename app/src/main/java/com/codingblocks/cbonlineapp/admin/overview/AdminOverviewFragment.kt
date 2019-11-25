@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
@@ -16,6 +17,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class AdminOverviewFragment : Fragment() {
 
     private val viewModel by viewModel<AdminOverviewViewModel>()
+    private val leaderBoardListAdapter = AdminLeaderBoardListAdapter()
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -30,6 +33,12 @@ class AdminOverviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        adminLeaderboardRv.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = leaderBoardListAdapter
+        }
+
+
         viewModel.doubtStats.observer(viewLifecycleOwner) {
             doubtResolvedTv.text = it.totalResolvedDoubts.toString()
             userRatingTv.text = it.avgRating.toString()
@@ -38,6 +47,10 @@ class AdminOverviewFragment : Fragment() {
             badReviewTv.text = it.totalBadReviews.toString()
             resolutionTv.text = it.avgResolution.toString()
 
+        }
+
+        viewModel.listLeaderboard.observer(viewLifecycleOwner) {
+            leaderBoardListAdapter.submitList(it)
         }
 
         viewModel.errorLiveData.observer(viewLifecycleOwner)
@@ -58,6 +71,21 @@ class AdminOverviewFragment : Fragment() {
 
                 }
             }
+        }
+
+        viewModel.nextOffSet.observer(viewLifecycleOwner) { offSet ->
+            nextBtn.isEnabled = offSet != 0
+            nextBtn.setOnClickListener {
+                viewModel.fetchLeaderBoard(offSet)
+            }
+        }
+
+        viewModel.prevOffSet.observer(viewLifecycleOwner) { offSet ->
+            prevBtn.isEnabled = offSet != 0
+            prevBtn.setOnClickListener {
+                viewModel.fetchLeaderBoard(offSet)
+            }
+
         }
     }
 

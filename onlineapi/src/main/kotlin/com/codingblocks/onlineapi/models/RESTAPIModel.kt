@@ -145,11 +145,6 @@ data class PostsItem(
     val displayUsername: String? = null
 )
 
-data class User(
-    val id: Int? = null,
-    val avatarTemplate: String? = null,
-    val username: String? = null
-)
 
 data class SuggestedTopicsItem(
     val unpinned: Any? = null,
