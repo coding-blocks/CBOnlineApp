@@ -1,8 +1,15 @@
 package com.codingblocks.cbonlineapp.admin.overview
 
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.ResultWrapper
+import com.codingblocks.onlineapi.models.DoubtStats
+import com.codingblocks.onlineapi.safeApiCall
+import retrofit2.Response
 
 class OverviewRepository {
 
-    suspend fun getStats(user: String) = Clients.api.doubtStats(user)
+    suspend fun getDoubtStats(userId: String): ResultWrapper<Response<DoubtStats>> {
+        return safeApiCall { Clients.api.doubtStats(userId) }
+    }
+
 }

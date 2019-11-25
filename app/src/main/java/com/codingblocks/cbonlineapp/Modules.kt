@@ -3,6 +3,8 @@ package com.codingblocks.cbonlineapp
 import androidx.room.Room
 import com.codingblocks.cbonlineapp.admin.doubts.DoubtRepository
 import com.codingblocks.cbonlineapp.admin.doubts.DoubtsViewModel
+import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewViewModel
+import com.codingblocks.cbonlineapp.admin.overview.OverviewRepository
 import com.codingblocks.cbonlineapp.course.CourseViewModel
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.home.HomeActivityViewModel
@@ -30,12 +32,14 @@ val viewModelModule = module {
     viewModel { MyCourseViewModel(get()) }
     viewModel { LeaderboardViewModel() }
     viewModel { NotificationViewModel(get()) }
+    viewModel { DoubtsViewModel(get()) }
+    viewModel { AdminOverviewViewModel(get()) }
+
 
     viewModel { QuizViewModel() }
 
     // Activities
     viewModel { CourseViewModel(get(), get()) }
-    viewModel { DoubtsViewModel(get()) }
     viewModel { VideoPlayerViewModel(get(), get(), get(), get(), get()) }
     viewModel { HomeActivityViewModel() }
     viewModel { SettingsViewModel(get()) }
@@ -46,6 +50,8 @@ val viewModelModule = module {
     single { MyCoursesRepository(get(), get(), get(), get()) }
     single { MyCourseRepository(get(), get(), get(), get(), get()) }
     single { DoubtRepository() }
+    single { OverviewRepository() }
+
 
 }
 val databaseModule = module {

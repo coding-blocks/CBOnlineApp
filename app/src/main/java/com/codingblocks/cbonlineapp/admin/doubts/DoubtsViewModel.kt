@@ -54,7 +54,7 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
-                        if (myDoubts.isNullOrEmpty())
+                        if (myDoubts.isEmpty())
                             fetchLiveDoubts()
                         else {
                             fetchMyDoubts(myDoubts)

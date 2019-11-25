@@ -16,7 +16,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.home.CourseDataAdapter
 import com.codingblocks.cbonlineapp.home.HomeFragmentUi
@@ -87,15 +86,8 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         viewModel.message.observer(viewLifecycleOwner) { error ->
             if (error.message == UNAUTHORIZED) {
                 getPrefs()?.SP_ACCESS_TOKEN_KEY = PreferenceHelper.ACCESS_TOKEN
-                Components.showConfirmation(requireContext(), UNAUTHORIZED) { status ->
-                    if (status) {
-                        Components.openChrome(
-                            requireContext(),
-                            "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
-                        )
-                    } else {
-                        requireActivity().finish()
-                    }
+                Components.showConfirmation(requireContext(), UNAUTHORIZED) {
+                    requireActivity().finish()
                 }
             } else {
                 ui.snackbarView.longSnackbar(getString(R.string.offline_message))

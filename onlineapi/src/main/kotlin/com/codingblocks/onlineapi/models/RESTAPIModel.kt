@@ -4,41 +4,15 @@ import com.google.gson.annotations.SerializedName
 
 
 data class DoubtStats(
-    val avgFirstResponse: Int,
-    val avgRating: Int,
-    val avgResolution: Int,
-    val cbRating: Int,
-    val lastFeedback: Int?,
+    val avgFirstResponse: Float,
+    val avgRating: Float,
+    val avgResolution: Float,
+    val cbRating: Float,
+    val lastFeedback: Any?,
     val totalBadReviews: Int,
     val totalResolvedDoubts: Int
 )
 
-data class TopicList(
-
-    @field:SerializedName("can_create_topic")
-    val canCreateTopic: Boolean? = null,
-
-    @field:SerializedName("per_page")
-    val perPage: Int? = null,
-
-    @field:SerializedName("topics")
-    val topics: ArrayList<TopicsItem?>? = null
-)
-
-data class TopicsItem(
-
-    @field:SerializedName("created_at")
-    val createdAt: String? = null,
-
-    @field:SerializedName("title")
-    val title: String? = null,
-
-    @field:SerializedName("id")
-    val id: Int? = null,
-
-    @field:SerializedName("last_poster_username")
-    val lastPosterUsername: String? = null
-)
 
 data class PostersItem(
 
@@ -62,9 +36,9 @@ data class RatingModel(
     val userScore: Any?
 )
 
-data class Leaderboard(@JvmField
-                       var userName: String) : BaseModel() {
-
+data class Leaderboard(
+    @JvmField
+    var userName: String) : BaseModel() {
     @JvmField
     var collegeName: String? = null
     @JvmField
