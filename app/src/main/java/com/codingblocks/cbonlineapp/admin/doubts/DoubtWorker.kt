@@ -31,7 +31,7 @@ class DoubtWorker(val context: Context, private val workerParameters: WorkerPara
                         if (!body()?.get().isNullOrEmpty()) {
                             body()?.get()?.get(0)?.apply {
                                 Log.i("Notification Worker", "CurrentTime ${System.currentTimeMillis()} AckTime ${createdAt.isotomillisecond()}")
-                                if ((System.currentTimeMillis() - createdAt.isotomillisecond()) / 1000 < 900000) {
+                                if ((System.currentTimeMillis() - createdAt.isotomillisecond()) < 900000) {
                                     showNotification()
                                 }
                             }

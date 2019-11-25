@@ -1,0 +1,40 @@
+<script>
+(function(t,a,l,k,j,s){
+s=a.createElement('script');s.async=1;s.src="https://cdn.talkjs.com/talk.js";a.head.appendChild(s)
+;k=t.Promise;t.Talk={v:2,ready:{then:function(f){if(k)return new k(function(r,e){l.push([f,r,e])});l
+.push([f])},catch:function(){return k&&new k()},c:l}};})(window,document,[]);
+
+</script>
+
+<!-- container element in which TalkJS will display a chat UI -->
+<div id="talkjs-container" style="width: 90%; margin: 10px; height: 80%"><i>Loading chat...</i>
+</div>
+
+<!-- TalkJS initialization code, which we'll customize in the next steps -->
+<script>
+Talk.ready.then(function() {
+    var me = new Talk.User({
+        id: "238594",
+        name: "Pulkit",
+        email: "alice@example.com",
+        photoUrl: "https://demo.talkjs.com/img/alice.jpg",
+        welcomeMessage: "Hey there! How are you? :-)"
+    });
+    window.talkSession = new Talk.Session({
+        appId: "2LhQvB3j",
+        me: me,
+        signature: "3dc087cd8b5c339a6e90c63253c095e5e6335c9362def51d28bf601e4a8c5f76"
+    });
+    var other = new Talk.User({
+        id: "654321",
+        name: "Sebastian",
+        email: "Sebastian@example.com",
+        photoUrl: "https://demo.talkjs.com/img/sebastian.jpg",
+        welcomeMessage: "Hey, how can I help?"
+    });
+
+    var inbox = talkSession.createInbox();
+    inbox.mount(document.getElementById("talkjs-container"));
+});
+
+</script>
