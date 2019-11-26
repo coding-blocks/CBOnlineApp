@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp
 
 import androidx.room.Room
+import com.codingblocks.cbonlineapp.admin.dashboard.AdminDashboardViewModel
 import com.codingblocks.cbonlineapp.admin.doubts.DoubtRepository
 import com.codingblocks.cbonlineapp.admin.doubts.DoubtsViewModel
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewViewModel
@@ -34,6 +35,7 @@ val viewModelModule = module {
     viewModel { NotificationViewModel(get()) }
     viewModel { DoubtsViewModel(get()) }
     viewModel { AdminOverviewViewModel(get()) }
+    viewModel { AdminDashboardViewModel() }
 
     viewModel { QuizViewModel() }
 

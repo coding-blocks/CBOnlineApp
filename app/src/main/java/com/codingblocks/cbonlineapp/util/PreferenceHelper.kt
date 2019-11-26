@@ -15,6 +15,7 @@ class PreferenceHelper private constructor() {
         const val USER_ID = "user_id"
         const val USER_NAME = "user_name"
         const val ROLE_ID = "role_id"
+        const val EMAIL_ID = "email_id"
         const val ROLE_ID_DEFAULT = 0
 
         const val WIFI = "wifi"
@@ -75,6 +76,12 @@ class PreferenceHelper private constructor() {
         get() = prefs?.getString(USER_NAME, USER_NAME) ?: ""
         set(value) {
             prefs?.edit()?.putString(USER_NAME, value)?.apply()
+        }
+
+    var SP_EMAIL_ID: String
+        get() = prefs?.getString(EMAIL_ID, EMAIL_ID) ?: ""
+        set(value) {
+            prefs?.edit()?.putString(EMAIL_ID, value)?.apply()
         }
 
     var SP_ROLE_ID: Int

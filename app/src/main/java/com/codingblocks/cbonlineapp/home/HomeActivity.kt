@@ -115,6 +115,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         with(viewModel.prefs.SP_ROLE_ID) {
             if (this == 1 || this == 3)
                 viewModel.isAdmin.postValue(true)
+            else if (this == 0) {
+                viewModel.getMe()
+            }
         }
         if (viewModel.prefs.SP_USER_IMAGE.isNotEmpty())
             nav_view.getHeaderView(0).nav_header_imageView.apply {

@@ -11,21 +11,3 @@ s=a.createElement('script');s.async=1;s.src="https://cdn.talkjs.com/talk.js";a.h
 </div>
 
 <!-- TalkJS initialization code, which we'll customize in the next steps -->
-<script>
-Talk.ready.then(function() {
-    var me = new Talk.User({
-        id: "238594",
-        name: "Pulkit",
-        email: "alice@example.com",
-        photoUrl: "https://demo.talkjs.com/img/alice.jpg"
-    });
-    window.talkSession = new Talk.Session({
-        appId: "2LhQvB3j",
-        me: me,
-        signature: "3dc087cd8b5c339a6e90c63253c095e5e6335c9362def51d28bf601e4a8c5f76"
-    });
-    var inbox = talkSession.createInbox();
-    inbox.mount(document.getElementById("talkjs-container"));
-});
-
-</script>
