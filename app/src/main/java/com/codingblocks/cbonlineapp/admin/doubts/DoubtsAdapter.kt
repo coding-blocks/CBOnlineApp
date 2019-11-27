@@ -60,7 +60,7 @@ interface ResolveClickListener {
 }
 
 interface ChatClickListener {
-    fun onClick(convId: String)
+    fun onClick(convId: String, doubtId: String)
 }
 
 interface DiscussClickListener {

@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.admin.doubts
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.ResultWrapper
@@ -9,6 +10,7 @@ import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.getMeta
 import com.codingblocks.onlineapi.models.Doubts
 import com.github.jasminb.jsonapi.JSONAPIDocument
+import kotlinx.coroutines.async
 import retrofit2.Response
 
 class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
@@ -77,4 +79,21 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
     private fun setError(error: String) {
         errorLiveData.postValue(error)
     }
+
+    suspend fun requestChat(doubtId: String): String = viewModelScope.async {
+        when (val response = repo.getChatId(doubtId)) {
+            is ResultWrapper.GenericError -> {
+                setError(response.error)
+                return@async ""
+            }
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful)
+                    return@async body()?.get("conversationId")?.asString ?: ""
+                else {
+                    setError(fetchError(response.value.code()))
+                    return@async ""
+                }
+            }
+        }
+    }.await()
 }

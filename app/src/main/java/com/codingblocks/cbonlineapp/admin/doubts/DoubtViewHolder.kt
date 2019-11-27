@@ -54,7 +54,7 @@ class DoubtViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     }
                 }
                 chatBtn.setOnClickListener {
-                    chatClickListener?.onClick(doubt.conversationId ?: "")
+                    chatClickListener?.onClick(doubt.conversationId ?: "", doubt.id)
                 }
 
                 discussBtn.setOnClickListener {

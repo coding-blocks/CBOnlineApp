@@ -18,9 +18,13 @@ import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Doubts
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.doubts_fragment.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
@@ -61,9 +65,23 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
 
     private val chatClickListener: ChatClickListener by lazy {
         object : ChatClickListener {
-            override fun onClick(convId: String) {
+            override fun onClick(convId: String, doubtId: String) {
+                if (convId.isEmpty()) {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        val id = viewModel.requestChat(doubtId)
+                        if (id.isNotEmpty()) {
+                            startChat(id)
+                        }
+                    }
+                } else {
+                    startChat(convId)
+                }
             }
         }
+    }
+
+    private fun startChat(id: String) {
+
     }
 
     override fun onCreateView(
@@ -102,9 +120,9 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
             when (it) {
                 ErrorStatus.EMPTY_RESPONSE -> {
                     if (adminTabLayout.selectedTabPosition == 0) {
-                        emptyMessageTv.text = requireContext().resources.getString(R.string.empty_live_doubt)
+                        emptyMessageTv.text = getString(R.string.empty_live_doubt)
                     } else {
-                        emptyMessageTv.text = requireContext().resources.getString(R.string.empty_my_doubt)
+                        emptyMessageTv.text = getString(R.string.empty_my_doubt)
                     }
                     emptyll.isVisible = true
                     doubtRv.isVisible = false
@@ -119,6 +137,12 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
                 ErrorStatus.TIMEOUT -> {
                 }
             }
+        }
+
+        viewModel.barMessage.observer(viewLifecycleOwner) {
+            Snackbar.make(view, it, Snackbar.LENGTH_SHORT)
+                .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
+                .show()
         }
 
         doubtsAdapter.apply {

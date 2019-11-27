@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
 import cn.campusapp.router.Router
 import cn.campusapp.router.router.IActivityRouteTableInitializer
 import com.codingblocks.cbonlineapp.course.CourseActivity
@@ -33,10 +34,14 @@ class CBOnlineApp : Application() {
 
     companion object {
         lateinit var mInstance: CBOnlineApp
+        @JvmStatic
+        var appContext: Context? = null
+            private set
     }
 
     override fun onCreate() {
         super.onCreate()
+        appContext = applicationContext
         mInstance = this
 
         // Create Notification Channel

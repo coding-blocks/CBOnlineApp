@@ -5,6 +5,7 @@ import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.safeApiCall
 import com.github.jasminb.jsonapi.JSONAPIDocument
+import com.google.gson.JsonObject
 import retrofit2.Response
 
 class DoubtRepository {
@@ -19,5 +20,9 @@ class DoubtRepository {
 
     suspend fun acknowledgeDoubt(doubtId: String, doubt: Doubts): ResultWrapper<Response<List<Doubts>>> {
         return safeApiCall { Clients.onlineV2JsonApi.acknowledgeDoubt(doubtId, doubt) }
+    }
+
+    suspend fun getChatId(doubtId: String): ResultWrapper<Response<JsonObject>> {
+        return safeApiCall { Clients.api.getChatId(doubtId) }
     }
 }
