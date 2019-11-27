@@ -17,10 +17,6 @@ class DoubtRepository {
         return safeApiCall { Clients.onlineV2JsonApi.getMyDoubts(acknowledgedId = acknowledgedId) }
     }
 
-    suspend fun resolveDoubt(doubtId: String, doubt: Doubts): ResultWrapper<Response<List<Doubts>>> {
-        return safeApiCall { Clients.onlineV2JsonApi.resolveAdminDoubt(doubtId, doubt) }
-    }
-
     suspend fun acknowledgeDoubt(doubtId: String, doubt: Doubts): ResultWrapper<Response<List<Doubts>>> {
         return safeApiCall { Clients.onlineV2JsonApi.acknowledgeDoubt(doubtId, doubt) }
     }

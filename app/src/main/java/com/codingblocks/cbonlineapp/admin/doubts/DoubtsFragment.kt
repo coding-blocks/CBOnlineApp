@@ -128,14 +128,14 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
             onResolveClick = resolveClickListener
         }
         viewModel.nextOffSet.observer(viewLifecycleOwner) { offSet ->
-            nextBtn.isEnabled = offSet != 0
+            nextBtn.isEnabled = offSet != -1
             nextBtn.setOnClickListener {
                 viewModel.fetchLiveDoubts(offSet)
             }
         }
 
         viewModel.prevOffSet.observer(viewLifecycleOwner) { offSet ->
-            prevBtn.isEnabled = offSet != 0
+            prevBtn.isEnabled = offSet != -1
             prevBtn.setOnClickListener {
                 viewModel.fetchLiveDoubts(offSet)
             }

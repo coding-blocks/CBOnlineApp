@@ -243,9 +243,6 @@ interface OnlineJsonApi {
     ): Response<JSONAPIDocument<List<DoubtLeaderBoard>>>
 
     @PATCH("doubts/{id}")
-    suspend fun resolveAdminDoubt(@Path("id") doubtId: String, @Body params: Doubts): Response<List<Doubts>>
-
-    @PATCH("doubts/{id}")
     suspend fun acknowledgeDoubt(@Path("id") doubtId: String, @Body params: Doubts): Response<List<Doubts>>
 
 //    @GET("projects/{id}")

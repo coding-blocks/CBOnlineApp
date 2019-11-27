@@ -15,8 +15,10 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
 
     var listDoubtsResponse: MutableLiveData<List<Doubts>> = MutableLiveData()
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
-    var nextOffSet: MutableLiveData<Int> = MutableLiveData(0)
-    var prevOffSet: MutableLiveData<Int> = MutableLiveData(0)
+    var nextOffSet: MutableLiveData<Int> = MutableLiveData()
+    var prevOffSet: MutableLiveData<Int> = MutableLiveData()
+    var barMessage: MutableLiveData<String> = MutableLiveData()
+
 
     fun fetchLiveDoubts(offSet: Int = 0) {
         runIO {
@@ -32,30 +34,17 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
         }
     }
 
-    fun resolveDoubt(id: String, doubts: Doubts) {
-        runIO {
-            when (val response = repo.resolveDoubt(id, doubts)) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful)
-                        fetchMyDoubts("238594")
-                    else {
-                        setError(fetchError(response.value.code()))
-                    }
-                }
-            }
-        }
-    }
-
     fun acknowledgeDoubt(id: String, doubts: Doubts, myDoubts: String = "") {
         runIO {
             when (val response = repo.acknowledgeDoubt(id, doubts)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
-                        if (myDoubts.isEmpty())
+                        if (myDoubts.isEmpty()) {
+                            barMessage.postValue("Doubt has been successfully Acknowledged")
                             fetchLiveDoubts()
-                        else {
+                        } else {
+                            barMessage.postValue("Doubt has been successfully Resolved")
                             fetchMyDoubts(myDoubts)
                         }
                     else {
@@ -74,8 +63,8 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
                     if (body()?.get().isNullOrEmpty()) {
                         setError(ErrorStatus.EMPTY_RESPONSE)
                     } else {
-                        nextOffSet.postValue(getMeta(body()?.meta, "nextOffset"))
-                        prevOffSet.postValue(getMeta(body()?.meta, "prevOffset"))
+                        nextOffSet.postValue(getMeta(body()?.meta, "nextOffset") ?: -1)
+                        prevOffSet.postValue(getMeta(body()?.meta, "prevOffset") ?: -1)
                         listDoubtsResponse.postValue(body()?.get())
                     }
                 else {

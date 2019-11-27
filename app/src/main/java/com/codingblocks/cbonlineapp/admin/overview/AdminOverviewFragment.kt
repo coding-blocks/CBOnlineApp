@@ -77,14 +77,14 @@ class AdminOverviewFragment : Fragment() {
         }
 
         viewModel.nextOffSet.observer(viewLifecycleOwner) { offSet ->
-            nextBtn.isEnabled = offSet != 0
+            nextBtn.isEnabled = offSet != -1
             nextBtn.setOnClickListener {
                 viewModel.fetchLeaderBoard(offSet)
             }
         }
 
         viewModel.prevOffSet.observer(viewLifecycleOwner) { offSet ->
-            prevBtn.isEnabled = offSet != 0
+            prevBtn.isEnabled = offSet != -1
             prevBtn.setOnClickListener {
                 viewModel.fetchLeaderBoard(offSet)
             }

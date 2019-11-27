@@ -45,10 +45,10 @@ data class CourseFeatures(
 
 @Type("run_attempts")
 open class MyRunAttempts(
-    val certificateApproved: Boolean,
-    val end: String,
-    val premium: Boolean,
-    val revoked: Boolean
+    val certificateApproved: Boolean = false,
+    val end: String = "",
+    val premium: Boolean = false,
+    val revoked: Boolean = false
 ) : BaseModel()
 
 @Type("runs")
@@ -396,7 +396,7 @@ class QuizQuestion : BaseModel() {
 @Type("qnas")
 class Quizqnas : BaseModel()
 
-@Type("doubt")
+@Type("doubts")
 data class Doubts(
     val body: String,
     val title: String,
@@ -410,7 +410,7 @@ data class Doubts(
     val firebaseRef: String? = null,
     val conversationId: String? = null,
     @Relationship("run-attempt")
-    val runAttempt: RunAttemptId? = null,
+    val runAttempt: MyRunAttempts? = null,
     @Relationship("content")
     val content: ContentId? = null,
     @Relationship("resolved-by")
@@ -517,7 +517,7 @@ class RunAttemptsId(
     val id: String?
 )
 
-@Type("content")
+@Type("contents")
 class ContentId(
     @Id
     val id: String?

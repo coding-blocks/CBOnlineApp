@@ -48,8 +48,8 @@ class AdminOverviewViewModel(private val repo: OverviewRepository) : ViewModel()
                     if (body()?.get().isNullOrEmpty()) {
                         setError(ErrorStatus.EMPTY_RESPONSE)
                     } else {
-                        nextOffSet.postValue(getMeta(body()?.meta, "nextOffset"))
-                        prevOffSet.postValue(getMeta(body()?.meta, "prevOffset"))
+                        nextOffSet.postValue(getMeta(body()?.meta, "nextOffset") ?: -1)
+                        prevOffSet.postValue(getMeta(body()?.meta, "prevOffset") ?: -1)
                         listLeaderboard.postValue(body()?.get())
                     }
                 else {

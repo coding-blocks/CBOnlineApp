@@ -23,6 +23,7 @@ class DoubtViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             if (doubt.status == "PENDING") {
                 timeTv.text = "Asked: ${formatDate(doubt.createdAt)}"
                 ackBtn.setOnClickListener {
+                    doubt.status = "ACKNOWLEDGED"
                     ackClickListener?.onClick(doubt.id, doubt)
                 }
             } else if (doubt.status == "ACKNOWLEDGED") {
