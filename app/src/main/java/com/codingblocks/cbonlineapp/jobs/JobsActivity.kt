@@ -48,22 +48,7 @@ class JobsActivity : AppCompatActivity() {
         viewModel.getAllJobs().observer(this) { jobs ->
             viewModel.allJobList.clear()
             viewModel.allJobList.addAll(jobs)
-
-            /*
-            * To solve the problem with listAdapter.submitList() with referencing
-            * the list. i.e.
-            *
-            *  if(oldList == newList){
-            *       return;
-            *  }
-            *
-            *  therefore, make different object
-             */
-            val updatedJobs = mutableListOf<JobsModel>().apply {
-                addAll(viewModel.allJobList)
-            }
-
-            jobsAdapter.submitList(updatedJobs)
+            updateJobsList()
             locationList = jobs.map { it.location }.distinct()
             jobtypeList = jobs.map { it.type }.distinct()
             setupBottomFilterSheet()
@@ -71,7 +56,14 @@ class JobsActivity : AppCompatActivity() {
 
         viewModel.filteredJobsProgress.observer(this) {
             if (it) {
-                jobsAdapter.notifyDataSetChanged()
+                shimmerJobs.isVisible = true
+                rvJobs.isVisible = false
+                tvNoJobs.isVisible = false
+            } else {
+                shimmerJobs.isVisible = false
+                rvJobs.isVisible = !viewModel.noFilteredJobs
+                tvNoJobs.isVisible = viewModel.noFilteredJobs
+                updateJobsList()
             }
         }
 
@@ -98,6 +90,23 @@ class JobsActivity : AppCompatActivity() {
             bottomSheetDialog.show()
         }
     }
+    /*
+            * To solve the problem with listAdapter.submitList() with referencing
+            * the list. i.e.
+            *
+            *  if(oldList == newList){
+            *       return;
+            *  }
+            *
+            *  therefore, make different object
+            */
+
+    private fun updateJobsList() {
+        val updatedJobs = mutableListOf<JobsModel>().apply {
+            addAll(viewModel.allJobList)
+        }
+        jobsAdapter.submitList(updatedJobs)
+    }
 
     private fun setupBottomFilterSheet() {
         @SuppressLint("InflateParams") val sheetView = layoutInflater.inflate(R.layout.sheet_filter, null)
@@ -107,7 +116,7 @@ class JobsActivity : AppCompatActivity() {
         val buttonApply = sheetView.findViewById<AppCompatButton>(R.id.btnApply)
         buttonApply.setOnClickListener {
             applyFilters()
-            bottomSheetDialog.cancel()
+            bottomSheetDialog.hide()
         }
 
         bottomSheetDialog.setContentView(sheetView)

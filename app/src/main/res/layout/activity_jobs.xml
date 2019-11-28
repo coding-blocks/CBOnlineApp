@@ -119,6 +119,16 @@
                 </LinearLayout>
             </com.facebook.shimmer.ShimmerFrameLayout>
 
+            <TextView
+                android:visibility="visible"
+                android:id="@+id/tvNoJobs"
+                android:gravity="center"
+                android:textSize="24sp"
+                android:layout_margin="16dp"
+                android:text="Sorry! No Jobs found matching your needs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:visibility="gone"
                 android:id="@+id/rvJobs"

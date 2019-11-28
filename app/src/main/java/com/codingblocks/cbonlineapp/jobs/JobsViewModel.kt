@@ -23,6 +23,8 @@ class JobsViewModel(
     var jobProgress = MutableLiveData<Boolean>(false)
     var fetchError = MutableLiveData<Boolean>(false)
 
+    var noFilteredJobs = false
+
     fun getAllJobs() = jobsDao.getAllJobs()
 
     fun getJobs() {
@@ -80,10 +82,11 @@ class JobsViewModel(
         })
     }
 
-    var filteredJobsProgress: MutableLiveData<Boolean> = MutableLiveData()
+    var filteredJobsProgress: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun getFilteredList() {
         allJobList.clear()
+        filteredJobsProgress.value = true
         Clients.onlineV2JsonApi.getJobs(
             getDate(),
             getDate(),
@@ -93,7 +96,12 @@ class JobsViewModel(
             response?.body().let {
                 if (response?.isSuccessful == true) {
                     response.body()?.run {
+                        if (this.isEmpty()) {
+                            noFilteredJobs = true
+                            filteredJobsProgress.value = false
+                        }
                         forEachIndexed { index, job ->
+                            noFilteredJobs = false
                             Clients.onlineV2JsonApi.getCompany(job.company?.id ?: "").enqueue(
                                 retrofitCallback { _, response ->
                                     response?.body()?.let {
@@ -120,9 +128,10 @@ class JobsViewModel(
                                             },
                                             job.courses ?: arrayListOf()
                                         ))
+                                    }
 
-                                        if (index == this.size - 1)
-                                            filteredJobsProgress.value = true
+                                    if (index == this.size - 1) {
+                                        filteredJobsProgress.value = false
                                     }
                                 })
                         }
