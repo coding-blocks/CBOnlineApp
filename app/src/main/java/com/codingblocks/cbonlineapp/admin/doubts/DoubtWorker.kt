@@ -52,6 +52,6 @@ class DoubtWorker(val context: Context, private val workerParameters: WorkerPara
             setDefaults(NotificationCompat.DEFAULT_VIBRATE)
         }.build()
 
-        notificationManager.notify(System.currentTimeMillis().toInt(), notification)
+        notificationManager.notify(1, notification)
     }
 }

@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codingblocks.cbonlineapp.util.extensions.runIO
-import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.getMeta
@@ -17,8 +16,8 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
 
     var listDoubtsResponse: MutableLiveData<List<Doubts>> = MutableLiveData()
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
-    var nextOffSet: MutableLiveData<Int> = MutableLiveData()
-    var prevOffSet: MutableLiveData<Int> = MutableLiveData()
+    var nextOffSet: MutableLiveData<Int> = MutableLiveData(0)
+    var prevOffSet: MutableLiveData<Int> = MutableLiveData(0)
     var barMessage: MutableLiveData<String> = MutableLiveData()
 
 
@@ -61,15 +60,11 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
         when (response) {
             is ResultWrapper.GenericError -> setError(response.error)
             is ResultWrapper.Success -> with(response.value) {
-                if (isSuccessful)
-                    if (body()?.get().isNullOrEmpty()) {
-                        setError(ErrorStatus.EMPTY_RESPONSE)
-                    } else {
-                        nextOffSet.postValue(getMeta(body()?.meta, "nextOffset") ?: -1)
-                        prevOffSet.postValue(getMeta(body()?.meta, "prevOffset") ?: -1)
-                        listDoubtsResponse.postValue(body()?.get())
-                    }
-                else {
+                if (isSuccessful) {
+                    nextOffSet.postValue(getMeta(body()?.meta, "nextOffset") ?: -1)
+                    prevOffSet.postValue(getMeta(body()?.meta, "prevOffset") ?: -1)
+                    listDoubtsResponse.postValue(body()?.get())
+                } else {
                     setError(fetchError(code()))
                 }
             }

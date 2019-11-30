@@ -15,7 +15,10 @@ import androidx.work.WorkManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
+import com.codingblocks.cbonlineapp.util.extensions.changeViewState
+import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.showAndStart
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Doubts
 import com.google.android.material.snackbar.Snackbar
@@ -23,7 +26,6 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.doubts_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -35,9 +37,13 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
         fun newInstance() = DoubtsFragment()
     }
 
+    val userId by lazy {
+        getPrefs()?.SP_USER_ID
+
+    }
+
     private val doubtsAdapter = DoubtsAdapter()
     private val viewModel by viewModel<DoubtsViewModel>()
-    private var job = Job()
 
     private val ackClickListener: AckClickListener by lazy {
         object : AckClickListener {
@@ -50,7 +56,7 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
     private val resolveClickListener: ResolveClickListener by lazy {
         object : ResolveClickListener {
             override fun onClick(doubtId: String, doubt: Doubts) {
-                viewModel.acknowledgeDoubt(doubtId, doubt, "238594")
+                userId?.let { viewModel.acknowledgeDoubt(doubtId, doubt, it) }
             }
         }
     }
@@ -95,6 +101,7 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.fetchLiveDoubts()
+        doubtShimmer.startShimmer()
         setupWorker()
     }
 
@@ -110,23 +117,20 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
         }
 
         viewModel.listDoubtsResponse.observer(viewLifecycleOwner) {
-            doubtsAdapter.submitList(it)
-
-            doubtRv.isVisible = it.isNotEmpty()
-            emptyll.isVisible = it.isEmpty()
+            if (it.isNullOrEmpty()) {
+                if (adminTabLayout.selectedTabPosition == 0) {
+                    emptyMessageTv.text = getString(R.string.empty_live_doubt)
+                } else {
+                    emptyMessageTv.text = getString(R.string.empty_my_doubt)
+                }
+            } else {
+                doubtsAdapter.submitList(it)
+            }
+            changeViewState(doubtRv, emptyll, doubtShimmer, it.isEmpty())
         }
 
         viewModel.errorLiveData.observer(viewLifecycleOwner) {
             when (it) {
-                ErrorStatus.EMPTY_RESPONSE -> {
-                    if (adminTabLayout.selectedTabPosition == 0) {
-                        emptyMessageTv.text = getString(R.string.empty_live_doubt)
-                    } else {
-                        emptyMessageTv.text = getString(R.string.empty_my_doubt)
-                    }
-                    emptyll.isVisible = true
-                    doubtRv.isVisible = false
-                }
                 ErrorStatus.NO_CONNECTION -> {
                 }
                 ErrorStatus.UNAUTHORIZED -> {
@@ -135,13 +139,15 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
+
                 }
             }
         }
 
         viewModel.barMessage.observer(viewLifecycleOwner) {
-            Snackbar.make(view, it, Snackbar.LENGTH_SHORT)
-                .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
+            //TODO("Overlapping with Bottom Bar")
+            Snackbar.make(root, it, Snackbar.LENGTH_SHORT)
+                .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
                 .show()
         }
 
@@ -179,15 +185,11 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
         when (tab.position) {
             0 -> {
                 viewModel.fetchLiveDoubts()
-//                CoroutineScope(Dispatchers.Default + job).launch {
-//                    repeat(12) {
-//                        delay(10000)
-//                        viewModel.fetchLiveDoubts()
-//                    }
-//                }
+                doubtShimmer.showAndStart()
             }
             1 -> {
-                viewModel.fetchMyDoubts("238594")
+                userId?.let { viewModel.fetchMyDoubts(it) }
+                doubtShimmer.showAndStart()
             }
         }
     }

@@ -6,6 +6,7 @@
     tools:context="com.codingblocks.cbonlineapp.admin.doubts.DoubtsFragment">
 
     <LinearLayout
+        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -30,12 +31,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/doubtRv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:itemCount="4"
+                tools:listitem="@layout/item_admin_doubt" />
+
             <LinearLayout
                 android:id="@+id/emptyll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <ImageView
                     android:layout_width="150dp"
@@ -59,13 +68,15 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/doubtRv"
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/doubtShimmer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:itemCount="4"
-                tools:listitem="@layout/item_admin_doubt" />
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="@color/dark_white">
+
+                <include layout="@layout/item_skeleton_content" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
         </FrameLayout>
 
