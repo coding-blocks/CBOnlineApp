@@ -76,6 +76,7 @@
                 android:background="@color/dark_white">
 
                 <include layout="@layout/item_skeleton_content" />
+
             </com.facebook.shimmer.ShimmerFrameLayout>
 
         </FrameLayout>

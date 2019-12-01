@@ -5,10 +5,6 @@
         android:icon="@drawable/ic_chart_line"
         android:title="Overview" />
 
-    <item
-        android:id="@+id/menu_leaderboard"
-        android:icon="@drawable/ic_leaderboard"
-        android:title="Leaderboard" />
 
     <item
         android:id="@+id/menu_doubts"

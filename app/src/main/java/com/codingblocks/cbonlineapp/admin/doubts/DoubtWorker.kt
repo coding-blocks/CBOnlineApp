@@ -1,12 +1,18 @@
 package com.codingblocks.cbonlineapp.admin.doubts
 
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.codingblocks.cbonlineapp.CBOnlineApp
+import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.appContext
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.admin.AdminActivity
+import com.codingblocks.cbonlineapp.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.ADMIN_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.extensions.isotomillisecond
 import com.codingblocks.onlineapi.Clients
@@ -43,10 +49,16 @@ class DoubtWorker(val context: Context, private val workerParameters: WorkerPara
     }
 
     private fun showNotification() {
+        val intent = Intent(appContext, AdminActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            applicationContext, 0 /* Request code */, intent,
+            PendingIntent.FLAG_ONE_SHOT
+        )
         val notification = NotificationCompat.Builder(context, ADMIN_CHANNEL_ID).apply {
             setContentTitle("New Doubts to Resolve !!!!!")
             setSmallIcon(R.drawable.ic_conversation)
             setOnlyAlertOnce(true)
+            setContentIntent(pendingIntent)
             setContentText("Students are waiting for your response.")
             setAutoCancel(true)
             setDefaults(NotificationCompat.DEFAULT_VIBRATE)

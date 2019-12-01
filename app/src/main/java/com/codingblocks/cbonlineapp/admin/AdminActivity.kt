@@ -15,7 +15,14 @@ import kotlinx.android.synthetic.main.activity_admin.*
 import org.jetbrains.anko.contentView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AdminActivity : AppCompatActivity() {
+class AdminActivity : AppCompatActivity(), FragmentChangeListener {
+
+    override fun openInbox(conversationId: String) {
+        pagerAdapter.add(InboxFragment.newInstance(conversationId))
+        pagerAdapter.notifyDataSetChanged()
+        pagerAdmin.currentItem = 2
+
+    }
 
     private val viewModel by viewModel<MyCourseViewModel>()
     private val pagerAdapter by lazy {
@@ -63,7 +70,7 @@ class AdminActivity : AppCompatActivity() {
         pagerAdmin.apply {
             adapter = pagerAdapter
             currentItem = 0
-            offscreenPageLimit = 3
+            offscreenPageLimit = 0
         }
     }
 

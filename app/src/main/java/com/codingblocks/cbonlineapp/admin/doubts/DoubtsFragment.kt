@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.admin.doubts
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.admin.FragmentChangeListener
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
@@ -33,14 +35,12 @@ import java.util.concurrent.TimeUnit
 
 class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
 
-    companion object {
-        fun newInstance() = DoubtsFragment()
-    }
-
     val userId by lazy {
         getPrefs()?.SP_USER_ID
-
     }
+
+    private lateinit var listener: FragmentChangeListener
+
 
     private val doubtsAdapter = DoubtsAdapter()
     private val viewModel by viewModel<DoubtsViewModel>()
@@ -51,6 +51,12 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
                 viewModel.acknowledgeDoubt(doubtId, doubt)
             }
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        listener = context as FragmentChangeListener
+
     }
 
     private val resolveClickListener: ResolveClickListener by lazy {
@@ -87,7 +93,7 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
     }
 
     private fun startChat(id: String) {
-
+        listener.openInbox(id)
     }
 
     override fun onCreateView(
