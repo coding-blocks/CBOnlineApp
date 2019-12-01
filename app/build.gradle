@@ -22,7 +22,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 100060200
-        // 1 (versioning scheme)
+        // 01 (versioning scheme)
         // 00 (major version)
         // 05 (minor version)
         // 00 (patch version)
@@ -54,6 +54,7 @@ android {
             applicationIdSuffix = '.debug'
 
         }
+
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

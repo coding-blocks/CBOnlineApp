@@ -36,6 +36,7 @@ class BatchesCardUi : AnkoComponent<ViewGroup> {
     lateinit var trialBtn: Button
     lateinit var enrollBtn: Button
     var font: Typeface? = null
+
     override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui) {
         frameLayout {
             font = ResourcesCompat.getFont(ctx, R.font.nunitosans_semibold)

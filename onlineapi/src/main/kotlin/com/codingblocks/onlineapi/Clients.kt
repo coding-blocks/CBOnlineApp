@@ -75,6 +75,7 @@ object Clients {
         .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
         .addConverterFactory(JacksonConverterFactory.create(om))
         .build()
+
     val onlineV2JsonApi: OnlineJsonApi
         get() = onlineV2JsonRetrofit
             .create(OnlineJsonApi::class.java)

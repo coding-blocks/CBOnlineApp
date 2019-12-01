@@ -5,7 +5,6 @@ interface NotificationClickListener {
 }
 
 interface SectionListClickListener {
-
     fun onClick(pos: Int)
 }
 
