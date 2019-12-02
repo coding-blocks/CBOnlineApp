@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 
 import com.codingblocks.cbonlineapp.R
 
-class GradientTextView : TextView {
+class GradientTextView : androidx.appcompat.widget.AppCompatTextView {
 
     constructor(context: Context) : super(context)
 

@@ -1,6 +1,16 @@
 <resources>
 
     <!-- Base application theme. -->
+    <style name="NewAppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:fontFamily">@font/nunitosans_regular</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -118,4 +128,5 @@
 
     <color name="colorPrimaryDarkJobs">#452ba3</color>
     <color name="colorPrimaryJobs">#692fdc</color>
+    
 </resources>
