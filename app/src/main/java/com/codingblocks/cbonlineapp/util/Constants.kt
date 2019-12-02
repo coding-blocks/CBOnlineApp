@@ -16,11 +16,15 @@ const val ARG_ATTEMPT_ID: String = "param1"
 
 const val RUN_ATTEMPT_ID: String = "runAttemptId"
 
+const val CONVERSATION_ID: String = "conversationID"
+
 const val ARG_COURSE_ID = "course_id"
 
 const val COURSE_NAME = "course_name"
 
 const val COURSE_ID = "courseId"
+
+const val ROLE_ID = "roleId"
 
 const val RUN_ID = "runId"
 
@@ -55,5 +59,7 @@ const val FILE_URL = "fileUrl"
 const val VIDEO_URL = "videoUrl"
 
 const val DOWNLOAD_CHANNEL_ID = "downloadChannel"
+
+const val ADMIN_CHANNEL_ID = "adminChannel"
 
 const val UNAUTHORIZED = "Unauthorized"

@@ -5,7 +5,8 @@ import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Company
 import com.codingblocks.onlineapi.models.Course
-import com.codingblocks.onlineapi.models.DoubtsJsonApi
+import com.codingblocks.onlineapi.models.DoubtLeaderBoard
+import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Instructor
 import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
@@ -19,6 +20,9 @@ import com.codingblocks.onlineapi.models.Question
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.Sections
+import com.codingblocks.onlineapi.models.User
+import com.github.jasminb.jsonapi.JSONAPIDocument
+import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -131,10 +135,10 @@ interface OnlineJsonApi {
     ): Call<QuizAttempt>
 
     @POST("doubts")
-    fun createDoubt(@Body params: DoubtsJsonApi): Call<DoubtsJsonApi>
+    fun createDoubt(@Body params: Doubts): Call<Doubts>
 
     @PATCH("doubts/{doubtid}")
-    fun resolveDoubt(@Path("doubtid") id: String, @Body params: DoubtsJsonApi): Call<DoubtsJsonApi>
+    fun resolveDoubt(@Path("doubtid") id: String, @Body params: Doubts): Call<Doubts>
 
     @POST("comments")
     fun createComment(@Body params: Comment): Call<Comment>
@@ -143,7 +147,7 @@ interface OnlineJsonApi {
     fun getCommentsById(@Path("comentid") id: String): Call<List<Comment>>
 
     @GET("run_attempts/{runAttemptId}/relationships/doubts")
-    fun getDoubtByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<DoubtsJsonApi>>
+    fun getDoubtByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<Doubts>>
 
     @GET("run_attempts/{runAttemptId}/relationships/notes")
     fun getNotesByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<Note>>
@@ -199,6 +203,47 @@ interface OnlineJsonApi {
 
     @POST("applications")
     fun applyJob(@Body params: Applications): Call<ResponseBody>
+
+    @GET("users/me")
+    fun getMe(): Call<User>
+
+
+    /**
+     * Admin Side API"s
+     */
+
+    @GET("doubts")
+    suspend fun getLiveDoubts(
+        @Query("exclude") query: String = "content.*",
+        @Query("filter[status]") filter: String = "PENDING",
+        @Query("include") include: String = "content",
+        @Query("page[limit]") page: String = "10",
+        @Query("page[offset]") offset: Int = 0,
+        @Query("sort") sort: String = "-createdAt"
+    ): Response<JSONAPIDocument<List<Doubts>>>
+
+    @GET("doubts")
+    suspend fun getMyDoubts(
+        @Query("exclude") query: String = "content.*",
+        @Query("filter[acknowledgedById]") acknowledgedId: String,
+        @Query("filter[status]") filter: String = "ACKNOWLEDGED",
+        @Query("include") include: String = "content",
+        @Query("page[limit]") page: String = "10",
+        @Query("page[offset]") offset: String = "0",
+        @Query("sort") sort: String = "-acknowledgedAt"
+    ): Response<JSONAPIDocument<List<Doubts>>>
+
+    @GET("doubt_leaderboards")
+    suspend fun getLeaderBoard(
+        @Query("filter[visible_all]") filter: String = "true",
+        @Query("include") include: String = "user",
+        @Query("sort") sort: String = "-rating_all",
+        @Query("page[limit]") page: String = "10",
+        @Query("page[offset]") offset: Int = 0
+    ): Response<JSONAPIDocument<List<DoubtLeaderBoard>>>
+
+    @PATCH("doubts/{id}")
+    suspend fun acknowledgeDoubt(@Path("id") doubtId: String, @Body params: Doubts): Response<List<Doubts>>
 
 //    @GET("projects/{id}")
 //    fun getProject(@Path("id") id: String): Call<Projects>

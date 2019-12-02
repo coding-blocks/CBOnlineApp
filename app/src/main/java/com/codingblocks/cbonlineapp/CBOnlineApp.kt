@@ -3,11 +3,13 @@ package com.codingblocks.cbonlineapp
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
 import cn.campusapp.router.Router
 import cn.campusapp.router.router.IActivityRouteTableInitializer
 import com.codingblocks.cbonlineapp.course.CourseActivity
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.util.ADMIN_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_TAB
@@ -32,10 +34,14 @@ class CBOnlineApp : Application() {
 
     companion object {
         lateinit var mInstance: CBOnlineApp
+        @JvmStatic
+        var appContext: Context? = null
+            private set
     }
 
     override fun onCreate() {
         super.onCreate()
+        appContext = applicationContext
         mInstance = this
 
         // Create Notification Channel
@@ -46,7 +52,14 @@ class CBOnlineApp : Application() {
                 NotificationManager.IMPORTANCE_DEFAULT
             )
 
+            val adminNotificationChannel = NotificationChannel(
+                ADMIN_CHANNEL_ID,
+                "Admin Notification",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+
             notificationManager.createNotificationChannel(notificationChannel)
+            notificationManager.createNotificationChannel(adminNotificationChannel)
         }
         startKoin {
             androidContext(this@CBOnlineApp)

@@ -21,7 +21,7 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 100060301
+        versionCode 100060302
         // 1 (versioning scheme)
         // 00 (major version)
         // 05 (minor version)
@@ -134,11 +134,12 @@ dependencies {
     //database
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
     kapt "androidx.room:room-compiler:$room_version"
 
 
     //VideoCipher library
-    implementation 'com.vdocipher.aegis:vdocipher-android:1.2.0'
+    implementation 'com.vdocipher.aegis:vdocipher-android:1.2.1'
 
 
     // Koin

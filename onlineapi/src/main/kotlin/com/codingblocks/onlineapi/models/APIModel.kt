@@ -45,10 +45,10 @@ data class CourseFeatures(
 
 @Type("run_attempts")
 open class MyRunAttempts(
-    val certificateApproved: Boolean,
-    val end: String,
-    val premium: Boolean,
-    val revoked: Boolean
+    val certificateApproved: Boolean = false,
+    val end: String = "",
+    val premium: Boolean = false,
+    val revoked: Boolean = false
 ) : BaseModel()
 
 @Type("runs")
@@ -396,33 +396,34 @@ class QuizQuestion : BaseModel() {
 @Type("qnas")
 class Quizqnas : BaseModel()
 
-@Type("doubt")
-class DoubtsJsonApi : BaseModel() {
-    @JvmField
-    var category: Int? = null
-    @JvmField
-    var body: String = ""
-    @JvmField
-    var title: String = ""
-    @JvmField
-    var status: String = "PENDING"
-    @JvmField
-    var discourseTopicId: String = ""
-    @JvmField
-    var resolvedById: String = ""
-    @Relationship("run-attempt", resolve = true)
-    @JvmField
-    var runAttempt: RunAttemptId? = null
-    @Relationship("run-attempt", resolve = true)
-    @JvmField
-    var postrunAttempt: RunAttemptsId? = null
-    @Relationship("content", resolve = true)
-    @JvmField
-    var content: ContentId? = null
-    @Relationship("contents", resolve = true)
-    @JvmField
-    var contents: ContentsId? = null
+@Type("doubts")
+data class Doubts(
+    val body: String,
+    val title: String,
+    var status: String = "PENDING",
+    val createdAt: String = "",
+    val discourseTopicId: String = "",
+    val categoryId: Int? = 0,
+    val resolvedById: String? = null,
+    val acknowledgedAt: String? = null,
+    val resolvedAt: String? = null,
+    val firebaseRef: String? = null,
+    val conversationId: String? = null,
+    @Relationship("run-attempt")
+    val runAttempt: MyRunAttempts? = null,
+    @Relationship("content")
+    val content: ContentsId? = null,
+    @Relationship("resolved-by")
+    val resolvedBy: UserId? = null
+) : BaseModel() {
+//    @Relationship("run-attempt")
+//    @JvmField
+//    var postrunAttempt: RunAttemptsId? = null
+//    @Relationship("content")
+//    @JvmField
+//    var contents: ContentsId? = null
 }
+
 
 @Type("comment")
 class Comment : BaseModel() {
@@ -434,7 +435,7 @@ class Comment : BaseModel() {
     var username: String = ""
     @Relationship("doubt", resolve = true)
     @JvmField
-    var doubt: DoubtsJsonApi? = null
+    var doubt: Doubts? = null
 }
 
 @Type("note")
@@ -450,7 +451,7 @@ class Note : BaseModel() {
     @Relationship("run_attempt", resolve = true)
     @JvmField
     var runAttempt: RunAttemptId? = null
-    @Relationship("content", resolve = true)
+    @Relationship("content")
     @JvmField
     var content: ContentId? = null
 }
@@ -480,6 +481,36 @@ class RunAttemptId(
     val id: String?
 )
 
+@Type("users")
+class UserId(
+    @Id
+    @JvmField
+    val id: String?
+)
+
+@Type("user")
+class User(
+    val email: String,
+    val firstname: String,
+    val lastReadNotification: String,
+    val lastname: String,
+    val oneauthId: String,
+    val photo: String?,
+    val verifiedemail: String?,
+    val verifiedmobile: String?,
+    val roleId: Int = 0
+
+) : BaseModel()
+
+@Type("doubt_leaderboard")
+class DoubtLeaderBoard(
+    val ratingAll: Double,
+    val ratingMonth: Double,
+    val ratingWeek: Double,
+    @Relationship("user")
+    var user: User?
+) : BaseModel()
+
 @Type("run-attempts")
 class RunAttemptsId(
     @Id
@@ -490,7 +521,10 @@ class RunAttemptsId(
 class ContentId(
     @Id
     val id: String?
-)
+) {
+    val title: String? = null
+
+}
 
 @Type("contents")
 open class ContentsId(
@@ -498,10 +532,8 @@ open class ContentsId(
     val id: String?
 ) {
     var contentable: String? = null
-
     val duration: Long? = null
     val title: String? = null
-    val sectionContent: SectionContent? = null
 }
 
 @Type("rating")

@@ -7,6 +7,7 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabsIntent
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.home.HomeActivity
 import kotlinx.android.synthetic.main.custom_dialog.view.*
@@ -87,6 +88,12 @@ object Components {
                 }
                 "wifi" -> {
                     context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
+                }
+                UNAUTHORIZED -> {
+                    openChrome(
+                        context,
+                        "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
+                    )
                 }
                 else -> {
                     callback(true)

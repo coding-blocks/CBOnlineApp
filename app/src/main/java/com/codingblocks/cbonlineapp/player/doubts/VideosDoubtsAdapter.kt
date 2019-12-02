@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.player.doubts
 
-import android.app.Activity
 import android.content.Context
 import android.text.Editable
 import android.view.LayoutInflater
@@ -15,13 +14,8 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.player.VideoPlayerViewModel
 import com.codingblocks.cbonlineapp.util.extensions.formatDate
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Comment
-import com.codingblocks.onlineapi.models.ContentsId
-import com.codingblocks.onlineapi.models.DoubtsJsonApi
-import com.codingblocks.onlineapi.models.RunAttemptsId
 import kotlinx.android.synthetic.main.item_doubt.view.*
 
 class VideosDoubtsAdapter(
@@ -87,23 +81,23 @@ class VideosDoubtsAdapter(
         }
 
         private fun resolveDoubt(doubt: DoubtsModel) {
-            val solvedDoubt = DoubtsJsonApi()
-            solvedDoubt.body = doubt.body
-            solvedDoubt.title = doubt.title
-            solvedDoubt.status = "RESOLVED"
-            solvedDoubt.discourseTopicId = doubt.discourseTopicId
-            solvedDoubt.id = doubt.dbtUid
-            solvedDoubt.resolvedById = (context as Activity).getPrefs().SP_USER_ID
-            solvedDoubt.postrunAttempt = RunAttemptsId(doubt.runAttemptId)
-            solvedDoubt.contents = ContentsId(doubt.contentId)
-            Clients.onlineV2JsonApi.resolveDoubt(doubt.dbtUid, solvedDoubt)
-                .enqueue(retrofitCallback { _, response ->
-                    response?.body().let {
-                        if (response?.isSuccessful == true) {
-                            viewModel.updateDoubtStatus(doubt.dbtUid, solvedDoubt.status)
-                        }
-                    }
-                })
+//            val solvedDoubt = Doubts()
+//            solvedDoubt.body = doubt.body
+//            solvedDoubt.title = doubt.title
+//            solvedDoubt.status = "RESOLVED"
+//            solvedDoubt.discourseTopicId = doubt.discourseTopicId
+//            solvedDoubt.id = doubt.dbtUid
+//            solvedDoubt.resolvedById = (context as Activity).getPrefs().SP_USER_ID
+//            solvedDoubt.postrunAttempt = RunAttemptsId(doubt.runAttemptId)
+//            solvedDoubt.contents = ContentsId(doubt.contentId)
+//            Clients.onlineV2JsonApi.resolveDoubt(doubt.dbtUid, solvedDoubt)
+//                .enqueue(retrofitCallback { _, response ->
+//                    response?.body().let {
+//                        if (response?.isSuccessful == true) {
+//                            viewModel.updateDoubtStatus(doubt.dbtUid, solvedDoubt.status)
+//                        }
+//                    }
+//                })
         }
 
         private fun fetchComments(dbtUid: String) {
@@ -149,17 +143,17 @@ class VideosDoubtsAdapter(
         }
 
         private fun createComment(text: Editable?, doubt: DoubtsModel) {
-            val comment = Comment()
-            comment.body = text.toString()
-            comment.discourseTopicId = doubt.discourseTopicId
-            val doubts = DoubtsJsonApi() // type doubts
-            doubts.id = doubt.dbtUid
-            comment.doubt = doubts
-            Clients.onlineV2JsonApi.createComment(comment)
-                .enqueue(retrofitCallback { _, response ->
-                    if (response?.isSuccessful == true)
-                        notifyDataSetChanged()
-                })
+//            val comment = Comment()
+//            comment.body = text.toString()
+//            comment.discourseTopicId = doubt.discourseTopicId
+//            val doubts = Doubts() // type doubts
+//            doubts.id = doubt.dbtUid
+//            comment.doubt = doubts
+//            Clients.onlineV2JsonApi.createComment(comment)
+//                .enqueue(retrofitCallback { _, response ->
+//                    if (response?.isSuccessful == true)
+//                        notifyDataSetChanged()
+//                })
         }
     }
 }

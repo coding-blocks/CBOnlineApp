@@ -117,4 +117,9 @@
     <string name="filter_job_type">Job Type</string>
     <string name="offline_message">Progress will be updated when your device goes online.</string>
     <string name="course_curriculum">Course Curriculum</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="empty_live_doubt">No Live requests. Keep this tab open, new doubts will appear here instantly</string>
+    <string name="empty_my_doubt">Nothing Here.Keep up the Good Work!!</string>
 </resources>

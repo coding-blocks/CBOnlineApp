@@ -145,3 +145,5 @@ fun timeAgo(time: Long): String {
     }
     return "Just Now"
 }
+
+fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()

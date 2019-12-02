@@ -1,7 +1,6 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.DoubtStats
-import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Extension
 import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.PostStream
@@ -10,6 +9,7 @@ import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -55,7 +55,7 @@ interface OnlineRestApi {
     ): Call<List<Leaderboard>>
 
     @GET("v2/courses/{runid}/doubts?order=latest")
-    fun getDoubts(@Path("runid") id: String): Call<Doubts>
+    fun getDoubts(@Path("runid") id: String): Call<ResponseBody>
 
     @GET("v2/courses/doubts/{doubtid}")
     fun getDoubtById(@Path("doubtid") id: Int): Call<PostStream>
@@ -83,7 +83,13 @@ interface OnlineRestApi {
     fun buyExtension(@Path("id") extensionId: Int): Call<JsonObject>
 
     @GET("v2/doubts/stats/{id}")
-    suspend fun doubtStats(@Path("id") userId: Int): Call<DoubtStats>
+    suspend fun doubtStats(@Path("id") userId: String): Response<DoubtStats>
+
+    @GET("v2/users/me/chatSignature")
+    fun getSignature(): Call<JsonObject>
+
+    @POST("v2/chats/{id}")
+    suspend fun getChatId(@Path("id") doubtId: String): Response<JsonObject>
 
 
 }
