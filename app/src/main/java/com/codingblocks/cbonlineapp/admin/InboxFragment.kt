@@ -15,7 +15,6 @@ import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_inbox.*
 
-
 /**
  * A simple [Fragment] subclass.
  */
@@ -42,7 +41,6 @@ class InboxFragment : Fragment() {
                 }
             }
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -109,12 +107,9 @@ class InboxFragment : Fragment() {
                     super.onPageFinished(view, url)
                     view.evaluateJavascript("javascript:$script", null)
                 }
-
             }
 
             webView.loadUrl("file:///android_asset/Chat.html")
-
         })
-
     }
 }

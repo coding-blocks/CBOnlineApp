@@ -412,7 +412,7 @@ data class Doubts(
     @Relationship("run-attempt")
     val runAttempt: MyRunAttempts? = null,
     @Relationship("content")
-    val content: ContentId? = null,
+    val content: ContentsId? = null,
     @Relationship("resolved-by")
     val resolvedBy: UserId? = null
 ) : BaseModel() {
@@ -451,7 +451,7 @@ class Note : BaseModel() {
     @Relationship("run_attempt", resolve = true)
     @JvmField
     var runAttempt: RunAttemptId? = null
-    @Relationship("content", resolve = true)
+    @Relationship("content")
     @JvmField
     var content: ContentId? = null
 }
@@ -517,7 +517,7 @@ class RunAttemptsId(
     val id: String?
 )
 
-@Type("contents")
+@Type("content")
 class ContentId(
     @Id
     val id: String?
@@ -532,10 +532,8 @@ open class ContentsId(
     val id: String?
 ) {
     var contentable: String? = null
-
     val duration: Long? = null
     val title: String? = null
-    val sectionContent: SectionContent? = null
 }
 
 @Type("rating")

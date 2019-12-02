@@ -7,7 +7,6 @@ import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.codingblocks.cbonlineapp.admin.doubts.DoubtsFragment
 import com.facebook.shimmer.ShimmerFrameLayout
 
 fun View.applyDim(dimAmount: Float) {

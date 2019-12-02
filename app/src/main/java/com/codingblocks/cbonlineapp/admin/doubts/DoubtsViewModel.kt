@@ -20,7 +20,6 @@ class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
     var prevOffSet: MutableLiveData<Int> = MutableLiveData(0)
     var barMessage: MutableLiveData<String> = MutableLiveData()
 
-
     fun fetchLiveDoubts(offSet: Int = 0) {
         runIO {
             val response = repo.getLiveDoubts(offSet)

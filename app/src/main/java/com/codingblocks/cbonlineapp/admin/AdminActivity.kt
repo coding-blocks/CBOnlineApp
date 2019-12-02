@@ -21,7 +21,6 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
         pagerAdapter.add(InboxFragment.newInstance(conversationId))
         pagerAdapter.notifyDataSetChanged()
         pagerAdmin.currentItem = 2
-
     }
 
     private val viewModel by viewModel<MyCourseViewModel>()

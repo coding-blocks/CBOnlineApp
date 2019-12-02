@@ -41,7 +41,6 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
 
     private lateinit var listener: FragmentChangeListener
 
-
     private val doubtsAdapter = DoubtsAdapter()
     private val viewModel by viewModel<DoubtsViewModel>()
 
@@ -56,7 +55,6 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         listener = context as FragmentChangeListener
-
     }
 
     private val resolveClickListener: ResolveClickListener by lazy {
@@ -145,13 +143,12 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
-
                 }
             }
         }
 
         viewModel.barMessage.observer(viewLifecycleOwner) {
-            //TODO("Overlapping with Bottom Bar")
+            // TODO("Overlapping with Bottom Bar")
             Snackbar.make(root, it, Snackbar.LENGTH_SHORT)
                 .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
                 .show()
