@@ -20,6 +20,7 @@
         android:theme="@style/AppThemeMain">
         <activity
             android:name=".admin.AdminActivity"
+            android:launchMode="singleTop"
             android:parentActivityName=".home.HomeActivity" />
         <activity android:name=".checkout.CheckoutActivity" />
         <activity

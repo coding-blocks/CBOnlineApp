@@ -13,6 +13,7 @@ import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
+import kotlinx.android.synthetic.main.activity_admin.*
 import kotlinx.android.synthetic.main.fragment_inbox.*
 
 /**
@@ -20,9 +21,7 @@ import kotlinx.android.synthetic.main.fragment_inbox.*
  */
 class InboxFragment : Fragment() {
 
-    private val conversationId by lazy {
-        arguments?.getString(CONVERSATION_ID) ?: ""
-    }
+    private var conversationId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,15 +43,16 @@ class InboxFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        arguments?.let {
+            inboxRoot.removeAllViews()
+            conversationId = it.getString(CONVERSATION_ID) ?: ""
+        }
+        val webView = WebView(requireContext())
         webView.settings.apply {
             javaScriptEnabled = true
             webView.settings.javaScriptCanOpenWindowsAutomatically = true
             webView.settings.allowFileAccess = true
             webView.settings.allowFileAccessFromFileURLs = true
-        }
-        if (conversationId.isNotEmpty()) {
-            webView.reload()
         }
         Clients.api.getSignature().enqueue(retrofitCallback { _, response ->
             val signature = response?.body()?.get("signature")
@@ -110,6 +110,7 @@ class InboxFragment : Fragment() {
             }
 
             webView.loadUrl("file:///android_asset/Chat.html")
+            inboxRoot.addView(webView)
         })
     }
 }

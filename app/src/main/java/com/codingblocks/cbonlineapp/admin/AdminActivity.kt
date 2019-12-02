@@ -7,10 +7,10 @@ import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.doubts.DoubtsFragment
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewFragment
-import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.activity_admin.*
 import org.jetbrains.anko.contentView
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -18,15 +18,14 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class AdminActivity : AppCompatActivity(), FragmentChangeListener {
 
     override fun openInbox(conversationId: String) {
-        pagerAdapter.add(InboxFragment.newInstance(conversationId))
-        pagerAdapter.notifyDataSetChanged()
-        pagerAdmin.currentItem = 2
+        replaceFragmentSafely(
+            fragment = InboxFragment.newInstance(conversationId),
+            containerViewId = R.id.pagerAdmin,
+            allowStateLoss = true
+        )
     }
 
     private val viewModel by viewModel<MyCourseViewModel>()
-    private val pagerAdapter by lazy {
-        TabLayoutAdapter(supportFragmentManager)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,28 +48,37 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
         bottomNavAdmin.setOnNavigationItemSelectedListener {
             return@setOnNavigationItemSelectedListener when (it.itemId) {
                 R.id.menu_overview -> {
-                    pagerAdmin.currentItem = 0
+                    replaceFragmentSafely(
+                        fragment = AdminOverviewFragment(),
+                        containerViewId = R.id.pagerAdmin,
+                        allowStateLoss = true
+                    )
                     true
                 }
                 R.id.menu_doubts -> {
-                    pagerAdmin.currentItem = 1
+                    replaceFragmentSafely(
+                        fragment = DoubtsFragment(),
+                        containerViewId = R.id.pagerAdmin,
+                        allowStateLoss = true
+                    )
                     true
                 }
                 R.id.menu_inbox -> {
-                    pagerAdmin.currentItem = 2
+                    replaceFragmentSafely(
+                        fragment = InboxFragment(),
+                        containerViewId = R.id.pagerAdmin,
+                        allowStateLoss = true
+                    )
                     true
                 }
                 else -> false
             }
         }
-        pagerAdapter.add(AdminOverviewFragment())
-        pagerAdapter.add(DoubtsFragment())
-        pagerAdapter.add(InboxFragment())
-        pagerAdmin.apply {
-            adapter = pagerAdapter
-            currentItem = 0
-            offscreenPageLimit = 0
-        }
+        replaceFragmentSafely(
+            fragment = AdminOverviewFragment(),
+            containerViewId = R.id.pagerAdmin,
+            allowStateLoss = true
+        )
     }
 
     private fun onKeyboardShown(state: Boolean) {
