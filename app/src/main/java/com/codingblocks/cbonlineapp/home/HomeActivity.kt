@@ -38,7 +38,6 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.firestore.FirebaseFirestore
-import com.squareup.picasso.Picasso
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_home.*

@@ -18,8 +18,8 @@ class AdminOverviewViewModel(private val repo: OverviewRepository) : ViewModel()
     var doubtStats: MutableLiveData<DoubtStats> = MutableLiveData()
     var listLeaderboard: MutableLiveData<List<DoubtLeaderBoard>> = MutableLiveData()
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
-    var nextOffSet: MutableLiveData<Int> = MutableLiveData(0)
-    var prevOffSet: MutableLiveData<Int> = MutableLiveData(0)
+    var nextOffSet: MutableLiveData<Int> = MutableLiveData(-1)
+    var prevOffSet: MutableLiveData<Int> = MutableLiveData(-1)
     lateinit var prefs: PreferenceHelper
 
     init {

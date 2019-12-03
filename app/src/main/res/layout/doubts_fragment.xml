@@ -68,6 +68,36 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/internetll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="invisible">
+
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="150dp"
+                    android:src="@drawable/ic_no_connection"
+                    android:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="150dp"
+                    android:text="@string/no_internet"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/doubtShimmer"
                 android:layout_width="match_parent"

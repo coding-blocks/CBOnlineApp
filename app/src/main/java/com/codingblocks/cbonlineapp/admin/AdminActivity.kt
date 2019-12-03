@@ -11,6 +11,8 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import com.codingblocks.fabnavigation.FabNavigation
+import com.codingblocks.fabnavigation.FabNavigationAdapter
 import kotlinx.android.synthetic.main.activity_admin.*
 import org.jetbrains.anko.contentView
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,6 +27,10 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
         )
     }
 
+    private val navigationAdapter: FabNavigationAdapter by lazy {
+        FabNavigationAdapter(this, R.menu.bottom_nav_admin)
+    }
+
     private val viewModel by viewModel<MyCourseViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +39,7 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
         setSupportActionBar(toolbarAdmin)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        navigationAdapter.setupWithBottomNavigation(bottomNavAdmin)
 
         val roleId = getPrefs().SP_ROLE_ID
         if (roleId == 1 || roleId == 3) {
@@ -45,35 +52,28 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
     }
 
     private fun initializeUI() {
-        bottomNavAdmin.setOnNavigationItemSelectedListener {
-            return@setOnNavigationItemSelectedListener when (it.itemId) {
-                R.id.menu_overview -> {
-                    replaceFragmentSafely(
+        bottomNavAdmin.setOnTabSelectedListener(object : FabNavigation.OnTabSelectedListener {
+            override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
+                when (position) {
+                    0 -> replaceFragmentSafely(
                         fragment = AdminOverviewFragment(),
                         containerViewId = R.id.pagerAdmin,
                         allowStateLoss = true
                     )
-                    true
-                }
-                R.id.menu_doubts -> {
-                    replaceFragmentSafely(
+                    1 -> replaceFragmentSafely(
                         fragment = DoubtsFragment(),
                         containerViewId = R.id.pagerAdmin,
                         allowStateLoss = true
                     )
-                    true
-                }
-                R.id.menu_inbox -> {
-                    replaceFragmentSafely(
+                    2 -> replaceFragmentSafely(
                         fragment = InboxFragment(),
                         containerViewId = R.id.pagerAdmin,
                         allowStateLoss = true
                     )
-                    true
                 }
-                else -> false
+                return true
             }
-        }
+        })
         replaceFragmentSafely(
             fragment = AdminOverviewFragment(),
             containerViewId = R.id.pagerAdmin,
