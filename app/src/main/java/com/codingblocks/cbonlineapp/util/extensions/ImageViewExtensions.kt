@@ -39,14 +39,13 @@ fun ImageView.loadSvg(svgUrl: String, onDrawableCreated: ((Drawable) -> Unit)?) 
 }
 
 fun ImageView.loadImage(imgUrl: String, scale: Boolean = false) {
-    if (imgUrl.isNotEmpty())
         if (imgUrl.takeLast(3) == "svg") {
             loadSvg(imgUrl, null)
         } else {
             if (scale)
                 Picasso.get().load(imgUrl).resize(72, 72).placeholder(R.drawable.defaultavatar).into(this)
             else
-                Picasso.get().load(imgUrl).into(this)
+                Picasso.get().load(imgUrl).placeholder(R.drawable.defaultavatar).into(this)
         }
 }
 

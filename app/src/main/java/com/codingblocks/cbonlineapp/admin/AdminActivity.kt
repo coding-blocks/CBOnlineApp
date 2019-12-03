@@ -1,7 +1,13 @@
 package com.codingblocks.cbonlineapp.admin
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
@@ -41,6 +47,7 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         navigationAdapter.setupWithBottomNavigation(bottomNavAdmin)
+        setupAlarm()
 
         val roleId = getPrefs().SP_ROLE_ID
         if (roleId == 1 || roleId == 3) {
@@ -49,6 +56,23 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
             Components.showConfirmation(this, "admin") {
                 finish()
             }
+        }
+    }
+
+    private fun setupAlarm() {
+        val alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val i = Intent(this, DoubtReceiver::class.java)
+
+        val alarmIntent = PendingIntent.getBroadcast(
+            this, 0, i, PendingIntent.FLAG_ONE_SHOT
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmMgr.setAndAllowWhileIdle(
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime(),
+                alarmIntent
+            )
         }
     }
 

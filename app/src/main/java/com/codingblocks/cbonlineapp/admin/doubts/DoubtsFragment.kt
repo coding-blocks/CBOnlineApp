@@ -8,11 +8,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequest
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.FragmentChangeListener
 import com.codingblocks.cbonlineapp.util.Components
@@ -33,7 +28,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.concurrent.TimeUnit
 
 class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
 
@@ -108,7 +102,7 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
         super.onActivityCreated(savedInstanceState)
         viewModel.fetchLiveDoubts()
         doubtShimmer.startShimmer()
-        setupWorker()
+//        setupWorker()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -207,16 +201,6 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
                 userId?.let { viewModel.fetchMyDoubts(it) }
             }
         }
-    }
-
-    private fun setupWorker() {
-        val constraints =
-            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val request = PeriodicWorkRequestBuilder<DoubtWorker>(PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS, TimeUnit.MILLISECONDS)
-            .setConstraints(constraints)
-            .build()
-        WorkManager.getInstance()
-            .enqueue(request)
     }
 
     override fun onDestroyView() {
