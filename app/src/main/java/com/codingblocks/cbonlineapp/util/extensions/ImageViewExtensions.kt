@@ -39,14 +39,15 @@ fun ImageView.loadSvg(svgUrl: String, onDrawableCreated: ((Drawable) -> Unit)?) 
 }
 
 fun ImageView.loadImage(imgUrl: String, scale: Boolean = false) {
-    if (imgUrl.takeLast(3) == "png") {
-        if (scale)
-            Picasso.get().load(imgUrl).resize(72, 72).into(this)
-        else
-            Picasso.get().load(imgUrl).into(this)
-    } else {
-        loadSvg(imgUrl, null)
-    }
+    if (imgUrl.isNotEmpty())
+        if (imgUrl.takeLast(3) == "svg") {
+            loadSvg(imgUrl, null)
+        } else {
+            if (scale)
+                Picasso.get().load(imgUrl).resize(72, 72).placeholder(R.drawable.defaultavatar).into(this)
+            else
+                Picasso.get().load(imgUrl).into(this)
+        }
 }
 
 fun Snackbar.config(context: Context, @ColorInt backgroundColor: Int, @ColorInt textColor: Int) {

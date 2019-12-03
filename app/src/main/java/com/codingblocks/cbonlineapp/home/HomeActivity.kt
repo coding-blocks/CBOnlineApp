@@ -30,6 +30,7 @@ import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.ACCESS_TOKEN
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.google.android.material.navigation.NavigationView
@@ -122,8 +123,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (viewModel.prefs.SP_USER_IMAGE.isNotEmpty())
             nav_view.getHeaderView(0).nav_header_imageView.apply {
                 setOnClickListener(this@HomeActivity)
-                Picasso.get().load(viewModel.prefs.SP_USER_IMAGE)
-                    .placeholder(R.drawable.defaultavatar).fit().into(this)
+                loadImage(viewModel.prefs.SP_USER_IMAGE, true)
             }
         nav_view.getHeaderView(0).login_button.apply {
             text = resources.getString(R.string.logout)
