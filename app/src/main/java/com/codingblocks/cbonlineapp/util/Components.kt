@@ -90,6 +90,7 @@ object Components {
                     context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
                 }
                 UNAUTHORIZED -> {
+
                     openChrome(
                         context,
                         "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"

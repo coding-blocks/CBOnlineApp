@@ -1,7 +1,13 @@
 package com.codingblocks.cbonlineapp.admin
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
@@ -11,6 +17,8 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import com.codingblocks.fabnavigation.FabNavigation
+import com.codingblocks.fabnavigation.FabNavigationAdapter
 import kotlinx.android.synthetic.main.activity_admin.*
 import org.jetbrains.anko.contentView
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -18,11 +26,16 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class AdminActivity : AppCompatActivity(), FragmentChangeListener {
 
     override fun openInbox(conversationId: String) {
+        bottomNavAdmin.setCurrentItem(2)
         replaceFragmentSafely(
             fragment = InboxFragment.newInstance(conversationId),
             containerViewId = R.id.pagerAdmin,
             allowStateLoss = true
         )
+    }
+
+    private val navigationAdapter: FabNavigationAdapter by lazy {
+        FabNavigationAdapter(this, R.menu.bottom_nav_admin)
     }
 
     private val viewModel by viewModel<MyCourseViewModel>()
@@ -33,6 +46,8 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
         setSupportActionBar(toolbarAdmin)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        navigationAdapter.setupWithBottomNavigation(bottomNavAdmin)
+        setupAlarm()
 
         val roleId = getPrefs().SP_ROLE_ID
         if (roleId == 1 || roleId == 3) {
@@ -44,36 +59,46 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
         }
     }
 
+    private fun setupAlarm() {
+        val alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val i = Intent(this, DoubtReceiver::class.java)
+
+        val alarmIntent = PendingIntent.getBroadcast(
+            this, 0, i, PendingIntent.FLAG_ONE_SHOT
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmMgr.setAndAllowWhileIdle(
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime(),
+                alarmIntent
+            )
+        }
+    }
+
     private fun initializeUI() {
-        bottomNavAdmin.setOnNavigationItemSelectedListener {
-            return@setOnNavigationItemSelectedListener when (it.itemId) {
-                R.id.menu_overview -> {
-                    replaceFragmentSafely(
+        bottomNavAdmin.setOnTabSelectedListener(object : FabNavigation.OnTabSelectedListener {
+            override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
+                when (position) {
+                    0 -> replaceFragmentSafely(
                         fragment = AdminOverviewFragment(),
                         containerViewId = R.id.pagerAdmin,
                         allowStateLoss = true
                     )
-                    true
-                }
-                R.id.menu_doubts -> {
-                    replaceFragmentSafely(
+                    1 -> replaceFragmentSafely(
                         fragment = DoubtsFragment(),
                         containerViewId = R.id.pagerAdmin,
                         allowStateLoss = true
                     )
-                    true
-                }
-                R.id.menu_inbox -> {
-                    replaceFragmentSafely(
+                    2 -> replaceFragmentSafely(
                         fragment = InboxFragment(),
                         containerViewId = R.id.pagerAdmin,
                         allowStateLoss = true
                     )
-                    true
                 }
-                else -> false
+                return true
             }
-        }
+        })
         replaceFragmentSafely(
             fragment = AdminOverviewFragment(),
             containerViewId = R.id.pagerAdmin,

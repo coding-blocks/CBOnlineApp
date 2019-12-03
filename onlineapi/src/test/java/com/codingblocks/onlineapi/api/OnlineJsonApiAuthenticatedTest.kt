@@ -22,17 +22,17 @@ class OnlineJsonApiAuthenticatedTest {
     }
 
 
-    @Test
-    fun getDoubts() {
-        runBlocking {
-            val doubts = GlobalScope.async { Clients.onlineV2JsonApi.getMyDoubts(acknowledgedId = "238594") }
-            val response = doubts.await()
-            val meta: HashMap<String, Any> = response.body()?.meta?.get("pagination") as HashMap<String, Any>
-            assertNotNull(meta)
-            assertNotNull(response.body())
-
-        }
-    }
+//    @Test
+//    fun getDoubts() {
+//        runBlocking {
+//            val doubts = GlobalScope.async { Clients.onlineV2JsonApi.getMyDoubts(acknowledgedId = "238594") }
+//            val response = doubts.await()
+//            val meta: HashMap<String, Any> = response.body()?.meta?.get("pagination") as HashMap<String, Any>
+//            assertNotNull(meta)
+//            assertNotNull(response.body())
+//
+//        }
+//    }
 
     @Test
     fun `GET section`() {
@@ -104,20 +104,20 @@ class OnlineJsonApiAuthenticatedTest {
         assertNotNull(notes)
     }
 
-    @Test
-    fun `POST createNote`() {
-
-        val runAttemt = RunAttemptsId("22685")
-        val contentsId = ContentsId("233")
-        val note = Notes()
-        note.text = "demo note"
-        note.duration = 1.2
-        note.runAttempt = runAttemt
-        note.content = contentsId
-
-        val noteResponse = jsonapi.createNote(note).execute().body()
-        assertNotNull(noteResponse)
-    }
+//    @Test
+//    fun `POST createNote`() {
+//
+//        val runAttemt = RunAttemptsId("22685")
+//        val contentsId = ContentsId("233")
+//        val note = Notes()
+//        note.text = "demo note"
+//        note.duration = 1.2
+//        note.runAttempt = runAttemt
+//        note.content = contentsId
+//
+//        val noteResponse = jsonapi.createNote(note).execute().body()
+//        assertNotNull(noteResponse)
+//    }
 
     @Test
     fun `GET Jobs `() {

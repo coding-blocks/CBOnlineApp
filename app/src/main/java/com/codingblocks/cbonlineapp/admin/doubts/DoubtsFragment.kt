@@ -8,11 +8,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequest
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.FragmentChangeListener
 import com.codingblocks.cbonlineapp.util.Components
@@ -20,18 +15,19 @@ import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.codingblocks.cbonlineapp.util.extensions.showAndStart
+import com.codingblocks.cbonlineapp.util.extensions.showEmptyView
+import com.codingblocks.cbonlineapp.util.extensions.showShimmer
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Doubts
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.activity_admin.*
 import kotlinx.android.synthetic.main.doubts_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.concurrent.TimeUnit
 
 class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
 
@@ -106,7 +102,7 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
         super.onActivityCreated(savedInstanceState)
         viewModel.fetchLiveDoubts()
         doubtShimmer.startShimmer()
-        setupWorker()
+//        setupWorker()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -130,12 +126,13 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
             } else {
                 doubtsAdapter.submitList(it)
             }
-            changeViewState(doubtRv, emptyll, doubtShimmer, it.isEmpty())
+            changeViewState(doubtRv, internetll, emptyll, doubtShimmer, it.isEmpty())
         }
 
         viewModel.errorLiveData.observer(viewLifecycleOwner) {
             when (it) {
                 ErrorStatus.NO_CONNECTION -> {
+                    showEmptyView(internetll, emptyll, doubtShimmer)
                 }
                 ErrorStatus.UNAUTHORIZED -> {
                     Components.showConfirmation(requireContext(), UNAUTHORIZED) {
@@ -143,13 +140,20 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
+                    Snackbar.make(root, it, Snackbar.LENGTH_SHORT)
+                        .setAnchorView(bottomNavAdmin)
+                        .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+                        .setAction("Retry") {
+                            fetchDoubts(adminTabLayout.selectedTabPosition)
+                        }
+                        .show()
                 }
             }
         }
 
         viewModel.barMessage.observer(viewLifecycleOwner) {
-            // TODO("Overlapping with Bottom Bar")
             Snackbar.make(root, it, Snackbar.LENGTH_SHORT)
+                .setAnchorView(bottomNavAdmin)
                 .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
                 .show()
         }
@@ -183,28 +187,20 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
 
     override fun onTabSelected(tab: TabLayout.Tab) {
         // Clear Doubts While Changing the tab
-        doubtsAdapter.clear()
+        fetchDoubts(tab.position)
+    }
 
-        when (tab.position) {
+    private fun fetchDoubts(position: Int) {
+        doubtsAdapter.clear()
+        showShimmer(internetll, emptyll, doubtShimmer)
+        when (position) {
             0 -> {
                 viewModel.fetchLiveDoubts()
-                doubtShimmer.showAndStart()
             }
             1 -> {
                 userId?.let { viewModel.fetchMyDoubts(it) }
-                doubtShimmer.showAndStart()
             }
         }
-    }
-
-    private fun setupWorker() {
-        val constraints =
-            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val request = PeriodicWorkRequestBuilder<DoubtWorker>(PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS, TimeUnit.MILLISECONDS)
-            .setConstraints(constraints)
-            .build()
-        WorkManager.getInstance()
-            .enqueue(request)
     }
 
     override fun onDestroyView() {

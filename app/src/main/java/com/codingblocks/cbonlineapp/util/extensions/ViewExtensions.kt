@@ -31,9 +31,22 @@ fun ShimmerFrameLayout.showAndStart() {
     startShimmer()
 }
 
-fun Fragment.changeViewState(recyclerView: RecyclerView, emptyView: LinearLayout, shimmerView: ShimmerFrameLayout, boolean: Boolean) {
-    recyclerView.isVisible = !boolean
+fun Fragment.changeViewState(recyclerView: RecyclerView, internetView: LinearLayout, emptyView: LinearLayout, shimmerView: ShimmerFrameLayout, boolean: Boolean) {
+    internetView.isVisible = false
     emptyView.isVisible = boolean
+    recyclerView.isVisible = !boolean
+    shimmerView.hideAndStop()
+}
+
+fun Fragment.showShimmer(internetView: LinearLayout, emptyView: LinearLayout, shimmerView: ShimmerFrameLayout) {
+    internetView.isVisible = false
+    emptyView.isVisible = false
+    shimmerView.showAndStart()
+}
+
+fun Fragment.showEmptyView(internetView: LinearLayout, emptyView: LinearLayout, shimmerView: ShimmerFrameLayout) {
+    internetView.isVisible = true
+    emptyView.isVisible = false
     shimmerView.hideAndStop()
 }
 

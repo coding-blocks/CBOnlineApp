@@ -24,12 +24,10 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <com.codingblocks.fabnavigation.FabNavigation
         android:id="@+id/bottomNavAdmin"
-        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:menu="@menu/bottom_nav_admin" />
+        android:layout_gravity="bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
