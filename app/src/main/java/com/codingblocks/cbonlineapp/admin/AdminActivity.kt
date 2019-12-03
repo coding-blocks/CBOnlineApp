@@ -20,6 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class AdminActivity : AppCompatActivity(), FragmentChangeListener {
 
     override fun openInbox(conversationId: String) {
+        bottomNavAdmin.setCurrentItem(2)
         replaceFragmentSafely(
             fragment = InboxFragment.newInstance(conversationId),
             containerViewId = R.id.pagerAdmin,
