@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
+class AdminDoubtsFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
     val userId by lazy {
         getPrefs()?.SP_USER_ID
@@ -140,7 +140,7 @@ class DoubtsFragment : Fragment(), AnkoLogger, TabLayout.OnTabSelectedListener {
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
-                    Snackbar.make(root, it, Snackbar.LENGTH_SHORT)
+                    Snackbar.make(root, it, Snackbar.LENGTH_INDEFINITE)
                         .setAnchorView(bottomNavAdmin)
                         .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
                         .setAction("Retry") {

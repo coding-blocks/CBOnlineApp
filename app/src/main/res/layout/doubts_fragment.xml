@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.codingblocks.cbonlineapp.admin.doubts.DoubtsFragment">
+    tools:context="com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtsFragment">
 
     <LinearLayout
         android:id="@+id/root"
@@ -116,7 +116,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="?attr/actionBarSize"
             android:gravity="center">
 
             <com.google.android.material.button.MaterialButton

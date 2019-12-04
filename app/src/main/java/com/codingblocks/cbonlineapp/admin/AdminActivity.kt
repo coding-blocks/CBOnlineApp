@@ -11,7 +11,8 @@ import android.os.SystemClock
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.admin.doubts.DoubtsFragment
+import com.codingblocks.cbonlineapp.admin.doubts.DoubtReceiver
+import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtsFragment
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewFragment
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.util.Components
@@ -86,7 +87,7 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
                         allowStateLoss = true
                     )
                     1 -> replaceFragmentSafely(
-                        fragment = DoubtsFragment(),
+                        fragment = AdminDoubtsFragment(),
                         containerViewId = R.id.pagerAdmin,
                         allowStateLoss = true
                     )

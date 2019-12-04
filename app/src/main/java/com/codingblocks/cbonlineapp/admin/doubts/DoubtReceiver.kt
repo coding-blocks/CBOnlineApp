@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.admin
+package com.codingblocks.cbonlineapp.admin.doubts
 
 import android.app.AlarmManager
 import android.app.NotificationManager
@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.appContext
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.util.ADMIN_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.extensions.isotomillisecond
 import com.codingblocks.onlineapi.Clients

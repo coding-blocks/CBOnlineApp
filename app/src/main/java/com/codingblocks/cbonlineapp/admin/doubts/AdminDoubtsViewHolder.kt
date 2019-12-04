@@ -8,7 +8,7 @@ import com.codingblocks.cbonlineapp.util.extensions.formatDate
 import com.codingblocks.onlineapi.models.Doubts
 import kotlinx.android.synthetic.main.item_admin_doubt.view.*
 
-class DoubtViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class AdminDoubtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     var ackClickListener: AckClickListener? = null
     var chatClickListener: ChatClickListener? = null

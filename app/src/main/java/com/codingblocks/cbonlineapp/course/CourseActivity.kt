@@ -309,4 +309,5 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 //            super.onBackPressed()
 //        }
 //    }
+
 }

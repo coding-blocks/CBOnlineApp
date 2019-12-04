@@ -12,7 +12,7 @@ import com.github.jasminb.jsonapi.JSONAPIDocument
 import kotlinx.coroutines.async
 import retrofit2.Response
 
-class DoubtsViewModel(private val repo: DoubtRepository) : ViewModel() {
+class DoubtsViewModel(private val repo: AdminDoubtRepository) : ViewModel() {
 
     var listDoubtsResponse: MutableLiveData<List<Doubts>> = MutableLiveData()
     var errorLiveData: MutableLiveData<String> = MutableLiveData()

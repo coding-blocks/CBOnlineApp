@@ -8,19 +8,19 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.Doubts
 
-class DoubtsAdapter : ListAdapter<Doubts, DoubtViewHolder>(diffCallback) {
+class DoubtsAdapter : ListAdapter<Doubts, AdminDoubtsViewHolder>(diffCallback) {
 
     var onAckClick: AckClickListener? = null
     var onResolveClick: ResolveClickListener? = null
     var onChatClick: ChatClickListener? = null
     var onDiscussClick: DiscussClickListener? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoubtViewHolder {
-        return DoubtViewHolder(LayoutInflater.from(parent.context)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdminDoubtsViewHolder {
+        return AdminDoubtsViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.item_admin_doubt, parent, false))
     }
 
-    override fun onBindViewHolder(holder: DoubtViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AdminDoubtsViewHolder, position: Int) {
         val doubt = getItem(position)
         if (doubt != null)
             holder.apply {

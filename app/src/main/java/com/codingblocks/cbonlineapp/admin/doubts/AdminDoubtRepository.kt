@@ -8,7 +8,7 @@ import com.github.jasminb.jsonapi.JSONAPIDocument
 import com.google.gson.JsonObject
 import retrofit2.Response
 
-class DoubtRepository {
+class AdminDoubtRepository {
 
     suspend fun getLiveDoubts(offSet: Int): ResultWrapper<Response<JSONAPIDocument<List<Doubts>>>> {
         return safeApiCall { Clients.onlineV2JsonApi.getLiveDoubts(offset = offSet) }

@@ -8,7 +8,7 @@ import com.codingblocks.onlineapi.safeApiCall
 import com.github.jasminb.jsonapi.JSONAPIDocument
 import retrofit2.Response
 
-class OverviewRepository {
+class AdminOverviewRepository {
 
     suspend fun getDoubtStats(userId: String): ResultWrapper<Response<DoubtStats>> {
         return safeApiCall { Clients.api.doubtStats(userId) }

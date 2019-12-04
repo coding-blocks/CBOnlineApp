@@ -167,7 +167,7 @@
             android:resource="@xml/shortcut" />
 
         <receiver
-            android:name=".admin.DoubtReceiver"
+            android:name=".admin.doubts.DoubtReceiver"
             android:enabled="true"
             android:exported="false" />
     </application>
