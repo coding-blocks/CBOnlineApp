@@ -76,7 +76,7 @@
         <activity
             android:name=".course.CourseActivity"
             android:parentActivityName=".home.HomeActivity"
-            android:theme="@style/Theme.CB.Course">
+            android:theme="@style/NewAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

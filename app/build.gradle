@@ -139,6 +139,7 @@ dependencies {
 
 
     //VideoCipher library
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
     implementation 'com.vdocipher.aegis:vdocipher-android:1.2.1'
 
 

@@ -123,4 +123,9 @@
     <string name="empty_live_doubt">No Live requests. Keep this tab open, new doubts will appear here instantly</string>
     <string name="empty_my_doubt">Nothing Here.Keep up the Good Work!!</string>
     <string name="no_internet">There seems to be an issue with your internet connection.\nPlease Try Again.</string>
+    <string name="like">Like</string>
+    <string name="share">Share</string>
+    <string name="choose_batch">Choose Batch</string>
+    <string name="buy_now">Buy Now</string>
+    <string name="try_it_for_free">Try it for Free</string>
 </resources>

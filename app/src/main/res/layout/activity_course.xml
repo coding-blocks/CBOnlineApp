@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,10 +12,202 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="155dp"
+            android:background="@drawable/toolbar_bg">
+
+            <ImageView
+                android:id="@+id/courseToolbarBg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:scaleType="centerCrop" />
+
+            <LinearLayout
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:gravity="center">
+
+                <ImageButton
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/ic_back" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    tools:text="Web Development" />
+
+                <ImageButton
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:background="@drawable/ic_share" />
+
+                <ImageButton
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/ic_like" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/shortTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toolbar"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:layout_marginBottom="@dimen/margin_extra_small"
+                android:layout_toStartOf="@id/courseLogo"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                tools:text="Learn full-stack web development using JavaScript and NodeJS" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/courseLogo"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_below="@id/toolbar"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:src="@drawable/ic_course_logo"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="2dp" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/ratingTv"
+                android:layout_alignBottom="@id/ratingTv"
+                android:layout_marginStart="@dimen/margin_large" />
+
+            <TextView
+                android:id="@+id/ratingTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/shortTv"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_toEndOf="@id/ratingBar"
+                android:textColor="@color/white"
+                tools:text="4/5, 435 ratings" />
 
         </RelativeLayout>
 
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:backgroundTint="#f3f3f3"
+            android:drawableEnd="@drawable/ic_dropdown"
+            android:padding="@dimen/padding_small"
+            android:paddingStart="@dimen/padding_medium"
+            android:paddingEnd="@dimen/padding_medium"
+            android:text="@string/choose_batch"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            app:cornerRadius="@dimen/button_corner_radius" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:textColor="@color/orangish"
+                android:textSize="18sp"
+                tools:text="₹ 9499" />
+
+            <TextView
+                android:id="@+id/priceTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:textColor="@color/orangish"
+                android:textSize="18sp"
+                tools:text="₹ 9499" />
+
+            <TextView
+                android:id="@+id/deadlineTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/priceTv"
+                android:layout_alignStart="@id/priceTv"
+                android:layout_marginTop="8dp"
+                android:layout_toStartOf="@id/trialBtn"
+                android:textColor="@color/orangish"
+                android:textSize="12sp"
+                tools:text="Ends 2nd Nov 2019" />
+
+            <TextView
+                android:id="@+id/mrpTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/priceTv"
+                android:layout_marginStart="@dimen/button_padding_small"
+                android:layout_toEndOf="@id/priceTv"
+                android:textColor="@color/brownish_grey"
+                tools:text="₹ 9499" />
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/trialBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/margin_extra_small"
+                android:layout_toStartOf="@+id/buyBtn"
+                android:background="@drawable/button_background_outline"
+                android:text="@string/try_it_for_free"
+                android:textColor="@color/pastel_red"
+                android:textSize="@dimen/button_text_size" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buyBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/margin_medium"
+                android:background="@drawable/button_background"
+                android:drawableEnd="@drawable/ic_dropright"
+                android:drawablePadding="10dp"
+                android:text="@string/buy_now"
+                android:textSize="@dimen/button_text_size" />
+        </RelativeLayout>
+
+        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+            android:id="@+id/youtube_player_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_large"
+            app:autoPlay="false"
+            app:showFullScreenButton="false"
+            app:showYouTubeButton="false"
+            app:useWebUi="true" />
 
     </LinearLayout>
 

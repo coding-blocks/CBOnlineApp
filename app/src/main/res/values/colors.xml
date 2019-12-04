@@ -19,4 +19,11 @@
     <color name="shimmer_color">#a2878787</color>
     <color name="light_transparent">#16000000</color>
 
+    <!--    New Colors-->
+    <color name="pastel_red">#e74e4b</color>
+    <color name="dusty_orange">#fb8133</color>
+    <color name="orangish">#f2734c</color>
+    <color name="brownish_grey">#666666</color>
+
+
 </resources>

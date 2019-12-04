@@ -3,6 +3,8 @@ package com.codingblocks.cbonlineapp.util
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
+import com.codingblocks.onlineapi.ResultWrapper
+import com.codingblocks.onlineapi.safeApiCall
 import kotlinx.coroutines.Dispatchers
 
 /**
@@ -20,12 +22,11 @@ fun <T, A> resultLiveData(databaseQuery: () -> LiveData<T>,
         emit(Result.loading<T>())
         val source = databaseQuery.invoke().map { Result.success(it) }
         emitSource(source)
-
-        val responseStatus = networkCall.invoke()
-        if (responseStatus.status == Result.Status.SUCCESS) {
-            saveCallResult(responseStatus.data!!)
-        } else if (responseStatus.status == Result.Status.ERROR) {
-            emit(Result.error<T>(responseStatus.message!!))
-            emitSource(source)
+        when (val responseStatus = safeApiCall(apiCall = networkCall)) {
+            is ResultWrapper.Success -> saveCallResult(responseStatus.value.data!!)
+            is ResultWrapper.GenericError -> {
+                emit(Result.error<T>(responseStatus.error))
+                emitSource(source)
+            }
         }
     }

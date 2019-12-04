@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.course
 
 import android.os.Bundle
+import android.view.Menu
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -8,9 +9,12 @@ import androidx.recyclerview.widget.SnapHelper
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.batches.BatchesAdapter
 import com.codingblocks.cbonlineapp.insturctors.InstructorDataAdapter
+import com.codingblocks.cbonlineapp.util.Utils.setToolbar
 import com.google.android.youtube.player.YouTubePlayer
+import kotlinx.android.synthetic.main.activity_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class CourseActivity : AppCompatActivity(), AnkoLogger {
     private val courseId by lazy {
@@ -31,10 +35,18 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course)
+
+
         val image = intent.getStringExtra("courseLogo") ?: ""
+
 //        setImageAndTitle(image, courseName)
 //
 //        init()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.course_menu, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
 
