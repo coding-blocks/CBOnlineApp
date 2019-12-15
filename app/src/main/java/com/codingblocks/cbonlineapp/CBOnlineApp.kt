@@ -25,6 +25,7 @@ import com.squareup.picasso.Picasso
 import io.github.inflationx.calligraphy3.CalligraphyConfig
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor
 import io.github.inflationx.viewpump.ViewPump
+import io.noties.markwon.Markwon
 import org.jetbrains.anko.notificationManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -68,6 +69,9 @@ class CBOnlineApp : Application() {
         }
 
         Picasso.setSingletonInstance(Picasso.Builder(this).build())
+
+        val markwon = Markwon.create(applicationContext)
+
 
         // OneSignal Initialization
         OneSignal.startInit(this)

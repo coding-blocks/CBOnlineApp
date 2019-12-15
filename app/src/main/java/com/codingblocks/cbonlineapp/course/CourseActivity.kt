@@ -11,6 +11,9 @@ import com.codingblocks.cbonlineapp.course.batches.BatchesAdapter
 import com.codingblocks.cbonlineapp.insturctors.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.util.Utils.setToolbar
 import com.google.android.youtube.player.YouTubePlayer
+import io.noties.markwon.Markwon
+import io.noties.markwon.html.HtmlPlugin
+import io.noties.markwon.linkify.LinkifyPlugin
 import kotlinx.android.synthetic.main.activity_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -42,6 +45,13 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 //        setImageAndTitle(image, courseName)
 //
 //        init()
+        val markwon = Markwon.builder(this)
+            .usePlugin(HtmlPlugin.create())
+            .usePlugin(LinkifyPlugin.create())
+            .build()
+
+        markwon.setMarkdown(courseSummaryTv, "First of its kind, our C++ online course for beginners is a uniquely designed online course in Data Structures and Algorithms to aid your journey right from the beginning to the very end in becoming the most skilled software engineers across the globe. Our online course in C++ is not only in absolute coherence with our most sought after classroom program, but also provides you the comfort of learning at your home. With over 300 video lectures and several practice problems. Through these online classes, the students will not only become more efficient with their solutions by optimizing space and time but this course will also provide them a firm base to excel in all their programming interviews. The core focus of these C++ classes for beginners is to maintain an equilibrium between theory and practical, thus providing the programmers with an ample amount of practice of questions based on Sorting, Searching, Greedy Algorithms, Divide and Conquer Algorithms, Dynamic Programming along with a comprehensive revision of data structures like linked-lists, Trees, Graphs, Heaps, Hashing etc. The user can opt for the complete bundle, or just the advanced part of the course. \\n\\n### Highlights\\n\\n• Extensive Data Structures & Algorithmic Coverage   \\n• 500+ Video Lectures and Code Challenges   \\n• Hint Videos for Complex Problems    \\n• Lifetime Assignment Access  \\n• Basics & Advanced Topics for Interviews  \\n• Expert Doubt Support  \\n\\n\\n### Pre-requisites\\nThere are no pre-requisites to join this course. Student familiar with C++ Syntax can also look for the Algo++ Course.");
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

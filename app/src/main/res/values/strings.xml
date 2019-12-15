@@ -128,4 +128,8 @@
     <string name="choose_batch">Choose Batch</string>
     <string name="buy_now">Buy Now</string>
     <string name="try_it_for_free">Try it for Free</string>
+    <string name="summary">Summary</string>
+    <string name="major_topics_covered">Major Topics Covered</string>
+    <string name="course_content">Course Content</string>
+    <string name="projects">Projects</string>
 </resources>
