@@ -1,21 +1,25 @@
 package com.codingblocks.cbonlineapp.course
 
 import android.os.Bundle
-import com.codingblocks.onlineapi.Result
 import android.view.Menu
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.batches.BatchesAdapter
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.insturctors.InstructorDataAdapter
+import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
+import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.onlineapi.Result
+import com.codingblocks.onlineapi.models.Tags
+import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.youtube.player.YouTubePlayer
-import io.noties.markwon.Markwon
-import io.noties.markwon.html.HtmlPlugin
-import io.noties.markwon.linkify.LinkifyPlugin
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import kotlinx.android.synthetic.main.activity_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
@@ -42,10 +46,12 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course)
         viewModel.id = "45"
+        lifecycle.addObserver(youtubePlayerView)
+
         viewModel.course.observer(this) { result ->
             when (result.status) {
                 Result.Status.SUCCESS -> {
-                    info { result.data?.course }
+                    result.data?.let { setContent(it) }
                 }
                 Result.Status.LOADING -> {
                     info { "Loading" }
@@ -55,20 +61,39 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                 }
             }
         }
+    }
 
+    private fun setContent(data: CourseInstructorPair) {
+        with(data.courseRun.course) {
 
-        val image = intent.getStringExtra("courseLogo") ?: ""
+        }
+        with(data.courseRun) {
+            showTags(tags)
+            courseTitle.text = course.title
+            shortTv.text = course.subtitle
+            courseLogo.loadImage(course.logo)
+            setYoutubePlayer(course.promoVideo)
+        }
+    }
 
-//        setImageAndTitle(image, courseName)
-//
-//        init()
-        val markwon = Markwon.builder(this)
-            .usePlugin(HtmlPlugin.create())
-            .usePlugin(LinkifyPlugin.create())
-            .build()
+    private fun showTags(tags: ArrayList<Tags>?) {
+        with(!tags.isNullOrEmpty()) {
+            topicsTv.isVisible = this
+            courseChipsGroup.isVisible = this
+        }
+        tags?.take(5)?.forEach {
+            val chip = Chip(this)
+            chip.text = it.name
+            courseChipsGroup.addView(chip)
+        }
+    }
 
-        markwon.setMarkdown(courseSummaryTv, "First of its kind, our C++ online course for beginners is a uniquely designed online course in Data Structures and Algorithms to aid your journey right from the beginning to the very end in becoming the most skilled software engineers across the globe. Our online course in C++ is not only in absolute coherence with our most sought after classroom program, but also provides you the comfort of learning at your home. With over 300 video lectures and several practice problems. Through these online classes, the students will not only become more efficient with their solutions by optimizing space and time but this course will also provide them a firm base to excel in all their programming interviews. The core focus of these C++ classes for beginners is to maintain an equilibrium between theory and practical, thus providing the programmers with an ample amount of practice of questions based on Sorting, Searching, Greedy Algorithms, Divide and Conquer Algorithms, Dynamic Programming along with a comprehensive revision of data structures like linked-lists, Trees, Graphs, Heaps, Hashing etc. The user can opt for the complete bundle, or just the advanced part of the course. \\n\\n### Highlights\\n\\n• Extensive Data Structures & Algorithmic Coverage   \\n• 500+ Video Lectures and Code Challenges   \\n• Hint Videos for Complex Problems    \\n• Lifetime Assignment Access  \\n• Basics & Advanced Topics for Interviews  \\n• Expert Doubt Support  \\n\\n\\n### Pre-requisites\\nThere are no pre-requisites to join this course. Student familiar with C++ Syntax can also look for the Algo++ Course.");
-
+    private fun setYoutubePlayer(promoVideo: String) {
+        youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer) {
+                youTubePlayer.loadVideo(getYotubeVideoId(promoVideo), 0F)
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -250,28 +275,28 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 //        viewModel.getCourse(courseId)
 //    }
 //
-//    private fun fetchTags(course: Course) {
-//        course.runs?.forEach { singleCourse ->
-//            if (singleCourse.tags?.size == 0) {
-//                tagstv.visibility = View.GONE
-//                coursePagevtags.visibility = View.GONE
-//                tagsChipgroup.visibility = View.GONE
-//            } else {
-//                tagstv.visibility = View.VISIBLE
-//                coursePagevtags.visibility = View.VISIBLE
-//                tagsChipgroup.visibility = View.VISIBLE
+//private fun showTags(course: Course) {
+//    course.runs?.forEach { singleCourse ->
+//        if (singleCourse.tags?.size == 0) {
+//            tagstv.visibility = View.GONE
+//            coursePagevtags.visibility = View.GONE
+//            tagsChipgroup.visibility = View.GONE
+//        } else {
+//            tagstv.visibility = View.VISIBLE
+//            coursePagevtags.visibility = View.VISIBLE
+//            courseChipsGroup.visibility = View.VISIBLE
 //
-//                singleCourse.tags?.forEach {
-//                    val chip = Chip(this)
-//                    chip.text = it.name
-//                    val typeFace: Typeface? =
-//                        ResourcesCompat.getFont(this.applicationContext, R.font.nunitosans_regular)
-//                    chip.typeface = typeFace
-//                    tagsChipgroup.addView(chip)
-//                }
+//            singleCourse.tags?.forEach {
+//                val chip = Chip(this)
+//                chip.text = it.name
+//                val typeFace: Typeface? =
+//                    ResourcesCompat.getFont(this.applicationContext, R.font.gilroy_bold)
+//                chip.typeface = typeFace
+//                courseChipsGroup.addView(chip)
 //            }
 //        }
 //    }
+//}
 //
 //    private fun addToCart(id: String, name: String) {
 //        viewModel.addedToCartProgress.observeOnce {

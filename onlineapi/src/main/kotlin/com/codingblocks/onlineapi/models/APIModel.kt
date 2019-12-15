@@ -34,8 +34,13 @@ open class Course(
     @Relationship("instructors")
     val instructors: ArrayList<Instructor>?,
     @Relationship("runs")
-    val runs: ArrayList<Runs>?
+    val runs: ArrayList<Runs>?,
+    @Relationship("projects")
+    val projects: ArrayList<Project>?
 ) : BaseModel()
+
+@Type("projects")
+class Project : BaseModel()
 
 data class CourseFeatures(
     val icon: String,

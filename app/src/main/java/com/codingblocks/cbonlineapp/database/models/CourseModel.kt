@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.database.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.codingblocks.onlineapi.models.Project
 
 @Entity
 data class CourseModel(
@@ -18,9 +19,10 @@ data class CourseModel(
     var slug: String?,
     var coverImage: String,
     var categoryId: Int,
-    var faq: String? = ""
+    var faq: String? = "",
+    var projectsId: ArrayList<Project>? = null
 ) {
     constructor() : this("", "", "", "", "",
         "", "", 0, 0f, "",
-        "", -1, "")
+        "", -1, "", null)
 }

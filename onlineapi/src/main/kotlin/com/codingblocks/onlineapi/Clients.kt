@@ -36,7 +36,8 @@ object Clients {
         Note::class.java, Notes::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
         RunAttemptId::class.java, RunAttemptsId::class.java, ContentId::class.java, ContentsId::class.java,
         Jobs::class.java, Company::class.java, CourseId::class.java, JobId::class.java,
-        Applications::class.java, ApplicationId::class.java, DoubtLeaderBoard::class.java, User::class.java
+        Applications::class.java, ApplicationId::class.java, DoubtLeaderBoard::class.java, User::class.java,
+        Project::class.java
     )
 
     //type resolver

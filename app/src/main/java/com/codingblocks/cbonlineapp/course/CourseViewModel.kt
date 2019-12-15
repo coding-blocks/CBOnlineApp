@@ -2,11 +2,13 @@ package com.codingblocks.cbonlineapp.course
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.database.converters.ProjectIdList
 import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.CourseFeatures
+import com.codingblocks.onlineapi.models.Project
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class CourseViewModel(
@@ -47,6 +49,10 @@ class CourseViewModel(
     lateinit var id: String
 
     val course by lazy { repository.getCourse(id) }
+
+    fun getProjects(projectIdList: ArrayList<Project>) {
+
+    }
 
 
     fun getCart() {

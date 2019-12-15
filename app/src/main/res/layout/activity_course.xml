@@ -42,6 +42,7 @@
                     android:background="@drawable/ic_back" />
 
                 <TextView
+                    android:id="@+id/courseTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_medium"
@@ -83,7 +84,6 @@
                 android:layout_below="@id/toolbar"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="@dimen/margin_large"
-                android:src="@drawable/ic_course_logo"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="2dp" />
 
@@ -199,7 +199,7 @@
         </RelativeLayout>
 
         <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-            android:id="@+id/youtube_player_view"
+            android:id="@+id/youtubePlayerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_medium"
@@ -236,6 +236,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_medium"
+            android:id="@+id/topicsTv"
             android:layout_marginTop="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_medium"
             android:fontFamily="@font/gilroy_bold"
@@ -246,6 +247,7 @@
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/courseChipsGroup"
             android:layout_width="match_parent"
+            app:lineSpacing="10dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_medium"
             android:layout_marginTop="@dimen/margin_small"

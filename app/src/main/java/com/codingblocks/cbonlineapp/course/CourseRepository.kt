@@ -54,7 +54,6 @@ class CourseRepository(
                     coverImage,
                     categoryId,
                     faq
-
                 ))
             course.instructors?.let { insertInstructors(it, course.id) }
             coursefeatures?.let { insertCourseFeatures(it, id) }
@@ -88,7 +87,7 @@ class CourseRepository(
 
     private suspend fun insertCourseRuns(runs: ArrayList<Runs>, id: String) {
         runs.forEach {
-            runDao.insertNew(
+            runDao.insert(
                 RunModel(
                     it.id,
                     null,
@@ -100,7 +99,8 @@ class CourseRepository(
                     it.end,
                     it.price,
                     it.mrp ?: "",
-                    id
+                    id,
+                    tags = it.tags
                 )
             )
         }

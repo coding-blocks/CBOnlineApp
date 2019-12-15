@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.codingblocks.onlineapi.models.Tags
 
 @Entity(
     indices = [Index("crCourseId")],
@@ -38,5 +39,6 @@ open class RunModel(
     var completionThreshold: Int = 90,
     var productId: Int = 0,
     var recommended: Boolean = false,
-    var hits: Int = 0
+    var hits: Int = 0,
+    var tags: ArrayList<Tags>? = null
 )
