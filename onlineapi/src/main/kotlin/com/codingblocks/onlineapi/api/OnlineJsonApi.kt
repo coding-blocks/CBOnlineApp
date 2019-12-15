@@ -22,7 +22,6 @@ import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.User
 import com.github.jasminb.jsonapi.JSONAPIDocument
-import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -42,9 +41,9 @@ interface OnlineJsonApi {
     val courses: Call<ArrayList<Course>>
 
     @GET("courses/{id}")
-    fun courseById(
+    suspend fun getCourse(
         @Path("id") id: String
-    ): Call<Course>
+    ): Response<Course>
 
     @GET("instructors")
     fun instructors(

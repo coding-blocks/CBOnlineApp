@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.codingblocks.cbonlineapp.database.models.CourseInstructor
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.database.models.CourseRunPair
 import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
@@ -48,6 +49,13 @@ interface CourseWithInstructorDao {
        WHERE r.crCourseId IN (:courses) AND r.crAttemptId IS NULL 
     """)
     fun getJobCourses(courses: ArrayList<String>): LiveData<List<CourseInstructorPair>>
+
+    @Transaction
+    @Query("""
+       SELECT c.* FROM CourseModel c
+       WHERE c.cid = :courseId 
+    """)
+    fun getCourse(courseId: String): LiveData<CourseInstructor>
 
     @Transaction
     @Query("""

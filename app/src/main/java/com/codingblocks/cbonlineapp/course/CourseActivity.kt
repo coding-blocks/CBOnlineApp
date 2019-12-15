@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.course
 
 import android.os.Bundle
+import com.codingblocks.onlineapi.Result
 import android.view.Menu
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
@@ -9,13 +10,15 @@ import androidx.recyclerview.widget.SnapHelper
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.batches.BatchesAdapter
 import com.codingblocks.cbonlineapp.insturctors.InstructorDataAdapter
-import com.codingblocks.cbonlineapp.util.Utils.setToolbar
+import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.youtube.player.YouTubePlayer
 import io.noties.markwon.Markwon
 import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.linkify.LinkifyPlugin
 import kotlinx.android.synthetic.main.activity_course.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -38,6 +41,20 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course)
+        viewModel.id = "45"
+        viewModel.course.observer(this) { result ->
+            when (result.status) {
+                Result.Status.SUCCESS -> {
+                    info { result.data?.course }
+                }
+                Result.Status.LOADING -> {
+                    info { "Loading" }
+                }
+                Result.Status.ERROR -> {
+                    Snackbar.make(courseRootView, result.message!!, Snackbar.LENGTH_LONG).show()
+                }
+            }
+        }
 
 
         val image = intent.getStringExtra("courseLogo") ?: ""

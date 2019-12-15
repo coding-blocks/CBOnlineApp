@@ -22,6 +22,22 @@ class CourseRunPair : RunModel() {
     var course: CourseModel = CourseModel()
 }
 
+data class CourseInstructor(
+    @Embedded
+    var course: CourseModel,
+    @Relation(
+        parentColumn = "cid",
+        entity = InstructorModel::class,
+        entityColumn = "uid",
+        associateBy = Junction(
+            value = CourseWithInstructor::class,
+            parentColumn = "course_id",
+            entityColumn = "instructor_id"
+        )
+    )
+    var instructor: List<InstructorModel>
+)
+
 data class CourseInstructorPair(
     @Embedded
     var courseRun: CourseRunPair,

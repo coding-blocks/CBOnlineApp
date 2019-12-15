@@ -7,7 +7,6 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="learn_to_code_interactively"><![CDATA[<Learn to code interactively/>]]></string>
     <string name="recommended_courses">Recommended Courses</string>
-    <string name="summary">Summary</string>
     <string name="student_feedback">Student Feedback</string>
     <string name="topics_covered">Major Topics Covered</string>
 
@@ -118,8 +117,7 @@
     <string name="offline_message">Progress will be updated when your device goes online.</string>
     <string name="course_curriculum">Course Curriculum</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- New Strings -->
     <string name="empty_live_doubt">No Live requests. Keep this tab open, new doubts will appear here instantly</string>
     <string name="empty_my_doubt">Nothing Here.Keep up the Good Work!!</string>
     <string name="no_internet">There seems to be an issue with your internet connection.\nPlease Try Again.</string>
