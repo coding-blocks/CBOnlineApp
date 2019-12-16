@@ -43,6 +43,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 
     private val projectAdapter = CourseProjectAdapter()
     private val instructorAdapter = InstructorListAdapter()
+    private val courseSectionListAdapter = CourseSectionListAdapter()
 
 
     private val viewModel by viewModel<CourseViewModel>()
@@ -50,9 +51,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course)
-        viewModel.id = "45"
+        viewModel.id = "17"
         viewModel.fetchCourse()
         lifecycle.addObserver(youtubePlayerView)
+
         courseProjectsRv.apply {
             layoutManager = LinearLayoutManager(this@CourseActivity, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(this@CourseActivity, DividerItemDecoration.VERTICAL))
@@ -63,14 +65,20 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
             adapter = instructorAdapter
         }
 
+        courseContentRv.apply {
+            layoutManager = LinearLayoutManager(this@CourseActivity, LinearLayoutManager.VERTICAL, false)
+            adapter = courseSectionListAdapter
+        }
+
         viewModel.course.observer(this) { course ->
             showTags(course.runs?.first()?.tags)
+            courseSummaryTv.text = course.summary
             courseTitle.text = course.title
             shortTv.text = course.subtitle
             courseLogo.loadImage(course.logo)
             setYoutubePlayer(course.promoVideo)
             viewModel.fetchProjects(course.projects)
-//            viewModel.fetchSections(course.runs?.first()?.sections)
+            viewModel.fetchSections(course.runs?.first()?.sections)
             instructorAdapter.submitList(course.instructors)
 
         }
@@ -78,6 +86,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         viewModel.projects.observer(this) { projects ->
             projectsTv.isVisible = !projects.isNullOrEmpty()
             projectAdapter.submitList(projects)
+        }
+
+        viewModel.sections.observer(this) { sections ->
+            courseSectionListAdapter.submitList(sections)
         }
 
 
@@ -119,7 +131,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     private fun setYoutubePlayer(promoVideo: String) {
         youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer) {
-                youTubePlayer.loadVideo(getYotubeVideoId(promoVideo), 0F)
+                youTubePlayer.cueVideo(getYotubeVideoId(promoVideo), 0F)
             }
         })
     }

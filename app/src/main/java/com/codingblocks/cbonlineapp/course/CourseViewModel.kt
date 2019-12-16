@@ -103,6 +103,8 @@ class CourseViewModel(
                 }
                 projects.postValue(list)
             }
+        } else {
+            projects.postValue(emptyList())
         }
     }
 
@@ -110,9 +112,9 @@ class CourseViewModel(
         val list = arrayListOf<Sections>()
         if (!sectionIdList.isNullOrEmpty()) {
             runIO {
-                repeat(sectionIdList.take(5).size) {
-                    //                    val sectionRes = async { repo.get(it.id) }.await()
-                    //                    sectionRes.body()?.let { it1 -> list.add(it1) }
+                sectionIdList.take(5).forEach {
+                    val sectionRes = withContext(Dispatchers.IO) { repo.getSection(it.id) }
+                    sectionRes.body()?.let { it1 -> list.add(it1) }
                 }
                 sections.postValue(list)
             }

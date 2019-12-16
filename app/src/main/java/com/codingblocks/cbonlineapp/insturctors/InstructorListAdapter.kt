@@ -9,11 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
+import com.codingblocks.onlineapi.models.Instructor
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_instructor.view.*
 import org.jetbrains.anko.email
 
-class InstructorListAdapter : ListAdapter<InstructorModel, InstructorListAdapter.ItemViewHolder>(DiffCallback()) {
+class InstructorListAdapter : ListAdapter<Instructor, InstructorListAdapter.ItemViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
@@ -27,7 +28,7 @@ class InstructorListAdapter : ListAdapter<InstructorModel, InstructorListAdapter
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(instructor: InstructorModel) = with(itemView) {
+        fun bind(instructor: Instructor) = with(itemView) {
             instructorNameTv.text = instructor.name
             instructorDescTv.text = instructor.description
 //            instructorTextView.text = "${instructor.sub}, Coding Blocks"
@@ -39,12 +40,12 @@ class InstructorListAdapter : ListAdapter<InstructorModel, InstructorListAdapter
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<InstructorModel>() {
-        override fun areItemsTheSame(oldItem: InstructorModel, newItem: InstructorModel): Boolean {
-            return oldItem.uid == newItem.uid
+    class DiffCallback : DiffUtil.ItemCallback<Instructor>() {
+        override fun areItemsTheSame(oldItem: Instructor, newItem: Instructor): Boolean {
+            return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: InstructorModel, newItem: InstructorModel): Boolean {
+        override fun areContentsTheSame(oldItem: Instructor, newItem: Instructor): Boolean {
             return oldItem.sameAndEqual(newItem)
         }
     }

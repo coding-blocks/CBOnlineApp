@@ -1,7 +1,6 @@
 package com.codingblocks.onlineapi.models
 
 import com.github.jasminb.jsonapi.Links
-import com.github.jasminb.jsonapi.RelType
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.RelationshipLinks
@@ -41,7 +40,7 @@ open class Course(
 ) : BaseModel()
 
 @Type("projects")
-class Project(
+data class Project(
     val title: String = "",
     val description: String = "",
     val image: String = ""
@@ -79,19 +78,14 @@ open class Runs(
 ) : BaseModel()
 
 @Type("sections")
-open class Sections : BaseModel() {
-    @JvmField
-    var name: String? = null
-    @JvmField
-    var preminum: Boolean? = false
-    @JvmField
-    var status: String? = null
-    @JvmField
-    var order: Int? = null
+data class Sections(
+    var name: String?,
+    var preminum: Boolean? = false,
+    var status: String? = null,
+    var order: Int? = 0,
     @Relationship("contents")
-    @JvmField
-    var contents: ArrayList<ContentsId>? = null
-}
+    var contents: ArrayList<ContentsId>?
+) : BaseModel()
 
 //=======Plurals Models =========
 

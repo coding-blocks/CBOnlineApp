@@ -52,6 +52,14 @@ interface OnlineJsonApi {
         @Query("exclude") query: String = "course.*"
     ): Response<Project>
 
+    @GET("sections/{id}")
+    suspend fun getSections(
+        @Path("id") id: String,
+        @Query("exclude") query: String = "contents.*",
+        @Query("include") include: String = "contents",
+        @Query("sort") sort: String = "content.section_content.order"
+    ): Response<Sections>
+
     @GET("instructors")
     fun instructors(
         @Query("include") include: Array<String>? = null
@@ -79,14 +87,6 @@ interface OnlineJsonApi {
         @Query("page[offset]") offset: String = "0",
         @Query("sort") sort: String = "difficulty"
     ): Call<ArrayList<Course>>
-
-    @GET("sections/{id}")
-    suspend fun getSections(
-        @Path("id") id: String,
-        @Query("exclude") query: String = "contents.*",
-        @Query("include") include: String = "contents",
-        @Query("sort") sort: String = "content.section_content.order"
-    ): Response<Sections>
 
 
     @GET("runs")
