@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.batches.BatchesAdapter
-import com.codingblocks.cbonlineapp.insturctors.InstructorDataAdapter
+import com.codingblocks.cbonlineapp.insturctors.InstructorListAdapter
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
@@ -22,7 +24,6 @@ import com.google.android.youtube.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import kotlinx.android.synthetic.main.activity_course.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -35,10 +36,14 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     }
     private lateinit var progressBar: Array<ProgressBar?>
     private lateinit var batchAdapter: BatchesAdapter
-    private lateinit var instructorAdapter: InstructorDataAdapter
+    //    private lateinit var instructorAdapter: InstructorDataAdapter
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private val batchSnapHelper: SnapHelper = LinearSnapHelper()
     private val sectionAdapter = SectionsDataAdapter(ArrayList())
+
+    private val projectAdapter = CourseProjectAdapter()
+    private val instructorAdapter = InstructorListAdapter()
+
 
     private val viewModel by viewModel<CourseViewModel>()
 
@@ -48,7 +53,15 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         viewModel.id = "45"
         viewModel.fetchCourse()
         lifecycle.addObserver(youtubePlayerView)
-
+        courseProjectsRv.apply {
+            layoutManager = LinearLayoutManager(this@CourseActivity, LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(DividerItemDecoration(this@CourseActivity, DividerItemDecoration.VERTICAL))
+            adapter = projectAdapter
+        }
+        courseInstructorRv.apply {
+            layoutManager = LinearLayoutManager(this@CourseActivity, LinearLayoutManager.VERTICAL, false)
+            adapter = instructorAdapter
+        }
 
         viewModel.course.observer(this) { course ->
             showTags(course.runs?.first()?.tags)
@@ -58,15 +71,13 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
             setYoutubePlayer(course.promoVideo)
             viewModel.fetchProjects(course.projects)
 //            viewModel.fetchSections(course.runs?.first()?.sections)
+            instructorAdapter.submitList(course.instructors)
 
         }
 
         viewModel.projects.observer(this) { projects ->
             projectsTv.isVisible = !projects.isNullOrEmpty()
-            projects.forEach {
-                info { "Project Name" + it.title }
-            }
-
+            projectAdapter.submitList(projects)
         }
 
 

@@ -1,14 +1,15 @@
 package com.codingblocks.cbonlineapp.course
 
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.Project
+import kotlinx.android.synthetic.main.item_project.view.*
 
 class CourseProjectAdapter : ListAdapter<Project, CourseProjectAdapter.ItemViewHolder>(DiffCallback()) {
 
@@ -25,7 +26,8 @@ class CourseProjectAdapter : ListAdapter<Project, CourseProjectAdapter.ItemViewH
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: Project) = with(itemView) {
-            // TODO: Bind the data with View
+            projectTitle.text = item.title
+            projectDescription.text = item.description
 
         }
     }

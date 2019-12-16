@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:overScrollMode="never"
     android:id="@+id/courseRootView"
     android:layout_height="match_parent">
 
@@ -13,7 +14,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="155dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/toolbar_bg">
 
             <ImageView
@@ -37,6 +38,7 @@
                 android:gravity="center">
 
                 <ImageButton
+                    android:contentDescription="back"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:background="@drawable/ic_back" />
@@ -51,6 +53,7 @@
                     tools:text="Web Development" />
 
                 <ImageButton
+                    android:contentDescription="@string/share"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginStart="@dimen/margin_small"
@@ -58,6 +61,7 @@
                     android:background="@drawable/ic_share" />
 
                 <ImageButton
+                    android:contentDescription="@string/like"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:background="@drawable/ic_like" />
@@ -84,6 +88,7 @@
                 android:layout_below="@id/toolbar"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="@dimen/margin_large"
+                android:layout_marginBottom="@dimen/margin_large"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="2dp" />
 
@@ -132,13 +137,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_large">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:textColor="@color/orangish"
-                android:textSize="18sp"
-                tools:text="₹ 9499" />
 
             <TextView
                 android:id="@+id/priceTv"
@@ -146,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_medium"
                 android:textColor="@color/orangish"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="₹ 9499" />
 
             <TextView
@@ -155,7 +153,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/priceTv"
                 android:layout_alignStart="@id/priceTv"
-                android:layout_marginTop="8dp"
                 android:layout_toStartOf="@id/trialBtn"
                 android:textColor="@color/orangish"
                 android:textSize="12sp"
@@ -181,8 +178,9 @@
                 android:layout_toStartOf="@+id/buyBtn"
                 android:background="@drawable/button_background_outline"
                 android:text="@string/try_it_for_free"
+                android:fontFamily="@font/gilroy_medium"
                 android:textColor="@color/pastel_red"
-                android:textSize="@dimen/button_text_size" />
+                android:textSize="16sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buyBtn"
@@ -194,8 +192,9 @@
                 android:background="@drawable/button_background"
                 android:drawableEnd="@drawable/ic_dropright"
                 android:drawablePadding="10dp"
+                android:fontFamily="@font/gilroy_bold"
                 android:text="@string/buy_now"
-                android:textSize="@dimen/button_text_size" />
+                android:textSize="16sp" />
         </RelativeLayout>
 
         <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -206,9 +205,9 @@
             android:layout_marginTop="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_medium"
             app:autoPlay="false"
-            app:showFullScreenButton="false"
+            app:showFullScreenButton="true"
             app:showYouTubeButton="false"
-            app:useWebUi="true" />
+            app:useWebUi="false" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -268,8 +267,10 @@
             android:id="@+id/courseContentRv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_instructor"
             android:layout_marginStart="@dimen/margin_medium"
-            android:layout_marginTop="@dimen/margin_small"
             android:layout_marginEnd="@dimen/margin_medium" />
 
         <TextView
@@ -285,12 +286,41 @@
             android:textSize="20sp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/courseProjectsTv"
+            android:id="@+id/courseProjectsRv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_medium"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_marginEnd="@dimen/margin_medium" />
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:overScrollMode="never"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_project" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f3f3f3"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginEnd="@dimen/margin_medium"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="@string/about_mentors"
+                android:textColor="#333333"
+                android:textSize="20sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/courseInstructorRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_medium" />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -299,10 +329,9 @@
             android:layout_marginTop="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_medium"
             android:fontFamily="@font/gilroy_bold"
-            android:text="You may also like"
+            android:text="@string/you_may_also_like"
             android:textColor="#333333"
             android:textSize="20sp" />
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/courseSuggestedRv"

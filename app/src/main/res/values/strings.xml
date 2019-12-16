@@ -130,4 +130,6 @@
     <string name="major_topics_covered">Major Topics Covered</string>
     <string name="course_content">Course Content</string>
     <string name="projects">Projects</string>
+    <string name="about_mentors">About Mentors</string>
+    <string name="you_may_also_like">You may also like</string>
 </resources>
