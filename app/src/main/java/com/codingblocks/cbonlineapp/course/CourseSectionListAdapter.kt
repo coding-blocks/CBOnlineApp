@@ -3,6 +3,11 @@ package com.codingblocks.cbonlineapp.course
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -25,8 +30,74 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        private lateinit var arrowAnimation: RotateAnimation
+
         fun bind(item: Sections) = with(itemView) {
             title.text = item.name
+            lectures.text = " ${item.contents?.size ?: 0} Items"
+            var duration: Long = 0
+            for (subItems in item.contents!!) {
+                if (subItems.contentable == "lecture" || subItems.contentable == "video")
+                    duration += subItems.duration ?: 0L
+            }
+            val hour = duration / (1000 * 60 * 60) % 24
+            val minute = duration / (1000 * 60) % 60
+            if (minute >= 1 && hour == 0L)
+                lectureTime.text = ("Duration : $minute Min")
+            else if (hour >= 1) {
+                lectureTime.text = ("Duration : $hour Hours")
+            } else
+                lectureTime.text = ("---")
+
+            val ll = findViewById<LinearLayout>(R.id.sectionContents)
+            ll.orientation = LinearLayout.VERTICAL
+            ll.visibility = View.GONE
+
+            for (i in item.contents!!) {
+                val factory = LayoutInflater.from(context)
+                val inflatedView = factory.inflate(R.layout.item_section_content_info, ll, false)
+                val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
+                val contentImg = inflatedView.findViewById(R.id.imageView3) as ImageView
+                if (i.contentable == "lecture" || i.contentable == "video") {
+                    contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_play))
+                } else if (i.contentable == "document") {
+                    contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_document))
+                } else if (i.contentable == "code-challenge") {
+                    contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
+                }
+                subTitle.text = i.title
+
+                ll.addView(inflatedView)
+            }
+
+            setOnClickListener {
+                showOrHide(ll)
+            }
+
+            arrow.setOnClickListener {
+                showOrHide(ll)
+            }
+
+        }
+
+        private fun showOrHide(ll: View) {
+            if (ll.visibility == View.GONE) {
+                ll.visibility = View.VISIBLE
+                arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                    0.5f)
+                arrowAnimation.fillAfter = true
+                arrowAnimation.duration = 350
+
+                itemView.arrow.startAnimation(arrowAnimation)
+            } else {
+                ll.visibility = View.GONE
+                arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                    0.5f)
+                arrowAnimation.fillAfter = true
+                arrowAnimation.duration = 350
+                itemView.arrow.startAnimation(arrowAnimation)
+            }
         }
     }
 

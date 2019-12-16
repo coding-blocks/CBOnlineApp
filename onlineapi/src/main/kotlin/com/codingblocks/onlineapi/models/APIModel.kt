@@ -531,7 +531,7 @@ class ContentId(
 }
 
 @Type("contents")
-open class ContentsId(
+data class ContentsId(
     @Id
     val id: String?
 ) {

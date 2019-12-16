@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.util.extensions
 
+import android.app.Activity
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.View
@@ -7,9 +8,13 @@ import android.widget.LinearLayout
 import androidx.annotation.AnimRes
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.util.DividerItemDecorator
 import com.facebook.shimmer.ShimmerFrameLayout
 
 fun View.applyDim(dimAmount: Float) {
@@ -78,4 +83,10 @@ fun AppCompatActivity.replaceFragmentSafely(
     } else if (allowStateLoss) {
         ft.commitAllowingStateLoss()
     }
+}
+
+fun RecyclerView.setRv(activity: Activity, setDivider: Boolean = false) {
+    val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.divider)!!)
+    layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+    if (setDivider) addItemDecoration(dividerItemDecoration)
 }

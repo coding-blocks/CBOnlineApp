@@ -1,26 +1,26 @@
 package com.codingblocks.cbonlineapp.course
 
 import android.os.Bundle
-import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.batches.BatchesAdapter
 import com.codingblocks.cbonlineapp.insturctors.InstructorListAdapter
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.DividerItemDecorator
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Tags
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.youtube.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import kotlinx.android.synthetic.main.activity_course.*
 import org.jetbrains.anko.AnkoLogger
@@ -28,23 +28,19 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class CourseActivity : AppCompatActivity(), AnkoLogger {
+
     private val courseId by lazy {
         intent.getStringExtra("courseId")
     }
     private val courseName by lazy {
         intent.getStringExtra("courseName")
     }
-    private lateinit var progressBar: Array<ProgressBar?>
     private lateinit var batchAdapter: BatchesAdapter
-    //    private lateinit var instructorAdapter: InstructorDataAdapter
-    private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private val batchSnapHelper: SnapHelper = LinearSnapHelper()
-    private val sectionAdapter = SectionsDataAdapter(ArrayList())
 
     private val projectAdapter = CourseProjectAdapter()
     private val instructorAdapter = InstructorListAdapter()
     private val courseSectionListAdapter = CourseSectionListAdapter()
-
 
     private val viewModel by viewModel<CourseViewModel>()
 
@@ -54,19 +50,18 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         viewModel.id = "17"
         viewModel.fetchCourse()
         lifecycle.addObserver(youtubePlayerView)
+        val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(this, R.drawable.divider)!!)
 
         courseProjectsRv.apply {
-            layoutManager = LinearLayoutManager(this@CourseActivity, LinearLayoutManager.VERTICAL, false)
-            addItemDecoration(DividerItemDecoration(this@CourseActivity, DividerItemDecoration.VERTICAL))
+            setRv(this@CourseActivity, true)
             adapter = projectAdapter
         }
         courseInstructorRv.apply {
-            layoutManager = LinearLayoutManager(this@CourseActivity, LinearLayoutManager.VERTICAL, false)
+            setRv(this@CourseActivity)
             adapter = instructorAdapter
         }
-
         courseContentRv.apply {
-            layoutManager = LinearLayoutManager(this@CourseActivity, LinearLayoutManager.VERTICAL, false)
+            setRv(this@CourseActivity, true)
             adapter = courseSectionListAdapter
         }
 
@@ -91,6 +86,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         viewModel.sections.observer(this) { sections ->
             courseSectionListAdapter.submitList(sections)
         }
+
 
 
         viewModel.errorLiveData.observer(this) {
@@ -124,6 +120,9 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         tags?.take(5)?.forEach {
             val chip = Chip(this)
             chip.text = it.name
+            val typeFace =
+                ResourcesCompat.getFont(this.applicationContext, R.font.gilroy_medium)
+            chip.typeface = typeFace
             courseChipsGroup.addView(chip)
         }
     }
@@ -177,31 +176,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 //        viewModel.getCart()
 //    }
 //
-//    private fun fetchInstructors(id: String) {
-//        instructorAdapter = InstructorDataAdapter(ArrayList())
-//
-//        instructorRv.layoutManager = LinearLayoutManager(this)
-//        instructorRv.adapter = instructorAdapter
-//
-//        viewModel.getInstructors(id)
-//            .observer(this) {
-//                if (!it.isNullOrEmpty()) {
-//                    instructorAdapter.setData(it as ArrayList<InstructorModel>)
-//                    var instructors = "Mentors: "
-//                    for (i in it.indices) {
-//                        if (i == 0) {
-//                            instructors += it[i].name
-//                        } else if (i == 1) {
-//                            instructors += ", ${it[i].name}"
-//                        } else if (i >= 2) {
-//                            instructors += "+ " + (it.size - 2) + " more"
-//                            break
-//                        }
-//                        coursePageMentors.text = instructors
-//                    }
-//                }
-//            }
-//    }
+
 //
 //    private fun fetchCourse() {
 //
@@ -304,28 +279,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 //        viewModel.getCourse(courseId)
 //    }
 //
-//private fun showTags(course: Course) {
-//    course.runs?.forEach { singleCourse ->
-//        if (singleCourse.tags?.size == 0) {
-//            tagstv.visibility = View.GONE
-//            coursePagevtags.visibility = View.GONE
-//            tagsChipgroup.visibility = View.GONE
-//        } else {
-//            tagstv.visibility = View.VISIBLE
-//            coursePagevtags.visibility = View.VISIBLE
-//            courseChipsGroup.visibility = View.VISIBLE
-//
-//            singleCourse.tags?.forEach {
-//                val chip = Chip(this)
-//                chip.text = it.name
-//                val typeFace: Typeface? =
-//                    ResourcesCompat.getFont(this.applicationContext, R.font.gilroy_bold)
-//                chip.typeface = typeFace
-//                courseChipsGroup.addView(chip)
-//            }
-//        }
-//    }
-//}
 //
 //    private fun addToCart(id: String, name: String) {
 //        viewModel.addedToCartProgress.observeOnce {
@@ -338,28 +291,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 //        viewModel.addToCart(id)
 //    }
 //
-//    private fun showPromoVideo(promoVideo: String) {
-//        youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
-//            override fun onInitializationFailure(
-//                p0: YouTubePlayer.Provider?,
-//                p1: YouTubeInitializationResult?
-//            ) {
-//            }
-//
-//            override fun onInitializationSuccess(
-//                p0: YouTubePlayer.Provider?,
-//                youtubePlayerInstance: YouTubePlayer?,
-//                p2: Boolean
-//            ) {
-//                if (!p2) {
-//                    youtubePlayerInstance?.cueVideo(getYotubeVideoId(promoVideo))
-//                }
-//            }
-//        }
-//        val youTubePlayerSupportFragment =
-//            supportFragmentManager.findFragmentById(R.id.displayYoutubeVideo) as YouTubePlayerSupportFragment?
-//        youTubePlayerSupportFragment?.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
-//    }
+
 //
 //    private fun fetchRating(id: String) {
 //        viewModel.getCourseRating(id).observeOnce {
@@ -404,3 +336,5 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
 //    }
 
 }
+
+
