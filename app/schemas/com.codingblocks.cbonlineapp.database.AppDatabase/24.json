@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "fef5ba53487ebaf19d955cf375d042b0",
+    "identityHash": "04fc1c3b087b1e518ab7ed00a3b6094c",
     "entities": [
       {
         "tableName": "CourseModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cid` TEXT NOT NULL, `title` TEXT NOT NULL, `subtitle` TEXT NOT NULL, `logo` TEXT NOT NULL, `summary` TEXT NOT NULL, `promoVideo` TEXT NOT NULL, `difficulty` TEXT NOT NULL, `reviewCount` INTEGER NOT NULL, `rating` REAL NOT NULL, `slug` TEXT, `coverImage` TEXT NOT NULL, `categoryId` INTEGER NOT NULL, `faq` TEXT, PRIMARY KEY(`cid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cid` TEXT NOT NULL, `title` TEXT NOT NULL, `subtitle` TEXT NOT NULL, `logo` TEXT NOT NULL, `summary` TEXT NOT NULL, `promoVideo` TEXT NOT NULL, `difficulty` TEXT NOT NULL, `reviewCount` INTEGER NOT NULL, `rating` REAL NOT NULL, `slug` TEXT, `coverImage` TEXT NOT NULL, `categoryId` INTEGER NOT NULL, `faq` TEXT, `projectsId` TEXT, PRIMARY KEY(`cid`))",
         "fields": [
           {
             "fieldPath": "cid",
@@ -83,6 +83,12 @@
           {
             "fieldPath": "faq",
             "columnName": "faq",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "projectsId",
+            "columnName": "projectsId",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -1157,7 +1163,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fef5ba53487ebaf19d955cf375d042b0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '04fc1c3b087b1e518ab7ed00a3b6094c')"
     ]
   }
 }

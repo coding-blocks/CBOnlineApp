@@ -16,6 +16,7 @@ import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.Player
 import com.codingblocks.onlineapi.models.Progress
+import com.codingblocks.onlineapi.models.Project
 import com.codingblocks.onlineapi.models.Question
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizzes
@@ -44,6 +45,12 @@ interface OnlineJsonApi {
     suspend fun getCourse(
         @Path("id") id: String
     ): Response<Course>
+
+    @GET("projects/{id}")
+    suspend fun getProject(
+        @Path("id") id: String,
+        @Query("exclude") query: String = "course.*"
+    ): Response<Project>
 
     @GET("instructors")
     fun instructors(

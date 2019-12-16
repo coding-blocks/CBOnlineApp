@@ -2,15 +2,58 @@ package com.codingblocks.onlineapi
 
 import com.codingblocks.onlineapi.api.OnlineJsonApi
 import com.codingblocks.onlineapi.api.OnlineRestApi
-import com.codingblocks.onlineapi.models.*
+import com.codingblocks.onlineapi.models.Announcement
+import com.codingblocks.onlineapi.models.ApplicationId
+import com.codingblocks.onlineapi.models.Applications
+import com.codingblocks.onlineapi.models.CarouselCards
+import com.codingblocks.onlineapi.models.Choice
+import com.codingblocks.onlineapi.models.Comment
+import com.codingblocks.onlineapi.models.Company
+import com.codingblocks.onlineapi.models.ContentCodeChallenge
+import com.codingblocks.onlineapi.models.ContentCsv
+import com.codingblocks.onlineapi.models.ContentDocumentType
+import com.codingblocks.onlineapi.models.ContentId
+import com.codingblocks.onlineapi.models.ContentLectureType
+import com.codingblocks.onlineapi.models.ContentProgress
+import com.codingblocks.onlineapi.models.ContentQna
+import com.codingblocks.onlineapi.models.ContentVideoType
+import com.codingblocks.onlineapi.models.ContentsId
+import com.codingblocks.onlineapi.models.Course
+import com.codingblocks.onlineapi.models.CourseId
+import com.codingblocks.onlineapi.models.CourseSection
+import com.codingblocks.onlineapi.models.DoubtLeaderBoard
+import com.codingblocks.onlineapi.models.Doubts
+import com.codingblocks.onlineapi.models.Instructor
+import com.codingblocks.onlineapi.models.JobId
+import com.codingblocks.onlineapi.models.Jobs
+import com.codingblocks.onlineapi.models.LectureContent
+import com.codingblocks.onlineapi.models.MyCourse
+import com.codingblocks.onlineapi.models.MyCourseRuns
+import com.codingblocks.onlineapi.models.MyRunAttempt
+import com.codingblocks.onlineapi.models.MyRunAttempts
+import com.codingblocks.onlineapi.models.Note
+import com.codingblocks.onlineapi.models.Notes
+import com.codingblocks.onlineapi.models.Progress
+import com.codingblocks.onlineapi.models.Project
+import com.codingblocks.onlineapi.models.Question
+import com.codingblocks.onlineapi.models.QuizAttempt
+import com.codingblocks.onlineapi.models.Quizqnas
+import com.codingblocks.onlineapi.models.Quizzes
+import com.codingblocks.onlineapi.models.Rating
+import com.codingblocks.onlineapi.models.RunAttemptId
+import com.codingblocks.onlineapi.models.RunAttemptsId
+import com.codingblocks.onlineapi.models.Sections
+import com.codingblocks.onlineapi.models.Tags
+import com.codingblocks.onlineapi.models.User
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jasminb.jsonapi.ResourceConverter
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import com.google.gson.GsonBuilder
-import okhttp3.OkHttpClient
 import okhttp3.ConnectionPool
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -48,11 +91,14 @@ object Clients {
 
     private const val connectTimeout = 15 // 15s
     private const val readTimeout = 15 // 15s
-
+    private val logging = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
     private val ClientInterceptor = OkHttpClient.Builder()
         .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
         .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
         .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
+        .addInterceptor(logging)
         .addInterceptor { chain ->
             chain.proceed(
                 chain.request().newBuilder().addHeader(

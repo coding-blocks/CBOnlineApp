@@ -1,6 +1,7 @@
 package com.codingblocks.onlineapi.models
 
 import com.github.jasminb.jsonapi.Links
+import com.github.jasminb.jsonapi.RelType
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.RelationshipLinks
@@ -35,12 +36,16 @@ open class Course(
     val instructors: ArrayList<Instructor>?,
     @Relationship("runs")
     val runs: ArrayList<Runs>?,
-    @Relationship("projects")
-    val projects: ArrayList<Project>?
+    @Relationship("projects", resolve = true)
+    var projects: ArrayList<Project>?
 ) : BaseModel()
 
 @Type("projects")
-class Project : BaseModel()
+class Project(
+    val title: String = "",
+    val description: String = "",
+    val image: String = ""
+) : BaseModel()
 
 data class CourseFeatures(
     val icon: String,

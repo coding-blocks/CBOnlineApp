@@ -277,6 +277,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_medium"
             android:layout_marginTop="@dimen/margin_medium"
+            android:id="@+id/projectsTv"
             android:layout_marginEnd="@dimen/margin_medium"
             android:fontFamily="@font/gilroy_bold"
             android:text="@string/projects"

@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.course
 
 import android.os.Bundle
-import android.view.Menu
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -9,12 +8,13 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.batches.BatchesAdapter
-import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.insturctors.InstructorDataAdapter
+import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
+import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.codingblocks.onlineapi.Result
+import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Tags
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
@@ -46,35 +46,52 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course)
         viewModel.id = "45"
+        viewModel.fetchCourse()
         lifecycle.addObserver(youtubePlayerView)
 
-        viewModel.course.observer(this) { result ->
-            when (result.status) {
-                Result.Status.SUCCESS -> {
-                    result.data?.let { setContent(it) }
+
+        viewModel.course.observer(this) { course ->
+            showTags(course.runs?.first()?.tags)
+            courseTitle.text = course.title
+            shortTv.text = course.subtitle
+            courseLogo.loadImage(course.logo)
+            setYoutubePlayer(course.promoVideo)
+            viewModel.fetchProjects(course.projects)
+//            viewModel.fetchSections(course.runs?.first()?.sections)
+
+        }
+
+        viewModel.projects.observer(this) { projects ->
+            projectsTv.isVisible = !projects.isNullOrEmpty()
+            projects.forEach {
+                info { "Project Name" + it.title }
+            }
+
+        }
+
+
+        viewModel.errorLiveData.observer(this) {
+            when (it) {
+                ErrorStatus.NO_CONNECTION -> {
+//                    showEmptyView(internetll, emptyll, doubtShimmer)
                 }
-                Result.Status.LOADING -> {
-                    info { "Loading" }
+                ErrorStatus.UNAUTHORIZED -> {
+                    Components.showConfirmation(this, UNAUTHORIZED) {
+                        finish()
+                    }
                 }
-                Result.Status.ERROR -> {
-                    Snackbar.make(courseRootView, result.message!!, Snackbar.LENGTH_LONG).show()
+                ErrorStatus.TIMEOUT -> {
+                    Snackbar.make(courseRootView, it, Snackbar.LENGTH_INDEFINITE)
+                        .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+                        .setAction("Retry") {
+                            viewModel.fetchCourse()
+                        }
+                        .show()
                 }
             }
         }
     }
 
-    private fun setContent(data: CourseInstructorPair) {
-        with(data.courseRun.course) {
-
-        }
-        with(data.courseRun) {
-            showTags(tags)
-            courseTitle.text = course.title
-            shortTv.text = course.subtitle
-            courseLogo.loadImage(course.logo)
-            setYoutubePlayer(course.promoVideo)
-        }
-    }
 
     private fun showTags(tags: ArrayList<Tags>?) {
         with(!tags.isNullOrEmpty()) {
@@ -96,17 +113,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.course_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-
-//    private fun setImageAndTitle(image: String, courseName: String) {
-//        coursePageLogo.loadImage(image)
-//        title = courseName
-//        coursePageTitle.text = courseName
-//    }
 //
 //    private fun init() {
 //        progressBar = arrayOf(

@@ -2,56 +2,58 @@ package com.codingblocks.cbonlineapp.course
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.codingblocks.cbonlineapp.database.converters.ProjectIdList
-import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
+import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.ResultWrapper
+import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Course
-import com.codingblocks.onlineapi.models.CourseFeatures
 import com.codingblocks.onlineapi.models.Project
+import com.codingblocks.onlineapi.models.Sections
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class CourseViewModel(
-    private val repository: CourseRepository
+    private val repo: CourseRepository
 ) : ViewModel() {
+    var course = MutableLiveData<Course>()
+    val projects = MutableLiveData<List<Project>>()
+    val sections = MutableLiveData<List<Sections>>()
+    var errorLiveData = MutableLiveData<String>()
 
     var sheetBehavior: BottomSheetBehavior<*>? = null
 
     var image: MutableLiveData<String> = MutableLiveData()
     var name: MutableLiveData<String> = MutableLiveData()
-    lateinit var instructors: MutableLiveData<List<InstructorModel>>
-    lateinit var features: MutableLiveData<List<CourseFeatures>>
-
+    lateinit var id: String
     var fetchedCourse: MutableLiveData<Course> = MutableLiveData()
     var addedToCartProgress: MutableLiveData<Boolean> = MutableLiveData()
     var clearCartProgress: MutableLiveData<Boolean> = MutableLiveData()
     var enrollTrialProgress: MutableLiveData<Boolean> = MutableLiveData()
 
-    //    fun getInstructors(id: String): LiveData<List<InstructorModel>> {
-//        if (!::instructors.isInitialized) {
-//            instructors = MutableLiveData()
-//            viewModelScope.launch(Dispatchers.IO) {
-//                instructors.postValue(courseWithInstructorDao.getInstructors(id))
-//            }
-//        }
-//        return instructors
-//    }
-//
-//    fun getCourseFeatures(id: String): LiveData<List<CourseFeatures>> {
-//        if (!::features.isInitialized) {
-//            features = MutableLiveData()
-//            viewModelScope.launch(Dispatchers.IO) {
-//                features.postValue(featuresDao.getFeatures(id))
-//            }
-//        }
-//        return features
-//    }
-    lateinit var id: String
 
-    val course by lazy { repository.getCourse(id) }
+    fun fetchCourse() {
+        runIO {
+            when (val response = repo.getCourse(id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        course.postValue(body())
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
 
     fun getProjects(projectIdList: ArrayList<Project>) {
+//        repository.getProjects(projectIdList)
+    }
 
+    private fun setError(error: String) {
+        errorLiveData.postValue(error)
     }
 
 
@@ -73,19 +75,11 @@ class CourseViewModel(
             clearCartProgress.value = (response?.isSuccessful == true)
         })
     }
-
-//    fun getCourse(courseId: String) {
-//        Clients.onlineV2JsonApi.courseById(courseId).enqueue(retrofitCallback { _, response ->
-//            if (response?.isSuccessful == true)
-//                fetchedCourse.value = response.body()
-//        })
-//    }
-//
 //    fun getCourseRating(id: String) = liveData(Dispatchers.IO) {
 //        emit(repository.getRating(id))
 //    }
 
-    suspend fun getCourseSection(id: String) = repository.getCourseSections(id)
+//    suspend fun getCourseSection(id: String) = repository.getCourseSections(id)
 
     fun enrollTrial(id: String) {
         Clients.api.enrollTrial(id).enqueue(retrofitCallback { _, response ->
@@ -97,5 +91,31 @@ class CourseViewModel(
         Clients.api.addToCart(id).enqueue(retrofitCallback { _, response ->
             addedToCartProgress.value = (response?.isSuccessful ?: false)
         })
+    }
+
+    fun fetchProjects(projectIdList: ArrayList<Project>?) {
+        val list = arrayListOf<Project>()
+        if (!projectIdList.isNullOrEmpty()) {
+            runIO {
+                projectIdList.forEach {
+                    val projectRes = withContext(Dispatchers.IO) { repo.getProjects(it.id) }
+                    projectRes.body()?.let { it1 -> list.add(it1) }
+                }
+                projects.postValue(list)
+            }
+        }
+    }
+
+    fun fetchSections(sectionIdList: ArrayList<Sections>?) {
+        val list = arrayListOf<Sections>()
+        if (!sectionIdList.isNullOrEmpty()) {
+            runIO {
+                repeat(sectionIdList.take(5).size) {
+                    //                    val sectionRes = async { repo.get(it.id) }.await()
+                    //                    sectionRes.body()?.let { it1 -> list.add(it1) }
+                }
+                sections.postValue(list)
+            }
+        }
     }
 }

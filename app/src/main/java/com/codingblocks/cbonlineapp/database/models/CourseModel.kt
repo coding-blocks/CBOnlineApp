@@ -20,7 +20,7 @@ data class CourseModel(
     var coverImage: String,
     var categoryId: Int,
     var faq: String? = "",
-    var projectsId: ArrayList<Project>? = null
+    var projectsId: ArrayList<Project?>? = null
 ) {
     constructor() : this("", "", "", "", "",
         "", "", 0, 0f, "",
