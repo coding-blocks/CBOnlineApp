@@ -8,6 +8,7 @@
     <color name="grey850">#343434</color>
     <color name="salmon">#ff6666</color>
     <color name="white_transparency">#b9ffffff</color>
+    <color name="white_transparent">#00ffffff</color>
     <color name="white">#ffffff</color>
     <color name="dark_white">#E8E8E8</color>
     <color name="battleship_gray">#64707b</color>

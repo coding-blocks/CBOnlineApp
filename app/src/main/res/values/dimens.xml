@@ -38,6 +38,9 @@
     <dimen name="button_padding_medium">14dp</dimen>
     <dimen name="button_text_size">14sp</dimen>
     <dimen name="heading_text_size">18sp</dimen>
+    <dimen name="card_corner_radius">10dp</dimen>
+    <dimen name="margin_medium_small">14dp</dimen>
+    <dimen name="button_size">20dp</dimen>
 
 
 </resources>

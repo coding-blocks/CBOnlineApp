@@ -60,11 +60,11 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
                 val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
                 val contentImg = inflatedView.findViewById(R.id.imageView3) as ImageView
                 if (i.contentable == "lecture" || i.contentable == "video") {
-                    contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_play))
+                    contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_play_lock))
                 } else if (i.contentable == "document") {
                     contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_document))
                 } else if (i.contentable == "code-challenge") {
-                    contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_lecture))
+                    contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_play_lock))
                 }
                 subTitle.text = i.title
 
@@ -99,6 +99,7 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
                 itemView.arrow.startAnimation(arrowAnimation)
             }
         }
+
     }
 
     class DiffCallback : DiffUtil.ItemCallback<Sections>() {

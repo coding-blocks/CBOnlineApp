@@ -340,6 +340,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_medium"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_course_card"
             android:layout_marginTop="@dimen/margin_small"
             android:layout_marginEnd="@dimen/margin_medium" />
 

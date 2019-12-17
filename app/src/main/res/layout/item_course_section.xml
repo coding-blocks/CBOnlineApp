@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_marginEnd="8dp"
-        android:layout_toStartOf="@id/downloadSectionBtn"
         android:fontFamily="@font/gilroy_semibold"
         android:textColor="@color/black"
         android:textSize="16sp"
@@ -69,7 +68,6 @@
             android:id="@+id/divider2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="@dimen/margin_medium"
             android:background="?android:attr/listDivider" />
     </LinearLayout>
 
