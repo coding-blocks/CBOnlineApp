@@ -9,6 +9,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.DOUBT_ID
 import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
@@ -19,6 +20,8 @@ import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard_doubts.*
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -31,6 +34,14 @@ class DashboardDoubtsFragment : Fragment() {
         object : ResolveDoubtClickListener {
             override fun onClick(doubt: DoubtsModel) {
                 viewModel.resolveDoubt(doubt)
+            }
+        }
+    }
+
+    private val commentsClickListener: DoubtCommentClickListener by lazy {
+        object : DoubtCommentClickListener {
+            override fun onClick(doubtId: String) {
+                requireContext().startActivity(requireContext().intentFor<DoubtCommentActivity>(DOUBT_ID to doubtId).singleTop())
             }
         }
     }
@@ -125,12 +136,14 @@ class DashboardDoubtsFragment : Fragment() {
 
         doubtListAdapter.apply {
             onResolveClick = resolveClickListener
+            onCommentClick = commentsClickListener
         }
     }
 
     override fun onDestroyView() {
         doubtListAdapter.apply {
             onResolveClick = null
+            onCommentClick = null
         }
         super.onDestroyView()
     }

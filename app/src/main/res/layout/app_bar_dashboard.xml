@@ -15,7 +15,7 @@
             android:layout_height="wrap_content" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <FrameLayout
+    <com.codingblocks.fabnavigation.FabNavigationViewPager
         android:id="@+id/dashboardPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

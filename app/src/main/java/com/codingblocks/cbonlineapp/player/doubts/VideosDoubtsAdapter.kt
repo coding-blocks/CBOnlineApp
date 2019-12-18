@@ -50,7 +50,7 @@ class VideosDoubtsAdapter(
     inner class DoubtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindView(doubt: DoubtsModel) {
-            fetchComments(doubt.dbtUid)
+//            fetchComments(doubt.dbtUid)
             itemView.doubtTopic.text =
                 viewModel.getContentWithId(doubt.runAttemptId, doubt.contentId).title
             itemView.doubtTitle.text = doubt.title
@@ -100,47 +100,47 @@ class VideosDoubtsAdapter(
 //                })
         }
 
-        private fun fetchComments(dbtUid: String) {
-            Clients.onlineV2JsonApi.getCommentsById(dbtUid)
-                .enqueue(retrofitCallback { throwable, response ->
-                    response?.body()?.let {
-                        if (it.isNotEmpty()) {
-                            itemView.showCommentsTv.visibility = View.VISIBLE
-                            itemView.setOnClickListener {
-                                if (itemView.commentll.visibility == View.VISIBLE) {
-                                    itemView.showCommentsTv.text =
-                                        context.getString(R.string.showComments)
-                                    itemView.commentll.visibility = View.GONE
-                                } else {
-                                    itemView.commentll.visibility = View.VISIBLE
-                                    itemView.showCommentsTv.text =
-                                        context.getString(R.string.hideComments)
-                                }
-                            }
-                            val ll = itemView.findViewById<LinearLayout>(R.id.commentll)
-                            ll.removeAllViews()
-                            ll.orientation = LinearLayout.VERTICAL
-                            for (comment in it) {
-                                val factory = LayoutInflater.from(context)
-                                val inflatedView =
-                                    factory.inflate(R.layout.item_comment, ll, false)
-                                val subTitle =
-                                    inflatedView.findViewById(R.id.usernameTv) as TextView
-                                val time = inflatedView.findViewById(R.id.timeTv) as TextView
-                                val body =
-                                    inflatedView.findViewById(R.id.bodyTv) as MarkdownView
-                                body.loadMarkdown(comment.body)
-                                subTitle.text = comment.username
-                                time.text =
-                                    formatDate(comment.updatedAt)
-                                ll.addView(inflatedView)
-                            }
-                        }
-                    }
-                    throwable?.let {
-                    }
-                })
-        }
+//        private fun fetchComments(dbtUid: String) {
+//            Clients.onlineV2JsonApi.getCommentsById(dbtUid)
+//                .enqueue(retrofitCallback { throwable, response ->
+//                    response?.body()?.let {
+//                        if (it.isNotEmpty()) {
+//                            itemView.showCommentsTv.visibility = View.VISIBLE
+//                            itemView.setOnClickListener {
+//                                if (itemView.commentll.visibility == View.VISIBLE) {
+//                                    itemView.showCommentsTv.text =
+//                                        context.getString(R.string.showComments)
+//                                    itemView.commentll.visibility = View.GONE
+//                                } else {
+//                                    itemView.commentll.visibility = View.VISIBLE
+//                                    itemView.showCommentsTv.text =
+//                                        context.getString(R.string.hideComments)
+//                                }
+//                            }
+//                            val ll = itemView.findViewById<LinearLayout>(R.id.commentll)
+//                            ll.removeAllViews()
+//                            ll.orientation = LinearLayout.VERTICAL
+//                            for (comment in it) {
+//                                val factory = LayoutInflater.from(context)
+//                                val inflatedView =
+//                                    factory.inflate(R.layout.item_comment, ll, false)
+//                                val subTitle =
+//                                    inflatedView.findViewById(R.id.usernameTv) as TextView
+//                                val time = inflatedView.findViewById(R.id.timeTv) as TextView
+//                                val body =
+//                                    inflatedView.findViewById(R.id.bodyTv) as MarkdownView
+//                                body.loadMarkdown(comment.body)
+//                                subTitle.text = comment.username
+//                                time.text =
+//                                    formatDate(comment.updatedAt)
+//                                ll.addView(inflatedView)
+//                            }
+//                        }
+//                    }
+//                    throwable?.let {
+//                    }
+//                })
+//        }
 
         private fun createComment(text: Editable?, doubt: DoubtsModel) {
 //            val comment = Comment()

@@ -34,6 +34,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.util.*
+import kotlin.collections.ArrayList
 
 interface OnlineJsonApi {
 
@@ -64,6 +65,25 @@ interface OnlineJsonApi {
     suspend fun getDoubtByAttemptId(
         @Path("runAttemptId") id: String
     ): Response<ArrayList<Doubts>>
+
+    @PATCH("doubts/{doubtid}")
+    suspend fun resolveDoubt(
+        @Path("doubtid") id: String,
+        @Body params: Doubts
+    ): Response<Doubts>
+
+    @PATCH("doubts/{doubtId}")
+    suspend fun getDoubt(
+        @Path("doubtId") id: String
+    ): Response<Doubts>
+
+    @GET("doubts/{doubtId}/relationships/comments")
+    suspend fun getCommentsById(
+        @Path("doubtId") id: String
+    ): Response<ArrayList<Comment>>
+
+
+
 
 
 
@@ -158,14 +178,9 @@ interface OnlineJsonApi {
     @POST("doubts")
     fun createDoubt(@Body params: Doubts): Call<Doubts>
 
-    @PATCH("doubts/{doubtid}")
-    suspend fun resolveDoubt(@Path("doubtid") id: String, @Body params: Doubts): Response<Doubts>
 
     @POST("comments")
     fun createComment(@Body params: Comment): Call<Comment>
-
-    @GET("doubts/{comentid}/relationships/comments")
-    fun getCommentsById(@Path("comentid") id: String): Call<List<Comment>>
 
     @GET("run_attempts/{runAttemptId}/relationships/notes")
     fun getNotesByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<Note>>

@@ -8,9 +8,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsFragment
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
-import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.fabnavigation.FabNavigationAdapter
 import com.google.android.material.navigation.NavigationView
@@ -35,7 +35,9 @@ class DashboardActivity : AppCompatActivity(), DrawerLayout.DrawerListener, Navi
     override fun onDrawerOpened(drawerView: View) {
     }
 
-    //    private val viewModel by viewModel<DashboardViewModel>()
+    private val pagerAdapter by lazy {
+        TabLayoutAdapter(supportFragmentManager)
+    }
     private val navigationAdapter: FabNavigationAdapter by lazy {
         FabNavigationAdapter(this, R.menu.bottom_nav_dashboard)
     }
@@ -62,27 +64,29 @@ class DashboardActivity : AppCompatActivity(), DrawerLayout.DrawerListener, Navi
         dashboardDrawer.addDrawerListener(this)
         dashboardNavigation.setNavigationItemSelectedListener(this)
         navigationAdapter.setupWithBottomNavigation(dashboardBottomNav)
+        setupViewPager()
+
         dashboardBottomNav.apply {
             defaultBackgroundColor = getColor(R.color.dark)
             titleState = (FabNavigation.TitleState.ALWAYS_SHOW)
             setOnTabSelectedListener(object : FabNavigation.OnTabSelectedListener {
                 override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
-                    when (position) {
-                        0 -> replaceFragmentSafely(
-                            fragment = DashboardDoubtsFragment(),
-                            containerViewId = R.id.dashboardPager,
-                            allowStateLoss = true
-                        )
-                    }
+                    dashboardPager.setCurrentItem(position, true)
                     return true
                 }
             })
         }
-        replaceFragmentSafely(
-            fragment = DashboardDoubtsFragment(),
-            containerViewId = R.id.dashboardPager,
-            allowStateLoss = true
-        )
+    }
+
+    private fun setupViewPager() {
+        pagerAdapter.apply {
+            add(DashboardDoubtsFragment())
+        }
+        dashboardPager.apply {
+            adapter = pagerAdapter
+            currentItem = 1
+            offscreenPageLimit = 3
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -96,7 +100,7 @@ class DashboardActivity : AppCompatActivity(), DrawerLayout.DrawerListener, Navi
             true
         }
         R.id.dashboard_cart -> {
-            //Todo - Implement this
+            TODO("Implement this")
             true
         }
         else -> super.onOptionsItemSelected(item)

@@ -48,14 +48,19 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
             when (val response = repo.resolveDoubt(doubt)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful)
+                    if (response.value.isSuccessful) {
+                        fetchDoubts()
                         barMessage.postValue(response.value.body()?.status)
-                    else {
+                    } else {
                         setError(fetchError(response.value.code()))
                     }
                 }
             }
         }
     }
+
+    fun getDoubt(doubtId: String) =
+        repo.getDoubtById(doubtId)
+
 
 }

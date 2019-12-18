@@ -59,4 +59,6 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao) {
                 ))
         }
 
+    fun getDoubtById(id: String) = doubtsDao.getDoubtById(id)
+
 }

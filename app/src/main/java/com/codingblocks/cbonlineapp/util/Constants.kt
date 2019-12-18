@@ -70,5 +70,7 @@ const val RESOLVED = "RESOLVED"
 
 const val PENDING = "PENDING"
 
+const val DOUBT_ID = "doubtID"
+
 const val ALL = "ALL"
 

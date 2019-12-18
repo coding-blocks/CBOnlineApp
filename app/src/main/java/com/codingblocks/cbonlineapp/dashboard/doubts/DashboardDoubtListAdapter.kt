@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.item_doubts.view.*
 class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAdapter.ItemViewHolder>(DiffCallback()) {
 
     var onResolveClick: ResolveDoubtClickListener? = null
+    var onCommentClick: DoubtCommentClickListener? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -33,11 +34,13 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
             holder.apply {
                 bind(doubt)
                 resolveClickListener = onResolveClick
+                commentClickListener = onCommentClick
             }
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var resolveClickListener: ResolveDoubtClickListener? = null
+        var commentClickListener: DoubtCommentClickListener? = null
 
         fun bind(item: DoubtsModel) = with(itemView) {
             doubtTitleTv.text = item.title
@@ -73,6 +76,10 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
                     }
                 }
             }
+
+            commentTv.setOnClickListener {
+                commentClickListener?.onClick(item.dbtUid)
+            }
         }
     }
 
@@ -89,4 +96,8 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
 
 interface ResolveDoubtClickListener {
     fun onClick(doubt: DoubtsModel)
+}
+
+interface DoubtCommentClickListener {
+    fun onClick(doubtId: String)
 }
