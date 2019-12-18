@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.doubts_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AdminDoubtsFragment : Fragment(), TabLayout.OnTabSelectedListener {
@@ -38,7 +37,7 @@ class AdminDoubtsFragment : Fragment(), TabLayout.OnTabSelectedListener {
     private lateinit var listener: FragmentChangeListener
 
     private val doubtsAdapter = DoubtsAdapter()
-    private val viewModel by viewModel<DoubtsViewModel>()
+    private val viewModel by viewModel<AdminDoubtsViewModel>()
 
     private val ackClickListener: AckClickListener by lazy {
         object : AckClickListener {
@@ -110,8 +109,8 @@ class AdminDoubtsFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
         adminTabLayout.addOnTabSelectedListener(this)
 
-        doubtRv.apply {
-            doubtRv.isVisible = true
+        adminDoubtRv.apply {
+            adminDoubtRv.isVisible = true
             layoutManager = LinearLayoutManager(requireContext())
             adapter = doubtsAdapter
         }
@@ -126,7 +125,7 @@ class AdminDoubtsFragment : Fragment(), TabLayout.OnTabSelectedListener {
             } else {
                 doubtsAdapter.submitList(it)
             }
-            changeViewState(doubtRv, internetll, emptyll, doubtShimmer, it.isEmpty())
+            changeViewState(adminDoubtRv, internetll, emptyll, doubtShimmer, it.isEmpty())
         }
 
         viewModel.errorLiveData.observer(viewLifecycleOwner) {

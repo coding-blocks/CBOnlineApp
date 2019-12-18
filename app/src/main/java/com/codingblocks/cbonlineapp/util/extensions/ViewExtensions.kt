@@ -1,6 +1,6 @@
 package com.codingblocks.cbonlineapp.util.extensions
 
-import android.app.Activity
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.View
@@ -85,7 +85,7 @@ fun AppCompatActivity.replaceFragmentSafely(
     }
 }
 
-fun RecyclerView.setRv(activity: Activity, setDivider: Boolean = false) {
+fun RecyclerView.setRv(activity: Context, setDivider: Boolean = false) {
     val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.divider)!!)
     layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     if (setDivider) addItemDecoration(dividerItemDecoration)

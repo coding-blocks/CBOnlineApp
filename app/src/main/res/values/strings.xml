@@ -143,4 +143,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_doubts">No Doubts</string>
+    <string name="go_to_classroom">Go to Classroom</string>
+    <string name="doubts_that_you_ask_appear_here">Doubts that you ask appear here</string>
 </resources>

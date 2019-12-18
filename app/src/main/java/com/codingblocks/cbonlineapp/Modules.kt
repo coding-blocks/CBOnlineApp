@@ -2,11 +2,12 @@ package com.codingblocks.cbonlineapp
 
 import androidx.room.Room
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtRepository
-import com.codingblocks.cbonlineapp.admin.doubts.DoubtsViewModel
+import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtsViewModel
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewViewModel
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewRepository
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.course.CourseViewModel
+import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsViewModel
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.home.HomeActivityViewModel
 import com.codingblocks.cbonlineapp.home.HomeRepository
@@ -33,7 +34,8 @@ val viewModelModule = module {
     viewModel { MyCourseViewModel(get()) }
     viewModel { LeaderboardViewModel() }
     viewModel { NotificationViewModel(get()) }
-    viewModel { DoubtsViewModel(get()) }
+    viewModel { AdminDoubtsViewModel(get()) }
+    viewModel { DashboardDoubtsViewModel() }
     viewModel { AdminOverviewViewModel(get()) }
 
     viewModel { QuizViewModel() }

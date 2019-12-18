@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/margin_large"
-    android:layout_marginBottom="@dimen/margin_large"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="14dp"
+    android:layout_marginBottom="14dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -63,6 +63,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_marginTop="14dp"
         android:layout_height="wrap_content"
         android:gravity="center">
 
@@ -79,8 +80,8 @@
         <com.codingblocks.cbonlineapp.widgets.GradientTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:drawableEnd="@drawable/ic_play"
             android:drawablePadding="8dp"
             android:fontFamily="@font/gilroy_medium"
