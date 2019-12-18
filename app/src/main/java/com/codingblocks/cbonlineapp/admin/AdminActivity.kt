@@ -39,8 +39,6 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
         FabNavigationAdapter(this, R.menu.bottom_nav_admin)
     }
 
-    private val viewModel by viewModel<MyCourseViewModel>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin)

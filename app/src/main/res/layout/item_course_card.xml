@@ -84,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/courseCardTitleTv"
-                    android:layout_marginTop="4"
+                    android:layout_marginTop="4dp"
                     android:layout_marginBottom="@dimen/margin_medium"
                     android:fontFamily="@font/gilroy_medium"
                     android:textColor="@color/white"

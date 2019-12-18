@@ -70,7 +70,6 @@ class CBOnlineApp : Application() {
 
         Picasso.setSingletonInstance(Picasso.Builder(this).build())
 
-        val markwon = Markwon.create(applicationContext)
 
 
         // OneSignal Initialization

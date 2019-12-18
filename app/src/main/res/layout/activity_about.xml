@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:elevation="4dp"
         android:gravity="center_vertical"
-        app:theme="@style/ToolBarStyle"
         app:title="Contact Us" />
 
     <androidx.core.widget.NestedScrollView

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/margin_large"
+    android:layout_marginBottom="@dimen/margin_large"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/doubtTitleTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/gilroy_bold"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            tools:text="This is the title of the doubt" />
+
+        <TextView
+            android:id="@+id/doubtTimeTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/brownish_grey"
+            android:textSize="12sp"
+            tools:text="4 hours ago" />
+    </LinearLayout>
+
+    <com.codingblocks.cbonlineapp.widgets.ExpandableTextView
+        android:id="@+id/doubtDescriptionTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:trimLength="100"
+        tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the best standard dummy text... more" />
+
+    <TextView
+        android:id="@+id/doubtCommentTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:textColor="@color/brownish_grey"
+        android:textSize="14sp"
+        tools:text="View 23 comments" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin_small"
+        android:background="?android:attr/listDivider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <com.codingblocks.cbonlineapp.widgets.GradientTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_comment_small"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:text="@string/comment"
+            app:color_end="@color/dusty_orange"
+            app:color_start="@color/pastel_red" />
+
+        <com.codingblocks.cbonlineapp.widgets.GradientTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:drawableEnd="@drawable/ic_play"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:text="@string/chat_with_ta" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_play"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:text="@string/mark_resolved"
+            android:textColor="@color/freshGreen" />
+    </LinearLayout>
+
+</LinearLayout>

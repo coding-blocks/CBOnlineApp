@@ -13,13 +13,14 @@
         android:id="@+id/videoContainer"
         android:visibility="gone"
         android:layout_height="wrap_content">
+
         <fragment
             android:id="@+id/videoView"
-            android:name="com.vdocipher.aegis.player.VdoPlayerFragment"
+            android:name="com.vdocipher.aegis.player.VdoPlayerSupportFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:keepScreenOn="true"/>
+            android:keepScreenOn="true" />
 
         <com.codingblocks.cbonlineapp.widgets.VdoPlayerControlView
             android:id="@+id/player_control_view"

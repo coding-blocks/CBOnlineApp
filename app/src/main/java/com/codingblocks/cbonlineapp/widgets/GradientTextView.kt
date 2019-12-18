@@ -29,8 +29,8 @@ class GradientTextView : androidx.appcompat.widget.AppCompatTextView {
         if (changed) {
             paint.shader = LinearGradient(
                 0f, 0f, width.toFloat(), height.toFloat(),
-                ContextCompat.getColor(context, R.color.neon_red),
-                ContextCompat.getColor(context, R.color.indigo_blue),
+                ContextCompat.getColor(context, R.color.pastel_red),
+                ContextCompat.getColor(context, R.color.dusty_orange),
                 Shader.TileMode.CLAMP
             )
         }

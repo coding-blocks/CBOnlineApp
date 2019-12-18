@@ -55,7 +55,6 @@
     <string name="cart_title">Replace Cart Items?</string>
     <string name="yes_continue">Yes,Continue</string>
     <string name="checkout">Checkout with Existing</string>
-    <string name="my_courses">My Courses</string>
     <string name="doubt_description_error">Description length must be atleast 20 characters.</string>
     <string name="doubt_title_error">Title length must be atleast 15 characters.</string>
     <!--Strings For Layouts !-->
@@ -133,4 +132,15 @@
     <string name="about_mentors">About Mentors</string>
     <string name="you_may_also_like">You may also like</string>
     <string name="instructors">Instructors</string>
+    <string name="mark_resolved">Mark Resolved</string>
+    <string name="chat_with_ta">Chat with TA</string>
+    <string name="comment">Comment</string>
+    <string name="doubts">Doubts</string>
+    <string name="library">Library</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="my_courses">My Courses</string>
+    <string name="explore">Explore</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
