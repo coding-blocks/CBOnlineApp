@@ -9,9 +9,7 @@ import com.google.gson.JsonObject
 
 open class BaseModel {
     @Id
-    @JvmField
     var id: String = ""
-    @JvmField
     var updatedAt: String = ""
 }
 
@@ -58,7 +56,11 @@ open class MyRunAttempts(
     val end: String = "",
     val premium: Boolean = false,
     val revoked: Boolean = false
-) : BaseModel()
+) : BaseModel() {
+    constructor(id: String) : this() {
+        super.id = id
+    }
+}
 
 //TODO ( change this to plural )
 @Type("doubt")
@@ -66,21 +68,32 @@ data class Doubts(
     val body: String,
     val title: String,
     var status: String = "PENDING",
-    val createdAt: String = "",
     val discourseTopicId: String = "",
-    val categoryId: Int? = 0,
-    val resolvedById: String? = null,
-    val acknowledgedAt: String? = null,
-    val resolvedAt: String? = null,
-    val firebaseRef: String? = null,
     val conversationId: String? = null,
     @Relationship("run-attempt")
     val runAttempt: MyRunAttempts? = null,
     @Relationship("content")
     val content: ContentsId? = null,
+    val createdAt: String = "",
+    val categoryId: Int? = 0,
+    val resolvedById: String? = null,
+    val acknowledgedAt: String? = null,
+    val resolvedAt: String? = null,
+    val firebaseRef: String? = null,
     @Relationship("resolved-by")
     val resolvedBy: UserId? = null
-) : BaseModel()
+) : BaseModel() {
+    constructor(id: String, title: String,
+                body: String,
+                discourseTopicId: String,
+                runAttempt: MyRunAttempts?,
+                conversationId: String?,
+                content: ContentsId?,
+                status: String)
+        : this(title, body, status, discourseTopicId, conversationId, runAttempt, content) {
+        super.id = id
+    }
+}
 
 //TODO ( change this to plural )
 @Type("content")

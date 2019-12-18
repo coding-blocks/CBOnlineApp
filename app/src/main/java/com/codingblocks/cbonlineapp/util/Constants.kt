@@ -68,5 +68,7 @@ const val LIVE = "LIVE"
 
 const val RESOLVED = "RESOLVED"
 
+const val PENDING = "PENDING"
+
 const val ALL = "ALL"
 

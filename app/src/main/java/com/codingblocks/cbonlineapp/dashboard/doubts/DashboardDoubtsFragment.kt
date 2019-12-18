@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LIVE
@@ -25,6 +26,14 @@ class DashboardDoubtsFragment : Fragment() {
 
     private val viewModel by viewModel<DashboardDoubtsViewModel>()
     private val doubtListAdapter = DashboardDoubtListAdapter()
+
+    private val resolveClickListener: ResolveDoubtClickListener by lazy {
+        object : ResolveDoubtClickListener {
+            override fun onClick(doubt: DoubtsModel) {
+                viewModel.resolveDoubt(doubt)
+            }
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? =
@@ -113,6 +122,17 @@ class DashboardDoubtsFragment : Fragment() {
                 .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
                 .show()
         }
+
+        doubtListAdapter.apply {
+            onResolveClick = resolveClickListener
+        }
+    }
+
+    override fun onDestroyView() {
+        doubtListAdapter.apply {
+            onResolveClick = null
+        }
+        super.onDestroyView()
     }
 
 }

@@ -159,7 +159,7 @@ interface OnlineJsonApi {
     fun createDoubt(@Body params: Doubts): Call<Doubts>
 
     @PATCH("doubts/{doubtid}")
-    fun resolveDoubt(@Path("doubtid") id: String, @Body params: Doubts): Call<Doubts>
+    suspend fun resolveDoubt(@Path("doubtid") id: String, @Body params: Doubts): Response<Doubts>
 
     @POST("comments")
     fun createComment(@Body params: Comment): Call<Comment>

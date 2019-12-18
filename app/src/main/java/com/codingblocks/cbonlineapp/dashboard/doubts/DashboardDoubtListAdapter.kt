@@ -9,11 +9,16 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
+import com.codingblocks.cbonlineapp.util.PENDING
+import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
 import kotlinx.android.synthetic.main.item_doubts.view.*
 
 class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAdapter.ItemViewHolder>(DiffCallback()) {
+
+    var onResolveClick: ResolveDoubtClickListener? = null
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
@@ -23,10 +28,17 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val doubt = getItem(position)
+        if (doubt != null)
+            holder.apply {
+                bind(doubt)
+                resolveClickListener = onResolveClick
+            }
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var resolveClickListener: ResolveDoubtClickListener? = null
+
         fun bind(item: DoubtsModel) = with(itemView) {
             doubtTitleTv.text = item.title
             doubtDescriptionTv.text = item.body
@@ -38,13 +50,26 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
                     chatTv.apply {
                         setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, context.getDrawable(R.drawable.ic_reopen_small), null)
                         text = context.getString(R.string.reopen_doubt)
+                        setOnClickListener {
+                            resolveClickListener?.onClick(item.apply {
+                                status = PENDING
+                            })
+                        }
                     }
                 }
                 else -> {
-                    markResolvedTv.isVisible = true
+                    markResolvedTv.apply {
+                        isVisible = true
+                        setOnClickListener {
+                            resolveClickListener?.onClick(item.apply {
+                                status = RESOLVED
+                            })
+                        }
+                    }
                     chatTv.apply {
                         setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, context.getDrawable(R.drawable.ic_chat), null)
                         text = context.getString(R.string.chat_with_ta)
+
                     }
                 }
             }
@@ -60,4 +85,8 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
             return oldItem.sameAndEqual(newItem)
         }
     }
+}
+
+interface ResolveDoubtClickListener {
+    fun onClick(doubt: DoubtsModel)
 }

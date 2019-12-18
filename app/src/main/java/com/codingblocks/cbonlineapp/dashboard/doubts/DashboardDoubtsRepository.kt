@@ -6,7 +6,9 @@ import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Doubts
+import com.codingblocks.onlineapi.models.MyRunAttempts
 import com.codingblocks.onlineapi.safeApiCall
 import java.util.*
 
@@ -41,4 +43,20 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao) {
         }
 
     }
+
+    suspend fun resolveDoubt(doubt: DoubtsModel) =
+        safeApiCall {
+            Clients.onlineV2JsonApi.resolveDoubt(doubt.dbtUid,
+                Doubts(
+                    id = doubt.dbtUid,
+                    title = doubt.title,
+                    body = doubt.body,
+                    discourseTopicId = doubt.discourseTopicId,
+                    runAttempt = MyRunAttempts(doubt.runAttemptId),
+                    conversationId = doubt.conversationId,
+                    content = ContentsId(doubt.contentId),
+                    status = doubt.status
+                ))
+        }
+
 }

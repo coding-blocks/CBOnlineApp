@@ -23,6 +23,7 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
             repo.getDoubtsByCourseRun(it)
         }
     }
+
     fun fetchDoubts() {
         runIO {
             when (val response = repo.fetchDoubtsByCourseRun()) {
@@ -40,6 +41,21 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
 
     private fun setError(error: String) {
         errorLiveData.postValue(error)
+    }
+
+    fun resolveDoubt(doubt: DoubtsModel) {
+        runIO {
+            when (val response = repo.resolveDoubt(doubt)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        barMessage.postValue(response.value.body()?.status)
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
     }
 
 }
