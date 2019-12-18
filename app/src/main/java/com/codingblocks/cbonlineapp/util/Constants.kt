@@ -63,3 +63,10 @@ const val DOWNLOAD_CHANNEL_ID = "downloadChannel"
 const val ADMIN_CHANNEL_ID = "adminChannel"
 
 const val UNAUTHORIZED = "Unauthorized"
+
+const val LIVE = "LIVE"
+
+const val RESOLVED = "RESOLVED"
+
+const val ALL = "ALL"
+

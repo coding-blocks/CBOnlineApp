@@ -1,7 +1,10 @@
 package com.codingblocks.cbonlineapp.dashboard.doubts
 
+import androidx.lifecycle.LiveData
 import com.codingblocks.cbonlineapp.database.DoubtsDao
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
+import com.codingblocks.cbonlineapp.util.LIVE
+import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.safeApiCall
@@ -30,5 +33,12 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao) {
         }
     }
 
-    fun getDoubtsByCourseRun(id: String) = doubtsDao.getDoubts(id)
+    fun getDoubtsByCourseRun(type: String): LiveData<List<DoubtsModel>> {
+        return when (type) {
+            LIVE -> doubtsDao.getLiveDoubts("44872")
+            RESOLVED -> doubtsDao.getResolveDoubts("44872")
+            else -> doubtsDao.getDoubts("44872")
+        }
+
+    }
 }

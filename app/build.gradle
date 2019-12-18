@@ -131,6 +131,8 @@ dependencies {
     implementation "io.noties.markwon:html:$markwon_version"
     implementation "io.noties.markwon:linkify:$markwon_version"
     implementation 'com.github.moh-affan:GradientTextView:0.1.0'
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
+
 
 
     // Image view libraries

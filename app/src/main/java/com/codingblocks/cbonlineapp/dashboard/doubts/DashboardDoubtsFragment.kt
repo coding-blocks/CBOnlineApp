@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.LIVE
+import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -35,6 +38,43 @@ class DashboardDoubtsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        liveDoubtBtn.setOnClickListener {
+            viewModel.courseId.value = LIVE
+        }
+
+        resolvedDoubtBtn.setOnClickListener {
+            viewModel.courseId.value = RESOLVED
+        }
+
+        allDoubtBtn.setOnClickListener {
+            viewModel.courseId.value = ALL
+        }
+
+        viewModel.courseId.observer(viewLifecycleOwner) {
+            when (it) {
+                LIVE -> {
+                    liveDoubtBtn.isActivated = true
+                    resolvedDoubtBtn.isActivated = false
+                    allDoubtBtn.isActivated = false
+                }
+                RESOLVED -> {
+                    liveDoubtBtn.isActivated = false
+                    resolvedDoubtBtn.isActivated = true
+                    allDoubtBtn.isActivated = false
+                }
+                ALL -> {
+                    liveDoubtBtn.isActivated = false
+                    resolvedDoubtBtn.isActivated = false
+                    allDoubtBtn.isActivated = true
+                }
+                else -> {
+                    liveDoubtBtn.isActivated = false
+                    resolvedDoubtBtn.isActivated = false
+                    allDoubtBtn.isActivated = false
+                }
+            }
+        }
 
         dashboardDoubtRv.apply {
             setRv(requireContext(), true, "thick")

@@ -2,14 +2,14 @@ package com.codingblocks.cbonlineapp.util.extensions
 
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
+import org.ocpsoft.prettytime.PrettyTime
 import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
-import java.util.TimeZone
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.NoSuchElementException
+
 
 fun folderSize(directory: File): Long {
     var length: Long = 0
@@ -36,6 +36,14 @@ fun Long.readableFileSize(): String {
 
 fun String.greater(): Boolean {
     return this.toLong() >= (System.currentTimeMillis() / 1000)
+}
+
+fun String.timeAgo(): String {
+    val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
+    sdf.timeZone = TimeZone.getTimeZone("GMT")
+    val time = sdf.parse(this).time
+    val prettyTime = PrettyTime(Locale.getDefault())
+    return prettyTime.format(Date(time))
 }
 
 fun Long.getDurationBreakdown(): String {

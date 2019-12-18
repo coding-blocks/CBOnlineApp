@@ -8,11 +8,6 @@
                 android:startColor="@color/pastel_red" />
             <corners android:radius="@dimen/button_corner_radius" />
 
-            <padding
-                android:bottom="@dimen/button_padding_small"
-                android:left="@dimen/button_padding_medium"
-                android:right="@dimen/button_padding_medium"
-                android:top="@dimen/button_padding_small" />
         </shape>
     </item>
 

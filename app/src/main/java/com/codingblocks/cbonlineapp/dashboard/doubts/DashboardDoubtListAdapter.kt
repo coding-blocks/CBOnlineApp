@@ -1,16 +1,16 @@
 package com.codingblocks.cbonlineapp.dashboard.doubts
 
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
-import kotlinx.android.synthetic.main.item_admin_doubt.view.*
+import com.codingblocks.cbonlineapp.util.extensions.timeAgo
 import kotlinx.android.synthetic.main.item_doubts.view.*
 
 class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAdapter.ItemViewHolder>(DiffCallback()) {
@@ -30,9 +30,23 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
         fun bind(item: DoubtsModel) = with(itemView) {
             doubtTitleTv.text = item.title
             doubtDescriptionTv.text = item.body
-            doubtTimeTv.text = item.createdAt
+            doubtTimeTv.text = item.createdAt.timeAgo()
             chatTv.isVisible = !item.conversationId.isNullOrEmpty()
-            setOnClickListener {
+            when (item.status) {
+                "RESOLVED" -> {
+                    markResolvedTv.isVisible = false
+                    chatTv.apply {
+                        setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, context.getDrawable(R.drawable.ic_reopen_small), null)
+                        text = context.getString(R.string.reopen_doubt)
+                    }
+                }
+                else -> {
+                    markResolvedTv.isVisible = true
+                    chatTv.apply {
+                        setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, context.getDrawable(R.drawable.ic_chat), null)
+                        text = context.getString(R.string.chat_with_ta)
+                    }
+                }
             }
         }
     }

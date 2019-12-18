@@ -1,14 +1,73 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dashboardDoubtRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/dashboardDoubtRoot"
+    android:orientation="vertical"
     tools:context="com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/liveDoubtBtn"
+            style="@style/ButtonStyleChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text="@string/live_doubts" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/resolvedDoubtBtn"
+            style="@style/ButtonStyleChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:text="@string/resolved" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/allDoubtBtn"
+            style="@style/ButtonStyleChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:text="@string/all" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableEnd="@drawable/ic_filter"
+            android:drawablePadding="8dp"
+            android:focusable="true"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/filter"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/veryLightPink" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dashboardDoubtRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:overScrollMode="never"
         tools:itemCount="4"
         tools:listitem="@layout/item_doubts" />
 
@@ -51,6 +110,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_medium"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="10dp"
             android:text="@string/go_to_classroom" />
     </LinearLayout>
 
@@ -88,10 +151,10 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:background="@color/dark_white"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <include layout="@layout/item_skeleton_content" />
     </com.facebook.shimmer.ShimmerFrameLayout>
 
-</FrameLayout>
+</LinearLayout>
 
