@@ -31,7 +31,7 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_video_doubt, container, false)
-        viewModel.fetchDoubts(param1 ?: "")
+//        viewModel.fetchDoubts(param1 ?: "")
         val doubtList = ArrayList<DoubtsModel>()
         val doubtsAdapter = VideosDoubtsAdapter(doubtList, viewModel)
         view.doubtsRv.layoutManager = LinearLayoutManager(requireContext())

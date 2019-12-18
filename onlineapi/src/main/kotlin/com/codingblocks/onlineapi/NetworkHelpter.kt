@@ -20,7 +20,7 @@ suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, ap
                 is IOException -> ResultWrapper.GenericError(103, "IOException")
                 is HttpException -> ResultWrapper.GenericError(throwable.code(), "HttpException")
                 else -> {
-                    ResultWrapper.GenericError(null, ErrorStatus.NOT_DEFINED)
+                    ResultWrapper.GenericError(null, throwable.localizedMessage)
                 }
             }
         }

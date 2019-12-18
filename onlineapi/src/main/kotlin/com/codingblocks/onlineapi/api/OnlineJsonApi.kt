@@ -60,6 +60,21 @@ interface OnlineJsonApi {
         @Query("sort") sort: String = "content.section_content.order"
     ): Response<Sections>
 
+    @GET("run_attempts/{runAttemptId}/relationships/doubts")
+    suspend fun getDoubtByAttemptId(
+        @Path("runAttemptId") id: String
+    ): Response<ArrayList<Doubts>>
+
+
+
+
+
+
+
+
+
+
+
     @GET("instructors")
     fun instructors(
         @Query("include") include: Array<String>? = null
@@ -151,9 +166,6 @@ interface OnlineJsonApi {
 
     @GET("doubts/{comentid}/relationships/comments")
     fun getCommentsById(@Path("comentid") id: String): Call<List<Comment>>
-
-    @GET("run_attempts/{runAttemptId}/relationships/doubts")
-    fun getDoubtByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<Doubts>>
 
     @GET("run_attempts/{runAttemptId}/relationships/notes")
     fun getNotesByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<Note>>
@@ -250,9 +262,5 @@ interface OnlineJsonApi {
 
     @PATCH("doubts/{id}")
     suspend fun acknowledgeDoubt(@Path("id") doubtId: String, @Body params: Doubts): Response<List<Doubts>>
-
-//    @GET("projects/{id}")
-//    fun getProject(@Path("id") id: String): Call<Projects>
-
 
 }

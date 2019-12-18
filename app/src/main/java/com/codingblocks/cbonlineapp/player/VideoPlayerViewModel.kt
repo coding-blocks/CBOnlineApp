@@ -76,12 +76,12 @@ class VideoPlayerViewModel(
                     if ((response?.isSuccessful == true))
                         response.body()?.let {
                             viewModelScope.launch(Dispatchers.IO) {
-                                doubtsDao.insert(
-                                    DoubtsModel(
-                                        it.id, it.title, it.body, it.content?.id
-                                        ?: "", it.status, attemptId
-                                    )
-                                )
+                                //                                doubtsDao.insert(
+//                                    DoubtsModel(
+//                                        it.id, it.title, it.body, it.content?.id
+//                                        ?: "", it.status, attemptId
+//                                    )
+//                                )
                             }
                         }
                 } catch (e: Exception) {
@@ -122,30 +122,30 @@ class VideoPlayerViewModel(
             })
     }
 
-    fun fetchDoubts(param: String) {
-        Clients.onlineV2JsonApi.getDoubtByAttemptId(param).enqueue(retrofitCallback { throwable, response ->
-            response?.body().let { doubts ->
-                if (response != null && response.isSuccessful) {
-                    doubts?.forEach {
-                        try {
-                            viewModelScope.launch(Dispatchers.IO) {
-                                doubtsDao.insert(
-                                    DoubtsModel(
-                                        it.id, it.title, it.body, it.content?.id
-                                        ?: "", it.status, it.runAttempt?.id ?: "",
-                                        it.discourseTopicId
-                                    )
-                                )
-                            }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                            Log.e("CRASH", "DOUBT ID : $it.id")
-                        }
-                    }
-                }
-            }
-        })
-    }
+//    fun fetchDoubts(param: String) {
+//        Clients.onlineV2JsonApi.getDoubtByAttemptId(param).enqueue(retrofitCallback { throwable, response ->
+//            response?.body().let { doubts ->
+//                if (response != null && response.isSuccessful) {
+//                    doubts?.forEach {
+//                        try {
+//                            viewModelScope.launch(Dispatchers.IO) {
+//                                doubtsDao.insert(
+//                                    DoubtsModel(
+//                                        it.id, it.title, it.body, it.content?.id
+//                                        ?: "", it.status, it.runAttempt?.id ?: "",
+//                                        it.discourseTopicId
+//                                    )
+//                                )
+//                            }
+//                        } catch (e: Exception) {
+//                            e.printStackTrace()
+//                            Log.e("CRASH", "DOUBT ID : $it.id")
+//                        }
+//                    }
+//                }
+//            }
+//        })
+//    }
 
     fun fetchNotes(param: String) {
         val networkList: ArrayList<NotesModel> = ArrayList()

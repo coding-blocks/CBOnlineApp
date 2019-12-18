@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "04fc1c3b087b1e518ab7ed00a3b6094c",
+    "identityHash": "0fea073bf5c455cc8cd69395807d4d25",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -603,7 +603,7 @@
       },
       {
         "tableName": "DoubtsModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`dbtUid` TEXT NOT NULL, `title` TEXT NOT NULL, `body` TEXT NOT NULL, `contentId` TEXT NOT NULL, `status` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `discourseTopicId` TEXT NOT NULL, PRIMARY KEY(`dbtUid`), FOREIGN KEY(`contentId`) REFERENCES `ContentModel`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`dbtUid` TEXT NOT NULL, `title` TEXT NOT NULL, `body` TEXT NOT NULL, `contentId` TEXT NOT NULL, `status` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `discourseTopicId` TEXT NOT NULL, `conversationId` TEXT, `createdAt` TEXT NOT NULL, PRIMARY KEY(`dbtUid`))",
         "fields": [
           {
             "fieldPath": "dbtUid",
@@ -646,6 +646,18 @@
             "columnName": "discourseTopicId",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "conversationId",
+            "columnName": "conversationId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -654,29 +666,8 @@
           ],
           "autoGenerate": false
         },
-        "indices": [
-          {
-            "name": "index_DoubtsModel_contentId",
-            "unique": false,
-            "columnNames": [
-              "contentId"
-            ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_DoubtsModel_contentId` ON `${TABLE_NAME}` (`contentId`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "ContentModel",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "contentId"
-            ],
-            "referencedColumns": [
-              "ccid"
-            ]
-          }
-        ]
+        "indices": [],
+        "foreignKeys": []
       },
       {
         "tableName": "NotesModel",
@@ -1163,7 +1154,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '04fc1c3b087b1e518ab7ed00a3b6094c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0fea073bf5c455cc8cd69395807d4d25')"
     ]
   }
 }

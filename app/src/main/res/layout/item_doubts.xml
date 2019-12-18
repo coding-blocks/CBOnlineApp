@@ -70,27 +70,31 @@
         <com.codingblocks.cbonlineapp.widgets.GradientTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/commentTv"
             android:drawableEnd="@drawable/ic_comment_small"
             android:drawablePadding="8dp"
             android:fontFamily="@font/gilroy_medium"
             android:text="@string/comment"
+            android:layout_marginEnd="10dp"
             app:color_end="@color/dusty_orange"
             app:color_start="@color/pastel_red" />
 
         <com.codingblocks.cbonlineapp.widgets.GradientTextView
             android:layout_width="wrap_content"
+            android:id="@+id/chatTv"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:visibility="gone"
             android:drawableEnd="@drawable/ic_play"
             android:drawablePadding="8dp"
             android:fontFamily="@font/gilroy_medium"
             android:text="@string/chat_with_ta" />
 
         <TextView
+            android:id="@+id/markResolvedTv"
+            android:layout_marginStart="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_play"
+            android:drawableEnd="@drawable/ic_comment_small"
             android:drawablePadding="8dp"
             android:fontFamily="@font/gilroy_medium"
             android:text="@string/mark_resolved"

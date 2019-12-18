@@ -18,7 +18,6 @@ class CourseRepository(
 
     suspend fun getRating(id: String) = Clients.api.getCourseRating(id)
 
-    suspend fun getCourseSections(id: String) = Clients.onlineV2JsonApi.getSections(id)
 
     suspend fun getCourse(id: String) = safeApiCall { Clients.onlineV2JsonApi.getCourse(id) }
 

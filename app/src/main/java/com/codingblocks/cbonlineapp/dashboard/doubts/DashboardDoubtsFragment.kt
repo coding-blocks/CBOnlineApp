@@ -22,6 +22,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class DashboardDoubtsFragment : Fragment() {
 
     private val viewModel by viewModel<DashboardDoubtsViewModel>()
+    private val doubtListAdapter = DashboardDoubtListAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? =
@@ -38,12 +39,11 @@ class DashboardDoubtsFragment : Fragment() {
 
         dashboardDoubtRv.apply {
             setRv(requireContext(), true)
-//            adapter = doubtsAdapter
+            adapter = doubtListAdapter
         }
 
         viewModel.listDoubtsResponse.observer(viewLifecycleOwner) {
-
-            //                doubtsAdapter.submitList(it)
+            doubtListAdapter.submitList(it)
             changeViewState(dashboardDoubtRv, internetll, emptyLl, dashboardDoubtShimmer, it.isEmpty())
         }
         viewModel.errorLiveData.observer(viewLifecycleOwner) {
@@ -61,7 +61,7 @@ class DashboardDoubtsFragment : Fragment() {
                         .setAnchorView(dashboardBottomNav)
                         .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
                         .setAction("Retry") {
-                            //                            fetchDoubts(adminTabLayout.selectedTabPosition)
+                            viewModel.fetchDoubts()
                         }
                         .show()
                 }

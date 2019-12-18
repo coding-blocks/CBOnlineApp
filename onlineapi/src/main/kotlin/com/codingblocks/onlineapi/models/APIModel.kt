@@ -51,14 +51,47 @@ data class CourseFeatures(
     val text: String
 )
 
-
-@Type("run_attempts")
+//TODO ( change this to plural )
+@Type("run_attempt")
 open class MyRunAttempts(
     val certificateApproved: Boolean = false,
     val end: String = "",
     val premium: Boolean = false,
     val revoked: Boolean = false
 ) : BaseModel()
+
+//TODO ( change this to plural )
+@Type("doubt")
+data class Doubts(
+    val body: String,
+    val title: String,
+    var status: String = "PENDING",
+    val createdAt: String = "",
+    val discourseTopicId: String = "",
+    val categoryId: Int? = 0,
+    val resolvedById: String? = null,
+    val acknowledgedAt: String? = null,
+    val resolvedAt: String? = null,
+    val firebaseRef: String? = null,
+    val conversationId: String? = null,
+    @Relationship("run-attempt")
+    val runAttempt: MyRunAttempts? = null,
+    @Relationship("content")
+    val content: ContentsId? = null,
+    @Relationship("resolved-by")
+    val resolvedBy: UserId? = null
+) : BaseModel()
+
+//TODO ( change this to plural )
+@Type("content")
+data class ContentsId(
+    @Id
+    val id: String?
+) {
+    var contentable: String? = null
+    val duration: Long? = null
+    val title: String? = null
+}
 
 @Type("runs")
 open class Runs(
@@ -400,35 +433,6 @@ class QuizQuestion : BaseModel() {
 @Type("qnas")
 class Quizqnas : BaseModel()
 
-@Type("doubts")
-data class Doubts(
-    val body: String,
-    val title: String,
-    var status: String = "PENDING",
-    val createdAt: String = "",
-    val discourseTopicId: String = "",
-    val categoryId: Int? = 0,
-    val resolvedById: String? = null,
-    val acknowledgedAt: String? = null,
-    val resolvedAt: String? = null,
-    val firebaseRef: String? = null,
-    val conversationId: String? = null,
-    @Relationship("run-attempt")
-    val runAttempt: MyRunAttempts? = null,
-    @Relationship("content")
-    val content: ContentsId? = null,
-    @Relationship("resolved-by")
-    val resolvedBy: UserId? = null
-) : BaseModel() {
-//    @Relationship("run-attempt")
-//    @JvmField
-//    var postrunAttempt: RunAttemptsId? = null
-//    @Relationship("content")
-//    @JvmField
-//    var contents: ContentsId? = null
-}
-
-
 @Type("comment")
 class Comment : BaseModel() {
     @JvmField
@@ -528,16 +532,6 @@ class ContentId(
 ) {
     val title: String? = null
 
-}
-
-@Type("contents")
-data class ContentsId(
-    @Id
-    val id: String?
-) {
-    var contentable: String? = null
-    val duration: Long? = null
-    val title: String? = null
 }
 
 @Type("rating")
