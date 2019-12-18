@@ -58,7 +58,7 @@ val viewModelModule = module {
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
     single { CourseRepository(get(), get(), get(), get(), get()) }
-    single { DashboardDoubtsRepository(get()) }
+    single { DashboardDoubtsRepository(get(), get()) }
 
 
 }
@@ -130,5 +130,10 @@ val databaseModule = module {
     factory {
         val database: AppDatabase = get()
         database.jobsDao()
+    }
+
+    factory {
+        val database: AppDatabase = get()
+        database.commentsDao()
     }
 }

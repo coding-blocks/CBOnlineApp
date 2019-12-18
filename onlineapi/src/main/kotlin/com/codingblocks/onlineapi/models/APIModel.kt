@@ -65,8 +65,8 @@ open class MyRunAttempts(
 //TODO ( change this to plural )
 @Type("doubt")
 data class Doubts(
-    val body: String,
-    val title: String,
+    val body: String = "",
+    val title: String = "",
     var status: String = "PENDING",
     val discourseTopicId: String = "",
     val conversationId: String? = null,
@@ -105,6 +105,14 @@ data class ContentsId(
     val duration: Long? = null
     val title: String? = null
 }
+
+@Type("comment")
+class Comment(
+    val body: String = "",
+    val username: String = "",
+    @Relationship("doubt")
+    val doubt: Doubts? = null
+) : BaseModel()
 
 @Type("runs")
 open class Runs(
@@ -446,18 +454,6 @@ class QuizQuestion : BaseModel() {
 @Type("qnas")
 class Quizqnas : BaseModel()
 
-@Type("comment")
-class Comment : BaseModel() {
-    @JvmField
-    var body: String = ""
-    @JvmField
-    var discourseTopicId: String = ""
-    @JvmField
-    var username: String = ""
-    @Relationship("doubt", resolve = true)
-    @JvmField
-    var doubt: Doubts? = null
-}
 
 @Type("note")
 class Note : BaseModel() {

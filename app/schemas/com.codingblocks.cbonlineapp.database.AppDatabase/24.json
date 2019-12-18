@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "0fea073bf5c455cc8cd69395807d4d25",
+    "identityHash": "82d6f62ac4680145a233739da46980e9",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -1149,12 +1149,77 @@
           }
         ],
         "foreignKeys": []
+      },
+      {
+        "tableName": "CommentModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `body` TEXT NOT NULL, `dbtId` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `username` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`dbtId`) REFERENCES `DoubtsModel`(`dbtUid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "body",
+            "columnName": "body",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dbtId",
+            "columnName": "dbtId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_CommentModel_dbtId",
+            "unique": false,
+            "columnNames": [
+              "dbtId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_CommentModel_dbtId` ON `${TABLE_NAME}` (`dbtId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "DoubtsModel",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "dbtId"
+            ],
+            "referencedColumns": [
+              "dbtUid"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0fea073bf5c455cc8cd69395807d4d25')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '82d6f62ac4680145a233739da46980e9')"
     ]
   }
 }

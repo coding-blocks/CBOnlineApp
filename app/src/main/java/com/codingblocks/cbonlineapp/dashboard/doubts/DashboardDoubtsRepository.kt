@@ -1,18 +1,22 @@
 package com.codingblocks.cbonlineapp.dashboard.doubts
 
 import androidx.lifecycle.LiveData
+import com.codingblocks.cbonlineapp.database.CommentsDao
 import com.codingblocks.cbonlineapp.database.DoubtsDao
+import com.codingblocks.cbonlineapp.database.models.CommentModel
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.MyRunAttempts
 import com.codingblocks.onlineapi.safeApiCall
 import java.util.*
 
-class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao) {
+class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
+                                private val commentsDao: CommentsDao) {
 
     suspend fun fetchDoubtsByCourseRun(id: String = "44872") = safeApiCall {
         Clients.onlineV2JsonApi.getDoubtByAttemptId(id)
@@ -60,5 +64,23 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao) {
         }
 
     fun getDoubtById(id: String) = doubtsDao.getDoubtById(id)
+
+    suspend fun fetchCommentsByDoubtId(id: String) = safeApiCall {
+        Clients.onlineV2JsonApi.getCommentsById(id)
+    }
+
+    suspend fun insertComments(comments: ArrayList<Comment>) {
+        comments.forEach {
+            commentsDao.insert(CommentModel(
+                it.id,
+                it.body,
+                it.doubt?.id ?: "",
+                it.updatedAt,
+                it.username
+            ))
+        }
+    }
+
+    fun getCommentsById(id: String) = commentsDao.getComments(id)
 
 }

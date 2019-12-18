@@ -20,4 +20,27 @@
 
     <include layout="@layout/item_doubts" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/commentRv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_comment" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/veryLightPink"
+        android:gravity="center">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_medium"
+            android:hint="Commenting as sidjain2901..."
+            android:textColor="@color/brownish_grey" />
+
+    </LinearLayout>
+
 </LinearLayout>

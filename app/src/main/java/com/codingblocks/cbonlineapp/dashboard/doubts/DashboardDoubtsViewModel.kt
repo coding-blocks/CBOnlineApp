@@ -59,8 +59,27 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
         }
     }
 
-    fun getDoubt(doubtId: String) =
-        repo.getDoubtById(doubtId)
+    fun getDoubt(doubtId: String): LiveData<DoubtsModel> {
+        fetchComments(doubtId)
+        return repo.getDoubtById(doubtId)
+    }
+
+    fun getComments(doubtId: String) = repo.getCommentsById(doubtId)
+
+    private fun fetchComments(doubtId: String) {
+        runIO {
+            when (val response = repo.fetchCommentsByDoubtId(doubtId)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        response.value.body()?.let { repo.insertComments(it) }
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
 
 
 }
