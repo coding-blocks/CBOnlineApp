@@ -9,8 +9,6 @@
         android:id="@+id/dashboardDoubtRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="28dp"
-        android:layout_marginEnd="28dp"
         tools:itemCount="4"
         tools:listitem="@layout/item_doubts" />
 

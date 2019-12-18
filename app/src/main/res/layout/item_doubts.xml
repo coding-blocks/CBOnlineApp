@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="14dp"
+    android:layout_marginStart="28dp"
+    android:layout_marginEnd="28dp"
     android:layout_marginBottom="14dp"
     android:orientation="vertical">
 
@@ -20,14 +22,16 @@
             android:layout_weight="1"
             android:fontFamily="@font/gilroy_bold"
             android:textColor="@color/black"
-            android:textSize="18sp"
-            tools:text="This is the title of the doubt" />
+            android:textSize="16sp"
+            tools:text="This is the title of the doubt " />
 
         <TextView
+            android:layout_gravity="start"
             android:id="@+id/doubtTimeTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
+            android:fontFamily="@font/gilroy_medium"
             android:textColor="@color/brownish_grey"
             android:textSize="12sp"
             tools:text="4 hours ago" />
@@ -84,7 +88,7 @@
             android:id="@+id/chatTv"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:drawableEnd="@drawable/ic_play"
+            android:drawableEnd="@drawable/ic_chat"
             android:drawablePadding="8dp"
             android:fontFamily="@font/gilroy_medium"
             android:text="@string/chat_with_ta" />
@@ -94,7 +98,7 @@
             android:layout_marginStart="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_comment_small"
+            android:drawableEnd="@drawable/ic_resolve"
             android:drawablePadding="8dp"
             android:fontFamily="@font/gilroy_medium"
             android:text="@string/mark_resolved"

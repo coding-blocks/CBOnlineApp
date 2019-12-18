@@ -85,8 +85,11 @@ fun AppCompatActivity.replaceFragmentSafely(
     }
 }
 
-fun RecyclerView.setRv(activity: Context, setDivider: Boolean = false) {
-    val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.divider)!!)
+fun RecyclerView.setRv(activity: Context, setDivider: Boolean = false, type: String = "") {
+    val dividerItemDecoration = if (type == "thick")
+        DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.dividerthick)!!)
+    else DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.divider)!!)
+
     layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     if (setDivider) addItemDecoration(dividerItemDecoration)
 }

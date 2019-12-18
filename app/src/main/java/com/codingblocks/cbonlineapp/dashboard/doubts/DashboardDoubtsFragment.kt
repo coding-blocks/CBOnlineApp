@@ -11,7 +11,6 @@ import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
-import com.codingblocks.cbonlineapp.util.extensions.showEmptyView
 import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
@@ -38,7 +37,7 @@ class DashboardDoubtsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         dashboardDoubtRv.apply {
-            setRv(requireContext(), true)
+            setRv(requireContext(), true, "thick")
             adapter = doubtListAdapter
         }
 
@@ -49,7 +48,7 @@ class DashboardDoubtsFragment : Fragment() {
         viewModel.errorLiveData.observer(viewLifecycleOwner) {
             when (it) {
                 ErrorStatus.NO_CONNECTION -> {
-                    showEmptyView(internetll, emptyLl, dashboardDoubtShimmer)
+//                    showEmptyView(internetll, emptyLl, dashboardDoubtShimmer)
                 }
                 ErrorStatus.UNAUTHORIZED -> {
                     Components.showConfirmation(requireContext(), UNAUTHORIZED) {
