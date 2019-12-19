@@ -28,39 +28,39 @@ class HomeRepository(
 
     fun getRecommendedCourses() = courseWithInstructorDao.getRecommendedCourses()
 
-    suspend fun insertCourse(course: Course, recommended: Boolean = true) {
-        with(course) {
-            courseDao.insertNew(
-                CourseModel(
-                    id,
-                    title,
-                    subtitle,
-                    logo,
-                    summary,
-                    promoVideo,
-                    difficulty,
-                    reviewCount,
-                    rating,
-                    slug,
-                    coverImage,
-                    categoryId,
-                    faq
-
-                ))
-            course.instructors?.let { insertInstructor(it, course.id) }
-            coursefeatures?.let { insertCourseFeatures(it, id) }
-            var list = course.runs?.filter { run ->
-                !run.enrollmentStart.greater() && run.enrollmentEnd.greater() && !run.unlisted
-            }?.sortedWith(compareBy { run -> run.price })
-            if (list != null) {
-                if (list.isEmpty()) {
-                    list =
-                        course.runs?.sortedWith(compareBy { run -> run.price })
-                }
-            }
-            list?.get(0)?.let { insertRun(it, course.id, recommended) }
-        }
-    }
+//    suspend fun insertCourse(course: Course, recommended: Boolean = true) {
+//        with(course) {
+//            courseDao.insertNew(
+//                CourseModel(
+//                    id,
+//                    title,
+//                    subtitle,
+//                    logo,
+//                    summary,
+//                    promoVideo,
+//                    difficulty,
+//                    reviewCount,
+//                    rating,
+//                    slug,
+//                    coverImage,
+//                    categoryId,
+//                    faq
+//
+//                ))
+//            course.instructors?.let { insertInstructor(it, course.id) }
+//            coursefeatures?.let { insertCourseFeatures(it, id) }
+//            var list = course.runs?.filter { run ->
+//                !run.enrollmentStart.greater() && run.enrollmentEnd.greater() && !run.unlisted
+//            }?.sortedWith(compareBy { run -> run.price })
+//            if (list != null) {
+//                if (list.isEmpty()) {
+//                    list =
+//                        course.runs?.sortedWith(compareBy { run -> run.price })
+//                }
+//            }
+//            list?.get(0)?.let { insertRun(it, course.id, recommended) }
+//        }
+//    }
 
     private suspend fun insertCourseFeatures(courseFeatures: List<CourseFeatures>, id: String) {
         courseFeatures.forEach {
@@ -68,27 +68,27 @@ class HomeRepository(
         }
     }
 
-    suspend fun insertRun(run: Runs, id: String, recommended: Boolean) {
-        with(run) {
-            runDao.insertNew(
-                RunModel(
-                    id,
-                    null,
-                    name,
-                    description,
-                    enrollmentStart,
-                    enrollmentEnd,
-                    start,
-                    end,
-                    price,
-                    mrp ?: "",
-                    id,
-                    crUpdatedAt = updatedAt,
-                    recommended = recommended
-                )
-            )
-        }
-    }
+//    suspend fun insertRun(run: Runs, id: String, recommended: Boolean) {
+//        with(run) {
+//            runDao.insertNew(
+//                RunModel(
+//                    id,
+//                    null,
+//                    name,
+//                    description,
+//                    enrollmentStart,
+//                    enrollmentEnd,
+//                    start,
+//                    end,
+//                    price,
+//                    mrp ?: "",
+//                    id,
+//                    crUpdatedAt = updatedAt,
+//                    recommended = recommended
+//                )
+//            )
+//        }
+//    }
 
     suspend fun insertInstructor(instructors: List<Instructor>, id: String) {
         instructors.forEach { instructor ->

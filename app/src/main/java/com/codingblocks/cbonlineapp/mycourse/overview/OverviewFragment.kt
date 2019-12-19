@@ -112,7 +112,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
         viewModel.getRun().observer(viewLifecycleOwner) { courseRun ->
             courseProgress.progress = courseRun.progress.toInt()
             contentCompletedTv.text = String.format("%d of %d", courseRun.completedContents, courseRun.totalContents)
-            batchEndTv.text = String.format("Batch Ends %s", getDateForTime(courseRun.crRunEnd))
+            batchEndTv.text = String.format("Batch Ends %s", getDateForTime(courseRun.crRunAttemptEnd))
             if (courseRun.progress > 90.0) {
                 completetionBtn.setImageResource(R.drawable.ic_status_white)
                 requestBtn.apply {
@@ -125,7 +125,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
                 completetionBtn.setImageResource(R.drawable.ic_circle_white)
                 requestBtn.isEnabled = false
             }
-            if (courseRun.crRunEnd.toLong() * 1000 < System.currentTimeMillis() || courseRun.crRunEnd.toLong() * 1000 - System.currentTimeMillis() <= 2592000000)
+            if (courseRun.crRunAttemptEnd.toLong() * 1000 < System.currentTimeMillis() || courseRun.crRunAttemptEnd.toLong() * 1000 - System.currentTimeMillis() <= 2592000000)
                 viewModel.fetchExtensions(courseRun.productId).observer(viewLifecycleOwner) {
                     if (it.isNotEmpty()) {
                         view.extensionsCard.isVisible = true

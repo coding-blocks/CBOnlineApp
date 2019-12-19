@@ -33,7 +33,7 @@ class MyCoursesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), A
             itemView.courseRunDescription.text = crDescription
             itemView.courseProgress.progress = progress.toInt()
             itemView.trialTv.isVisible = !premium
-            if (crRunEnd.toLong() * 1000 > System.currentTimeMillis()) {
+            if (crRunAttemptEnd.toLong() * 1000 > System.currentTimeMillis()) {
                 itemView.courseBtn1.background = itemView.context.getDrawable(R.drawable.button_background)
                 if (progress == 0.0) {
                     itemView.courseBtn1.text = "Start"

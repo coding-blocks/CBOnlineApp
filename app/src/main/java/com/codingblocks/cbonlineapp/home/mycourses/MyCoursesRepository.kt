@@ -42,45 +42,45 @@ class MyCoursesRepository(
         }
     }
 
-    suspend fun insertRun(run: Runs, progress: Double, totalContents: Int, completedContents: Int, refresh: Boolean) {
-        with(run) {
-            val newRun = RunModel(
-                id,
-                runAttempts?.get(0)?.id ?: "",
-                name,
-                description,
-                enrollmentStart,
-                enrollmentEnd,
-                start,
-                end,
-                price,
-                mrp ?: "",
-                course?.id ?: "",
-                updatedAt,
-                progress,
-                runAttempts?.get(0)?.premium
-                    ?: false,
-                whatsappLink,
-                runAttempts?.get(0)?.end
-                    ?: "",
-                totalContents,
-                completedContents,
-                runAttempts?.get(0)?.certificateApproved
-                    ?: false,
-                completionThreshold,
-                productId
-            )
-            val oldRun = runDao.getRunById(
-                runAttempts?.get(0)?.id ?: ""
-            )
-            if (oldRun == null) {
-                runDao.insertNew(newRun)
-            } else if (oldRun.progress != progress || refresh) {
-                newRun.hits = oldRun.hits
-                runDao.update(newRun)
-            }
-        }
-    }
+//    suspend fun insertRun(run: Runs, progress: Double, totalContents: Int, completedContents: Int, refresh: Boolean) {
+//        with(run) {
+//            val newRun = RunModel(
+//                id,
+//                runAttempts?.get(0)?.id ?: "",
+//                name,
+//                description,
+//                enrollmentStart,
+//                enrollmentEnd,
+//                start,
+//                end,
+//                price,
+//                mrp ?: "",
+//                course?.id ?: "",
+//                updatedAt,
+//                progress,
+//                runAttempts?.get(0)?.premium
+//                    ?: false,
+//                whatsappLink,
+//                runAttempts?.get(0)?.end
+//                    ?: "",
+//                totalContents,
+//                completedContents,
+//                runAttempts?.get(0)?.certificateApproved
+//                    ?: false,
+//                completionThreshold,
+//                productId
+//            )
+//            val oldRun = runDao.getRunById(
+//                runAttempts?.get(0)?.id ?: ""
+//            )
+//            if (oldRun == null) {
+//                runDao.insertNew(newRun)
+//            } else if (oldRun.progress != progress || refresh) {
+//                newRun.hits = oldRun.hits
+//                runDao.update(newRun)
+//            }
+//        }
+//    }
 
     suspend fun insertInstructor(instructor: Instructor, id: String) {
         instructorDao.insertNew(

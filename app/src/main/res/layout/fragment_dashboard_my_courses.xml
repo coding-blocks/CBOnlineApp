@@ -37,8 +37,10 @@
         android:id="@+id/dashboardCoursesRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_large"
         android:overScrollMode="never"
-        android:visibility="gone"
+        android:visibility="visible"
         tools:itemCount="4"
         tools:listitem="@layout/item_courses" />
 
@@ -118,12 +120,12 @@
     </LinearLayout>
 
     <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/dashboardDoubtShimmer"
+        android:id="@+id/dashboardCourseShimmer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:background="@color/dark_white"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <include layout="@layout/item_skeleton_content" />
     </com.facebook.shimmer.ShimmerFrameLayout>

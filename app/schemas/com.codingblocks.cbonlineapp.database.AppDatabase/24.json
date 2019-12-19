@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "82d6f62ac4680145a233739da46980e9",
+    "identityHash": "537640b0605292ccad46f51227167d58",
     "entities": [
       {
         "tableName": "CourseModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cid` TEXT NOT NULL, `title` TEXT NOT NULL, `subtitle` TEXT NOT NULL, `logo` TEXT NOT NULL, `summary` TEXT NOT NULL, `promoVideo` TEXT NOT NULL, `difficulty` TEXT NOT NULL, `reviewCount` INTEGER NOT NULL, `rating` REAL NOT NULL, `slug` TEXT, `coverImage` TEXT NOT NULL, `categoryId` INTEGER NOT NULL, `faq` TEXT, `projectsId` TEXT, PRIMARY KEY(`cid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cid` TEXT NOT NULL, `title` TEXT NOT NULL, `subtitle` TEXT NOT NULL, `logo` TEXT NOT NULL, `summary` TEXT NOT NULL, `promoVideo` TEXT NOT NULL, `difficulty` TEXT NOT NULL, `reviewCount` INTEGER NOT NULL, `rating` REAL NOT NULL, `slug` TEXT, `coverImage` TEXT NOT NULL, `categoryId` INTEGER NOT NULL, PRIMARY KEY(`cid`))",
         "fields": [
           {
             "fieldPath": "cid",
@@ -79,18 +79,6 @@
             "columnName": "categoryId",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "faq",
-            "columnName": "faq",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "projectsId",
-            "columnName": "projectsId",
-            "affinity": "TEXT",
-            "notNull": false
           }
         ],
         "primaryKey": {
@@ -748,19 +736,13 @@
       },
       {
         "tableName": "RunModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`crUid` TEXT NOT NULL, `crAttemptId` TEXT, `crName` TEXT NOT NULL, `crDescription` TEXT NOT NULL, `crEnrollmentStart` TEXT NOT NULL, `crEnrollmentEnd` TEXT NOT NULL, `crStart` TEXT NOT NULL, `crEnd` TEXT NOT NULL, `crPrice` TEXT NOT NULL, `crMrp` TEXT NOT NULL, `crCourseId` TEXT NOT NULL, `crUpdatedAt` TEXT NOT NULL, `progress` REAL NOT NULL, `premium` INTEGER NOT NULL, `whatsappLink` TEXT, `crRunEnd` TEXT NOT NULL, `totalContents` INTEGER NOT NULL, `completedContents` INTEGER NOT NULL, `mentorApproved` INTEGER NOT NULL, `completionThreshold` INTEGER NOT NULL, `productId` INTEGER NOT NULL, `recommended` INTEGER NOT NULL, `hits` INTEGER NOT NULL, `tags` TEXT, PRIMARY KEY(`crUid`), FOREIGN KEY(`crCourseId`) REFERENCES `CourseModel`(`cid`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`crUid` TEXT NOT NULL, `crName` TEXT NOT NULL, `crDescription` TEXT NOT NULL, `crEnrollmentStart` TEXT NOT NULL, `crEnrollmentEnd` TEXT NOT NULL, `crStart` TEXT NOT NULL, `crEnd` TEXT NOT NULL, `crPrice` TEXT NOT NULL, `crMrp` TEXT NOT NULL, `crCourseId` TEXT NOT NULL, `crUpdatedAt` TEXT NOT NULL, `whatsappLink` TEXT, `crAttemptId` TEXT, `premium` INTEGER NOT NULL, `crRunAttemptEnd` TEXT NOT NULL, `approvalRequested` INTEGER NOT NULL, `certificateApproved` INTEGER NOT NULL, `totalContents` INTEGER NOT NULL, `completedContents` INTEGER NOT NULL, `progress` REAL NOT NULL, `completionThreshold` INTEGER NOT NULL, `goodiesThreshold` INTEGER NOT NULL, `productId` INTEGER NOT NULL, `recommended` INTEGER NOT NULL, `hits` INTEGER NOT NULL, PRIMARY KEY(`crUid`), FOREIGN KEY(`crCourseId`) REFERENCES `CourseModel`(`cid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "crUid",
             "columnName": "crUid",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "crAttemptId",
-            "columnName": "crAttemptId",
-            "affinity": "TEXT",
-            "notNull": false
           },
           {
             "fieldPath": "crName",
@@ -823,10 +805,16 @@
             "notNull": true
           },
           {
-            "fieldPath": "progress",
-            "columnName": "progress",
-            "affinity": "REAL",
-            "notNull": true
+            "fieldPath": "whatsappLink",
+            "columnName": "whatsappLink",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "crAttemptId",
+            "columnName": "crAttemptId",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "premium",
@@ -835,15 +823,21 @@
             "notNull": true
           },
           {
-            "fieldPath": "whatsappLink",
-            "columnName": "whatsappLink",
+            "fieldPath": "crRunAttemptEnd",
+            "columnName": "crRunAttemptEnd",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
-            "fieldPath": "crRunEnd",
-            "columnName": "crRunEnd",
-            "affinity": "TEXT",
+            "fieldPath": "approvalRequested",
+            "columnName": "approvalRequested",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "certificateApproved",
+            "columnName": "certificateApproved",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -859,14 +853,20 @@
             "notNull": true
           },
           {
-            "fieldPath": "mentorApproved",
-            "columnName": "mentorApproved",
-            "affinity": "INTEGER",
+            "fieldPath": "progress",
+            "columnName": "progress",
+            "affinity": "REAL",
             "notNull": true
           },
           {
             "fieldPath": "completionThreshold",
             "columnName": "completionThreshold",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "goodiesThreshold",
+            "columnName": "goodiesThreshold",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -887,12 +887,6 @@
             "columnName": "hits",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "tags",
-            "columnName": "tags",
-            "affinity": "TEXT",
-            "notNull": false
           }
         ],
         "primaryKey": {
@@ -914,7 +908,7 @@
         "foreignKeys": [
           {
             "table": "CourseModel",
-            "onDelete": "NO ACTION",
+            "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
               "crCourseId"
@@ -1219,7 +1213,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '82d6f62ac4680145a233739da46980e9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '537640b0605292ccad46f51227167d58')"
     ]
   }
 }

@@ -64,7 +64,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
 
         ui.swipeRefreshLayout.setOnRefreshListener {
             viewModel.progress.value = true
-            viewModel.fetchAllCourses()
+//            viewModel.fetchAllCourses()
         }
 
         viewModel.progress.observer(viewLifecycleOwner) {
@@ -78,7 +78,7 @@ class AllCourseFragment : Fragment(), AnkoLogger {
                 courseDataAdapter.submitList(it)
                 ui.shimmerLayout.stopShimmer()
             } else {
-                viewModel.fetchAllCourses()
+//                viewModel.fetchAllCourses()
             }
             ui.shimmerLayout.isVisible = it.isEmpty()
         }

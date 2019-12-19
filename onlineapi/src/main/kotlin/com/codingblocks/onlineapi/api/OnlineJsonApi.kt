@@ -87,13 +87,20 @@ interface OnlineJsonApi {
     ): Response<JSONAPIDocument<List<Runs>>>
 
 
+    @GET("instructors/{id}")
+    suspend fun instructorsById(@Path("id") id: String): Response<Instructor>
+
+
+
+
+
+
+
     @GET("instructors")
     fun instructors(
         @Query("include") include: Array<String>? = null
     ): Call<ArrayList<Instructor>>
 
-    @GET("instructors/{id}")
-    fun instructorsById(@Path("id") id: String): Call<Instructor>
 
     @GET("courses")
     fun getRecommendedCourses(

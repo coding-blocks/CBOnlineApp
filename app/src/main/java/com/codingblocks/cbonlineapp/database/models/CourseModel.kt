@@ -18,11 +18,9 @@ data class CourseModel(
     var rating: Float,
     var slug: String?,
     var coverImage: String,
-    var categoryId: Int,
-    var faq: String? = "",
-    var projectsId: ArrayList<Project?>? = null
+    var categoryId: Int
 ) {
     constructor() : this("", "", "", "", "",
         "", "", 0, 0f, "",
-        "", -1, "", null)
+        "", -1)
 }

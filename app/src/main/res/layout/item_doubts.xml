@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/margin_large"
-    android:layout_marginTop="14dp"
+    android:layout_marginTop="@dimen/margin_medium_small"
     android:layout_marginEnd="@dimen/margin_large"
-    android:layout_marginBottom="14dp"
+    android:layout_marginBottom="@dimen/margin_medium_small"
     android:orientation="vertical">
 
     <LinearLayout

@@ -1,6 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_large"
+    android:layout_marginBottom="@dimen/margin_large"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/courseLogoImg"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:src="@drawable/ic_course_logo" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/courseTitleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_bold"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            tools:text="Competitive Programming" />
+
+        <TextView
+            android:id="@+id/courseInstructorTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            tools:text="Mentor: Arnav Gupta" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.skydoves.progressview.ProgressView
+                android:id="@+id/progressView1"
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_weight="1"
+                app:progressView_autoAnimate="true"
+                app:progressView_colorBackground="@color/veryLightPink"
+                app:progressView_colorGradientEnd="@color/dusty_orange"
+                app:progressView_colorGradientStart="@color/pastel_red"
+                app:progressView_max="100"
+                app:progressView_progress="40"
+                app:progressView_radius="10dp" />
+
+            <TextView
+                android:id="@+id/progressTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/gilroy_bold"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                tools:text="100%" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="47dp"
+        android:src="@drawable/ic_dropright_big" />
+</LinearLayout>

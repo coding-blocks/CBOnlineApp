@@ -45,7 +45,7 @@ class HomeFragment : Fragment(), AnkoLogger {
         ui.homeImg.visibility = View.GONE
         ui.swipeRefreshLayout.setOnRefreshListener {
             viewModel.progress.value = true
-            viewModel.fetchRecommendedCourses()
+//            viewModel.fetchRecommendedCourses()
         }
         attachObservers()
     }
@@ -54,7 +54,7 @@ class HomeFragment : Fragment(), AnkoLogger {
 
         viewModel.courses.nonNull().observer(this) { list ->
             if (list.isEmpty()) {
-                viewModel.fetchRecommendedCourses()
+//                viewModel.fetchRecommendedCourses()
             } else {
                 courseDataAdapter.submitList(list)
                 ui.shimmerLayout.stopShimmer()

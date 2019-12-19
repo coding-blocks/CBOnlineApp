@@ -27,7 +27,7 @@ class HomeViewModel(
     fun getAllCourses() = repository.getAllCourses()
 
     init {
-        fetchRecommendedCourses()
+//        fetchRecommendedCourses()
         fetchCards()
         courses = Transformations.switchMap(courseFilter) { query ->
             repository.getRecommendedCourses().filterList {
@@ -36,44 +36,44 @@ class HomeViewModel(
         }
     }
 
-    fun fetchRecommendedCourses() {
-        Clients.onlineV2JsonApi.getRecommendedCourses()
-            .enqueue(retrofitCallback { _, response ->
-                response?.let {
-                    if (response.isSuccessful) {
-                        it.body()?.let { courseList ->
-                            courseList.forEach { course ->
-                                viewModelScope.launch(Dispatchers.IO) {
-                                    repository.insertCourse(course)
-                                }
-                            }
-                        }
-                    }
-                    progress.value = false
-                }
-            })
-    }
+//    fun fetchRecommendedCourses() {
+//        Clients.onlineV2JsonApi.getRecommendedCourses()
+//            .enqueue(retrofitCallback { _, response ->
+//                response?.let {
+//                    if (response.isSuccessful) {
+//                        it.body()?.let { courseList ->
+//                            courseList.forEach { course ->
+//                                viewModelScope.launch(Dispatchers.IO) {
+//                                    repository.insertCourse(course)
+//                                }
+//                            }
+//                        }
+//                    }
+//                    progress.value = false
+//                }
+//            })
+//    }
 
-    fun fetchAllCourses() {
-        Clients.onlineV2JsonApi.getAllCourses()
-            .enqueue(retrofitCallback { _, response ->
-                response?.let {
-                    if (response.isSuccessful) {
-                        it.body()?.let { courseList ->
-                            runBlocking {
-                                courseList.forEach { course ->
-                                    withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
-                                        repository.insertCourse(course, false)
-                                    }
-                                }
-                            }.also {
-                                progress.value = false
-                            }
-                        }
-                    }
-                }
-            })
-    }
+//    fun fetchAllCourses() {
+//        Clients.onlineV2JsonApi.getAllCourses()
+//            .enqueue(retrofitCallback { _, response ->
+//                response?.let {
+//                    if (response.isSuccessful) {
+//                        it.body()?.let { courseList ->
+//                            runBlocking {
+//                                courseList.forEach { course ->
+//                                    withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
+//                                        repository.insertCourse(course, false)
+//                                    }
+//                                }
+//                            }.also {
+//                                progress.value = false
+//                            }
+//                        }
+//                    }
+//                }
+//            })
+//    }
 
     private fun fetchCards() {
         Clients.onlineV2JsonApi.carouselCards.enqueue(retrofitCallback { error, response ->

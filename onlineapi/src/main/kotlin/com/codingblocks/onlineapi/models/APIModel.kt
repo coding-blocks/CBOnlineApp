@@ -26,7 +26,7 @@ data class Project(
     val image: String = ""
 ) : BaseModel()
 
-@Type("courses")
+@Type("course")
 data class Course(
     val title: String,
     val subtitle: String,
@@ -81,13 +81,14 @@ data class Runs(
 ) : BaseModel()
 
 //TODO ( change this to plural )
-@Type("run_attempt")
+@Type("run_attempts")
 data class RunAttempts(
     val certificateApproved: Boolean = false,
     val end: String = "",
     val premium: Boolean = false,
     val revoked: Boolean = false,
-    val doubtSupport: String = ""
+    val approvalRequested: Boolean = false,
+    val doubtSupport: String? = ""
 ) : BaseModel() {
     constructor(id: String) : this() {
         super.id = id

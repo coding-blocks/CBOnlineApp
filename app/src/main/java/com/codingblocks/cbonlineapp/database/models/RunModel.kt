@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.codingblocks.onlineapi.models.Tags
 
 @Entity(
     indices = [Index("crCourseId")],
@@ -12,13 +11,13 @@ import com.codingblocks.onlineapi.models.Tags
         ForeignKey(
             entity = CourseModel::class,
             parentColumns = ["cid"],
-            childColumns = ["crCourseId"])
+            childColumns = ["crCourseId"],
+            onDelete = ForeignKey.CASCADE)
     ]
 )
 open class RunModel(
     @PrimaryKey
     var crUid: String = "",
-    var crAttemptId: String? = null,
     var crName: String = "",
     var crDescription: String = "",
     var crEnrollmentStart: String = "",
@@ -29,16 +28,18 @@ open class RunModel(
     var crMrp: String = "",
     var crCourseId: String = "",
     var crUpdatedAt: String = "",
-    var progress: Double = 0.0,
-    var premium: Boolean = false,
     var whatsappLink: String? = "",
-    var crRunEnd: String = "",
+    var crAttemptId: String? = null,
+    var premium: Boolean = false,
+    var crRunAttemptEnd: String = "",
+    var approvalRequested: Boolean = false,
+    var certificateApproved: Boolean = false,
     var totalContents: Int = 0,
     var completedContents: Int = 0,
-    var mentorApproved: Boolean = false,
-    var completionThreshold: Int = 90,
+    var progress: Double = 0.0,
+    var completionThreshold: Int = 0,
+    var goodiesThreshold: Int = 0,
     var productId: Int = 0,
     var recommended: Boolean = false,
-    var hits: Int = 0,
-    var tags: ArrayList<Tags>? = null
+    var hits: Int = 0
 )
