@@ -8,15 +8,18 @@
 
 
     <TextView
+        android:id="@+id/courseTypeTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_large"
         android:layout_marginEnd="@dimen/margin_large"
         android:background="?attr/selectableItemBackground"
+        android:clickable="true"
         android:drawableStart="@drawable/ic_recent"
         android:drawableEnd="@drawable/ic_dropdown"
         android:drawablePadding="12dp"
         android:drawableTint="@color/orangish"
+        android:focusable="true"
         android:fontFamily="@font/gilroy_bold"
         android:paddingTop="14dp"
         android:paddingBottom="14dp"

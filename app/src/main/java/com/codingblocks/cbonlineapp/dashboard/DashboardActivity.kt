@@ -92,8 +92,8 @@ class DashboardActivity : AppCompatActivity(), DrawerLayout.DrawerListener, Navi
         }
         dashboardPager.apply {
             adapter = pagerAdapter
-            currentItem = 1
-            offscreenPageLimit = 3
+            currentItem = 0
+            offscreenPageLimit = 4
         }
     }
 

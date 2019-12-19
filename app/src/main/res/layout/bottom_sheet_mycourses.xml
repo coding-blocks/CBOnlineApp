@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_sheet_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,75 +9,11 @@
     app:behavior_hideable="true"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-    <TextView
-        android:layout_width="match_parent"
+    <ListView
+        android:id="@+id/sheetLv"
         android:layout_height="wrap_content"
-        android:layout_marginStart="43dp"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:layout_marginEnd="@dimen/margin_large"
-        android:layout_marginBottom="@dimen/margin_medium"
-        android:drawableStart="@drawable/ic_recent"
-        android:drawablePadding="30dp"
-        android:fontFamily="@font/gilroy_medium"
-        android:text="@string/recently_accessed"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
-
-    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="43dp"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:layout_marginEnd="@dimen/margin_large"
-        android:layout_marginBottom="@dimen/margin_medium"
-        android:drawableStart="@drawable/ic_wishlisted"
-        android:drawablePadding="30dp"
-        android:fontFamily="@font/gilroy_medium"
-        android:text="@string/wishlisted_courses"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="43dp"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:layout_marginEnd="@dimen/margin_large"
-        android:layout_marginBottom="@dimen/margin_medium"
-        android:drawableStart="@drawable/ic_tracks"
-        android:drawablePadding="30dp"
-        android:fontFamily="@font/gilroy_medium"
-        android:text="@string/learning_tracks"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="43dp"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:layout_marginEnd="@dimen/margin_large"
-        android:layout_marginBottom="@dimen/margin_medium"
-        android:drawableStart="@drawable/ic_expired"
-        android:drawablePadding="30dp"
-        android:fontFamily="@font/gilroy_medium"
-        android:text="@string/expired_courses"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="43dp"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:layout_marginEnd="@dimen/margin_large"
-        android:layout_marginBottom="@dimen/margin_medium"
-        android:drawableStart="@drawable/ic_courses"
-        android:drawablePadding="30dp"
-        android:fontFamily="@font/gilroy_medium"
-        android:text="@string/all_courses"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        tools:listitem="@layout/item_bottomsheet" />
 
 
 </LinearLayout>
