@@ -9,7 +9,6 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
 import kotlinx.android.synthetic.main.activity_doubt_comment.*
-import kotlinx.android.synthetic.main.item_doubts.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DoubtCommentActivity : AppCompatActivity() {
@@ -38,7 +37,6 @@ class DoubtCommentActivity : AppCompatActivity() {
             doubtTitleTv.text = it.title
             doubtDescriptionTv.text = it.body
             doubtTimeTv.text = it.createdAt.timeAgo()
-            commentTv.isVisible = false
             chatTv.isVisible = !it.conversationId.isNullOrEmpty()
         }
 

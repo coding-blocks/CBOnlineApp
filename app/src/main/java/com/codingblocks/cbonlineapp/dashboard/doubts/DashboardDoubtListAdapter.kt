@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.admin.doubts.ChatClickListener
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.PENDING
 import com.codingblocks.cbonlineapp.util.RESOLVED
@@ -19,6 +20,7 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
 
     var onResolveClick: ResolveDoubtClickListener? = null
     var onCommentClick: DoubtCommentClickListener? = null
+    var onChatClick: ChatClickListener? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -35,12 +37,15 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
                 bind(doubt)
                 resolveClickListener = onResolveClick
                 commentClickListener = onCommentClick
+                chatClickListener = onChatClick
+
             }
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var resolveClickListener: ResolveDoubtClickListener? = null
         var commentClickListener: DoubtCommentClickListener? = null
+        var chatClickListener: ChatClickListener? = null
 
         fun bind(item: DoubtsModel) = with(itemView) {
             doubtTitleTv.text = item.title
@@ -79,6 +84,9 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
 
             commentTv.setOnClickListener {
                 commentClickListener?.onClick(item.dbtUid)
+            }
+            chatTv.setOnClickListener {
+                chatClickListener?.onClick(item.conversationId ?: "", item.dbtUid)
             }
         }
     }

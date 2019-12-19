@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.admin.doubts.ChatClickListener
+import com.codingblocks.cbonlineapp.dashboard.ChatActivity
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.ALL
+import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.DOUBT_ID
 import com.codingblocks.cbonlineapp.util.LIVE
@@ -42,6 +45,14 @@ class DashboardDoubtsFragment : Fragment() {
         object : DoubtCommentClickListener {
             override fun onClick(doubtId: String) {
                 requireContext().startActivity(requireContext().intentFor<DoubtCommentActivity>(DOUBT_ID to doubtId).singleTop())
+            }
+        }
+    }
+
+    private val chatClickListener: ChatClickListener by lazy {
+        object : ChatClickListener {
+            override fun onClick(convId: String, doubtId: String) {
+                requireContext().startActivity(requireContext().intentFor<ChatActivity>(CONVERSATION_ID to convId).singleTop())
             }
         }
     }
@@ -101,7 +112,7 @@ class DashboardDoubtsFragment : Fragment() {
             adapter = doubtListAdapter
         }
 
-        viewModel.listDoubtsResponse.observer(viewLifecycleOwner) {
+        viewModel.doubts.observer(viewLifecycleOwner) {
             doubtListAdapter.submitList(it)
             changeViewState(dashboardDoubtRv, internetll, emptyLl, dashboardDoubtShimmer, it.isEmpty())
         }
@@ -137,6 +148,8 @@ class DashboardDoubtsFragment : Fragment() {
         doubtListAdapter.apply {
             onResolveClick = resolveClickListener
             onCommentClick = commentsClickListener
+            onChatClick = chatClickListener
+
         }
     }
 
@@ -144,6 +157,7 @@ class DashboardDoubtsFragment : Fragment() {
         doubtListAdapter.apply {
             onResolveClick = null
             onCommentClick = null
+            onChatClick = null
         }
         super.onDestroyView()
     }

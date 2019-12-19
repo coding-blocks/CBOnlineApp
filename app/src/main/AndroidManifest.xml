@@ -20,9 +20,14 @@
         android:supportsRtl="true"
         android:theme="@style/NewAppTheme">
         <activity
+            android:name=".dashboard.ChatActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity
             android:name=".dashboard.doubts.DoubtCommentActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
-        <activity android:name=".dashboard.DashboardActivity">
+        <activity
+            android:name=".dashboard.DashboardActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
