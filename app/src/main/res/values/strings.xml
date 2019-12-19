@@ -155,5 +155,6 @@
     <string name="learning_tracks">Learning Tracks</string>
     <string name="all_courses">All Courses</string>
     <string name="expired_courses">Expired Courses</string>
+    <string name="buy_extension">Buy Extension</string>
 
 </resources>

@@ -109,32 +109,32 @@ class OverviewFragment : Fragment(), AnkoLogger {
     }
 
     private fun setUpObservers(view: View) {
-        viewModel.getRun().observer(viewLifecycleOwner) { courseRun ->
-            courseProgress.progress = courseRun.progress.toInt()
-            contentCompletedTv.text = String.format("%d of %d", courseRun.completedContents, courseRun.totalContents)
-            batchEndTv.text = String.format("Batch Ends %s", getDateForTime(courseRun.crRunAttemptEnd))
-            if (courseRun.progress > 90.0) {
-                completetionBtn.setImageResource(R.drawable.ic_status_white)
-                requestBtn.apply {
-                    isEnabled = true
-                    setOnClickListener {
-                        viewModel.requestApproval()
-                    }
-                }
-            } else {
-                completetionBtn.setImageResource(R.drawable.ic_circle_white)
-                requestBtn.isEnabled = false
-            }
-            if (courseRun.crRunAttemptEnd.toLong() * 1000 < System.currentTimeMillis() || courseRun.crRunAttemptEnd.toLong() * 1000 - System.currentTimeMillis() <= 2592000000)
-                viewModel.fetchExtensions(courseRun.productId).observer(viewLifecycleOwner) {
-                    if (it.isNotEmpty()) {
-                        view.extensionsCard.isVisible = true
-                        extensionsAdapter.setData(it as ArrayList<ProductExtensionsItem>)
-                    } else {
-                        view.extensionsCard.isVisible = false
-                    }
-                }
-        }
+//        viewModel.getRun().observer(viewLifecycleOwner) { courseRun ->
+//            courseProgress.progress = courseRun.progress.toInt()
+//            contentCompletedTv.text = String.format("%d of %d", courseRun.completedContents, courseRun.totalContents)
+//            batchEndTv.text = String.format("Batch Ends %s", getDateForTime(courseRun.crRunAttemptEnd))
+//            if (courseRun.progress > 90.0) {
+//                completetionBtn.setImageResource(R.drawable.ic_status_white)
+//                requestBtn.apply {
+//                    isEnabled = true
+//                    setOnClickListener {
+//                        viewModel.requestApproval()
+//                    }
+//                }
+//            } else {
+//                completetionBtn.setImageResource(R.drawable.ic_circle_white)
+//                requestBtn.isEnabled = false
+//            }
+//            if (courseRun.crRunAttemptEnd.toLong() * 1000 < System.currentTimeMillis() || courseRun.crRunAttemptEnd.toLong() * 1000 - System.currentTimeMillis() <= 2592000000)
+//                viewModel.fetchExtensions(courseRun.productId).observer(viewLifecycleOwner) {
+//                    if (it.isNotEmpty()) {
+//                        view.extensionsCard.isVisible = true
+//                        extensionsAdapter.setData(it as ArrayList<ProductExtensionsItem>)
+//                    } else {
+//                        view.extensionsCard.isVisible = false
+//                    }
+//                }
+//        }
 
         extensionsAdapter.checkedPosition.observer(viewLifecycleOwner) {
             buyBtn.isEnabled = it != -1

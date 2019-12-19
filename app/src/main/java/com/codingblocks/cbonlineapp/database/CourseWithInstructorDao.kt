@@ -65,6 +65,7 @@ interface CourseWithInstructorDao {
             """)
     fun getRecommendedCourses(): LiveData<List<CourseInstructorPair>>
 
+
     @Transaction
     @Query("""
     SELECT c.*,r.* FROM RunModel r
@@ -72,6 +73,22 @@ interface CourseWithInstructorDao {
        WHERE r.crAttemptId IS NOT NULL ORDER BY hits DESC,crEnrollmentEnd DESC
     """)
     fun getMyRuns(): LiveData<List<CourseInstructorPair>>
+
+    @Transaction
+    @Query("""
+    SELECT c.*,r.* FROM RunModel r
+	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
+       WHERE r.crAttemptId IS NOT NULL ORDER BY hits DESC,crEnrollmentEnd DESC LIMIT 3
+    """)
+    fun getRecentRuns(): LiveData<List<CourseInstructorPair>>
+
+    @Transaction
+    @Query("""
+    SELECT c.*,r.* FROM RunModel r
+	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
+       WHERE r.crAttemptId IS NOT NULL AND r.crRunAttemptEnd < :currentTimeMillis ORDER BY r.hits DESC,crEnrollmentEnd 
+    """)
+    fun getExpiredRuns(currentTimeMillis: Long): LiveData<List<CourseInstructorPair>>
 
     @Query("""
         SELECT * FROM RunModel r

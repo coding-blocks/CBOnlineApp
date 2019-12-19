@@ -74,10 +74,10 @@ class AboutFragment : Fragment() {
             instructorAdapter.setData(it as ArrayList<InstructorModel>)
         }
 
-        viewModel.getRun().observer(this) {
-            whatsAppLink = it.whatsappLink
-            joinWhatsAppGroupView.isVisible = whatsAppLink?.run { true } ?: false
-        }
+//        viewModel.getRun().observer(this) {
+//            whatsAppLink = it.whatsappLink
+//            joinWhatsAppGroupView.isVisible = whatsAppLink?.run { true } ?: false
+//        }
     }
 
     companion object {

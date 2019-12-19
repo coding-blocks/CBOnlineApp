@@ -12,4 +12,4 @@
     android:paddingBottom="@dimen/margin_medium"
     android:text="@string/recently_accessed"
     android:textColor="@color/black"
-    android:textSize="20sp" />
+    android:textSize="18sp" />

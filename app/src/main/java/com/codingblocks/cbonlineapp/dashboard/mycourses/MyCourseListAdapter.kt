@@ -1,8 +1,12 @@
 package com.codingblocks.cbonlineapp.dashboard.mycourses
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -29,17 +33,24 @@ class MyCourseListAdapter : ListAdapter<CourseInstructorPair, MyCourseListAdapte
             courseTitleTv.text = item.courseRun.course.title
             if (item.instructor.isNotEmpty())
                 courseInstructorTv.text = "Mentor: ${item.instructor.first().name} and ${item.instructor.size} more"
-            val progess = (0..100).random()
-            progressTv.text = "$progess %"
-            progressView1.progress = progess.toFloat()
-            if (progess > 90) {
+            val expired = item.courseRun.crRunAttemptEnd.toLong() * 1000 < System.currentTimeMillis()
+            progressContainer.isVisible = !expired
+            openBtn.isVisible = !expired
+            extensionTv.isVisible = expired
+            if (expired) {
+                //Todo Fix this
+                ImageViewCompat.setImageTintList(courseLogoImg, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.brownish_grey)))
+            }
+            val progress = (0..100).random()
+            progressTv.text = "$progress %"
+            progressView1.progress = progress.toFloat()
+            if (progress > 90) {
                 progressView1.highlightView.colorGradientStart = context.getColor(R.color.kiwigreen)
                 progressView1.highlightView.colorGradientEnd = context.getColor(R.color.tealgreen)
             } else {
                 progressView1.highlightView.colorGradientStart = context.getColor(R.color.pastel_red)
                 progressView1.highlightView.colorGradientEnd = context.getColor(R.color.dusty_orange)
             }
-
         }
     }
 

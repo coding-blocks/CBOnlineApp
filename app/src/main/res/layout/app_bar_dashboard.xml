@@ -12,7 +12,8 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/dashboardToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.codingblocks.fabnavigation.FabNavigationViewPager

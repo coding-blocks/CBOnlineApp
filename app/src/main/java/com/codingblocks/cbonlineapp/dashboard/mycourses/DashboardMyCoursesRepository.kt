@@ -60,9 +60,9 @@ class DashboardMyCoursesRepository(
                     goodiesThreshold,
                     productId
                 )
-                if (response == -2L) {
+                if (response == -2L && !runDao.getRun(id).isNullOrEmpty()) {
                     runDao.update(model)
-                } else if (response != -1L && response != -2L)
+                } else if (response != -1L)
                     runDao.insert(model)
             }
         }
@@ -115,16 +115,10 @@ class DashboardMyCoursesRepository(
     }
 
     fun getMyRuns(query: String?): LiveData<List<CourseInstructorPair>> {
-        return courseWithInstructorDao.getMyRuns()
+        return when (query) {
+            "Recently Accessed" -> courseWithInstructorDao.getRecentRuns()
+            "Expired Courses" -> courseWithInstructorDao.getExpiredRuns(System.currentTimeMillis() / 1000)
+            else -> courseWithInstructorDao.getMyRuns()
+        }
     }
-
-
-//    fun getDoubtsByCourseRun(type: String): LiveData<List<DoubtsModel>> {
-//        return when (type) {
-//            LIVE -> doubtsDao.getLiveDoubts("44872")
-//            RESOLVED -> doubtsDao.getResolveDoubts("44872")
-//            else -> doubtsDao.getDoubts("44872")
-//        }
-//
-//    }
 }
