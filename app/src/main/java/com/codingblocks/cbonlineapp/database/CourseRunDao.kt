@@ -25,4 +25,7 @@ abstract class CourseRunDao : BaseDao<RunModel> {
 
     @Query("SELECT crUid FROM RunModel where crUid = :runId")
     abstract fun getRun(runId: String): String
+
+    @Query("SELECT * FROM RunModel WHERE crAttemptId IS NOT NULL")
+    abstract fun getAttemptIds(): LiveData<List<RunModel>>
 }

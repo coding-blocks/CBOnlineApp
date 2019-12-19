@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.doubts.ChatClickListener
+import com.codingblocks.cbonlineapp.commons.SheetAdapter
+import com.codingblocks.cbonlineapp.commons.SheetItem
 import com.codingblocks.cbonlineapp.dashboard.ChatActivity
 import com.codingblocks.cbonlineapp.dashboard.DoubtCommentActivity
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
@@ -21,8 +24,10 @@ import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.onlineapi.ErrorStatus
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
+import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard_doubts.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
@@ -33,6 +38,7 @@ class DashboardDoubtsFragment : Fragment() {
 
     private val viewModel by viewModel<DashboardDoubtsViewModel>()
     private val doubtListAdapter = DashboardDoubtListAdapter()
+    private val dialog by lazy { BottomSheetDialog(requireContext()) }
 
     private val resolveClickListener: ResolveDoubtClickListener by lazy {
         object : ResolveDoubtClickListener {
@@ -72,18 +78,23 @@ class DashboardDoubtsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         liveDoubtBtn.setOnClickListener {
-            viewModel.courseId.value = LIVE
+            viewModel.type.value = LIVE
         }
 
         resolvedDoubtBtn.setOnClickListener {
-            viewModel.courseId.value = RESOLVED
+            viewModel.type.value = RESOLVED
         }
 
         allDoubtBtn.setOnClickListener {
-            viewModel.courseId.value = ALL
+            viewModel.type.value = ALL
         }
 
-        viewModel.courseId.observer(viewLifecycleOwner) {
+        filterTv.setOnClickListener {
+            setUpBottomSheet()
+            dialog.show()
+        }
+
+        viewModel.type.observer(viewLifecycleOwner) {
             when (it) {
                 LIVE -> {
                     liveDoubtBtn.isActivated = true
@@ -153,6 +164,27 @@ class DashboardDoubtsFragment : Fragment() {
 
         }
     }
+
+    private fun setUpBottomSheet() {
+        val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_mycourses, null)
+        val list = arrayListOf<SheetItem>()
+        viewModel.getRunId().observer(viewLifecycleOwner) {
+            it.forEach { run ->
+                list.add(SheetItem(run.crDescription, R.drawable.ic_course_logo))
+            }
+            sheetDialog.run {
+                sheetLv.adapter = SheetAdapter(list)
+                sheetLv.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+                    viewModel.courseId.postValue("")
+                    dialog.dismiss()
+                }
+            }
+        }
+
+
+        dialog.setContentView(sheetDialog)
+    }
+
 
     override fun onDestroyView() {
         doubtListAdapter.apply {

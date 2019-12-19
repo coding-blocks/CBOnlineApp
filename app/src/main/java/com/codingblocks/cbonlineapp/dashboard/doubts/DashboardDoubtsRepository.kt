@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.dashboard.doubts
 
 import androidx.lifecycle.LiveData
 import com.codingblocks.cbonlineapp.database.CommentsDao
+import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.DoubtsDao
 import com.codingblocks.cbonlineapp.database.models.CommentModel
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
@@ -15,12 +16,12 @@ import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.safeApiCall
 
 class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
-                                private val commentsDao: CommentsDao) {
+                                private val commentsDao: CommentsDao,
+                                private val runDao: CourseRunDao) {
 
     suspend fun fetchDoubtsByCourseRun(id: String = "44872") = safeApiCall {
         Clients.onlineV2JsonApi.getDoubtByAttemptId(id)
     }
-
 
     suspend fun insertDoubts(doubts: List<Doubts>) {
         doubts.forEach {
@@ -38,7 +39,7 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
         }
     }
 
-    fun getDoubtsByCourseRun(type: String): LiveData<List<DoubtsModel>> {
+    fun getDoubtsByCourseRun(type: String?, courseId: String? = ""): LiveData<List<DoubtsModel>> {
         return when (type) {
             LIVE -> doubtsDao.getLiveDoubts("44872")
             RESOLVED -> doubtsDao.getResolveDoubts("44872")
@@ -81,5 +82,6 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
     }
 
     fun getCommentsById(id: String) = commentsDao.getComments(id)
+    fun getRuns() = runDao.getAttemptIds()
 
 }

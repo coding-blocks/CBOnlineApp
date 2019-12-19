@@ -7,6 +7,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.ALL
+import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
@@ -19,11 +20,12 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
     var nextOffSet: MutableLiveData<Int> = MutableLiveData(-1)
     var prevOffSet: MutableLiveData<Int> = MutableLiveData(-1)
     var barMessage: MutableLiveData<String> = MutableLiveData()
+    var type: MutableLiveData<String> = MutableLiveData()
     var courseId: MutableLiveData<String> = MutableLiveData()
 
     init {
-        listDoubtsResponse = Transformations.switchMap(courseId) {
-            repo.getDoubtsByCourseRun(it)
+        listDoubtsResponse = Transformations.switchMap(DoubleTrigger(type, courseId)) {
+            repo.getDoubtsByCourseRun(it.first, it.second)
         }
 
         doubts.addSource(listDoubtsResponse) {
@@ -72,6 +74,8 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
             }
         }
     }
+
+    fun getRunId() = repo.getRuns()
 
     fun getDoubt(doubtId: String): LiveData<DoubtsModel> {
         fetchComments(doubtId)

@@ -7,12 +7,13 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     app:behavior_hideable="true"
+    app:behavior_peekHeight="56dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-    <ListView
+    <com.codingblocks.cbonlineapp.widgets.BottomSheetListView
         android:id="@+id/sheetLv"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         tools:listitem="@layout/item_bottomsheet" />
 
 

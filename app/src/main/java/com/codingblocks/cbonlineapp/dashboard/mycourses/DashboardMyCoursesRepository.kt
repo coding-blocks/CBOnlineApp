@@ -35,35 +35,37 @@ class DashboardMyCoursesRepository(
         runs.forEach { run ->
             with(run) {
                 val response = withContext(Dispatchers.IO) { insertCourse(course) }
-                val model = RunModel(
-                    id,
-                    name,
-                    description,
-                    enrollmentStart,
-                    enrollmentEnd,
-                    start,
-                    end,
-                    price,
-                    mrp ?: price,
-                    course?.id ?: "",
-                    updatedAt,
-                    whatsappLink,
-                    runAttempts?.first()?.id ?: "",
-                    runAttempts?.first()?.premium ?: false,
-                    runAttempts?.first()?.end ?: "",
-                    runAttempts?.first()?.approvalRequested ?: false,
-                    runAttempts?.first()?.certificateApproved ?: false,
-                    totalContents,
-                    completedContents,
-                    (totalContents / completedContents).toDouble(),
-                    completionThreshold,
-                    goodiesThreshold,
-                    productId
-                )
-                if (response == -2L && !runDao.getRun(id).isNullOrEmpty()) {
-                    runDao.update(model)
-                } else if (response != -1L)
-                    runDao.insert(model)
+                if (!runAttempts.isNullOrEmpty()) {
+                    val model = RunModel(
+                        id,
+                        name,
+                        description,
+                        enrollmentStart,
+                        enrollmentEnd,
+                        start,
+                        end,
+                        price,
+                        mrp ?: price,
+                        course?.id ?: "",
+                        updatedAt,
+                        whatsappLink,
+                        runAttempts?.first()?.id ?: "",
+                        runAttempts?.first()?.premium ?: false,
+                        runAttempts?.first()?.end ?: "",
+                        runAttempts?.first()?.approvalRequested ?: false,
+                        runAttempts?.first()?.certificateApproved ?: false,
+                        totalContents,
+                        completedContents,
+                        (totalContents / completedContents).toDouble(),
+                        completionThreshold,
+                        goodiesThreshold,
+                        productId
+                    )
+                    if (response == -2L && !runDao.getRun(id).isNullOrEmpty()) {
+                        runDao.update(model)
+                    } else if (response != -1L)
+                        runDao.insert(model)
+                }
             }
         }
     }

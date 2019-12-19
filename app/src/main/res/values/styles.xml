@@ -14,6 +14,7 @@
         <item name="appBarLayoutStyle">@style/ToolBarStyle</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="buttonStyle">@style/ButtonStyle</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
     <style name="ToolBarStyle" parent="Widget.MaterialComponents.Toolbar">
@@ -56,6 +57,15 @@
         <item name="android:paddingEnd">12dp</item>
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">8dp</item>
+    </style>
+
+
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_dialog</item>
     </style>
 
 
@@ -170,5 +180,5 @@
 
     <color name="colorPrimaryDarkJobs">#452ba3</color>
     <color name="colorPrimaryJobs">#692fdc</color>
-    
+
 </resources>

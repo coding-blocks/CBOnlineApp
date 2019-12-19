@@ -81,7 +81,7 @@ data class Runs(
 ) : BaseModel()
 
 //TODO ( change this to plural )
-@Type("run_attempts")
+@Type("run_attempt")
 data class RunAttempts(
     val certificateApproved: Boolean = false,
     val end: String = "",
