@@ -10,8 +10,6 @@ import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Instructor
 import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
-import com.codingblocks.onlineapi.models.MyCourseRuns
-import com.codingblocks.onlineapi.models.MyRunAttempt
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.Player
@@ -20,6 +18,8 @@ import com.codingblocks.onlineapi.models.Project
 import com.codingblocks.onlineapi.models.Question
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizzes
+import com.codingblocks.onlineapi.models.RunAttempts
+import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.User
 import com.github.jasminb.jsonapi.JSONAPIDocument
@@ -33,8 +33,6 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
-import java.util.*
-import kotlin.collections.ArrayList
 
 interface OnlineJsonApi {
 
@@ -64,7 +62,7 @@ interface OnlineJsonApi {
     @GET("run_attempts/{runAttemptId}/relationships/doubts")
     suspend fun getDoubtByAttemptId(
         @Path("runAttemptId") id: String
-    ): Response<ArrayList<Doubts>>
+    ): Response<List<Doubts>>
 
     @PATCH("doubts/{doubtid}")
     suspend fun resolveDoubt(
@@ -80,19 +78,13 @@ interface OnlineJsonApi {
     @GET("doubts/{doubtId}/relationships/comments")
     suspend fun getCommentsById(
         @Path("doubtId") id: String
-    ): Response<ArrayList<Comment>>
+    ): Response<List<Comment>>
 
-
-
-
-
-
-
-
-
-
-
-
+    @GET("runs")
+    suspend fun getMyCourses(
+        @Query("enrolled") enrolled: String = "true",
+        @Query("include") include: String = "course,run_attempts"
+    ): Response<JSONAPIDocument<List<Runs>>>
 
 
     @GET("instructors")
@@ -124,16 +116,10 @@ interface OnlineJsonApi {
     ): Call<ArrayList<Course>>
 
 
-    @GET("runs")
-    fun getMyCourses(
-        @Query("enrolled") enrolled: String = "true",
-        @Query("include") include: String = "course,run_attempts"
-    ): Call<ArrayList<MyCourseRuns>>
-
     @GET("run_attempts/{runid}")
     fun enrolledCourseById(
         @Path("runid") id: String
-    ): Call<MyRunAttempt>
+    ): Call<RunAttempts>
 
     @GET("sections/{sectionid}/relationships/contents")
     fun getSectionContent(

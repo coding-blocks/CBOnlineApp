@@ -8,9 +8,9 @@ import com.codingblocks.cbonlineapp.database.models.CourseModel
 import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
 import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.database.models.RunModel
+import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Instructor
-import com.codingblocks.onlineapi.models.MyCourse
-import com.codingblocks.onlineapi.models.MyCourseRuns
+import com.codingblocks.onlineapi.models.Runs
 
 class MyCoursesRepository(
     private val courseWithInstructorDao: CourseWithInstructorDao,
@@ -22,7 +22,7 @@ class MyCoursesRepository(
 
 //    fun getTopRun() = courseWithInstructorDao.getTopRun()
 
-    suspend fun insertCourse(course: MyCourse) {
+    suspend fun insertCourse(course: Course) {
         with(course) {
             courseDao.insertNew(
                 CourseModel(
@@ -42,7 +42,7 @@ class MyCoursesRepository(
         }
     }
 
-    suspend fun insertRun(run: MyCourseRuns, progress: Double, totalContents: Int, completedContents: Int, refresh: Boolean) {
+    suspend fun insertRun(run: Runs, progress: Double, totalContents: Int, completedContents: Int, refresh: Boolean) {
         with(run) {
             val newRun = RunModel(
                 id,

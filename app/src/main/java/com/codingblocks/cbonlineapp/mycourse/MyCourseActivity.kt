@@ -50,7 +50,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
         }
         if (savedInstanceState == null) {
             viewModel.updateHit(viewModel.attemptId)
-            viewModel.fetchCourse(viewModel.attemptId)
+//            viewModel.fetchCourse(viewModel.attemptId)
         }
     }
 
@@ -98,6 +98,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
     }
 
     override fun onRefresh() {
-        viewModel.fetchCourse(viewModel.attemptId)
+//        viewModel.fetchCourse(viewModel.attemptId)
     }
 }

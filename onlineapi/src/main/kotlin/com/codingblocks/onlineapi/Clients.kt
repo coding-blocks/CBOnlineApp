@@ -27,10 +27,6 @@ import com.codingblocks.onlineapi.models.Instructor
 import com.codingblocks.onlineapi.models.JobId
 import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
-import com.codingblocks.onlineapi.models.MyCourse
-import com.codingblocks.onlineapi.models.MyCourseRuns
-import com.codingblocks.onlineapi.models.MyRunAttempt
-import com.codingblocks.onlineapi.models.MyRunAttempts
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.Progress
@@ -41,7 +37,9 @@ import com.codingblocks.onlineapi.models.Quizqnas
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.Rating
 import com.codingblocks.onlineapi.models.RunAttemptId
+import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.RunAttemptsId
+import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Tags
 import com.codingblocks.onlineapi.models.User
@@ -69,8 +67,7 @@ object Clients {
 
 
     private val onlineApiResourceConverter = ResourceConverter(
-        om, Instructor::class.java, Course::class.java, Sections::class.java, MyCourseRuns::class.java,
-        MyCourse::class.java, MyRunAttempts::class.java, MyRunAttempt::class.java, ContentVideoType::class.java,
+        om, Instructor::class.java, Course::class.java, Sections::class.java, Runs::class.java, RunAttempts::class.java, ContentVideoType::class.java,
         LectureContent::class.java, ContentDocumentType::class.java, ContentProgress::class.java,
         CourseSection::class.java, ContentLectureType::class.java, ContentCodeChallenge::class.java,
         ContentQna::class.java, Announcement::class.java, Progress::class.java, Quizzes::class.java,

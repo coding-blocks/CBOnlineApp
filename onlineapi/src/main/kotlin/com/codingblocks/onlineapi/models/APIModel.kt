@@ -13,9 +13,21 @@ open class BaseModel {
     var updatedAt: String = ""
 }
 
-// =======Plurals Models =========
+
+data class CourseFeatures(
+    val icon: String,
+    val text: String
+)
+
+@Type("projects")
+data class Project(
+    val title: String = "",
+    val description: String = "",
+    val image: String = ""
+) : BaseModel()
+
 @Type("courses")
-open class Course(
+data class Course(
     val title: String,
     val subtitle: String,
     val logo: String,
@@ -37,25 +49,45 @@ open class Course(
     var projects: ArrayList<Project>?
 ) : BaseModel()
 
-@Type("projects")
-data class Project(
-    val title: String = "",
-    val description: String = "",
-    val image: String = ""
-) : BaseModel()
+@Type("run")
+data class Runs(
+    val name: String,
+    val description: String,
+    val start: String,
+    val end: String,
+    val price: String,
+    val mrp: String?,
+    val unlisted: Boolean,
+    val enrollmentStart: String,
+    val enrollmentEnd: String,
+    @Relationship("sections")
+    val sections: ArrayList<Sections>?,
+    @Relationship("run-attempts")
+    var runAttempts: ArrayList<RunAttempts>?,
+    @Relationship("course")
+    var course: Course?,
+    @Relationship("ratings")
+    var rating: ArrayList<Rating>?,
+    val whatsappLink: String?,
+    val productId: Int,
+    val completionThreshold: Int,
+    val goodiesThreshold: Int,
+    //TODO ( Remove these values )
+    val totalContents: Int = 100,
+    val completedContents: Int = 50,
+    @Relationship("tags")
+    val tags: ArrayList<Tags>?
 
-data class CourseFeatures(
-    val icon: String,
-    val text: String
-)
+) : BaseModel()
 
 //TODO ( change this to plural )
 @Type("run_attempt")
-open class MyRunAttempts(
+data class RunAttempts(
     val certificateApproved: Boolean = false,
     val end: String = "",
     val premium: Boolean = false,
-    val revoked: Boolean = false
+    val revoked: Boolean = false,
+    val doubtSupport: String = ""
 ) : BaseModel() {
     constructor(id: String) : this() {
         super.id = id
@@ -71,7 +103,7 @@ data class Doubts(
     val discourseTopicId: String = "",
     val conversationId: String? = null,
     @Relationship("run-attempt")
-    val runAttempt: MyRunAttempts? = null,
+    val runAttempt: RunAttempts? = null,
     @Relationship("content")
     val content: ContentsId? = null,
     val createdAt: String = "",
@@ -86,11 +118,11 @@ data class Doubts(
     constructor(id: String, title: String,
                 body: String,
                 discourseTopicId: String,
-                runAttempt: MyRunAttempts?,
+                runAttempt: RunAttempts?,
                 conversationId: String?,
                 content: ContentsId?,
-                status: String)
-        : this(title, body, status, discourseTopicId, conversationId, runAttempt, content) {
+                status: String
+    ) : this(title, body, status, discourseTopicId, conversationId, runAttempt, content) {
         super.id = id
     }
 }
@@ -106,6 +138,7 @@ data class ContentsId(
     val title: String? = null
 }
 
+
 @Type("comment")
 class Comment(
     val body: String = "",
@@ -114,22 +147,6 @@ class Comment(
     val doubt: Doubts? = null
 ) : BaseModel()
 
-@Type("runs")
-open class Runs(
-    val name: String,
-    val description: String,
-    val start: String,
-    val end: String,
-    val price: String,
-    val mrp: String?,
-    val unlisted: Boolean,
-    val enrollmentStart: String,
-    val enrollmentEnd: String,
-    @Relationship("sections")
-    val sections: ArrayList<Sections>?,
-    @Relationship("tags")
-    val tags: ArrayList<Tags>?
-) : BaseModel()
 
 @Type("sections")
 data class Sections(
@@ -141,10 +158,9 @@ data class Sections(
     var contents: ArrayList<ContentsId>?
 ) : BaseModel()
 
-//=======Plurals Models =========
 
 @Type("instructors")
-open class Instructor(
+data class Instructor(
     val name: String?,
     val description: String?,
     val photo: String?,
@@ -157,59 +173,6 @@ class SectionContent(
     val sectionId: String?
 ) : BaseModel()
 
-// =======Singular Models =========
-
-
-@Type("course")
-class MyCourse(
-    val title: String,
-    val subtitle: String,
-    val logo: String,
-    val summary: String,
-    val categoryId: Int,
-    val promoVideo: String,
-    val reviewCount: Int,
-    val difficulty: String,
-    val rating: Float,
-    val slug: String?,
-    @Relationship("instructors")
-    val instructors: ArrayList<Instructor>?,
-    val coverImage: String
-) : BaseModel()
-
-@Type("run_attempt")
-open class MyRunAttempt(
-    val certificateApproved: Boolean,
-    val end: String,
-    val premium: Boolean,
-    val revoked: Boolean,
-    @Relationship("run")
-    val run: MyCourseRuns?
-) : BaseModel()
-
-@Type("run")
-class MyCourseRuns(
-    val name: String,
-    val description: String,
-    val start: String,
-    val end: String,
-    val price: String,
-    val mrp: String?,
-    val unlisted: Boolean,
-    val enrollmentStart: String,
-    val enrollmentEnd: String,
-    @Relationship("sections")
-    val sections: ArrayList<CourseSection>?,
-    @Relationship("run-attempts")
-    var runAttempts: ArrayList<MyRunAttempts>?,
-    @Relationship("course")
-    var course: MyCourse?,
-    @Relationship("ratings")
-    var rating: ArrayList<Rating>?,
-    val whatsappLink: String?,
-    val productId: Int,
-    val completionThreshold: Int
-) : BaseModel()
 
 @Type("section")
 class CourseSection(

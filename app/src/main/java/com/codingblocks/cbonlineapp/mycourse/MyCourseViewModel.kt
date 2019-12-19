@@ -49,39 +49,39 @@ class MyCourseViewModel(
         repository.updateHit(attemptId)
     }
 
-    fun fetchCourse(attemptId: String) {
-        Clients.onlineV2JsonApi.enrolledCourseById(attemptId)
-            .enqueue(retrofitCallback { _, response ->
-                response?.let { runAttempt ->
-                    if (runAttempt.isSuccessful) {
-                        expired.value = runAttempt.body()?.end!!.toLong() * 1000 < System.currentTimeMillis()
-                        runAttempt.body()?.run?.sections?.let { sectionList ->
-                            viewModelScope.launch(Dispatchers.IO) {
-                                repository.insertSections(sectionList, attemptId)
-                            }
-                            sectionList.forEach { courseSection ->
-                                courseSection.courseContentLinks?.related?.href?.substring(7)
-                                    ?.let { contentLink ->
-                                        Clients.onlineV2JsonApi.getSectionContents(contentLink)
-                                            .enqueue(retrofitCallback { _, contentResponse ->
-                                                contentResponse?.let { contentList ->
-                                                    if (contentList.isSuccessful) {
-                                                        viewModelScope.launch(Dispatchers.IO) {
-                                                            contentList.body()?.let { repository.insertContents(it, attemptId, courseSection.id) }
-                                                        }
-                                                    }
-                                                }
-                                            })
-                                    }
-                            }
-                        }
-                        progress.value = false
-                    } else if (runAttempt.code() == 404) {
-                        revoked.value = true
-                    }
-                }
-            })
-    }
+//    fun fetchCourse(attemptId: String) {
+//        Clients.onlineV2JsonApi.enrolledCourseById(attemptId)
+//            .enqueue(retrofitCallback { _, response ->
+//                response?.let { runAttempt ->
+//                    if (runAttempt.isSuccessful) {
+//                        expired.value = runAttempt.body()?.end!!.toLong() * 1000 < System.currentTimeMillis()
+//                        runAttempt.body()?.run?.sections?.let { sectionList ->
+//                            viewModelScope.launch(Dispatchers.IO) {
+//                                repository.insertSections(sectionList, attemptId)
+//                            }
+//                            sectionList.forEach { courseSection ->
+//                                courseSection.courseContentLinks?.related?.href?.substring(7)
+//                                    ?.let { contentLink ->
+//                                        Clients.onlineV2JsonApi.getSectionContents(contentLink)
+//                                            .enqueue(retrofitCallback { _, contentResponse ->
+//                                                contentResponse?.let { contentList ->
+//                                                    if (contentList.isSuccessful) {
+//                                                        viewModelScope.launch(Dispatchers.IO) {
+//                                                            contentList.body()?.let { repository.insertContents(it, attemptId, courseSection.id) }
+//                                                        }
+//                                                    }
+//                                                }
+//                                            })
+//                                    }
+//                            }
+//                        }
+//                        progress.value = false
+//                    } else if (runAttempt.code() == 404) {
+//                        revoked.value = true
+//                    }
+//                }
+//            })
+//    }
 
     fun resetProgress() {
         val resetCourse = ResetRunAttempt(attemptId)

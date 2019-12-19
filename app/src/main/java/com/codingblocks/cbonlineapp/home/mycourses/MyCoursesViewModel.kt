@@ -23,7 +23,7 @@ class MyCoursesViewModel(
     var courseFilter = MutableLiveData<String>("")
 
     init {
-        fetchMyCourses(true)
+//        fetchMyCourses(true)
         courses = Transformations.switchMap(courseFilter) { query ->
             repository.getMyRuns().filterList {
                 (it?.courseRun?.course?.title ?: "").contains(query, true)
@@ -33,71 +33,71 @@ class MyCoursesViewModel(
 
 //    fun getTopRun() = MutableLiveData<CourseInstructorPair>()
 
-    fun fetchMyCourses(refresh: Boolean = false) {
-        progress.postValue(true)
-        Clients.onlineV2JsonApi.getMyCourses()
-            .enqueue(retrofitCallback { error, res ->
-                res?.let { response ->
-                    if (response.isSuccessful) {
-                        response.body()?.let { courseList ->
-                            courseList.forEach { courseRun ->
-                                courseRun.runAttempts?.get(0)?.id?.let { runId ->
-                                    Clients.api.getMyCourseProgress(runId)
-                                        .enqueue(retrofitCallback { _, progressRes ->
-                                            progressRes?.body().let {
-                                                var progress = 0.0
-                                                var completedContents = 0.0
-                                                var totalContents = 0.0
-                                                try {
-                                                    progress = it?.get("percent") as Double
-                                                    completedContents = it["completedContents"] as Double
-                                                    totalContents = it["totalContents"] as Double
-                                                } catch (e: Exception) {
-                                                    Crashlytics.logException(e)
-                                                }
-
-                                                viewModelScope.launch(Dispatchers.IO) {
-                                                    courseRun.course?.let { it1 -> repository.insertCourse(it1) }
-                                                    repository.insertRun(courseRun,
-                                                        progress,
-                                                        totalContents.toInt(),
-                                                        completedContents.toInt(),
-                                                        refresh)
-                                                }
-
-                                                courseRun.course?.instructors?.forEach { instructorId ->
-                                                    Clients.onlineV2JsonApi.instructorsById(
-                                                        instructorId.id
-                                                    ).enqueue(
-                                                        retrofitCallback { _, instructorResponse ->
-                                                            instructorResponse?.let {
-                                                                if (instructorResponse.isSuccessful) {
-                                                                    instructorResponse.body()?.run {
-                                                                        viewModelScope.launch(Dispatchers.IO) {
-                                                                            courseRun.course?.id?.let { it1 ->
-                                                                                repository.insertInstructor(this@run, it1)
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        })
-                                                }
-                                            }
-                                        })
-                                }
-                            }
-                        }
-                        progress.postValue(false)
-                    } else if (response.code() == 401) {
-                        message.postValue(Throwable(UNAUTHORIZED))
-                        progress.value = false
-                    }
-                }
-                error?.let {
-                    message.postValue(it)
-                    progress.value = false
-                }
-            })
-    }
+//    fun fetchMyCourses(refresh: Boolean = false) {
+//        progress.postValue(true)
+//        Clients.onlineV2JsonApi.getMyCourses()
+//            .enqueue(retrofitCallback { error, res ->
+//                res?.let { response ->
+//                    if (response.isSuccessful) {
+//                        response.body()?.let { courseList ->
+//                            courseList.forEach { courseRun ->
+//                                courseRun.runAttempts?.get(0)?.id?.let { runId ->
+//                                    Clients.api.getMyCourseProgress(runId)
+//                                        .enqueue(retrofitCallback { _, progressRes ->
+//                                            progressRes?.body().let {
+//                                                var progress = 0.0
+//                                                var completedContents = 0.0
+//                                                var totalContents = 0.0
+//                                                try {
+//                                                    progress = it?.get("percent") as Double
+//                                                    completedContents = it["completedContents"] as Double
+//                                                    totalContents = it["totalContents"] as Double
+//                                                } catch (e: Exception) {
+//                                                    Crashlytics.logException(e)
+//                                                }
+//
+//                                                viewModelScope.launch(Dispatchers.IO) {
+//                                                    courseRun.course?.let { it1 -> repository.insertCourse(it1) }
+//                                                    repository.insertRun(courseRun,
+//                                                        progress,
+//                                                        totalContents.toInt(),
+//                                                        completedContents.toInt(),
+//                                                        refresh)
+//                                                }
+//
+//                                                courseRun.course?.instructors?.forEach { instructorId ->
+//                                                    Clients.onlineV2JsonApi.instructorsById(
+//                                                        instructorId.id
+//                                                    ).enqueue(
+//                                                        retrofitCallback { _, instructorResponse ->
+//                                                            instructorResponse?.let {
+//                                                                if (instructorResponse.isSuccessful) {
+//                                                                    instructorResponse.body()?.run {
+//                                                                        viewModelScope.launch(Dispatchers.IO) {
+//                                                                            courseRun.course?.id?.let { it1 ->
+//                                                                                repository.insertInstructor(this@run, it1)
+//                                                                            }
+//                                                                        }
+//                                                                    }
+//                                                                }
+//                                                            }
+//                                                        })
+//                                                }
+//                                            }
+//                                        })
+//                                }
+//                            }
+//                        }
+//                        progress.postValue(false)
+//                    } else if (response.code() == 401) {
+//                        message.postValue(Throwable(UNAUTHORIZED))
+//                        progress.value = false
+//                    }
+//                }
+//                error?.let {
+//                    message.postValue(it)
+//                    progress.value = false
+//                }
+//            })
+//    }
 }

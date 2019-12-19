@@ -50,7 +50,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         viewModel.id = "17"
         viewModel.fetchCourse()
         lifecycle.addObserver(youtubePlayerView)
-        val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(this, R.drawable.divider)!!)
 
         courseProjectsRv.apply {
             setRv(this@CourseActivity, true)

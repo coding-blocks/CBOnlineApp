@@ -11,9 +11,8 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Doubts
-import com.codingblocks.onlineapi.models.MyRunAttempts
+import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.safeApiCall
-import java.util.*
 
 class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
                                 private val commentsDao: CommentsDao) {
@@ -23,7 +22,7 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
     }
 
 
-    suspend fun insertDoubts(doubts: ArrayList<Doubts>) {
+    suspend fun insertDoubts(doubts: List<Doubts>) {
         doubts.forEach {
             doubtsDao.insert(DoubtsModel(
                 dbtUid = it.id,
@@ -56,7 +55,7 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
                     title = doubt.title,
                     body = doubt.body,
                     discourseTopicId = doubt.discourseTopicId,
-                    runAttempt = MyRunAttempts(doubt.runAttemptId),
+                    runAttempt = RunAttempts(doubt.runAttemptId),
                     conversationId = doubt.conversationId,
                     content = ContentsId(doubt.contentId),
                     status = doubt.status
@@ -69,7 +68,7 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
         Clients.onlineV2JsonApi.getCommentsById(id)
     }
 
-    suspend fun insertComments(comments: ArrayList<Comment>) {
+    suspend fun insertComments(comments: List<Comment>) {
         comments.forEach {
             commentsDao.insert(CommentModel(
                 it.id,

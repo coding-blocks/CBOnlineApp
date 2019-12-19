@@ -71,7 +71,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         attachObservers()
 
         ui.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.fetchMyCourses(true)
+            //            viewModel.fetchMyCourses(true)
         }
 
         if (Build.VERSION.SDK_INT >= N_MR1)
@@ -95,7 +95,7 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
         }
         viewModel.courses.nonNull().observer(this) {
             if (it.isEmpty()) {
-                viewModel.fetchMyCourses()
+//                viewModel.fetchMyCourses()
             } else {
                 courseDataAdapter.submitList(it)
                 ui.shimmerLayout.stopShimmer()
@@ -181,6 +181,6 @@ class MyCoursesFragment : Fragment(), AnkoLogger {
     }
 
     fun refreshCourses() {
-        viewModel.fetchMyCourses(true)
+//        viewModel.fetchMyCourses(true)
     }
 }
