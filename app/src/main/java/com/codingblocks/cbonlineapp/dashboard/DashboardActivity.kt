@@ -10,6 +10,10 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsFragment
+import com.codingblocks.cbonlineapp.dashboard.explore.DashboardExploreFragment
+import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeFragment
+import com.codingblocks.cbonlineapp.dashboard.library.DashboardLibraryFragment
+import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesFragment
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
 import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.fabnavigation.FabNavigationAdapter
@@ -80,7 +84,11 @@ class DashboardActivity : AppCompatActivity(), DrawerLayout.DrawerListener, Navi
 
     private fun setupViewPager() {
         pagerAdapter.apply {
+            add(DashboardExploreFragment())
+            add(DashboardMyCoursesFragment())
+            add(DashboardHomeFragment())
             add(DashboardDoubtsFragment())
+            add(DashboardLibraryFragment())
         }
         dashboardPager.apply {
             adapter = pagerAdapter

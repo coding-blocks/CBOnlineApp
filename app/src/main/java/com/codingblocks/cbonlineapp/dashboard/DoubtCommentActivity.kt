@@ -1,9 +1,11 @@
-package com.codingblocks.cbonlineapp.dashboard.doubts
+package com.codingblocks.cbonlineapp.dashboard
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.dashboard.doubts.CommentsListAdapter
+import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsViewModel
 import com.codingblocks.cbonlineapp.util.DOUBT_ID
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
@@ -22,6 +24,8 @@ class DoubtCommentActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //TODO(Add Chat,Resolve and Post Comment)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doubt_comment)
         setSupportActionBar(commentsToolbar)
@@ -45,3 +49,4 @@ class DoubtCommentActivity : AppCompatActivity() {
         }
     }
 }
+

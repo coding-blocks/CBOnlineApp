@@ -3,7 +3,6 @@
     <string name="toolbar_title">Coding Blocks</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="all_courses">All Courses</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="learn_to_code_interactively"><![CDATA[<Learn to code interactively/>]]></string>
     <string name="recommended_courses">Recommended Courses</string>
@@ -151,4 +150,9 @@
     <string name="live_doubts">Live Doubts</string>
     <string name="resolved">Resolved</string>
     <string name="all">All</string>
+    <string name="recently_accessed">Recently Accessed</string>
+    <string name="wishlisted_courses">Wishlisted Courses</string>
+    <string name="learning_tracks">Learning Tracks</string>
+    <string name="all_courses">All Courses</string>
+    <string name="expired_courses">Expired Courses</string>
 </resources>

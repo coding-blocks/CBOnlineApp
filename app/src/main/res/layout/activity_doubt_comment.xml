@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.codingblocks.cbonlineapp.dashboard.doubts.DoubtCommentActivity">
+    tools:context="com.codingblocks.cbonlineapp.dashboard.DoubtCommentActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/commentsAppbar"

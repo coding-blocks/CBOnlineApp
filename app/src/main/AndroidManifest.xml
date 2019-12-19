@@ -23,7 +23,7 @@
             android:name=".dashboard.ChatActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
-            android:name=".dashboard.doubts.DoubtCommentActivity"
+            android:name=".dashboard.DoubtCommentActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".dashboard.DashboardActivity"
