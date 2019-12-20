@@ -1,21 +1,33 @@
 package com.codingblocks.cbonlineapp.util.extensions
 
+import android.animation.Animator
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.View
+import android.view.ViewGroup
+import android.view.animation.OvershootInterpolator
 import android.widget.LinearLayout
 import androidx.annotation.AnimRes
 import androidx.annotation.IdRes
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.DividerItemDecorator
+import com.codingblocks.cbonlineapp.util.REOPENED
+import com.codingblocks.cbonlineapp.util.RESOLVED
+import com.codingblocks.fabnavigation.FabNavigation
 import com.facebook.shimmer.ShimmerFrameLayout
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.dialog.view.*
+import org.jetbrains.anko.layoutInflater
 
 fun View.applyDim(dimAmount: Float) {
     val dim = ColorDrawable(Color.BLACK)
@@ -85,11 +97,106 @@ fun AppCompatActivity.replaceFragmentSafely(
     }
 }
 
-fun RecyclerView.setRv(activity: Context, setDivider: Boolean = false, type: String = "") {
+fun RecyclerView.setRv(activity: Context, listAdapter: ListAdapter<out Any, out RecyclerView.ViewHolder>, setDivider: Boolean = false, type: String = "") {
     val dividerItemDecoration = if (type == "thick")
         DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.dividerthick)!!)
     else DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.divider)!!)
 
     layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     if (setDivider) addItemDecoration(dividerItemDecoration)
+    adapter = listAdapter
 }
+
+fun View.showSnackbar(message: String, length: Int, anchorView: FabNavigation?, action: Boolean = true, callback: () -> Unit = { }) {
+    val snackBarView = Snackbar.make(this, message, length)
+    val params = snackBarView.view.layoutParams as ViewGroup.MarginLayoutParams
+    params.setMargins(params.leftMargin,
+        params.topMargin,
+        params.rightMargin,
+        params.bottomMargin + 16)
+
+    snackBarView.view.layoutParams = params
+    snackBarView
+        .setAnchorView(anchorView).animationMode = Snackbar.ANIMATION_MODE_SLIDE
+    if (action)
+        snackBarView.setAction("Retry") {
+            callback()
+        }
+    snackBarView.show()
+}
+
+fun Context.showDialog(type: String, cancelable: Boolean = false, callback: (state: Boolean) -> Unit = { status: Boolean -> }) {
+
+    val dialog = AlertDialog.Builder(this).create()
+    val view = layoutInflater.inflate(R.layout.dialog, null)
+    when (type) {
+        RESOLVED -> {
+            view.run {
+                dialogImg.setImageResource(R.drawable.ic_resolve_dialog)
+                dialogTitle.startColor = R.color.kiwigreen
+                dialogTitle.endColor = R.color.tealgreen
+                dialogTitle.text = context.getString(R.string.doubt_resolved_title)
+                dialogDesc.text = context.getString(R.string.doubt_resolve_desc)
+                primaryBtn.text = context.getString(R.string.view_resolved)
+            }
+        }
+        REOPENED -> {
+            view.run {
+                dialogImg.setImageResource(R.drawable.ic_reopen)
+                dialogTitle.text = context.getString(R.string.doubt_reopen_title)
+                dialogDesc.text = context.getString(R.string.doubt_reopen_desc)
+                primaryBtn.text = context.getString(R.string.view_live_doubts)
+            }
+        }
+    }
+    view.primaryBtn.setOnClickListener {
+        callback(true)
+        dialog.dismiss()
+    }
+    dialog.apply {
+        window?.setBackgroundDrawableResource(android.R.color.transparent)
+        setView(view)
+        setCancelable(cancelable)
+        show()
+    }
+}
+
+fun View.animateVisibility(visible: Int) {
+    if (visible == View.VISIBLE) {
+        visibility = View.VISIBLE
+        alpha = 0f
+        scaleX = 0f
+        scaleY = 0f
+    }
+    val value = if (visible == View.VISIBLE) 1f else 0f
+    animate()
+        .alpha(value)
+        .scaleX(value)
+        .scaleY(value)
+        .setDuration(300)
+        .setInterpolator(OvershootInterpolator())
+        .setListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {
+            }
+
+            override fun onAnimationEnd(animation: Animator) {
+                if (visible == View.GONE)
+                    visibility = View.GONE
+                else
+                    animate()
+                        .setInterpolator(LinearOutSlowInInterpolator())
+                        .start()
+            }
+
+            override fun onAnimationCancel(animation: Animator) {
+                if (visible == View.GONE) {
+                    visibility = View.GONE
+                }
+            }
+
+            override fun onAnimationRepeat(animation: Animator) {
+            }
+        })
+        .start()
+}
+

@@ -32,10 +32,7 @@ class DoubtCommentActivity : AppCompatActivity() {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        commentRv.apply {
-            setRv(this@DoubtCommentActivity)
-            adapter = commentsListAdapter
-        }
+        commentRv.setRv(this@DoubtCommentActivity, commentsListAdapter)
 
         viewModel.getDoubt(doubtId).observer(this) {
             doubtTitleTv.text = it.title

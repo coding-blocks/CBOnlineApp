@@ -49,14 +49,3 @@ fun ImageView.loadImage(imgUrl: String, scale: Boolean = false) {
         }
 }
 
-fun Snackbar.config(context: Context, @ColorInt backgroundColor: Int, @ColorInt textColor: Int) {
-    val params = this.view.layoutParams as ViewGroup.MarginLayoutParams
-    params.setMargins(12, 12, 12, 12)
-    this.view.layoutParams = params
-    this.view.background = context.getDrawable(R.drawable.bg_snackbar)
-
-    this.view.setBackgroundColor(backgroundColor)
-    this.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).setTextColor(textColor)
-
-    ViewCompat.setElevation(this.view, 6f)
-}

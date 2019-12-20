@@ -25,6 +25,8 @@ import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.showDialog
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -46,11 +48,11 @@ class DashboardDoubtsFragment : Fragment() {
         object : ResolveDoubtClickListener {
             override fun onClick(doubt: DoubtsModel) {
                 if (doubt.status == RESOLVED) {
-                    Components.showDialog(requireContext(), RESOLVED) {
+                    requireContext().showDialog(RESOLVED) {
                         viewModel.type.value = RESOLVED
                     }
                 } else {
-                    Components.showDialog(requireContext(), REOPENED) {
+                    requireContext().showDialog(REOPENED) {
                         viewModel.type.value = LIVE
                     }
                 }
@@ -130,10 +132,7 @@ class DashboardDoubtsFragment : Fragment() {
             }
         }
 
-        dashboardDoubtRv.apply {
-            setRv(requireContext(), true, "thick")
-            adapter = doubtListAdapter
-        }
+        dashboardDoubtRv.setRv(requireContext(), doubtListAdapter, true, "thick")
 
         viewModel.doubts.observer(viewLifecycleOwner) {
             doubtListAdapter.submitList(it)
@@ -150,22 +149,16 @@ class DashboardDoubtsFragment : Fragment() {
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
-                    Snackbar.make(dashboardDoubtRoot, it, Snackbar.LENGTH_INDEFINITE)
-                        .setAnchorView(dashboardBottomNav)
-                        .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-                        .setAction("Retry") {
-                            viewModel.fetchDoubts()
-                        }
-                        .show()
+                    dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, dashboardBottomNav) {
+                        viewModel.fetchDoubts()
+                    }
+
                 }
             }
         }
 
         viewModel.barMessage.observer(viewLifecycleOwner) {
-            Snackbar.make(dashboardDoubtRoot, it, Snackbar.LENGTH_SHORT)
-                .setAnchorView(dashboardBottomNav)
-                .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-                .show()
+            dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, dashboardBottomNav, false)
         }
 
         doubtListAdapter.apply {

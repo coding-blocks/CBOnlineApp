@@ -12,8 +12,15 @@ import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.ErrorStatus
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_admin.*
 import kotlinx.android.synthetic.main.admin_overview_fragment.*
+import kotlinx.android.synthetic.main.admin_overview_fragment.nextBtn
+import kotlinx.android.synthetic.main.admin_overview_fragment.prevBtn
+import kotlinx.android.synthetic.main.doubts_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AdminOverviewFragment : Fragment() {
@@ -41,10 +48,7 @@ class AdminOverviewFragment : Fragment() {
         usernameTv.text = viewModel.prefs.SP_USER_NAME
         userIdTv.text = "Account Id :${viewModel.prefs.SP_ONEAUTH_ID}"
 
-        adminLeaderboardRv.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = leaderBoardListAdapter
-        }
+        adminLeaderboardRv.setRv(requireContext(), leaderBoardListAdapter)
 
         viewModel.doubtStats.observer(viewLifecycleOwner) {
             doubtResolvedTv.text = it.totalResolvedDoubts.toString()
@@ -61,16 +65,15 @@ class AdminOverviewFragment : Fragment() {
 
         viewModel.errorLiveData.observer(viewLifecycleOwner) {
             when (it) {
-                ErrorStatus.EMPTY_RESPONSE -> {
-                }
-                ErrorStatus.NO_CONNECTION -> {
-                }
                 ErrorStatus.UNAUTHORIZED -> {
                     Components.showConfirmation(requireContext(), UNAUTHORIZED) {
                         requireActivity().finish()
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
+                    adminOverviewRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin) {
+                        viewModel.fetchDoubtStats()
+                    }
                 }
             }
         }

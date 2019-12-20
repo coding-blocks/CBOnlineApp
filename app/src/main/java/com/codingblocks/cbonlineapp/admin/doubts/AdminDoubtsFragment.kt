@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.FragmentChangeListener
 import com.codingblocks.cbonlineapp.util.Components
@@ -15,8 +14,10 @@ import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showEmptyView
 import com.codingblocks.cbonlineapp.util.extensions.showShimmer
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Doubts
 import com.google.android.material.snackbar.Snackbar
@@ -111,8 +112,7 @@ class AdminDoubtsFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
         adminDoubtRv.apply {
             adminDoubtRv.isVisible = true
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = doubtsAdapter
+            setRv(requireContext(), doubtsAdapter)
         }
 
         viewModel.listDoubtsResponse.observer(viewLifecycleOwner) {
@@ -139,22 +139,16 @@ class AdminDoubtsFragment : Fragment(), TabLayout.OnTabSelectedListener {
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
-                    Snackbar.make(root, it, Snackbar.LENGTH_INDEFINITE)
-                        .setAnchorView(bottomNavAdmin)
-                        .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-                        .setAction("Retry") {
-                            fetchDoubts(adminTabLayout.selectedTabPosition)
-                        }
-                        .show()
+                    root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin) {
+                        fetchDoubts(adminTabLayout.selectedTabPosition)
+                    }
                 }
             }
         }
 
         viewModel.barMessage.observer(viewLifecycleOwner) {
-            Snackbar.make(root, it, Snackbar.LENGTH_SHORT)
-                .setAnchorView(bottomNavAdmin)
-                .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-                .show()
+            root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin, false)
+
         }
 
         doubtsAdapter.apply {

@@ -40,10 +40,10 @@ class MyCourseListAdapter : ListAdapter<CourseInstructorPair, MyCourseListAdapte
             progressContainer.isVisible = !expired
             openBtn.isVisible = !expired
             extensionTv.isVisible = expired
-            if (expired) {
-                //Todo Fix this
-                ImageViewCompat.setImageTintList(courseLogoImg, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.brownish_grey)))
-            }
+//            if (expired) {
+//                //Todo Fix this
+//                ImageViewCompat.setImageTintList(courseLogoImg, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.brownish_grey)))
+//            }
             val progress = (0..100).random()
             progressTv.text = "$progress %"
             progressView1.progress = progress.toFloat()

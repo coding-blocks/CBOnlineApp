@@ -1,11 +1,17 @@
 package com.codingblocks.cbonlineapp.commons
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import androidx.core.widget.ImageViewCompat
 import com.codingblocks.cbonlineapp.R
 import kotlinx.android.synthetic.main.item_bottomsheet.view.*
+import android.graphics.PorterDuff
+import androidx.core.graphics.drawable.DrawableCompat
+
+
 
 data class SheetItem(val name: String, val icon: Int, val selected: Boolean = false)
 
@@ -23,7 +29,11 @@ class SheetAdapter(val items: ArrayList<SheetItem>) : BaseAdapter() {
             view.textView.apply {
                 setTextColor(resources.getColor(R.color.orangish))
 //                compoundDrawableTintMode
-                setCompoundDrawablesRelativeWithIntrinsicBounds(context.getDrawable(sheetItem.icon), null, null, null)
+                var drawable = context.getDrawable(sheetItem.icon)!!
+                drawable = DrawableCompat.wrap(drawable)
+                DrawableCompat.setTint(drawable, resources.getColor(R.color.orangish))
+                DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_IN)
+                setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
             }
         }
         return view

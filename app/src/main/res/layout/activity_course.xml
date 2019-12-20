@@ -189,7 +189,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/margin_medium"
-                android:background="@drawable/button_background"
                 android:drawableEnd="@drawable/ic_dropright"
                 android:drawablePadding="10dp"
                 android:fontFamily="@font/gilroy_bold"

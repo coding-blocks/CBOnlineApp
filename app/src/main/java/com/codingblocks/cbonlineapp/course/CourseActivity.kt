@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.course
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -11,7 +10,6 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.batches.BatchesAdapter
 import com.codingblocks.cbonlineapp.insturctors.InstructorListAdapter
 import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.DividerItemDecorator
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
@@ -51,18 +49,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         viewModel.fetchCourse()
         lifecycle.addObserver(youtubePlayerView)
 
-        courseProjectsRv.apply {
-            setRv(this@CourseActivity, true)
-            adapter = projectAdapter
-        }
-        courseInstructorRv.apply {
-            setRv(this@CourseActivity)
-            adapter = instructorAdapter
-        }
-        courseContentRv.apply {
-            setRv(this@CourseActivity, true)
-            adapter = courseSectionListAdapter
-        }
+        courseProjectsRv.setRv(this@CourseActivity, projectAdapter, true)
+        courseInstructorRv.setRv(this@CourseActivity, instructorAdapter)
+        courseContentRv.setRv(this@CourseActivity, courseSectionListAdapter, true)
+
 
         viewModel.course.observer(this) { course ->
             showTags(course.runs?.first()?.tags)

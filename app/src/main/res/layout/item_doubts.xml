@@ -86,9 +86,7 @@
             android:drawablePadding="8dp"
             android:fontFamily="@font/gilroy_medium"
             android:gravity="start"
-            android:text="@string/comment"
-            app:color_end="@color/dusty_orange"
-            app:color_start="@color/pastel_red" />
+            android:text="@string/comment" />
 
         <com.codingblocks.cbonlineapp.widgets.GradientTextView
             android:id="@+id/chatTv"

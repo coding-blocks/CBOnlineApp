@@ -116,40 +116,6 @@ object Components {
         confirmDialog.show()
     }
 
-    fun showDialog(context: Context, type: String, cancelable: Boolean = false, callback: (state: Boolean) -> Unit = { status: Boolean -> }) {
-        val dialog = AlertDialog.Builder(context).create()
-        val view = context.layoutInflater.inflate(R.layout.dialog, null)
-        when (type) {
-            RESOLVED -> {
-                view.run {
-                    dialogImg.setImageResource(R.drawable.ic_resolve_dialog)
-                    dialogTitle.startColor = R.color.kiwigreen
-                    dialogTitle.endColor = R.color.tealgreen
-                    dialogTitle.text = context.getString(R.string.doubt_resolved_title)
-                    dialogDesc.text = context.getString(R.string.doubt_resolve_desc)
-                    primaryBtn.text = context.getString(R.string.view_resolved)
-                }
-            }
-            REOPENED -> {
-                view.run {
-                    dialogImg.setImageResource(R.drawable.ic_reopen)
-                    dialogTitle.text = context.getString(R.string.doubt_reopen_title)
-                    dialogDesc.text = context.getString(R.string.doubt_reopen_desc)
-                    primaryBtn.text = context.getString(R.string.view_live_doubts)
-                }
-            }
-        }
-        view.primaryBtn.setOnClickListener {
-            callback(true)
-            dialog.dismiss()
-        }
-        dialog.apply {
-            window?.setBackgroundDrawableResource(android.R.color.transparent)
-            setView(view)
-            setCancelable(cancelable)
-            show()
-        }
-    }
 
     fun openChrome(context: Context, url: String, newTask: Boolean = false) {
         val builder = CustomTabsIntent.Builder()

@@ -128,6 +128,8 @@ dependencies {
     implementation 'com.github.aggarwalpulkit596:FabNavigation:1.0'
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
     implementation "com.github.skydoves:progressview:1.0.5"
+//    implementation "com.andkulikov:transitionseverywhere:2.1.0"
+
 
 
 

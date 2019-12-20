@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.dashboard.mycourses
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +11,13 @@ import androidx.lifecycle.MutableLiveData
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.SheetAdapter
 import com.codingblocks.cbonlineapp.commons.SheetItem
-import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtListAdapter
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -35,7 +37,6 @@ class DashboardMyCoursesFragment : Fragment() {
     private val courseListAdapter = MyCourseListAdapter()
 
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_dashboard_my_courses, container, false)
@@ -43,29 +44,26 @@ class DashboardMyCoursesFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.fetchMyCourses()
-
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpBottomSheet()
 
         courseTypeTv.setOnClickListener {
-            setUpBottomSheet()
             dialog.show()
         }
         type.observer(viewLifecycleOwner) {
             courseTypeTv.apply {
+                //                TransitionManager.beginDelayedTransition(dashboardCourseRoot, ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_OUT_IN))
                 text = coursesType[it]
                 viewModel.courseFilter.postValue(coursesType[it])
                 setCompoundDrawablesRelativeWithIntrinsicBounds(requireContext().getDrawable(imgs.getResourceId(it, 0)), null, requireContext().getDrawable(R.drawable.ic_dropdown), null)
             }
         }
 
-        dashboardCoursesRv.apply {
-            setRv(requireContext(), true)
-            adapter = courseListAdapter
-        }
+        dashboardCoursesRv.setRv(requireContext(), courseListAdapter, true)
 
 
         viewModel.courses.observer(viewLifecycleOwner) {
@@ -85,13 +83,9 @@ class DashboardMyCoursesFragment : Fragment() {
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
-                    Snackbar.make(dashboardCourseRoot, it, Snackbar.LENGTH_INDEFINITE)
-                        .setAnchorView(dashboardBottomNav)
-                        .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-                        .setAction("Retry") {
-                            viewModel.fetchMyCourses()
-                        }
-                        .show()
+                    dashboardCourseRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, dashboardBottomNav) {
+                        viewModel.fetchMyCourses()
+                    }
                 }
             }
         }
@@ -101,10 +95,10 @@ class DashboardMyCoursesFragment : Fragment() {
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_mycourses, null)
         val list = arrayListOf<SheetItem>()
         repeat(5) {
-            //            if (type.value == it)
-//                list.add(SheetItem(couresType[it], imgs.getResourceId(it, 0),true))
-//            else
-            list.add(SheetItem(coursesType[it], imgs.getResourceId(it, 0)))
+            if (type.value == it)
+                list.add(SheetItem(coursesType[it], imgs.getResourceId(it, 0), true))
+            else
+                list.add(SheetItem(coursesType[it], imgs.getResourceId(it, 0)))
         }
         sheetDialog.run {
             sheetLv.adapter = SheetAdapter(list)
@@ -113,6 +107,7 @@ class DashboardMyCoursesFragment : Fragment() {
                 dialog.dismiss()
             }
         }
+        dialog.dismissWithAnimation = true
         dialog.setContentView(sheetDialog)
     }
 
@@ -121,4 +116,7 @@ class DashboardMyCoursesFragment : Fragment() {
         super.onDestroyView()
     }
 }
+
+
+
 
