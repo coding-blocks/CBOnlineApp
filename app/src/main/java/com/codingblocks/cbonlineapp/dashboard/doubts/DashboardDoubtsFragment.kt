@@ -18,9 +18,11 @@ import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.DOUBT_ID
 import com.codingblocks.cbonlineapp.util.LIVE
+import com.codingblocks.cbonlineapp.util.REOPENED
 import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
+import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.onlineapi.ErrorStatus
@@ -43,6 +45,15 @@ class DashboardDoubtsFragment : Fragment() {
     private val resolveClickListener: ResolveDoubtClickListener by lazy {
         object : ResolveDoubtClickListener {
             override fun onClick(doubt: DoubtsModel) {
+                if (doubt.status == RESOLVED) {
+                    Components.showDialog(requireContext(), RESOLVED) {
+                        viewModel.type.value = RESOLVED
+                    }
+                } else {
+                    Components.showDialog(requireContext(), REOPENED) {
+                        viewModel.type.value = LIVE
+                    }
+                }
                 viewModel.resolveDoubt(doubt)
             }
         }
@@ -166,9 +177,10 @@ class DashboardDoubtsFragment : Fragment() {
     }
 
     private fun setUpBottomSheet() {
+        //TODO( fix list overlapping)
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_mycourses, null)
         val list = arrayListOf<SheetItem>()
-        viewModel.getRunId().observer(viewLifecycleOwner) {
+        viewModel.getRunId().observeOnce {
             it.forEach { run ->
                 list.add(SheetItem(run.crDescription, R.drawable.ic_course_logo))
             }
@@ -184,7 +196,6 @@ class DashboardDoubtsFragment : Fragment() {
 
         dialog.setContentView(sheetDialog)
     }
-
 
     override fun onDestroyView() {
         doubtListAdapter.apply {

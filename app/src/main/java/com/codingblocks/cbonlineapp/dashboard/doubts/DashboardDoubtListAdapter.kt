@@ -77,16 +77,15 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
                     chatTv.apply {
                         setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, context.getDrawable(R.drawable.ic_chat), null)
                         text = context.getString(R.string.chat_with_ta)
-
+                        setOnClickListener {
+                            chatClickListener?.onClick(item.conversationId ?: "", item.dbtUid)
+                        }
                     }
                 }
             }
 
             commentTv.setOnClickListener {
                 commentClickListener?.onClick(item.dbtUid)
-            }
-            chatTv.setOnClickListener {
-                chatClickListener?.onClick(item.conversationId ?: "", item.dbtUid)
             }
         }
     }

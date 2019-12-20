@@ -41,6 +41,7 @@
     <dimen name="card_corner_radius">10dp</dimen>
     <dimen name="margin_medium_small">14dp</dimen>
     <dimen name="button_size">20dp</dimen>
+    <dimen name="margin_xllarge">42dp</dimen>
 
 
 </resources>

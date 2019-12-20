@@ -32,7 +32,10 @@ class MyCourseListAdapter : ListAdapter<CourseInstructorPair, MyCourseListAdapte
         fun bind(item: CourseInstructorPair) = with(itemView) {
             courseTitleTv.text = item.courseRun.course.title
             if (item.instructor.isNotEmpty())
-                courseInstructorTv.text = "Mentor: ${item.instructor.first().name} and ${item.instructor.size} more"
+                courseInstructorTv.text = "Mentor: ${item.instructor.first().name} "
+            if (item.instructor.size > 1) {
+                courseInstructorTv.append("and ${item.instructor.size - 1} more")
+            }
             val expired = item.courseRun.crRunAttemptEnd.toLong() * 1000 < System.currentTimeMillis()
             progressContainer.isVisible = !expired
             openBtn.isVisible = !expired

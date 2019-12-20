@@ -23,7 +23,6 @@ import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.LoginActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
-import com.codingblocks.cbonlineapp.home.mycourses.MyCoursesFragment
 import com.codingblocks.cbonlineapp.jobs.JobsActivity
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
@@ -103,7 +102,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val navMenu = nav_view.menu
             navMenu.findItem(R.id.nav_my_courses).isVisible = true
             nav_view.setCheckedItem(R.id.nav_my_courses)
-            transaction.replace(R.id.fragment_holder, MyCoursesFragment()).commit()
+//            transaction.replace(R.id.fragment_holder, MyCoursesFragment()).commit()
         } else {
             transaction.replace(R.id.fragment_holder, HomeFragment()).commit()
         }
@@ -186,9 +185,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewModel.getMe()
         viewModel.getMeProgress.observer(this) {
             if (it) {
-                if ((supportFragmentManager.findFragmentById(R.id.fragment_holder) is MyCoursesFragment)) {
-                    (supportFragmentManager.findFragmentById(R.id.fragment_holder) as MyCoursesFragment).refreshCourses()
-                }
+//                if ((supportFragmentManager.findFragmentById(R.id.fragment_holder) is MyCoursesFragment)) {
+//                    (supportFragmentManager.findFragmentById(R.id.fragment_holder) as MyCoursesFragment).refreshCourses()
+//                }
                 setUser()
             }
         }
@@ -310,7 +309,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (filter) {
             "All Courses" -> viewModel.mFragmentToSet = AllCourseFragment()
             "Home" -> viewModel.mFragmentToSet = HomeFragment()
-            "My Courses" -> viewModel.mFragmentToSet = MyCoursesFragment()
+//            "My Courses" -> viewModel.mFragmentToSet = MyCoursesFragment()
         }
         onBackPressed()
     }

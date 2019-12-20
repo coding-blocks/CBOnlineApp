@@ -12,6 +12,8 @@ import com.codingblocks.cbonlineapp.R
 
 class GradientTextView : androidx.appcompat.widget.AppCompatTextView {
 
+    var startColor = R.color.pastel_red
+    var endColor = R.color.dusty_orange
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
@@ -29,8 +31,8 @@ class GradientTextView : androidx.appcompat.widget.AppCompatTextView {
         if (changed) {
             paint.shader = LinearGradient(
                 0f, 0f, width.toFloat(), height.toFloat(),
-                ContextCompat.getColor(context, R.color.pastel_red),
-                ContextCompat.getColor(context, R.color.dusty_orange),
+                ContextCompat.getColor(context, startColor),
+                ContextCompat.getColor(context, endColor),
                 Shader.TileMode.CLAMP
             )
         }

@@ -156,5 +156,11 @@
     <string name="all_courses">All Courses</string>
     <string name="expired_courses">Expired Courses</string>
     <string name="buy_extension">Buy Extension</string>
+    <string name="doubt_resolved_title">Your doubt has been marked Resolved</string>
+    <string name="doubt_resolve_desc">You can still reopen the doubt in “Resolved Doubts” section</string>
+    <string name="view_resolved">View Resolved</string>
+    <string name="view_live_doubts">View Live Doubts</string>
+    <string name="doubt_reopen_desc">You can view your doubt in “Live Doubts” section</string>
+    <string name="doubt_reopen_title">Your doubt has been reopened!</string>
 
 </resources>

@@ -122,8 +122,9 @@ data class Doubts(
                 runAttempt: RunAttempts?,
                 conversationId: String?,
                 content: ContentsId?,
-                status: String
-    ) : this(title, body, status, discourseTopicId, conversationId, runAttempt, content) {
+                status: String,
+                createdAt: String
+    ) : this(title, body, status, discourseTopicId, conversationId, runAttempt, content, createdAt) {
         super.id = id
     }
 }

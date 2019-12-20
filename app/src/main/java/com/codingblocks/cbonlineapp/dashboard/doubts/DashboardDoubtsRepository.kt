@@ -59,7 +59,8 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
                     runAttempt = RunAttempts(doubt.runAttemptId),
                     conversationId = doubt.conversationId,
                     content = ContentsId(doubt.contentId),
-                    status = doubt.status
+                    status = doubt.status,
+                    createdAt = doubt.createdAt
                 ))
         }
 
