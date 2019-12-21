@@ -21,8 +21,8 @@
             app:toolbarId="@+id/toolbar">
 
             <LinearLayout
-                android:layout_height="match_parent"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@drawable/toolbar_bg"
                 android:orientation="vertical">
 
@@ -110,7 +110,7 @@
             </LinearLayout>
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/courseToolbar"
+                android:id="@+id/toolbar"
                 style="@style/ToolBarStyleWhite"
                 android:layout_width="match_parent"
                 android:layout_height="155dp"
@@ -121,7 +121,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/toolbar_bg_colored"
-                    android:paddingTop="68dp">
+                    android:paddingTop="?actionBarSize">
 
                     <TextView
                         android:id="@+id/shortTv"

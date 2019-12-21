@@ -4,6 +4,7 @@
     <item>
         <shape android:shape="rectangle">
             <gradient
+                android:angle="360"
                 android:endColor="@color/dusty_orange"
                 android:startColor="@color/pastel_red" />
             <corners android:radius="@dimen/button_corner_radius" />

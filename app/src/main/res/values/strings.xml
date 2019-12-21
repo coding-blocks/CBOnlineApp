@@ -171,5 +171,7 @@
     <string name="learning_tracks">Learning Tracks</string>
     <string name="my_purchases">My Purchases</string>
     <string name="hiring_blocks">Hiring Blocks</string>
+    <string name="login_signup">Login/Signup</string>
+    <string name="browse_courses">Browse Courses</string>
 
 </resources>

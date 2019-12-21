@@ -45,6 +45,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course)
+        setSupportActionBar(courseToolbar)
         viewModel.id = "17"
         viewModel.fetchCourse()
         lifecycle.addObserver(youtubePlayerView)
@@ -57,7 +58,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         viewModel.course.observer(this) { course ->
             showTags(course.runs?.first()?.tags)
             courseSummaryTv.text = course.summary
-            courseTitle.text = course.title
+            courseToolbar.title = course.title
             shortTv.text = course.subtitle
             courseLogo.loadImage(course.logo)
             setYoutubePlayer(course.promoVideo)
@@ -88,12 +89,12 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
-                    Snackbar.make(courseRootView, it, Snackbar.LENGTH_INDEFINITE)
-                        .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-                        .setAction("Retry") {
-                            viewModel.fetchCourse()
-                        }
-                        .show()
+//                    Snackbar.make(courseRootView, it, Snackbar.LENGTH_INDEFINITE)
+//                        .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+//                        .setAction("Retry") {
+//                            viewModel.fetchCourse()
+//                        }
+//                        .show()
                 }
             }
         }
