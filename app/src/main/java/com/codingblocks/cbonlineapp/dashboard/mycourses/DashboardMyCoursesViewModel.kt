@@ -15,11 +15,10 @@ class DashboardMyCoursesViewModel(
 ) : ViewModel() {
     private var coursesResponse: LiveData<List<CourseInstructorPair>> = MutableLiveData()
     var courses: MediatorLiveData<List<CourseInstructorPair>> = MediatorLiveData()
-    var courseFilter = MutableLiveData<String>("")
+    var courseFilter = MutableLiveData<String>()
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
     var nextOffSet: MutableLiveData<Int> = MutableLiveData(-1)
     var prevOffSet: MutableLiveData<Int> = MutableLiveData(-1)
-    var barMessage: MutableLiveData<String> = MutableLiveData("")
 
     init {
         coursesResponse = Transformations.switchMap(courseFilter) { query ->
@@ -27,6 +26,13 @@ class DashboardMyCoursesViewModel(
         }
         courses.addSource(coursesResponse) {
             courses.postValue(it)
+        }
+
+        courses.addSource(repo.getMyRuns()) {
+            if (it.isNotEmpty()) {
+                courses.postValue(it)
+                courses.removeSource(repo.getMyRuns())
+            }
         }
 
     }
@@ -39,6 +45,8 @@ class DashboardMyCoursesViewModel(
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
                             repo.insertCourses(it.get())
+                            if (it.get().isEmpty())
+                                courses.postValue(emptyList())
                         }
                     else {
                         setError(fetchError(response.value.code()))

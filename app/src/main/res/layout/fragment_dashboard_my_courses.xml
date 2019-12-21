@@ -8,15 +8,15 @@
 
 
     <TextView
-
         android:id="@+id/courseTypeTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_large"
-        android:layout_marginEnd="@dimen/margin_large"
+        android:drawableEnd="@drawable/ic_dropdown"
+        android:paddingStart="@dimen/margin_large"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:drawablePadding="12dp"
+        android:paddingEnd="@dimen/margin_large"
         android:drawableTint="@color/orangish"
         android:focusable="true"
         android:fontFamily="@font/gilroy_bold"
@@ -24,7 +24,7 @@
         android:paddingBottom="14dp"
         android:textColor="@color/orangish"
         android:textSize="18sp"
-        tools:text="Expired Courses" />
+        android:text="@string/filters" />
 
 
     <View
@@ -37,10 +37,8 @@
         android:id="@+id/dashboardCoursesRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/margin_large"
-        android:layout_marginEnd="@dimen/margin_large"
         android:overScrollMode="never"
-        android:visibility="visible"
+        android:visibility="gone"
         tools:itemCount="4"
         tools:listitem="@layout/item_courses" />
 
@@ -125,7 +123,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:background="@color/dark_white"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <include layout="@layout/item_skeleton_content" />
     </com.facebook.shimmer.ShimmerFrameLayout>

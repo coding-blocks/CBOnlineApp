@@ -25,15 +25,17 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
 
     init {
         listDoubtsResponse = Transformations.switchMap(DoubleTrigger(type, courseId)) {
-            repo.getDoubtsByCourseRun(it.first, it.second)
+            repo.getDoubtsByCourseRun(it.first, it.second ?: "")
         }
 
         doubts.addSource(listDoubtsResponse) {
             doubts.postValue(it)
         }
         doubts.addSource(repo.getDoubtsByCourseRun(ALL)) {
-            doubts.postValue(it)
-            doubts.removeSource(repo.getDoubtsByCourseRun(ALL))
+            if (it.isNotEmpty()) {
+                doubts.postValue(it)
+                doubts.removeSource(repo.getDoubtsByCourseRun(ALL))
+            }
         }
 
     }
@@ -46,6 +48,8 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
                             repo.insertDoubts(it)
+                            if (it.isEmpty())
+                                doubts.postValue(emptyList())
                         }
                     else {
                         setError(fetchError(response.value.code()))

@@ -173,5 +173,6 @@
     <string name="hiring_blocks">Hiring Blocks</string>
     <string name="login_signup">Login/Signup</string>
     <string name="browse_courses">Browse Courses</string>
+    <string name="filters">Filters</string>
 
 </resources>

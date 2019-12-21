@@ -39,6 +39,7 @@
     <style name="ToolBarStyleWhite" parent="Widget.MaterialComponents.Toolbar">
         <item name="titleTextAppearance">@style/Toolbar.TitleText</item>
         <item name="titleTextColor">@color/white</item>
+        <item name="android:background">@drawable/toolbar_bg_dark</item>
         <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
 

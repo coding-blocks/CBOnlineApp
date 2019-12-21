@@ -39,11 +39,11 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
         }
     }
 
-    fun getDoubtsByCourseRun(type: String?, courseId: String? = ""): LiveData<List<DoubtsModel>> {
+    fun getDoubtsByCourseRun(type: String?, courseId: String = "44872"): LiveData<List<DoubtsModel>> {
         return when (type) {
-            LIVE -> doubtsDao.getLiveDoubts("44872")
-            RESOLVED -> doubtsDao.getResolveDoubts("44872")
-            else -> doubtsDao.getDoubts("44872")
+            LIVE -> doubtsDao.getLiveDoubts(courseId)
+            RESOLVED -> doubtsDao.getResolveDoubts(courseId)
+            else -> doubtsDao.getDoubts(courseId)
         }
 
     }

@@ -116,7 +116,7 @@ class DashboardMyCoursesRepository(
         }
     }
 
-    fun getMyRuns(query: String?): LiveData<List<CourseInstructorPair>> {
+    fun getMyRuns(query: String = "Recently Accessed"): LiveData<List<CourseInstructorPair>> {
         return when (query) {
             "Recently Accessed" -> courseWithInstructorDao.getRecentRuns()
             "Expired Courses" -> courseWithInstructorDao.getExpiredRuns(System.currentTimeMillis() / 1000)

@@ -11,281 +11,200 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="335dp"
+        android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:contentScrim="@color/black"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:titleEnabled="false"
             app:toolbarId="@+id/toolbar">
 
-            <LinearLayout
-                android:layout_height="match_parent"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:background="@drawable/toolbar_bg"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:background="@drawable/toolbar_bg_colored"
+                android:paddingTop="68dp">
 
-                <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/shortTv"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_medium"
-                    android:layout_marginTop="165dp"
-                    android:layout_marginEnd="@dimen/margin_medium"
-                    android:backgroundTint="#f3f3f3"
-                    android:drawableEnd="@drawable/ic_dropdown"
-                    android:padding="@dimen/padding_small"
-                    android:paddingStart="@dimen/padding_medium"
-                    android:paddingEnd="@dimen/padding_medium"
-                    android:text="@string/choose_batch"
-                    android:textAlignment="textStart"
-                    android:textAllCaps="false"
-                    android:textColor="@color/black"
-                    app:cornerRadius="@dimen/button_corner_radius" />
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:layout_marginBottom="@dimen/margin_extra_small"
+                    android:layout_toStartOf="@id/courseLogo"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:text="Learn full-stack web development using JavaScript and NodeJS"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/courseLogo"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:layout_marginBottom="@dimen/margin_large"
+                    android:src="@drawable/ic_course_logo"
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="2dp" />
+
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium">
+                    android:layout_alignTop="@id/ratingTv"
+                    android:layout_alignBottom="@id/ratingTv"
+                    android:layout_marginStart="@dimen/margin_large" />
 
+                <TextView
+                    android:id="@+id/ratingTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/shortTv"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_toEndOf="@id/ratingBar"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:text="4/5, 435 ratings"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/priceTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_medium"
-                        android:textColor="@color/orangish"
-                        android:textSize="16sp"
-                        tools:text="₹ 9499" />
-
-                    <TextView
-                        android:id="@+id/deadlineTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/priceTv"
-                        android:layout_alignStart="@id/priceTv"
-                        android:layout_toStartOf="@id/trialBtn"
-                        android:textColor="@color/orangish"
-                        android:textSize="12sp"
-                        tools:text="Ends 2nd Nov 2019" />
-
-                    <TextView
-                        android:id="@+id/mrpTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@id/priceTv"
-                        android:layout_marginStart="@dimen/button_padding_small"
-                        android:layout_toEndOf="@id/priceTv"
-                        android:textColor="@color/brownish_grey"
-                        tools:text="₹ 9499" />
-
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/trialBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/margin_extra_small"
-                        android:layout_toStartOf="@+id/buyBtn"
-                        android:background="@drawable/button_background_outline"
-                        android:fontFamily="@font/gilroy_medium"
-                        android:text="@string/try_it_for_free"
-                        android:textColor="@color/pastel_red"
-                        android:textSize="16sp" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/buyBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/margin_medium"
-                        android:drawableEnd="@drawable/ic_dropright"
-                        android:drawablePadding="10dp"
-                        android:fontFamily="@font/gilroy_bold"
-                        android:text="@string/buy_now"
-                        android:textSize="16sp" />
-                </RelativeLayout>
-            </LinearLayout>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/courseToolbar"
-                style="@style/ToolBarStyleWhite"
+                style="@style/Theme.MaterialComponents.Light"
                 android:layout_width="match_parent"
-                android:layout_height="155dp"
-                app:contentInsetStart="0dp"
+                android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/toolbar_bg_colored"
-                    android:paddingTop="68dp">
-
-                    <TextView
-                        android:id="@+id/shortTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_large"
-                        android:layout_marginEnd="@dimen/margin_large"
-                        android:layout_marginBottom="@dimen/margin_extra_small"
-                        android:layout_toStartOf="@id/courseLogo"
-                        android:fontFamily="@font/gilroy_medium"
-                        android:text="Learn full-stack web development using JavaScript and NodeJS"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/courseLogo"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="@dimen/margin_large"
-                        android:layout_marginBottom="@dimen/margin_large"
-                        android:src="@drawable/ic_course_logo"
-                        app:civ_border_color="@color/white"
-                        app:civ_border_width="2dp" />
-
-                    <RatingBar
-                        android:id="@+id/ratingBar"
-                        style="@style/Widget.AppCompat.RatingBar.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@id/ratingTv"
-                        android:layout_alignBottom="@id/ratingTv"
-                        android:layout_marginStart="@dimen/margin_large" />
-
-                    <TextView
-                        android:id="@+id/ratingTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/shortTv"
-                        android:layout_marginStart="@dimen/margin_small"
-                        android:layout_toEndOf="@id/ratingBar"
-                        android:fontFamily="@font/gilroy_medium"
-                        android:text="4/5, 435 ratings"
-                        android:textColor="@color/white" />
-                </RelativeLayout>
 
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:context="com.codingblocks.cbonlineapp.auth.LoginActivity">
+            android:background="@drawable/toolbar_bg"
+            android:orientation="vertical">
 
-            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-                android:id="@+id/youtubePlayerView"
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_medium"
                 android:layout_marginTop="@dimen/margin_medium"
                 android:layout_marginEnd="@dimen/margin_medium"
-                app:autoPlay="false"
-                app:showFullScreenButton="true"
-                app:showYouTubeButton="false"
-                app:useWebUi="false" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:layout_marginTop="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_medium"
-                android:fontFamily="@font/gilroy_bold"
-                android:text="@string/summary"
-                android:textColor="#333333"
-                android:textSize="20sp" />
-
-            <com.codingblocks.cbonlineapp.widgets.ExpandableTextView
-                android:id="@+id/courseSummaryTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:layout_marginTop="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_medium"
+                android:backgroundTint="#f3f3f3"
+                android:drawableEnd="@drawable/ic_dropdown"
+                android:padding="@dimen/padding_small"
+                android:paddingStart="@dimen/padding_medium"
+                android:paddingEnd="@dimen/padding_medium"
+                android:text="@string/choose_batch"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
                 android:textColor="@color/black"
-                android:textSize="16sp"
-                app:trimLength="200" />
+                app:cornerRadius="@dimen/button_corner_radius" />
 
-            <TextView
-                android:id="@+id/topicsTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:layout_marginTop="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_medium"
-                android:fontFamily="@font/gilroy_bold"
-                android:text="@string/major_topics_covered"
-                android:textColor="#333333"
-                android:textSize="20sp" />
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/courseChipsGroup"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginEnd="@dimen/margin_medium"
-                app:lineSpacing="10dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_medium"
                 android:layout_marginTop="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_medium"
-                android:fontFamily="@font/gilroy_bold"
-                android:text="@string/course_content"
-                android:textColor="#333333"
-                android:textSize="20sp" />
+                android:layout_marginBottom="@dimen/margin_medium">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/courseContentRv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_medium"
-                android:overScrollMode="never"
-                tools:itemCount="4"
-                tools:listitem="@layout/item_course_section" />
+                <TextView
+                    android:id="@+id/priceTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="9499"
+                    android:textColor="@color/orangish"
+                    android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/projectsTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:layout_marginTop="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_medium"
-                android:fontFamily="@font/gilroy_bold"
-                android:text="@string/projects"
-                android:textColor="#333333"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/deadlineTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/priceTv"
+                    android:layout_alignStart="@id/priceTv"
+                    android:layout_toStartOf="@id/trialBtn"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:textColor="@color/orangish"
+                    android:textSize="12sp"
+                    tools:text="Ends 2nd Nov 2019" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/courseProjectsRv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_medium"
-                android:overScrollMode="never"
-                tools:itemCount="5"
-                tools:listitem="@layout/item_project" />
+                <TextView
+                    android:id="@+id/mrpTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/priceTv"
+                    android:layout_marginStart="@dimen/button_padding_small"
+                    android:layout_toEndOf="@id/priceTv"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:textColor="@color/brownish_grey"
+                    tools:text="9499" />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/trialBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/margin_extra_small"
+                    android:layout_toStartOf="@+id/buyBtn"
+                    android:background="@drawable/button_background_outline"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:text="@string/try_it_for_free"
+                    android:textColor="@color/pastel_red"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/buyBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:drawableEnd="@drawable/ic_dropright"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/buy_now"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#f3f3f3"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:context="com.codingblocks.cbonlineapp.auth.LoginActivity">
+
+                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                    android:id="@+id/youtubePlayerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    app:autoPlay="false"
+                    app:showFullScreenButton="true"
+                    app:showYouTubeButton="false"
+                    app:useWebUi="false" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -294,48 +213,141 @@
                     android:layout_marginTop="@dimen/margin_medium"
                     android:layout_marginEnd="@dimen/margin_medium"
                     android:fontFamily="@font/gilroy_bold"
-                    android:text="@string/about_mentors"
+                    android:text="@string/summary"
+                    android:textColor="#333333"
+                    android:textSize="20sp" />
+
+                <com.codingblocks.cbonlineapp.widgets.ExpandableTextView
+                    android:id="@+id/courseSummaryTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:trimLength="200" />
+
+                <TextView
+                    android:id="@+id/topicsTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/major_topics_covered"
+                    android:textColor="#333333"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/courseChipsGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    app:lineSpacing="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/course_content"
                     android:textColor="#333333"
                     android:textSize="20sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/courseInstructorRv"
+                    android:id="@+id/courseContentRv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_medium"
                     android:layout_marginEnd="@dimen/margin_medium"
                     android:overScrollMode="never"
-                    tools:itemCount="2"
-                    tools:listitem="@layout/item_instructor" />
+                    tools:itemCount="4"
+                    tools:listitem="@layout/item_course_section" />
+
+                <TextView
+                    android:id="@+id/projectsTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/projects"
+                    android:textColor="#333333"
+                    android:textSize="20sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/courseProjectsRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:overScrollMode="never"
+                    tools:itemCount="5"
+                    tools:listitem="@layout/item_project" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#f3f3f3"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:layout_marginTop="@dimen/margin_medium"
+                        android:layout_marginEnd="@dimen/margin_medium"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:text="@string/about_mentors"
+                        android:textColor="#333333"
+                        android:textSize="20sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/courseInstructorRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:layout_marginEnd="@dimen/margin_medium"
+                        android:overScrollMode="never"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/item_instructor" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/you_may_also_like"
+                    android:textColor="#333333"
+                    android:textSize="20sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/courseSuggestedRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="4"
+                    tools:listitem="@layout/item_course_card" />
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:layout_marginTop="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_medium"
-                android:fontFamily="@font/gilroy_bold"
-                android:text="@string/you_may_also_like"
-                android:textColor="#333333"
-                android:textSize="20sp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/courseSuggestedRv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginEnd="@dimen/margin_medium"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="4"
-                tools:listitem="@layout/item_course_card" />
-
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,6 +1,8 @@
 package com.codingblocks.cbonlineapp.course
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
@@ -9,6 +11,7 @@ import androidx.recyclerview.widget.SnapHelper
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.batches.BatchesAdapter
 import com.codingblocks.cbonlineapp.insturctors.InstructorListAdapter
+import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
@@ -22,6 +25,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import kotlinx.android.synthetic.main.activity_course.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.intentFor
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -46,6 +50,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course)
         setSupportActionBar(courseToolbar)
+        supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         viewModel.id = "17"
         viewModel.fetchCourse()
         lifecycle.addObserver(youtubePlayerView)
@@ -58,7 +64,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         viewModel.course.observer(this) { course ->
             showTags(course.runs?.first()?.tags)
             courseSummaryTv.text = course.summary
-            courseToolbar.title = course.title
+            title = course.title
             shortTv.text = course.subtitle
             courseLogo.loadImage(course.logo)
             setYoutubePlayer(course.promoVideo)
@@ -123,6 +129,17 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
             }
         })
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.course_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+
+        else -> super.onOptionsItemSelected(item)
+    }
+
 }
 
 

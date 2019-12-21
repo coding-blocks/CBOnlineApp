@@ -33,7 +33,7 @@ class DashboardMyCoursesFragment : Fragment() {
     private val imgs by lazy { resources.obtainTypedArray(R.array.course_type_img) }
     private val coursesType by lazy { resources.getStringArray(R.array.course_type) }
     private val viewModel by viewModel<DashboardMyCoursesViewModel>()
-    private val type = MutableLiveData(0)
+    private val type = MutableLiveData<Int>()
     private val courseListAdapter = MyCourseListAdapter()
 
 
@@ -43,6 +43,7 @@ class DashboardMyCoursesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        dashboardCourseShimmer.startShimmer()
         viewModel.fetchMyCourses()
     }
 
