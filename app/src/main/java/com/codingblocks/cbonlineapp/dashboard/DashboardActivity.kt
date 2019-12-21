@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
@@ -15,12 +16,14 @@ import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeFragment
 import com.codingblocks.cbonlineapp.dashboard.library.DashboardLibraryFragment
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesFragment
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
+import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
 import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.fabnavigation.FabNavigationAdapter
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import org.jetbrains.anko.intentFor
+
 
 class DashboardActivity : AppCompatActivity(), DrawerLayout.DrawerListener, NavigationView.OnNavigationItemSelectedListener {
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -75,6 +78,13 @@ class DashboardActivity : AppCompatActivity(), DrawerLayout.DrawerListener, Navi
             titleState = (FabNavigation.TitleState.ALWAYS_SHOW)
             setOnTabSelectedListener(object : FabNavigation.OnTabSelectedListener {
                 override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
+                    if (position == 2) {
+                        dashboardToolbarSecondary.isVisible = true
+                        dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+                    } else {
+                        dashboardToolbarSecondary.isVisible = false
+                        dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
+                    }
                     dashboardPager.setCurrentItem(position, true)
                     return true
                 }
@@ -92,7 +102,7 @@ class DashboardActivity : AppCompatActivity(), DrawerLayout.DrawerListener, Navi
         }
         dashboardPager.apply {
             adapter = pagerAdapter
-            currentItem = 0
+            currentItem = 1
             offscreenPageLimit = 4
         }
     }
@@ -113,5 +123,8 @@ class DashboardActivity : AppCompatActivity(), DrawerLayout.DrawerListener, Navi
         }
         else -> super.onOptionsItemSelected(item)
     }
+
+
 }
+
 

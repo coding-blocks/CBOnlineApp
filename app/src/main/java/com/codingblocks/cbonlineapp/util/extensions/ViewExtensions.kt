@@ -3,15 +3,24 @@ package com.codingblocks.cbonlineapp.util.extensions
 import android.animation.Animator
 import android.content.Context
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.annotation.AnimRes
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.view.menu.ActionMenuItemView
+import androidx.appcompat.widget.ActionMenuView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -199,4 +208,35 @@ fun View.animateVisibility(visible: Int) {
         })
         .start()
 }
+
+fun Toolbar.colouriseToolbar(context: Context, @DrawableRes toolbarDrawable: Int, @ColorInt foregroundColor: Int) {
+    if (this == null) return
+    background = AppCompatResources.getDrawable(context, toolbarDrawable)
+    setTitleTextColor(foregroundColor)
+    setSubtitleTextColor(foregroundColor)
+    val colorFilter = PorterDuffColorFilter(foregroundColor, PorterDuff.Mode.SRC_IN)
+    for (i in 0 until childCount) {
+        val view: View = getChildAt(i)
+        //Back button or drawer open button
+        if (view is ImageButton) {
+            view.drawable.colorFilter = colorFilter
+        }
+        if (view is ActionMenuView) {
+            for (j in 0 until view.childCount) {
+                val innerView: View = view.getChildAt(j)
+                //Any ActionMenuViews - icons that are not back button, text or overflow menu
+                if (innerView is ActionMenuItemView) {
+                    val drawables = innerView.compoundDrawables
+                    for (k in drawables.indices) {
+                        val drawable = drawables[k]
+                        if (drawable != null) {
+                            innerView.post { innerView.compoundDrawables[k].colorFilter = colorFilter }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 

@@ -9,12 +9,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/dashboardToolbar"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways" />
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/dashboardToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="10dp"
+                app:layout_scrollFlags="scroll|enterAlways" />
+
+            <LinearLayout
+                android:id="@+id/dashboardToolbarSecondary"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:layout_marginTop="42dp"
+                android:background="@drawable/toolbar_bg_colored"
+                android:visibility="gone" />
+        </FrameLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
 
     <com.codingblocks.fabnavigation.FabNavigationViewPager
         android:id="@+id/dashboardPager"
