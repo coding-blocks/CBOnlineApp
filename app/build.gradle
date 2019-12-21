@@ -131,8 +131,6 @@ dependencies {
 //    implementation "com.andkulikov:transitionseverywhere:2.1.0"
 
 
-
-
     // Image view libraries
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'com.caverock:androidsvg-aar:1.4'

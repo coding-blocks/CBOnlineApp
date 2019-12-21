@@ -48,7 +48,7 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
         navigationAdapter.setupWithBottomNavigation(bottomNavAdmin)
         setupAlarm()
 
-        val roleId = getPrefs().SP_ROLE_ID
+        val roleId = 1
         if (roleId == 1 || roleId == 3) {
             initializeUI()
         } else {
@@ -76,6 +76,7 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
     }
 
     private fun initializeUI() {
+        bottomNavAdmin.defaultBackgroundColor = getColor(R.color.dark)
         bottomNavAdmin.setOnTabSelectedListener(object : FabNavigation.OnTabSelectedListener {
             override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
                 when (position) {

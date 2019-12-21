@@ -14,15 +14,29 @@
         <item name="appBarLayoutStyle">@style/ToolBarStyle</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="buttonStyle">@style/ButtonStyle</item>
+
         <!--        <item name="materialButtonStyle">@style/MaterialButton</item>-->
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+
     </style>
 
     <style name="ToolBarStyle" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:background">@drawable/toolbar_bg</item>
         <item name="titleTextAppearance">@style/Toolbar.TitleText</item>
         <item name="titleTextColor">@color/black</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
+
     </style>
+
+    <style name="ToolBarStyleDark" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:background">@drawable/toolbar_bg_dark</item>
+        <item name="titleTextAppearance">@style/Toolbar.TitleText</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="navigationIcon">@drawable/ic_back_white</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
+
+    </style>
+
 
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">18sp</item>
@@ -183,6 +197,7 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/gilroy_medium</item>
     </style>
+
 
     <color name="colorPrimaryDarkJobs">#452ba3</color>
     <color name="colorPrimaryJobs">#692fdc</color>

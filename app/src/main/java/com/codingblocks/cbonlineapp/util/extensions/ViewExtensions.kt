@@ -122,7 +122,7 @@ fun View.showSnackbar(message: String, length: Int, anchorView: FabNavigation?, 
     params.setMargins(params.leftMargin,
         params.topMargin,
         params.rightMargin,
-        params.bottomMargin + 16)
+        params.bottomMargin + 100)
 
     snackBarView.view.layoutParams = params
     snackBarView
