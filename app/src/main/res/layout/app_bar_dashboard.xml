@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dashboardRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -23,10 +24,41 @@
             <LinearLayout
                 android:id="@+id/dashboardToolbarSecondary"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                android:layout_marginTop="42dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
                 android:background="@drawable/toolbar_bg_colored"
-                android:visibility="gone" />
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/toolbarCourseTitleTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_xxl"
+                    android:layout_marginBottom="@dimen/margin_medium"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="Web Development"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/toolbarCourseResumeTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_xxl"
+                    android:layout_marginBottom="@dimen/margin_medium"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_dropright"
+                    android:drawablePadding="@dimen/margin_medium_small"
+                    android:focusable="true"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:text="@string/continue_learning"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
         </FrameLayout>
     </com.google.android.material.appbar.AppBarLayout>
 

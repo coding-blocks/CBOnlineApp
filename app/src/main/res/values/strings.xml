@@ -152,7 +152,6 @@
     <string name="all">All</string>
     <string name="recently_accessed">Recently Accessed</string>
     <string name="wishlisted_courses">Wishlisted Courses</string>
-    <string name="learning_tracks">Learning Tracks</string>
     <string name="all_courses">All Courses</string>
     <string name="expired_courses">Expired Courses</string>
     <string name="buy_extension">Buy Extension</string>
@@ -162,5 +161,15 @@
     <string name="view_live_doubts">View Live Doubts</string>
     <string name="doubt_reopen_desc">You can view your doubt in “Live Doubts” section</string>
     <string name="doubt_reopen_title">Your doubt has been reopened!</string>
+    <string name="continue_learning">Continue Learning</string>
+    <string name="view_profile">View Profile</string>
+    <string name="help_amp_feedback"><![CDATA[Help & Feedback]]></string>
+    <string name="contact_us">Contact Us</string>
+    <string name="report_a_bug">Report A Bug</string>
+    <string name="admin_panel">Admin Panel</string>
+    <string name="settings">Settings</string>
+    <string name="learning_tracks">Learning Tracks</string>
+    <string name="my_purchases">My Purchases</string>
+    <string name="hiring_blocks">Hiring Blocks</string>
 
 </resources>

@@ -19,9 +19,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
+        app:itemIconPadding="30dp"
         app:headerLayout="@layout/nav_header_home"
-        app:itemBackground="@android:color/transparent"
+        app:itemTextAppearance="@style/NavigationDrawerStyle"
         app:menu="@menu/activity_home_drawer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

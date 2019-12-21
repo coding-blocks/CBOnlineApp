@@ -100,13 +100,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (viewModel.prefs.SP_ACCESS_TOKEN_KEY != ACCESS_TOKEN) {
             setUser()
             val navMenu = nav_view.menu
-            navMenu.findItem(R.id.nav_my_courses).isVisible = true
-            nav_view.setCheckedItem(R.id.nav_my_courses)
+//            navMenu.findItem(R.id.nav_my_courses).isVisible = true
+//            nav_view.setCheckedItem(R.id.nav_my_courses)
 //            transaction.replace(R.id.fragment_holder, MyCoursesFragment()).commit()
         } else {
             transaction.replace(R.id.fragment_holder, HomeFragment()).commit()
         }
-        nav_view.getHeaderView(0).login_button.setOnClickListener(this)
+//        nav_view.getHeaderView(0).login_button.setOnClickListener(this)
     }
 
     private fun setUser() {
@@ -123,11 +123,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 setOnClickListener(this@HomeActivity)
                 loadImage(viewModel.prefs.SP_USER_IMAGE, true)
             }
-        nav_view.getHeaderView(0).login_button.apply {
-            text = resources.getString(R.string.logout)
-        }
+//        nav_view.getHeaderView(0).login_button.apply {
+//            text = resources.getString(R.string.logout)
+//        }
         val navMenu = nav_view.menu
-        navMenu.findItem(R.id.nav_my_courses).isVisible = true
+//        navMenu.findItem(R.id.nav_my_courses).isVisible = true
     }
 
     override fun onStart() {
@@ -211,42 +211,42 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_all_courses -> {
-                changeFragment("All Courses")
-            }
-            R.id.nav_home -> {
-                changeFragment("Home")
-            }
-            R.id.nav_my_courses -> {
-                changeFragment("My Courses")
-            }
-            R.id.nav_whatsapp -> {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setPackage("com.whatsapp")
-                intent.data = Uri.parse("https://wa.me/919811557517")
-                if (packageManager.resolveActivity(intent, 0) != null) {
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(this, "Please install whatsApp", Toast.LENGTH_SHORT).show()
-                }
-            }
-            R.id.nav_preferences -> {
-                startActivity(intentFor<SettingsActivity>().singleTop())
-            }
-            R.id.nav_jobs -> {
-                startActivity(intentFor<JobsActivity>().singleTop())
-            }
-            R.id.nav_contactUs -> {
-                startActivity(intentFor<AboutActivity>().singleTop())
-            }
-            R.id.nav_admin -> {
-                startActivity(intentFor<AdminActivity>().singleTop())
-            }
-            R.id.report_bug -> {
-                showReportDialog()
-            }
-        }
+//        when (item.itemId) {
+//            R.id.nav_all_courses -> {
+//                changeFragment("All Courses")
+//            }
+//            R.id.nav_home -> {
+//                changeFragment("Home")
+//            }
+//            R.id.nav_my_courses -> {
+//                changeFragment("My Courses")
+//            }
+//            R.id.nav_whatsapp -> {
+//                val intent = Intent(Intent.ACTION_VIEW)
+//                intent.setPackage("com.whatsapp")
+//                intent.data = Uri.parse("https://wa.me/919811557517")
+//                if (packageManager.resolveActivity(intent, 0) != null) {
+//                    startActivity(intent)
+//                } else {
+//                    Toast.makeText(this, "Please install whatsApp", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//            R.id.nav_preferences -> {
+//                startActivity(intentFor<SettingsActivity>().singleTop())
+//            }
+//            R.id.nav_jobs -> {
+//                startActivity(intentFor<JobsActivity>().singleTop())
+//            }
+//            R.id.nav_contactUs -> {
+//                startActivity(intentFor<AboutActivity>().singleTop())
+//            }
+//            R.id.nav_admin -> {
+//                startActivity(intentFor<AdminActivity>().singleTop())
+//            }
+//            R.id.report_bug -> {
+//                showReportDialog()
+//            }
+//        }
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
@@ -400,13 +400,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.login_button -> {
-                if (viewModel.prefs.SP_ACCESS_TOKEN_KEY == ACCESS_TOKEN) {
-                    startActivity(intentFor<LoginActivity>().singleTop())
-                    finish()
-                } else
-                    confirmLogout()
-            }
+//            R.id.login_button -> {
+//                if (viewModel.prefs.SP_ACCESS_TOKEN_KEY == ACCESS_TOKEN) {
+//                    startActivity(intentFor<LoginActivity>().singleTop())
+//                    finish()
+//                } else
+//                    confirmLogout()
+//            }
             R.id.nav_header_imageView -> Components.openChrome(
                 this,
                 "https://account.codingblocks.com"
