@@ -2,34 +2,46 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
-
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
+        style="@style/ToolBarStyleDarkBorderless"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="@color/black"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            style="@style/ToolBarStyleDarkBorderless"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|enterAlways"
             app:titleEnabled="false"
             app:toolbarId="@+id/toolbar">
 
             <RelativeLayout
+                android:id="@+id/collapseContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/toolbar_bg_colored"
-                android:paddingTop="68dp">
+                android:background="@drawable/toolbar_bg_borderless"
+                app:layout_collapseMode="parallax">
+
+                <ImageView
+                    android:id="@+id/courseBackdrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:outlineProvider="background"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/placeholder_course_cover" />
 
                 <TextView
                     android:id="@+id/shortTv"
+                    android:layout_marginTop="68dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_large"
@@ -44,6 +56,7 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/courseLogo"
                     android:layout_width="70dp"
+                    android:layout_marginTop="68dp"
                     android:layout_height="70dp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="@dimen/margin_large"
@@ -76,7 +89,7 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/courseToolbar"
-                style="@style/Theme.MaterialComponents.Light"
+                style="@style/ToolBarStyleDarkBorderless"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin">
@@ -141,7 +154,7 @@
                     android:fontFamily="@font/gilroy_medium"
                     android:textColor="@color/orangish"
                     android:textSize="12sp"
-                    tools:text="Ends 2nd Nov 2019" />
+                    android:text="Ends 2nd Nov 2019" />
 
                 <TextView
                     android:id="@+id/mrpTv"
@@ -152,7 +165,7 @@
                     android:layout_toEndOf="@id/priceTv"
                     android:fontFamily="@font/gilroy_bold"
                     android:textColor="@color/brownish_grey"
-                    tools:text="9499" />
+                    android:text="9499" />
 
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -336,9 +349,8 @@
                     android:id="@+id/courseSuggestedRv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:layout_marginEnd="@dimen/margin_medium"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:itemCount="4"

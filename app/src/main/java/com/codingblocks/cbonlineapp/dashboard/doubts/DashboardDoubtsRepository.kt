@@ -19,8 +19,12 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
                                 private val commentsDao: CommentsDao,
                                 private val runDao: CourseRunDao) {
 
-    suspend fun fetchDoubtsByCourseRun(id: String = "44872") = safeApiCall {
+    suspend fun fetchDoubtsByCourseRun(id: String) = safeApiCall {
         Clients.onlineV2JsonApi.getDoubtByAttemptId(id)
+    }
+
+    suspend fun fetchCommentsByDoubtId(id: String) = safeApiCall {
+        Clients.onlineV2JsonApi.getCommentsById(id)
     }
 
     suspend fun insertDoubts(doubts: List<Doubts>) {
@@ -39,15 +43,6 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
         }
     }
 
-    fun getDoubtsByCourseRun(type: String?, courseId: String = "44872"): LiveData<List<DoubtsModel>> {
-        return when (type) {
-            LIVE -> doubtsDao.getLiveDoubts(courseId)
-            RESOLVED -> doubtsDao.getResolveDoubts(courseId)
-            else -> doubtsDao.getDoubts(courseId)
-        }
-
-    }
-
     suspend fun resolveDoubt(doubt: DoubtsModel) =
         safeApiCall {
             Clients.onlineV2JsonApi.resolveDoubt(doubt.dbtUid,
@@ -64,11 +59,6 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
                 ))
         }
 
-    fun getDoubtById(id: String) = doubtsDao.getDoubtById(id)
-
-    suspend fun fetchCommentsByDoubtId(id: String) = safeApiCall {
-        Clients.onlineV2JsonApi.getCommentsById(id)
-    }
 
     suspend fun insertComments(comments: List<Comment>) {
         comments.forEach {
@@ -82,7 +72,19 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
         }
     }
 
+    fun getDoubtsByCourseRun(type: String?, courseId: String): LiveData<List<DoubtsModel>> {
+        return when (type) {
+            LIVE -> doubtsDao.getLiveDoubts(courseId)
+            RESOLVED -> doubtsDao.getResolveDoubts(courseId)
+            else -> doubtsDao.getDoubts(courseId)
+        }
+
+    }
+
+
+    fun getDoubtById(id: String) = doubtsDao.getDoubtById(id)
     fun getCommentsById(id: String) = commentsDao.getComments(id)
     fun getRuns() = runDao.getAttemptIds()
+
 
 }

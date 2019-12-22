@@ -14,7 +14,6 @@
         <item name="appBarLayoutStyle">@style/ToolBarStyle</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="buttonStyle">@style/ButtonStyle</item>
-
         <!--        <item name="materialButtonStyle">@style/MaterialButton</item>-->
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
 
@@ -35,6 +34,11 @@
         <item name="navigationIcon">@drawable/ic_back_white</item>
         <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
+
+    <style name="ToolBarStyleDarkBorderless" parent="ToolBarStyleDark">
+        <item name="android:background">@drawable/toolbar_bg_borderless</item>
+    </style>
+
 
     <style name="ToolBarStyleWhite" parent="Widget.MaterialComponents.Toolbar">
         <item name="titleTextAppearance">@style/Toolbar.TitleText</item>

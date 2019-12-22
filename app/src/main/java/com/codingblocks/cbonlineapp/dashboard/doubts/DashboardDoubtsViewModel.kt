@@ -22,19 +22,21 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
     var barMessage: MutableLiveData<String> = MutableLiveData()
     var type: MutableLiveData<String> = MutableLiveData()
     var courseId: MutableLiveData<String> = MutableLiveData()
+    val default = "44872"
 
     init {
         listDoubtsResponse = Transformations.switchMap(DoubleTrigger(type, courseId)) {
-            repo.getDoubtsByCourseRun(it.first, it.second ?: "")
+            fetchDoubts()
+            repo.getDoubtsByCourseRun(it.first, it.second ?: default)
         }
 
         doubts.addSource(listDoubtsResponse) {
             doubts.postValue(it)
         }
-        doubts.addSource(repo.getDoubtsByCourseRun(ALL)) {
+        doubts.addSource(repo.getDoubtsByCourseRun(ALL, default)) {
             if (it.isNotEmpty()) {
                 doubts.postValue(it)
-                doubts.removeSource(repo.getDoubtsByCourseRun(ALL))
+                doubts.removeSource(repo.getDoubtsByCourseRun(ALL, default))
             }
         }
 
@@ -42,7 +44,7 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
 
     fun fetchDoubts() {
         runIO {
-            when (val response = repo.fetchDoubtsByCourseRun()) {
+            when (val response = repo.fetchDoubtsByCourseRun(courseId.value ?: default)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)

@@ -180,7 +180,7 @@ class DashboardDoubtsFragment : Fragment() {
             sheetDialog.run {
                 sheetLv.adapter = SheetAdapter(list)
                 sheetLv.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-                    viewModel.courseId.postValue("")
+                    viewModel.courseId.postValue("30678")
                     dialog.dismiss()
                 }
             }

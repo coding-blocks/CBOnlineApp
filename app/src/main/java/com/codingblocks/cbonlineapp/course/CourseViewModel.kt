@@ -18,6 +18,7 @@ class CourseViewModel(
     private val repo: CourseRepository
 ) : ViewModel() {
     var course = MutableLiveData<Course>()
+    var suggestedCourses = MutableLiveData<List<Course>>()
     val projects = MutableLiveData<List<Project>>()
     val sections = MutableLiveData<List<Sections>>()
     var errorLiveData = MutableLiveData<String>()
@@ -32,6 +33,9 @@ class CourseViewModel(
     var clearCartProgress: MutableLiveData<Boolean> = MutableLiveData()
     var enrollTrialProgress: MutableLiveData<Boolean> = MutableLiveData()
 
+    init {
+        fetchRecommendedCourses()
+    }
 
     fun fetchCourse() {
         runIO {
@@ -48,8 +52,19 @@ class CourseViewModel(
         }
     }
 
-    fun getProjects(projectIdList: ArrayList<Project>) {
-//        repository.getProjects(projectIdList)
+    private fun fetchRecommendedCourses() {
+        runIO {
+            when (val response = repo.getSuggestedCourses()) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        suggestedCourses.postValue(body())
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
     }
 
     private fun setError(error: String) {

@@ -24,6 +24,10 @@ const val COURSE_NAME = "course_name"
 
 const val COURSE_ID = "courseId"
 
+const val COURSE_LOGO = "courseLogo"
+
+const val LOGO_TRANSITION_NAME = "logo_transition"
+
 const val ROLE_ID = "roleId"
 
 const val RUN_ID = "runId"

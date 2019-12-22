@@ -37,8 +37,6 @@ import retrofit2.http.Query
 interface OnlineJsonApi {
 
 
-    @get:GET("courses")
-    val courses: Call<ArrayList<Course>>
 
     @GET("courses/{id}")
     suspend fun getCourse(
@@ -90,10 +88,15 @@ interface OnlineJsonApi {
     @GET("instructors/{id}")
     suspend fun instructorsById(@Path("id") id: String): Response<Instructor>
 
-
-
-
-
+    @GET("courses")
+    suspend fun getRecommendedCourses(
+        @Query("exclude") query: String = "ratings,instructors.*,feedbacks,runs.*",
+        @Query("filter[recommended]") recommended: String = "true",
+        @Query("filter[unlisted]") unlisted: String = "false",
+        @Query("page[limit]") page: String = "12",
+        @Query("include") include: String = "instructors,runs",
+        @Query("sort") sort: String = "difficulty"
+    ): Response<List<Course>>
 
 
     @GET("instructors")
@@ -101,16 +104,6 @@ interface OnlineJsonApi {
         @Query("include") include: Array<String>? = null
     ): Call<ArrayList<Instructor>>
 
-
-    @GET("courses")
-    fun getRecommendedCourses(
-        @Query("exclude") query: String = "ratings,instructors.*,feedbacks,runs.*",
-        @Query("filter[recommended]") recommended: String = "true",
-        @Query("filter[unlisted]") unlisted: String = "false",
-        @Query("page[limit]") page: String = "12",
-        @Query("include") include: String = "instructors,runs",
-        @Query("sort") sort: String = "difficulty"
-    ): Call<ArrayList<Course>>
 
     @GET("courses")
     fun getAllCourses(

@@ -21,6 +21,8 @@ class CourseRepository(
 
     suspend fun getCourse(id: String) = safeApiCall { Clients.onlineV2JsonApi.getCourse(id) }
 
+    suspend fun getSuggestedCourses() = safeApiCall { Clients.onlineV2JsonApi.getRecommendedCourses() }
+
     suspend fun getProjects(id: String) = Clients.onlineV2JsonApi.getProject(id)
 
     suspend fun getSection(id: String) = Clients.onlineV2JsonApi.getSections(id)
