@@ -131,8 +131,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_medium"
-                android:layout_marginBottom="@dimen/margin_medium">
+                android:paddingTop="@dimen/margin_medium"
+                android:paddingBottom="@dimen/margin_medium">
 
                 <TextView
                     android:id="@+id/priceTv"

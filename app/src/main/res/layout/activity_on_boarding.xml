@@ -26,11 +26,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_large"
-        android:layout_marginTop="@dimen/margin_xl"
-        android:layout_marginEnd="@dimen/margin_large"
-        android:layout_marginBottom="@dimen/margin_xl"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/margin_large"
+        android:paddingTop="@dimen/margin_xl"
+        android:paddingEnd="@dimen/margin_large"
+        android:paddingBottom="@dimen/margin_xl">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/browseBtn"
@@ -46,6 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_medium"
             android:layout_weight="1"
+            android:padding="10dp"
             android:text="@string/login_signup" />
     </LinearLayout>
 </LinearLayout>

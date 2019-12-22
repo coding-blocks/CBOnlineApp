@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.dashboard.mycourses
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,19 +10,25 @@ import androidx.lifecycle.MutableLiveData
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.SheetAdapter
 import com.codingblocks.cbonlineapp.commons.SheetItem
+import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
+import com.codingblocks.cbonlineapp.util.COURSE_ID
+import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
-import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard_my_courses.*
+import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -35,6 +40,20 @@ class DashboardMyCoursesFragment : Fragment() {
     private val viewModel by viewModel<DashboardMyCoursesViewModel>()
     private val type = MutableLiveData<Int>()
     private val courseListAdapter = MyCourseListAdapter()
+
+    private val itemClickListener: ItemClickListener by lazy {
+        object : ItemClickListener {
+
+            override fun onClick(id: String, runId: String, runAttemptId: String, name: String) {
+                startActivity(intentFor<MyCourseActivity>(
+                    COURSE_ID to id,
+                    RUN_ID to runId,
+                    RUN_ATTEMPT_ID to runAttemptId,
+                    COURSE_NAME to name
+                ).singleTop())
+            }
+        }
+    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -90,6 +109,7 @@ class DashboardMyCoursesFragment : Fragment() {
                 }
             }
         }
+        courseListAdapter.onItemClick = itemClickListener
     }
 
     private fun setUpBottomSheet() {
@@ -115,6 +135,8 @@ class DashboardMyCoursesFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        courseListAdapter.onItemClick = null
+
     }
 }
 

@@ -104,8 +104,8 @@
             android:name=".mycourse.MyCourseActivity"
             android:label="@string/title_activity_my_course"
             android:launchMode="singleTop"
-            android:parentActivityName=".home.HomeActivity"
-            android:theme="@style/AppThemeMain">
+            android:parentActivityName=".dashboard.DashboardActivity"
+            android:theme="@style/NewAppTheme">
             <intent-filter>
                 <action android:name="com.coddinblocks.appshortcuts.OPEN_DYNAMIC_SHORTCUT" />
 

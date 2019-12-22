@@ -135,7 +135,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         }
 
         popupWindowDogs?.setOnDismissListener {
-            activity?.fab?.extend()
+            //            activity?.fab?.extend()
             view.clearDim()
         }
 

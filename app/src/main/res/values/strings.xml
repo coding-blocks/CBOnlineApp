@@ -107,7 +107,6 @@
     <string name="faqs">Frequently Asked Questions</string>
     <string name="reset_progress">Reset Progress</string>
     <string name="contents_completed">Contents Completed</string>
-    <string name="resume">Resume</string>
     <string name="extension_desc">Buy extension for this course</string>
     <string name="extension_title">Your course will expire soon!</string>
     <string name="filter_location">Location</string>
@@ -135,8 +134,6 @@
     <string name="chat_with_ta">Chat with TA</string>
     <string name="comment">Comment</string>
     <string name="doubts">Doubts</string>
-    <string name="library">Library</string>
-    <string name="dashboard">Dashboard</string>
     <string name="my_courses">My Courses</string>
     <string name="explore">Explore</string>
 
@@ -174,5 +171,11 @@
     <string name="login_signup">Login/Signup</string>
     <string name="browse_courses">Browse Courses</string>
     <string name="filters">Filters</string>
+    <string name="resume">Resume</string>
+    <string name="sections">Sections</string>
+    <string name="contents">Contents</string>
+    <string name="library">Library</string>
+    <string name="curriculum">Curriculum</string>
+    <string name="dashboard">Dashboard</string>
 
 </resources>

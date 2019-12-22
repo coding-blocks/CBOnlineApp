@@ -1,12 +1,9 @@
 package com.codingblocks.cbonlineapp.dashboard.mycourses
 
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +14,8 @@ import kotlinx.android.synthetic.main.item_courses.view.*
 
 class MyCourseListAdapter : ListAdapter<CourseInstructorPair, MyCourseListAdapter.ItemViewHolder>(DiffCallback()) {
 
+    var onItemClick: ItemClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
             LayoutInflater.from(parent.context)
@@ -26,9 +25,13 @@ class MyCourseListAdapter : ListAdapter<CourseInstructorPair, MyCourseListAdapte
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.itemClickListener = onItemClick
+
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var itemClickListener: ItemClickListener? = null
+
         fun bind(item: CourseInstructorPair) = with(itemView) {
             courseTitleTv.text = item.courseRun.course.title
             if (item.instructor.isNotEmpty())
@@ -54,16 +57,30 @@ class MyCourseListAdapter : ListAdapter<CourseInstructorPair, MyCourseListAdapte
                 progressView1.highlightView.colorGradientStart = context.getColor(R.color.pastel_red)
                 progressView1.highlightView.colorGradientEnd = context.getColor(R.color.dusty_orange)
             }
-        }
-    }
-
-    class DiffCallback : DiffUtil.ItemCallback<CourseInstructorPair>() {
-        override fun areItemsTheSame(oldItem: CourseInstructorPair, newItem: CourseInstructorPair): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(oldItem: CourseInstructorPair, newItem: CourseInstructorPair): Boolean {
-            return oldItem.sameAndEqual(newItem)
+            setOnClickListener {
+                if (expired) {
+                    //TODO ( show extension modal )
+                } else {
+                    itemClickListener?.onClick(item.courseRun.crCourseId, item.courseRun.crUid, item.courseRun.crAttemptId
+                        ?: "", item.courseRun.course.title)
+                }
+            }
         }
     }
 }
+
+class DiffCallback : DiffUtil.ItemCallback<CourseInstructorPair>() {
+    override fun areItemsTheSame(oldItem: CourseInstructorPair, newItem: CourseInstructorPair): Boolean {
+        return oldItem == newItem
+    }
+
+    override fun areContentsTheSame(oldItem: CourseInstructorPair, newItem: CourseInstructorPair): Boolean {
+        return oldItem.sameAndEqual(newItem)
+    }
+}
+
+
+interface ItemClickListener {
+    fun onClick(id: String, runId: String, runAttemptId: String, name: String)
+}
+

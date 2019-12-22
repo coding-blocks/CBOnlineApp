@@ -26,7 +26,7 @@ data class Project(
     val image: String = ""
 ) : BaseModel()
 
-@Type("courses")
+@Type("course")
 data class Course(
     val title: String,
     val subtitle: String,
@@ -49,7 +49,7 @@ data class Course(
     var projects: ArrayList<Project>?
 ) : BaseModel()
 
-@Type("runs")
+@Type("run")
 data class Runs(
     val name: String,
     val description: String,
@@ -81,7 +81,7 @@ data class Runs(
 ) : BaseModel()
 
 //TODO ( change this to plural )
-@Type("run_attempts")
+@Type("run_attempt")
 data class RunAttempts(
     val certificateApproved: Boolean = false,
     val end: String = "",

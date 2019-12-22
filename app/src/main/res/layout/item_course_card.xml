@@ -57,24 +57,30 @@
 
 
                 <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:id="@+id/course_card_share"
-                    android:layout_width="@dimen/button_size"
-                    android:layout_height="@dimen/button_size"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:layout_alignTop="@id/course_card_like"
                     android:layout_marginEnd="@dimen/margin_small"
                     android:layout_toStartOf="@id/course_card_like"
-                    android:background="@drawable/ic_share"
+                    android:src="@drawable/ic_share"
                     android:contentDescription="@string/share" />
 
                 <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
                     android:id="@+id/course_card_like"
-                    android:layout_width="@dimen/button_size"
-                    android:layout_height="@dimen/button_size"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="@dimen/margin_medium_small"
                     android:layout_marginEnd="@dimen/padding_medium"
                     android:layout_marginBottom="@dimen/margin_large"
-                    android:background="@drawable/ic_like"
+                    android:src="@drawable/ic_like"
                     android:contentDescription="@string/like" />
 
                 <TextView

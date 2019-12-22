@@ -11,14 +11,13 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         app:cardCornerRadius="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/margin_large"
-            android:layout_marginBottom="@dimen/margin_large"
+            android:paddingTop="@dimen/margin_large"
+            android:paddingBottom="@dimen/margin_large"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -51,7 +50,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="28dp"
                 android:gravity="center">
 
                 <androidx.appcompat.widget.AppCompatButton

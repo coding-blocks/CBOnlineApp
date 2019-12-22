@@ -28,8 +28,6 @@ import com.codingblocks.onlineapi.models.Tags
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -100,6 +98,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             courseSummaryTv.text = course.summary
             title = course.title
             shortTv.text = course.subtitle
+            ratingBar.numStars = course.rating.toInt()
+            ratingTv.text = "${course.rating}/5, ${course.reviewCount} ratings"
             if (courseLogoUrl.isNullOrEmpty()) courseLogo.loadImage(course.logo)
             courseBackdrop.loadImage(course.coverImage)
             setYoutubePlayer(course.promoVideo)
@@ -186,6 +186,11 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         val alpha = (appBarLayout.totalScrollRange + verticalOffset).toFloat() / appBarLayout.totalScrollRange
         courseLogo.alpha = alpha
         shortTv.alpha = alpha
+    }
+
+    override fun onBackPressed() { //To support reverse transitions when user clicks the device back button
+        supportFinishAfterTransition()
+        super.onBackPressed()
     }
 
 }

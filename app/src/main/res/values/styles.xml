@@ -14,6 +14,7 @@
         <item name="appBarLayoutStyle">@style/ToolBarStyle</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="buttonStyle">@style/ButtonStyle</item>
+        <item name="android:clipToPadding">false</item>
         <!--        <item name="materialButtonStyle">@style/MaterialButton</item>-->
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
 
@@ -94,7 +95,9 @@
         <item name="android:paddingEnd">12dp</item>
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">8dp</item>
+        <item name="android:drawablePadding">10dp</item>
     </style>
+
 
 
     <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
@@ -220,6 +223,12 @@
         <item name="android:fontFamily">@font/gilroy_medium</item>
     </style>
 
+    <style name="AppTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:fontFamily">@font/gilroy_bold</item>
+    </style>
 
     <color name="colorPrimaryDarkJobs">#452ba3</color>
     <color name="colorPrimaryJobs">#692fdc</color>
