@@ -30,6 +30,8 @@
     <color name="dark">#1b1e26</color>
     <color name="kiwigreen">#83db3b</color>
     <color name="tealgreen">#26a87c</color>
+    <color name="navy_blue">#00205b</color>
+    <color name="warm_purple">#84358e</color>
 
 
 </resources>

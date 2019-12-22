@@ -16,7 +16,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.home.CourseDataAdapter
 import com.codingblocks.cbonlineapp.util.JOB_ID
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.isotomillisecond
@@ -41,7 +40,7 @@ class JobDetailActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<JobDetailViewModel>()
 
-    private lateinit var courseDataAdapter: CourseDataAdapter
+//    private lateinit var courseDataAdapter: CourseDataAdapter
 
     lateinit var jobId: String
 
@@ -61,9 +60,9 @@ class JobDetailActivity : AppCompatActivity() {
 
         viewModel.fetchJob(jobId)
 
-        courseDataAdapter = CourseDataAdapter()
+//        courseDataAdapter = CourseDataAdapter()
         rvJobCourses.layoutManager = LinearLayoutManager(this)
-        rvJobCourses.adapter = courseDataAdapter
+//        rvJobCourses.adapter = courseDataAdapter
 
         jobDescriptionBtn.setOnClickListener {
             cardJobDescription.isVisible = !cardJobDescription.isVisible
@@ -92,7 +91,7 @@ class JobDetailActivity : AppCompatActivity() {
         }
 
         viewModel.jobCourses.distinctUntilChanged().nonNull().observer(this) {
-            courseDataAdapter.submitList(it)
+            //            courseDataAdapter.submitList(it)
         }
         viewModel.eligibleLiveData.observer(this) {
             when (it) {

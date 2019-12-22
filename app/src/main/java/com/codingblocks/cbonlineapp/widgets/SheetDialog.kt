@@ -10,7 +10,7 @@ import androidx.annotation.StyleRes
 
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class SheetDialog(context: Context, @StyleRes theme: Int) : BottomSheetDialog(context, SheetDialog.getThemeResId(context, theme)) {
+class SheetDialog(context: Context, @StyleRes theme: Int) : BottomSheetDialog(context, getThemeResId(context, theme)) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

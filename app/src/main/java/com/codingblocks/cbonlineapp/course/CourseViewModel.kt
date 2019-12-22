@@ -17,18 +17,17 @@ import kotlinx.coroutines.withContext
 class CourseViewModel(
     private val repo: CourseRepository
 ) : ViewModel() {
+    lateinit var id: String
     var course = MutableLiveData<Course>()
     var suggestedCourses = MutableLiveData<List<Course>>()
     val projects = MutableLiveData<List<Project>>()
     val sections = MutableLiveData<List<Sections>>()
     var errorLiveData = MutableLiveData<String>()
 
-    var sheetBehavior: BottomSheetBehavior<*>? = null
 
+    var sheetBehavior: BottomSheetBehavior<*>? = null
     var image: MutableLiveData<String> = MutableLiveData()
     var name: MutableLiveData<String> = MutableLiveData()
-    lateinit var id: String
-    var fetchedCourse: MutableLiveData<Course> = MutableLiveData()
     var addedToCartProgress: MutableLiveData<Boolean> = MutableLiveData()
     var clearCartProgress: MutableLiveData<Boolean> = MutableLiveData()
     var enrollTrialProgress: MutableLiveData<Boolean> = MutableLiveData()
@@ -67,47 +66,6 @@ class CourseViewModel(
         }
     }
 
-    private fun setError(error: String) {
-        errorLiveData.postValue(error)
-    }
-
-
-    fun getCart() {
-        Clients.api.getCart().enqueue(retrofitCallback { _, response ->
-            response?.body().let { json ->
-                json?.getAsJsonArray("cartItems")?.get(0)?.asJsonObject.let {
-                    image.value = it?.get("image_url")?.asString
-                    name.value = it?.get("productName")?.asString
-
-                    sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-                }
-            }
-        })
-    }
-
-    fun clearCart() {
-        Clients.api.clearCart().enqueue(retrofitCallback { _, response ->
-            clearCartProgress.value = (response?.isSuccessful == true)
-        })
-    }
-//    fun getCourseRating(id: String) = liveData(Dispatchers.IO) {
-//        emit(repository.getRating(id))
-//    }
-
-//    suspend fun getCourseSection(id: String) = repository.getCourseSections(id)
-
-    fun enrollTrial(id: String) {
-        Clients.api.enrollTrial(id).enqueue(retrofitCallback { _, response ->
-            enrollTrialProgress.value = (response?.isSuccessful == true)
-        })
-    }
-
-    fun addToCart(id: String) {
-        Clients.api.addToCart(id).enqueue(retrofitCallback { _, response ->
-            addedToCartProgress.value = (response?.isSuccessful ?: false)
-        })
-    }
-
     fun fetchProjects(projectIdList: ArrayList<Project>?) {
         val list = arrayListOf<Project>()
         if (!projectIdList.isNullOrEmpty()) {
@@ -134,5 +92,41 @@ class CourseViewModel(
                 sections.postValue(list)
             }
         }
+    }
+
+    private fun setError(error: String) {
+        errorLiveData.postValue(error)
+    }
+
+
+    fun getCart() {
+        Clients.api.getCart().enqueue(retrofitCallback { _, response ->
+            response?.body().let { json ->
+                json?.getAsJsonArray("cartItems")?.get(0)?.asJsonObject.let {
+                    image.value = it?.get("image_url")?.asString
+                    name.value = it?.get("productName")?.asString
+                    sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+                }
+            }
+        })
+    }
+
+    fun clearCart() {
+        Clients.api.clearCart().enqueue(retrofitCallback { _, response ->
+            clearCartProgress.value = (response?.isSuccessful == true)
+        })
+    }
+
+
+    fun enrollTrial(id: String) {
+        Clients.api.enrollTrial(id).enqueue(retrofitCallback { _, response ->
+            enrollTrialProgress.value = (response?.isSuccessful == true)
+        })
+    }
+
+    fun addToCart(id: String) {
+        Clients.api.addToCart(id).enqueue(retrofitCallback { _, response ->
+            addedToCartProgress.value = (response?.isSuccessful ?: false)
+        })
     }
 }

@@ -177,5 +177,8 @@
     <string name="library">Library</string>
     <string name="curriculum">Curriculum</string>
     <string name="dashboard">Dashboard</string>
+    <string name="course_announcements">Course Announcements</string>
+    <string name="my_bookmarks">My Bookmarks</string>
+    <string name="my_downloads">My Downloads</string>
 
 </resources>

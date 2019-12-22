@@ -104,7 +104,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //            nav_view.setCheckedItem(R.id.nav_my_courses)
 //            transaction.replace(R.id.fragment_holder, MyCoursesFragment()).commit()
         } else {
-            transaction.replace(R.id.fragment_holder, HomeFragment()).commit()
+//            transaction.replace(R.id.fragment_holder, HomeFragment()).commit()
         }
 //        nav_view.getHeaderView(0).login_button.setOnClickListener(this)
     }
@@ -307,8 +307,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun changeFragment(filter: String) {
         when (filter) {
-            "All Courses" -> viewModel.mFragmentToSet = AllCourseFragment()
-            "Home" -> viewModel.mFragmentToSet = HomeFragment()
+//            "All Courses" -> viewModel.mFragmentToSet = AllCourseFragment()
+//            "Home" -> viewModel.mFragmentToSet = HomeFragment()
 //            "My Courses" -> viewModel.mFragmentToSet = MyCoursesFragment()
         }
         onBackPressed()
@@ -372,11 +372,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onDrawerClosed(drawerView: View) {
         if (viewModel.mFragmentToSet != null) {
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.fragment_holder, viewModel.mFragmentToSet ?: HomeFragment())
-                .commit()
-            viewModel.mFragmentToSet = null
+//            supportFragmentManager
+//                .beginTransaction()
+//                .replace(R.id.fragment_holder, viewModel.mFragmentToSet ?: HomeFragment())
+//                .commit()
+//            viewModel.mFragmentToSet = null
         }
     }
 

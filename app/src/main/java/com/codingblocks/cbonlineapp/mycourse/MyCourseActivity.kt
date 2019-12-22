@@ -7,6 +7,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.content.CourseContentFragment
+import com.codingblocks.cbonlineapp.mycourse.library.CourseLibraryFragment
 import com.codingblocks.cbonlineapp.mycourse.overview.OverviewFragment
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
@@ -49,41 +50,27 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
     }
 
     private fun initUI() {
-//
-//        navigationAdapter.setupWithBottomNavigation(bottom_navigation)
-//        setupViewPager()
-//
-//        bottom_navigation.manageFloatingActionButtonBehavior(fab)
-////        bottom_navigation.accentColor = R.color.salmon
-//        bottom_navigation.titleState = FabNavigation.TitleState.ALWAYS_SHOW
-//        bottom_navigation.isTranslucentNavigationEnabled = true
-//        bottom_navigation.setCurrentItem(1)
-//        bottom_navigation.setOnTabSelectedListener(object : FabNavigation.OnTabSelectedListener {
-//            override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
-//                course_pager.setCurrentItem(position, false)
-//                if (position == 1) {
+        setupViewPager()
+    }
+
+    private fun setupViewPager() {
+//        if (position == 1) {
 //                    fab.animateVisibility(View.VISIBLE)
 //                } else {
 //                    if (fab.visibility == View.VISIBLE) {
 //                        fab.animateVisibility(View.GONE)
 //                    }
 //                }
-//                return true
-//            }
-//        })
-        setupViewPager()
-    }
-
-    private fun setupViewPager() {
         myCourseTabs.setupWithViewPager(course_pager)
         pagerAdapter.apply {
             add(OverviewFragment.newInstance(viewModel.attemptId, viewModel.runId), getString(R.string.dashboard))
-            add(CourseContentFragment.newInstance(viewModel.attemptId), getString(R.string.curriculum))
+            add(CourseContentFragment(), getString(R.string.curriculum))
+            add(CourseLibraryFragment(), getString(R.string.library))
         }
         course_pager.apply {
+            setPagingEnabled(true)
             adapter = pagerAdapter
             currentItem = 0
-
             offscreenPageLimit = 3
         }
     }

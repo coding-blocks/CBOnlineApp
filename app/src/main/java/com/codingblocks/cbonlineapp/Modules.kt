@@ -13,8 +13,6 @@ import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesReposi
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesViewModel
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.home.HomeActivityViewModel
-import com.codingblocks.cbonlineapp.home.HomeRepository
-import com.codingblocks.cbonlineapp.home.HomeViewModel
 import com.codingblocks.cbonlineapp.jobs.JobsViewModel
 import com.codingblocks.cbonlineapp.jobs.jobdetails.JobDetailViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
@@ -29,7 +27,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { HomeViewModel(get()) }
 
     viewModel { MyCourseViewModel(get()) }
     viewModel { LeaderboardViewModel() }
@@ -44,7 +41,6 @@ val viewModelModule = module {
     viewModel { JobsViewModel(get()) }
     viewModel { JobDetailViewModel(get(), get()) }
 
-    single { HomeRepository(get(), get(), get(), get(), get()) }
     single { MyCourseRepository(get(), get(), get(), get(), get()) }
 
 

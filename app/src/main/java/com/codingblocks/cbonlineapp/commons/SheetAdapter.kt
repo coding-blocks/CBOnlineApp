@@ -1,20 +1,13 @@
 package com.codingblocks.cbonlineapp.commons
 
-import android.graphics.Color
+import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import androidx.core.widget.ImageViewCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import com.codingblocks.cbonlineapp.R
 import kotlinx.android.synthetic.main.item_bottomsheet.view.*
-import android.graphics.PorterDuff
-import androidx.core.graphics.drawable.DrawableCompat
-
-
-
-data class SheetItem(val name: String, val icon: Int, val selected: Boolean = false)
-
 
 class SheetAdapter(val items: ArrayList<SheetItem>) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -47,3 +40,6 @@ class SheetAdapter(val items: ArrayList<SheetItem>) : BaseAdapter() {
     override fun getCount() = items.size
 
 }
+
+data class SheetItem(val name: String, val icon: Int, val selected: Boolean = false)
+

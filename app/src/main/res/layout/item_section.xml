@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_margin="4dp"
-    tools:ignore="MissingPrefix"
-    android:gravity="center_vertical">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="18dp"
+    android:layout_marginBottom="18dp"
+    android:gravity="center_vertical"
+    android:paddingStart="@dimen/margin_large"
+    android:paddingEnd="@dimen/margin_large">
+
+    <View
+        android:id="@+id/dividerTop"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/veryLightPink" />
 
     <TextView
         android:id="@+id/title"
+        android:layout_below="@id/dividerTop"
+        android:layout_marginTop="18dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/gilroy_bold"
         android:layout_toStartOf="@id/downloadSectionBtn"
-        android:textColor="@color/grey850"
+        android:textColor="@color/black"
         android:textSize="18sp"
-        tools:ignore="MissingPrefix"
         tools:text="1.Introduction to Android Development" />
 
     <TextView
@@ -26,10 +34,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
+        android:layout_marginTop="4dp"
         android:layout_marginStart="8dp"
         android:layout_toEndOf="@id/lectures"
         android:maxLines="1"
-        android:textColor="@color/grey850"
+        android:fontFamily="@font/gilroy_medium"
+        android:textColor="@color/brownish_grey"
         android:textSize="14sp"
         tools:text="30 Mins" />
 
@@ -38,10 +48,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
+        android:layout_marginTop="4dp"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="8dp"
+        android:fontFamily="@font/gilroy_medium"
         android:maxLines="1"
-        android:textColor="@color/grey850"
+        android:textColor="@color/brownish_grey"
         android:textSize="14sp"
         tools:text="3 Lectures" />
 
@@ -52,7 +63,6 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="12dp"
         android:src="@android:drawable/stat_sys_download"
         android:tint="@color/colorPrimary"
         android:visibility="gone" />
@@ -61,11 +71,8 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_below="@id/lectureTime"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/grey850"
-        android:visibility="visible" />
+        android:layout_marginTop="18dp"
+        android:background="@color/veryLightPink" />
 
 
 </RelativeLayout>

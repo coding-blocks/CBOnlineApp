@@ -81,6 +81,7 @@ interface OnlineJsonApi {
     @GET("runs")
     suspend fun getMyCourses(
         @Query("enrolled") enrolled: String = "true",
+        @Query("page[offset]") offset: String = "0",
         @Query("include") include: String = "course,run_attempts"
     ): Response<JSONAPIDocument<List<Runs>>>
 

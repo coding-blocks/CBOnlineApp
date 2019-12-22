@@ -9,6 +9,7 @@ import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
+import com.codingblocks.onlineapi.getMeta
 
 class DashboardMyCoursesViewModel(
     private val repo: DashboardMyCoursesRepository
@@ -37,16 +38,23 @@ class DashboardMyCoursesViewModel(
 
     }
 
-    fun fetchMyCourses() {
+    fun fetchMyCourses(offset: String = "0") {
         runIO {
-            when (val response = repo.fetchMyCourses()) {
+            when (val response = repo.fetchMyCourses(offset)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
                             repo.insertCourses(it.get())
-                            if (it.get().isEmpty())
-                                courses.postValue(emptyList())
+                            val currentOffSet = getMeta(it.meta, "currentOffset").toString()
+                            val nextOffSet = getMeta(it.meta, "nextOffset").toString()
+                            if (currentOffSet != nextOffSet) {
+                                fetchMyCourses(nextOffSet)
+                                if (it.get().isEmpty())
+                                    courses.postValue(emptyList())
+                            }
+
+
                         }
                     else {
                         setError(fetchError(response.value.code()))

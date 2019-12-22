@@ -26,8 +26,8 @@ class DashboardMyCoursesRepository(
     private val instructorDao: InstructorDao
 ) {
 
-    suspend fun fetchMyCourses() = safeApiCall {
-        Clients.onlineV2JsonApi.getMyCourses()
+    suspend fun fetchMyCourses(offset: String) = safeApiCall {
+        Clients.onlineV2JsonApi.getMyCourses(offset = offset)
     }
 
 
