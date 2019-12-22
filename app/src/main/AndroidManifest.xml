@@ -19,6 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/NewAppTheme">
+        <activity android:name=".library.LibraryActivity"></activity>
         <activity android:name=".auth.LoginActivity" />
         <activity android:name=".onboarding.OnBoardingActivity">
             <intent-filter>

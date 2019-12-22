@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.dashboard
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.doubts.CommentsListAdapter
@@ -9,6 +10,7 @@ import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsViewModel
 import com.codingblocks.cbonlineapp.util.DOUBT_ID
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
 import kotlinx.android.synthetic.main.activity_doubt_comment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,10 +30,7 @@ class DoubtCommentActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doubt_comment)
-        setSupportActionBar(commentsToolbar)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
+        setToolbar(commentsToolbar)
         commentRv.setRv(this@DoubtCommentActivity, commentsListAdapter)
 
         viewModel.getDoubt(doubtId).observer(this) {

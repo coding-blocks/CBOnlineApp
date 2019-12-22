@@ -32,6 +32,8 @@ const val ROLE_ID = "roleId"
 
 const val RUN_ID = "runId"
 
+const val TYPE = "type"
+
 const val DOWNLOADED = "downloaded"
 
 const val COURSE_TAB = "courseTab"

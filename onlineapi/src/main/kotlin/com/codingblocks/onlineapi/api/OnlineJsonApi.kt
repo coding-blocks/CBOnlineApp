@@ -109,11 +109,16 @@ interface OnlineJsonApi {
         @Path("sectionlink") sectionlink: String
     ): Response<ArrayList<LectureContent>>
 
+    @GET("run_attempts/{runAttemptId}/relationships/notes")
+    suspend fun getNotesByAttemptId(
+        @Path("runAttemptId") id: String
+    ): Response<List<Note>>
 
-    @GET("instructors")
-    fun instructors(
-        @Query("include") include: Array<String>? = null
-    ): Call<ArrayList<Instructor>>
+    @DELETE("notes/{noteid}")
+    suspend fun deleteNoteById(
+        @Path("noteid") id: String
+    ): Response<Note>
+
 
 
     @GET("courses")
@@ -126,11 +131,6 @@ interface OnlineJsonApi {
         @Query("sort") sort: String = "difficulty"
     ): Call<ArrayList<Course>>
 
-
-    @GET("sections/{sectionid}/relationships/contents")
-    fun getSectionContent(
-        @Path("sectionid") id: String
-    ): Call<ArrayList<LectureContent>>
 
 
     @GET("quizzes/{quizid}")
@@ -166,15 +166,9 @@ interface OnlineJsonApi {
     @POST("doubts")
     fun createDoubt(@Body params: Doubts): Call<Doubts>
 
-
     @POST("comments")
     fun createComment(@Body params: Comment): Call<Comment>
 
-    @GET("run_attempts/{runAttemptId}/relationships/notes")
-    fun getNotesByAttemptId(@Path("runAttemptId") id: String): Call<ArrayList<Note>>
-
-    @DELETE("notes/{noteid}")
-    fun deleteNoteById(@Path("noteid") id: String): Call<Note>
 
     @PATCH("notes/{noteid}")
     fun updateNoteById(@Path("noteid") id: String, @Body params: Notes): Call<ResponseBody>

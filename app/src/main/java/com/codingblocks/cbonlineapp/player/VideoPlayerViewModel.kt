@@ -148,45 +148,45 @@ class VideoPlayerViewModel(
 //    }
 
     fun fetchNotes(param: String) {
-        val networkList: ArrayList<NotesModel> = ArrayList()
-        Clients.onlineV2JsonApi.getNotesByAttemptId(param).enqueue(retrofitCallback { _, response ->
-            response?.body().let { notesList ->
-                if (response?.isSuccessful == true) {
-                    notesList?.forEach {
-                        try {
-                            networkList.add(
-                                NotesModel(
-                                    it.id,
-                                    it.duration ?: 0.0,
-                                    it.text ?: "",
-                                    it.content?.id
-                                        ?: "",
-                                    it.runAttempt?.id ?: "",
-                                    it.createdAt ?: "",
-                                    it.deletedAt
-                                        ?: ""
-                                )
-                            )
-                        } catch (e: Exception) {
-                            Log.i("Error", "error" + e.message)
-                        }
-                    }
-                    if (networkList.size == notesList?.size) {
-                        viewModelScope.launch(Dispatchers.IO) { notesDao.insertAll(networkList) }
-                        notesDao.getNotes(param).observeOnce { list ->
-                            // remove items which are deleted
-                            val sum = list + networkList
-                            sum.groupBy { it.nttUid }
-                                .filter { it.value.size == 1 }
-                                .flatMap { it.value }
-                                .forEach {
-                                    notesDao.deleteNoteByID(it.nttUid)
-                                }
-                        }
-                    }
-                }
-            }
-        })
+//        val networkList: ArrayList<NotesModel> = ArrayList()
+//        Clients.onlineV2JsonApi.getNotesByAttemptId(param).enqueue(retrofitCallback { _, response ->
+//            response?.body().let { notesList ->
+//                if (response?.isSuccessful == true) {
+//                    notesList?.forEach {
+//                        try {
+//                            networkList.add(
+//                                NotesModel(
+//                                    it.id,
+//                                    it.duration ?: 0.0,
+//                                    it.text ?: "",
+//                                    it.content?.id
+//                                        ?: "",
+//                                    it.runAttempt?.id ?: "",
+//                                    it.createdAt ?: "",
+//                                    it.deletedAt
+//                                        ?: ""
+//                                )
+//                            )
+//                        } catch (e: Exception) {
+//                            Log.i("Error", "error" + e.message)
+//                        }
+//                    }
+//                    if (networkList.size == notesList?.size) {
+//                        viewModelScope.launch(Dispatchers.IO) { notesDao.insertAll(networkList) }
+//                        notesDao.getNotes(param).observeOnce { list ->
+//                            // remove items which are deleted
+//                            val sum = list + networkList
+//                            sum.groupBy { it.nttUid }
+//                                .filter { it.value.size == 1 }
+//                                .flatMap { it.value }
+//                                .forEach {
+//                                    notesDao.deleteNoteByID(it.nttUid)
+//                                }
+//                        }
+//                    }
+//                }
+//            }
+//        })
     }
 
     fun getNextVideo(contentId: String, sectionId: String, attemptId: String) = contentDao.getNextItem(sectionId, attemptId, contentId)

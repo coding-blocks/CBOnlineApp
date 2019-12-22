@@ -26,6 +26,7 @@ class MyCourseViewModel(
     var attemptId: String = ""
     var runId: String = ""
     var courseId: String = ""
+    var name: String = ""
     private val mutablePopMessage = SingleLiveEvent<String>()
     private val extensions = MutableLiveData<List<ProductExtensionsItem>>()
     val popMessage: LiveData<String> = mutablePopMessage

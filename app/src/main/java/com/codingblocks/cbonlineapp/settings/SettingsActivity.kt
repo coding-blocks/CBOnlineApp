@@ -11,6 +11,7 @@ import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.extensions.folderSize
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.readableFileSize
+import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_settings.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,9 +30,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        setSupportActionBar(settings_toolbar)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setToolbar(settings_toolbar)
     }
 
     override fun onStart() {

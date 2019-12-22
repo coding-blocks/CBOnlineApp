@@ -18,6 +18,7 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.fabnavigation.FabNavigationAdapter
 import kotlinx.android.synthetic.main.activity_admin.*
@@ -42,9 +43,7 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin)
-        setSupportActionBar(toolbarAdmin)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setToolbar(toolbarAdmin)
         navigationAdapter.setupWithBottomNavigation(bottomNavAdmin)
         setupAlarm()
 

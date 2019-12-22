@@ -40,4 +40,7 @@ interface ContentDao : BaseDao<ContentModel> {
         c.`order` = ((SELECT `order` FROM ContentModel where ccid = :uid) + 1 ) LIMIT 1
     """)
     fun getNextItem(sectionId: String, attemptId: String, uid: String): LiveData<ContentModel>
+
+    @Query("SElECT title FROM ContentModel where  ccid = :id")
+    suspend fun getContentTitle(id: String): String
 }

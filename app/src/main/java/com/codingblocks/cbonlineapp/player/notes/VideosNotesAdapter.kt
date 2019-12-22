@@ -81,14 +81,14 @@ class VideosNotesAdapter(
                     }.addCallback(object : Snackbar.Callback() {
                         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                             if (event == DISMISS_EVENT_TIMEOUT) {
-                                Clients.onlineV2JsonApi.deleteNoteById(note.nttUid)
-                                    .enqueue(retrofitCallback { _, response ->
-                                        response.let {
-                                            if (it?.isSuccessful == true) {
-                                                viewModel.deleteNoteByID(note.nttUid)
-                                            }
-                                        }
-                                    })
+//                                Clients.onlineV2JsonApi.deleteNoteById(note.nttUid)
+//                                    .enqueue(retrofitCallback { _, response ->
+//                                        response.let {
+//                                            if (it?.isSuccessful == true) {
+//                                                viewModel.deleteNoteByID(note.nttUid)
+//                                            }
+//                                        }
+//                                    })
                             }
                         }
                     }).setActionTextColor(context.resources.getColor(R.color.salmon))

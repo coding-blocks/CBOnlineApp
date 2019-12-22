@@ -77,7 +77,7 @@ data class ContentCsvModel(
         entity = ContentModel::class,
         parentColumns = ["ccid"],
         childColumns = ["contentId"],
-        onDelete = ForeignKey.CASCADE // or CASCADE
+        onDelete = ForeignKey.CASCADE
     ))]
 )
 data class NotesModel(
@@ -88,7 +88,9 @@ data class NotesModel(
     var contentId: String = "",
     var runAttemptId: String = "",
     var createdAt: String = "",
-    var deletedAt: String = ""
+    var deletedAt: String? = "",
+    var contentTitle: String = ""
+
 )
 
 @Entity

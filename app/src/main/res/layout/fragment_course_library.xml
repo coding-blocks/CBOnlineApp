@@ -5,7 +5,13 @@
     android:orientation="vertical"
     tools:context="com.codingblocks.cbonlineapp.mycourse.library.CourseLibraryFragment">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/veryLightPink" />
+
     <LinearLayout
+        android:id="@+id/notesBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -61,7 +67,15 @@
             android:visibility="visible" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:background="@color/veryLightPink" />
+
     <LinearLayout
+        android:id="@+id/bookmarkBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -117,7 +131,15 @@
             android:visibility="visible" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:background="@color/veryLightPink" />
+
     <LinearLayout
+        android:id="@+id/downloadBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -173,7 +195,15 @@
             android:visibility="visible" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:background="@color/veryLightPink" />
+
     <LinearLayout
+        android:id="@+id/announcementsBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"

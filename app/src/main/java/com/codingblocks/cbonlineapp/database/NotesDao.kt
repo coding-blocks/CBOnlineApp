@@ -4,12 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.codingblocks.cbonlineapp.database.models.NotesModel
+import com.codingblocks.onlineapi.models.RunAttemptId
 
 @Dao
 abstract class NotesDao : BaseDao<NotesModel> {
 
-    @Query("SElECT * FROM NotesModel where runAttemptId = :ruid")
-    abstract fun getNotes(ruid: String): LiveData<List<NotesModel>>
+    @Query("SElECT * FROM NotesModel where runAttemptId = :runAttemptId")
+    abstract fun getNotes(runAttemptId: String): LiveData<List<NotesModel>>
 
     @Query("SElECT * FROM NotesModel")
     abstract fun getAllNotes(): LiveData<List<NotesModel>>

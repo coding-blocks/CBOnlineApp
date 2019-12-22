@@ -1,5 +1,6 @@
 package com.codingblocks.onlineapi.models
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.github.jasminb.jsonapi.Links
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
@@ -178,7 +179,6 @@ class SectionContent(
     val order: Int,
     val sectionId: String?
 ) : BaseModel()
-
 
 
 @Type("content")
@@ -412,22 +412,17 @@ class Quizqnas : BaseModel()
 
 
 @Type("note")
-class Note : BaseModel() {
-    @JvmField
-    var duration: Double? = null
-    @JvmField
-    var text: String? = null
-    @JvmField
-    var createdAt: String? = null
-    @JvmField
-    var deletedAt: String? = null
-    @Relationship("run_attempt", resolve = true)
-    @JvmField
-    var runAttempt: RunAttemptId? = null
+class Note(
+    val duration: Double,
+    @JsonProperty("createdAt")
+    val createdAt: String,
+    val deletedAt: String? = null,
+    val text: String,
+    @Relationship("run_attempt")
+    val runAttempt: RunAttemptId? = null,
     @Relationship("content")
-    @JvmField
-    var content: ContentId? = null
-}
+    val content: ContentId? = null
+) : BaseModel()
 
 @Type("notes")
 class Notes : BaseModel() {

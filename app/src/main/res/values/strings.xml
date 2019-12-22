@@ -180,5 +180,9 @@
     <string name="course_announcements">Course Announcements</string>
     <string name="my_bookmarks">My Bookmarks</string>
     <string name="my_downloads">My Downloads</string>
+    <string name="notes">Notes</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="downloads">Downloads</string>
+    <string name="announcements">Announcements</string>
 
 </resources>

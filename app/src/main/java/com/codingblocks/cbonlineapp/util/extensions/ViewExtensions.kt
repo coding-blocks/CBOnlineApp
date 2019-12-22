@@ -239,4 +239,21 @@ fun Toolbar.colouriseToolbar(context: Context, @DrawableRes toolbarDrawable: Int
     }
 }
 
+fun AppCompatActivity.setToolbar(
+    toolbar: Toolbar,
+    hasUpEnabled: Boolean = true,
+    homeButtonEnabled: Boolean = true,
+    title: String = "",
+    show: Boolean = true
+) {
+    setSupportActionBar(toolbar)
+    if (show) {
+        if (title.isNotEmpty())
+            supportActionBar?.title = title
+        supportActionBar?.setDisplayHomeAsUpEnabled(hasUpEnabled)
+        supportActionBar?.setHomeButtonEnabled(homeButtonEnabled)
+        supportActionBar?.show()
+    } else supportActionBar?.hide()
+}
+
 

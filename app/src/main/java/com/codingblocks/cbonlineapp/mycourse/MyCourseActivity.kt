@@ -14,6 +14,7 @@ import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
+import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
@@ -29,14 +30,12 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_course)
-
-        setSupportActionBar(toolbar_mycourse)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setToolbar(toolbar_mycourse)
 
         viewModel.courseId = intent.getStringExtra(COURSE_ID) ?: ""
         title = intent.getStringExtra(COURSE_NAME)
         viewModel.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
+        viewModel.name = title as String? ?: ""
         viewModel.runId = intent.getStringExtra(RUN_ID) ?: ""
 
         initUI()

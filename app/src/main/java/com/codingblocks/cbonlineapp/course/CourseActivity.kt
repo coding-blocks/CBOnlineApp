@@ -23,6 +23,7 @@ import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.loadSvg
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Tags
 import com.google.android.material.appbar.AppBarLayout
@@ -74,9 +75,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course)
         supportPostponeEnterTransition()
-        setSupportActionBar(courseToolbar)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setToolbar(courseToolbar)
         viewModel.id = courseId
         viewModel.fetchCourse()
         lifecycle.addObserver(youtubePlayerView)
