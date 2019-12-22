@@ -82,21 +82,25 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         return inflater.inflate(R.layout.fragment_course_content, container, false)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.fetchSections()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val smoothScroller: RecyclerView.SmoothScroller = object : LinearSmoothScroller(context) {
             override fun getVerticalSnapPreference(): Int {
                 return SNAP_TO_START
             }
         }
 
-        completeSwitch.setOnClickListener {
-            if (completeSwitch.isChecked)
-                viewModel.complete.postValue("UNDONE")
-            else
-                viewModel.complete.postValue("")
-        }
+//        completeSwitch.setOnClickListener {
+//            if (completeSwitch.isChecked)
+//                viewModel.complete.postValue("UNDONE")
+//            else
+//                viewModel.complete.postValue("")
+//        }
 
         typeChipGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {

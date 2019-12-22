@@ -88,7 +88,9 @@ data class RunAttempts(
     val premium: Boolean = false,
     val revoked: Boolean = false,
     val approvalRequested: Boolean = false,
-    val doubtSupport: String? = ""
+    val doubtSupport: String? = "",
+    @Relationship("run")
+    val run: Runs? = null
 ) : BaseModel() {
     constructor(id: String) : this() {
         super.id = id
@@ -150,16 +152,18 @@ class Comment(
 ) : BaseModel()
 
 
-@Type("sections")
+@Type("section")
 data class Sections(
     var name: String?,
-    var preminum: Boolean? = false,
+    var premium: Boolean? = false,
     var status: String? = null,
     var order: Int? = 0,
     @Relationship("contents")
-    var contents: ArrayList<ContentsId>?
+    var contents: ArrayList<ContentsId>?,
+    val runId: String? = "",
+    @RelationshipLinks("contents")
+    val courseContentLinks: Links? = null
 ) : BaseModel()
-
 
 @Type("instructors")
 data class Instructor(
@@ -175,19 +179,6 @@ class SectionContent(
     val sectionId: String?
 ) : BaseModel()
 
-
-@Type("section")
-class CourseSection(
-    val name: String,
-    val status: String,
-    val order: Int,
-    val premium: Boolean,
-    val runId: String,
-    @RelationshipLinks("contents")
-    val courseContentLinks: Links?,
-    @Relationship("contents")
-    val courseContent: ArrayList<LectureContent>? = null
-) : BaseModel()
 
 
 @Type("content")

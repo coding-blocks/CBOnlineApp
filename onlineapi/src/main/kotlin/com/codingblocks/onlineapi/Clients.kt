@@ -20,7 +20,6 @@ import com.codingblocks.onlineapi.models.ContentVideoType
 import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.CourseId
-import com.codingblocks.onlineapi.models.CourseSection
 import com.codingblocks.onlineapi.models.DoubtLeaderBoard
 import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Instructor
@@ -68,8 +67,7 @@ object Clients {
 
     private val onlineApiResourceConverter = ResourceConverter(
         om, Instructor::class.java, Course::class.java, Sections::class.java, Runs::class.java, RunAttempts::class.java, ContentVideoType::class.java,
-        LectureContent::class.java, ContentDocumentType::class.java, ContentProgress::class.java,
-        CourseSection::class.java, ContentLectureType::class.java, ContentCodeChallenge::class.java,
+        LectureContent::class.java, ContentDocumentType::class.java, ContentProgress::class.java, ContentLectureType::class.java, ContentCodeChallenge::class.java,
         ContentQna::class.java, Announcement::class.java, Progress::class.java, Quizzes::class.java,
         Question::class.java, Choice::class.java, QuizAttempt::class.java,
         Quizqnas::class.java, Doubts::class.java, ContentCsv::class.java, Comment::class.java,

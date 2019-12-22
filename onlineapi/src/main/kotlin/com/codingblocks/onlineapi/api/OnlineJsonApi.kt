@@ -98,6 +98,16 @@ interface OnlineJsonApi {
         @Query("sort") sort: String = "difficulty"
     ): Response<List<Course>>
 
+    @GET("run_attempts/{runid}")
+    suspend fun enrolledCourseById(
+        @Path("runid") id: String
+    ): Response<RunAttempts>
+
+    @GET("{sectionlink}")
+    suspend fun getSectionContents(
+        @Path("sectionlink") sectionlink: String
+    ): Response<ArrayList<LectureContent>>
+
 
     @GET("instructors")
     fun instructors(
@@ -116,20 +126,11 @@ interface OnlineJsonApi {
     ): Call<ArrayList<Course>>
 
 
-    @GET("run_attempts/{runid}")
-    fun enrolledCourseById(
-        @Path("runid") id: String
-    ): Call<RunAttempts>
-
     @GET("sections/{sectionid}/relationships/contents")
     fun getSectionContent(
         @Path("sectionid") id: String
     ): Call<ArrayList<LectureContent>>
 
-    @GET("{sectionlink}")
-    fun getSectionContents(
-        @Path("sectionlink") sectionlink: String
-    ): Call<ArrayList<LectureContent>>
 
     @GET("quizzes/{quizid}")
     fun getQuizById(

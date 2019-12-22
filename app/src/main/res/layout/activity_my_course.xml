@@ -6,7 +6,6 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-        style="@style/ToolBarStyleDark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -14,8 +13,7 @@
             android:id="@+id/toolbar_mycourse"
             style="@style/ToolBarStyleDark"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways">
+            android:layout_height="?attr/actionBarSize">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/courseResumeBtn"
