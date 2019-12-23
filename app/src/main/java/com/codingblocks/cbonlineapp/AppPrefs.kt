@@ -24,4 +24,10 @@ interface AppPrefs {
     @Pref("roleId")
     var roleId: Int
 
+    @Pref("filter")
+    var courseFilter: Int
+
+    @Pref("doubtType")
+    var doubtType: Int
+
 }

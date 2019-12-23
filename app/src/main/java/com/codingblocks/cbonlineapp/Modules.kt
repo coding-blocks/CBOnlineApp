@@ -7,7 +7,7 @@ import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewRepository
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.course.CourseViewModel
-import com.codingblocks.cbonlineapp.dashboard.DashboardHomeRepository
+import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsViewModel
@@ -63,10 +63,9 @@ val viewModelModule = module {
     single { DashboardDoubtsRepository(get(), get(), get()) }
     single { DashboardMyCoursesRepository(get(), get(), get(), get()) }
     single { LibraryRepository(get(), get()) }
-    single { DashboardHomeRepository(get()) }
+    single { DashboardHomeRepository(get(), get()) }
+
     single { Spork.create(androidApplication(), AppPrefs::class) }
-
-
 }
 val databaseModule = module {
 

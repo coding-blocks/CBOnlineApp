@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.AboutActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
+import com.codingblocks.cbonlineapp.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsFragment
 import com.codingblocks.cbonlineapp.dashboard.explore.DashboardExploreFragment
@@ -71,7 +72,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         viewModel.prefs.run {
             dashboardNavigation.getHeaderView(0).apply {
                 navHeaderImageView.loadImage(userImage, true)
-                navUsernameTv.append(firstName)
+                navUsernameTv.append(" $firstName")
             }
         }
     }
@@ -137,7 +138,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             true
         }
         R.id.dashboard_cart -> {
-            TODO("Implement this")
+            startActivity(intentFor<CheckoutActivity>())
             true
         }
         else -> super.onOptionsItemSelected(item)

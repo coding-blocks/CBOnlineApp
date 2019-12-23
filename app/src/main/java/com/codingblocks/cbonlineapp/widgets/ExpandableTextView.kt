@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import android.widget.TextView
 import com.codingblocks.cbonlineapp.R
 
-class ExpandableTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : TextView(context, attrs) {
+class ExpandableTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : androidx.appcompat.widget.AppCompatTextView(context, attrs) {
 
     var originalText: CharSequence? = null
         private set
@@ -62,6 +62,6 @@ class ExpandableTextView @JvmOverloads constructor(context: Context, attrs: Attr
 
     companion object {
         private val DEFAULT_TRIM_LENGTH = 200
-        private val ELLIPSIS = "....."
+        private val ELLIPSIS = "..... View More"
     }
 }

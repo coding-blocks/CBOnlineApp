@@ -11,7 +11,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="title_activity_my_course">MyCourseActivity</string>
-    <string name="course_progress">Course Progress</string>
+    <string name="course_progress">Course Progress : </string>
     <string name="trial_text">Start Free Trial</string>
     <string name="buy_text">Buy Now</string>
     <string name="join_whatsapp">Join WhatsApp Group</string>
@@ -114,6 +114,7 @@
     <string name="offline_message">Progress will be updated when your device goes online.</string>
     <string name="course_curriculum">Course Curriculum</string>
 
+
     <!-- New Strings -->
     <string name="empty_live_doubt">No Live requests. Keep this tab open, new doubts will appear here instantly</string>
     <string name="empty_my_doubt">Nothing Here.Keep up the Good Work!!</string>
@@ -185,5 +186,6 @@
     <string name="downloads">Downloads</string>
     <string name="announcements">Announcements</string>
     <string name="hello">Hello </string>
+    <string name="your_performance">Your Performance</string>
 
 </resources>

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabsIntent
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import kotlinx.android.synthetic.main.custom_dialog.view.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.layoutInflater
@@ -78,7 +79,7 @@ object Components {
         updateView.okBtn.setOnClickListener {
             confirmDialog.dismiss()
             when (type) {
-                "trial" -> context.startActivity(context.intentFor<HomeActivity>("courseRun" to "mycourses").singleTop())
+                "trial" -> context.startActivity(context.intentFor<DashboardActivity>("courseRun" to "mycourses").singleTop())
                 "verify" -> {
                     openChrome(context, "https://account.codingblocks.com/users/me")
                 }

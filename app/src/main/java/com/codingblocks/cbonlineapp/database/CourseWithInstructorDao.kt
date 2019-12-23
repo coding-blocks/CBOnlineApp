@@ -95,5 +95,12 @@ interface CourseWithInstructorDao {
 	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
        WHERE r.crAttemptId IS NOT NULL ORDER BY hits DESC LIMIT 2
     """)
-    fun getTopRun(): LiveData<List<CourseRunPair>>
+    fun getTopRuns(): LiveData<List<CourseRunPair>>
+
+    @Query("""
+        SELECT * FROM RunModel r
+	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
+       WHERE r.crAttemptId IS NOT NULL ORDER BY hits DESC LIMIT 1
+    """)
+    fun getTopRun(): LiveData<CourseRunPair>
 }

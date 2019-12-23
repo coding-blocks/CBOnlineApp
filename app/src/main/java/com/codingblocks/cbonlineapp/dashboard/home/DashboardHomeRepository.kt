@@ -1,11 +1,13 @@
-package com.codingblocks.cbonlineapp.dashboard
+package com.codingblocks.cbonlineapp.dashboard.home
 
 import com.codingblocks.cbonlineapp.AppPrefs
+import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.User
 import com.codingblocks.onlineapi.safeApiCall
 
-class DashboardHomeRepository(private val prefs: AppPrefs) {
+class DashboardHomeRepository(private val prefs: AppPrefs,
+                              private val courseWithInstructorDao: CourseWithInstructorDao) {
 
     suspend fun fetchUser() = safeApiCall { Clients.onlineV2JsonApi.getMe() }
 
@@ -19,5 +21,7 @@ class DashboardHomeRepository(private val prefs: AppPrefs) {
             prefs.lastName = lastname
         }
     }
+
+    fun getTopRun() = courseWithInstructorDao.getTopRun()
 
 }

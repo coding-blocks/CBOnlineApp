@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import kotlinx.android.synthetic.main.activity_login.*
@@ -35,7 +36,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
     private fun getAccessToken() = getPrefs().SP_ACCESS_TOKEN_KEY
 
     private fun redirectToHome() {
-        startActivity(intentFor<HomeActivity>().singleTop())
+        startActivity(intentFor<DashboardActivity>().singleTop())
         finish()
     }
 }

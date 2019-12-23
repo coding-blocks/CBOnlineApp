@@ -65,6 +65,7 @@ class DashboardMyCoursesFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         dashboardCourseShimmer.startShimmer()
         viewModel.fetchMyCourses()
+//        type.value = viewModel.prefs.courseFilter
     }
 
 
@@ -75,12 +76,12 @@ class DashboardMyCoursesFragment : Fragment() {
         courseTypeTv.setOnClickListener {
             dialog.show()
         }
-        type.observer(viewLifecycleOwner) {
+        type.observer(viewLifecycleOwner) { num ->
             courseTypeTv.apply {
-                //                TransitionManager.beginDelayedTransition(dashboardCourseRoot, ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_OUT_IN))
-                text = coursesType[it]
-                viewModel.courseFilter.postValue(coursesType[it])
-                setCompoundDrawablesRelativeWithIntrinsicBounds(requireContext().getDrawable(imgs.getResourceId(it, 0)), null, requireContext().getDrawable(R.drawable.ic_dropdown), null)
+                viewModel.prefs.courseFilter = num
+                text = coursesType[num]
+                viewModel.courseFilter.postValue(coursesType[num])
+                setCompoundDrawablesRelativeWithIntrinsicBounds(requireContext().getDrawable(imgs.getResourceId(num, 0)), null, requireContext().getDrawable(R.drawable.ic_dropdown), null)
             }
         }
 

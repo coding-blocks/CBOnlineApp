@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.AppPrefs
+import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.util.extensions.runIO
@@ -19,8 +20,7 @@ class DashboardViewModel(private val homeRepo: DashboardHomeRepository,
     var courseFilter = MutableLiveData<String>()
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
     var isAdmin: MutableLiveData<Boolean> = MutableLiveData()
-
-
+    val topRun = homeRepo.getTopRun()
     private val runs = myCourseRepo.getMyRuns()
     private val coursesResponse = Transformations.switchMap(courseFilter) { query ->
         myCourseRepo.getMyRuns(query)
