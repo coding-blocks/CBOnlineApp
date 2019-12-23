@@ -23,6 +23,7 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
     var type: MutableLiveData<String> = MutableLiveData()
     var courseId: MutableLiveData<String> = MutableLiveData()
     val default = "44872"
+    private val doubtsDao = repo.getDoubtsByCourseRun(ALL, default)
 
     init {
         listDoubtsResponse = Transformations.switchMap(DoubleTrigger(type, courseId)) {
@@ -33,10 +34,10 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
         doubts.addSource(listDoubtsResponse) {
             doubts.postValue(it)
         }
-        doubts.addSource(repo.getDoubtsByCourseRun(ALL, default)) {
+        doubts.addSource(doubtsDao) {
             if (it.isNotEmpty()) {
                 doubts.postValue(it)
-                doubts.removeSource(repo.getDoubtsByCourseRun(ALL, default))
+                doubts.removeSource(doubtsDao)
             }
         }
 

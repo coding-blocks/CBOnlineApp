@@ -12,6 +12,7 @@ import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import kotlinx.android.synthetic.main.activity_library.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+
 class LibraryActivity : AppCompatActivity() {
 
     val viewModel by viewModel<LibraryViewModel>()
@@ -19,6 +20,7 @@ class LibraryActivity : AppCompatActivity() {
         intent.getStringExtra(TYPE) ?: ""
     }
     private val notesListAdapter = LibraryNotesListAdapter()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

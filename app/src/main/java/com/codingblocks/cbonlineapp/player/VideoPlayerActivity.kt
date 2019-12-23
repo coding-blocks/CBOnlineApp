@@ -56,9 +56,7 @@ import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class VideoPlayerActivity : AppCompatActivity(),
-    OnItemClickListener, AnkoLogger,
-    VdoPlayer.InitializationListener {
+class VideoPlayerActivity : AppCompatActivity(), OnItemClickListener, AnkoLogger, VdoPlayer.InitializationListener {
 
     private val attemptId by lazy {
         intent.getStringExtra(RUN_ATTEMPT_ID)
