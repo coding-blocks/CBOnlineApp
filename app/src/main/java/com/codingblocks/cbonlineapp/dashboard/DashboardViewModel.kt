@@ -1,51 +1,76 @@
-package com.codingblocks.cbonlineapp.dashboard.mycourses
+package com.codingblocks.cbonlineapp.dashboard
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.AppPrefs
+import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.getMeta
 
-class DashboardMyCoursesViewModel(
-    private val repo: DashboardMyCoursesRepository
-) : ViewModel() {
-    private var coursesResponse: LiveData<List<CourseInstructorPair>> = MutableLiveData()
+class DashboardViewModel(private val homeRepo: DashboardHomeRepository,
+                         private val myCourseRepo: DashboardMyCoursesRepository,
+                         val prefs: AppPrefs) : ViewModel() {
     var courses: MediatorLiveData<List<CourseInstructorPair>> = MediatorLiveData()
     var courseFilter = MutableLiveData<String>()
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
-    var nextOffSet: MutableLiveData<Int> = MutableLiveData(-1)
-    var prevOffSet: MutableLiveData<Int> = MutableLiveData(-1)
+    var isAdmin: MutableLiveData<Boolean> = MutableLiveData()
+
+
+    private val runs = myCourseRepo.getMyRuns()
+    private val coursesResponse = Transformations.switchMap(courseFilter) { query ->
+        myCourseRepo.getMyRuns(query)
+    }
 
     init {
-        coursesResponse = Transformations.switchMap(courseFilter) { query ->
-            repo.getMyRuns(query)
-        }
         courses.addSource(coursesResponse) {
             courses.postValue(it)
         }
 
-        courses.addSource(repo.getMyRuns()) {
+        courses.addSource(runs) {
             if (it.isNotEmpty()) {
                 courses.postValue(it)
-                courses.removeSource(repo.getMyRuns())
+                courses.removeSource(runs)
             }
         }
+        fetchUser()
 
     }
 
-    fun fetchMyCourses(offset: String = "0") {
+
+    private fun fetchUser() {
         runIO {
-            when (val response = repo.fetchMyCourses(offset)) {
+            when (val response = homeRepo.fetchUser()) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
-                            repo.insertCourses(it.get())
+                            homeRepo.insertUser(it)
+                            if (it.roleId == 1 || it.roleId == 3) {
+                                isAdmin.postValue(true)
+                            }
+
+                        }
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun fetchMyCourses(offset: String = "0") {
+        runIO {
+            when (val response = myCourseRepo.fetchMyCourses(offset)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let {
+                            myCourseRepo.insertCourses(it.get())
                             val currentOffSet = getMeta(it.meta, "currentOffset").toString()
                             val nextOffSet = getMeta(it.meta, "nextOffset").toString()
                             if (currentOffSet != nextOffSet) {
@@ -68,4 +93,5 @@ class DashboardMyCoursesViewModel(
     private fun setError(error: String) {
         errorLiveData.postValue(error)
     }
+
 }

@@ -7,10 +7,11 @@ import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewRepository
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.course.CourseViewModel
+import com.codingblocks.cbonlineapp.dashboard.DashboardHomeRepository
+import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsViewModel
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
-import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesViewModel
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.home.HomeActivityViewModel
 import com.codingblocks.cbonlineapp.jobs.JobsViewModel
@@ -27,6 +28,7 @@ import com.codingblocks.cbonlineapp.settings.SettingsViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import tech.arnav.spork.Spork
 
 val viewModelModule = module {
 
@@ -51,8 +53,9 @@ val viewModelModule = module {
     viewModel { AdminOverviewViewModel(get()) }
     viewModel { DashboardDoubtsViewModel(get()) }
     viewModel { CourseViewModel(get()) }
-    viewModel { DashboardMyCoursesViewModel(get()) }
     viewModel { LibraryViewModel(get()) }
+    viewModel { DashboardViewModel(get(), get(), get()) }
+
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
@@ -60,6 +63,8 @@ val viewModelModule = module {
     single { DashboardDoubtsRepository(get(), get(), get()) }
     single { DashboardMyCoursesRepository(get(), get(), get(), get()) }
     single { LibraryRepository(get(), get()) }
+    single { DashboardHomeRepository(get()) }
+    single { Spork.create(androidApplication(), AppPrefs::class) }
 
 
 }

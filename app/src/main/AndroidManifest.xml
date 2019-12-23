@@ -19,7 +19,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/NewAppTheme">
-        <activity android:name=".library.LibraryActivity"></activity>
+        <activity
+            android:name=".library.LibraryActivity"
+            android:parentActivityName=".mycourse.MyCourseActivity" />
         <activity android:name=".auth.LoginActivity" />
         <activity android:name=".onboarding.OnBoardingActivity">
             <intent-filter>
@@ -43,12 +45,16 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <data
+                    android:host="online.codingblocks.com"
+                    android:scheme="app" />
             </intent-filter>
         </activity>
         <activity
             android:name=".admin.AdminActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".home.HomeActivity" />
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity android:name=".checkout.CheckoutActivity" />
         <activity
             android:name=".URLRouterActivity"
@@ -82,24 +88,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".home.HomeActivity"
-            android:configChanges="orientation"
-            android:label="@string/app_name"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="online.codingblocks.com"
-                    android:scheme="app" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".course.CourseActivity"
-            android:parentActivityName=".home.HomeActivity"
+            android:parentActivityName=".dashboard.DashboardActivity"
             android:theme="@style/NewAppTheme" />
         <activity
             android:name=".mycourse.MyCourseActivity"
@@ -115,16 +105,16 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.codingblocks.cbonlineapp.home.HomeActivity" />
+                android:value="com.codingblocks.cbonlineapp.dashboard.DashboardActivity" />
         </activity>
         <activity
             android:name=".notifications.NotificationsActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".home.HomeActivity" />
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".jobs.JobsActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".home.HomeActivity"
+            android:parentActivityName=".dashboard.DashboardActivity"
             android:theme="@style/Theme.Jobs" />
         <activity
             android:name=".jobs.jobdetails.JobDetailActivity"
@@ -134,10 +124,10 @@
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".home.HomeActivity" />
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".AboutActivity"
-            android:parentActivityName=".home.HomeActivity" />
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".player.VideoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"

@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.codingblocks.cbonlineapp.home.HomeActivity
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import kotlinx.android.synthetic.main.activity_login.*

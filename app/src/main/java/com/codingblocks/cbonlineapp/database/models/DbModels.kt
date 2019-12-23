@@ -89,7 +89,7 @@ data class NotesModel(
     var runAttemptId: String = "",
     var createdAt: String = "",
     var deletedAt: String? = "",
-    var contentTitle: String = ""
+    var contentTitle: String? = ""
 
 )
 

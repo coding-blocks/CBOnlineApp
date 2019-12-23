@@ -9,9 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabsIntent
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.home.HomeActivity
 import kotlinx.android.synthetic.main.custom_dialog.view.*
-import kotlinx.android.synthetic.main.dialog.view.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.singleTop

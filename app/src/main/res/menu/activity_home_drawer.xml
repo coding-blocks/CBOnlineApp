@@ -29,7 +29,7 @@
             android:id="@+id/nav_admin"
             android:icon="@drawable/ic_chat"
             android:title="@string/admin_panel"
-            android:visible="true" />
+            android:visible="false" />
     </group>
     <group
         android:id="@+id/communication"

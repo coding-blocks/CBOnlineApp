@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.SheetAdapter
 import com.codingblocks.cbonlineapp.commons.SheetItem
+import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
@@ -29,7 +30,7 @@ import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard_my_courses.*
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class DashboardMyCoursesFragment : Fragment() {
@@ -37,7 +38,7 @@ class DashboardMyCoursesFragment : Fragment() {
     private val dialog by lazy { BottomSheetDialog(requireContext()) }
     private val imgs by lazy { resources.obtainTypedArray(R.array.course_type_img) }
     private val coursesType by lazy { resources.getStringArray(R.array.course_type) }
-    private val viewModel by viewModel<DashboardMyCoursesViewModel>()
+    private val viewModel by sharedViewModel<DashboardViewModel>()
     private val type = MutableLiveData<Int>()
     private val courseListAdapter = MyCourseListAdapter()
 

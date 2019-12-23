@@ -220,7 +220,7 @@ interface OnlineJsonApi {
     fun applyJob(@Body params: Applications): Call<ResponseBody>
 
     @GET("users/me")
-    fun getMe(): Call<User>
+    suspend fun getMe(): Response<User>
 
 
     /**

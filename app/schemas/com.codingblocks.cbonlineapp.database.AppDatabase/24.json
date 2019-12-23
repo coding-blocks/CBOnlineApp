@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "8b4eea4e13534bf306b690e5ff1254b9",
+    "identityHash": "f957bc0089aa7a499db409a4e317e0fa",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -659,7 +659,7 @@
       },
       {
         "tableName": "NotesModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`nttUid` TEXT NOT NULL, `duration` REAL NOT NULL, `text` TEXT NOT NULL, `contentId` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `deletedAt` TEXT, `contentTitle` TEXT NOT NULL, PRIMARY KEY(`nttUid`), FOREIGN KEY(`contentId`) REFERENCES `ContentModel`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`nttUid` TEXT NOT NULL, `duration` REAL NOT NULL, `text` TEXT NOT NULL, `contentId` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `deletedAt` TEXT, `contentTitle` TEXT, PRIMARY KEY(`nttUid`), FOREIGN KEY(`contentId`) REFERENCES `ContentModel`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "nttUid",
@@ -707,7 +707,7 @@
             "fieldPath": "contentTitle",
             "columnName": "contentTitle",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -1219,7 +1219,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8b4eea4e13534bf306b690e5ff1254b9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f957bc0089aa7a499db409a4e317e0fa')"
     ]
   }
 }

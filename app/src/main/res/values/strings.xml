@@ -184,5 +184,6 @@
     <string name="bookmarks">Bookmarks</string>
     <string name="downloads">Downloads</string>
     <string name="announcements">Announcements</string>
+    <string name="hello">Hello </string>
 
 </resources>

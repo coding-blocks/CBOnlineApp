@@ -56,28 +56,6 @@ class HomeActivityViewModel : ViewModel() {
 
     fun getMe() {
         setJWTToken()
-        Clients.onlineV2JsonApi.getMe().enqueue(retrofitCallback { _, resp ->
-            resp.let {
-                if (resp?.isSuccessful == true) {
-                    resp.body()?.let {
-                        if (prefs.SP_ONEAUTH_ID == PreferenceHelper.ONEAUTH_ID) {
-                            clearData.postValue(true)
-                        }
-                        prefs.SP_USER_ID = it.id
-                        prefs.SP_ONEAUTH_ID = it.oneauthId
-                        prefs.SP_USER_IMAGE = it.photo ?: "Empty"
-                        prefs.SP_USER_NAME = it.firstname + " " + it.lastname
-                        prefs.SP_ROLE_ID = it.roleId
-                        prefs.SP_EMAIL_ID = it.email
-                        if (it.roleId == 1 || it.roleId == 3)
-                            isAdmin.postValue(true)
-                    }
-                    getMeProgress.value = true
-                } else {
-                    getMeProgress.value = false
-                }
-            }
-        })
     }
 
     fun setJWTToken() {

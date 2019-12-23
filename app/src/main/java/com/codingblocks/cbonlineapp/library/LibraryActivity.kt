@@ -26,8 +26,15 @@ class LibraryActivity : AppCompatActivity() {
         setToolbar(libraryToolbar)
         libraryRv.setRv(this, notesListAdapter)
         title = intent.getStringExtra(COURSE_NAME)
+        typeTv.text = type
         viewModel.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
-        viewModel.fetchNotes()
+        when (type) {
+            getString(R.string.notes) -> viewModel.fetchNotes()
+            getString(R.string.announcements) -> viewModel.fetchNotes()
+            getString(R.string.bookmarks) -> viewModel.fetchNotes()
+            getString(R.string.downloads) -> viewModel.fetchNotes()
+
+        }
 
         viewModel.notes.observer(this) { notes ->
             notesListAdapter.submitList(notes)
