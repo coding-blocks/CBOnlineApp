@@ -11,19 +11,17 @@ import android.os.SystemClock
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.admin.doubts.DoubtReceiver
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtsFragment
+import com.codingblocks.cbonlineapp.admin.doubts.DoubtReceiver
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewFragment
-import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
+import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.fabnavigation.FabNavigationAdapter
 import kotlinx.android.synthetic.main.activity_admin.*
 import org.jetbrains.anko.contentView
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AdminActivity : AppCompatActivity(), FragmentChangeListener {
 
@@ -34,6 +32,12 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
             containerViewId = R.id.pagerAdmin,
             allowStateLoss = true
         )
+    }
+
+    override fun openClassroom() {
+    }
+
+    override fun openExplore() {
     }
 
     private val navigationAdapter: FabNavigationAdapter by lazy {

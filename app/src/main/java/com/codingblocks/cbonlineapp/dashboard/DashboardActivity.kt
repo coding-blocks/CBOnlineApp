@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.dashboard
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -13,6 +12,7 @@ import com.codingblocks.cbonlineapp.AboutActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.checkout.CheckoutActivity
+import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsFragment
 import com.codingblocks.cbonlineapp.dashboard.explore.DashboardExploreFragment
@@ -42,7 +42,7 @@ import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, FragmentChangeListener, FabNavigation.OnTabSelectedListener {
 
     private val pagerAdapter by lazy { TabLayoutAdapter(supportFragmentManager) }
     private val navigationAdapter: FabNavigationAdapter by lazy {
@@ -95,20 +95,9 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         dashboardBottomNav.apply {
             defaultBackgroundColor = getColor(R.color.dark)
             titleState = (FabNavigation.TitleState.ALWAYS_SHOW)
-            setOnTabSelectedListener(object : FabNavigation.OnTabSelectedListener {
-                override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
-                    if (position == 2) {
-                        dashboardToolbarSecondary.isVisible = true
-                        dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
-                    } else {
-                        dashboardToolbarSecondary.isVisible = false
-                        dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
-                    }
-                    dashboardPager.setCurrentItem(position, true)
-                    return true
-                }
-            })
+            setOnTabSelectedListener(this@DashboardActivity)
         }
+        dashboardBottomNav.setCurrentItem(1)
     }
 
     private fun setupViewPager() {
@@ -122,7 +111,6 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         dashboardPager.apply {
             setPagingEnabled(true)
             adapter = pagerAdapter
-            currentItem = 1
             offscreenPageLimit = 4
         }
     }
@@ -197,6 +185,31 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 doubleBackToExitPressedOnce = false
             }
         }
+    }
+
+    override fun openInbox(conversationId: String) {
+    }
+
+    override fun openClassroom() {
+        dashboardBottomNav.setCurrentItem(1)
+//        dashboardPager.setCurrentItem(1,true)
+    }
+
+    override fun openExplore() {
+        dashboardBottomNav.setCurrentItem(2)
+//        dashboardPager.setCurrentItem(2,true)
+    }
+
+    override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
+        if (position == 2) {
+            dashboardToolbarSecondary.isVisible = true
+            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+        } else {
+            dashboardToolbarSecondary.isVisible = false
+            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
+        }
+        dashboardPager.setCurrentItem(position, true)
+        return true
     }
 
 

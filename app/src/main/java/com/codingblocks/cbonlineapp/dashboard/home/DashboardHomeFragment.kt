@@ -44,7 +44,7 @@ class DashboardHomeFragment : Fragment() {
                     startActivity(intentFor<MyCourseActivity>(
                         COURSE_ID to course.cid,
                         RUN_ID to crUid,
-                        RUN_ATTEMPT_ID to crRunAttemptEnd,
+                        RUN_ATTEMPT_ID to crAttemptId,
                         COURSE_NAME to course.title
                     ).singleTop())
                 }

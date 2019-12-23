@@ -187,5 +187,8 @@
     <string name="announcements">Announcements</string>
     <string name="hello">Hello </string>
     <string name="your_performance">Your Performance</string>
+    <string name="explore_courses">Explore Courses</string>
+    <string name="nothing_to_show">Nothing to show</string>
+    <string name="empty_library">Your library will start showing once you enroll in any course</string>
 
 </resources>
