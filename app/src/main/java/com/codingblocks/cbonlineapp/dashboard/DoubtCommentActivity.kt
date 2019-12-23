@@ -27,7 +27,6 @@ class DoubtCommentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //TODO(Add Chat,Resolve and Post Comment)
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doubt_comment)
         setToolbar(commentsToolbar)

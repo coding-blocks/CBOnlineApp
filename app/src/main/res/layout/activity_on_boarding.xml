@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.codingblocks.cbonlineapp.onboarding.OnBoardingActivity">
+    tools:context="com.codingblocks.cbonlineapp.auth.onboarding.OnBoardingActivity">
 
 
-    <com.codingblocks.cbonlineapp.widgets.ViewPagerCustomDuration
+    <com.codingblocks.cbonlineapp.util.widgets.ViewPagerCustomDuration
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight=".5">
 
-    </com.codingblocks.cbonlineapp.widgets.ViewPagerCustomDuration>
+    </com.codingblocks.cbonlineapp.util.widgets.ViewPagerCustomDuration>
 
     <View
         android:id="@+id/divider5"

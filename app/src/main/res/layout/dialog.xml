@@ -27,7 +27,7 @@
                 android:layout_height="60dp"
                 android:src="@drawable/ic_resolve_dialog" />
 
-            <com.codingblocks.cbonlineapp.widgets.GradientTextView
+            <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
                 android:id="@+id/dialogTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

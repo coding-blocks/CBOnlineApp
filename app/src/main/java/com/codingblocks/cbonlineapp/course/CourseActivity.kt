@@ -86,7 +86,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         courseContentRv.setRv(this@CourseActivity, courseSectionListAdapter, true)
         if (!courseLogoImage.isNullOrEmpty()) {
             courseLogo.transitionName = courseLogoImage
-
             courseLogo.loadSvg(courseLogoUrl) {
                 supportStartPostponedEnterTransition()
             }
@@ -187,9 +186,9 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         shortTv.alpha = alpha
     }
 
-    override fun onBackPressed() { //To support reverse transitions when user clicks the device back button
+    override fun onBackPressed() {
         supportFinishAfterTransition()
-        super.onBackPressed()
+        finish()
     }
 
 }

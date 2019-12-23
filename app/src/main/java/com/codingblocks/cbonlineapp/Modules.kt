@@ -13,7 +13,6 @@ import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsViewModel
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
 import com.codingblocks.cbonlineapp.database.AppDatabase
-import com.codingblocks.cbonlineapp.home.HomeActivityViewModel
 import com.codingblocks.cbonlineapp.jobs.JobsViewModel
 import com.codingblocks.cbonlineapp.jobs.jobdetails.JobDetailViewModel
 import com.codingblocks.cbonlineapp.library.LibraryRepository
@@ -21,9 +20,10 @@ import com.codingblocks.cbonlineapp.library.LibraryViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.leaderboard.LeaderboardViewModel
+import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerRepository
 import com.codingblocks.cbonlineapp.notifications.NotificationViewModel
-import com.codingblocks.cbonlineapp.player.VideoPlayerViewModel
-import com.codingblocks.cbonlineapp.quiz.QuizViewModel
+import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
+import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
 import com.codingblocks.cbonlineapp.settings.SettingsViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -39,8 +39,7 @@ val viewModelModule = module {
     viewModel { QuizViewModel() }
 
     // Activities
-    viewModel { VideoPlayerViewModel(get(), get(), get(), get(), get()) }
-    viewModel { HomeActivityViewModel() }
+    viewModel { VideoPlayerViewModel(get(), get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { JobsViewModel(get()) }
     viewModel { JobDetailViewModel(get(), get()) }
@@ -64,6 +63,7 @@ val viewModelModule = module {
     single { DashboardMyCoursesRepository(get(), get(), get(), get()) }
     single { LibraryRepository(get(), get()) }
     single { DashboardHomeRepository(get(), get()) }
+    single { VideoPlayerRepository(get(), get(), get(), get(), get()) }
 
     single { Spork.create(androidApplication(), AppPrefs::class) }
 }

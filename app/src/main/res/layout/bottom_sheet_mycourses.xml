@@ -10,7 +10,7 @@
     app:behavior_peekHeight="56dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-    <com.codingblocks.cbonlineapp.widgets.BottomSheetListView
+    <com.codingblocks.cbonlineapp.util.widgets.BottomSheetListView
         android:id="@+id/sheetLv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

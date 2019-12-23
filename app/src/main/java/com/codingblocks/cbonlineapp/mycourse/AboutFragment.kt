@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.InstructorModel
-import com.codingblocks.cbonlineapp.insturctors.InstructorDataAdapter
+import com.codingblocks.cbonlineapp.course.insturctors.InstructorDataAdapter
 import com.codingblocks.cbonlineapp.util.ARG_COURSE_ID
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs

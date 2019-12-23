@@ -3,7 +3,7 @@ package com.codingblocks.cbonlineapp.util.extensions
 import android.view.ViewManager
 import android.widget.RatingBar
 import androidx.annotation.StyleRes
-import com.codingblocks.cbonlineapp.widgets.ViewPagerCustomDuration
+import com.codingblocks.cbonlineapp.util.widgets.ViewPagerCustomDuration
 import com.facebook.shimmer.ShimmerFrameLayout
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.custom.ankoView

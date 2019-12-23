@@ -23,7 +23,7 @@
             android:textStyle="bold"
             tools:text="don't understand when to take (head != NULL) or (head->next != NULL)" />
 
-        <com.codingblocks.cbonlineapp.widgets.ExpandableTextView
+        <com.codingblocks.cbonlineapp.util.widgets.ExpandableTextView
             android:id="@+id/descriptionTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

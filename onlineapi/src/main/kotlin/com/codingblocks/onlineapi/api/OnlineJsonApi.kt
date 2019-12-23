@@ -36,8 +36,6 @@ import retrofit2.http.Query
 
 interface OnlineJsonApi {
 
-
-
     @GET("courses/{id}")
     suspend fun getCourse(
         @Path("id") id: String

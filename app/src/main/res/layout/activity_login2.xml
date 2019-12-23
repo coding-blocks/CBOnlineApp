@@ -206,7 +206,7 @@
                 android:textColor="#333333"
                 android:textSize="20sp" />
 
-            <com.codingblocks.cbonlineapp.widgets.ExpandableTextView
+            <com.codingblocks.cbonlineapp.util.widgets.ExpandableTextView
                 android:id="@+id/courseSummaryTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

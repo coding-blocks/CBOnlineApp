@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="?attr/background"
     tools:context="com.codingblocks.cbonlineapp.dashboard.DoubtCommentActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -42,7 +43,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/gilroy_bold"
-                android:textColor="@color/black"
                 android:textSize="16sp"
                 tools:text="This is the title of the doubt " />
 
@@ -59,13 +59,12 @@
                 tools:text="4 hours ago" />
         </LinearLayout>
 
-        <com.codingblocks.cbonlineapp.widgets.ExpandableTextView
+        <com.codingblocks.cbonlineapp.util.widgets.ExpandableTextView
             android:id="@+id/doubtDescriptionTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/gilroy_medium"
-            android:textColor="@color/black"
             android:textSize="16sp"
             app:trimLength="100"
             tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the best standard dummy text... more" />
@@ -86,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="@dimen/margin_small"
-            android:background="?android:attr/listDivider" />
+            android:background="?attr/divider" />
 
     </LinearLayout>
 
@@ -108,7 +107,7 @@
         android:layout_marginStart="@dimen/margin_large"
         android:layout_marginTop="@dimen/margin_small"
         android:layout_marginEnd="@dimen/margin_large"
-        android:background="?android:attr/listDivider" />
+        android:background="?attr/divider" />
 
     <LinearLayout
         android:id="@+id/buttonsContainer"
@@ -121,7 +120,7 @@
         android:gravity="end">
 
 
-        <com.codingblocks.cbonlineapp.widgets.GradientTextView
+        <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
             android:id="@+id/chatTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -156,7 +155,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/veryLightPink"
+        android:background="?attr/divider"
         android:gravity="center">
 
         <EditText

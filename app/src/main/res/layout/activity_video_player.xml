@@ -24,7 +24,7 @@
             android:layout_gravity="center"
             android:keepScreenOn="true" />
 
-        <com.codingblocks.cbonlineapp.widgets.VdoPlayerControlView
+        <com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControlView
             android:id="@+id/player_control_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,6 +33,13 @@
             android:layout_alignEnd="@id/videoView"
             android:layout_alignBottom="@id/videoView" />
     </RelativeLayout>
+
+    <fragment
+        android:id="@+id/displayYoutubeVideo"
+        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,14 +58,16 @@
             android:orientation="vertical">
 
 
-            <com.codingblocks.cbonlineapp.widgets.GradientTextView
+            <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
                 android:layout_width="wrap_content"
+                android:id="@+id/sectionTitle"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/gilroy_bold"
                 android:textSize="16sp"
                 tools:text="Section 1.4 - Catalan Number" />
 
             <TextView
+                android:id="@+id/contentTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -87,20 +96,13 @@
     </LinearLayout>
 
 
-    <fragment
-        android:id="@+id/displayYoutubeVideo"
-        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:visibility="gone" />
-
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/myCourseTabs"
+        android:id="@+id/playerTabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/dark"
-        android:paddingStart="@dimen/margin_medium"
-        android:paddingEnd="@dimen/margin_medium"
+        android:paddingStart="@dimen/margin_large"
+        android:paddingEnd="@dimen/margin_large"
         app:tabIndicatorColor="@color/white"
         app:tabMode="scrollable"
         app:tabSelectedTextColor="@color/white"
@@ -119,13 +121,20 @@
 
     </com.google.android.material.tabs.TabLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:background="@color/divider" />
+
     <FrameLayout
         android:id="@+id/pagerFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.viewpager.widget.ViewPager
-            android:id="@+id/player_viewpager"
+            android:id="@+id/playerViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/dark" />

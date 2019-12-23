@@ -38,7 +38,7 @@
             tools:text="4 hours ago" />
     </LinearLayout>
 
-    <com.codingblocks.cbonlineapp.widgets.ExpandableTextView
+    <com.codingblocks.cbonlineapp.util.widgets.ExpandableTextView
         android:id="@+id/noteDescriptionTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
