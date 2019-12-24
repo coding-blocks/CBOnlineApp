@@ -132,6 +132,8 @@ dependencies {
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
     implementation "com.github.skydoves:progressview:1.0.5"
     implementation 'tech.arnav:SPORK:0.1.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 //    implementation "com.andkulikov:transitionseverywhere:2.1.0"
 
 

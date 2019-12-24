@@ -1,18 +1,20 @@
 package com.codingblocks.cbonlineapp.mycourse.player
 
 import android.animation.LayoutTransition
-import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.widget.AdapterView
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.OnItemClickListener
+import com.codingblocks.cbonlineapp.commons.SheetAdapter
+import com.codingblocks.cbonlineapp.commons.SheetItem
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.player.notes.VideoNotesFragment
@@ -26,6 +28,7 @@ import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControlView
 import com.crashlytics.android.Crashlytics
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
@@ -34,8 +37,8 @@ import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
-import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_video_player.*
+import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.toast
@@ -57,6 +60,8 @@ class VideoPlayerActivity : AppCompatActivity(), OnItemClickListener, AnkoLogger
     private val download: Boolean by lazy {
         intent.getBooleanExtra(DOWNLOADED, false)
     }
+    private val dialog by lazy { BottomSheetDialog(this) }
+
 
     private var youtubePlayer: YouTubePlayer? = null
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
@@ -68,12 +73,19 @@ class VideoPlayerActivity : AppCompatActivity(), OnItemClickListener, AnkoLogger
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_player)
+        setUpBottomSheet()
         rootLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         viewModel.currentOrientation = resources.configuration.orientation
         viewModel.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
         setupUI()
+    }
+
+    private fun setUpBottomSheet() {
+        val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_note, null)
+        dialog.dismissWithAnimation = true
+        dialog.setContentView(sheetDialog)
     }
 
     private fun setupUI() {
@@ -95,6 +107,9 @@ class VideoPlayerActivity : AppCompatActivity(), OnItemClickListener, AnkoLogger
             } else {
                 setupVideoView()
             }
+        }
+        videoFab.setOnClickListener {
+            dialog.show()
         }
         setupViewPager()
     }

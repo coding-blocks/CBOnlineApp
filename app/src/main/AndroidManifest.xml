@@ -89,14 +89,12 @@
         </activity>
         <activity
             android:name=".course.CourseActivity"
-            android:parentActivityName=".dashboard.DashboardActivity"
-            android:theme="@style/NewAppTheme" />
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".mycourse.MyCourseActivity"
             android:label="@string/title_activity_my_course"
             android:launchMode="singleTop"
-            android:parentActivityName=".dashboard.DashboardActivity"
-            android:theme="@style/NewAppTheme">
+            android:parentActivityName=".dashboard.DashboardActivity">
             <intent-filter>
                 <action android:name="com.coddinblocks.appshortcuts.OPEN_DYNAMIC_SHORTCUT" />
 
@@ -130,6 +128,7 @@
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".mycourse.player.VideoPlayerActivity"
+            android:windowSoftInputMode="adjustResize"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:supportsPictureInPicture="true"
             android:theme="@style/NewAppTheme.Dark" />
@@ -140,8 +139,7 @@
             android:name=".mycourse.quiz.QuizActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".mycourse.MyCourseActivity"
-            android:screenOrientation="fullSensor"
-            android:theme="@style/AppThemeMain" />
+            android:screenOrientation="fullSensor" />
 
         <receiver android:name=".util.DownloadBroadcastReceiver">
             <intent-filter>

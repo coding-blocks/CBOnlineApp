@@ -190,5 +190,11 @@
     <string name="explore_courses">Explore Courses</string>
     <string name="nothing_to_show">Nothing to show</string>
     <string name="empty_library">Your library will start showing once you enroll in any course</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="continue_with_mobile_number">Continue With Mobile Number</string>
+    <string name="google">Google</string>
+    <string name="facebook">Facebook</string>
+    <string name="performance_graph">Performance Graph</string>
 
 </resources>
