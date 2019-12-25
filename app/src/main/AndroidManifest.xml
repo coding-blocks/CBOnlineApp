@@ -19,6 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/NewAppTheme">
+        <activity android:name=".auth.onboarding.CompleteProfileActivity"></activity>
         <activity
             android:name=".library.LibraryActivity"
             android:parentActivityName=".mycourse.MyCourseActivity" />
@@ -128,10 +129,10 @@
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".mycourse.player.VideoPlayerActivity"
-            android:windowSoftInputMode="adjustResize"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:supportsPictureInPicture="true"
-            android:theme="@style/NewAppTheme.Dark" />
+            android:theme="@style/NewAppTheme.Dark"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".PdfActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

@@ -196,5 +196,6 @@
     <string name="google">Google</string>
     <string name="facebook">Facebook</string>
     <string name="performance_graph">Performance Graph</string>
+    <string name="enter_mobile_number_for_verification">Enter mobile number for verification</string>
 
 </resources>

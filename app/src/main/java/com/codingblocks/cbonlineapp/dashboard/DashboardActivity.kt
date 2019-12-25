@@ -212,7 +212,6 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         return true
     }
 
-
 }
 
 
