@@ -18,7 +18,7 @@ class OnBoardingActivity : AppCompatActivity() {
             startActivity(intentFor<DashboardActivity>())
         }
         loginBtn.setOnClickListener {
-            startActivity(intentFor<CourseActivity>())
+            startActivity(intentFor<LoginActivity>())
         }
     }
 }

@@ -82,3 +82,6 @@ const val DOUBT_ID = "doubtID"
 
 const val ALL = "ALL"
 
+const val RESOLVEHINT = 1001
+
+

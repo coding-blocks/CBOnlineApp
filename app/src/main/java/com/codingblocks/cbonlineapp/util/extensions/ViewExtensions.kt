@@ -12,6 +12,7 @@ import android.view.animation.OvershootInterpolator
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.annotation.AnimRes
+import androidx.annotation.AnimatorRes
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
@@ -100,6 +101,27 @@ fun AppCompatActivity.replaceFragmentSafely(
         .setCustomAnimations(enterAnimation, exitAnimation, popEnterAnimation, popExitAnimation)
         .replace(containerViewId, fragment, tag)
     if (!supportFragmentManager.isStateSaved) {
+        ft.commit()
+    } else if (allowStateLoss) {
+        ft.commitAllowingStateLoss()
+    }
+}
+
+fun <F : Fragment> F.replaceFragmentSafely(
+    fragment: Fragment,
+    tag: String = "",
+    allowStateLoss: Boolean = false,
+    @IdRes containerViewId: Int,
+    @AnimatorRes enterAnimation: Int = 0,
+    @AnimatorRes exitAnimation: Int = 0,
+    @AnimRes popEnterAnimation: Int = 0,
+    @AnimRes popExitAnimation: Int = 0
+) {
+    val ft = fragmentManager!!
+        .beginTransaction()
+        .setCustomAnimations(enterAnimation, exitAnimation, popEnterAnimation, popExitAnimation)
+        .replace(containerViewId, fragment, tag)
+    if (!fragmentManager!!.isStateSaved) {
         ft.commit()
     } else if (allowStateLoss) {
         ft.commitAllowingStateLoss()
