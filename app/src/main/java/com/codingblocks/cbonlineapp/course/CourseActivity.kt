@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.AdapterView
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
@@ -13,6 +14,9 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.InstructorListAdapter
+import com.codingblocks.cbonlineapp.commons.SheetAdapter
+import com.codingblocks.cbonlineapp.commons.SheetItem
+import com.codingblocks.cbonlineapp.course.batches.BatchListAdapter
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.Components
@@ -25,11 +29,15 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.onlineapi.ErrorStatus
+import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Tags
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import kotlinx.android.synthetic.main.activity_course.*
+import kotlinx.android.synthetic.main.bottom_sheet_batch.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -52,6 +60,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
     private val instructorAdapter = InstructorListAdapter()
     private val courseSectionListAdapter = CourseSectionListAdapter()
     private val courseCardListAdapter = CourseListAdapter()
+    private val batchListAdapter = BatchListAdapter()
+    private val dialog by lazy { BottomSheetDialog(this) }
+
+
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -79,6 +91,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         viewModel.id = courseId
         viewModel.fetchCourse()
         lifecycle.addObserver(youtubePlayerView)
+        setUpBottomSheet()
 
         courseProjectsRv.setRv(this@CourseActivity, projectAdapter, true)
         courseSuggestedRv.setRv(this@CourseActivity, courseCardListAdapter, orientation = RecyclerView.HORIZONTAL)
@@ -104,6 +117,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             viewModel.fetchProjects(course.projects)
             viewModel.fetchSections(course.runs?.first()?.sections)
             instructorAdapter.submitList(course.instructors)
+            batchListAdapter.submitList(course.activeRuns)
         }
 
         viewModel.projects.observer(this) { projects ->
@@ -144,6 +158,9 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         appbar.addOnOffsetChangedListener(this)
 
         courseCardListAdapter.onItemClick = itemClickListener
+        buyBtn.setOnClickListener {
+            dialog.show()
+        }
     }
 
 
@@ -185,6 +202,16 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         courseLogo.alpha = alpha
         shortTv.alpha = alpha
     }
+
+    private fun setUpBottomSheet() {
+        val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_batch, null)
+        sheetDialog.run {
+            batchRv.setRv(this@CourseActivity, batchListAdapter)
+        }
+        dialog.dismissWithAnimation = true
+        dialog.setContentView(sheetDialog)
+    }
+
 
     override fun onBackPressed() {
         supportFinishAfterTransition()

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.models.DoubtsModel
+import com.codingblocks.cbonlineapp.util.extensions.greater
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.Course
@@ -56,8 +56,16 @@ class CourseListAdapter : ListAdapter<Course, CourseListAdapter.ItemViewHolder>(
                     courseCardInstructorImg2.visibility = View.INVISIBLE
                 }
             }
-            courseCardPriceTv.text = item.runs?.first()?.price
-            courseCardMrpTv.text = item.runs?.first()?.mrp
+            var list = item.runs?.filter { run ->
+                !run.unlisted && run.enrollmentEnd.greater() && !run.enrollmentStart.greater()
+            }?.sortedWith(compareBy { run -> run.price })
+            if (list.isNullOrEmpty()) {
+                list =
+                    item.runs?.sortedWith(compareBy { run -> run.price })
+
+            }
+            courseCardPriceTv.text = "₹ " + list?.first()?.price
+            courseCardMrpTv.text = "₹ " + list?.first()?.mrp
             courseCardMrpTv.paintFlags = courseCardPriceTv.paintFlags or
                 Paint.STRIKE_THRU_TEXT_FLAG
             ratingTv.text = "${item.rating}/5, ${item.reviewCount} ratings"

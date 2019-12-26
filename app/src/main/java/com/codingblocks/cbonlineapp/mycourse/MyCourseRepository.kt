@@ -194,7 +194,7 @@ class MyCourseRepository(
                     content.title,
                     content.duration
                         ?: 0,
-                    content.contentable,
+                    content.contentable ?: "",
                     content.sectionContent?.order
                         ?: 0,
                     attemptId,

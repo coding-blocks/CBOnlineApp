@@ -16,7 +16,6 @@ import com.codingblocks.onlineapi.models.ContentLectureType
 import com.codingblocks.onlineapi.models.ContentProgress
 import com.codingblocks.onlineapi.models.ContentQna
 import com.codingblocks.onlineapi.models.ContentVideoType
-import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.CourseId
 import com.codingblocks.onlineapi.models.DoubtLeaderBoard
@@ -71,7 +70,7 @@ object Clients {
         Question::class.java, Choice::class.java, QuizAttempt::class.java,
         Quizqnas::class.java, Doubts::class.java, ContentCsv::class.java, Comment::class.java,
         Note::class.java, Notes::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
-        RunAttemptId::class.java, RunAttemptsId::class.java, ContentsId::class.java,
+        RunAttemptId::class.java, RunAttemptsId::class.java,
         Jobs::class.java, Company::class.java, CourseId::class.java, JobId::class.java,
         Applications::class.java, ApplicationId::class.java, DoubtLeaderBoard::class.java, User::class.java,
         Project::class.java
@@ -106,7 +105,8 @@ object Clients {
 
     private val onlineV2JsonRetrofit = Retrofit.Builder()
         .client(ClientInterceptor)
-        .baseUrl("http://192.168.0.133:3000/api/v2/")
+        //http://192.168.0.133:3000
+        .baseUrl("https://api-online.cb.lk/api/v2/")
         .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
         .addConverterFactory(JacksonConverterFactory.create(om))
         .build()

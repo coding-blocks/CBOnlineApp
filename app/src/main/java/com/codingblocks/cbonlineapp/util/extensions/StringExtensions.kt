@@ -35,7 +35,7 @@ fun Long.readableFileSize(): String {
 }
 
 fun String.greater(): Boolean {
-    return this.toLong() >= (System.currentTimeMillis() / 1000)
+    return this.toLong() <= (System.currentTimeMillis() / 1000)
 }
 
 fun String.timeAgo(): String {

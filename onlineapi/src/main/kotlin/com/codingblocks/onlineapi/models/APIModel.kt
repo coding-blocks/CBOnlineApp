@@ -46,6 +46,8 @@ data class Course(
     val instructors: ArrayList<Instructor>?,
     @Relationship("runs")
     val runs: ArrayList<Runs>?,
+    @Relationship("active-runs")
+    val activeRuns: ArrayList<Runs>?,
     @Relationship("projects", resolve = true)
     var projects: ArrayList<Project>?
 ) : BaseModel()
@@ -90,7 +92,7 @@ data class RunAttempts(
     val revoked: Boolean = false,
     val approvalRequested: Boolean = false,
     val doubtSupport: String? = "",
-    @Relationship("run˚¬˚")
+    @Relationship("run")
     val run: Runs? = null
 ) : BaseModel() {
     constructor(id: String) : this() {
@@ -109,7 +111,7 @@ data class Doubts(
     @Relationship("run-attempt")
     val runAttempt: RunAttempts? = null,
     @Relationship("content")
-    val content: ContentsId? = null,
+    val content: LectureContent? = null,
     val createdAt: String = "",
     val categoryId: Int? = 0,
     val resolvedById: String? = null,
@@ -124,25 +126,13 @@ data class Doubts(
                 discourseTopicId: String,
                 runAttempt: RunAttempts?,
                 conversationId: String?,
-                content: ContentsId?,
+                content: LectureContent?,
                 status: String,
                 createdAt: String
     ) : this(title, body, status, discourseTopicId, conversationId, runAttempt, content, createdAt) {
         super.id = id
     }
 }
-
-//TODO ( change this to plural )
-@Type("contents")
-data class ContentsId(
-    @Id
-    val id: String?
-) {
-    var contentable: String? = null
-    val duration: Long? = null
-    val title: String? = null
-}
-
 
 @Type("comment")
 class Comment(
@@ -160,30 +150,15 @@ data class Sections(
     var status: String? = null,
     var order: Int? = 0,
     @Relationship("contents")
-    var contents: ArrayList<ContentsId>?,
+    var contents: ArrayList<LectureContent>?,
     val runId: String? = "",
     @RelationshipLinks("contents")
     val courseContentLinks: Links? = null
 ) : BaseModel()
 
-@Type("instructors")
-data class Instructor(
-    val name: String?,
-    val description: String?,
-    val photo: String?,
-    val email: String?,
-    val sub: String?
-) : BaseModel()
-
-class SectionContent(
-    val order: Int,
-    val sectionId: String?
-) : BaseModel()
-
-
-@Type("content")
+@Type("contents")
 class LectureContent(
-    val contentable: String,
+    val contentable: String?,
     val duration: Long?,
     val title: String,
     val sectionContent: SectionContent?,
@@ -202,9 +177,25 @@ class LectureContent(
     @Relationship("csv")
     val csv: ContentCsv?
 ) : BaseModel() {
-
+    constructor(id: String)
+        : this("", 0L, "", null, null, null, null, null, null, null, null) {
+        super.id = id
+    }
 }
 
+@Type("instructors")
+data class Instructor(
+    val name: String?,
+    val description: String?,
+    val photo: String?,
+    val email: String?,
+    val sub: String?
+) : BaseModel()
+
+class SectionContent(
+    val order: Int,
+    val sectionId: String?
+) : BaseModel()
 
 
 // =======Section Content Models =========
@@ -325,7 +316,7 @@ class Progress : BaseModel() {
     var runs: RunAttemptsId? = null
     @Relationship("content")
     @JvmField
-    var content: ContentsId? = null
+    var content: LectureContent? = null
 }
 
 // =======Section Content Models =========
@@ -440,7 +431,7 @@ class Notes : BaseModel() {
     var runAttempt: RunAttemptsId? = null
     @Relationship("content")
     @JvmField
-    var content: ContentsId? = null
+    var content: LectureContent? = null
 }
 
 @Type("run_attempt")

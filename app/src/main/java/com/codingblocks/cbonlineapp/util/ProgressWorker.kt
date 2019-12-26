@@ -5,7 +5,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.ContentsId
+import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.RunAttemptsId
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +26,7 @@ class ProgressWorker(context: Context, private val workerParameters: WorkerParam
         val progress = Progress()
         progress.status = "DONE"
         progress.runs = RunAttemptsId(attemptId)
-        progress.content = ContentsId(contentId)
+        progress.content = contentId?.let { LectureContent(it) }
         val response: Response<Progress>
         if (progressId.isNullOrEmpty()) {
             response = Clients.onlineV2JsonApi.setProgress(progress).execute()

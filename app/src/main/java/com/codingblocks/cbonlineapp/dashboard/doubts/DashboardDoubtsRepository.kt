@@ -10,8 +10,8 @@ import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Comment
-import com.codingblocks.onlineapi.models.ContentsId
 import com.codingblocks.onlineapi.models.Doubts
+import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.safeApiCall
 
@@ -53,7 +53,7 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
                     discourseTopicId = doubt.discourseTopicId,
                     runAttempt = RunAttempts(doubt.runAttemptId),
                     conversationId = doubt.conversationId,
-                    content = ContentsId(doubt.contentId),
+                    content = LectureContent(doubt.contentId),
                     status = doubt.status,
                     createdAt = doubt.createdAt
                 ))
