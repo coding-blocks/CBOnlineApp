@@ -116,11 +116,9 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:2.1.1"
     implementation "android.arch.work:work-runtime-ktx:1.0.1"
     implementation "androidx.fragment:fragment-ktx:1.1.0"
-    implementation "androidx.recyclerview:recyclerview-selection:1.1.0-beta01"
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:17.3.0'
-
 
     // 3rd party libs
     implementation 'io.github.inflationx:calligraphy3:3.1.1'

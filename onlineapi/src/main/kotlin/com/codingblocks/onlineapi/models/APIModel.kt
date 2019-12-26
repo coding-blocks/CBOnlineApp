@@ -65,7 +65,7 @@ data class Runs(
     val sections: ArrayList<Sections>?,
     @Relationship("run-attempts")
     var runAttempts: ArrayList<RunAttempts>?,
-    @Relationship("course")
+    @Relationship("courses")
     var course: Course?,
     @Relationship("ratings")
     var rating: ArrayList<Rating>?,
@@ -82,7 +82,7 @@ data class Runs(
 ) : BaseModel()
 
 //TODO ( change this to plural )
-@Type("run_attempt")
+@Type("run_attempts")
 data class RunAttempts(
     val certificateApproved: Boolean = false,
     val end: String = "",
@@ -90,7 +90,7 @@ data class RunAttempts(
     val revoked: Boolean = false,
     val approvalRequested: Boolean = false,
     val doubtSupport: String? = "",
-    @Relationship("run")
+    @Relationship("run˚¬˚")
     val run: Runs? = null
 ) : BaseModel() {
     constructor(id: String) : this() {
@@ -99,7 +99,7 @@ data class RunAttempts(
 }
 
 //TODO ( change this to plural )
-@Type("doubt")
+@Type("doubts")
 data class Doubts(
     val body: String = "",
     val title: String = "",
@@ -133,7 +133,7 @@ data class Doubts(
 }
 
 //TODO ( change this to plural )
-@Type("content")
+@Type("contents")
 data class ContentsId(
     @Id
     val id: String?
@@ -153,7 +153,7 @@ class Comment(
 ) : BaseModel()
 
 
-@Type("section")
+@Type("sections")
 data class Sections(
     var name: String?,
     var premium: Boolean? = false,
@@ -201,9 +201,10 @@ class LectureContent(
     val qna: ContentQna?,
     @Relationship("csv")
     val csv: ContentCsv?
-) : BaseModel()
+) : BaseModel() {
 
-// =======Singular Models =========
+}
+
 
 
 // =======Section Content Models =========
@@ -421,7 +422,7 @@ class Note(
     @Relationship("run_attempt")
     val runAttempt: RunAttemptId? = null,
     @Relationship("content")
-    val content: ContentId? = null
+    val content: LectureContent? = null
 ) : BaseModel()
 
 @Type("notes")
@@ -485,15 +486,6 @@ class RunAttemptsId(
     val id: String?
 )
 
-@Type("content")
-class ContentId(
-    @Id
-    val id: String?
-) {
-    val title: String? = null
-
-}
-
 @Type("rating")
 class Rating : BaseModel()
 
@@ -542,7 +534,7 @@ class Jobs(
     val application: ApplicationId?
 ) : BaseModel()
 
-@Type("courses")
+@Type("course")
 data class CourseId(
     @Id
     val id: String?

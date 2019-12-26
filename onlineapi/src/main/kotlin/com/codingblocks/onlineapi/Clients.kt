@@ -12,7 +12,6 @@ import com.codingblocks.onlineapi.models.Company
 import com.codingblocks.onlineapi.models.ContentCodeChallenge
 import com.codingblocks.onlineapi.models.ContentCsv
 import com.codingblocks.onlineapi.models.ContentDocumentType
-import com.codingblocks.onlineapi.models.ContentId
 import com.codingblocks.onlineapi.models.ContentLectureType
 import com.codingblocks.onlineapi.models.ContentProgress
 import com.codingblocks.onlineapi.models.ContentQna
@@ -61,7 +60,7 @@ object Clients {
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
 
-    var authJwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc5NzUsImZpcnN0bmFtZSI6IlB1bGtpdCIsImxhc3RuYW1lIjoiQWdnYXJ3YWwiLCJ1c2VybmFtZSI6ImFnZ2Fyd2FscHVsa2l0NTk2LWciLCJlbWFpbCI6ImFnZ2Fyd2FscHVsa2l0NTk2QGdtYWlsLmNvbSIsInZlcmlmaWVkZW1haWwiOiJhZ2dhcndhbHB1bGtpdDU5NkBnbWFpbC5jb20iLCJ2ZXJpZmllZG1vYmlsZSI6Iis5MS05NTgyMDU0NjY0IiwibW9iaWxlIjoiKzkxLTk1ODIwNTQ2NjQiLCJvbmVhdXRoX2lkIjoiMTIwMzUiLCJsYXN0X3JlYWRfbm90aWZpY2F0aW9uIjoiMCIsInBob3RvIjoiaHR0cHM6Ly9taW5pby5jb2RpbmdibG9ja3MuY29tL2ltZy9hdmF0YXItMjAuc3ZnIiwiY29sbGVnZSI6IkFtaXR5IFNjaG9vbCBPZiBFbmdpbmVlcmluZyAmIFRlY2hub2xvZ3kgKE5vaWRhKSIsImdyYWR1YXRpb255ZWFyIjoiMjAyNSIsIm9yZ2FuaXphdGlvbiI6bnVsbCwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDE4LTA5LTI3VDEzOjEwOjU5LjM5NloiLCJ1cGRhdGVkQXQiOiIyMDE5LTEyLTE4VDA5OjMwOjU4Ljk4N1oiLCJjbGllbnRJZCI6ImYwMTNkOTExLWVkZDgtNDY0Zi04YjQyLWViM2I0YWFhZmIyMCIsImNsaWVudCI6IndlYiIsImlzVG9rZW5Gb3JBZG1pbiI6ZmFsc2UsImlhdCI6MTU3NjY5Nzg0MCwiZXhwIjoxNTc2Njk5MzQwfQ.PZ0NjWxIUy8_2YlFqoupFk--EhK8RIIxA7HB5LtOnZzmeMhpKKI0XC4TLIxLEPQ8s4Lj-SoohCwD2QPVpwBEjSxXX3uTScsePRPB9YtulG-1-R6jiMoBQIWMQHwT9Gu47T2l1r8-DEatZztRfEBfz4-mju6wrdGRnfi9x6cSsXLF0zkZyeZng68SG22BVrumthx3bOX73g2akVRiiP9b1q3ISN865l-cQTKDigCBW_ybW_5wb7L5soCwNvNkZTAYaWXkl6VO2PVMGUuqmq8h6uVak8e7-Nxvm2w3y7wcMXzTsq5BnyEL34coQSThcLUj5Lt5UXhNum9dSKAkUCxiIg"
+    var authJwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3RuYW1lIjoiQWJoaXNoZWsiLCJsYXN0bmFtZSI6Ikd1cHRhIiwidXNlcm5hbWUiOiJhYmhpc2hlazk3IiwiZW1haWwiOiJ6YXBwZXIuYXdha2VAZ21haWwuY29tIiwidmVyaWZpZWRlbWFpbCI6InphcHBlci5hd2FrZUBnbWFpbC5jb20iLCJ2ZXJpZmllZG1vYmlsZSI6bnVsbCwibW9iaWxlIjoiKzkxLTk2NTQ2MjQyNDciLCJvbmVhdXRoX2lkIjoiMTAiLCJsYXN0X3JlYWRfbm90aWZpY2F0aW9uIjoiMCIsInBob3RvIjoiaHR0cHM6Ly9ncmFwaC5mYWNlYm9vay5jb20vMTUwOTk0MjE3OTAzODAyOS9waWN0dXJlP3R5cGU9bGFyZ2UiLCJjb2xsZWdlIjoiMC0tLU9USEVSIC8gTk9UIExJU1RFRCAvIE5PIENPTExFR0UgLS0tMCIsImdyYWR1YXRpb255ZWFyIjoiMjAyNSIsIm9yZ2FuaXphdGlvbiI6bnVsbCwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDE3LTA0LTE1VDA2OjQwOjU0LjQwOVoiLCJ1cGRhdGVkQXQiOiIyMDE5LTEyLTI1VDEwOjIzOjU5LjI4M1oiLCJjbGllbnRJZCI6ImQzM2ZmZGU1LTBjOTQtNGJmNi1hOGU2LWI5ZDFiZGVmMjc0OCIsImNsaWVudCI6IndlYiIsImlzVG9rZW5Gb3JBZG1pbiI6ZmFsc2UsImlhdCI6MTU3NzM1MzU2NCwiZXhwIjoxNTc3MzUzODY0fQ.bk30uSgJf2ZggZ96hFS96L6rsnw5z8Ajq1niJdF925GY5vZoZFAdNhOYg7hxGROc5M9a4L54iKmGvDjbCt7Lj8GsNdb-cX6KBFpP2f8Q0DRdXOD860JaA84cMZ8WFgQSwxkFI7_7r3uq7tJFJFMR9IDpnsftAPSmtGgm7e9YsSNPnQigHG8K2ylJR2Ffd1oSkPlK52ojyheAArmfu1XjzVEHYDkd6kkXScLWBIfmfe6x_3-2m6vuXaXuNvp150qCfTs5Dw1TLOx1NjuOwGLUMwW1NJjfOHAq6KfK0D6SoeiVEwfx91_rpF00hfYKugaOjd9sXrXCet7Y1Lsp4neIkw"
     var refreshToken = ""
 
 
@@ -72,7 +71,7 @@ object Clients {
         Question::class.java, Choice::class.java, QuizAttempt::class.java,
         Quizqnas::class.java, Doubts::class.java, ContentCsv::class.java, Comment::class.java,
         Note::class.java, Notes::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
-        RunAttemptId::class.java, RunAttemptsId::class.java, ContentId::class.java, ContentsId::class.java,
+        RunAttemptId::class.java, RunAttemptsId::class.java, ContentsId::class.java,
         Jobs::class.java, Company::class.java, CourseId::class.java, JobId::class.java,
         Applications::class.java, ApplicationId::class.java, DoubtLeaderBoard::class.java, User::class.java,
         Project::class.java
@@ -107,7 +106,7 @@ object Clients {
 
     private val onlineV2JsonRetrofit = Retrofit.Builder()
         .client(ClientInterceptor)
-        .baseUrl("https://api-online.cb.lk/api/v2/")
+        .baseUrl("http://192.168.0.133:3000/api/v2/")
         .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
         .addConverterFactory(JacksonConverterFactory.create(om))
         .build()

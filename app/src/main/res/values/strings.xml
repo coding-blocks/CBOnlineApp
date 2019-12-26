@@ -197,5 +197,10 @@
     <string name="facebook">Facebook</string>
     <string name="performance_graph">Performance Graph</string>
     <string name="enter_mobile_number_for_verification">Enter mobile number for verification</string>
+    <string name="complete_your_profile">Complete your Profile</string>
+    <string name="complete_desc">While we are personalizing your dashboard experience, complete your profile.</string>
+    <string name="full_name">Full Name</string>
+    <string name="email_address">Email Address</string>
+    <string name="college">College</string>
 
 </resources>
