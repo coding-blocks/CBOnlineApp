@@ -24,7 +24,7 @@ class DoubtsAdapter : ListAdapter<Doubts, AdminDoubtsViewHolder>(diffCallback) {
         val doubt = getItem(position)
         if (doubt != null)
             holder.apply {
-                bind(doubt, position)
+                bind(doubt)
                 ackClickListener = onAckClick
                 resolveClickListener = onResolveClick
                 chatClickListener = onChatClick

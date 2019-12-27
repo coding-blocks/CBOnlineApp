@@ -15,7 +15,7 @@ class AdminDoubtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     var resolveClickListener: ResolveClickListener? = null
     var discussClickListener: DiscussClickListener? = null
 
-    fun bind(doubt: Doubts, position: Int) {
+    fun bind(doubt: Doubts) {
         with(itemView) {
             titleTv.text = doubt.title
             descriptionTv.text = doubt.body

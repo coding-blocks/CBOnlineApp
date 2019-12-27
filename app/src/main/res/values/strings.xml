@@ -58,7 +58,6 @@
     <string name="doubt_title_error">Title length must be atleast 15 characters.</string>
     <!--Strings For Layouts !-->
     <string name="login_now">Login Now</string>
-    <string name="skip">Skip</string>
     <string name="tollfree_number">+1800 274 4504</string>
     <string name="email_cb">Admissions@Codingblocks.com</string>
     <string name="pitampura_address">1st Floor, 47, Nishant Kunj, Main Pitampura Road, New Delhi Near Kohat Enclave Metro Station(Exit from Gate # 2)(Opposite Pillar 337)</string>
@@ -202,5 +201,12 @@
     <string name="full_name">Full Name</string>
     <string name="email_address">Email Address</string>
     <string name="college">College</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="use_email">Use Email</string>
+    <string name="proceed">Proceed</string>
+    <string name="graduation_year">Graduation Year</string>
+    <string name="branch">Branch</string>
+    <string name="skip">Skip</string>
+    <string name="continue_to_dashboard">Continue to dashboard</string>
 
 </resources>

@@ -127,7 +127,7 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
         // 0.15 ratio is perhaps enough to determine keypad height.
         val isKeyboardNowVisible = keypadHeight > screenHeight * 0.15
 
-        if (mKeyboardVisible !== isKeyboardNowVisible) {
+        if (mKeyboardVisible != isKeyboardNowVisible) {
             if (isKeyboardNowVisible) {
                 onKeyboardShown(false)
             } else {

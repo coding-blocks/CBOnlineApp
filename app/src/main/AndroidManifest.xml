@@ -24,7 +24,9 @@
         <activity
             android:name=".library.LibraryActivity"
             android:parentActivityName=".mycourse.MyCourseActivity" />
-        <activity android:name=".auth.LoginActivity" />
+        <activity
+            android:name=".auth.LoginActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".auth.onboarding.OnBoardingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

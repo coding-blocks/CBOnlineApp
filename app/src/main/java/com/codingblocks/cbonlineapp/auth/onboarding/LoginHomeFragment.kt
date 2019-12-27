@@ -26,6 +26,37 @@ class LoginHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setfirstSpan()
+        setSecondSpan()
+
+        mobileBtn.setOnClickListener {
+            replaceFragmentSafely(SignInFragment(), "SignIn", containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
+        }
+
+
+    }
+
+    private fun setSecondSpan() {
+        val policySpan = SpannableString("By loggin in you agree to Coding Blocks’s\n" +
+            "Privacy Policy & Terms of Service")
+        val clickableSpan: ClickableSpan = object : ClickableSpan() {
+            override fun onClick(textView: View) {
+                replaceFragmentSafely(SignInFragment(), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+
+            }
+        }
+        policySpan.setSpan(clickableSpan, 41, policySpan.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        policyTv.apply {
+            text = policySpan
+            movementMethod = LinkMovementMethod.getInstance()
+            highlightColor = Color.TRANSPARENT
+        }
+    }
+
+    private fun setfirstSpan() {
         val wordToSpan = SpannableString("New here? Create an account")
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
@@ -38,15 +69,12 @@ class LoginHomeFragment : Fragment() {
                 ds.isUnderlineText = false // set to false to remove underline
             }
         }
-        wordToSpan.setSpan(clickableSpan, 9, 27, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        wordToSpan.setSpan(clickableSpan, 9, wordToSpan.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         createAccTv.apply {
             text = wordToSpan
             movementMethod = LinkMovementMethod.getInstance()
             highlightColor = Color.TRANSPARENT
-        }
-        mobileBtn.setOnClickListener {
-            replaceFragmentSafely(SignInFragment(), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
         }
     }
 
