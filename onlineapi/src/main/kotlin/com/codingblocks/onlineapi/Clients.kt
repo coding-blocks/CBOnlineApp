@@ -17,7 +17,6 @@ import com.codingblocks.onlineapi.models.ContentProgress
 import com.codingblocks.onlineapi.models.ContentQna
 import com.codingblocks.onlineapi.models.ContentVideoType
 import com.codingblocks.onlineapi.models.Course
-import com.codingblocks.onlineapi.models.CourseId
 import com.codingblocks.onlineapi.models.DoubtLeaderBoard
 import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Instructor
@@ -25,7 +24,6 @@ import com.codingblocks.onlineapi.models.JobId
 import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
-import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.Project
 import com.codingblocks.onlineapi.models.Question
@@ -33,7 +31,6 @@ import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizqnas
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.Rating
-import com.codingblocks.onlineapi.models.RunAttemptId
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.codingblocks.onlineapi.models.Runs
@@ -59,7 +56,7 @@ object Clients {
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
 
-    var authJwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3RuYW1lIjoiQWJoaXNoZWsiLCJsYXN0bmFtZSI6Ikd1cHRhIiwidXNlcm5hbWUiOiJhYmhpc2hlazk3IiwiZW1haWwiOiJ6YXBwZXIuYXdha2VAZ21haWwuY29tIiwidmVyaWZpZWRlbWFpbCI6InphcHBlci5hd2FrZUBnbWFpbC5jb20iLCJ2ZXJpZmllZG1vYmlsZSI6bnVsbCwibW9iaWxlIjoiKzkxLTk2NTQ2MjQyNDciLCJvbmVhdXRoX2lkIjoiMTAiLCJsYXN0X3JlYWRfbm90aWZpY2F0aW9uIjoiMCIsInBob3RvIjoiaHR0cHM6Ly9ncmFwaC5mYWNlYm9vay5jb20vMTUwOTk0MjE3OTAzODAyOS9waWN0dXJlP3R5cGU9bGFyZ2UiLCJjb2xsZWdlIjoiMC0tLU9USEVSIC8gTk9UIExJU1RFRCAvIE5PIENPTExFR0UgLS0tMCIsImdyYWR1YXRpb255ZWFyIjoiMjAyNSIsIm9yZ2FuaXphdGlvbiI6bnVsbCwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDE3LTA0LTE1VDA2OjQwOjU0LjQwOVoiLCJ1cGRhdGVkQXQiOiIyMDE5LTEyLTI1VDEwOjIzOjU5LjI4M1oiLCJjbGllbnRJZCI6ImQzM2ZmZGU1LTBjOTQtNGJmNi1hOGU2LWI5ZDFiZGVmMjc0OCIsImNsaWVudCI6IndlYiIsImlzVG9rZW5Gb3JBZG1pbiI6ZmFsc2UsImlhdCI6MTU3NzM1MzU2NCwiZXhwIjoxNTc3MzUzODY0fQ.bk30uSgJf2ZggZ96hFS96L6rsnw5z8Ajq1niJdF925GY5vZoZFAdNhOYg7hxGROc5M9a4L54iKmGvDjbCt7Lj8GsNdb-cX6KBFpP2f8Q0DRdXOD860JaA84cMZ8WFgQSwxkFI7_7r3uq7tJFJFMR9IDpnsftAPSmtGgm7e9YsSNPnQigHG8K2ylJR2Ffd1oSkPlK52ojyheAArmfu1XjzVEHYDkd6kkXScLWBIfmfe6x_3-2m6vuXaXuNvp150qCfTs5Dw1TLOx1NjuOwGLUMwW1NJjfOHAq6KfK0D6SoeiVEwfx91_rpF00hfYKugaOjd9sXrXCet7Y1Lsp4neIkw"
+    var authJwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc5NzUsImZpcnN0bmFtZSI6IlB1bGtpdCIsImxhc3RuYW1lIjoiQWdnYXJ3YWwiLCJ1c2VybmFtZSI6ImFnZ2Fyd2FscHVsa2l0NTk2LWciLCJlbWFpbCI6ImFnZ2Fyd2FscHVsa2l0NTk2QGdtYWlsLmNvbSIsInZlcmlmaWVkZW1haWwiOiJhZ2dhcndhbHB1bGtpdDU5NkBnbWFpbC5jb20iLCJ2ZXJpZmllZG1vYmlsZSI6Iis5MS05NTgyMDU0NjY0IiwibW9iaWxlIjoiKzkxLTk1ODIwNTQ2NjQiLCJvbmVhdXRoX2lkIjoiMTIwMzUiLCJsYXN0X3JlYWRfbm90aWZpY2F0aW9uIjoiMCIsInBob3RvIjoiaHR0cHM6Ly9taW5pby5jb2RpbmdibG9ja3MuY29tL2ltZy9hdmF0YXItMjAuc3ZnIiwiY29sbGVnZSI6IkFtaXR5IFNjaG9vbCBPZiBFbmdpbmVlcmluZyAmIFRlY2hub2xvZ3kgKE5vaWRhKSIsImdyYWR1YXRpb255ZWFyIjoiMjAyNSIsIm9yZ2FuaXphdGlvbiI6bnVsbCwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDE4LTA5LTI3VDEzOjEwOjU5LjM5NloiLCJ1cGRhdGVkQXQiOiIyMDE5LTEyLTI3VDEyOjQyOjAzLjMwOFoiLCJjbGllbnRJZCI6ImY0Yjg5MTczLThmOTMtNGUwYS04OTEzLTA5OTAzOWIzY2U2NyIsImNsaWVudCI6IndlYiIsImlzVG9rZW5Gb3JBZG1pbiI6ZmFsc2UsImlhdCI6MTU3NzQ1OTU0MywiZXhwIjoxNTc3NDU5ODQzfQ.DNzePL0hiD8LCVv2R92S_8MSpZQbjFNgQgSZl148MCMHbXDXfWgTnm1fp7RohyqwOR0349_55N4wue6c5JM0x-pCuuEhcdlsl-AMm2j8obMMZs_a2D55LUjD_6QqkNBRAUXktyR-WG8oHU7qSsTcus8ns1wHD5Pfk21zCt0Jv3d0fMT0QtNUsFLlyok6BbfbusnXbZfDAleQsTnZZLD4tz2X0SRMq_J_quyyCX3Sqp2OcexA8eswYLfqa6aQBL3W3F-57J7_6EW0QSs75AlJ1Ul0Jm7SfNtzU5Ie-__OWmTBugdvPuE7ZNOJUj07BVYeXVDm9WDF6yC-V9bVro7B5Q"
     var refreshToken = ""
 
 
@@ -69,9 +66,8 @@ object Clients {
         ContentQna::class.java, Announcement::class.java, Progress::class.java, Quizzes::class.java,
         Question::class.java, Choice::class.java, QuizAttempt::class.java,
         Quizqnas::class.java, Doubts::class.java, ContentCsv::class.java, Comment::class.java,
-        Note::class.java, Notes::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
-        RunAttemptId::class.java, RunAttemptsId::class.java,
-        Jobs::class.java, Company::class.java, CourseId::class.java, JobId::class.java,
+        Note::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
+        RunAttemptsId::class.java, Jobs::class.java, Company::class.java, JobId::class.java,
         Applications::class.java, ApplicationId::class.java, DoubtLeaderBoard::class.java, User::class.java,
         Project::class.java
     )
@@ -105,8 +101,7 @@ object Clients {
 
     private val onlineV2JsonRetrofit = Retrofit.Builder()
         .client(ClientInterceptor)
-        //http://192.168.0.133:3000
-        .baseUrl("https://api-online.cb.lk/api/v2/")
+        .baseUrl("http://192.168.1.8:3000/api/v2/")
         .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
         .addConverterFactory(JacksonConverterFactory.create(om))
         .build()

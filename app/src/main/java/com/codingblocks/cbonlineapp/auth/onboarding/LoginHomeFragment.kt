@@ -11,7 +11,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_login_home.*
 
@@ -33,6 +35,20 @@ class LoginHomeFragment : Fragment() {
             replaceFragmentSafely(SignInFragment(), "SignIn", containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
         }
 
+        gmailBtn.setOnClickListener {
+            Components.openChrome(
+                requireContext(),
+                "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
+            )
+        }
+
+        fbBtn.setOnClickListener {
+            Components.openChrome(
+                requireContext(),
+                "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
+            )
+        }
+
 
     }
 
@@ -41,7 +57,7 @@ class LoginHomeFragment : Fragment() {
             "Privacy Policy & Terms of Service")
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
-                replaceFragmentSafely(SignInFragment(), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
+//                replaceFragmentSafely(SignInFragment(), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
             }
 
             override fun updateDrawState(ds: TextPaint) {
@@ -60,8 +76,7 @@ class LoginHomeFragment : Fragment() {
         val wordToSpan = SpannableString("New here? Create an account")
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
-                //
-//                startActivity(Intent(requireContext(), NextActivity::class.java))
+                replaceFragmentSafely(SignInFragment.newInstance("NEW"), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
             }
 
             override fun updateDrawState(ds: TextPaint) {

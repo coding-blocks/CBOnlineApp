@@ -13,6 +13,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/numberTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
@@ -21,13 +22,14 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/numberDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/gilroy_medium"
-            android:text="Use your number registered with us"
+            android:text="@string/number_desc"
             android:textColor="@color/brownish_grey"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:visibility="visible" />
 
         <RelativeLayout
@@ -44,6 +46,9 @@
                 android:layout_gravity="end|top"
                 android:layout_marginBottom="28dp"
                 android:elevation="1dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
                 android:fontFamily="@font/gilroy_bold"
                 android:text="@string/use_email"
                 android:textColor="@color/orangish"
@@ -69,6 +74,29 @@
 
             </com.google.android.material.textfield.TextInputLayout>
         </RelativeLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:endIconMode="password_toggle"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/gilroy_medium"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:paddingStart="0dp"
+                android:textColorHighlight="@color/orangish"
+                android:textColorHint="@color/black"
+                android:textSize="16sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
     </LinearLayout>
 

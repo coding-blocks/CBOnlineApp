@@ -15,7 +15,7 @@ class OnBoardingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_on_boarding)
         browseBtn.setOnClickListener {
-            startActivity(intentFor<DashboardActivity>())
+            startActivity(intentFor<CourseActivity>())
         }
         loginBtn.setOnClickListener {
             startActivity(intentFor<LoginActivity>())

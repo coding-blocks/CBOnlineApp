@@ -38,14 +38,14 @@ class DashboardMyCoursesRepository(
                 if (!runAttempts.isNullOrEmpty()) {
                     val model = RunModel(
                         id,
-                        name,
-                        description,
-                        enrollmentStart,
-                        enrollmentEnd,
-                        start,
-                        end,
-                        price,
-                        mrp ?: price,
+                        name ?: "",
+                        description ?: "",
+                        enrollmentStart ?: "",
+                        enrollmentEnd ?: "",
+                        start ?: "",
+                        end ?: "",
+                        price ?: "",
+                        mrp ?: price ?: "",
                         course?.id ?: "",
                         updatedAt,
                         whatsappLink,
@@ -57,9 +57,9 @@ class DashboardMyCoursesRepository(
                         totalContents,
                         completedContents,
                         (totalContents / completedContents).toDouble(),
-                        completionThreshold,
-                        goodiesThreshold,
-                        productId
+                        completionThreshold ?: 0,
+                        goodiesThreshold ?: 0,
+                        productId ?: 0
                     )
                     if (response == -2L && !runDao.getRun(id).isNullOrEmpty()) {
                         runDao.update(model)

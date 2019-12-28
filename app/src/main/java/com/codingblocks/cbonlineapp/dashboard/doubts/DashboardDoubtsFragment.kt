@@ -15,19 +15,19 @@ import com.codingblocks.cbonlineapp.dashboard.DoubtCommentActivity
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
-import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.DOUBT_ID
 import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.REOPENED
 import com.codingblocks.cbonlineapp.util.RESOLVED
-import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
+import com.codingblocks.cbonlineapp.util.extensions.showEmptyView
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.ErrorStatus
+import com.crashlytics.android.core.CrashlyticsCore
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
@@ -141,20 +141,21 @@ class DashboardDoubtsFragment : Fragment() {
         viewModel.errorLiveData.observer(viewLifecycleOwner) {
             when (it) {
                 ErrorStatus.NO_CONNECTION -> {
-//                    showEmptyView(internetll, emptyLl, dashboardDoubtShimmer)
-                }
-                ErrorStatus.UNAUTHORIZED -> {
-                    Components.showConfirmation(requireContext(), UNAUTHORIZED) {
-                        requireActivity().finish()
-                    }
+                    dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
                 }
                 ErrorStatus.TIMEOUT -> {
                     dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, dashboardBottomNav) {
                         viewModel.fetchDoubts()
                     }
-
+                }
+                else -> {
+                    dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
+                    CrashlyticsCore.getInstance().log(it)
                 }
             }
+            if (doubtListAdapter.currentList.isEmpty())
+                showEmptyView(emptyView = emptyLl, shimmerView = dashboardDoubtShimmer)
+
         }
 
         viewModel.barMessage.observer(viewLifecycleOwner) {

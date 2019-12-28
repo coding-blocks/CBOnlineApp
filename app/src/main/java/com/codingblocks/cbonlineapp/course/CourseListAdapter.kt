@@ -57,7 +57,7 @@ class CourseListAdapter : ListAdapter<Course, CourseListAdapter.ItemViewHolder>(
                 }
             }
             var list = item.runs?.filter { run ->
-                !run.unlisted && run.enrollmentEnd.greater() && !run.enrollmentStart.greater()
+                !run.unlisted && run.enrollmentEnd?.greater()!! && !run.enrollmentStart!!.greater()
             }?.sortedWith(compareBy { run -> run.price })
             if (list.isNullOrEmpty()) {
                 list =

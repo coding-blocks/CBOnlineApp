@@ -71,9 +71,14 @@ fun Fragment.showShimmer(internetView: LinearLayout, emptyView: LinearLayout, sh
     shimmerView.showAndStart()
 }
 
-fun Fragment.showEmptyView(internetView: LinearLayout, emptyView: LinearLayout, shimmerView: ShimmerFrameLayout) {
-    internetView.isVisible = true
-    emptyView.isVisible = false
+fun Fragment.showEmptyView(internetView: LinearLayout? = null, emptyView: LinearLayout, shimmerView: ShimmerFrameLayout) {
+    if (internetView == null) {
+        emptyView.isVisible = true
+    } else {
+        internetView.isVisible = true
+        emptyView.isVisible = false
+    }
+
     shimmerView.hideAndStop()
 }
 
@@ -115,17 +120,22 @@ fun <F : Fragment> F.replaceFragmentSafely(
     @AnimatorRes enterAnimation: Int = 0,
     @AnimatorRes exitAnimation: Int = 0,
     @AnimRes popEnterAnimation: Int = 0,
-    @AnimRes popExitAnimation: Int = 0
+    @AnimRes popExitAnimation: Int = 0,
+    addToStack: Boolean = false
 ) {
     val ft = fragmentManager!!
         .beginTransaction()
         .setCustomAnimations(enterAnimation, exitAnimation, popEnterAnimation, popExitAnimation)
         .replace(containerViewId, fragment, tag)
+    if (addToStack) {
+        ft.addToBackStack(tag)
+    }
     if (!fragmentManager!!.isStateSaved) {
         ft.commit()
     } else if (allowStateLoss) {
         ft.commitAllowingStateLoss()
     }
+
 }
 
 fun RecyclerView.setRv(activity: Context, listAdapter: ListAdapter<out Any, out RecyclerView.ViewHolder>, setDivider: Boolean = false, type: String = "", orientation: Int = RecyclerView.VERTICAL) {

@@ -32,7 +32,7 @@ interface OnlineRestApi {
 
     @POST("jwt/login?android=true")
     @FormUrlEncoded
-    fun getToken(@Field("code") code: String): Call<JsonObject>
+    suspend fun getToken(@Field("code") code: String): Response<JsonObject>
 
     @GET("v2/courses/{id}/rating")
     suspend fun getCourseRating(@Path("id") id: String): RatingModel

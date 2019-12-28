@@ -11,7 +11,6 @@ import com.codingblocks.onlineapi.models.Instructor
 import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
-import com.codingblocks.onlineapi.models.Notes
 import com.codingblocks.onlineapi.models.Player
 import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.Project
@@ -168,11 +167,11 @@ interface OnlineJsonApi {
     fun createComment(@Body params: Comment): Call<Comment>
 
 
-    @PATCH("notes/{noteid}")
-    fun updateNoteById(@Path("noteid") id: String, @Body params: Notes): Call<ResponseBody>
-
-    @POST("notes")
-    fun createNote(@Body params: Notes): Call<Notes>
+//    @PATCH("notes/{noteid}")
+//    fun updateNoteById(@Path("noteid") id: String, @Body params: Notes): Call<ResponseBody>
+//
+//    @POST("notes")
+//    fun createNote(@Body params: Notes): Call<Notes>
 
     @POST("quiz_attempts")
     fun createQuizAttempt(@Body params: QuizAttempt): Call<QuizAttempt>

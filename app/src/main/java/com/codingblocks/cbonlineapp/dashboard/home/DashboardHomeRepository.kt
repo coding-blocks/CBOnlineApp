@@ -11,6 +11,8 @@ class DashboardHomeRepository(private val prefs: AppPrefs,
 
     suspend fun fetchUser() = safeApiCall { Clients.onlineV2JsonApi.getMe() }
 
+    suspend fun getToken(grantCode: String) = safeApiCall { Clients.api.getToken(grantCode) }
+
     fun insertUser(user: User) {
         with(user) {
             prefs.oneAuthId = oneauthId
@@ -23,5 +25,6 @@ class DashboardHomeRepository(private val prefs: AppPrefs,
     }
 
     fun getTopRun() = courseWithInstructorDao.getTopRun()
+
 
 }

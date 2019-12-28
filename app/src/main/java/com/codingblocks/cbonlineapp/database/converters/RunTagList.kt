@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.database.converters
 
 import androidx.room.TypeConverter
-import com.codingblocks.onlineapi.models.CourseId
 import com.codingblocks.onlineapi.models.Tags
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper

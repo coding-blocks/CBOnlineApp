@@ -20,7 +20,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/NewAppTheme">
-        <activity android:name=".auth.onboarding.CompleteProfileActivity" />
+        <activity
+            android:name=".auth.onboarding.CompleteProfileActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".library.LibraryActivity"
             android:parentActivityName=".mycourse.MyCourseActivity" />

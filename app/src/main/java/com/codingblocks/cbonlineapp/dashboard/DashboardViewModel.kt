@@ -9,6 +9,7 @@ import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.util.extensions.runIO
+import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.getMeta
@@ -78,8 +79,6 @@ class DashboardViewModel(private val homeRepo: DashboardHomeRepository,
                                 if (it.get().isEmpty())
                                     courses.postValue(emptyList())
                             }
-
-
                         }
                     else {
                         setError(fetchError(response.value.code()))
@@ -92,6 +91,24 @@ class DashboardViewModel(private val homeRepo: DashboardHomeRepository,
 
     private fun setError(error: String) {
         errorLiveData.postValue(error)
+    }
+
+    fun fetchToken(grantCode: String) {
+        runIO {
+            when (val response = homeRepo.getToken(grantCode)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let {
+                            val jwt = it.asJsonObject.get("jwt").asString
+                            val rt = it.asJsonObject.get("refresh_token").asString
+                            Clients.authJwt = jwt
+                            Clients.refreshToken = rt
+                        }
+                }
+            }
+        }
+
     }
 
 }

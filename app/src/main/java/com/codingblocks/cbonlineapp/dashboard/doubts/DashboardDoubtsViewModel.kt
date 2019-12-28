@@ -22,7 +22,7 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
     var barMessage: MutableLiveData<String> = MutableLiveData()
     var type: MutableLiveData<String> = MutableLiveData()
     var courseId: MutableLiveData<String> = MutableLiveData()
-    val default = "5074"
+    val default = "44872"
     private val doubtsDao = repo.getDoubtsByCourseRun(ALL, default)
 
     init {

@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.dashboard
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,9 +12,9 @@ import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.AboutActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
-import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
+import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsFragment
 import com.codingblocks.cbonlineapp.dashboard.explore.DashboardExploreFragment
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeFragment
@@ -58,6 +59,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         setContentView(R.layout.activity_dashboard)
         setUser()
         initializeUI()
+        var a = 5;
         viewModel.isAdmin.observer(this) {
             val navMenu = dashboardNavigation.menu
             navMenu.findItem(R.id.nav_admin).isVisible = it
@@ -75,6 +77,21 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 navUsernameTv.append(" $firstName")
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val data = this.intent.data
+        if (data != null && data.isHierarchical) {
+            if (data.getQueryParameter("code") != null) {
+                fetchToken(data)
+            }
+        }
+    }
+
+    private fun fetchToken(data: Uri) {
+        val grantCode = data.getQueryParameter("code") as String
+        viewModel.fetchToken(grantCode)
     }
 
     private fun initializeUI() {

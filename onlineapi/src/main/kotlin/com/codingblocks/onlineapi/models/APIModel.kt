@@ -54,36 +54,36 @@ data class Course(
 
 @Type("runs")
 data class Runs(
-    val name: String,
-    val description: String,
-    val start: String,
-    val end: String,
-    val price: String,
+    val name: String?,
+    val description: String?,
+    val start: String?,
+    val end: String?,
+    val price: String?,
     val mrp: String?,
     val unlisted: Boolean,
-    val enrollmentStart: String,
-    val enrollmentEnd: String,
+    val enrollmentStart: String?,
+    val enrollmentEnd: String?,
     @Relationship("sections")
     val sections: ArrayList<Sections>?,
     @Relationship("run-attempts")
     var runAttempts: ArrayList<RunAttempts>?,
-    @Relationship("courses")
+    @Relationship("course")
     var course: Course?,
     @Relationship("ratings")
     var rating: ArrayList<Rating>?,
     val whatsappLink: String?,
-    val productId: Int,
-    val completionThreshold: Int,
-    val goodiesThreshold: Int,
+    val productId: Int?,
+    val completionThreshold: Int?,
+    val goodiesThreshold: Int?,
     //TODO ( Remove these values )
     val totalContents: Int = 100,
     val completedContents: Int = 50,
     @Relationship("tags")
     val tags: ArrayList<Tags>?
+) : BaseModel() {
 
-) : BaseModel()
+}
 
-//TODO ( change this to plural )
 @Type("run_attempts")
 data class RunAttempts(
     val certificateApproved: Boolean = false,
@@ -100,7 +100,6 @@ data class RunAttempts(
     }
 }
 
-//TODO ( change this to plural )
 @Type("doubts")
 data class Doubts(
     val body: String = "",
@@ -119,7 +118,7 @@ data class Doubts(
     val resolvedAt: String? = null,
     val firebaseRef: String? = null,
     @Relationship("resolved-by")
-    val resolvedBy: UserId? = null
+    val resolvedBy: User? = null
 ) : BaseModel() {
     constructor(id: String, title: String,
                 body: String,
@@ -403,7 +402,7 @@ class QuizQuestion : BaseModel() {
 class Quizqnas : BaseModel()
 
 
-@Type("note")
+@Type("notes")
 class Note(
     val duration: Double,
     @JsonProperty("createdAt")
@@ -411,44 +410,12 @@ class Note(
     val deletedAt: String? = null,
     val text: String,
     @Relationship("run_attempt")
-    val runAttempt: RunAttemptId? = null,
+    val runAttempt: RunAttempts? = null,
     @Relationship("content")
     val content: LectureContent? = null
 ) : BaseModel()
 
-@Type("notes")
-class Notes : BaseModel() {
-    @JvmField
-    var duration: Double? = null
-    @JvmField
-    var text: String? = null
-    @JvmField
-    var createdAt: String? = null
-    @JvmField
-    var deletedAt: String? = null
-    @Relationship("run-attempt", resolve = true)
-    @JvmField
-    var runAttempt: RunAttemptsId? = null
-    @Relationship("content")
-    @JvmField
-    var content: LectureContent? = null
-}
-
-@Type("run_attempt")
-class RunAttemptId(
-    @Id
-    @JvmField
-    val id: String?
-)
-
 @Type("users")
-class UserId(
-    @Id
-    @JvmField
-    val id: String?
-)
-
-@Type("user")
 class User(
     val email: String,
     val firstname: String,

@@ -208,5 +208,11 @@
     <string name="branch">Branch</string>
     <string name="skip">Skip</string>
     <string name="continue_to_dashboard">Continue to dashboard</string>
+    <string name="password">Password</string>
+    <string name="number_desc">Use your number to login to your account</string>
+    <string name="welcome">Welcome to Coding Blocks</string>
+    <string name="welcome_desc">Use your number to get registered with us</string>
+    <string name="email_title">Enter Email Address for verification</string>
+    <string name="email_desc">Use your email ID to login to your account</string>
 
 </resources>

@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.codingblocks.cbonlineapp.database.models.NotesModel
-import com.codingblocks.onlineapi.models.RunAttemptId
 
 @Dao
 abstract class NotesDao : BaseDao<NotesModel> {
