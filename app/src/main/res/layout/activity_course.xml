@@ -36,8 +36,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
                     android:outlineProvider="background"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_course_cover" />
+                    android:scaleType="centerCrop" />
 
                 <TextView
                     android:id="@+id/shortTv"
@@ -49,7 +48,7 @@
                     android:layout_marginBottom="@dimen/margin_extra_small"
                     android:layout_toStartOf="@id/courseLogo"
                     android:fontFamily="@font/gilroy_medium"
-                    android:text="Learn full-stack web development using JavaScript and NodeJS"
+                    tools:text="Learn full-stack web development using JavaScript and NodeJS"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
@@ -61,7 +60,6 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="@dimen/margin_large"
                     android:layout_marginBottom="@dimen/margin_large"
-                    android:src="@drawable/ic_course_logo"
                     app:civ_border_color="@color/white"
                     app:civ_border_width="2dp" />
 
@@ -82,7 +80,7 @@
                     android:layout_marginStart="@dimen/margin_small"
                     android:layout_toEndOf="@id/ratingBar"
                     android:fontFamily="@font/gilroy_medium"
-                    android:text="4/5, 435 ratings"
+                    tools:text="4/5, 435 ratings"
                     android:textColor="@color/white" />
             </RelativeLayout>
 

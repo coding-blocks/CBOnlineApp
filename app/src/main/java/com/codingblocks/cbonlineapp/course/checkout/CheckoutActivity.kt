@@ -8,6 +8,6 @@ class CheckoutActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.app_bar_home)
+//        setContentView(R.layout.app_bar_home)
     }
 }

@@ -2,9 +2,9 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/adminOverviewRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/adminOverviewRoot"
     tools:context="com.codingblocks.cbonlineapp.admin.overview.AdminOverviewFragment">
 
     <LinearLayout
@@ -263,7 +263,7 @@
             android:layout_marginEnd="16dp"
             android:gravity="center">
 
-            <com.google.android.material.button.MaterialButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/prevBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -274,7 +274,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-            <com.google.android.material.button.MaterialButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/nextBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

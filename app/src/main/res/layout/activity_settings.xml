@@ -23,6 +23,7 @@
         android:padding="16dp">
 
         <TextView
+            android:fontFamily="@font/gilroy_medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Video download options" />
@@ -33,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/ripple"
-            android:fontFamily="@font/nunitosans_regular"
+            android:fontFamily="@font/gilroy_bold"
             android:text="Download via Wi-Fi only"
             android:textSize="18sp"
             app:theme="@style/ColorSwitchStyle" />
@@ -50,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ripple"
-            android:fontFamily="@font/nunitosans_regular"
+            android:fontFamily="@font/gilroy_bold"
             android:text="Allow Picture in Picture Mode"
             android:textSize="18sp"
             app:theme="@style/ColorSwitchStyle">
@@ -68,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ripple"
-            android:fontFamily="@font/nunitosans_regular"
+            android:fontFamily="@font/gilroy_bold"
             android:text="Delete all downloads"
             android:textColor="@color/black"
             android:textSize="18sp" />
@@ -81,6 +82,7 @@
             android:background="#eeeeee" />
 
         <TextView
+            android:fontFamily="@font/gilroy_bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Available Storage" />
@@ -128,6 +130,7 @@
         </LinearLayout>
 
         <TextView
+            android:fontFamily="@font/gilroy_bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -145,8 +148,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:maxLines="1"
+                android:fontFamily="@font/gilroy_bold"
                 android:ellipsize="end"
-                android:fontFamily="sans-serif-light"
                 android:gravity="center"
                 android:textSize="23sp" />
 

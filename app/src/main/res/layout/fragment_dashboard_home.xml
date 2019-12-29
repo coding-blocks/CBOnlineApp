@@ -121,7 +121,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/performanceImg"
                         android:fontFamily="@font/gilroy_bold"
-                        android:text="Average"
+                        tools:text="Average"
                         android:textSize="16sp" />
 
                     <TextView
@@ -162,7 +162,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/leaderboardImg"
                         android:fontFamily="@font/gilroy_bold"
-                        android:text="233/450"
+                        tools:text="233/450"
                         android:textSize="16sp" />
 
                     <TextView
@@ -171,7 +171,7 @@
                         android:layout_below="@+id/homeleaderboardTv"
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/gilroy_medium"
-                        android:text="Leaderboard Rank"
+                        android:text="@string/leaderboard_rank"
                         android:textSize="14sp" />
 
                 </RelativeLayout>
