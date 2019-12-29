@@ -14,9 +14,9 @@ import cn.campusapp.router.route.ActivityRoute
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.NotificationClickListener
 import com.codingblocks.cbonlineapp.database.NotificationDao
-import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_notifications.*
 import org.koin.android.ext.android.inject
@@ -52,7 +52,7 @@ class NotificationsActivity : AppCompatActivity() {
                         .withParams(VIDEO_ID, videoId)
                         .open()
                 } else {
-                    Components.openChrome(this@NotificationsActivity, url)
+                    this@NotificationsActivity.openChrome(url)
                 }
             }
         }

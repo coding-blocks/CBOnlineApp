@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
-import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
@@ -19,7 +18,9 @@ class VideoPlayerViewModel(
     var mOtp: String? = null
     var mPlaybackInfo: String? = null
     var attemptId: String = ""
-
+    var sectionId: String = ""
+    var videoId: String = ""
+    var contentId: String = ""
     var getOtpProgress: MutableLiveData<Boolean> = MutableLiveData()
     val doubts by lazy {
         repoDoubts.getDoubtsByCourseRun(LIVE, attemptId)

@@ -2,10 +2,12 @@ package com.codingblocks.cbonlineapp.util.extensions
 
 import android.animation.Animator
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
@@ -22,6 +24,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.appcompat.widget.ActionMenuView
 import androidx.appcompat.widget.Toolbar
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -200,6 +203,19 @@ fun Context.showDialog(type: String, cancelable: Boolean = false, callback: (sta
         setCancelable(cancelable)
         show()
     }
+}
+
+fun Context.openChrome(url: String, newTask: Boolean = false) {
+    val builder = CustomTabsIntent.Builder()
+        .enableUrlBarHiding()
+        .setToolbarColor(getColor(R.color.colorPrimaryDark))
+        .setShowTitle(true)
+        .setSecondaryToolbarColor(getColor(R.color.colorPrimary))
+    val customTabsIntent = builder.build()
+    if (newTask) {
+        customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    }
+    customTabsIntent.launchUrl(this, Uri.parse(url))
 }
 
 fun View.animateVisibility(visible: Int) {

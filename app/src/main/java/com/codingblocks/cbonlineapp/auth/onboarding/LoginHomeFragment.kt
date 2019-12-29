@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_login_home.*
 
@@ -36,15 +37,13 @@ class LoginHomeFragment : Fragment() {
         }
 
         gmailBtn.setOnClickListener {
-            Components.openChrome(
-                requireContext(),
+            requireContext().openChrome(
                 "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
             )
         }
 
         fbBtn.setOnClickListener {
-            Components.openChrome(
-                requireContext(),
+            requireContext().openChrome(
                 "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
             )
         }

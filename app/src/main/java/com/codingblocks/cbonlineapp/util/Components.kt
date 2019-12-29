@@ -10,6 +10,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
+import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import kotlinx.android.synthetic.main.custom_dialog.view.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.layoutInflater
@@ -81,7 +82,7 @@ object Components {
             when (type) {
                 "trial" -> context.startActivity(context.intentFor<DashboardActivity>("courseRun" to "mycourses").singleTop())
                 "verify" -> {
-                    openChrome(context, "https://account.codingblocks.com/users/me")
+                    context.openChrome("https://account.codingblocks.com/users/me")
                 }
                 "exit" -> {
                     (context as Activity).finish()
@@ -91,8 +92,7 @@ object Components {
                 }
                 UNAUTHORIZED -> {
 
-                    openChrome(
-                        context,
+                    context.openChrome(
                         "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
                     )
                 }
@@ -113,19 +113,5 @@ object Components {
         confirmDialog.setView(updateView)
         confirmDialog.setCancelable(false)
         confirmDialog.show()
-    }
-
-
-    fun openChrome(context: Context, url: String, newTask: Boolean = false) {
-        val builder = CustomTabsIntent.Builder()
-            .enableUrlBarHiding()
-            .setToolbarColor(context.resources.getColor(R.color.colorPrimaryDark))
-            .setShowTitle(true)
-            .setSecondaryToolbarColor(context.resources.getColor(R.color.colorPrimary))
-        val customTabsIntent = builder.build()
-        if (newTask) {
-            customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-        customTabsIntent.launchUrl(context, Uri.parse(url))
     }
 }

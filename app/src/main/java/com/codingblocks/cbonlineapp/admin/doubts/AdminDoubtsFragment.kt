@@ -14,6 +14,7 @@ import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showEmptyView
 import com.codingblocks.cbonlineapp.util.extensions.showShimmer
@@ -64,7 +65,7 @@ class AdminDoubtsFragment : Fragment(), TabLayout.OnTabSelectedListener {
     private val discussClickListener: DiscussClickListener by lazy {
         object : DiscussClickListener {
             override fun onClick(discordId: String) {
-                Components.openChrome(requireContext(), "https://discuss.codingblocks.com/t/$discordId")
+                requireContext().openChrome("https://discuss.codingblocks.com/t/$discordId")
             }
         }
     }

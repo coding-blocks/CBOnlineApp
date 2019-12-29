@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.extensions.getDateForTime
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.ProductExtensionsItem
@@ -63,7 +64,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
                 Clients.api.buyExtension(it1).enqueue(retrofitCallback { throwable, response ->
                     response.let {
                     }
-                    Components.openChrome(requireContext(), "https://dukaan.codingblocks.com/mycart")
+                    requireContext().openChrome("https://dukaan.codingblocks.com/mycart")
                 })
             } ?: run {
                 longToast("Atleast Select One Before Proceding !!")

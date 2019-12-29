@@ -10,6 +10,7 @@ import cn.campusapp.router.Router
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.otherwise
 import com.codingblocks.onlineapi.models.CarouselCards
 import kotlinx.android.synthetic.main.item_carousel.view.*
@@ -33,7 +34,7 @@ class CarouselSliderAdapter(var list: ArrayList<CarouselCards>, var mContext: Co
         view.imgView.loadImage(list[position].img)
         view.button.setOnClickListener {
             Router.open("activity://courseRun/" + list[position].buttonLink).otherwise {
-                Components.openChrome(it.context, list[position].buttonLink)
+                it.context.openChrome(list[position].buttonLink)
             }
         }
         container.addView(view)
