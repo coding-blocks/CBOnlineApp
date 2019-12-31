@@ -401,12 +401,11 @@ class Note(
 
 @Type("users")
 class User(
-    @JsonSetter(nulls = Nulls.AS_EMPTY) // don't override if null
-    val email: String,
+    val email: String?,
     val firstname: String,
-    val lastReadNotification: String,
+    val lastReadNotification: String?,
     val lastname: String,
-    val oneauthId: String,
+    val oneauthId: String?,
     val photo: String?,
     val verifiedemail: String?,
     val verifiedmobile: String?,

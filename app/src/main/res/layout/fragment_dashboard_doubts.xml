@@ -115,6 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_medium"
+            android:id="@+id/doubtEmptyBtn"
             android:paddingStart="20dp"
             android:paddingTop="10dp"
             android:paddingEnd="20dp"

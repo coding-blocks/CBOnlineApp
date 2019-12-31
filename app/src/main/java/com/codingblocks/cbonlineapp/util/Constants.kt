@@ -6,7 +6,7 @@ const val SECTION_ID: String = "sectionId"
 
 const val VIDEO_ID: String = "videoId"
 
-val PROGRESS_ID = "progressId"
+const val PROGRESS_ID = "progressId"
 
 const val TITLE: String = "title"
 

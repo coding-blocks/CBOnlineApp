@@ -15,7 +15,7 @@ class DashboardHomeRepository(private val prefs: AppPrefs,
 
     fun insertUser(user: User) {
         with(user) {
-            prefs.oneAuthId = oneauthId
+            prefs.oneAuthId = oneauthId ?: ""
             prefs.userId = id
             prefs.userImage = photo ?: "empty"
             prefs.roleId = roleId

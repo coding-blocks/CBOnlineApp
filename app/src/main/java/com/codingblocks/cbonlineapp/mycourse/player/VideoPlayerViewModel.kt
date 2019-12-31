@@ -28,6 +28,13 @@ class VideoPlayerViewModel(
     val notes by lazy {
         repo.getNotes(attemptId)
     }
+    val sectionContentTitle = MutableLiveData<Pair<String, String>>()
+
+    init {
+        runIO {
+            sectionContentTitle.postValue(repo.getSectionTitle(sectionId, contentId))
+        }
+    }
 
 //    fun getRunByAtemptId(id: String) = runDao.getRunByAtemptId(id)
 //

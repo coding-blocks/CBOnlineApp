@@ -5,19 +5,23 @@ import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.DoubtsDao
 import com.codingblocks.cbonlineapp.database.NotesDao
+import com.codingblocks.cbonlineapp.database.SectionDao
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.safeApiCall
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 
 class VideoPlayerRepository(
     private val doubtsDao: DoubtsDao,
     private val notesDao: NotesDao,
     private val courseDao: CourseDao,
     private val runDao: CourseRunDao,
-    private val contentDao: ContentDao
+    private val contentDao: ContentDao,
+    private val sectionDao: SectionDao
 ) {
     suspend fun fetchCourseNotes(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.getNotesByAttemptId(attemptId) }
 
@@ -39,4 +43,12 @@ class VideoPlayerRepository(
     }
 
     fun getNotes(attemptId: String) = notesDao.getNotes(attemptId)
+
+    suspend fun getSectionTitle(sectionId: String, contentId: String): Pair<String, String> {
+        val a = withContext(Dispatchers.IO) { sectionDao.getSectionTitle(sectionId) }
+        val b = withContext(Dispatchers.IO) { contentDao.getContentTitle(contentId) }
+        return Pair(a, b)
+    }
+
+
 }

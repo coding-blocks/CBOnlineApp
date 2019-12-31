@@ -73,6 +73,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/gilroy_bold"
                     android:textSize="16sp"
+                    android:text="Section "
                     tools:text="Section 1.4 - Catalan Number" />
 
                 <TextView
@@ -90,12 +91,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/ic_bookmark_fill" />
 
             <ImageView
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:focusable="true"
                 android:src="@drawable/ic_download_circle" />
 
         </LinearLayout>

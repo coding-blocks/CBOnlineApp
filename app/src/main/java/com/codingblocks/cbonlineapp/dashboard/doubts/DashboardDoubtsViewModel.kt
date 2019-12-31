@@ -23,7 +23,7 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
     var type: MutableLiveData<String> = MutableLiveData()
     var courseId: MutableLiveData<String> = MutableLiveData()
     val default = "44872"
-    private val doubtsDao = repo.getDoubtsByCourseRun(ALL, default)
+    private val doubtsDao = repo.getDoubtsByCourseRun(type.value ?: ALL, default)
 
     init {
         listDoubtsResponse = Transformations.switchMap(DoubleTrigger(type, courseId)) {
@@ -73,7 +73,6 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         fetchDoubts()
-                        barMessage.postValue(response.value.body()?.status)
                     } else {
                         setError(fetchError(response.value.code()))
                     }

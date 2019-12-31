@@ -16,21 +16,47 @@
         android:gravity="center">
 
         <TextView
-            android:id="@+id/noteTitleTv"
+            android:id="@+id/noteVTitleTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_medium"
             android:layout_weight="1"
             android:fontFamily="@font/gilroy_bold"
-            android:textColor="@color/orangish"
+            android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             tools:text="This is the title of the doubt " />
 
-        <TextView
-            android:id="@+id/noteTimeTv"
+        <ImageView
+            android:id="@+id/noteVEditImg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="4dp"
+            android:layout_gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:src="@drawable/ic_edit" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp">
+
+        <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+            android:id="@+id/noteVCreateTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_bold"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            tools:text="14:08" />
+
+        <TextView
+            android:id="@+id/noteVTimeTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/margin_small"
             android:layout_marginEnd="4dp"
             android:fontFamily="@font/gilroy_medium"
             android:textColor="@color/brownish_grey"
@@ -39,23 +65,22 @@
     </LinearLayout>
 
     <com.codingblocks.cbonlineapp.util.widgets.ExpandableTextView
-        android:id="@+id/noteDescriptionTv"
+        android:id="@+id/noteVDescriptionTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/gilroy_medium"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="16sp"
         app:trimLength="100"
         tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the best standard dummy text... more" />
-
 
     <View
         android:id="@+id/divider3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/margin_small"
-        android:background="?android:attr/listDivider" />
+        android:background="#2a2f3a" />
 
 
 </LinearLayout>

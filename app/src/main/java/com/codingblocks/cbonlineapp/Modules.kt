@@ -63,7 +63,7 @@ val viewModelModule = module {
     single { DashboardMyCoursesRepository(get(), get(), get(), get()) }
     single { LibraryRepository(get(), get()) }
     single { DashboardHomeRepository(get(), get()) }
-    single { VideoPlayerRepository(get(), get(), get(), get(), get()) }
+    single { VideoPlayerRepository(get(), get(), get(), get(), get(), get()) }
 
     single { Spork.create(androidApplication(), AppPrefs::class) }
 }

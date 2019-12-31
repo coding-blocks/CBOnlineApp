@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.dashboard.doubts
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.doubts.ChatClickListener
+import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import com.codingblocks.cbonlineapp.commons.SheetAdapter
 import com.codingblocks.cbonlineapp.commons.SheetItem
 import com.codingblocks.cbonlineapp.dashboard.ChatActivity
@@ -33,12 +35,16 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard_doubts.*
+import kotlinx.android.synthetic.main.fragment_dashboard_doubts.emptyLl
+import kotlinx.android.synthetic.main.fragment_dashboard_library.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class DashboardDoubtsFragment : Fragment() {
+
+    private lateinit var listener: FragmentChangeListener
 
     private val viewModel by viewModel<DashboardDoubtsViewModel>()
     private val doubtListAdapter = DashboardDoubtListAdapter()
@@ -48,11 +54,11 @@ class DashboardDoubtsFragment : Fragment() {
         object : ResolveDoubtClickListener {
             override fun onClick(doubt: DoubtsModel) {
                 if (doubt.status == RESOLVED) {
-                    requireContext().showDialog(RESOLVED) {
+                    requireContext().showDialog(RESOLVED, cancelable = true) {
                         viewModel.type.value = RESOLVED
                     }
                 } else {
-                    requireContext().showDialog(REOPENED) {
+                    requireContext().showDialog(REOPENED, cancelable = true) {
                         viewModel.type.value = LIVE
                     }
                 }
@@ -90,6 +96,9 @@ class DashboardDoubtsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        doubtEmptyBtn.setOnClickListener {
+            listener.openExplore()
+        }
         liveDoubtBtn.setOnClickListener {
             viewModel.type.value = LIVE
         }
@@ -159,7 +168,7 @@ class DashboardDoubtsFragment : Fragment() {
         }
 
         viewModel.barMessage.observer(viewLifecycleOwner) {
-            dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, dashboardBottomNav, false)
+            dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav, false)
         }
 
         doubtListAdapter.apply {
@@ -189,6 +198,11 @@ class DashboardDoubtsFragment : Fragment() {
 
 
         dialog.setContentView(sheetDialog)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        listener = context as FragmentChangeListener
     }
 
     override fun onDestroyView() {

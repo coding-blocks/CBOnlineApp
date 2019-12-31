@@ -110,6 +110,11 @@ class VideoPlayerActivity : AppCompatActivity(), OnItemClickListener, AnkoLogger
         playerViewPager.adapter = adapter
         playerTabs.setupWithViewPager(playerViewPager)
         playerViewPager.offscreenPageLimit = 2
+        viewModel.sectionContentTitle.observer(this) {
+            sectionTitle.append(it.first)
+            contentTitle.text = it.second
+        }
+
     }
 
     private fun setupVideoView() {

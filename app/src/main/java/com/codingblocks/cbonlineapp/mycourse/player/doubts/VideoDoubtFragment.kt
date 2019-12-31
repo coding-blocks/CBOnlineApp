@@ -40,11 +40,11 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
     private val resolveClickListener: ResolveDoubtClickListener by lazy {
         object : ResolveDoubtClickListener {
             override fun onClick(doubt: DoubtsModel) {
-                if (doubt.status == RESOLVED) {
-                    requireContext().showDialog(RESOLVED)
-                } else {
-                    requireContext().showDialog(REOPENED)
-                }
+//                if (doubt.status == RESOLVED) {
+//                    requireContext().showDialog(RESOLVED)
+//                } else {
+//                    requireContext().showDialog(REOPENED)
+//                }
                 viewModel.resolveDoubt(doubt)
             }
         }
