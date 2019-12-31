@@ -2,9 +2,18 @@ package com.codingblocks.cbonlineapp.mycourse.player
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
+import com.codingblocks.cbonlineapp.mycourse.player.notes.NotesWorker
 import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
@@ -12,6 +21,7 @@ import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
+import java.util.concurrent.TimeUnit
 
 class VideoPlayerViewModel(
     private val repo: VideoPlayerRepository,
@@ -38,159 +48,6 @@ class VideoPlayerViewModel(
         runIO {
             sectionContentTitle.postValue(repo.getSectionTitle(sectionId, contentId))
         }
-    }
-
-//    fun getRunByAtemptId(id: String) = runDao.getRunByAtemptId(id)
-//
-//    fun getCourseById(id: String) = courseDao.getCourses().value!![0]
-//
-//    fun getContentWithId(attemptId: String, contentId: String) = contentDao.getContentWithId(attemptId, contentId)
-//
-//    fun deleteNoteByID(id: String) = notesDao.deleteNoteByID(id)
-//
-//    fun updateNote(notes: NotesModel) = viewModelScope.launch(Dispatchers.IO) { notesDao.update(notes) }
-//
-//    fun updateDoubtStatus(uid: String, status: String) = doubtsDao.updateStatus(uid, status)
-//
-//    fun getNotes(ruid: String) = notesDao.getNotes(ruid)
-//
-//    fun getDoubts(ruid: String) = doubtsDao.getDoubts(ruid)
-//
-//    fun getOtp(videoId: String, sectionId: String, attemptId: String) {
-//        Clients.api.getOtp(videoId, sectionId, attemptId)
-//            .enqueue(retrofitCallback { error, response ->
-//                response?.let {
-//                    mOtp = response.body()?.get("otp")?.asString
-//                    mPlaybackInfo = response.body()?.get("playbackInfo")?.asString
-//                    getOtpProgress.postValue(it.isSuccessful)
-//                    it.errorBody()?.let {
-//                        Crashlytics.log("Error Fetching Otp: ${it.string()}")
-//                    }
-//                }
-//                error?.let {
-//                    Crashlytics.log("Error Fetching Otp: ${it.message}")
-//                }
-//            })
-//    }
-//
-//    fun createDoubt(doubt: Doubts, attemptId: String) {
-//        Clients.onlineV2JsonApi.createDoubt(doubt)
-//            .enqueue(retrofitCallback { _, response ->
-//                try {
-//                    if ((response?.isSuccessful == true))
-//                        response.body()?.let {
-//                            viewModelScope.launch(Dispatchers.IO) {
-//                                //                                doubtsDao.insert(
-////                                    DoubtsModel(
-////                                        it.id, it.title, it.body, it.content?.id
-////                                        ?: "", it.status, attemptId
-////                                    )
-////                                )
-//                            }
-//                        }
-//                } catch (e: Exception) {
-//                    createDoubtProgress.value = false
-//                }
-//                createDoubtProgress.value = (response?.isSuccessful == true)
-//            })
-//    }
-//
-//    fun createNote(note: Notes, attemptId: String) {
-//        Clients.onlineV2JsonApi.createNote(note)
-//            .enqueue(retrofitCallback { _, response ->
-//                response?.let { responseNote ->
-//                    createNoteProgress.value = true
-//                    if (responseNote.isSuccessful)
-//                        responseNote.body().let {
-//                            try {
-//                                viewModelScope.launch(Dispatchers.IO) {
-//                                    notesDao.insert(
-//                                        NotesModel(
-//                                            it?.id ?: "",
-//                                            it?.duration ?: 0.0,
-//                                            it?.text ?: "",
-//                                            it?.content?.id ?: "",
-//                                            attemptId,
-//                                            it?.createdAt ?: "",
-//                                            it?.deletedAt ?: ""
-//                                        )
-//                                    )
-//                                }
-//                            } catch (e: Exception) {
-//                                createNoteProgress.value = false
-//                            }
-//                        }
-//                    else
-//                        createNoteProgress.value = false
-//                }
-//            })
-//    }
-
-//    fun fetchDoubts(param: String) {
-//        Clients.onlineV2JsonApi.getDoubtByAttemptId(param).enqueue(retrofitCallback { throwable, response ->
-//            response?.body().let { doubts ->
-//                if (response != null && response.isSuccessful) {
-//                    doubts?.forEach {
-//                        try {
-//                            viewModelScope.launch(Dispatchers.IO) {
-//                                doubtsDao.insert(
-//                                    DoubtsModel(
-//                                        it.id, it.title, it.body, it.content?.id
-//                                        ?: "", it.status, it.runAttempt?.id ?: "",
-//                                        it.discourseTopicId
-//                                    )
-//                                )
-//                            }
-//                        } catch (e: Exception) {
-//                            e.printStackTrace()
-//                            Log.e("CRASH", "DOUBT ID : $it.id")
-//                        }
-//                    }
-//                }
-//            }
-//        })
-//    }
-
-    fun fetchNotes(param: String) {
-//        val networkList: ArrayList<NotesModel> = ArrayList()
-//        Clients.onlineV2JsonApi.getNotesByAttemptId(param).enqueue(retrofitCallback { _, response ->
-//            response?.body().let { notesList ->
-//                if (response?.isSuccessful == true) {
-//                    notesList?.forEach {
-//                        try {
-//                            networkList.add(
-//                                NotesModel(
-//                                    it.id,
-//                                    it.duration ?: 0.0,
-//                                    it.text ?: "",
-//                                    it.content?.id
-//                                        ?: "",
-//                                    it.runAttempt?.id ?: "",
-//                                    it.createdAt ?: "",
-//                                    it.deletedAt
-//                                        ?: ""
-//                                )
-//                            )
-//                        } catch (e: Exception) {
-//                            Log.i("Error", "error" + e.message)
-//                        }
-//                    }
-//                    if (networkList.size == notesList?.size) {
-//                        viewModelScope.launch(Dispatchers.IO) { notesDao.insertAll(networkList) }
-//                        notesDao.getNotes(param).observeOnce { list ->
-//                            // remove items which are deleted
-//                            val sum = list + networkList
-//                            sum.groupBy { it.nttUid }
-//                                .filter { it.value.size == 1 }
-//                                .flatMap { it.value }
-//                                .forEach {
-//                                    notesDao.deleteNoteByID(it.nttUid)
-//                                }
-//                        }
-//                    }
-//                }
-//            }
-//        })
     }
 
     fun resolveDoubt(doubt: DoubtsModel) {
@@ -249,7 +106,12 @@ class VideoPlayerViewModel(
     fun deleteNote(noteId: String) {
         runIO {
             when (val response = repo.deleteNote(noteId)) {
-                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.GenericError ->
+                    if (response.code in 100..103)
+                        startWorkerRequest(noteId)
+                    else {
+                        setError(response.error)
+                    }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         repo.deleteNoteFromDb(noteId)
@@ -261,11 +123,34 @@ class VideoPlayerViewModel(
         }
     }
 
+    private fun startWorkerRequest(noteId: String = "", noteModel: Note? = null) {
+        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val progressData: Data = if (noteId.isEmpty()) {
+            workDataOf("NOTE" to noteModel?.serializeToJson())
+        } else {
+            workDataOf("NOTE_ID" to noteId)
+        }
+        val request: OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<NotesWorker>()
+                .setConstraints(constraints)
+                .setInputData(progressData)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                .build()
+
+        WorkManager.getInstance()
+            .enqueue(request)
+    }
+
     fun updateNote(note: NotesModel) {
         val newNote = Note(note.nttUid, note.duration, note.text, RunAttempts(note.runAttemptId), LectureContent(note.contentId))
         runIO {
             when (val response = repo.updateNote(newNote)) {
-                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.GenericError ->
+                    if (response.code in 100..103)
+                        startWorkerRequest(noteModel = newNote)
+                    else {
+                        setError(response.error)
+                    }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         repo.updateNoteInDb(newNote)
@@ -292,8 +177,4 @@ class VideoPlayerViewModel(
         }
     }
 
-//    fun getNextVideo(contentId: String, sectionId: String, attemptId: String) = contentDao.getNextItem(sectionId, attemptId, contentId)
-//
-//    fun deleteVideo(contentId: String) =
-//        viewModelScope.launch { contentDao.updateContent(contentId, 0) }
 }

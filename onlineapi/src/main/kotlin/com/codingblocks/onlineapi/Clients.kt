@@ -105,7 +105,7 @@ object Clients {
 
     private val onlineV2JsonRetrofit = Retrofit.Builder()
         .client(ClientInterceptor)
-        .baseUrl("http://192.168.0.132:3000/api/v2/")
+        .baseUrl("http://192.168.1.8:3000/api/v2/")
         .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
         .addConverterFactory(JacksonConverterFactory.create(om))
         .build()

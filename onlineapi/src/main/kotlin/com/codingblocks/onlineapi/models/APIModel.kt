@@ -6,7 +6,10 @@ import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.RelationshipLinks
 import com.github.jasminb.jsonapi.annotations.Type
+import com.google.gson.Gson
 import com.google.gson.JsonObject
+import java.io.Serializable
+
 
 open class BaseModel {
     @Id
@@ -395,7 +398,7 @@ class Note(
     val runAttempt: RunAttempts? = null,
     @Relationship("content")
     val content: LectureContent? = null
-) : BaseModel() {
+) : BaseModel(), Serializable {
     constructor(id: String, duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent)
         : this(duration, null, null, text, runAttemptId, contentId) {
         super.id = id
@@ -403,6 +406,10 @@ class Note(
 
     constructor(duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent)
         : this(duration, null, null, text, runAttemptId, contentId)
+
+    fun serializeToJson(): String {
+        return Gson().toJson(this)
+    }
 
 }
 

@@ -2,6 +2,8 @@ package com.codingblocks.cbonlineapp.util.extensions
 
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
+import com.codingblocks.onlineapi.models.Note
+import com.google.gson.Gson
 import org.ocpsoft.prettytime.PrettyTime
 import java.io.File
 import java.text.DecimalFormat
@@ -152,6 +154,11 @@ fun timeAgo(time: Long): String {
         return "$interval Minutes Ago"
     }
     return "Just Now"
+}
+
+// Deserialize to single object.
+fun String.deserializeNoteFromJson(): Note {
+    return Gson().fromJson(this, Note::class.java)
 }
 
 fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
