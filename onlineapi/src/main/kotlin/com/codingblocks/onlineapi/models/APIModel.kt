@@ -400,6 +400,10 @@ class Note(
         : this(duration, null, null, text, runAttemptId, contentId) {
         super.id = id
     }
+
+    constructor(duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent)
+        : this(duration, null, null, text, runAttemptId, contentId)
+
 }
 
 @Type("users")

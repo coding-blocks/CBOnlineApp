@@ -277,6 +277,21 @@ class VideoPlayerViewModel(
         }
     }
 
+    fun createNote(note: Note) {
+        runIO {
+            when (val response = repo.addNote(note)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        fetchNotes()
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
 //    fun getNextVideo(contentId: String, sectionId: String, attemptId: String) = contentDao.getNextItem(sectionId, attemptId, contentId)
 //
 //    fun deleteVideo(contentId: String) =

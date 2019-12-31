@@ -217,5 +217,6 @@
     <string name="leaderboard_rank">Leaderboard Rank</string>
     <string name="noted_del_msg">Note has been Deleted</string>
     <string name="edit_note">Edit Note</string>
+    <string name="add_note">Add a Note</string>
 
 </resources>

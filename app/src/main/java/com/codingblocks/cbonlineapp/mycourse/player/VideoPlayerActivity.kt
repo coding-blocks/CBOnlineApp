@@ -25,6 +25,9 @@ import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControlView
+import com.codingblocks.onlineapi.models.LectureContent
+import com.codingblocks.onlineapi.models.Note
+import com.codingblocks.onlineapi.models.RunAttempts
 import com.crashlytics.android.Crashlytics
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -101,7 +104,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             }
         }
         videoFab.setOnClickListener {
-            dialog.show()
+            updateSheet("")
         }
         setupViewPager()
     }
@@ -115,8 +118,8 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         playerTabs.setupWithViewPager(playerViewPager)
         playerViewPager.offscreenPageLimit = 2
         viewModel.sectionContentTitle.observer(this) {
-            sectionTitle.append(it.first)
-            contentTitle.text = it.second
+            sectionTitle.append(it.first ?: "")
+            contentTitle.text = it.second ?: ""
         }
 
     }
@@ -424,10 +427,9 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
 
     override fun onClick(note: NotesModel) {
         updateSheet("EDIT", note)
-        dialog.show()
     }
 
-    private fun updateSheet(type: String, model: Any) {
+    private fun updateSheet(type: String, model: Any? = null) {
         if (type == "EDIT") {
             val notes = model as NotesModel
             sheetDialog.apply {
@@ -444,7 +446,21 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                     dialog.dismiss()
                 }
             }
-
+        } else {
+            sheetDialog.apply {
+                bottomSheetTitleTv.text = getString(R.string.add_note)
+                bottoSheetDescTv.setText("")
+                bottomSheetInfoTv.text = "${contentTitle.text} | 10:00"
+                bottomSheetCancelBtn.setOnClickListener {
+                    dialog.dismiss()
+                }
+                bottomSheetSaveBtn.setOnClickListener {
+                    val note = Note(10.45000, sheetDialog.bottoSheetDescTv.text.toString(), RunAttempts(viewModel.attemptId), LectureContent(viewModel.contentId))
+                    viewModel.createNote(note)
+                    dialog.dismiss()
+                }
+            }
         }
+        dialog.show()
     }
 }

@@ -123,6 +123,11 @@ interface OnlineJsonApi {
     ): Response<Note>
 
 
+    @POST("notes")
+    suspend fun createNote(
+        @Body params: Note
+    ): Response<Note>
+
 
     @GET("courses")
     fun getAllCourses(
@@ -133,7 +138,6 @@ interface OnlineJsonApi {
         @Query("page[offset]") offset: String = "0",
         @Query("sort") sort: String = "difficulty"
     ): Call<ArrayList<Course>>
-
 
 
     @GET("quizzes/{quizid}")

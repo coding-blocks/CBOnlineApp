@@ -27,6 +27,8 @@ class VideoPlayerRepository(
 
     suspend fun deleteNote(noteId: String) = safeApiCall { Clients.onlineV2JsonApi.deleteNoteById(noteId) }
 
+    suspend fun addNote(note: Note) = safeApiCall { Clients.onlineV2JsonApi.createNote(note) }
+
 
     suspend fun insertNotes(notes: List<Note>) {
         notes.forEach {
@@ -41,12 +43,34 @@ class VideoPlayerRepository(
                 it.deletedAt,
                 contentTitle.await()
             )
+//            val sum = notes + networkList
+//            sum.groupBy { it.nttUid }
+//                .filter { it.value.size == 1 }
+//                .flatMap { it.value }
+//                .forEach {
+//                    notesDao.deleteNoteByID(it.nttUid)
+//                }
             notesDao.insert(model)
         }
     }
 
     fun updateNoteInDb(newNote: Note) {
         notesDao.updateBody(newNote.id, newNote.text)
+    }
+
+    suspend fun addNewNote(newNote: Note) {
+        val contentTitle = GlobalScope.async { contentDao.getContentTitle(newNote.content?.id ?: "") }
+        val model = NotesModel(
+            newNote.id,
+            newNote.duration,
+            newNote.text,
+            newNote.content?.id ?: "",
+            newNote.runAttempt?.id ?: "",
+            newNote.createdAt ?: "",
+            newNote.deletedAt,
+            contentTitle.await()
+        )
+        notesDao.insert(model)
     }
 
     fun getNotes(attemptId: String) = notesDao.getNotes(attemptId)
