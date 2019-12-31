@@ -49,15 +49,13 @@ class MyCourseRepository(
                 )
                 sectionDao.insertNew(newSection)
             }
-            courseSection.courseContentLinks?.related?.href?.substring(7)?.let {
-                getSectionContent(courseSection.id, runAttempt.id, it)
-            }
+            getSectionContent(courseSection.id, runAttempt.id)
         }
 
     }
 
-    private suspend fun getSectionContent(sectionId: String, runAttemptId: String, sectionLink: String) {
-        when (val response = safeApiCall { Clients.onlineV2JsonApi.getSectionContents(sectionLink) }) {
+    private suspend fun getSectionContent(sectionId: String, runAttemptId: String) {
+        when (val response = safeApiCall { Clients.onlineV2JsonApi.getSectionContents(sectionId) }) {
             is ResultWrapper.Success -> {
                 if (response.value.isSuccessful)
                     response.value.body()?.let {
@@ -191,7 +189,7 @@ class MyCourseRepository(
                     content.id,
                     status,
                     progressId,
-                    content.title,
+                    content.title ?: "",
                     content.duration
                         ?: 0,
                     content.contentable ?: "",

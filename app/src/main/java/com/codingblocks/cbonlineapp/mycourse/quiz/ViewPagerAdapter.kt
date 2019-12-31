@@ -16,7 +16,6 @@ import com.codingblocks.onlineapi.models.Choice
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.QuizResult
 import com.codingblocks.onlineapi.models.QuizSubmission
-import com.codingblocks.onlineapi.models.Quizqnas
 import kotlinx.android.synthetic.main.quizlayout.view.*
 import org.jetbrains.anko.AnkoLogger
 
@@ -79,9 +78,9 @@ class ViewPagerAdapter(private var mContext: Context, private var quizId: String
                             quizSubmission.markedChoices = arrayOf(id)
                             submissionList.add(quizSubmission)
                             quizAttempt.submission.addAll(submissionList)
-                            val qna = Quizqnas()
-                            qna.id = quizId
-                            quizAttempt.qna = qna
+//                            val qna = Quizqnas()
+//                            qna.id = quizId
+//                            quizAttempt.qna = qna
                             Clients.onlineV2JsonApi.updateQuizAttempt(qaId, quizAttempt).enqueue(retrofitCallback { _, _ ->
                             })
                         }

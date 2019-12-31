@@ -13,7 +13,6 @@ import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttempt
-import com.codingblocks.onlineapi.models.Quizqnas
 import com.codingblocks.onlineapi.models.RunAttemptsId
 import kotlinx.android.synthetic.main.fragment_about_quiz.*
 import org.jetbrains.anko.AnkoLogger
@@ -69,9 +68,9 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         startQuiz.setOnClickListener {
 
             val quizAttempt = QuizAttempt()
-            val qna = Quizqnas()
-            qna.id = qnaId
-            quizAttempt.qna = qna
+//            val qna = Quizqnas()
+//            qna.id = qnaId
+//            quizAttempt.qna = qna
             quizAttempt.runAttempt = RunAttemptsId(attemptId)
 
             Clients.onlineV2JsonApi.createQuizAttempt(quizAttempt)

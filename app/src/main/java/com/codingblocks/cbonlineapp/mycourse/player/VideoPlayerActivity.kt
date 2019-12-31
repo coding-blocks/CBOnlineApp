@@ -39,9 +39,8 @@ import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class VideoPlayerActivity : AppCompatActivity(), OnItemClickListener, AnkoLogger, VdoPlayer.InitializationListener {
-    private val download: Boolean by lazy {
-        intent.getBooleanExtra(DOWNLOADED, false)
-    }
+    private val download: Boolean by lazy { intent.getBooleanExtra(DOWNLOADED, false) }
+    private val viewModel by viewModel<VideoPlayerViewModel>()
     private val fullscreenToggleListener = VdoPlayerControlView.FullscreenActionListener { enterFullscreen ->
         showFullScreen(enterFullscreen)
         true
@@ -53,7 +52,6 @@ class VideoPlayerActivity : AppCompatActivity(), OnItemClickListener, AnkoLogger
             }
         }
     }
-    private val viewModel by viewModel<VideoPlayerViewModel>()
     private val dialog by lazy { BottomSheetDialog(this) }
     private lateinit var youtubePlayer: YouTubePlayer
     private lateinit var playerFragment: VdoPlayerSupportFragment

@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.mycourse
 
-import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -15,7 +14,6 @@ import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
-import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,9 +21,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
 
     private val viewModel by viewModel<MyCourseViewModel>()
-    private val pagerAdapter by lazy {
-        TabLayoutAdapter(supportFragmentManager)
-    }
+    private val pagerAdapter by lazy { TabLayoutAdapter(supportFragmentManager) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

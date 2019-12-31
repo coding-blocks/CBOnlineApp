@@ -1,6 +1,8 @@
 package com.codingblocks.onlineapi.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonSetter
+import com.fasterxml.jackson.annotation.Nulls
 import com.github.jasminb.jsonapi.Links
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
@@ -159,7 +161,7 @@ data class Sections(
 class LectureContent(
     val contentable: String?,
     val duration: Long?,
-    val title: String,
+    val title: String?,
     val sectionContent: SectionContent?,
     @Relationship("code-challenge")
     val codeChallenge: ContentCodeChallenge?,
@@ -199,7 +201,7 @@ class SectionContent(
 
 // =======Section Content Models =========
 
-@Type("code_challenge")
+@Type("code_challenges")
 class ContentCodeChallenge() : BaseModel() {
     @JvmField
     var contentId: String? = null
@@ -211,7 +213,7 @@ class ContentCodeChallenge() : BaseModel() {
     var hbProblemId: Int? = null
 }
 
-@Type("qna")
+@Type("qnas")
 class ContentQna : BaseModel() {
     @JvmField
     var contentId: String? = null
@@ -239,7 +241,7 @@ class ContentCsv : BaseModel() {
     var judgeScript: String? = null
 }
 
-@Type("document")
+@Type("documents")
 class ContentDocumentType : BaseModel() {
     @JvmField
     var contentId: String? = null
@@ -253,7 +255,7 @@ class ContentDocumentType : BaseModel() {
     var pdfLink: String? = null
 }
 
-@Type("lecture")
+@Type("lectures")
 class ContentLectureType : BaseModel() {
     @JvmField
     var createdAt: String? = null
@@ -269,7 +271,7 @@ class ContentLectureType : BaseModel() {
     var videoId: String? = null
 }
 
-@Type("video")
+@Type("videos")
 class ContentVideoType : BaseModel() {
     @JvmField
     var description: String? = null
@@ -283,7 +285,7 @@ class ContentVideoType : BaseModel() {
     var url: String? = null
 }
 
-@Type("progress")
+@Type("progresses")
 class ContentProgress(
     var contentId: String,
     var createdAt: String,
@@ -302,20 +304,6 @@ class Announcement : BaseModel() {
     var title: String? = null
     @JvmField
     var runId: String? = null
-}
-
-@Type("progresses")
-class Progress : BaseModel() {
-    @JvmField
-    var status: String = "UNDONE"
-    var runAttemptId: String = ""
-    var contentId: String = ""
-    @Relationship("run-attempt")
-    @JvmField
-    var runs: RunAttemptsId? = null
-    @Relationship("content")
-    @JvmField
-    var content: LectureContent? = null
 }
 
 // =======Section Content Models =========
@@ -363,9 +351,9 @@ class QuizAttempt : BaseModel() {
     var result: QuizResult? = null
     @JvmField
     var status: String? = "DRAFT"
-    @Relationship("qna", resolve = true)
-    @JvmField
-    var qna: Quizqnas? = null
+    //    @Relationship("qna", resolve = true)
+//    @JvmField
+//    var qna: Quizqnas? = null
     @Relationship("run-attempt", resolve = true)
     @JvmField
     var runAttempt: RunAttemptsId? = null
@@ -398,10 +386,6 @@ class QuizQuestion : BaseModel() {
     var incorrectlyAnswered: Array<Choice>? = null
 }
 
-@Type("qnas")
-class Quizqnas : BaseModel()
-
-
 @Type("notes")
 class Note(
     val duration: Double,
@@ -417,6 +401,7 @@ class Note(
 
 @Type("users")
 class User(
+    @JsonSetter(nulls = Nulls.AS_EMPTY) // don't override if null
     val email: String,
     val firstname: String,
     val lastReadNotification: String,

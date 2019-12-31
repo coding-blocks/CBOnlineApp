@@ -4,6 +4,7 @@ import com.codingblocks.onlineapi.models.Applications
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Company
+import com.codingblocks.onlineapi.models.ContentProgress
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.DoubtLeaderBoard
 import com.codingblocks.onlineapi.models.Doubts
@@ -12,7 +13,6 @@ import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.Player
-import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.Project
 import com.codingblocks.onlineapi.models.Question
 import com.codingblocks.onlineapi.models.QuizAttempt
@@ -101,9 +101,9 @@ interface OnlineJsonApi {
         @Path("runid") id: String
     ): Response<RunAttempts>
 
-    @GET("{sectionlink}")
+    @GET("sections/{sectionId}/relationships/contents")
     suspend fun getSectionContents(
-        @Path("sectionlink") sectionlink: String
+        @Path("sectionId") sectionId: String
     ): Response<ArrayList<LectureContent>>
 
     @GET("run_attempts/{runAttemptId}/relationships/notes")
@@ -148,7 +148,7 @@ interface OnlineJsonApi {
     ): Call<List<QuizAttempt>>
 
     @POST("progresses")
-    fun setProgress(@Body params: Progress): Call<Progress>
+    fun setProgress(@Body params: ContentProgress): Call<ContentProgress>
 
     @GET("quiz_attempts/{id}")
     fun getQuizAttemptById(
@@ -184,7 +184,7 @@ interface OnlineJsonApi {
 
 
     @PATCH("progresses/{id}")
-    fun updateProgress(@Path("id") id: String, @Body params: Progress): Call<Progress>
+    fun updateProgress(@Path("id") id: String, @Body params: ContentProgress): Call<ContentProgress>
 
     @get:GET("carousel_cards?sort=order")
     val carouselCards: Call<ArrayList<CarouselCards>>

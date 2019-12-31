@@ -24,11 +24,9 @@ import com.codingblocks.onlineapi.models.JobId
 import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
-import com.codingblocks.onlineapi.models.Progress
 import com.codingblocks.onlineapi.models.Project
 import com.codingblocks.onlineapi.models.Question
 import com.codingblocks.onlineapi.models.QuizAttempt
-import com.codingblocks.onlineapi.models.Quizqnas
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.Rating
 import com.codingblocks.onlineapi.models.RunAttempts
@@ -37,6 +35,8 @@ import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Tags
 import com.codingblocks.onlineapi.models.User
+import com.fasterxml.jackson.annotation.JsonSetter
+import com.fasterxml.jackson.annotation.Nulls
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -56,16 +56,15 @@ object Clients {
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
 
-    var authJwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc5NzUsImZpcnN0bmFtZSI6IlB1bGtpdCIsImxhc3RuYW1lIjoiQWdnYXJ3YWwiLCJ1c2VybmFtZSI6ImFnZ2Fyd2FscHVsa2l0NTk2LWciLCJlbWFpbCI6ImFnZ2Fyd2FscHVsa2l0NTk2QGdtYWlsLmNvbSIsInZlcmlmaWVkZW1haWwiOiJhZ2dhcndhbHB1bGtpdDU5NkBnbWFpbC5jb20iLCJ2ZXJpZmllZG1vYmlsZSI6Iis5MS05NTgyMDU0NjY0IiwibW9iaWxlIjoiKzkxLTk1ODIwNTQ2NjQiLCJvbmVhdXRoX2lkIjoiMTIwMzUiLCJsYXN0X3JlYWRfbm90aWZpY2F0aW9uIjoiMCIsInBob3RvIjoiaHR0cHM6Ly9taW5pby5jb2RpbmdibG9ja3MuY29tL2ltZy9hdmF0YXItMjAuc3ZnIiwiY29sbGVnZSI6IkFtaXR5IFNjaG9vbCBPZiBFbmdpbmVlcmluZyAmIFRlY2hub2xvZ3kgKE5vaWRhKSIsImdyYWR1YXRpb255ZWFyIjoiMjAyNSIsIm9yZ2FuaXphdGlvbiI6bnVsbCwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDE4LTA5LTI3VDEzOjEwOjU5LjM5NloiLCJ1cGRhdGVkQXQiOiIyMDE5LTEyLTI3VDEyOjQyOjAzLjMwOFoiLCJjbGllbnRJZCI6ImY0Yjg5MTczLThmOTMtNGUwYS04OTEzLTA5OTAzOWIzY2U2NyIsImNsaWVudCI6IndlYiIsImlzVG9rZW5Gb3JBZG1pbiI6ZmFsc2UsImlhdCI6MTU3NzQ1OTU0MywiZXhwIjoxNTc3NDU5ODQzfQ.DNzePL0hiD8LCVv2R92S_8MSpZQbjFNgQgSZl148MCMHbXDXfWgTnm1fp7RohyqwOR0349_55N4wue6c5JM0x-pCuuEhcdlsl-AMm2j8obMMZs_a2D55LUjD_6QqkNBRAUXktyR-WG8oHU7qSsTcus8ns1wHD5Pfk21zCt0Jv3d0fMT0QtNUsFLlyok6BbfbusnXbZfDAleQsTnZZLD4tz2X0SRMq_J_quyyCX3Sqp2OcexA8eswYLfqa6aQBL3W3F-57J7_6EW0QSs75AlJ1Ul0Jm7SfNtzU5Ie-__OWmTBugdvPuE7ZNOJUj07BVYeXVDm9WDF6yC-V9bVro7B5Q"
+    var authJwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc5NzUsImZpcnN0bmFtZSI6IlB1bGtpdCIsImxhc3RuYW1lIjoiQWdnYXJ3YWwiLCJ1c2VybmFtZSI6ImFnZ2Fyd2FscHVsa2l0NTk2LWciLCJlbWFpbCI6ImFnZ2Fyd2FscHVsa2l0NTk2QGdtYWlsLmNvbSIsInZlcmlmaWVkZW1haWwiOiJhZ2dhcndhbHB1bGtpdDU5NkBnbWFpbC5jb20iLCJ2ZXJpZmllZG1vYmlsZSI6Iis5MS05NTgyMDU0NjY0IiwibW9iaWxlIjoiKzkxLTk1ODIwNTQ2NjQiLCJvbmVhdXRoX2lkIjoiMTIwMzUiLCJsYXN0X3JlYWRfbm90aWZpY2F0aW9uIjoiMCIsInBob3RvIjoiaHR0cHM6Ly9taW5pby5jb2RpbmdibG9ja3MuY29tL2ltZy9hdmF0YXItMjAuc3ZnIiwiY29sbGVnZSI6IkFtaXR5IFNjaG9vbCBPZiBFbmdpbmVlcmluZyAmIFRlY2hub2xvZ3kgKE5vaWRhKSIsImdyYWR1YXRpb255ZWFyIjoiMjAyNSIsIm9yZ2FuaXphdGlvbiI6bnVsbCwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDE4LTA5LTI3VDEzOjEwOjU5LjM5NloiLCJ1cGRhdGVkQXQiOiIyMDE5LTEyLTMwVDExOjEyOjA0LjU4N1oiLCJjbGllbnRJZCI6IjI0M2FmZjEyLTRiOWMtNGJlMC05M2IwLWY1NjIwZDRhNWFjYSIsImNsaWVudCI6IndlYiIsImlzVG9rZW5Gb3JBZG1pbiI6ZmFsc2UsImlhdCI6MTU3NzcwNTg5NCwiZXhwIjoxNTc3NzA2MTk0fQ.bOFm_oo1jVZrwbTUaVN4uHdDrvh0u70ZU2Bcny3vXqUNMu2u1X671pa-cbVfbHPgPD6YTb2ML3Fl_GTN8Dk8pGhdZ1wwHWO7zFcui43wzaTD-65080mID9pRUQ4k5AzxVNNOWCqrZRjl-l3UGLAwWaYyJ4eD98antAZtMCUuvu0E1LK9GIRsu3uDKd2bCi6503uYlaePVvYbtKWcVbgwE-2EoAD81q7Av5K3mfdnAsM_ifD8kJHFgYxYo6QJWJFHR668lTXwem-5TfEb6Ynuf-lt4iAk6qk88E7VPfZb96ynO_pd-g_YAUuDPvJooHSXIXzN8pyy948YpOAqI0bzZw"
     var refreshToken = ""
 
 
     private val onlineApiResourceConverter = ResourceConverter(
         om, Instructor::class.java, Course::class.java, Sections::class.java, Runs::class.java, RunAttempts::class.java, ContentVideoType::class.java,
         LectureContent::class.java, ContentDocumentType::class.java, ContentProgress::class.java, ContentLectureType::class.java, ContentCodeChallenge::class.java,
-        ContentQna::class.java, Announcement::class.java, Progress::class.java, Quizzes::class.java,
-        Question::class.java, Choice::class.java, QuizAttempt::class.java,
-        Quizqnas::class.java, Doubts::class.java, ContentCsv::class.java, Comment::class.java,
+        ContentQna::class.java, Announcement::class.java, Quizzes::class.java,
+        Question::class.java, Choice::class.java, QuizAttempt::class.java, Doubts::class.java, ContentCsv::class.java, Comment::class.java,
         Note::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
         RunAttemptsId::class.java, Jobs::class.java, Company::class.java, JobId::class.java,
         Applications::class.java, ApplicationId::class.java, DoubtLeaderBoard::class.java, User::class.java,

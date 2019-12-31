@@ -89,12 +89,12 @@ class SignInFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data != null) {
-            val cred = data.getParcelableExtra(Credential.EXTRA_KEY) as Credential
-            val unformattedPhone = cred.id
-            val formatNumber = SpannableString(unformattedPhone)
-            val boldSpan = StyleSpan(Typeface.BOLD)// Span to make text bold
-            formatNumber.setSpan(boldSpan, 0, 3, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            numberLayout.editText?.setText(formatNumber)
+//            val cred = data.getParcelableExtra(Credential.EXTRA_KEY) as Credential
+//            val unformattedPhone = cred.id
+//            val formatNumber = SpannableString(unformattedPhone)
+//            val boldSpan = StyleSpan(Typeface.BOLD)// Span to make text bold
+//            formatNumber.setSpan(boldSpan, 0, 3, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+//            numberLayout.editText?.setText(formatNumber)
         }
     }
 
