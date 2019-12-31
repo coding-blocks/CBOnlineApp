@@ -242,6 +242,21 @@ class VideoPlayerViewModel(
 //        errorLiveData.postValue(error)
     }
 
+    fun deleteNote(noteId: String) {
+        runIO {
+            when (val response = repo.deleteNote(noteId)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        repo.deleteNoteFromDb(noteId)
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
 //    fun getNextVideo(contentId: String, sectionId: String, attemptId: String) = contentDao.getNextItem(sectionId, attemptId, contentId)
 //
 //    fun deleteVideo(contentId: String) =

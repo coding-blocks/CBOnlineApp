@@ -25,6 +25,9 @@ class VideoPlayerRepository(
 ) {
     suspend fun fetchCourseNotes(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.getNotesByAttemptId(attemptId) }
 
+    suspend fun deleteNote(noteId: String) = safeApiCall { Clients.onlineV2JsonApi.deleteNoteById(noteId) }
+
+
     suspend fun insertNotes(notes: List<Note>) {
         notes.forEach {
             val contentTitle = GlobalScope.async { contentDao.getContentTitle(it.content?.id ?: "") }
@@ -43,6 +46,8 @@ class VideoPlayerRepository(
     }
 
     fun getNotes(attemptId: String) = notesDao.getNotes(attemptId)
+
+    fun deleteNoteFromDb(noteId: String) = notesDao.deleteNoteByID(noteId)
 
     suspend fun getSectionTitle(sectionId: String, contentId: String): Pair<String, String> {
         val a = withContext(Dispatchers.IO) { sectionDao.getSectionTitle(sectionId) }

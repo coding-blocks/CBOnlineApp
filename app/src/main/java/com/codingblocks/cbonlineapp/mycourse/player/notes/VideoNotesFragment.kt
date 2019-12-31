@@ -4,13 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.database.models.NotesModel
+import com.codingblocks.cbonlineapp.library.DeleteNoteClickListener
+import com.codingblocks.cbonlineapp.library.EditNoteClickListener
+import com.codingblocks.cbonlineapp.library.ItemClickListener
 import com.codingblocks.cbonlineapp.library.LibraryNotesListAdapter
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_notes.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -19,6 +27,38 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<VideoPlayerViewModel>()
     private val notesListAdapter = LibraryNotesListAdapter(VIDEO)
+
+    private val deleteClickListener: DeleteNoteClickListener by lazy {
+        object : DeleteNoteClickListener {
+            override fun onClick(noteId: String, position: Int, view: View) {
+                view.isVisible = false
+                videoNotesRoot.showSnackbar(getString(R.string.noted_del_msg), Snackbar.LENGTH_SHORT, action = true, actionText = "UNDO") {
+                    view.isVisible = true
+                }.addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                        if (event == DISMISS_EVENT_TIMEOUT) {
+                            viewModel.deleteNote(noteId)
+                        }
+                    }
+
+                })
+            }
+        }
+    }
+
+    private val editClickListener: EditNoteClickListener by lazy {
+        object : EditNoteClickListener {
+            override fun onClick(note: NotesModel) {
+            }
+        }
+    }
+
+    private val itemClickListener: ItemClickListener by lazy {
+        object : ItemClickListener {
+            override fun onClick(note: NotesModel) {
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +78,21 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
         viewModel.notes.observer(viewLifecycleOwner) {
             notesListAdapter.submitList(it)
         }
+
+        notesListAdapter.apply {
+            onDeleteClick = deleteClickListener
+            onEditClick = editClickListener
+            onItemClick = itemClickListener
+        }
+    }
+
+    override fun onDestroy() {
+        notesListAdapter.apply {
+            onDeleteClick = null
+            onEditClick = null
+            onItemClick = null
+        }
+        super.onDestroy()
     }
 
 }

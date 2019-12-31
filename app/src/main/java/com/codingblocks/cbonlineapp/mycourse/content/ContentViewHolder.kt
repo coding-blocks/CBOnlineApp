@@ -114,7 +114,8 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                             context.intentFor<VideoPlayerActivity>(
                                 "videoUrl" to content.contentVideo.videoUrl,
                                 RUN_ATTEMPT_ID to content.attempt_id,
-                                CONTENT_ID to content.ccid
+                                CONTENT_ID to content.ccid,
+                                SECTION_ID to content.sectionId
                             ).singleTop()
                         )
 

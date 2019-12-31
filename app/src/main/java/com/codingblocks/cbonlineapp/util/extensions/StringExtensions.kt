@@ -84,8 +84,8 @@ fun String.isotomillisecond(): Long {
     return newDate.time
 }
 
-fun secToTime(time: Double): String {
-    val sec = time.toInt()
+fun Double.secToTime(): String {
+    val sec = this.toInt()
     val seconds = sec % 60
     var minutes = sec / 60
     if (minutes >= 60) {
@@ -97,7 +97,7 @@ fun secToTime(time: Double): String {
         }
         return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
-    return String.format("00:%02d:%02d", minutes, seconds)
+    return String.format("%02d:%02d", minutes, seconds)
 }
 
 fun getDateForTime(time: String): String {

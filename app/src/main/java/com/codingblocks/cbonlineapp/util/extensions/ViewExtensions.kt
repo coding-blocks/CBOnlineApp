@@ -151,22 +151,25 @@ fun RecyclerView.setRv(activity: Context, listAdapter: ListAdapter<out Any, out 
     adapter = listAdapter
 }
 
-fun View.showSnackbar(message: String, length: Int, anchorView: FabNavigation?, action: Boolean = true, callback: () -> Unit = { }) {
+fun View.showSnackbar(message: String, length: Int, anchorView: FabNavigation? = null, action: Boolean = true, actionText: String = "Retry", callback: () -> Unit = { }): Snackbar {
     val snackBarView = Snackbar.make(this, message, length)
     val params = snackBarView.view.layoutParams as ViewGroup.MarginLayoutParams
     params.setMargins(params.leftMargin,
         params.topMargin,
         params.rightMargin,
         params.bottomMargin + 100)
+    snackBarView.animationMode = Snackbar.ANIMATION_MODE_SLIDE
 
     snackBarView.view.layoutParams = params
-    snackBarView
-        .setAnchorView(anchorView).animationMode = Snackbar.ANIMATION_MODE_SLIDE
+    if (anchorView != null) {
+        snackBarView.anchorView = anchorView
+    }
     if (action)
-        snackBarView.setAction("Retry") {
+        snackBarView.setAction(actionText) {
             callback()
         }
     snackBarView.show()
+    return snackBarView
 }
 
 fun Context.showDialog(type: String, cancelable: Boolean = false, callback: (state: Boolean) -> Unit = { status: Boolean -> }) {

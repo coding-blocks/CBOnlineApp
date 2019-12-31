@@ -175,7 +175,6 @@ class DashboardDoubtsFragment : Fragment() {
             onResolveClick = resolveClickListener
             onCommentClick = commentsClickListener
             onChatClick = chatClickListener
-
         }
     }
 
