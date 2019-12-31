@@ -8,6 +8,7 @@
     android:paddingTop="@dimen/margin_medium">
 
     <TextView
+        android:id="@+id/bottomSheetTitleTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_large"
@@ -18,6 +19,7 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:layout_width="match_parent"
+        android:id="@+id/bottoSheetDescTv"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_large"
         android:layout_marginTop="@dimen/margin_small"
@@ -27,7 +29,7 @@
         android:gravity="start"
         android:hint="Add a note here"
         android:lines="5"
-        android:padding="@dimen/margin_medium_small" />
+        android:padding="@dimen/margin_medium_small"></com.google.android.material.textfield.TextInputEditText>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,26 +41,28 @@
         android:paddingBottom="@dimen/margin_medium">
 
         <TextView
-            android:id="@+id/noteTitleTv"
+            android:id="@+id/bottomSheetInfoTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/gilroy_bold"
             android:textColor="@color/orangish"
             android:textSize="14sp"
-            tools:text="This is the title of the doubt " />
+            tools:text="This is the title of the ddladalnkjboblkzbkjbakjbkjsdbbfkjboubt " />
 
         <TextView
-            android:id="@+id/cancelBtn"
+            android:id="@+id/bottomSheetCancelBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="@dimen/margin_small"
+            android:textColor="@color/black"
             android:fontFamily="@font/gilroy_medium"
             android:text="@string/cancel" />
 
         <androidx.appcompat.widget.AppCompatButton
             style="@style/ButtonStyleChip"
+            android:id="@+id/bottomSheetSaveBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/button_background"

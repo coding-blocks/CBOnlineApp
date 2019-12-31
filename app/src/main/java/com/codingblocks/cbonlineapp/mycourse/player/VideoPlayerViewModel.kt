@@ -4,10 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
+import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
+import com.codingblocks.onlineapi.models.LectureContent
+import com.codingblocks.onlineapi.models.Note
+import com.codingblocks.onlineapi.models.RunAttempts
 
 class VideoPlayerViewModel(
     private val repo: VideoPlayerRepository,
@@ -249,6 +253,22 @@ class VideoPlayerViewModel(
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         repo.deleteNoteFromDb(noteId)
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun updateNote(note: NotesModel) {
+        val newNote = Note(note.nttUid, note.duration, note.text, RunAttempts(note.runAttemptId), LectureContent(note.contentId))
+        runIO {
+            when (val response = repo.updateNote(newNote)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        repo.updateNoteInDb(newNote)
                     else {
                         setError(fetchError(response.value.code()))
                     }

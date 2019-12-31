@@ -116,6 +116,12 @@ interface OnlineJsonApi {
         @Path("noteid") id: String
     ): Response<Note>
 
+    @PATCH("notes/{noteid}")
+    suspend fun updateNoteById(
+        @Path("noteid") id: String,
+        @Body params: Note
+    ): Response<Note>
+
 
 
     @GET("courses")
@@ -166,9 +172,6 @@ interface OnlineJsonApi {
     @POST("comments")
     fun createComment(@Body params: Comment): Call<Comment>
 
-
-//    @PATCH("notes/{noteid}")
-//    fun updateNoteById(@Path("noteid") id: String, @Body params: Notes): Call<ResponseBody>
 //
 //    @POST("notes")
 //    fun createNote(@Body params: Notes): Call<Notes>

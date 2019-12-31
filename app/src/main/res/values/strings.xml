@@ -216,5 +216,6 @@
     <string name="email_desc">Use your email ID to login to your account</string>
     <string name="leaderboard_rank">Leaderboard Rank</string>
     <string name="noted_del_msg">Note has been Deleted</string>
+    <string name="edit_note">Edit Note</string>
 
 </resources>

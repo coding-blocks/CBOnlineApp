@@ -49,6 +49,7 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
     private val editClickListener: EditNoteClickListener by lazy {
         object : EditNoteClickListener {
             override fun onClick(note: NotesModel) {
+                (activity as EditNoteClickListener).onClick(note)
             }
         }
     }

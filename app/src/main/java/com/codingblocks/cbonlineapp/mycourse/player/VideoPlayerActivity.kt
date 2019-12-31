@@ -10,8 +10,9 @@ import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.commons.OnItemClickListener
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
+import com.codingblocks.cbonlineapp.database.models.NotesModel
+import com.codingblocks.cbonlineapp.library.EditNoteClickListener
 import com.codingblocks.cbonlineapp.mycourse.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.player.notes.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
@@ -22,6 +23,7 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControlView
 import com.crashlytics.android.Crashlytics
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -33,12 +35,13 @@ import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_video_player.*
+import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class VideoPlayerActivity : AppCompatActivity(), OnItemClickListener, AnkoLogger, VdoPlayer.InitializationListener {
+class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogger, VdoPlayer.InitializationListener {
     private val download: Boolean by lazy { intent.getBooleanExtra(DOWNLOADED, false) }
     private val viewModel by viewModel<VideoPlayerViewModel>()
     private val fullscreenToggleListener = VdoPlayerControlView.FullscreenActionListener { enterFullscreen ->
@@ -53,6 +56,7 @@ class VideoPlayerActivity : AppCompatActivity(), OnItemClickListener, AnkoLogger
         }
     }
     private val dialog by lazy { BottomSheetDialog(this) }
+    val sheetDialog by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, null) }
     private lateinit var youtubePlayer: YouTubePlayer
     private lateinit var playerFragment: VdoPlayerSupportFragment
     private var videoPlayer: VdoPlayer? = null
@@ -203,14 +207,14 @@ class VideoPlayerActivity : AppCompatActivity(), OnItemClickListener, AnkoLogger
         }
     }
 
-    override fun onItemClick(position: Int, id: String) {
-        if (viewModel.contentId == id) {
-            if (youtubePlayerView.isVisible)
-                youtubePlayer.seekTo((position * 1000).toFloat())
-            else
-                videoPlayer?.seekTo(position.toLong() * 1000)
-        }
-    }
+//    override fun onItemClick(position: Int, id: String) {
+//        if (viewModel.contentId == id) {
+//            if (youtubePlayerView.isVisible)
+//                youtubePlayer.seekTo((position * 1000).toFloat())
+//            else
+//                videoPlayer?.seekTo(position.toLong() * 1000)
+//        }
+//    }
 
     private fun showFullScreen(show: Boolean) {
         showSystemUi(show)
@@ -396,7 +400,6 @@ class VideoPlayerActivity : AppCompatActivity(), OnItemClickListener, AnkoLogger
 //    }
 
     private fun setUpBottomSheet() {
-        val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_note, null)
         dialog.dismissWithAnimation = true
         dialog.setContentView(sheetDialog)
     }
@@ -416,6 +419,32 @@ class VideoPlayerActivity : AppCompatActivity(), OnItemClickListener, AnkoLogger
             playerControlView.setFullscreenState(false)
         } else {
             super.onBackPressed()
+        }
+    }
+
+    override fun onClick(note: NotesModel) {
+        updateSheet("EDIT", note)
+        dialog.show()
+    }
+
+    private fun updateSheet(type: String, model: Any) {
+        if (type == "EDIT") {
+            val notes = model as NotesModel
+            sheetDialog.apply {
+                bottomSheetTitleTv.text = getString(R.string.edit_note)
+                bottoSheetDescTv.setText(notes.text)
+                bottomSheetInfoTv.text = "${notes.contentTitle} | ${notes.duration.secToTime()}"
+                bottomSheetCancelBtn.setOnClickListener {
+                    dialog.dismiss()
+                }
+                bottomSheetSaveBtn.setOnClickListener {
+                    viewModel.updateNote(notes.apply {
+                        text = sheetDialog.bottoSheetDescTv.text.toString()
+                    })
+                    dialog.dismiss()
+                }
+            }
+
         }
     }
 }

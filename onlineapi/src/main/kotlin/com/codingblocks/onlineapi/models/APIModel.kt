@@ -1,8 +1,6 @@
 package com.codingblocks.onlineapi.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonSetter
-import com.fasterxml.jackson.annotation.Nulls
 import com.github.jasminb.jsonapi.Links
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
@@ -390,14 +388,19 @@ class QuizQuestion : BaseModel() {
 class Note(
     val duration: Double,
     @JsonProperty("createdAt")
-    val createdAt: String,
+    val createdAt: String? = null,
     val deletedAt: String? = null,
     val text: String,
     @Relationship("run_attempt")
     val runAttempt: RunAttempts? = null,
     @Relationship("content")
     val content: LectureContent? = null
-) : BaseModel()
+) : BaseModel() {
+    constructor(id: String, duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent)
+        : this(duration, null, null, text, runAttemptId, contentId) {
+        super.id = id
+    }
+}
 
 @Type("users")
 class User(

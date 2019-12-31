@@ -35,6 +35,7 @@ import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Tags
 import com.codingblocks.onlineapi.models.User
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonSetter
 import com.fasterxml.jackson.annotation.Nulls
 import com.fasterxml.jackson.databind.DeserializationFeature
@@ -56,6 +57,7 @@ object Clients {
     private val om = jacksonObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
+        .setSerializationInclusion(JsonInclude.Include.NON_NULL)
         .registerModule(KotlinModule()) //let Jackson know about Kotlin
 
 
@@ -103,7 +105,7 @@ object Clients {
 
     private val onlineV2JsonRetrofit = Retrofit.Builder()
         .client(ClientInterceptor)
-        .baseUrl("http://192.168.0.126:3000/api/v2/")
+        .baseUrl("http://192.168.0.132:3000/api/v2/")
         .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
         .addConverterFactory(JacksonConverterFactory.create(om))
         .build()

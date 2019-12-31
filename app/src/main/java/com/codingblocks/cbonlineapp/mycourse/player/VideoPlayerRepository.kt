@@ -37,12 +37,16 @@ class VideoPlayerRepository(
                 it.text,
                 it.content?.id ?: "",
                 it.runAttempt?.id ?: "",
-                it.createdAt,
+                it.createdAt ?: "",
                 it.deletedAt,
                 contentTitle.await()
             )
             notesDao.insert(model)
         }
+    }
+
+    fun updateNoteInDb(newNote: Note) {
+        notesDao.updateBody(newNote.id, newNote.text)
     }
 
     fun getNotes(attemptId: String) = notesDao.getNotes(attemptId)
@@ -54,6 +58,8 @@ class VideoPlayerRepository(
         val b = withContext(Dispatchers.IO) { contentDao.getContentTitle(contentId) }
         return Pair(a, b)
     }
+
+    suspend fun updateNote(note: Note) = safeApiCall { Clients.onlineV2JsonApi.updateNoteById(note.id, note) }
 
 
 }

@@ -23,7 +23,7 @@ class LibraryRepository(private val notesDao: NotesDao,
                 it.text,
                 it.content?.id ?: "",
                 it.runAttempt?.id ?: "",
-                it.createdAt,
+                it.createdAt ?: "",
                 it.deletedAt,
                 contentTitle.await()
             )
