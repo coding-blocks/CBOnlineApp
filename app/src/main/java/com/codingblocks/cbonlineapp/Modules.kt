@@ -46,15 +46,12 @@ val viewModelModule = module {
 
     single { MyCourseRepository(get(), get(), get(), get(), get()) }
 
-
-
     viewModel { AdminDoubtsViewModel(get()) }
     viewModel { AdminOverviewViewModel(get()) }
     viewModel { DashboardDoubtsViewModel(get()) }
     viewModel { CourseViewModel(get()) }
     viewModel { LibraryViewModel(get()) }
     viewModel { DashboardViewModel(get(), get(), get()) }
-
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }

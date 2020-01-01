@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.database.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.codingblocks.onlineapi.models.Project
 
 @Entity
 data class CourseModel(

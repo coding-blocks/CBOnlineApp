@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 
-
 class DashboardExploreFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? =
         inflater.inflate(R.layout.fragment_dashboard_explore, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

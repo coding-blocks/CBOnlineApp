@@ -15,9 +15,11 @@ import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.safeApiCall
 
-class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
-                                private val commentsDao: CommentsDao,
-                                private val runDao: CourseRunDao) {
+class DashboardDoubtsRepository(
+    private val doubtsDao: DoubtsDao,
+    private val commentsDao: CommentsDao,
+    private val runDao: CourseRunDao
+) {
 
     suspend fun fetchDoubtsByCourseRun(id: String) = safeApiCall {
         Clients.onlineV2JsonApi.getDoubtByAttemptId(id)
@@ -59,7 +61,6 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
                 ))
         }
 
-
     suspend fun insertComments(comments: List<Comment>) {
         comments.forEach {
             commentsDao.insert(CommentModel(
@@ -78,13 +79,9 @@ class DashboardDoubtsRepository(private val doubtsDao: DoubtsDao,
             RESOLVED -> doubtsDao.getResolveDoubts(courseId)
             else -> doubtsDao.getDoubts(courseId)
         }
-
     }
-
 
     fun getDoubtById(id: String) = doubtsDao.getDoubtById(id)
     fun getCommentsById(id: String) = commentsDao.getComments(id)
     fun getRuns() = runDao.getAttemptIds()
-
-
 }

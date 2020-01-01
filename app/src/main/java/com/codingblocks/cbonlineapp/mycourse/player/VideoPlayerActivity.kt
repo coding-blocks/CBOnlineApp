@@ -84,7 +84,6 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         viewModel.currentOrientation = resources.configuration.orientation
 
-
         val youtubeUrl = intent.getStringExtra("videoUrl")
 
         if (youtubeUrl != null) {
@@ -121,7 +120,6 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             sectionTitle.append(it.first ?: "")
             contentTitle.text = it.second ?: ""
         }
-
     }
 
     private fun setupVideoView() {
@@ -284,7 +282,6 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         }
 
         override fun onMediaEnded(p0: VdoPlayer.VdoInitParams?) {
-
         }
 
         override fun onError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {

@@ -10,5 +10,4 @@ abstract class CommentsDao : BaseDao<CommentModel> {
 
     @Query("SElECT * FROM CommentModel where dbtId = :id")
     abstract fun getComments(id: String): LiveData<List<CommentModel>>
-
 }

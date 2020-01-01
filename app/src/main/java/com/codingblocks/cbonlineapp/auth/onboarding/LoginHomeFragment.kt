@@ -13,18 +13,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_login_home.*
 
-
 class LoginHomeFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?):
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ):
         View? = inflater.inflate(R.layout.fragment_login_home, container, false)
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,8 +47,6 @@ class LoginHomeFragment : Fragment() {
                 "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
             )
         }
-
-
     }
 
     private fun setSecondSpan() {
@@ -60,7 +58,6 @@ class LoginHomeFragment : Fragment() {
             }
 
             override fun updateDrawState(ds: TextPaint) {
-
             }
         }
         policySpan.setSpan(clickableSpan, 41, policySpan.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -91,5 +88,4 @@ class LoginHomeFragment : Fragment() {
             highlightColor = Color.TRANSPARENT
         }
     }
-
 }

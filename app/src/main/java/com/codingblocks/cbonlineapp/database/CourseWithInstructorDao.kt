@@ -65,7 +65,6 @@ interface CourseWithInstructorDao {
             """)
     fun getRecommendedCourses(): LiveData<List<CourseInstructorPair>>
 
-
     @Transaction
     @Query("""
     SELECT c.*,r.* FROM RunModel r

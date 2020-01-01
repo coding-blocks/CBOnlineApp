@@ -9,7 +9,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 
-@Suppress("UNCHECKED_CAST")
 class OnlineJsonApiAuthenticatedTest {
     val jsonapi = Clients.onlineV2JsonApi
 
@@ -20,23 +19,23 @@ class OnlineJsonApiAuthenticatedTest {
 //    }
 
 
-    @Test
-    fun getSectionContent() {
-        runBlocking {
-            val content = GlobalScope.async { Clients.onlineV2JsonApi.getSectionContents(sectionId = "19702") }
-            val response = content.await()
-            assertNotNull(response.body())
-
-        }
-    }
-
-    @Test
-    fun `GET section`() {
-        suspend {
-            val courses = jsonapi.getSections("795")
-            assertNotNull(courses)
-        }
-    }
+//    @Test
+//    fun getSectionContent() {
+//        runBlocking {
+//            val content = GlobalScope.async { Clients.onlineV2JsonApi.getSectionContents(sectionId = "19702") }
+//            val response = content.await()
+//            assertNotNull(response.body())
+//
+//        }
+//    }
+//
+//    @Test
+//    fun `GET section`() {
+//        suspend {
+//            val courses = jsonapi.getSections("795")
+//            assertNotNull(courses)
+//        }
+//    }
 
 
 //    @Test
@@ -57,36 +56,36 @@ class OnlineJsonApiAuthenticatedTest {
 //        assertNotNull(section)
 //    }
 
-    @Test
-    fun `GET QuizById`() {
-        val quiz = jsonapi.getQuizById("23").execute().body()
-        assertNotNull(quiz)
-    }
-
-    @Test
-    fun `GET Quiz`() {
-        val quizzes = jsonapi.getQuizAttempt("3").execute().body()
-        assertNotNull(quizzes)
-    }
-
-    @Test
-    fun `GET getQuizAttempById`() {
-        val quiz = jsonapi.getQuizAttemptById("6443").execute().body()
-        assertNotNull(quiz)
-    }
-
-
-    @Test
-    fun `GET Question`() {
-        val questions = jsonapi.getQuestionById("22").execute().body()
-        assertNotNull(questions)
-    }
-
-    @Test
-    fun `GET Quiz Attempt`() {
-        val quizAttempt = jsonapi.getQuizAttempt("23").execute().body()
-        assertNotNull(quizAttempt)
-    }
+//    @Test
+//    fun `GET QuizById`() {
+//        val quiz = jsonapi.getQuizById("23").execute().body()
+//        assertNotNull(quiz)
+//    }
+//
+//    @Test
+//    fun `GET Quiz`() {
+//        val quizzes = jsonapi.getQuizAttempt("3").execute().body()
+//        assertNotNull(quizzes)
+//    }
+//
+//    @Test
+//    fun `GET getQuizAttempById`() {
+//        val quiz = jsonapi.getQuizAttemptById("6443").execute().body()
+//        assertNotNull(quiz)
+//    }
+//
+//
+//    @Test
+//    fun `GET Question`() {
+//        val questions = jsonapi.getQuestionById("22").execute().body()
+//        assertNotNull(questions)
+//    }
+//
+//    @Test
+//    fun `GET Quiz Attempt`() {
+//        val quizAttempt = jsonapi.getQuizAttempt("23").execute().body()
+//        assertNotNull(quizAttempt)
+//    }
 
 //    @Test
 //    fun `GET DoubtByAttemptId `() {

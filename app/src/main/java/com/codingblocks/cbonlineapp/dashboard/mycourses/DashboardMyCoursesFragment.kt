@@ -32,7 +32,6 @@ import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-
 class DashboardMyCoursesFragment : Fragment() {
 
     private val dialog by lazy { BottomSheetDialog(requireContext()) }
@@ -56,9 +55,11 @@ class DashboardMyCoursesFragment : Fragment() {
         }
     }
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? =
         inflater.inflate(R.layout.fragment_dashboard_my_courses, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -67,7 +68,6 @@ class DashboardMyCoursesFragment : Fragment() {
         viewModel.fetchMyCourses()
 //        type.value = viewModel.prefs.courseFilter
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -87,11 +87,9 @@ class DashboardMyCoursesFragment : Fragment() {
 
         dashboardCoursesRv.setRv(requireContext(), courseListAdapter, true)
 
-
         viewModel.courses.observer(viewLifecycleOwner) {
             courseListAdapter.submitList(it)
             changeViewState(dashboardCoursesRv, internetll, emptyLl, dashboardCourseShimmer, it.isEmpty())
-
         }
 
         viewModel.errorLiveData.observer(viewLifecycleOwner) {
@@ -111,7 +109,6 @@ class DashboardMyCoursesFragment : Fragment() {
             }
             if (courseListAdapter.currentList.isEmpty())
                 showEmptyView(emptyView = emptyLl, shimmerView = dashboardCourseShimmer)
-
         }
         courseListAdapter.onItemClick = itemClickListener
     }
@@ -136,14 +133,8 @@ class DashboardMyCoursesFragment : Fragment() {
         dialog.setContentView(sheetDialog)
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         courseListAdapter.onItemClick = null
-
     }
 }
-
-
-
-

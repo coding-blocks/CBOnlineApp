@@ -14,9 +14,11 @@ import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.getMeta
 
-class DashboardViewModel(private val homeRepo: DashboardHomeRepository,
-                         private val myCourseRepo: DashboardMyCoursesRepository,
-                         val prefs: AppPrefs) : ViewModel() {
+class DashboardViewModel(
+    private val homeRepo: DashboardHomeRepository,
+    private val myCourseRepo: DashboardMyCoursesRepository,
+    val prefs: AppPrefs
+) : ViewModel() {
     var courses: MediatorLiveData<List<CourseInstructorPair>> = MediatorLiveData()
     var courseFilter = MutableLiveData<String>()
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
@@ -39,9 +41,7 @@ class DashboardViewModel(private val homeRepo: DashboardHomeRepository,
             }
         }
         fetchUser()
-
     }
-
 
     private fun fetchUser() {
         runIO {
@@ -54,7 +54,6 @@ class DashboardViewModel(private val homeRepo: DashboardHomeRepository,
                             if (it.roleId == 1 || it.roleId == 3) {
                                 isAdmin.postValue(true)
                             }
-
                         }
                     else {
                         setError(fetchError(response.value.code()))
@@ -88,7 +87,6 @@ class DashboardViewModel(private val homeRepo: DashboardHomeRepository,
         }
     }
 
-
     private fun setError(error: String) {
         errorLiveData.postValue(error)
     }
@@ -108,7 +106,5 @@ class DashboardViewModel(private val homeRepo: DashboardHomeRepository,
                 }
             }
         }
-
     }
-
 }

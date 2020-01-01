@@ -149,7 +149,6 @@ class AdminDoubtsFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
         viewModel.barMessage.observer(viewLifecycleOwner) {
             root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin, false)
-
         }
 
         doubtsAdapter.apply {

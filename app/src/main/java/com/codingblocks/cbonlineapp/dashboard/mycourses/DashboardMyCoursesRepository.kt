@@ -30,7 +30,6 @@ class DashboardMyCoursesRepository(
         Clients.onlineV2JsonApi.getMyCourses(offset = offset)
     }
 
-
     suspend fun insertCourses(runs: List<Runs>) {
         runs.forEach { run ->
             with(run) {

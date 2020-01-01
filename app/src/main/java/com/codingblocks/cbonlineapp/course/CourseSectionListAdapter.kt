@@ -78,7 +78,6 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
             arrow.setOnClickListener {
                 showOrHide(ll)
             }
-
         }
 
         private fun showOrHide(ll: View) {
@@ -99,7 +98,6 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
                 itemView.arrow.startAnimation(arrowAnimation)
             }
         }
-
     }
 
     class DiffCallback : DiffUtil.ItemCallback<Sections>() {

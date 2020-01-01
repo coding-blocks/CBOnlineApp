@@ -33,5 +33,4 @@ class LibraryViewModel(private val repo: LibraryRepository) : ViewModel() {
     private fun setError(error: String) {
         errorLiveData.postValue(error)
     }
-
 }

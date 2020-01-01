@@ -7,5 +7,4 @@ interface FragmentChangeListener {
     fun openClassroom()
 
     fun openExplore()
-
 }

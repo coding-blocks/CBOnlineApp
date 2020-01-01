@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
@@ -13,12 +12,10 @@ import com.codingblocks.cbonlineapp.util.ARG_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
 import com.codingblocks.cbonlineapp.util.RUN_ID
-import com.codingblocks.cbonlineapp.util.extensions.getDateForTime
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.ProductExtensionsItem
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_overview.*

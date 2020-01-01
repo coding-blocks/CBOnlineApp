@@ -69,8 +69,6 @@ class CBOnlineApp : Application() {
 
         Picasso.setSingletonInstance(Picasso.Builder(this).build())
 
-
-
         // OneSignal Initialization
         OneSignal.startInit(this)
             .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)

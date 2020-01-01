@@ -138,7 +138,6 @@ fun <F : Fragment> F.replaceFragmentSafely(
     } else if (allowStateLoss) {
         ft.commitAllowingStateLoss()
     }
-
 }
 
 fun RecyclerView.setRv(activity: Context, listAdapter: ListAdapter<out Any, out RecyclerView.ViewHolder>, setDivider: Boolean = false, type: String = "", orientation: Int = RecyclerView.VERTICAL) {
@@ -268,14 +267,14 @@ fun Toolbar.colouriseToolbar(context: Context, @DrawableRes toolbarDrawable: Int
     val colorFilter = PorterDuffColorFilter(foregroundColor, PorterDuff.Mode.SRC_IN)
     for (i in 0 until childCount) {
         val view: View = getChildAt(i)
-        //Back button or drawer open button
+        // Back button or drawer open button
         if (view is ImageButton) {
             view.drawable.colorFilter = colorFilter
         }
         if (view is ActionMenuView) {
             for (j in 0 until view.childCount) {
                 val innerView: View = view.getChildAt(j)
-                //Any ActionMenuViews - icons that are not back button, text or overflow menu
+                // Any ActionMenuViews - icons that are not back button, text or overflow menu
                 if (innerView is ActionMenuItemView) {
                     val drawables = innerView.compoundDrawables
                     for (k in drawables.indices) {
@@ -306,5 +305,3 @@ fun AppCompatActivity.setToolbar(
         supportActionBar?.show()
     } else supportActionBar?.hide()
 }
-
-

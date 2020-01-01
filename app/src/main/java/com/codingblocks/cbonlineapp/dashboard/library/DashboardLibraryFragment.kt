@@ -10,13 +10,15 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import kotlinx.android.synthetic.main.fragment_dashboard_library.*
 
-
 class DashboardLibraryFragment : Fragment() {
 
     private lateinit var listener: FragmentChangeListener
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? =
         inflater.inflate(R.layout.fragment_dashboard_library, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -29,7 +31,6 @@ class DashboardLibraryFragment : Fragment() {
             listener.openExplore()
         }
     }
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

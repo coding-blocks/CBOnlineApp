@@ -102,6 +102,5 @@ class TrippleTriggle<A, B, C>(a: LiveData<A>, b: LiveData<B>, c: LiveData<C>) : 
         addSource(a) { value = Triple(it, b.value, c.value) }
         addSource(b) { value = Triple(a.value, it, c.value) }
         addSource(c) { value = Triple(a.value, b.value, it) }
-
     }
 }

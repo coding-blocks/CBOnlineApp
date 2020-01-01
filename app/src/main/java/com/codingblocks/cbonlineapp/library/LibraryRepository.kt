@@ -9,8 +9,10 @@ import com.codingblocks.onlineapi.safeApiCall
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 
-class LibraryRepository(private val notesDao: NotesDao,
-                        private val contentDao: ContentDao) {
+class LibraryRepository(
+    private val notesDao: NotesDao,
+    private val contentDao: ContentDao
+) {
 
     suspend fun fetchCourseNotes(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.getNotesByAttemptId(attemptId) }
 
@@ -32,5 +34,4 @@ class LibraryRepository(private val notesDao: NotesDao,
     }
 
     fun getNotes(attemptId: String) = notesDao.getNotes(attemptId)
-
 }

@@ -42,4 +42,3 @@ fun ImageView.loadImage(imgUrl: String, scale: Boolean = false) {
                 Picasso.get().load(imgUrl).placeholder(R.drawable.defaultavatar).into(this)
         }
 }
-

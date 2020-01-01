@@ -29,7 +29,6 @@ class VideoPlayerRepository(
 
     suspend fun addNote(note: Note) = safeApiCall { Clients.onlineV2JsonApi.createNote(note) }
 
-
     suspend fun insertNotes(notes: List<Note>) {
         notes.forEach {
             val contentTitle = GlobalScope.async { contentDao.getContentTitle(it.content?.id ?: "") }
@@ -87,5 +86,4 @@ class VideoPlayerRepository(
 
     suspend fun getOtp(videoId: String, attemptId: String, sectionId: String) =
         safeApiCall { Clients.api.getOtp(videoId, sectionId, attemptId) }
-
 }

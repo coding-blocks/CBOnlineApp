@@ -31,7 +31,6 @@ import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.LECTURE
-import com.codingblocks.cbonlineapp.util.PROGRESS_ID
 import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.QNA
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
@@ -79,10 +78,8 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         }
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = inflater.inflate(R.layout.fragment_course_content, container, false)
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -95,7 +92,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
 //        completeSwitch.setOnClickListener {
 //            if (completeSwitch.isChecked)
@@ -261,7 +257,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         WorkManager.getInstance()
             .enqueue(request)
     }
-
 
     override fun startSectionDownlod(sectionId: String) {
         startService<SectionDownloadService>(SECTION_ID to sectionId)

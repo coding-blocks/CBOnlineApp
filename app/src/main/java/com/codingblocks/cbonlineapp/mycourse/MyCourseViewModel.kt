@@ -14,7 +14,6 @@ import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.ProductExtensionsItem
 import com.codingblocks.onlineapi.models.ResetRunAttempt
-import com.codingblocks.onlineapi.safeApiCall
 
 class MyCourseViewModel(
     private val repo: MyCourseRepository

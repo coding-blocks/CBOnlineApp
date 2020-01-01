@@ -56,5 +56,4 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun featuresDao(): FeaturesDao
 
     abstract fun commentsDao(): CommentsDao
-
 }

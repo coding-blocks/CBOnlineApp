@@ -51,7 +51,6 @@ class MyCourseRepository(
             }
             getSectionContent(courseSection.id, runAttempt.id)
         }
-
     }
 
     private suspend fun getSectionContent(sectionId: String, runAttemptId: String) {
@@ -62,7 +61,6 @@ class MyCourseRepository(
                         insertContents(it, runAttemptId, sectionId)
                     }
             }
-
         }
     }
 

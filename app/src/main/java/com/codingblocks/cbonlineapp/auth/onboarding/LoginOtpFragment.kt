@@ -6,15 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import kotlinx.android.synthetic.main.fragment_login_otp.*
 import org.jetbrains.anko.support.v4.intentFor
 
-
 class LoginOtpFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?):
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ):
         View? = inflater.inflate(R.layout.fragment_login_otp, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -24,5 +25,4 @@ class LoginOtpFragment : Fragment() {
             requireActivity().finish()
         }
     }
-
 }

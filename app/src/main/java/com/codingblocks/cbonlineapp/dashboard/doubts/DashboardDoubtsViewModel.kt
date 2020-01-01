@@ -40,7 +40,6 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
                 doubts.removeSource(doubtsDao)
             }
         }
-
     }
 
     fun fetchDoubts() {
@@ -104,6 +103,4 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
             }
         }
     }
-
-
 }

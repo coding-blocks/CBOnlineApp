@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.doubts.ChatClickListener
 import com.codingblocks.cbonlineapp.dashboard.ChatActivity
@@ -16,15 +14,10 @@ import com.codingblocks.cbonlineapp.dashboard.doubts.DoubtCommentClickListener
 import com.codingblocks.cbonlineapp.dashboard.doubts.ResolveDoubtClickListener
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
-import com.codingblocks.cbonlineapp.util.ARG_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.DOUBT_ID
-import com.codingblocks.cbonlineapp.util.LIVE
-import com.codingblocks.cbonlineapp.util.REOPENED
-import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
-import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import kotlinx.android.synthetic.main.fragment_video_doubt.*
 import kotlinx.android.synthetic.main.fragment_video_doubt.view.*
 import org.jetbrains.anko.AnkoLogger
@@ -87,7 +80,6 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
             onResolveClick = resolveClickListener
             onCommentClick = commentsClickListener
             onChatClick = chatClickListener
-
         }
     }
 
@@ -99,5 +91,4 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
         }
         super.onDestroyView()
     }
-
 }

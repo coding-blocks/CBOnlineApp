@@ -3,7 +3,6 @@ package com.codingblocks.cbonlineapp
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
-import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import kotlinx.android.synthetic.main.activity_login.*

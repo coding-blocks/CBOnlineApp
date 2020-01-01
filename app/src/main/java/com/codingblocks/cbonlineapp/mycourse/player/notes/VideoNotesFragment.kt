@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.library.DeleteNoteClickListener
@@ -40,7 +39,6 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
                             viewModel.deleteNote(noteId)
                         }
                     }
-
                 })
             }
         }
@@ -95,5 +93,4 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
         }
         super.onDestroy()
     }
-
 }

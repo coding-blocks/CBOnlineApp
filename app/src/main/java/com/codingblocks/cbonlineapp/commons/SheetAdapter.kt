@@ -30,7 +30,6 @@ class SheetAdapter(val items: ArrayList<SheetItem>) : BaseAdapter() {
             }
         }
         return view
-
     }
 
     override fun getItem(position: Int) = items[position]
@@ -38,8 +37,6 @@ class SheetAdapter(val items: ArrayList<SheetItem>) : BaseAdapter() {
     override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getCount() = items.size
-
 }
 
 data class SheetItem(val name: String, val icon: Int, val selected: Boolean = false)
-

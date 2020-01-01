@@ -9,7 +9,6 @@ import com.codingblocks.cbonlineapp.auth.onboarding.LoginHomeFragment
 import com.codingblocks.cbonlineapp.util.RESOLVEHINT
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 
-
 class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,18 +17,14 @@ class LoginActivity : AppCompatActivity() {
         replaceFragmentSafely(LoginHomeFragment(), containerViewId = R.id.loginContainer)
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val frg: Fragment? = supportFragmentManager.findFragmentByTag("SignIn")
 
         if (requestCode == RESOLVEHINT) {
             if (resultCode == RESULT_OK) {
-                frg?.onActivityResult(requestCode, resultCode, data);
-
+                frg?.onActivityResult(requestCode, resultCode, data)
             }
         }
     }
-
-
 }

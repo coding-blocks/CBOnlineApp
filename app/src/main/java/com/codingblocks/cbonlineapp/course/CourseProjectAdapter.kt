@@ -28,7 +28,6 @@ class CourseProjectAdapter : ListAdapter<Project, CourseProjectAdapter.ItemViewH
         fun bind(item: Project) = with(itemView) {
             projectTitle.text = item.title
             projectDescription.text = item.description
-
         }
     }
 

@@ -26,7 +26,6 @@ class MyCourseListAdapter : ListAdapter<CourseInstructorPair, MyCourseListAdapte
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bind(getItem(position))
         holder.itemClickListener = onItemClick
-
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -59,7 +58,7 @@ class MyCourseListAdapter : ListAdapter<CourseInstructorPair, MyCourseListAdapte
             }
             setOnClickListener {
                 if (expired) {
-                    //TODO ( show extension modal )
+                    // TODO ( show extension modal )
                 } else {
                     itemClickListener?.onClick(item.courseRun.crCourseId, item.courseRun.crUid, item.courseRun.crAttemptId
                         ?: "", item.courseRun.course.title)
@@ -79,8 +78,6 @@ class DiffCallback : DiffUtil.ItemCallback<CourseInstructorPair>() {
     }
 }
 
-
 interface ItemClickListener {
     fun onClick(id: String, runId: String, runAttemptId: String, name: String)
 }
-

@@ -61,7 +61,6 @@ class LibraryNotesListAdapter(val type: String = "") : ListAdapter<NotesModel, R
         var editClickListener: EditNoteClickListener? = null
         var itemClickListener: ItemClickListener? = null
 
-
         fun bind(item: NotesModel) = with(itemView) {
             noteVTitleTv.text = item.contentTitle
             noteVDescriptionTv.text = item.text

@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.dashboard
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.doubts.CommentsListAdapter
@@ -24,9 +23,8 @@ class DoubtCommentActivity : AppCompatActivity() {
     private val viewModel by viewModel<DashboardDoubtsViewModel>()
     private val commentsListAdapter = CommentsListAdapter()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        //TODO(Add Chat,Resolve and Post Comment)
+        // TODO(Add Chat,Resolve and Post Comment)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doubt_comment)
         setToolbar(commentsToolbar)
@@ -44,4 +42,3 @@ class DoubtCommentActivity : AppCompatActivity() {
         }
     }
 }
-

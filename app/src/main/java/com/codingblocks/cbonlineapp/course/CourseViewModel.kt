@@ -24,7 +24,6 @@ class CourseViewModel(
     val sections = MutableLiveData<List<Sections>>()
     var errorLiveData = MutableLiveData<String>()
 
-
     var sheetBehavior: BottomSheetBehavior<*>? = null
     var image: MutableLiveData<String> = MutableLiveData()
     var name: MutableLiveData<String> = MutableLiveData()
@@ -98,7 +97,6 @@ class CourseViewModel(
         errorLiveData.postValue(error)
     }
 
-
     fun getCart() {
         Clients.api.getCart().enqueue(retrofitCallback { _, response ->
             response?.body().let { json ->
@@ -116,7 +114,6 @@ class CourseViewModel(
             clearCartProgress.value = (response?.isSuccessful == true)
         })
     }
-
 
     fun enrollTrial(id: String) {
         Clients.api.enrollTrial(id).enqueue(retrofitCallback { _, response ->

@@ -22,7 +22,6 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
     var onCommentClick: DoubtCommentClickListener? = null
     var onChatClick: ChatClickListener? = null
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
             LayoutInflater.from(parent.context)
@@ -38,7 +37,6 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
                 resolveClickListener = onResolveClick
                 commentClickListener = onCommentClick
                 chatClickListener = onChatClick
-
             }
     }
 
@@ -108,5 +106,3 @@ interface ResolveDoubtClickListener {
 interface DoubtCommentClickListener {
     fun onClick(doubtId: String)
 }
-
-

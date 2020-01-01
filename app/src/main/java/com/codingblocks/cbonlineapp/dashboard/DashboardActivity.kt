@@ -42,7 +42,6 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, FragmentChangeListener, FabNavigation.OnTabSelectedListener {
 
     private val pagerAdapter by lazy { TabLayoutAdapter(supportFragmentManager) }
@@ -52,7 +51,6 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     private val appUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
     private val viewModel by viewModel<DashboardViewModel>()
     private var doubleBackToExitPressedOnce = false
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -223,7 +221,4 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         dashboardPager.setCurrentItem(position, true)
         return true
     }
-
 }
-
-

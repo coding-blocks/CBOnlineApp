@@ -70,7 +70,6 @@ data class ContentCsvModel(
     var csvUpdatedAt: String = ""
 )
 
-
 @Entity(
     indices = [Index("contentId")],
     foreignKeys = [(ForeignKey(

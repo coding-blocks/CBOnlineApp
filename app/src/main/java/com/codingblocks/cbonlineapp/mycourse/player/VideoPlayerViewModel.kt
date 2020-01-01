@@ -130,7 +130,6 @@ class VideoPlayerViewModel(
         if (noteId.isEmpty()) {
             progressData = workDataOf("NOTE" to noteModel?.serializeToJson())
             offlineSnackbar.postValue("Note will be updated once you connect to Network")
-
         } else {
             progressData = workDataOf("NOTE_ID" to noteId)
             offlineSnackbar.postValue("Note will be Deleted once you connect to Network")

@@ -9,8 +9,6 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
-import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
-import com.codingblocks.onlineapi.Clients
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.offline.DownloadOptions
 import com.vdocipher.aegis.offline.DownloadRequest

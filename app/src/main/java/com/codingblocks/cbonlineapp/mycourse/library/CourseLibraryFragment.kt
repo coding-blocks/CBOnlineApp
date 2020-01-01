@@ -15,7 +15,6 @@ import com.codingblocks.cbonlineapp.util.TYPE
 import kotlinx.android.synthetic.main.fragment_course_library.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-
 class CourseLibraryFragment : Fragment(), View.OnClickListener {
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
@@ -30,7 +29,6 @@ class CourseLibraryFragment : Fragment(), View.OnClickListener {
         downloadBtn.setOnClickListener(this)
         bookmarkBtn.setOnClickListener(this)
         announcementsBtn.setOnClickListener(this)
-
     }
 
     override fun onClick(v: View) {
@@ -45,5 +43,4 @@ class CourseLibraryFragment : Fragment(), View.OnClickListener {
         }
         startActivity(intent)
     }
-
 }

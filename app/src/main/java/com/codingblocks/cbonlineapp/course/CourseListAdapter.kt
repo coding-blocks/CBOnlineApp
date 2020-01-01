@@ -62,7 +62,6 @@ class CourseListAdapter : ListAdapter<Course, CourseListAdapter.ItemViewHolder>(
             if (list.isNullOrEmpty()) {
                 list =
                     item.runs?.sortedWith(compareBy { run -> run.price })
-
             }
             courseCardPriceTv.text = "₹ " + list?.first()?.price
             courseCardMrpTv.text = "₹ " + list?.first()?.mrp

@@ -30,18 +30,18 @@ class OnlineJsonApiPublicTest {
 //        val instructors = api.instructors().execute().body()
 //        assertNotNull(instructors)
 //    }
-
-    @Test
-    fun `GET allcourses`() {
-        val courses = api.getAllCourses().execute().body()
-        assertNotNull(courses)
-    }
-
-    @Test
-    fun `GET carouselCards`() {
-        val carouselCards = api.carouselCards.execute().body()
-        assertNotNull(carouselCards)
-    }
+//
+//    @Test
+//    fun `GET allcourses`() {
+//        val courses = api.getAllCourses().execute().body()
+//        assertNotNull(courses)
+//    }
+//
+//    @Test
+//    fun `GET carouselCards`() {
+//        val carouselCards = api.carouselCards.execute().body()
+//        assertNotNull(carouselCards)
+//    }
 
 
 }

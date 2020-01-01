@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.util
 
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import android.view.View
 
 import androidx.recyclerview.widget.RecyclerView
 

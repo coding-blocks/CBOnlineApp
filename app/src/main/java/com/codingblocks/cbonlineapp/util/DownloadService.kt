@@ -14,8 +14,6 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.models.DownloadData
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
-import com.codingblocks.onlineapi.Clients
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.offline.DownloadOptions
 import com.vdocipher.aegis.offline.DownloadRequest

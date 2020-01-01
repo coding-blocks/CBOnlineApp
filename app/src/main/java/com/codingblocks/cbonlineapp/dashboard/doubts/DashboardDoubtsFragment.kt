@@ -41,7 +41,6 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class DashboardDoubtsFragment : Fragment() {
 
     private lateinit var listener: FragmentChangeListener
@@ -83,8 +82,11 @@ class DashboardDoubtsFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? =
         inflater.inflate(R.layout.fragment_dashboard_doubts, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -164,7 +166,6 @@ class DashboardDoubtsFragment : Fragment() {
             }
             if (doubtListAdapter.currentList.isEmpty())
                 showEmptyView(emptyView = emptyLl, shimmerView = dashboardDoubtShimmer)
-
         }
 
         viewModel.barMessage.observer(viewLifecycleOwner) {
@@ -179,7 +180,7 @@ class DashboardDoubtsFragment : Fragment() {
     }
 
     private fun setUpBottomSheet() {
-        //TODO( fix list overlapping)
+        // TODO( fix list overlapping)
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_mycourses, null)
         val list = arrayListOf<SheetItem>()
         viewModel.getRunId().observeOnce {
@@ -194,7 +195,6 @@ class DashboardDoubtsFragment : Fragment() {
                 }
             }
         }
-
 
         dialog.setContentView(sheetDialog)
     }
@@ -212,5 +212,4 @@ class DashboardDoubtsFragment : Fragment() {
         }
         super.onDestroyView()
     }
-
 }

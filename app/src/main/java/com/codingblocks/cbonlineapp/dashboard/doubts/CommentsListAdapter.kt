@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.dashboard.doubts.CommentsListAdapter.*
+import com.codingblocks.cbonlineapp.dashboard.doubts.CommentsListAdapter.ItemViewHolder
 import com.codingblocks.cbonlineapp.database.models.CommentModel
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo

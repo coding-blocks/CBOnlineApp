@@ -28,7 +28,8 @@ import kotlin.math.min
 class VdoPlayerControls @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyle: Int = 0) : FrameLayout(context, attrs, defStyle) {
+    defStyle: Int = 0
+) : FrameLayout(context, attrs, defStyle) {
 
     companion object {
         private const val TAG = "VdoPlayerControlView"
@@ -57,7 +58,6 @@ class VdoPlayerControls @JvmOverloads constructor(
          */
         fun onFullscreenAction(enterFullscreen: Boolean): Boolean
     }
-
 
     private val playButton: View
     private val pauseButton: View
@@ -211,9 +211,9 @@ class VdoPlayerControls @JvmOverloads constructor(
         }
 
         val playbackState = player?.playbackState ?: VdoPlayer.STATE_IDLE
-        val playing = (player?.playWhenReady ?: false)
-            && playbackState != VdoPlayer.STATE_IDLE
-            && playbackState != VdoPlayer.STATE_ENDED
+        val playing = (player?.playWhenReady ?: false) &&
+            playbackState != VdoPlayer.STATE_IDLE &&
+            playbackState != VdoPlayer.STATE_ENDED
         playButton.visibility = if (playing) GONE else VISIBLE
         pauseButton.visibility = if (playing) VISIBLE else GONE
     }
@@ -494,7 +494,6 @@ class VdoPlayerControls @JvmOverloads constructor(
                 else ->
                     track.toString()
             }
-
         }
 
         private fun dataExpenditurePerHour(bitsPerSec: Int): String {

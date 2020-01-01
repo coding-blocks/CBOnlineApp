@@ -29,5 +29,4 @@ interface AppPrefs {
 
     @Pref("doubtType")
     var doubtType: Int
-
 }

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.AdapterView
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
@@ -14,8 +13,6 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.InstructorListAdapter
-import com.codingblocks.cbonlineapp.commons.SheetAdapter
-import com.codingblocks.cbonlineapp.commons.SheetItem
 import com.codingblocks.cbonlineapp.course.batches.BatchListAdapter
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
@@ -29,7 +26,6 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.onlineapi.ErrorStatus
-import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Tags
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -40,7 +36,6 @@ import kotlinx.android.synthetic.main.bottom_sheet_batch.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetChangedListener {
 
@@ -63,8 +58,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
     private val batchListAdapter = BatchListAdapter()
     private val dialog by lazy { BottomSheetDialog(this) }
 
-
-
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
             override fun onClick(id: String, name: String, logo: ImageView) {
@@ -81,7 +74,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             }
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,8 +125,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             courseCardListAdapter.submitList(courses)
         }
 
-
-
         viewModel.errorLiveData.observer(this) {
             when (it) {
                 ErrorStatus.NO_CONNECTION -> {
@@ -162,7 +152,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             dialog.show()
         }
     }
-
 
     private fun showTags(tags: ArrayList<Tags>?) {
         with(!tags.isNullOrEmpty()) {
@@ -212,12 +201,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         dialog.setContentView(sheetDialog)
     }
 
-
     override fun onBackPressed() {
         supportFinishAfterTransition()
         finish()
     }
-
 }
-
-

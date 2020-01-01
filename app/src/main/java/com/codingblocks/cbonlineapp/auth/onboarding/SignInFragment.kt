@@ -1,12 +1,8 @@
 package com.codingblocks.cbonlineapp.auth.onboarding
 
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import android.text.InputType
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.StyleSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,18 +13,19 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.RESOLVEHINT
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.HintRequest
 import com.google.android.gms.common.api.GoogleApiClient
 import kotlinx.android.synthetic.main.fragment_sign_in.*
-
 
 class SignInFragment : Fragment() {
 
     lateinit var type: String
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?):
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ):
         View? = inflater.inflate(R.layout.fragment_sign_in, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,7 +59,6 @@ class SignInFragment : Fragment() {
                 numberLayout.hint = getString(R.string.mobile_number)
             }
         }
-
 
         requestHint()
         proceedBtn.setOnClickListener {
@@ -107,6 +103,4 @@ class SignInFragment : Fragment() {
                 }
             }
     }
-
-
 }

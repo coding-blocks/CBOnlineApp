@@ -6,8 +6,10 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.User
 import com.codingblocks.onlineapi.safeApiCall
 
-class DashboardHomeRepository(private val prefs: AppPrefs,
-                              private val courseWithInstructorDao: CourseWithInstructorDao) {
+class DashboardHomeRepository(
+    private val prefs: AppPrefs,
+    private val courseWithInstructorDao: CourseWithInstructorDao
+) {
 
     suspend fun fetchUser() = safeApiCall { Clients.onlineV2JsonApi.getMe() }
 
@@ -25,6 +27,4 @@ class DashboardHomeRepository(private val prefs: AppPrefs,
     }
 
     fun getTopRun() = courseWithInstructorDao.getTopRun()
-
-
 }

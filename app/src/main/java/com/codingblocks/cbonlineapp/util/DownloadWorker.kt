@@ -8,14 +8,12 @@ import android.graphics.BitmapFactory
 import android.os.Environment
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.work.CoroutineWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.models.DownloadData
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
-import com.codingblocks.onlineapi.Clients
 import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.offline.DownloadOptions

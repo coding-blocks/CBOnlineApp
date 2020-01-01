@@ -3,10 +3,8 @@ package com.codingblocks.cbonlineapp.util
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
-import androidx.browser.customtabs.CustomTabsIntent
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
