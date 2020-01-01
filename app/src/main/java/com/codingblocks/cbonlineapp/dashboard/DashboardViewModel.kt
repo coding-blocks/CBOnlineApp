@@ -70,12 +70,12 @@ class DashboardViewModel(
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
-                            myCourseRepo.insertCourses(it.get())
+                            myCourseRepo.insertCourses(it.get() ?: emptyList())
                             val currentOffSet = getMeta(it.meta, "currentOffset").toString()
                             val nextOffSet = getMeta(it.meta, "nextOffset").toString()
                             if (currentOffSet != nextOffSet) {
                                 fetchMyCourses(nextOffSet)
-                                if (it.get().isEmpty())
+                                if (it.get()?.isEmpty() == true)
                                     courses.postValue(emptyList())
                             }
                         }
