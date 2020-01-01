@@ -85,5 +85,7 @@ class VideoPlayerRepository(
 
     suspend fun updateNote(note: Note) = safeApiCall { Clients.onlineV2JsonApi.updateNoteById(note.id, note) }
 
+    suspend fun getOtp(videoId: String, attemptId: String, sectionId: String) =
+        safeApiCall { Clients.api.getOtp(videoId, sectionId, attemptId) }
 
 }

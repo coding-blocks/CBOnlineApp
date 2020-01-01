@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.os.Environment
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.work.CoroutineWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.R
@@ -75,26 +76,26 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
         )
         notificationManager.notify(downloadData.notificationId, downloadData.notificationBuilder.build())
         val response: Response<JsonObject>
-        response = Clients.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true).execute()
-
-        if (response.isSuccessful) {
-            response.body()?.let {
-                downloadList.add(downloadData)
-                val mOtp = it.get("otp").asString
-                val mPlaybackInfo = it.get("playbackInfo").asString
-                initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
-            }
+//        response = Clients.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true).execute()
+//
+//        if (response.isSuccessful) {
+//            response.body()?.let {
+//                downloadList.add(downloadData)
+//                val mOtp = it.get("otp").asString
+//                val mPlaybackInfo = it.get("playbackInfo").asString
+//                initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
+//            }
             return Result.success()
-        } else {
-            for (data in downloadList) {
-                notificationManager.cancel(data.notificationId)
-            }
-            if (response.code() in (500..599)) {
-                // try again if there is a server error
-                return Result.retry()
-            }
-            return Result.failure()
-        }
+//        } else {
+//            for (data in downloadList) {
+//                notificationManager.cancel(data.notificationId)
+//            }
+//            if (response.code() in (500..599)) {
+//                // try again if there is a server error
+//                return Result.retry()
+//            }
+//            return Result.failure()
+//        }
     }
 
     private fun initializeDownload(mOtp: String, mPlaybackInfo: String, videoId: String) {

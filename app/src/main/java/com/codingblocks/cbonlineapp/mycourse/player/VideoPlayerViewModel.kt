@@ -43,6 +43,7 @@ class VideoPlayerViewModel(
         repo.getNotes(attemptId)
     }
     val sectionContentTitle = MutableLiveData<Pair<String, String>>()
+    val offlineSnackbar = MutableLiveData<String>()
 
     init {
         runIO {
@@ -125,10 +126,14 @@ class VideoPlayerViewModel(
 
     private fun startWorkerRequest(noteId: String = "", noteModel: Note? = null) {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val progressData: Data = if (noteId.isEmpty()) {
-            workDataOf("NOTE" to noteModel?.serializeToJson())
+        val progressData: Data
+        if (noteId.isEmpty()) {
+            progressData = workDataOf("NOTE" to noteModel?.serializeToJson())
+            offlineSnackbar.postValue("Note will be updated once you connect to Network")
+
         } else {
-            workDataOf("NOTE_ID" to noteId)
+            progressData = workDataOf("NOTE_ID" to noteId)
+            offlineSnackbar.postValue("Note will be Deleted once you connect to Network")
         }
         val request: OneTimeWorkRequest =
             OneTimeWorkRequestBuilder<NotesWorker>()
@@ -177,4 +182,22 @@ class VideoPlayerViewModel(
         }
     }
 
+    fun getOtp() {
+        runIO {
+            when (val response = repo.getOtp(videoId, attemptId, sectionId)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let { obj ->
+                            mOtp = obj.get("otp")?.asString
+                            mPlaybackInfo = obj.get("playbackInfo")?.asString
+                            getOtpProgress.postValue(true)
+                        }
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
 }

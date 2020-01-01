@@ -288,10 +288,21 @@ class ContentVideoType : BaseModel() {
 
 @Type("progresses")
 class ContentProgress(
-    var contentId: String,
-    var createdAt: String,
-    var status: String,
-    var runAttemptId: String) : BaseModel()
+    @Id
+    val id: String? = null,
+    val updatedAt: String? = null,
+    val contentId: String? = null,
+    val createdAt: String? = null,
+    val status: String,
+    val runAttemptId: String? = null,
+    @Relationship("run_attempt")
+    val runAttempt: RunAttempts? = null,
+    @Relationship("content")
+    val content: LectureContent? = null
+) {
+    constructor(status: String, runAttemptId: RunAttempts, contentId: LectureContent, progressId: String?)
+        : this(status = status, runAttempt = runAttemptId, content = contentId, id = progressId)
+}
 
 @Type("announcement")
 class Announcement : BaseModel() {

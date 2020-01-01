@@ -59,7 +59,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         }
     }
     private val dialog by lazy { BottomSheetDialog(this) }
-    val sheetDialog by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, null) }
+    private val sheetDialog: View by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, null) }
     private lateinit var youtubePlayer: YouTubePlayer
     private lateinit var playerFragment: VdoPlayerSupportFragment
     private var videoPlayer: VdoPlayer? = null
@@ -131,8 +131,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             } else
                 toast("there was some error with starting feed, try again")
         }
-
-//        viewModel.getOtp(videoId, sectionId, attemptId)
+        viewModel.getOtp()
     }
 
     private fun initializePlayer() {
@@ -193,7 +192,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                 .setPreferredCaptionsLanguage("en")
                 .build()
         }
-        player?.apply {
+        player.apply {
             load(vdoParams)
         }
     }
@@ -275,12 +274,12 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
 
         override fun onLoadError(p0: VdoPlayer.VdoInitParams, p1: ErrorDescription) {
             Crashlytics.log("Error Message: ${p1.errorMsg}, " +
-                "Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}")
+                "Error Code: ${p1.errorCode} , ${p1.httpStatusCode}")
             if (p1.errorCode == 4101 || p1.errorCode == 5110) {
                 rootLayout.snackbar("Seems like your download was corrupted.Please Download Again")
 //                viewModel.deleteVideo(contentId)
             } else if (p1.errorCode in (2010..2020)) {
-//                viewModel.getOtp(videoId, sectionId, attemptId)
+                viewModel.getOtp()
             }
         }
 

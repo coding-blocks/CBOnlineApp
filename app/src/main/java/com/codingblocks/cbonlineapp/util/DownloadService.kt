@@ -60,18 +60,18 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
             )
             notificationManager.notify(downloadData.notificationId, downloadData.notificationBuilder.build())
 
-            Clients.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true)
-                .enqueue(retrofitCallback { _, response ->
-                    response?.let { json ->
-                        if (json.isSuccessful) {
-                            json.body()?.let {
-                                val mOtp = it.get("otp").asString
-                                val mPlaybackInfo = it.get("playbackInfo").asString
-                                initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
-                            }
-                        }
-                    }
-                })
+//            Clients.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true)
+//                .enqueue(retrofitCallback { _, response ->
+//                    response?.let { json ->
+//                        if (json.isSuccessful) {
+//                            json.body()?.let {
+//                                val mOtp = it.get("otp").asString
+//                                val mPlaybackInfo = it.get("playbackInfo").asString
+//                                initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
+//                            }
+//                        }
+//                    }
+//                })
 
             downloadList.add(downloadData)
         }

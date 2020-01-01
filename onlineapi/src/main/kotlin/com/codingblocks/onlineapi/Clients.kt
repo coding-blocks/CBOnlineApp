@@ -119,7 +119,7 @@ object Clients {
 
     private val retrofit = Retrofit.Builder()
         .client(ClientInterceptor)
-        .baseUrl("https://api-online.cb.lk/api/")
+        .baseUrl("https://192.168.1.8:3000/api/")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
     val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)

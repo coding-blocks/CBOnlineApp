@@ -59,11 +59,6 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         setContentView(R.layout.activity_dashboard)
         setUser()
         initializeUI()
-        var a = 5;
-        viewModel.isAdmin.observer(this) {
-            val navMenu = dashboardNavigation.menu
-            navMenu.findItem(R.id.nav_admin).isVisible = it
-        }
     }
 
     private fun setUser() {

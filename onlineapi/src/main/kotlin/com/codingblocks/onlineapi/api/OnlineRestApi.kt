@@ -23,12 +23,12 @@ interface OnlineRestApi {
     fun getMyCourseProgress(@Path("runid") id: String): Call<HashMap<Any, Any>>
 
     @GET("v2/lectures/otp")
-    fun getOtp(
+    suspend fun getOtp(
         @Query("videoId") videoId: String,
         @Query("sectionId") sectionId: String,
         @Query("runAttemptId") runAttemptId: String,
         @Query("offline") offline: Boolean = false
-    ): Call<JsonObject>
+    ): Response<JsonObject>
 
     @POST("jwt/login?android=true")
     @FormUrlEncoded

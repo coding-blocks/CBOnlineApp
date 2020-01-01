@@ -128,6 +128,17 @@ interface OnlineJsonApi {
         @Body params: Note
     ): Response<Note>
 
+    @POST("progresses")
+    suspend fun setProgress(
+        @Body params: ContentProgress
+    ): Response<ContentProgress>
+
+    @PATCH("progresses/{id}")
+    suspend fun updateProgress(
+        @Path("id") id: String,
+        @Body params: ContentProgress
+    ): Response<ContentProgress>
+
 
     @GET("courses")
     fun getAllCourses(
@@ -157,8 +168,6 @@ interface OnlineJsonApi {
         @Query("sort") sort: String = "-createdAt"
     ): Call<List<QuizAttempt>>
 
-    @POST("progresses")
-    fun setProgress(@Body params: ContentProgress): Call<ContentProgress>
 
     @GET("quiz_attempts/{id}")
     fun getQuizAttemptById(
@@ -188,10 +197,6 @@ interface OnlineJsonApi {
         @Path("id") attemptId: String,
         @Body params: QuizAttempt
     ): Call<QuizAttempt>
-
-
-    @PATCH("progresses/{id}")
-    fun updateProgress(@Path("id") id: String, @Body params: ContentProgress): Call<ContentProgress>
 
     @get:GET("carousel_cards?sort=order")
     val carouselCards: Call<ArrayList<CarouselCards>>

@@ -137,7 +137,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                             ).singleTop()
                         )
                     }
-                    starterListener?.updateProgress(content.ccid, content.progressId)
+                    starterListener?.updateProgress(content.ccid)
                 } else {
                     showConfirmation(it.context, "unavailable")
                 }

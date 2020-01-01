@@ -220,14 +220,9 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         }
     }
 
-    override fun updateProgress(contentId: String, progressId: String) {
+    override fun updateProgress(contentId: String) {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val progressData: Data = if (progressId.isNotEmpty()) {
-            workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to viewModel.attemptId, PROGRESS_ID to progressId)
-        } else {
-            workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to viewModel.attemptId)
-        }
-
+        val progressData: Data = workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to viewModel.attemptId)
         val request: OneTimeWorkRequest =
             OneTimeWorkRequestBuilder<ProgressWorker>()
                 .setConstraints(constraints)

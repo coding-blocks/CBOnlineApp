@@ -138,18 +138,18 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
     }
 
     override fun onFailed(videoId: String, p1: DownloadStatus?) {
-        Clients.api.getOtp(videoId, sectionId ?: "", attemptId ?: "", true)
-            .enqueue(retrofitCallback { _, response ->
-                response?.let { json ->
-                    if (json.isSuccessful) {
-                        json.body()?.let {
-                            val mOtp = it.get("otp").asString
-                            val mPlaybackInfo = it.get("playbackInfo").asString
-                            initializeDownload(mOtp, mPlaybackInfo, videoId)
-                        }
-                    }
-                }
-            })
+//        Clients.api.getOtp(videoId, sectionId ?: "", attemptId ?: "", true)
+//            .enqueue(retrofitCallback { _, response ->
+//                response?.let { json ->
+//                    if (json.isSuccessful) {
+//                        json.body()?.let {
+//                            val mOtp = it.get("otp").asString
+//                            val mPlaybackInfo = it.get("playbackInfo").asString
+//                            initializeDownload(mOtp, mPlaybackInfo, videoId)
+//                        }
+//                    }
+//                }
+//            })
     }
 
     override fun onQueued(p0: String?, p1: DownloadStatus?) {

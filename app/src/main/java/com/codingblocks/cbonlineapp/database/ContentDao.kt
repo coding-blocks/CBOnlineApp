@@ -43,4 +43,7 @@ interface ContentDao : BaseDao<ContentModel> {
 
     @Query("SElECT title FROM ContentModel where  ccid = :id")
     suspend fun getContentTitle(id: String): String
+
+    @Query("SElECT progressId FROM ContentModel where  ccid = :id")
+    suspend fun getProgressId(id: String): String
 }

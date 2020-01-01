@@ -18,7 +18,7 @@ class NotesWorker(context: Context, private val workerParameters: WorkerParamete
     override suspend fun doWork(): Result {
         val notesDao: NotesDao by inject()
         val noteId = workerParameters.inputData.getString("NOTE_ID")
-        val noteJson = workerParameters.inputData.getString("NOTE_ID")
+        val noteJson = workerParameters.inputData.getString("NOTE")
         val response: Response<Note> =
             if (noteId.isNullOrEmpty()) {
                 val note = noteJson?.deserializeNoteFromJson()
