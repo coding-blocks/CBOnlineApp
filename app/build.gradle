@@ -122,7 +122,7 @@ dependencies {
     implementation 'io.github.inflationx:viewpump:2.0.3'
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
     implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
-    implementation 'com.onesignal:OneSignal:3.11.2'
+    implementation 'com.onesignal:OneSignal:3.12.4'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'com.github.aggarwalpulkit596:FabNavigation:1.0'
 
