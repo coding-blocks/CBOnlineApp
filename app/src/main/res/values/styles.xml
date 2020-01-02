@@ -119,6 +119,7 @@
 
     <style name="sheetStyle" parent="@style/Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
         <item name="bottomSheetStyle">@style/BottomSheet</item>
     </style>
 

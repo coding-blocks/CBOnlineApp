@@ -133,8 +133,6 @@ dependencies {
     implementation 'tech.arnav:SPORK:0.1.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
-//    implementation "com.andkulikov:transitionseverywhere:2.1.0"
-
 
     // Image view libraries
     implementation 'de.hdodenhof:circleimageview:3.0.1'
@@ -174,9 +172,8 @@ dependencies {
 
 
     implementation project(':onlineapi')
-    implementation files('libs/YouTubeAndroidPlayerApi.jar')
 
-    // Test Deps
+    // Test Dependencies
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

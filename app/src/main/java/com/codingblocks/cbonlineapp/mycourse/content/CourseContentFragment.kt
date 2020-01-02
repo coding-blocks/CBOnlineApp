@@ -9,7 +9,6 @@ import android.widget.PopupWindow
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.BackoffPolicy
@@ -60,21 +59,21 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     private val sectionListAdapter = SectionListAdapter(sectionitem)
     private val viewModel by sharedViewModel<MyCourseViewModel>()
     private val mLayoutManager by lazy { LinearLayoutManager(requireContext()) }
-    val smoothScroller: RecyclerView.SmoothScroller by lazy {
-        object : LinearSmoothScroller(requireContext()) {
-            override fun getVerticalSnapPreference(): Int {
-                return SNAP_TO_START
-            }
-        }
-    }
+//    val smoothScroller: RecyclerView.SmoothScroller by lazy {
+//        object : LinearSmoothScroller(requireContext()) {
+//            override fun getVerticalSnapPreference(): Int {
+//                return SNAP_TO_START
+//            }
+//        }
+//    }
 
     private val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
         override fun onClick(pos: Int) {
             popupWindowDogs?.dismiss()
             // Todo - Improvise the scroll
             mLayoutManager.scrollToPosition(pos - 10)
-            smoothScroller.targetPosition = pos
-            mLayoutManager.startSmoothScroll(smoothScroller)
+//            smoothScroller.targetPosition = pos
+//            mLayoutManager.startSmoothScroll(smoothScroller)
         }
     }
 
@@ -92,13 +91,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        completeSwitch.setOnClickListener {
-//            if (completeSwitch.isChecked)
-//                viewModel.complete.postValue("UNDONE")
-//            else
-//                viewModel.complete.postValue("")
-//        }
 
         typeChipGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
@@ -126,7 +118,8 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         popupWindowDogs = popUpWindowSection()
 
         activity?.fab?.setOnClickListener {
-            popupWindowDogs?.showAsDropDown(it, 0, 0, Gravity.BOTTOM)
+            // Todo Check for different screens
+            popupWindowDogs?.showAsDropDown(it, -280, -50, Gravity.BOTTOM)
             view.applyDim(0.5F)
         }
 
