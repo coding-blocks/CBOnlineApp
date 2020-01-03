@@ -1,10 +1,10 @@
 package com.codingblocks.cbonlineapp.library
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StableIdKeyProvider
 import androidx.recyclerview.selection.StorageStrategy
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.doubts.MyItemDetailsLookup
@@ -60,6 +60,9 @@ class LibraryActivity : AppCompatActivity() {
                 override fun onSelectionChanged() {
                     super.onSelectionChanged()
                     val items = tracker?.selection!!.size()
+                    tracker?.selection!!.forEach {
+                        Log.i("Selection Keys", "Note ID : $it")
+                    }
                 }
             })
 

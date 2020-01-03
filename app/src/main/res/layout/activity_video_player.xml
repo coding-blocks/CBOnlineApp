@@ -97,6 +97,7 @@
                 android:src="@drawable/ic_bookmark_fill" />
 
             <ImageView
+                android:id="@+id/downloadBtn"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:layout_width="wrap_content"

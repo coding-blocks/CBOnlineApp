@@ -9,6 +9,13 @@ import android.view.WindowManager
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.models.NotesModel
@@ -17,19 +24,24 @@ import com.codingblocks.cbonlineapp.mycourse.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.player.notes.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
+import com.codingblocks.cbonlineapp.util.DownloadService
+import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.TITLE
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControlView
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.crashlytics.android.Crashlytics
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.vdocipher.aegis.media.ErrorDescription
@@ -41,8 +53,10 @@ import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
+import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.concurrent.TimeUnit
 
 class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogger, VdoPlayer.InitializationListener {
     private val download: Boolean by lazy { intent.getBooleanExtra(DOWNLOADED, false) }
@@ -105,7 +119,38 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         videoFab.setOnClickListener {
             updateSheet("")
         }
+        downloadBtn.setOnClickListener {
+            startDownloadWorker()
+        }
         setupViewPager()
+    }
+
+    private fun startDownloadWorker() {
+//        val constraints = if (getPrefs().SP_WIFI)
+//            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
+//        else
+//            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+//        val videoData = workDataOf(VIDEO_ID to viewModel.videoId,
+//            TITLE to contentTitle.text.toString(),
+//            SECTION_ID to viewModel.sectionId,
+//            RUN_ATTEMPT_ID to viewModel.attemptId,
+//            CONTENT_ID to viewModel.contentId)
+//
+//        val request: OneTimeWorkRequest =
+//            OneTimeWorkRequestBuilder<DownloadWorker>()
+//                .setConstraints(constraints)
+//                .setInputData(videoData)
+//                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+//                .build()
+//
+//        WorkManager.getInstance()
+//            .enqueue(request)
+        startService(intentFor<DownloadService>(VIDEO_ID to viewModel.videoId,
+            TITLE to contentTitle.text.toString(),
+            SECTION_ID to viewModel.sectionId,
+            RUN_ATTEMPT_ID to viewModel.attemptId,
+            CONTENT_ID to viewModel.contentId))
+        rootLayout.showSnackbar("Download Video In Progress", Snackbar.LENGTH_LONG)
     }
 
     private fun setupViewPager() {
@@ -404,6 +449,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
     }
 
     private fun setYoutubePlayer(promoVideo: String) {
+        lifecycle.addObserver(youtubePlayerView)
         youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 youtubePlayer = youTubePlayer

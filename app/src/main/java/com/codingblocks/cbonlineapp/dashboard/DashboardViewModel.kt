@@ -73,7 +73,7 @@ class DashboardViewModel(
                             myCourseRepo.insertCourses(it.get() ?: emptyList())
                             val currentOffSet = getMeta(it.meta, "currentOffset").toString()
                             val nextOffSet = getMeta(it.meta, "nextOffset").toString()
-                            if (currentOffSet != nextOffSet) {
+                            if (currentOffSet != nextOffSet && nextOffSet != "null") {
                                 fetchMyCourses(nextOffSet)
                                 if (it.get()?.isEmpty() == true)
                                     courses.postValue(emptyList())

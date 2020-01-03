@@ -55,7 +55,7 @@ class DashboardMyCoursesRepository(
                         runAttempts?.first()?.certificateApproved ?: false,
                         totalContents,
                         completedContents,
-                        (totalContents / completedContents).toDouble(),
+                        if (completedContents > 0) (totalContents / completedContents).toDouble() else 0.toDouble(),
                         completionThreshold ?: 0,
                         goodiesThreshold ?: 0,
                         productId ?: 0

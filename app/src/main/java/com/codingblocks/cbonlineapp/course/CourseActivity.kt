@@ -97,7 +97,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         }
 
         viewModel.course.observer(this) { course ->
-            showTags(course.runs?.first()?.tags)
+            showTags(course.tags)
             courseSummaryTv.text = course.summary
             title = course.title
             shortTv.text = course.subtitle

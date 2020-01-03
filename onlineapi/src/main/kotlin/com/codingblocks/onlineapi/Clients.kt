@@ -43,6 +43,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jasminb.jsonapi.ResourceConverter
+import com.github.jasminb.jsonapi.SerializationFeature
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import com.google.gson.GsonBuilder
 import okhttp3.ConnectionPool
@@ -102,10 +103,13 @@ object Clients {
         }
         .build()
 
+    const val DEBUG = "192.168.0.155:3000"
+    const val PROD = "192.168.0.155"
+
 
     private val onlineV2JsonRetrofit = Retrofit.Builder()
         .client(ClientInterceptor)
-        .baseUrl("http://192.168.1.8:3000/api/v2/")
+        .baseUrl("http://$DEBUG/api/v2/")
         .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
         .addConverterFactory(JacksonConverterFactory.create(om))
         .build()
@@ -119,7 +123,7 @@ object Clients {
 
     private val retrofit = Retrofit.Builder()
         .client(ClientInterceptor)
-        .baseUrl("https://192.168.1.8:3000/api/")
+        .baseUrl("http://$DEBUG/api/")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
     val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)

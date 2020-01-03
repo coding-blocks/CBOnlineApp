@@ -46,7 +46,7 @@ class MyCourseListAdapter : ListAdapter<CourseInstructorPair, MyCourseListAdapte
 //                //Todo Fix this
 //                ImageViewCompat.setImageTintList(courseLogoImg, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.brownish_grey)))
 //            }
-            val progress = (0..100).random()
+            val progress = item.courseRun.progress
             progressTv.text = "$progress %"
             progressView1.progress = progress.toFloat()
             if (progress > 90) {

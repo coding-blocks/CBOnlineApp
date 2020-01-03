@@ -8,12 +8,14 @@ import android.graphics.BitmapFactory
 import android.os.Environment
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.work.CoroutineWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.models.DownloadData
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
+import com.codingblocks.onlineapi.Clients
 import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.offline.DownloadOptions
@@ -25,13 +27,14 @@ import com.vdocipher.aegis.offline.VdoDownloadManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import retrofit2.Response
 import java.io.File
 
 class DownloadWorker(context: Context, private val workerParameters: WorkerParameters) :
-    Worker(context, workerParameters),
+    CoroutineWorker(context, workerParameters),
     KoinComponent,
     VdoDownloadManager.EventListener {
 
@@ -41,14 +44,14 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
 
     val contentDao: ContentDao by inject()
 
-    override fun onStopped() {
-        super.onStopped()
-        for (data in downloadList) {
-            notificationManager.cancel(data.notificationId)
-        }
-    }
+//    override fun onStopped() {
+//        super.onStopped()
+//        for (data in downloadList) {
+//            notificationManager.cancel(data.notificationId)
+//        }
+//    }
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         val contentId = workerParameters.inputData.getString(CONTENT_ID) ?: ""
         val attemptId = workerParameters.inputData.getString(RUN_ATTEMPT_ID) ?: ""
         val videoId = workerParameters.inputData.getString(VIDEO_ID) ?: ""
@@ -74,26 +77,25 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
         )
         notificationManager.notify(downloadData.notificationId, downloadData.notificationBuilder.build())
         val response: Response<JsonObject>
-//        response = Clients.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true).execute()
-//
-//        if (response.isSuccessful) {
-//            response.body()?.let {
-//                downloadList.add(downloadData)
-//                val mOtp = it.get("otp").asString
-//                val mPlaybackInfo = it.get("playbackInfo").asString
-//                initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
-//            }
+        response = withContext(Dispatchers.IO) { Clients.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
+        if (response.isSuccessful) {
+            response.body()?.let {
+                downloadList.add(downloadData)
+                val mOtp = it.get("otp").asString
+                val mPlaybackInfo = it.get("playbackInfo").asString
+                initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
+            }
             return Result.success()
-//        } else {
-//            for (data in downloadList) {
-//                notificationManager.cancel(data.notificationId)
-//            }
-//            if (response.code() in (500..599)) {
-//                // try again if there is a server error
-//                return Result.retry()
-//            }
-//            return Result.failure()
-//        }
+        } else {
+            for (data in downloadList) {
+                notificationManager.cancel(data.notificationId)
+            }
+            if (response.code() in (500..599)) {
+                // try again if there is a server error
+                return Result.retry()
+            }
+            return Result.failure()
+        }
     }
 
     private fun initializeDownload(mOtp: String, mPlaybackInfo: String, videoId: String) {

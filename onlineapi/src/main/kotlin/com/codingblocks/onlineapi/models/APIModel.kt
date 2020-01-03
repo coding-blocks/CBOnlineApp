@@ -52,7 +52,9 @@ data class Course(
     @Relationship("active-runs")
     val activeRuns: ArrayList<Runs>?,
     @Relationship("projects", resolve = true)
-    var projects: ArrayList<Project>?
+    var projects: ArrayList<Project>?,
+    @Relationship("tags")
+    val tags: ArrayList<Tags>?
 ) : BaseModel()
 
 @Type("runs")
@@ -78,11 +80,8 @@ data class Runs(
     val productId: Int?,
     val completionThreshold: Int?,
     val goodiesThreshold: Int?,
-    //TODO ( Remove these values )
-    val totalContents: Int = 100,
-    val completedContents: Int = 50,
-    @Relationship("tags")
-    val tags: ArrayList<Tags>?
+    val totalContents: Int,
+    val completedContents: Int
 ) : BaseModel() {
 
 }
@@ -295,7 +294,7 @@ class ContentProgress(
     val createdAt: String? = null,
     val status: String,
     val runAttemptId: String? = null,
-    @Relationship("run_attempt")
+    @Relationship("run-attempt")
     val runAttempt: RunAttempts? = null,
     @Relationship("content")
     val content: LectureContent? = null
@@ -401,11 +400,10 @@ class QuizQuestion : BaseModel() {
 @Type("notes")
 class Note(
     val duration: Double,
-    @JsonProperty("createdAt")
     val createdAt: String? = null,
     val deletedAt: String? = null,
     val text: String,
-    @Relationship("run_attempt")
+    @Relationship("run-attempt")
     val runAttempt: RunAttempts? = null,
     @Relationship("content")
     val content: LectureContent? = null
