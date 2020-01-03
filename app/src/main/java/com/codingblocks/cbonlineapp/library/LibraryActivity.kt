@@ -2,7 +2,13 @@ package com.codingblocks.cbonlineapp.library
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.selection.SelectionPredicates
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StableIdKeyProvider
+import androidx.recyclerview.selection.StorageStrategy
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.dashboard.doubts.MyItemDetailsLookup
+import com.codingblocks.cbonlineapp.dashboard.doubts.MyItemKeyProvider
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.TYPE
@@ -19,6 +25,8 @@ class LibraryActivity : AppCompatActivity() {
         intent.getStringExtra(TYPE) ?: ""
     }
     private val notesListAdapter = LibraryNotesListAdapter()
+    private var tracker: SelectionTracker<Long>? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +42,26 @@ class LibraryActivity : AppCompatActivity() {
             getString(R.string.bookmarks) -> viewModel.fetchNotes()
             getString(R.string.downloads) -> viewModel.fetchNotes()
         }
+
+        tracker = SelectionTracker.Builder<Long>(
+            "mySelection",
+            libraryRv,
+            MyItemKeyProvider(libraryRv),
+            MyItemDetailsLookup(libraryRv),
+            StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+            SelectionPredicates.createSelectAnything()
+        ).build()
+
+        notesListAdapter.tracker = tracker
+
+        tracker?.addObserver(
+            object : SelectionTracker.SelectionObserver<Long>() {
+                override fun onSelectionChanged() {
+                    super.onSelectionChanged()
+                    val items = tracker?.selection!!.size()
+                }
+            })
 
         viewModel.notes.observer(this) { notes ->
             notesListAdapter.submitList(notes)

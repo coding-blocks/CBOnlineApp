@@ -3,6 +3,9 @@ package com.codingblocks.cbonlineapp.library
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +23,13 @@ class LibraryNotesListAdapter(val type: String = "") : ListAdapter<NotesModel, R
     var onDeleteClick: DeleteNoteClickListener? = null
     var onEditClick: EditNoteClickListener? = null
     var onItemClick: ItemClickListener? = null
+    var tracker: SelectionTracker<Long>? = null
+
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long = position.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (type == VIDEO) {
@@ -44,16 +54,28 @@ class LibraryNotesListAdapter(val type: String = "") : ListAdapter<NotesModel, R
                 itemClickListener = onItemClick
             }
         else
-            (holder as ItemViewHolder).bind(getItem(position))
+            (holder as ItemViewHolder).apply {
+                tracker?.let {
+                    bind(getItem(position), it.isSelected(position.toLong()))
+                }
+            }
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: NotesModel) = with(itemView) {
+        fun bind(item: NotesModel, isActivated: Boolean = false) = with(itemView) {
 
             noteTitleTv.text = item.contentTitle
             noteDescriptionTv.text = item.text
             noteTimeTv.text = item.createdAt.timeAgo()
+            selectionImg.isVisible = isActivated
+            noteTimeTv.isVisible = !isActivated
         }
+
+        fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
+            object : ItemDetailsLookup.ItemDetails<Long>() {
+                override fun getPosition(): Int = adapterPosition
+                override fun getSelectionKey(): Long? = itemId
+            }
     }
 
     class ItemVideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
