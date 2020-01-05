@@ -27,7 +27,6 @@ class LibraryActivity : AppCompatActivity() {
     private val notesListAdapter = LibraryNotesListAdapter()
     private var tracker: SelectionTracker<Long>? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_library)
