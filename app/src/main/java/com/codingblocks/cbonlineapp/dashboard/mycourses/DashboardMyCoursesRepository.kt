@@ -97,7 +97,7 @@ class DashboardMyCoursesRepository(
     private suspend fun getInstructors(instructors: ArrayList<Instructor>, courseId: String) {
         instructors.forEach {
             if (instructorDao.getInstructorById(it.id).isNullOrEmpty())
-                when (val response = safeApiCall { Clients.onlineV2JsonApi.instructorsById(it.id) }) {
+                when (val response = safeApiCall { Clients.onlineV2JsonApi.getInstructor(it.id) }) {
                     is ResultWrapper.Success -> {
                         if (response.value.isSuccessful)
                             response.value.body()?.let {
