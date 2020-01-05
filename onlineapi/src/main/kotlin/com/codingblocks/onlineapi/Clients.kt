@@ -104,12 +104,12 @@ object Clients {
         .build()
 
     const val DEBUG = "192.168.0.155:3000"
-    const val PROD = "192.168.0.155"
+    const val PROD = "online-api.codingblocks.com"
 
 
     private val onlineV2JsonRetrofit = Retrofit.Builder()
         .client(ClientInterceptor)
-        .baseUrl("http://$DEBUG/api/v2/")
+        .baseUrl("http://$PROD/api/v2/")
         .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
         .addConverterFactory(JacksonConverterFactory.create(om))
         .build()

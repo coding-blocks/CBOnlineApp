@@ -7,7 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.util.FileUtils
-import com.codingblocks.onlineapi.models.CourseId
+import com.codingblocks.onlineapi.models.Course
 import java.sql.Date
 
 @Entity
@@ -119,7 +119,7 @@ data class JobsModel(
     val title: String,
     @Embedded
     val company: Companies,
-    val courseId: ArrayList<CourseId>
+    val courseId: ArrayList<Course>
 )
 
 class FormModel(
