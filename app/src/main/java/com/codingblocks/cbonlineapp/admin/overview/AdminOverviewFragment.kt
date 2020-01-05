@@ -17,9 +17,6 @@ import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_admin.*
 import kotlinx.android.synthetic.main.admin_overview_fragment.*
-import kotlinx.android.synthetic.main.admin_overview_fragment.nextBtn
-import kotlinx.android.synthetic.main.admin_overview_fragment.prevBtn
-import kotlinx.android.synthetic.main.doubts_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AdminOverviewFragment : Fragment() {

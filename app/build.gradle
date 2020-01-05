@@ -121,8 +121,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth-api-phone:17.3.0'
 
     // 3rd party libs
-    implementation 'io.github.inflationx:calligraphy3:3.1.1'
-    implementation 'io.github.inflationx:viewpump:2.0.3'
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
     implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
     implementation 'com.onesignal:OneSignal:3.12.4'

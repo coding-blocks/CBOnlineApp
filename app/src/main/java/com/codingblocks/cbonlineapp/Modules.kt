@@ -7,10 +7,10 @@ import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewRepository
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.course.CourseViewModel
-import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsViewModel
+import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.jobs.JobsViewModel
@@ -21,9 +21,9 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.leaderboard.LeaderboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerRepository
-import com.codingblocks.cbonlineapp.notifications.NotificationViewModel
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
+import com.codingblocks.cbonlineapp.notifications.NotificationViewModel
 import com.codingblocks.cbonlineapp.settings.SettingsViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel

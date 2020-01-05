@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.settings
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
@@ -12,7 +11,6 @@ import com.codingblocks.cbonlineapp.util.extensions.folderSize
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.readableFileSize
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
-import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_settings.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
@@ -88,9 +86,5 @@ class SettingsActivity : AppCompatActivity() {
         val size = (1 + progress / 100.toDouble()).toFloat()
         seekbarTv.text = "${size}GB"
         getPrefs().SP_DATA_LIMIT = size
-    }
-
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 }

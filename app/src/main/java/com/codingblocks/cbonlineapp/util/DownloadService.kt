@@ -75,9 +75,7 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
                         initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
                     }
                 }
-
             }
-
         }
         return START_STICKY
     }

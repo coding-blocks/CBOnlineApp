@@ -8,9 +8,14 @@ import org.ocpsoft.prettytime.PrettyTime
 import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.TimeZone
+import java.util.Locale
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import kotlin.NoSuchElementException
+import kotlin.math.floor
+import kotlin.math.log10
 
 fun folderSize(directory: File): Long {
     var length: Long = 0
@@ -26,7 +31,7 @@ fun folderSize(directory: File): Long {
 fun Long.readableFileSize(): String {
     if (this <= 0) return "0 MB"
     val units = arrayOf("B", "kB", "MB", "GB", "TB")
-    val digitGroups = (Math.log10(this.toDouble()) / Math.log10(1024.0)).toInt()
+    val digitGroups = (log10(this.toDouble()) / log10(1024.0)).toInt()
     return DecimalFormat("#,##0.#").format(
         this / Math.pow(
             1024.0,
@@ -131,28 +136,28 @@ fun getSpannableSring(normalText: String, boldText: String): SpannableStringBuil
         .bold { append(boldText) }
 
 fun timeAgo(time: Long): String {
-    val diff = Math.floor(((System.currentTimeMillis() - time) / 1000).toDouble())
-    var interval = Math.floor(diff / 31536000).toInt()
+    val diff = floor(((System.currentTimeMillis() - time) / 1000).toDouble())
+    var interval = floor(diff / 31536000).toInt()
     if (interval >= 1) {
         return "$interval Years Ago"
     }
-    interval = Math.floor(diff / 2592000).toInt()
+    interval = floor(diff / 2592000).toInt()
     if (interval >= 1) {
         return "$interval Months Ago"
     }
-    interval = Math.floor(diff / 604800).toInt()
+    interval = floor(diff / 604800).toInt()
     if (interval >= 1) {
         return "$interval Weeks Ago"
     }
-    interval = Math.floor(diff / 86400).toInt()
+    interval = floor(diff / 86400).toInt()
     if (interval >= 1) {
         return "$interval Days Ago"
     }
-    interval = Math.floor(diff / 3600).toInt()
+    interval = floor(diff / 3600).toInt()
     if (interval >= 1) {
         return "$interval Hours Ago"
     }
-    interval = Math.floor(diff / 60).toInt()
+    interval = floor(diff / 60).toInt()
     if (interval >= 1) {
         return "$interval Minutes Ago"
     }

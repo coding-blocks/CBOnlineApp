@@ -103,7 +103,7 @@ object Clients {
         }
         .build()
 
-    const val DEBUG = "192.168.0.155:3000"
+    const val DEBUG = "192.168.0.116:3000"
     const val PROD = "192.168.0.155"
 
 

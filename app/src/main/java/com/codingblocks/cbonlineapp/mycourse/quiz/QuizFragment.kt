@@ -24,7 +24,6 @@ import com.codingblocks.onlineapi.Clients
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.bottom_question_sheet.*
-import kotlinx.android.synthetic.main.custom_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor

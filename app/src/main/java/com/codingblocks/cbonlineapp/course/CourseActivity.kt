@@ -33,7 +33,6 @@ import com.google.android.material.chip.Chip
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.android.synthetic.main.bottom_sheet_batch.view.*
-import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

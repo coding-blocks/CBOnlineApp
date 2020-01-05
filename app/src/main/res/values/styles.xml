@@ -26,9 +26,9 @@
         <!-- enable window content transitions -->
         <item name="android:windowActivityTransitions">true</item>
 
-        <!-- specify enter and exit transitions -->
-        <item name="android:windowEnterTransition">@transition/explode</item>
-        <item name="android:windowExitTransition">@transition/explode</item>
+        <!--        &lt;!&ndash; specify enter and exit transitions &ndash;&gt;-->
+        <!--        <item name="android:windowEnterTransition">@transition/explode</item>-->
+        <!--        <item name="android:windowExitTransition">@transition/explode</item>-->
     </style>
 
     <style name="NewAppTheme.Dark" parent="NewAppTheme">

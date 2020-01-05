@@ -19,7 +19,6 @@ import com.codingblocks.cbonlineapp.util.DOUBT_ID
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import kotlinx.android.synthetic.main.fragment_video_doubt.*
-import kotlinx.android.synthetic.main.fragment_video_doubt.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop

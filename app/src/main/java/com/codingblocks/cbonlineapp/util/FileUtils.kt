@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Environment
 import com.codingblocks.cbonlineapp.util.extensions.folderSize
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
-import kotlinx.android.synthetic.main.custom_dialog.view.*
 import java.io.File
 
 const val FILE_THRESHOLD = 256000

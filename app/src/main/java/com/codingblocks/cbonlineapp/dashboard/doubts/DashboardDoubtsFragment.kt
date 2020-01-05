@@ -35,8 +35,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard_doubts.*
-import kotlinx.android.synthetic.main.fragment_dashboard_doubts.emptyLl
-import kotlinx.android.synthetic.main.fragment_dashboard_library.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel

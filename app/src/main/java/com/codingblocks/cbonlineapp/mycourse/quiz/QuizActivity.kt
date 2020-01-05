@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.mycourse.quiz
 
-import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
@@ -8,7 +7,6 @@ import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.QUIZ_ID
 import com.codingblocks.cbonlineapp.util.QUIZ_QNA
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_quiz.*
 
 class QuizActivity : AppCompatActivity() {
@@ -35,10 +33,6 @@ class QuizActivity : AppCompatActivity() {
                 .setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
                 .commit()
         }
-    }
-
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
     override fun onBackPressed() {

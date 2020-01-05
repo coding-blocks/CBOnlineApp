@@ -22,13 +22,9 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.crashlytics.android.Crashlytics
 import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
-import io.github.inflationx.calligraphy3.CalligraphyConfig
-import io.github.inflationx.calligraphy3.CalligraphyInterceptor
-import io.github.inflationx.viewpump.ViewPump
 import org.jetbrains.anko.notificationManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import java.io.File
 
 class CBOnlineApp : Application() {
 
@@ -77,20 +73,6 @@ class CBOnlineApp : Application() {
             .setNotificationOpenedHandler(NotificationOpenedHandler())
             .init()
 
-        // Initiate Calligraphy
-        ViewPump.init(
-            ViewPump.builder()
-                .addInterceptor(
-                    CalligraphyInterceptor(
-                        CalligraphyConfig.Builder()
-                            .setDefaultFontPath("fonts/nunitosans_regular.ttf")
-                            .setFontAttrId(R.attr.fontPath)
-                            .build()
-                    )
-                )
-                .build()
-        )
-
         // Configure Routers
         try {
             Router.initActivityRouter(applicationContext, IActivityRouteTableInitializer { router ->
@@ -104,33 +86,5 @@ class CBOnlineApp : Application() {
         } catch (e: ConcurrentModificationException) {
             Crashlytics.log("Router not working : ${e.localizedMessage}")
         }
-    }
-
-    fun clearApplicationData() {
-        val applicationCacheDirectory = File(cacheDir.parent)
-        if (applicationCacheDirectory.exists()) {
-            val fileNames = applicationCacheDirectory.list()
-            for (fileName in fileNames) {
-                if (fileName != "lib") {
-                    deleteFile(File(applicationCacheDirectory, fileName))
-                }
-            }
-        }
-    }
-
-    private fun deleteFile(file: File?): Boolean {
-        var deletedAll = true
-        if (file != null) {
-            if (file.isDirectory) {
-                val children = file.list()
-                for (i in children.indices) {
-                    deletedAll = deleteFile(File(file, children[i])) && deletedAll
-                }
-            } else {
-                deletedAll = file.delete()
-            }
-        }
-
-        return deletedAll
     }
 }

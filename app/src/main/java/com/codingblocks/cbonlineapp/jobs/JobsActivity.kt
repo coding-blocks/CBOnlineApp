@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.jobs
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +18,6 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.tabs.TabLayout
-import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_jobs.*
 import org.jetbrains.anko.design.indefiniteSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -232,9 +230,5 @@ class JobsActivity : AppCompatActivity() {
                 }
             }
         })
-    }
-
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 }
