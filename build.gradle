@@ -13,7 +13,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.0-rc01'
+        classpath 'com.android.tools.build:gradle:3.5.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.android.tools.build.jetifier:jetifier-processor:1.0.0-beta07'
         classpath 'com.google.gms:google-services:4.3.3'
@@ -23,6 +23,9 @@ buildscript {
 }
 allprojects {
     repositories {
+        maven {
+            url "file://${project.rootDir}/.m2/repository"
+        }
         mavenCentral()
         google()
         jcenter()

@@ -84,7 +84,10 @@ interface OnlineJsonApi {
 
 
     @GET("instructors/{id}")
-    suspend fun instructorsById(@Path("id") id: String): Response<Instructor>
+    suspend fun getInstructor(@Path("id") id: String): Response<Instructor>
+
+    @GET("instructors/")
+    suspend fun getAllInstructors(): Response<List<Instructor>>
 
     @GET("courses")
     suspend fun getRecommendedCourses(
@@ -141,14 +144,14 @@ interface OnlineJsonApi {
 
 
     @GET("courses")
-    fun getAllCourses(
+    suspend fun getAllCourses(
         @Query("exclude") query: String = "ratings,instructors.*",
         @Query("filter[unlisted]") unlisted: String = "false",
         @Query("include") include: String = "instructors,runs",
         @Query("page[limit]") page: String = "8",
         @Query("page[offset]") offset: String = "0",
         @Query("sort") sort: String = "difficulty"
-    ): Call<ArrayList<Course>>
+    ): Response<List<Course>>
 
 
     @GET("quizzes/{quizid}")
@@ -198,8 +201,8 @@ interface OnlineJsonApi {
         @Body params: QuizAttempt
     ): Call<QuizAttempt>
 
-    @get:GET("carousel_cards?sort=order")
-    val carouselCards: Call<ArrayList<CarouselCards>>
+    @GET("carousel_cards?sort=order")
+    suspend fun getCarouselCards(): Response<List<CarouselCards>>
 
     @POST("players")
     fun setPlayerId(@Body params: Player): Call<ResponseBody>

@@ -104,7 +104,7 @@ object Clients {
         .build()
 
     const val DEBUG = "192.168.0.116:3000"
-    const val PROD = "192.168.0.155"
+    const val PROD = "online-api.codingblocks.com"
 
 
     private val onlineV2JsonRetrofit = Retrofit.Builder()

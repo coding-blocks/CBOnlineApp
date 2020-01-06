@@ -15,7 +15,7 @@ import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Applications
-import com.codingblocks.onlineapi.models.CourseId
+import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Form
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,7 +29,7 @@ class JobDetailViewModel(
     private val inactiveLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val acceptingLiveData: MutableLiveData<Boolean> = MutableLiveData()
     val formData: MutableLiveData<ArrayList<Form>> = MutableLiveData()
-    val courseIdList: MutableLiveData<ArrayList<CourseId>> = MutableLiveData()
+    val courseIdList: MutableLiveData<ArrayList<Course>> = MutableLiveData()
     var jobCourses: LiveData<List<CourseInstructorPair>> = MutableLiveData()
 
     init {
@@ -76,7 +76,7 @@ class JobDetailViewModel(
                                     website ?: ""
                                 )
                             },
-                            courses ?: arrayListOf()
+                            courses ?: arrayListOf<Course>()
                         )
                         if (application != null) {
                             eligibleLiveData.value = mInstance.getString(R.string.applied)

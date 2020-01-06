@@ -30,7 +30,7 @@ data class Project(
     val image: String = ""
 ) : BaseModel()
 
-@Type("courses")
+@Type("courses", "course")
 data class Course(
     val title: String,
     val subtitle: String,
@@ -49,7 +49,7 @@ data class Course(
     val instructors: ArrayList<Instructor>?,
     @Relationship("runs")
     val runs: ArrayList<Runs>?,
-    @Relationship("active-runs")
+    @Relationship("active_runs", "active-runs")
     val activeRuns: ArrayList<Runs>?,
     @Relationship("projects", resolve = true)
     var projects: ArrayList<Project>?,
@@ -57,7 +57,7 @@ data class Course(
     val tags: ArrayList<Tags>?
 ) : BaseModel()
 
-@Type("runs")
+@Type("runs", "run")
 data class Runs(
     val name: String?,
     val description: String?,
@@ -70,7 +70,7 @@ data class Runs(
     val enrollmentEnd: String?,
     @Relationship("sections")
     val sections: ArrayList<Sections>?,
-    @Relationship("run-attempts")
+    @Relationship("run_attempts", "run-attempts")
     var runAttempts: ArrayList<RunAttempts>?,
     @Relationship("course")
     var course: Course?,
@@ -109,7 +109,7 @@ data class Doubts(
     var status: String = "PENDING",
     val discourseTopicId: String = "",
     val conversationId: String? = null,
-    @Relationship("run-attempt")
+    @Relationship("run_attempt", "run-attempt")
     val runAttempt: RunAttempts? = null,
     @Relationship("content")
     val content: LectureContent? = null,
@@ -119,7 +119,7 @@ data class Doubts(
     val acknowledgedAt: String? = null,
     val resolvedAt: String? = null,
     val firebaseRef: String? = null,
-    @Relationship("resolved-by")
+    @Relationship("resolved_by", "resolved-by")
     val resolvedBy: User? = null
 ) : BaseModel() {
     constructor(id: String, title: String,
@@ -163,7 +163,7 @@ class LectureContent(
     val duration: Long?,
     val title: String?,
     val sectionContent: SectionContent?,
-    @Relationship("code-challenge")
+    @Relationship("code_challenge", "code-challenge")
     val codeChallenge: ContentCodeChallenge?,
     @Relationship("document")
     val document: ContentDocumentType?,
@@ -201,7 +201,7 @@ class SectionContent(
 
 // =======Section Content Models =========
 
-@Type("code_challenges")
+@Type("code_challenges", "code_challenge")
 class ContentCodeChallenge() : BaseModel() {
     @JvmField
     var contentId: String? = null
@@ -213,7 +213,7 @@ class ContentCodeChallenge() : BaseModel() {
     var hbProblemId: Int? = null
 }
 
-@Type("qnas")
+@Type("qnas", "qna")
 class ContentQna : BaseModel() {
     @JvmField
     var contentId: String? = null
@@ -241,7 +241,7 @@ class ContentCsv : BaseModel() {
     var judgeScript: String? = null
 }
 
-@Type("documents")
+@Type("documents", "document")
 class ContentDocumentType : BaseModel() {
     @JvmField
     var contentId: String? = null
@@ -255,7 +255,7 @@ class ContentDocumentType : BaseModel() {
     var pdfLink: String? = null
 }
 
-@Type("lectures")
+@Type("lectures", "lecture")
 class ContentLectureType : BaseModel() {
     @JvmField
     var createdAt: String? = null
@@ -271,7 +271,7 @@ class ContentLectureType : BaseModel() {
     var videoId: String? = null
 }
 
-@Type("videos")
+@Type("videos", "video")
 class ContentVideoType : BaseModel() {
     @JvmField
     var description: String? = null
@@ -285,7 +285,7 @@ class ContentVideoType : BaseModel() {
     var url: String? = null
 }
 
-@Type("progresses")
+@Type("progresses", "progress")
 class ContentProgress(
     @Id
     val id: String? = null,
@@ -294,7 +294,7 @@ class ContentProgress(
     val createdAt: String? = null,
     val status: String,
     val runAttemptId: String? = null,
-    @Relationship("run-attempt")
+    @Relationship("run_attempt", "run-attempt")
     val runAttempt: RunAttempts? = null,
     @Relationship("content")
     val content: LectureContent? = null
@@ -365,7 +365,7 @@ class QuizAttempt : BaseModel() {
     //    @Relationship("qna", resolve = true)
 //    @JvmField
 //    var qna: Quizqnas? = null
-    @Relationship("run-attempt", resolve = true)
+    @Relationship("run_attempt", "run-attempt", resolve = true)
     @JvmField
     var runAttempt: RunAttemptsId? = null
     @JvmField
@@ -403,7 +403,7 @@ class Note(
     val createdAt: String? = null,
     val deletedAt: String? = null,
     val text: String,
-    @Relationship("run-attempt")
+    @Relationship("run_attempt", "run-attempt")
     val runAttempt: RunAttempts? = null,
     @Relationship("content")
     val content: LectureContent? = null
@@ -445,7 +445,7 @@ class DoubtLeaderBoard(
     var user: User?
 ) : BaseModel()
 
-@Type("run-attempts")
+@Type("run_attempts", "run-attempts")
 class RunAttemptsId(
     @Id
     val id: String?
@@ -494,16 +494,10 @@ class Jobs(
     @Relationship("company")
     val company: Company?,
     @Relationship("courses")
-    val courses: ArrayList<CourseId>?,
-    @Relationship("my-application")
+    val courses: ArrayList<Course>?,
+    @Relationship("my_application", "my-application")
     val application: ApplicationId?
 ) : BaseModel()
-
-@Type("course")
-data class CourseId(
-    @Id
-    val id: String?
-)
 
 class Form(
     val name: String,
