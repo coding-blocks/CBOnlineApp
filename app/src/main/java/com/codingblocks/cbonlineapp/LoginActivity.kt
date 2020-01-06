@@ -26,7 +26,6 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
                 "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
             )
         }
-
         skipBtn.setOnClickListener {
             redirectToHome()
         }

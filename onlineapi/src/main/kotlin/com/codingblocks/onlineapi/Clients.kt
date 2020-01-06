@@ -30,7 +30,6 @@ import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.Rating
 import com.codingblocks.onlineapi.models.RunAttempts
-import com.codingblocks.onlineapi.models.RunAttemptsId
 import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Tags
@@ -71,8 +70,7 @@ object Clients {
         LectureContent::class.java, ContentDocumentType::class.java, ContentProgress::class.java, ContentLectureType::class.java, ContentCodeChallenge::class.java,
         ContentQna::class.java, Announcement::class.java, Quizzes::class.java,
         Question::class.java, Choice::class.java, QuizAttempt::class.java, Doubts::class.java, ContentCsv::class.java, Comment::class.java,
-        Note::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java,
-        RunAttemptsId::class.java, Jobs::class.java, Company::class.java, JobId::class.java,
+        Note::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java, Jobs::class.java, Company::class.java, JobId::class.java,
         Applications::class.java, ApplicationId::class.java, DoubtLeaderBoard::class.java, User::class.java,
         Project::class.java
     )
@@ -103,7 +101,7 @@ object Clients {
         }
         .build()
 
-    const val DEBUG = "192.168.0.116:3000"
+    private const val DEBUG = "192.168.0.100:3000"
     const val PROD = "online-api.codingblocks.com"
 
 

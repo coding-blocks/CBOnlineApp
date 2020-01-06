@@ -202,8 +202,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
     }
 
     override fun onBackPressed() {
-        youtubePlayerView.release()
-        supportFinishAfterTransition()
+//        youtubePlayerView.release()
+//        supportFinishAfterTransition()
         super.onBackPressed()
     }
 }

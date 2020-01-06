@@ -1,6 +1,5 @@
 package com.codingblocks.onlineapi.models
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.github.jasminb.jsonapi.Links
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
@@ -367,7 +366,7 @@ class QuizAttempt : BaseModel() {
 //    var qna: Quizqnas? = null
     @Relationship("run_attempt", "run-attempt", resolve = true)
     @JvmField
-    var runAttempt: RunAttemptsId? = null
+    var runAttempt: RunAttempts? = null
     @JvmField
     var submission: ArrayList<QuizSubmission> = arrayListOf()
 }
@@ -419,8 +418,23 @@ class Note(
     fun serializeToJson(): String {
         return Gson().toJson(this)
     }
-
 }
+
+@Type("bookmark")
+class Bookmark(
+    @Relationship("run-attempt")
+    val runAttempt: RunAttempts? = null,
+    @Relationship("content")
+    val content: LectureContent? = null,
+    @Relationship("section")
+    val section: Sections? = null
+) : BaseModel() {
+    constructor(id: String, runAttemptId: RunAttempts, contentId: LectureContent, sectionId: Sections)
+        : this(runAttemptId, contentId, sectionId) {
+        super.id = id
+    }
+}
+
 
 @Type("users")
 class User(
@@ -445,11 +459,6 @@ class DoubtLeaderBoard(
     var user: User?
 ) : BaseModel()
 
-@Type("run_attempts", "run-attempts")
-class RunAttemptsId(
-    @Id
-    val id: String?
-)
 
 @Type("rating")
 class Rating : BaseModel()

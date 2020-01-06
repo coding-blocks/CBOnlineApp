@@ -1,6 +1,7 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.Applications
+import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Company
@@ -74,6 +75,12 @@ interface OnlineJsonApi {
     suspend fun getCommentsById(
         @Path("doubtId") id: String
     ): Response<List<Comment>>
+
+    @GET("bookmark")
+    suspend fun markBookmark(
+        @Body params: Bookmark
+    ): Response<List<Bookmark>>
+
 
     @GET("runs")
     suspend fun getMyCourses(

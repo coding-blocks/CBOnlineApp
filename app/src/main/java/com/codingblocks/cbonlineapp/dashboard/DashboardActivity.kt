@@ -45,9 +45,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, FragmentChangeListener, FabNavigation.OnTabSelectedListener {
 
     private val pagerAdapter by lazy { TabLayoutAdapter(supportFragmentManager) }
-    private val navigationAdapter: FabNavigationAdapter by lazy {
-        FabNavigationAdapter(this, R.menu.bottom_nav_dashboard)
-    }
+    private val navigationAdapter: FabNavigationAdapter by lazy { FabNavigationAdapter(this, R.menu.bottom_nav_dashboard) }
     private val appUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
     private val viewModel by viewModel<DashboardViewModel>()
     private var doubleBackToExitPressedOnce = false
