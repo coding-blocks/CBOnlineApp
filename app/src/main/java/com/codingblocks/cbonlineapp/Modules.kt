@@ -22,6 +22,7 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.leaderboard.LeaderboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerRepository
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
+import com.codingblocks.cbonlineapp.mycourse.quiz.QuizRepository
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
 import com.codingblocks.cbonlineapp.notifications.NotificationViewModel
 import com.codingblocks.cbonlineapp.settings.SettingsViewModel
@@ -35,8 +36,6 @@ val viewModelModule = module {
     viewModel { MyCourseViewModel(get()) }
     viewModel { LeaderboardViewModel() }
     viewModel { NotificationViewModel(get()) }
-
-    viewModel { QuizViewModel() }
 
     // Activities
     viewModel { VideoPlayerViewModel(get(), get()) }
@@ -52,6 +51,7 @@ val viewModelModule = module {
     viewModel { CourseViewModel(get()) }
     viewModel { LibraryViewModel(get()) }
     viewModel { DashboardViewModel(get(), get(), get()) }
+    viewModel { QuizViewModel(get()) }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
@@ -61,6 +61,7 @@ val viewModelModule = module {
     single { LibraryRepository(get(), get()) }
     single { DashboardHomeRepository(get(), get()) }
     single { VideoPlayerRepository(get(), get(), get(), get(), get(), get()) }
+    single { QuizRepository(get()) }
 
     single { Spork.create(androidApplication(), AppPrefs::class) }
 }

@@ -15,8 +15,8 @@ interface SectionDao : BaseDao<SectionModel> {
     abstract fun getSectionWithId(id: String): SectionModel
 
     @Query("SElECT * FROM SectionModel where attemptId = :courseId ORDER BY `sectionOrder`")
-    abstract fun getCourseSection(courseId: String): LiveData<List<SectionModel>>
+    fun getCourseSection(courseId: String): LiveData<List<SectionModel>>
 
     @Query("SElECT name FROM SectionModel where  csid = :id")
-    abstract suspend fun getSectionTitle(id: String): String
+    suspend fun getSectionTitle(id: String): String
 }

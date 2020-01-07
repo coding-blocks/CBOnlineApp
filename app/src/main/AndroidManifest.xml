@@ -143,6 +143,7 @@
         <activity
             android:name=".mycourse.quiz.QuizActivity"
             android:launchMode="singleTop"
+            android:theme="@style/NewAppTheme.Dark"
             android:parentActivityName=".mycourse.MyCourseActivity"
             android:screenOrientation="fullSensor" />
 

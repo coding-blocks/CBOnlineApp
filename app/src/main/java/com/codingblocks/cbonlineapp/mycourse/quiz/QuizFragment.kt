@@ -68,27 +68,27 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
         prevBtn.setOnClickListener(this)
         questionBtn.setOnClickListener(this)
 
-        Clients.onlineV2JsonApi.getQuizById(quizId).enqueue(retrofitCallback { _, response ->
-            response?.body()?.let { quiz ->
-                setupMutableBottomSheetData(quiz.questions?.size ?: 0)
-                setUpQuestionBottomSheet(quiz.questions?.size ?: 0)
-                quiz.questions?.forEachIndexed { index, question ->
-                    questionList.put(index, question.id)
-                    if (index == quiz.questions!!.size - 1) {
-                        Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, attemptResponse ->
-                            attemptResponse?.body().let {
-                                mAdapter = ViewPagerAdapter(context!!, qnaId, quizAttemptId, questionList, it?.submission, it?.result, this, viewModel)
-                                quizViewPager.adapter = mAdapter
-                                quizViewPager.currentItem = 0
-                                quizViewPager.offscreenPageLimit = quiz.questions?.size ?: 0
-                                quizViewPager.setOnPageChangeListener(this)
-                                quizViewPager.offscreenPageLimit = 3
-                            }
-                        })
-                    }
-                }
-            }
-        })
+//        Clients.onlineV2JsonApi.getQuizById(quizId).enqueue(retrofitCallback { _, response ->
+//            response?.body()?.let { quiz ->
+//                setupMutableBottomSheetData(quiz.questions?.size ?: 0)
+//                setUpQuestionBottomSheet(quiz.questions?.size ?: 0)
+//                quiz.questions?.forEachIndexed { index, question ->
+//                    questionList.put(index, question.id)
+//                    if (index == quiz.questions!!.size - 1) {
+//                        Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, attemptResponse ->
+//                            attemptResponse?.body().let {
+//                                mAdapter = ViewPagerAdapter(context!!, qnaId, quizAttemptId, questionList, it?.submission, it?.result, this, viewModel)
+//                                quizViewPager.adapter = mAdapter
+//                                quizViewPager.currentItem = 0
+//                                quizViewPager.offscreenPageLimit = quiz.questions?.size ?: 0
+//                                quizViewPager.setOnPageChangeListener(this)
+//                                quizViewPager.offscreenPageLimit = 3
+//                            }
+//                        })
+//                    }
+//                }
+//            }
+//        })
     }
 
     private fun setupMutableBottomSheetData(size: Int) {

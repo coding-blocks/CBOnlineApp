@@ -101,7 +101,7 @@ object Clients {
         }
         .build()
 
-    private const val DEBUG = "192.168.0.100:3000"
+    private const val DEBUG = "192.168.0.130:3000"
     const val PROD = "online-api.codingblocks.com"
 
 

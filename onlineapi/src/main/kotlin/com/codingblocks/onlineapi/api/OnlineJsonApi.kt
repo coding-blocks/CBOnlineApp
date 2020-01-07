@@ -149,6 +149,18 @@ interface OnlineJsonApi {
         @Body params: ContentProgress
     ): Response<ContentProgress>
 
+    @GET("quizzes/{quizId}")
+    suspend fun getQuizById(
+        @Path("quizId") id: String
+    ): Response<Quizzes>
+
+
+    @GET("quiz_attempts")
+    suspend fun getQuizAttempt(
+        @Query("filter[qnaId]") qnaId: String,
+        @Query("sort") sort: String = "-createdAt"
+    ): Response<List<QuizAttempt>>
+
 
     @GET("courses")
     suspend fun getAllCourses(
@@ -161,22 +173,12 @@ interface OnlineJsonApi {
     ): Response<List<Course>>
 
 
-    @GET("quizzes/{quizid}")
-    fun getQuizById(
-        @Path("quizid") id: String
-    ): Call<Quizzes>
 
     @GET("questions/{questionid}")
     fun getQuestionById(
         @Path("questionid") id: String,
         @Query("include") include: String = "choices"
     ): Call<Question>
-
-    @GET("quiz_attempts")
-    fun getQuizAttempt(
-        @Query("filter[qnaId]") qnaId: String,
-        @Query("sort") sort: String = "-createdAt"
-    ): Call<List<QuizAttempt>>
 
 
     @GET("quiz_attempts/{id}")

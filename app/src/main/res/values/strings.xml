@@ -218,5 +218,7 @@
     <string name="noted_del_msg">Note has been Deleted</string>
     <string name="edit_note">Edit Note</string>
     <string name="add_note">Add a Note</string>
+    <string name="start_quiz">Start Quiz</string>
+    <string name="view">View</string>
 
 </resources>

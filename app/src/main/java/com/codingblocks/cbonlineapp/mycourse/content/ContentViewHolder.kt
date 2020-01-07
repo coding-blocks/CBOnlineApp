@@ -123,6 +123,8 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                             context.intentFor<QuizActivity>(
                                 QUIZ_QNA to content.contentQna.qnaUid,
                                 RUN_ATTEMPT_ID to content.attempt_id,
+                                CONTENT_ID to content.ccid,
+                                SECTION_ID to content.sectionId,
                                 QUIZ_ID to content.contentQna.qnaQid.toString()
                             ).singleTop()
                         )

@@ -135,7 +135,7 @@ data class Doubts(
 }
 
 @Type("comment")
-class Comment(
+data class Comment(
     val body: String = "",
     val username: String = "",
     @Relationship("doubt")
@@ -157,7 +157,7 @@ data class Sections(
 ) : BaseModel()
 
 @Type("contents")
-class LectureContent(
+data class LectureContent(
     val contentable: String?,
     val duration: Long?,
     val title: String?,
@@ -191,6 +191,91 @@ data class Instructor(
     val email: String?,
     val sub: String?
 ) : BaseModel()
+
+@Type("progresses", "progress")
+data class ContentProgress(
+    @Id
+    val id: String? = null,
+    val updatedAt: String? = null,
+    val contentId: String? = null,
+    val createdAt: String? = null,
+    val status: String,
+    val runAttemptId: String? = null,
+    @Relationship("run_attempt", "run-attempt")
+    val runAttempt: RunAttempts? = null,
+    @Relationship("content")
+    val content: LectureContent? = null
+) {
+    constructor(status: String, runAttemptId: RunAttempts, contentId: LectureContent, progressId: String?)
+        : this(status = status, runAttempt = runAttemptId, content = contentId, id = progressId)
+}
+
+@Type("bookmark")
+data class Bookmark(
+    val id: String?,
+    @Relationship("run-attempt")
+    val runAttempt: RunAttempts? = null,
+    @Relationship("content")
+    val content: LectureContent? = null,
+    @Relationship("section")
+    val section: Sections? = null
+) {
+    constructor(runAttemptId: RunAttempts, contentId: LectureContent, sectionId: Sections)
+        : this(null, runAttemptId, contentId, sectionId)
+}
+
+@Type("quiz_attempts")
+data class QuizAttempt(
+    val createdAt: String,
+    var result: QuizResult?,
+    val status: String? = "DRAFT",
+//    @Relationship("qna", resolve = true)
+//    @JvmField
+//    var qna: Quizqnas? = null
+    @Relationship("run_attempt", "run-attempt")
+    var runAttempt: RunAttempts? = null,
+    var submission: ArrayList<QuizSubmission>? = arrayListOf()
+) : BaseModel() {
+}
+
+@Type("notes")
+data class Note(
+    val duration: Double,
+    val createdAt: String? = null,
+    val deletedAt: String? = null,
+    val text: String,
+    @Relationship("run_attempt", "run-attempt")
+    val runAttempt: RunAttempts? = null,
+    @Relationship("content")
+    val content: LectureContent? = null
+) : BaseModel(), Serializable {
+    constructor(id: String, duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent)
+        : this(duration, null, null, text, runAttemptId, contentId) {
+        super.id = id
+    }
+
+    constructor(duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent)
+        : this(duration, null, null, text, runAttemptId, contentId)
+
+    fun serializeToJson(): String {
+        return Gson().toJson(this)
+    }
+}
+
+@Type("users")
+data class User(
+    val email: String?,
+    val firstname: String,
+    val lastReadNotification: String?,
+    val lastname: String,
+    val oneauthId: String?,
+    val photo: String?,
+    val verifiedemail: String?,
+    val verifiedmobile: String?,
+    val roleId: Int = 0
+
+) : BaseModel()
+
 
 class SectionContent(
     val order: Int,
@@ -284,24 +369,6 @@ class ContentVideoType : BaseModel() {
     var url: String? = null
 }
 
-@Type("progresses", "progress")
-class ContentProgress(
-    @Id
-    val id: String? = null,
-    val updatedAt: String? = null,
-    val contentId: String? = null,
-    val createdAt: String? = null,
-    val status: String,
-    val runAttemptId: String? = null,
-    @Relationship("run_attempt", "run-attempt")
-    val runAttempt: RunAttempts? = null,
-    @Relationship("content")
-    val content: LectureContent? = null
-) {
-    constructor(status: String, runAttemptId: RunAttempts, contentId: LectureContent, progressId: String?)
-        : this(status = status, runAttempt = runAttemptId, content = contentId, id = progressId)
-}
-
 @Type("announcement")
 class Announcement : BaseModel() {
     @JvmField
@@ -353,24 +420,6 @@ class Choice : BaseModel() {
     var correct: Boolean? = null
 }
 
-@Type("quiz_attempts")
-class QuizAttempt : BaseModel() {
-    @JvmField
-    var createdAt: String? = null
-    @JvmField
-    var result: QuizResult? = null
-    @JvmField
-    var status: String? = "DRAFT"
-    //    @Relationship("qna", resolve = true)
-//    @JvmField
-//    var qna: Quizqnas? = null
-    @Relationship("run_attempt", "run-attempt", resolve = true)
-    @JvmField
-    var runAttempt: RunAttempts? = null
-    @JvmField
-    var submission: ArrayList<QuizSubmission> = arrayListOf()
-}
-
 class QuizSubmission : BaseModel() {
     @JvmField
     var markedChoices: Array<String>? = null
@@ -395,60 +444,6 @@ class QuizQuestion : BaseModel() {
     @JvmField
     var incorrectlyAnswered: Array<Choice>? = null
 }
-
-@Type("notes")
-class Note(
-    val duration: Double,
-    val createdAt: String? = null,
-    val deletedAt: String? = null,
-    val text: String,
-    @Relationship("run_attempt", "run-attempt")
-    val runAttempt: RunAttempts? = null,
-    @Relationship("content")
-    val content: LectureContent? = null
-) : BaseModel(), Serializable {
-    constructor(id: String, duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent)
-        : this(duration, null, null, text, runAttemptId, contentId) {
-        super.id = id
-    }
-
-    constructor(duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent)
-        : this(duration, null, null, text, runAttemptId, contentId)
-
-    fun serializeToJson(): String {
-        return Gson().toJson(this)
-    }
-}
-
-@Type("bookmark")
-class Bookmark(
-    @Relationship("run-attempt")
-    val runAttempt: RunAttempts? = null,
-    @Relationship("content")
-    val content: LectureContent? = null,
-    @Relationship("section")
-    val section: Sections? = null
-) : BaseModel() {
-    constructor(id: String, runAttemptId: RunAttempts, contentId: LectureContent, sectionId: Sections)
-        : this(runAttemptId, contentId, sectionId) {
-        super.id = id
-    }
-}
-
-
-@Type("users")
-class User(
-    val email: String?,
-    val firstname: String,
-    val lastReadNotification: String?,
-    val lastname: String,
-    val oneauthId: String?,
-    val photo: String?,
-    val verifiedemail: String?,
-    val verifiedmobile: String?,
-    val roleId: Int = 0
-
-) : BaseModel()
 
 @Type("doubt_leaderboard")
 class DoubtLeaderBoard(
