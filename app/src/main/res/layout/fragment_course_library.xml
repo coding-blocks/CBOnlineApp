@@ -24,13 +24,10 @@
         android:paddingBottom="@dimen/margin_large">
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_medium"
-            android:background="@drawable/background_purple"
-            android:padding="15dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_notes" />
+            android:src="@drawable/ic_notes_circle" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -88,13 +85,10 @@
         android:paddingBottom="@dimen/margin_large">
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_medium"
-            android:background="@drawable/background_purple"
-            android:padding="15dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_bookmark" />
+            android:src="@drawable/ic_bookmark_circle" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -152,13 +146,10 @@
         android:paddingBottom="@dimen/margin_large">
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_medium"
-            android:background="@drawable/background_purple"
-            android:padding="15dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_download" />
+            android:src="@drawable/ic_download_circle" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -216,13 +207,10 @@
         android:paddingBottom="@dimen/margin_large">
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_medium"
-            android:background="@drawable/button_background"
-            android:padding="15dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_comment_white" />
+            android:src="@drawable/ic_announcement_circle" />
 
         <LinearLayout
             android:layout_width="0dp"

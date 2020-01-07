@@ -154,12 +154,46 @@ interface OnlineJsonApi {
         @Path("quizId") id: String
     ): Response<Quizzes>
 
-
     @GET("quiz_attempts")
     suspend fun getQuizAttempt(
         @Query("filter[qnaId]") qnaId: String,
         @Query("sort") sort: String = "-createdAt"
     ): Response<List<QuizAttempt>>
+
+    @POST("quiz_attempts")
+    suspend fun createQuizAttempt(
+        @Body params: QuizAttempt
+    ): Response<QuizAttempt>
+
+
+    @PATCH("quiz_attempts/{id}")
+    suspend fun updateQuizAttempt(
+        @Path("id") attemptId: String,
+        @Body params: QuizAttempt
+    ): Response<QuizAttempt>
+
+    @GET("questions/{questionId}")
+    suspend fun getQuestionById(
+        @Path("questionId") id: String,
+        @Query("include") include: String = "choices"
+    ): Response<Question>
+
+
+    @GET("quiz_attempts/{id}")
+    suspend fun getQuizAttemptById(
+        @Path("id") id: String
+    ): Response<QuizAttempt>
+
+    @POST("quiz_attempts/{id}/submit")
+    suspend fun submitQuizById(
+        @Path("id") id: String
+    ): Response<QuizAttempt>
+
+    @POST("doubts")
+    suspend fun createDoubt(@Body params: Doubts): Response<Doubts>
+
+    @POST("comments")
+    suspend fun createComment(@Body params: Comment): Response<Comment>
 
 
     @GET("courses")
@@ -171,44 +205,6 @@ interface OnlineJsonApi {
         @Query("page[offset]") offset: String = "0",
         @Query("sort") sort: String = "difficulty"
     ): Response<List<Course>>
-
-
-
-    @GET("questions/{questionid}")
-    fun getQuestionById(
-        @Path("questionid") id: String,
-        @Query("include") include: String = "choices"
-    ): Call<Question>
-
-
-    @GET("quiz_attempts/{id}")
-    fun getQuizAttemptById(
-        @Path("id") id: String
-    ): Call<QuizAttempt>
-
-    @POST("quiz_attempts/{id}/submit")
-    fun sumbitQuizById(
-        @Path("id") id: String
-    ): Call<QuizAttempt>
-
-    @POST("doubts")
-    fun createDoubt(@Body params: Doubts): Call<Doubts>
-
-    @POST("comments")
-    fun createComment(@Body params: Comment): Call<Comment>
-
-//
-//    @POST("notes")
-//    fun createNote(@Body params: Notes): Call<Notes>
-
-    @POST("quiz_attempts")
-    fun createQuizAttempt(@Body params: QuizAttempt): Call<QuizAttempt>
-
-    @PATCH("quiz_attempts/{id}")
-    fun updateQuizAttempt(
-        @Path("id") attemptId: String,
-        @Body params: QuizAttempt
-    ): Call<QuizAttempt>
 
     @GET("carousel_cards?sort=order")
     suspend fun getCarouselCards(): Response<List<CarouselCards>>

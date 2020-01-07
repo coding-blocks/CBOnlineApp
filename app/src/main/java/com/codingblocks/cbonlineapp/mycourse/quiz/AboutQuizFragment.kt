@@ -15,7 +15,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class AboutQuizFragment : Fragment(), AnkoLogger {
 
-    private val viewModel by sharedViewModel<QuizViewModel>()
+    private val vm by sharedViewModel<QuizViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,15 +30,17 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.fetchQuiz()
+        vm.fetchQuiz()
 
         quizStartBtn.setOnClickListener {
+            quizStartBtn.isEnabled = false
+            vm.startQuiz()
 
 //            val qna = Quizqnas()
 //            qna.id = qnaId
 //            quizAttempt.qna = qna
 //            quizAttempt.runAttempt = RunAttemptsId(attemptId)
-
+//
 //            Clients.onlineV2JsonApi.createQuizAttempt(quizAttempt)
 //                .enqueue(retrofitCallback { throwable, response ->
 //                    response?.body().let {
@@ -56,7 +58,6 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         val adapter = TabLayoutAdapter(fragmentManager!!)
         adapter.add(QuizInfoFragment(), "About")
         adapter.add(QuizSubmissionsFragment(), "Submissions")
-
         quizViewPager.adapter = adapter
         quizTabs.setupWithViewPager(quizViewPager)
     }
