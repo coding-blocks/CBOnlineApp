@@ -1,9 +1,6 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.RunAttemptsId
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -60,11 +57,11 @@ class OnlineJsonApiAuthenticatedTest {
 //        assertNotNull(section)
 //    }
 
-    @Test
-    fun `GET QuizById`() {
-        val quiz = jsonapi.getQuizById("23").execute().body()
-        assertNotNull(quiz)
-    }
+//    @Test
+//    fun `GET QuizById`() {
+//        val quiz = jsonapi.getQuizById("23").execute().body()
+//        assertNotNull(quiz)
+//    }
 //
 //    @Test
 //    fun `GET Quiz`() {

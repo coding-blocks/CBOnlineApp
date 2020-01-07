@@ -35,90 +35,90 @@ class ViewPagerAdapter(private var mContext: Context, private var quizId: String
         if (pos == questionList.size() - 1 && result == null) {
             view.submitButton.visibility = View.VISIBLE
         }
-        Clients.onlineV2JsonApi.getQuestionById(questionList[pos]
-            ?: "").enqueue(retrofitCallback { _, response ->
-            response?.body().let { question ->
-                view.questionTitle.text = "Q${pos + 1}. ${question?.title}"
-                if (question?.title.equals(question?.description)) {
-                    view.questionDescription.visibility = View.GONE
-                } else {
-                    question?.description?.let {
-                        view.questionDescription.loadMarkdown(it)
-                    } ?: run {
-                        view.questionDescription.visibility = View.GONE
-                    }
-                }
-                choiceDataAdapter = QuizChoiceAdapter(question?.choices as ArrayList<Choice>, object : OnItemClickListener {
-                    override fun onItemClick(position: Int, id: String) {
-                        if (result == null) {
-                            // marking correct option in the list
-                            viewModel.bottomSheetQuizData.value?.get(pos)?.value = true
-                            question.choices?.get(position)?.marked = true
-
-                            // unmarking rest of the options
-                            question.choices?.forEachIndexed { index, _ ->
-                                if (index != position) {
-                                    question.choices?.get(index)?.marked = false
-                                    choiceDataAdapter.notifyDataSetChanged()
-                                }
-                            }
-                            // adding or removing the previous marked option
-                            submissionList.forEach { quizSumbission ->
-                                if (quizSumbission.id == questionList[pos]) {
-                                    quizSumbission.markedChoices = arrayOf(question.choices?.get(position)?.id
-                                        ?: "")
-                                }
-                            }
-//                            val quizAttempt = QuizAttempt()
-//                            quizAttempt.id = qaId
-//                            quizAttempt.status = "DRAFT"
-//                            val quizSubmission = QuizSubmission()
-//                            quizSubmission.id = questionList[pos] ?: ""
-//                            quizSubmission.markedChoices = arrayOf(id)
-//                            submissionList.add(quizSubmission)
-//                            quizAttempt.submission.addAll(submissionList)
-// //                            val qna = Quizqnas()
-// //                            qna.id = quizId
-// //                            quizAttempt.qna = qna
-//                            Clients.onlineV2JsonApi.updateQuizAttempt(qaId, quizAttempt).enqueue(retrofitCallback { _, _ ->
-//                            })
-                        }
-                    }
-                })
-                submissionList.forEach { quizSumbission ->
-                    if (quizSumbission.id == questionList[pos]) {
-                        quizSumbission.markedChoices?.forEach { markedChoice ->
-                            question.choices?.forEach { choice ->
-                                if (markedChoice.contains(choice.id)) {
-                                    choice.marked = true
-                                    viewModel.bottomSheetQuizData.value?.get(pos)?.value = true
-                                    choiceDataAdapter.notifyDataSetChanged()
-                                }
-                            }
-                        }
-                    }
-                }
-                result?.questions?.forEach { quizQuestion ->
-                    if (quizQuestion.id == questionList[pos]) {
-                        viewModel.bottomSheetQuizData.value?.get(pos)?.value = false
-                        quizQuestion.answers?.forEach { answers ->
-                            question.choices?.forEach { choice ->
-                                if (answers.contains(choice.id)) {
-                                    choice.correct = true
-                                    viewModel.bottomSheetQuizData.value?.get(pos)?.value = choice.marked
-                                    choiceDataAdapter.notifyDataSetChanged()
-                                } else {
-                                    choice.correct = false
-                                    choiceDataAdapter.notifyDataSetChanged()
-                                }
-                            }
-                        }
-                    }
-                }
-                view.questionRv.layoutManager = LinearLayoutManager(mContext)
-                view.questionRv.adapter = choiceDataAdapter
-            }
-        })
+//        Clients.onlineV2JsonApi.getQuestionById(questionList[pos]
+//            ?: "").enqueue(retrofitCallback { _, response ->
+//            response?.body().let { question ->
+//                view.questionTitle.text = "Q${pos + 1}. ${question?.title}"
+//                if (question?.title.equals(question?.description)) {
+//                    view.questionDescription.visibility = View.GONE
+//                } else {
+//                    question?.description?.let {
+//                        view.questionDescription.loadMarkdown(it)
+//                    } ?: run {
+//                        view.questionDescription.visibility = View.GONE
+//                    }
+//                }
+//                choiceDataAdapter = QuizChoiceAdapter(question?.choices as ArrayList<Choice>, object : OnItemClickListener {
+//                    override fun onItemClick(position: Int, id: String) {
+//                        if (result == null) {
+//                            // marking correct option in the list
+//                            viewModel.bottomSheetQuizData.value?.get(pos)?.value = true
+//                            question.choices?.get(position)?.marked = true
+//
+//                            // unmarking rest of the options
+//                            question.choices?.forEachIndexed { index, _ ->
+//                                if (index != position) {
+//                                    question.choices?.get(index)?.marked = false
+//                                    choiceDataAdapter.notifyDataSetChanged()
+//                                }
+//                            }
+//                            // adding or removing the previous marked option
+//                            submissionList.forEach { quizSumbission ->
+//                                if (quizSumbission.id == questionList[pos]) {
+//                                    quizSumbission.markedChoices = arrayOf(question.choices?.get(position)?.id
+//                                        ?: "")
+//                                }
+//                            }
+////                            val quizAttempt = QuizAttempt()
+////                            quizAttempt.id = qaId
+////                            quizAttempt.status = "DRAFT"
+////                            val quizSubmission = QuizSubmission()
+////                            quizSubmission.id = questionList[pos] ?: ""
+////                            quizSubmission.markedChoices = arrayOf(id)
+////                            submissionList.add(quizSubmission)
+////                            quizAttempt.submission.addAll(submissionList)
+//// //                            val qna = Quizqnas()
+//// //                            qna.id = quizId
+//// //                            quizAttempt.qna = qna
+////                            Clients.onlineV2JsonApi.updateQuizAttempt(qaId, quizAttempt).enqueue(retrofitCallback { _, _ ->
+////                            })
+//                        }
+//                    }
+//                })
+//                submissionList.forEach { quizSumbission ->
+//                    if (quizSumbission.id == questionList[pos]) {
+//                        quizSumbission.markedChoices?.forEach { markedChoice ->
+//                            question.choices?.forEach { choice ->
+//                                if (markedChoice.contains(choice.id)) {
+//                                    choice.marked = true
+//                                    viewModel.bottomSheetQuizData.value?.get(pos)?.value = true
+//                                    choiceDataAdapter.notifyDataSetChanged()
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                result?.questions?.forEach { quizQuestion ->
+//                    if (quizQuestion.id == questionList[pos]) {
+//                        viewModel.bottomSheetQuizData.value?.get(pos)?.value = false
+//                        quizQuestion.answers?.forEach { answers ->
+//                            question.choices?.forEach { choice ->
+//                                if (answers.contains(choice.id)) {
+//                                    choice.correct = true
+//                                    viewModel.bottomSheetQuizData.value?.get(pos)?.value = choice.marked
+//                                    choiceDataAdapter.notifyDataSetChanged()
+//                                } else {
+//                                    choice.correct = false
+//                                    choiceDataAdapter.notifyDataSetChanged()
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                view.questionRv.layoutManager = LinearLayoutManager(mContext)
+//                view.questionRv.adapter = choiceDataAdapter
+//            }
+//        })
         view.submitButton.setOnClickListener {
             listener.onQuizSubmitted()
         }

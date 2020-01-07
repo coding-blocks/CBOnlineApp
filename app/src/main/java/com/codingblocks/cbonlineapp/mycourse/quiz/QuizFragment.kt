@@ -152,13 +152,13 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
         }
         numberLayout.addView(submitButton)
         // hide submit button if quiz has already been submitted
-        Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
-            val body = response?.body()
-            if (body?.status.equals("FINAL")) {
-                isSubmitted = true
-                submitButton.visibility = View.GONE
-            }
-        })
+//        Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
+//            val body = response?.body()
+//            if (body?.status.equals("FINAL")) {
+//                isSubmitted = true
+//                submitButton.visibility = View.GONE
+//            }
+//        })
     }
 
     private fun confirmSubmitQuiz() {
@@ -195,15 +195,15 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     }
 
     private fun submitQuiz() {
-        Clients.onlineV2JsonApi.sumbitQuizById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
-            val fragmentManager = fragmentManager!!
-            val fragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
-            fragmentTransaction.replace(R.id.framelayout_quiz,
-                QuizResultFragment.newInstance(quizId, qnaId, attemptId, quizAttemptId))
-            fragmentTransaction.addToBackStack("")
-            fragmentTransaction.commit()
-        })
+//        Clients.onlineV2JsonApi.sumbitQuizById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
+//            val fragmentManager = fragmentManager!!
+//            val fragmentTransaction = fragmentManager.beginTransaction()
+//            fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
+//            fragmentTransaction.replace(R.id.framelayout_quiz,
+//                QuizResultFragment.newInstance(quizId, qnaId, attemptId, quizAttemptId))
+//            fragmentTransaction.addToBackStack("")
+//            fragmentTransaction.commit()
+//        })
     }
 
     override fun onClick(v: View) {

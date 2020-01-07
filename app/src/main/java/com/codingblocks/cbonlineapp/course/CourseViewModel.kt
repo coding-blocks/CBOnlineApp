@@ -31,9 +31,6 @@ class CourseViewModel(
     var clearCartProgress: MutableLiveData<Boolean> = MutableLiveData()
     var enrollTrialProgress: MutableLiveData<Boolean> = MutableLiveData()
 
-    init {
-        fetchRecommendedCourses()
-    }
 
     fun fetchCourse() {
         runIO {
@@ -48,6 +45,7 @@ class CourseViewModel(
                 }
             }
         }
+        fetchRecommendedCourses()
     }
 
     private fun fetchRecommendedCourses() {

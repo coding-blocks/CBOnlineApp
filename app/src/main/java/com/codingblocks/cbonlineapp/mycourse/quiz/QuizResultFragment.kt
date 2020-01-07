@@ -44,19 +44,19 @@ class QuizResultFragment : Fragment() {
         // 0x90CE8700
         correctBackground.color = ColorStateList.valueOf(Color.parseColor("#90ce87"))
 
-        Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, response ->
-            val questions = response?.body()?.result?.questions
-            val totalQuestions = questions?.size
-            var correctQuestions = 0
-            questions?.forEach { question ->
-                if (question.score!! > 0)
-                    correctQuestions++
-            }
-            val wrongQuestions = totalQuestions?.minus(correctQuestions)
-            total_questions_image.text = totalQuestions.toString()
-            correct_answers_score_image.text = correctQuestions.toString()
-            wrong_answers_image.text = wrongQuestions.toString()
-        })
+//        Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, response ->
+//            val questions = response?.body()?.result?.questions
+//            val totalQuestions = questions?.size
+//            var correctQuestions = 0
+//            questions?.forEach { question ->
+//                if (question.score!! > 0)
+//                    correctQuestions++
+//            }
+//            val wrongQuestions = totalQuestions?.minus(correctQuestions)
+//            total_questions_image.text = totalQuestions.toString()
+//            correct_answers_score_image.text = correctQuestions.toString()
+//            wrong_answers_image.text = wrongQuestions.toString()
+//        })
 
         quizResultGoBackBtn.setOnClickListener {
             val fragmentManager = fragmentManager!!

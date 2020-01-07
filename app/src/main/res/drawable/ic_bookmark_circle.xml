@@ -43,7 +43,7 @@
     </path>
     <path
         android:fillColor="#00000000"
-        android:pathData="M17.9,24.294l5.1,5.103 5.1,-5.103M23,29.397V17.15"
+        android:pathData="M30.036,32.32L23,27.294l-7.036,5.026V16.237a2.01,2.01 0,0 1,2.01 -2.01h10.052a2.01,2.01 0,0 1,2.01 2.01V32.32z"
         android:strokeWidth="1"
         android:strokeColor="#fff"
         android:strokeLineCap="round"
