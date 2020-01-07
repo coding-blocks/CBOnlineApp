@@ -25,6 +25,7 @@ class QuizInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vm.quizDetails.observer(viewLifecycleOwner) {
+            it
             quizType.text = "MCQ"
             quizMarks.text = "${it.questions!!.size * 10}"
             quizQuestion.text = "${it.questions!!.size}"

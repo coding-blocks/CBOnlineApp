@@ -29,7 +29,7 @@ data class ContentModel(
     var contentVideo: ContentVideo = ContentVideo(),
     @Embedded
     @Nullable
-    var contentQna: ContentQna = ContentQna(),
+    var contentQna: ContentQnaModel = ContentQnaModel(),
     @Embedded
     @Nullable
     var contentCode: ContentCodeChallenge = ContentCodeChallenge(),

@@ -2,12 +2,14 @@ package com.codingblocks.cbonlineapp.mycourse.quiz
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.codingblocks.cbonlineapp.database.models.ContentQna
+import com.codingblocks.cbonlineapp.database.models.ContentQnaModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
+import com.codingblocks.onlineapi.models.ContentQna
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizzes
+import com.codingblocks.onlineapi.models.RunAttempts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -16,11 +18,13 @@ class QuizViewModel(private val repo: QuizRepository) : ViewModel() {
     var attemptId: String = ""
     var sectionId: String = ""
     var contentId: String = ""
-    lateinit var quiz: ContentQna
+    var quizAttemptId: String = ""
+    lateinit var quiz: ContentQnaModel
 
     var bottomSheetQuizData: MutableLiveData<MutableList<MutableLiveData<Boolean>>> = MutableLiveData()
     val quizDetails = MutableLiveData<Quizzes>()
     val quizAttempts = MutableLiveData<List<QuizAttempt>>()
+    val quizAttempt = MutableLiveData<QuizAttempt>()
 
     fun fetchQuiz() {
         runIO {
@@ -52,17 +56,16 @@ class QuizViewModel(private val repo: QuizRepository) : ViewModel() {
         }
     }
 
-    private fun setError(error: String) {
-    }
-
-    fun startQuiz() {
+    fun startQuiz(function: () -> Unit) {
         runIO {
-            when (val response = quiz?.qnaUid?.let { repo.getQuizAttempts(qnaId = it) }) {
+            val quizAttempt = QuizAttempt(ContentQna(quiz.qnaUid), RunAttempts(attemptId))
+            when (val response = repo.createQuizAttempt(quizAttempt)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         response.value.body()?.let {
-                            quizAttempts.postValue(it)
+                            quizAttemptId = it.id
+                            function()
                         }
                     } else {
                         setError(fetchError(response.value.code()))
@@ -70,5 +73,25 @@ class QuizViewModel(private val repo: QuizRepository) : ViewModel() {
                 }
             }
         }
+    }
+
+    fun getQuizAttempt() {
+        runIO {
+            when (val response = repo.fetchQuizAttempt(quizAttemptId)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        response.value.body()?.let {
+                            quizAttempt.postValue(it)
+                        }
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setError(error: String) {
     }
 }

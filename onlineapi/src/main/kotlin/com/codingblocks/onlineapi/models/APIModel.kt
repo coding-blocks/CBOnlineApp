@@ -224,18 +224,20 @@ data class Bookmark(
         : this(null, runAttemptId, contentId, sectionId)
 }
 
-@Type("quiz_attempts")
+@Type("quiz-attempts", "quiz_attempts")
 data class QuizAttempt(
-    val createdAt: String,
-    var result: QuizResult?,
+    val createdAt: String? = null,
+    var result: QuizResult? = null,
     val status: String? = "DRAFT",
-//    @Relationship("qna", resolve = true)
-//    @JvmField
-//    var qna: Quizqnas? = null
-    @Relationship("run_attempt", "run-attempt")
+    @Relationship("qna")
+    @JvmField
+    var qna: ContentQna? = null,
+    @Relationship("run-attempt")
     var runAttempt: RunAttempts? = null,
-    var submission: ArrayList<QuizSubmission>? = arrayListOf()
+    var submission: ArrayList<QuizSubmission>? = null
 ) : BaseModel() {
+    constructor(qnaId: ContentQna, runAttemptId: RunAttempts)
+        : this(qna = qnaId, runAttempt = runAttemptId)
 }
 
 @Type("notes")
@@ -298,13 +300,15 @@ class ContentCodeChallenge() : BaseModel() {
 }
 
 @Type("qnas", "qna")
-class ContentQna : BaseModel() {
-    @JvmField
-    var contentId: String? = null
-    @JvmField
-    var qId: Int? = null
-    @JvmField
+class ContentQna(
+    var contentId: String? = null,
+    var qId: Int? = null,
     var name: String? = null
+) : BaseModel() {
+    constructor(id: String)
+        : this() {
+        super.id = id
+    }
 }
 
 @Type("csv")
@@ -387,15 +391,12 @@ class Announcement : BaseModel() {
 
 
 @Type("quizzes")
-class Quizzes : BaseModel() {
-    @JvmField
-    var title: String? = null
-    @JvmField
-    var description: String? = null
-    @Relationship("questions", resolve = true)
-    @JvmField
+class Quizzes(
+    var title: String? = null,
+    var description: String? = null,
+    @Relationship("questions")
     var questions: ArrayList<Question>? = null
-}
+) : BaseModel()
 
 @Type("questions")
 class Question : BaseModel() {

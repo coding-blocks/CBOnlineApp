@@ -8,7 +8,7 @@ import com.codingblocks.cbonlineapp.database.models.NotesModel
 @Dao
 abstract class NotesDao : BaseDao<NotesModel> {
 
-    @Query("SElECT * FROM NotesModel where runAttemptId = :runAttemptId")
+    @Query("SElECT * FROM NotesModel where runAttemptId = :runAttemptId order by createdAt")
     abstract fun getNotes(runAttemptId: String): LiveData<List<NotesModel>>
 
     @Query("SElECT * FROM NotesModel")

@@ -13,14 +13,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.viewpager.widget.ViewPager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.QUIZ_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.QUIZ_ID
-import com.codingblocks.cbonlineapp.util.QUIZ_QNA
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.bottom_question_sheet.*
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import org.jetbrains.anko.AnkoLogger
@@ -29,73 +23,54 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener, ViewPagerAdapter.QuizInteractor {
 
-    private lateinit var quizId: String
-    private lateinit var qnaId: String
-    private lateinit var attemptId: String
-    private lateinit var quizAttemptId: String
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var isSubmitted: Boolean = false
 
     private lateinit var mAdapter: ViewPagerAdapter
     private var questionList = SparseArray<String>()
     private var sheetBehavior: BottomSheetBehavior<*>? = null
 
-    private val viewModel by viewModel<QuizViewModel>()
+    private val vm by viewModel<QuizViewModel>()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ):
-        View? = inflater.inflate(R.layout.fragment_quiz, container, false).apply {
-        firebaseAnalytics = FirebaseAnalytics.getInstance(context)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+        View? = inflater.inflate(R.layout.fragment_quiz, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        arguments?.let {
-            quizId = it.getString(QUIZ_ID) ?: ""
-            qnaId = it.getString(QUIZ_QNA) ?: ""
-            attemptId = it.getString(RUN_ATTEMPT_ID) ?: ""
-            quizAttemptId = it.getString(QUIZ_ATTEMPT_ID) ?: ""
-        }
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
 
         nextBtn.setOnClickListener(this)
         prevBtn.setOnClickListener(this)
         questionBtn.setOnClickListener(this)
 
-//        Clients.onlineV2JsonApi.getQuizById(quizId).enqueue(retrofitCallback { _, response ->
-//            response?.body()?.let { quiz ->
-//                setupMutableBottomSheetData(quiz.questions?.size ?: 0)
-//                setUpQuestionBottomSheet(quiz.questions?.size ?: 0)
-//                quiz.questions?.forEachIndexed { index, question ->
-//                    questionList.put(index, question.id)
-//                    if (index == quiz.questions!!.size - 1) {
-//                        Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, attemptResponse ->
-//                            attemptResponse?.body().let {
-//                                mAdapter = ViewPagerAdapter(context!!, qnaId, quizAttemptId, questionList, it?.submission, it?.result, this, viewModel)
+        vm.quizDetails.observer(viewLifecycleOwner) {
+            it.questions?.let { list ->
+                setUpQuestionBottomSheet(list.size)
+                setupMutableBottomSheetData(list.size)
+                list.forEachIndexed { index, question ->
+                    questionList.put(index, question.id)
+                    if (index == list.size - 1) {
+                        vm.getQuizAttempt()
+                    }
+                }
+            }
+        }
+
+        vm.quizAttempt.observer(viewLifecycleOwner) {
+            //                                mAdapter = ViewPagerAdapter(context!!, qnaId, quizAttemptId, questionList, it?.submission, it?.result, this, viewModel)
 //                                quizViewPager.adapter = mAdapter
 //                                quizViewPager.currentItem = 0
 //                                quizViewPager.offscreenPageLimit = quiz.questions?.size ?: 0
 //                                quizViewPager.setOnPageChangeListener(this)
 //                                quizViewPager.offscreenPageLimit = 3
-//                            }
-//                        })
-//                    }
-//                }
-//            }
-//        })
+        }
     }
 
     private fun setupMutableBottomSheetData(size: Int) {
         val tempList = mutableListOf<MutableLiveData<Boolean>>()
-        for (i in 0 until size) {
-            tempList.add(MutableLiveData())
-            tempList[i].value = false
+        repeat(size) {
+            tempList.add(MutableLiveData(false))
         }
-        viewModel.bottomSheetQuizData.value = tempList
+        vm.bottomSheetQuizData.value = tempList
     }
 
     private fun setUpQuestionBottomSheet(size: Int) {
@@ -121,7 +96,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             }
             val numberBtn = Button(context)
 
-            viewModel.bottomSheetQuizData.value?.get(i)?.observer(viewLifecycleOwner) {
+            vm.bottomSheetQuizData.value?.get(i)?.observer(viewLifecycleOwner) {
                 numberBtn.background = if (it) context!!.getDrawable(R.drawable.submit_button_background) else context!!.getDrawable(R.drawable.button_rounded_background)
             }
 
@@ -230,28 +205,5 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
     override fun onQuizSubmitted() {
         confirmSubmitQuiz()
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(quizId: String, qnaId: String, attemptId: String, quizAttemptId: String) =
-            QuizFragment().apply {
-                arguments = Bundle().apply {
-                    putString(QUIZ_ID, quizId)
-                    putString(QUIZ_QNA, qnaId)
-                    putString(RUN_ATTEMPT_ID, attemptId)
-                    putString(QUIZ_ATTEMPT_ID, quizAttemptId)
-                }
-            }
-    }
-
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser) {
-            val params = Bundle()
-            params.putString("authid", getPrefs()?.SP_ONEAUTH_ID)
-            params.putString("name", "Quiz")
-            firebaseAnalytics.logEvent("Open", params)
-        }
     }
 }

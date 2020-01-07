@@ -10,7 +10,7 @@ import com.codingblocks.cbonlineapp.database.models.ContentCsvModel
 import com.codingblocks.cbonlineapp.database.models.ContentDocument
 import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.ContentModel
-import com.codingblocks.cbonlineapp.database.models.ContentQna
+import com.codingblocks.cbonlineapp.database.models.ContentQnaModel
 import com.codingblocks.cbonlineapp.database.models.ContentVideo
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
@@ -73,7 +73,7 @@ class MyCourseRepository(
             var contentVideo =
                 ContentVideo()
             var contentQna =
-                ContentQna()
+                ContentQnaModel()
             var contentCodeChallenge =
                 ContentCodeChallenge()
             var contentCsv =
@@ -127,7 +127,7 @@ class MyCourseRepository(
                 }
                 "qna" -> content.qna?.let { contentQna1 ->
                     contentQna =
-                        ContentQna(
+                        ContentQnaModel(
                             contentQna1.id,
                             contentQna1.name
                                 ?: "",

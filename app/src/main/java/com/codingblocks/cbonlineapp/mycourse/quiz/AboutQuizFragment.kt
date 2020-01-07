@@ -11,6 +11,7 @@ import com.codingblocks.cbonlineapp.mycourse.quiz.info.QuizInfoFragment
 import com.codingblocks.cbonlineapp.mycourse.quiz.submissions.QuizSubmissionsFragment
 import kotlinx.android.synthetic.main.fragment_about_quiz.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.support.v4.runOnUiThread
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class AboutQuizFragment : Fragment(), AnkoLogger {
@@ -34,23 +35,17 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
 
         quizStartBtn.setOnClickListener {
             quizStartBtn.isEnabled = false
-            vm.startQuiz()
-
-//            val qna = Quizqnas()
-//            qna.id = qnaId
-//            quizAttempt.qna = qna
-//            quizAttempt.runAttempt = RunAttemptsId(attemptId)
-//
-//            Clients.onlineV2JsonApi.createQuizAttempt(quizAttempt)
-//                .enqueue(retrofitCallback { throwable, response ->
-//                    response?.body().let {
-//                        initiateQuiz(it?.id ?: "")
-//                    }
-//                    throwable?.localizedMessage.let {
-//                        if (it != null)
-//                            toast("Can't Create Quiz.Try Again !!!$it")
-//                    }
-//                })
+            vm.startQuiz {
+                runOnUiThread {
+                    quizStartBtn.isEnabled = true
+                    val fragmentManager = fragmentManager!!
+                    val fragmentTransaction = fragmentManager.beginTransaction()
+                    fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
+                    fragmentTransaction.replace(R.id.quizContainer, QuizFragment(), "quiz")
+                    fragmentTransaction.addToBackStack("")
+                    fragmentTransaction.commit()
+                }
+            }
         }
     }
 
@@ -60,17 +55,5 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         adapter.add(QuizSubmissionsFragment(), "Submissions")
         quizViewPager.adapter = adapter
         quizTabs.setupWithViewPager(quizViewPager)
-    }
-
-    private fun initiateQuiz(quizAttemptId: String) {
-//        val fragmentManager = fragmentManager!!
-//        val fragmentTransaction = fragmentManager.beginTransaction()
-//        fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
-//        fragmentTransaction.replace(
-//            R.id.framelayout_quiz,
-//            QuizFragment.newInstance(quizId, qnaId, attemptId, quizAttemptId), "quiz"
-//        )
-//        fragmentTransaction.addToBackStack("")
-//        fragmentTransaction.commit()
     }
 }

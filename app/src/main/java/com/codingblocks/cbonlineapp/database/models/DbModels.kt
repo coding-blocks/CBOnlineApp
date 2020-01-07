@@ -53,7 +53,7 @@ data class ContentCodeChallenge(
 )
 
 @Entity
-data class ContentQna(
+data class ContentQnaModel(
     var qnaUid: String = "",
     var qnaName: String = "",
     var qnaQid: Int = 0,

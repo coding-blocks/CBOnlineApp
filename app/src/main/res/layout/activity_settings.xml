@@ -15,7 +15,6 @@
         app:title="@string/title_activity_settings" />
 
     <LinearLayout
-        android:id="@+id/framelayout_quiz"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"

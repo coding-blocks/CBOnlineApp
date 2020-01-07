@@ -9,31 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.QUIZ_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.QUIZ_ID
-import com.codingblocks.cbonlineapp.util.QUIZ_QNA
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import kotlinx.android.synthetic.main.fragment_quiz_result.*
 
-@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class QuizResultFragment : Fragment() {
-
-    private lateinit var quizId: String
-    private lateinit var qnaId: String
-    private lateinit var attemptId: String
-    private lateinit var quizAttemptId: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = inflater.inflate(R.layout.fragment_quiz_result, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        arguments?.let {
-            quizId = it.getString(QUIZ_ID) ?: ""
-            qnaId = it.getString(QUIZ_QNA) ?: ""
-            attemptId = it.getString(RUN_ATTEMPT_ID) ?: ""
-            quizAttemptId = it.getString(QUIZ_ATTEMPT_ID) ?: ""
-        }
 
         val totalBackground = total_questions_image.background as GradientDrawable
         // 0x696969
@@ -60,22 +44,9 @@ class QuizResultFragment : Fragment() {
             val fragmentManager = fragmentManager!!
             val fragmentTransaction = fragmentManager.beginTransaction()
             fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
-            fragmentTransaction.replace(R.id.framelayout_quiz,
-                QuizFragment.newInstance(quizId, qnaId, attemptId, quizAttemptId))
+            fragmentTransaction.replace(R.id.quizContainer,
+                QuizFragment())
             fragmentTransaction.commit()
         }
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(quizId: String, qnaId: String, attemptId: String, quizAttemptId: String) =
-            QuizResultFragment().apply {
-                arguments = Bundle().apply {
-                    putString(QUIZ_ID, quizId)
-                    putString(QUIZ_QNA, qnaId)
-                    putString(RUN_ATTEMPT_ID, attemptId)
-                    putString(QUIZ_ATTEMPT_ID, quizAttemptId)
-                }
-            }
     }
 }

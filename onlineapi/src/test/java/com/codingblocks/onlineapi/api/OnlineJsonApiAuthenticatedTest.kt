@@ -1,9 +1,6 @@
 package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.Clients
-import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -27,23 +24,23 @@ class OnlineJsonApiAuthenticatedTest {
 //        }
 //    }
 //
-    @Test
-    fun `GET section`() {
-        runBlocking {
-            val courses = jsonapi.getSections("795")
-            assertNotNull(courses)
-        }
-    }
-
-
-    @Test
-    fun `GET myCourses`() {
-        runBlocking {
-            val courses = jsonapi.getMyCourses().body()?.get()
-            assertNotNull(courses)
-            assertTrue(courses?.isNotEmpty() == true)
-        }
-    }
+//    @Test
+//    fun `GET section`() {
+//        runBlocking {
+//            val courses = jsonapi.getSections("795")
+//            assertNotNull(courses)
+//        }
+//    }
+//
+//
+//    @Test
+//    fun `GET myCourses`() {
+//        runBlocking {
+//            val courses = jsonapi.getMyCourses().body()?.get()
+//            assertNotNull(courses)
+//            assertTrue(courses?.isNotEmpty() == true)
+//        }
+//    }
 //
 //    @Test
 //    fun `GET enrolledCourse`() {
