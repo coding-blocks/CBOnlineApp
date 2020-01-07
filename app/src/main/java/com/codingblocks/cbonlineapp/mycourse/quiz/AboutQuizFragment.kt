@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
+import com.codingblocks.cbonlineapp.mycourse.quiz.info.QuizInfoFragment
 import com.codingblocks.cbonlineapp.mycourse.quiz.submissions.QuizSubmissionsFragment
 import kotlinx.android.synthetic.main.fragment_about_quiz.*
 import org.jetbrains.anko.AnkoLogger
@@ -53,7 +54,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
 
     private fun setupViewPager() {
         val adapter = TabLayoutAdapter(fragmentManager!!)
-//        adapter.add(QuizInfoFragment(), "About")
+        adapter.add(QuizInfoFragment(), "About")
         adapter.add(QuizSubmissionsFragment(), "Submissions")
 
         quizViewPager.adapter = adapter

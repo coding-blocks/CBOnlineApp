@@ -103,78 +103,7 @@
     <!--        android:textColor="@color/black"-->
     <!--        android:textSize="16sp" />-->
 
-    <!--    <LinearLayout-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="16dp"-->
-    <!--        android:orientation="horizontal">-->
 
-    <!--        <LinearLayout-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginStart="12dp"-->
-    <!--            android:orientation="vertical">-->
-
-    <!--            <TextView-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:fontFamily="@font/nunitosans_semibold"-->
-    <!--                android:text="Total:"-->
-    <!--                android:textColor="@color/black"-->
-    <!--                android:textSize="16sp" />-->
-
-    <!--            <TextView-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:fontFamily="@font/nunitosans_semibold"-->
-    <!--                android:text="Maximum Marks:"-->
-    <!--                android:textColor="@color/black"-->
-    <!--                android:textSize="16sp" />-->
-
-    <!--            <TextView-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:fontFamily="@font/nunitosans_semibold"-->
-    <!--                android:text="Question Type:"-->
-    <!--                android:textColor="@color/black"-->
-    <!--                android:textSize="16sp" />-->
-
-
-    <!--        </LinearLayout>-->
-
-    <!--        <LinearLayout-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginStart="12dp"-->
-    <!--            android:orientation="vertical">-->
-
-    <!--            <TextView-->
-    <!--                android:id="@+id/quizQuestion"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:fontFamily="@font/nunitosans_semibold"-->
-    <!--                android:textColor="@color/black"-->
-    <!--                android:textSize="16sp" />-->
-
-
-    <!--            <TextView-->
-    <!--                android:id="@+id/quizMarks"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:fontFamily="@font/nunitosans_semibold"-->
-    <!--                android:textColor="@color/black"-->
-    <!--                android:textSize="16sp" />-->
-
-    <!--            <TextView-->
-    <!--                android:id="@+id/quizType"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:fontFamily="@font/nunitosans_semibold"-->
-    <!--                android:textColor="@color/black"-->
-    <!--                android:textSize="16sp" />-->
-
-    <!--        </LinearLayout>-->
-    <!--    </LinearLayout>-->
 
     <!--    <TextView-->
     <!--        android:layout_width="wrap_content"-->
