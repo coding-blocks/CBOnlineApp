@@ -48,7 +48,7 @@ data class Course(
     val instructors: ArrayList<Instructor>?,
     @Relationship("runs")
     val runs: ArrayList<Runs>?,
-    @Relationship("active_runs", "active-runs")
+    @Relationship("active-runs", "active_runs")
     val activeRuns: ArrayList<Runs>?,
     @Relationship("projects", resolve = true)
     var projects: ArrayList<Project>?,
@@ -69,7 +69,7 @@ data class Runs(
     val enrollmentEnd: String?,
     @Relationship("sections")
     val sections: ArrayList<Sections>?,
-    @Relationship("run_attempts", "run-attempts")
+    @Relationship("run-attempts", "run_attempts")
     var runAttempts: ArrayList<RunAttempts>?,
     @Relationship("course")
     var course: Course?,
@@ -85,7 +85,7 @@ data class Runs(
 
 }
 
-@Type("run_attempts")
+@Type("run-attempts,run_attempts")
 data class RunAttempts(
     val certificateApproved: Boolean = false,
     val end: String = "",
@@ -108,7 +108,7 @@ data class Doubts(
     var status: String = "PENDING",
     val discourseTopicId: String = "",
     val conversationId: String? = null,
-    @Relationship("run_attempt", "run-attempt")
+    @Relationship("run-attempt", "run_attempt")
     val runAttempt: RunAttempts? = null,
     @Relationship("content")
     val content: LectureContent? = null,
@@ -118,7 +118,7 @@ data class Doubts(
     val acknowledgedAt: String? = null,
     val resolvedAt: String? = null,
     val firebaseRef: String? = null,
-    @Relationship("resolved_by", "resolved-by")
+    @Relationship("resolved-by", "resolved_by")
     val resolvedBy: User? = null
 ) : BaseModel() {
     constructor(id: String, title: String,
@@ -162,7 +162,7 @@ data class LectureContent(
     val duration: Long?,
     val title: String?,
     val sectionContent: SectionContent?,
-    @Relationship("code_challenge", "code-challenge")
+    @Relationship("code-challenge", "code_challenge")
     val codeChallenge: ContentCodeChallenge?,
     @Relationship("document")
     val document: ContentDocumentType?,
@@ -175,10 +175,12 @@ data class LectureContent(
     @Relationship("qna")
     val qna: ContentQna?,
     @Relationship("csv")
-    val csv: ContentCsv?
+    val csv: ContentCsv?,
+    @Relationship("bookmark")
+    val bookmark: Bookmark?
 ) : BaseModel() {
     constructor(id: String)
-        : this("", 0L, "", null, null, null, null, null, null, null, null) {
+        : this("", 0L, "", null, null, null, null, null, null, null, null, null) {
         super.id = id
     }
 }
@@ -201,7 +203,7 @@ data class ContentProgress(
     val createdAt: String? = null,
     val status: String,
     val runAttemptId: String? = null,
-    @Relationship("run_attempt", "run-attempt")
+    @Relationship("run-attempt", "run_attempt")
     val runAttempt: RunAttempts? = null,
     @Relationship("content")
     val content: LectureContent? = null
@@ -213,7 +215,7 @@ data class ContentProgress(
 @Type("bookmark")
 data class Bookmark(
     val id: String?,
-    @Relationship("run-attempt")
+    @Relationship("run-attempt", "run_attempt")
     val runAttempt: RunAttempts? = null,
     @Relationship("content")
     val content: LectureContent? = null,
@@ -224,7 +226,7 @@ data class Bookmark(
         : this(null, runAttemptId, contentId, sectionId)
 }
 
-@Type("quiz_attempts")
+@Type("quiz-attempts", "quiz_attempts")
 data class QuizAttempt(
     val createdAt: String,
     var result: QuizResult?,
@@ -232,7 +234,7 @@ data class QuizAttempt(
 //    @Relationship("qna", resolve = true)
 //    @JvmField
 //    var qna: Quizqnas? = null
-    @Relationship("run_attempt", "run-attempt")
+    @Relationship("run-attempt", "run_attempt")
     var runAttempt: RunAttempts? = null,
     var submission: ArrayList<QuizSubmission>? = arrayListOf()
 ) : BaseModel() {
@@ -244,7 +246,7 @@ data class Note(
     val createdAt: String? = null,
     val deletedAt: String? = null,
     val text: String,
-    @Relationship("run_attempt", "run-attempt")
+    @Relationship("run-attempt", "run_attempt")
     val runAttempt: RunAttempts? = null,
     @Relationship("content")
     val content: LectureContent? = null
@@ -285,7 +287,7 @@ class SectionContent(
 
 // =======Section Content Models =========
 
-@Type("code_challenges", "code_challenge")
+@Type("code-challenges", "code_challenges")
 class ContentCodeChallenge() : BaseModel() {
     @JvmField
     var contentId: String? = null
