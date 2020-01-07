@@ -31,7 +31,6 @@ class CourseViewModel(
     var clearCartProgress: MutableLiveData<Boolean> = MutableLiveData()
     var enrollTrialProgress: MutableLiveData<Boolean> = MutableLiveData()
 
-
     fun fetchCourse() {
         runIO {
             when (val response = repo.getCourse(id)) {

@@ -6,13 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.PagerAdapter
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.commons.OnItemClickListener
-import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
-import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Choice
 import com.codingblocks.onlineapi.models.QuizResult
 import com.codingblocks.onlineapi.models.QuizSubmission
 import kotlinx.android.synthetic.main.quizlayout.view.*
@@ -69,19 +64,19 @@ class ViewPagerAdapter(private var mContext: Context, private var quizId: String
 //                                        ?: "")
 //                                }
 //                            }
-////                            val quizAttempt = QuizAttempt()
-////                            quizAttempt.id = qaId
-////                            quizAttempt.status = "DRAFT"
-////                            val quizSubmission = QuizSubmission()
-////                            quizSubmission.id = questionList[pos] ?: ""
-////                            quizSubmission.markedChoices = arrayOf(id)
-////                            submissionList.add(quizSubmission)
-////                            quizAttempt.submission.addAll(submissionList)
-//// //                            val qna = Quizqnas()
-//// //                            qna.id = quizId
-//// //                            quizAttempt.qna = qna
-////                            Clients.onlineV2JsonApi.updateQuizAttempt(qaId, quizAttempt).enqueue(retrofitCallback { _, _ ->
-////                            })
+// //                            val quizAttempt = QuizAttempt()
+// //                            quizAttempt.id = qaId
+// //                            quizAttempt.status = "DRAFT"
+// //                            val quizSubmission = QuizSubmission()
+// //                            quizSubmission.id = questionList[pos] ?: ""
+// //                            quizSubmission.markedChoices = arrayOf(id)
+// //                            submissionList.add(quizSubmission)
+// //                            quizAttempt.submission.addAll(submissionList)
+// // //                            val qna = Quizqnas()
+// // //                            qna.id = quizId
+// // //                            quizAttempt.qna = qna
+// //                            Clients.onlineV2JsonApi.updateQuizAttempt(qaId, quizAttempt).enqueue(retrofitCallback { _, _ ->
+// //                            })
 //                        }
 //                    }
 //                })
