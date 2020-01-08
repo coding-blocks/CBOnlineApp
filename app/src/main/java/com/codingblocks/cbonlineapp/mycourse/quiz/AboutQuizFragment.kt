@@ -56,6 +56,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         adapter.add(QuizInfoFragment(), "About")
         adapter.add(QuizSubmissionsFragment(), "Submissions")
         quizViewPager.adapter = adapter
+        quizViewPager.offscreenPageLimit = 2
         quizTabs.setupWithViewPager(quizViewPager)
     }
 }

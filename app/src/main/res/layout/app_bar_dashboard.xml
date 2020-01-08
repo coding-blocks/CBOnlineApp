@@ -17,7 +17,8 @@
                 android:id="@+id/dashboardToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="10dp"
+                android:elevation="1dp"
+                app:title="Dashboard"
                 app:layout_scrollFlags="scroll|enterAlways" />
 
             <LinearLayout
@@ -59,6 +60,30 @@
                     android:textColor="@color/white"
                     android:textSize="16sp" />
             </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/dashboardToolbarSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:background="@color/white"
+                android:elevation="1dp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/toolbar_bg_dark" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:text="@string/what_do_you_want_to_become" />
+            </FrameLayout>
         </FrameLayout>
     </com.google.android.material.appbar.AppBarLayout>
 

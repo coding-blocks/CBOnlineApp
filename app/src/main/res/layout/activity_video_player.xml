@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:focusable="true"
-                android:src="@drawable/ic_download_circle" />
+                android:src="@drawable/ic_download_circle_small" />
 
         </LinearLayout>
 

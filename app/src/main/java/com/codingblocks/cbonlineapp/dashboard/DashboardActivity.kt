@@ -117,7 +117,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             add(DashboardLibraryFragment())
         }
         dashboardPager.apply {
-            setPagingEnabled(true)
+            setPagingEnabled(false)
             adapter = pagerAdapter
             offscreenPageLimit = 4
         }
@@ -209,12 +209,22 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     }
 
     override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
-        if (position == 2) {
-            dashboardToolbarSecondary.isVisible = true
-            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
-        } else {
-            dashboardToolbarSecondary.isVisible = false
-            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
+        when (position) {
+            0 -> {
+                dashboardToolbarSearch.isVisible = true
+                dashboardToolbarSecondary.isVisible = false
+                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+            }
+            2 -> {
+                dashboardToolbarSecondary.isVisible = true
+                dashboardToolbarSearch.isVisible = false
+                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+            }
+            else -> {
+                dashboardToolbarSecondary.isVisible = false
+                dashboardToolbarSearch.isVisible = false
+                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
+            }
         }
         dashboardPager.setCurrentItem(position, true)
         return true

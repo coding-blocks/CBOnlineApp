@@ -50,22 +50,22 @@ class MyCourseRepository(
                 )
                 sectionDao.insertNew(newSection)
             }
-            getSectionContent(courseSection.id, runAttempt.id)
+            getSectionContent(courseSection.id, runAttempt.id, courseSection.name)
         }
     }
 
-    private suspend fun getSectionContent(sectionId: String, runAttemptId: String) {
+    private suspend fun getSectionContent(sectionId: String, runAttemptId: String, name: String?) {
         when (val response = safeApiCall { Clients.onlineV2JsonApi.getSectionContents(sectionId) }) {
             is ResultWrapper.Success -> {
                 if (response.value.isSuccessful)
                     response.value.body()?.let {
-                        insertContents(it, runAttemptId, sectionId)
+                        insertContents(it, runAttemptId, sectionId, name)
                     }
             }
         }
     }
 
-    private suspend fun insertContents(contentList: List<LectureContent>, attemptId: String, sectionId: String) {
+    private suspend fun insertContents(contentList: List<LectureContent>, attemptId: String, sectionId: String, name: String?) {
         contentList.forEach { content ->
             var contentDocument =
                 ContentDocument()
@@ -192,8 +192,6 @@ class MyCourseRepository(
                     it.createdAt ?: "")
             }
 
-            val sectionTitle = sectionDao.getSectionTitle(sectionId)
-
             val newContent =
                 ContentModel(
                     content.id,
@@ -206,7 +204,7 @@ class MyCourseRepository(
                     content.sectionContent?.order
                         ?: 0,
                     attemptId,
-                    sectionTitle,
+                    name ?: "",
                     contentLecture,
                     contentDocument,
                     contentVideo,

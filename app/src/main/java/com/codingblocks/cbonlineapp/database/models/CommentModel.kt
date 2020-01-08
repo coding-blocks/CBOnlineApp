@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey
         onDelete = ForeignKey.CASCADE // or CASCADE
     ))]
 )
-data class CommentModel(
+class CommentModel(
     @PrimaryKey
     var id: String,
     var body: String,

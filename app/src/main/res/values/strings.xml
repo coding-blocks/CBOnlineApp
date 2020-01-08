@@ -228,5 +228,14 @@
     <string name="view_questions">View Questions</string>
     <string name="hide_questions">Hide Questions</string>
     <string name="end">End</string>
+    <string name="what_do_you_want_to_become">What do you want to become ?</string>
+    <string name="card_title">The Technology Learning Platform</string>
+    <string name="view_all_courses">View all Courses</string>
+    <string name="popular_courses">Popular Courses</string>
+    <string name="popular_desc">The most popular courses of em all!</string>
+    <string name="track_desc">Tracks designed to shape your future!</string>
+    <string name="view_all">View all</string>
+    <string name="trending_now">Trending Now</string>
+    <string name="trending_desc">Industry trending tech courses for you!</string>
 
 </resources>
