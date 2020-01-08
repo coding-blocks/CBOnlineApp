@@ -19,4 +19,6 @@ class QuizRepository(private var contentDao: ContentDao) {
     suspend fun createQuizAttempt(quizAttempt: QuizAttempt) = safeApiCall { Clients.onlineV2JsonApi.createQuizAttempt(quizAttempt) }
 
     suspend fun fetchQuizAttempt(quizAttemptId: String) = safeApiCall { Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId) }
+
+    suspend fun submitQuiz(quizAttemptId: String) = safeApiCall { Clients.onlineV2JsonApi.submitQuizById(quizAttemptId) }
 }

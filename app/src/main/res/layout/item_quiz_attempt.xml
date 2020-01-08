@@ -14,7 +14,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="0.5"
+        android:layout_weight="0.3"
         android:fontFamily="@font/gilroy_medium"
         android:textColor="@color/white"
         tools:text="1" />
@@ -33,7 +33,7 @@
         android:id="@+id/dateTv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1.7"
+        android:layout_weight="1.9"
         android:fontFamily="@font/gilroy_medium"
         android:textAlignment="center"
         android:textColor="@color/white"

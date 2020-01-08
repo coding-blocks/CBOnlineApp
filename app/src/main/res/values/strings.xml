@@ -227,5 +227,6 @@
     <string name="next">Next</string>
     <string name="view_questions">View Questions</string>
     <string name="hide_questions">Hide Questions</string>
+    <string name="end">End</string>
 
 </resources>

@@ -92,6 +92,21 @@ class QuizViewModel(private val repo: QuizRepository) : ViewModel() {
         }
     }
 
+    fun submitQuiz(function: () -> Unit) {
+        runIO {
+            when (val response = repo.submitQuiz(quizAttemptId)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        function()
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
     private fun setError(error: String) {
     }
 }

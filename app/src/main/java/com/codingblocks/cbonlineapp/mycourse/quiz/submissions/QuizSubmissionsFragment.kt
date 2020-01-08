@@ -9,6 +9,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizFragment
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.onlineapi.models.QuizAttempt
 import kotlinx.android.synthetic.main.fragment_quiz_submissions.*
@@ -24,13 +25,13 @@ class QuizSubmissionsFragment : Fragment() {
             override fun onClick(quizAttempt: QuizAttempt) {
                 vm.quizAttempt.value = quizAttempt
                 vm.quizAttemptId = quizAttempt.id
-
-                val fragmentManager = fragmentManager!!
-                val fragmentTransaction = fragmentManager.beginTransaction()
-                fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
-                fragmentTransaction.replace(R.id.quizContainer, QuizFragment(), "quiz")
-                fragmentTransaction.addToBackStack("")
-                fragmentTransaction.commit()
+                replaceFragmentSafely(
+                    QuizFragment(),
+                    "quiz",
+                    containerViewId = R.id.quizContainer,
+                    enterAnimation = R.animator.slide_in_right,
+                    exitAnimation = R.animator.slide_out_left,
+                    addToStack = true)
             }
         }
     }

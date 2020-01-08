@@ -9,6 +9,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.quiz.info.QuizInfoFragment
 import com.codingblocks.cbonlineapp.mycourse.quiz.submissions.QuizSubmissionsFragment
+import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_about_quiz.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.runOnUiThread
@@ -38,12 +39,13 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
             vm.startQuiz {
                 runOnUiThread {
                     quizStartBtn.isEnabled = true
-                    val fragmentManager = fragmentManager!!
-                    val fragmentTransaction = fragmentManager.beginTransaction()
-                    fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
-                    fragmentTransaction.replace(R.id.quizContainer, QuizFragment(), "quiz")
-                    fragmentTransaction.addToBackStack("")
-                    fragmentTransaction.commit()
+                    replaceFragmentSafely(
+                        QuizFragment(),
+                        "quiz",
+                        containerViewId = R.id.quizContainer,
+                        enterAnimation = R.animator.slide_in_right,
+                        exitAnimation = R.animator.slide_out_left,
+                        addToStack = true)
                 }
             }
         }

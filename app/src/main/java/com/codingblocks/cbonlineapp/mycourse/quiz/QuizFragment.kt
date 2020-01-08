@@ -7,17 +7,16 @@ import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat.getColor
-import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.viewpager.widget.ViewPager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.bottom_question_sheet.*
 import kotlinx.android.synthetic.main.fragment_quiz.*
@@ -105,29 +104,6 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             count++
             rowLayout.addView(numberBtn)
         }
-        val submitButton = Button(context)
-        submitButton.background = context!!.getDrawable(R.drawable.submit_button_background)
-        submitButton.textColor = context!!.resources.getColor(R.color.white)
-        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        params.bottomMargin = 16
-        submitButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.submit_image, 0)
-        submitButton.compoundDrawablePadding = 16
-        params.topMargin = 8
-        // submitButton.backgroundColor = context!!.resources.getColor(R.color.colorPrimaryDark)
-        submitButton.layoutParams = params
-        submitButton.text = "Submit"
-        submitButton.setOnClickListener {
-            confirmSubmitQuiz()
-        }
-        numberLayout.addView(submitButton)
-        // hide submit button if quiz has already been submitted
-//        Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
-//            val body = response?.body()
-//            if (body?.status.equals("FINAL")) {
-//                isSubmitted = true
-//                submitButton.visibility = View.GONE
-//            }
-//        })
     }
 
     private fun confirmSubmitQuiz() {
@@ -147,16 +123,16 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
         when {
             position + 1 == questionList.size() -> {
 
-                nextBtn.text = "End"
-                prevBtn.setTextColor(Color.parseColor("#000000"))
+                nextBtn.text = getString(R.string.end)
+                prevBtn.setTextColor(getColor(requireContext(), R.color.orangish))
             }
             position == 0 -> {
-                nextBtn.text = "Next"
+                nextBtn.text = getString(R.string.next)
                 prevBtn.setTextColor(Color.parseColor("#808080"))
-                nextBtn.setTextColor(Color.parseColor("#000000"))
+                nextBtn.setTextColor(getColor(requireContext(), R.color.orangish))
             }
             else -> {
-                nextBtn.text = "Next"
+                nextBtn.text = getString(R.string.next)
                 nextBtn.setTextColor(getColor(requireContext(), R.color.orangish))
                 prevBtn.setTextColor(getColor(requireContext(), R.color.orangish))
             }
@@ -164,15 +140,15 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     }
 
     private fun submitQuiz() {
-//        Clients.onlineV2JsonApi.sumbitQuizById(quizAttemptId).enqueue(retrofitCallback { throwable, response ->
-//            val fragmentManager = fragmentManager!!
-//            val fragmentTransaction = fragmentManager.beginTransaction()
-//            fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
-//            fragmentTransaction.replace(R.id.framelayout_quiz,
-//                QuizResultFragment.newInstance(quizId, qnaId, attemptId, quizAttemptId))
-//            fragmentTransaction.addToBackStack("")
-//            fragmentTransaction.commit()
-//        })
+        vm.submitQuiz {
+            replaceFragmentSafely(
+                QuizResultFragment(),
+                "result",
+                containerViewId = R.id.quizContainer,
+                enterAnimation = R.animator.slide_in_right,
+                exitAnimation = R.animator.slide_out_left,
+                addToStack = true)
+        }
     }
 
     override fun onClick(v: View) {
