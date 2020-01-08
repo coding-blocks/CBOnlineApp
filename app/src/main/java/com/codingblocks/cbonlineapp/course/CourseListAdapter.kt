@@ -16,14 +16,18 @@ import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.Course
 import kotlinx.android.synthetic.main.item_course_card.view.*
 
-class CourseListAdapter : ListAdapter<Course, CourseListAdapter.ItemViewHolder>(DiffCallback()) {
+class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListAdapter.ItemViewHolder>(DiffCallback()) {
 
     var onItemClick: ItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_course_card, parent, false)
+            if (type == "POPULAR")
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_course_card_secondary, parent, false)
+            else
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_course_card, parent, false)
         )
     }
 
@@ -32,7 +36,7 @@ class CourseListAdapter : ListAdapter<Course, CourseListAdapter.ItemViewHolder>(
         holder.itemClickListener = onItemClick
     }
 
-    class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var itemClickListener: ItemClickListener? = null
 
         fun bind(item: Course) = with(itemView) {
@@ -46,32 +50,34 @@ class CourseListAdapter : ListAdapter<Course, CourseListAdapter.ItemViewHolder>(
                 else -> "Beginner"
             }
             courseCardTitleTv.text = item.title
-            if (!item.instructors.isNullOrEmpty()) {
-                courseCardInstructorsTv.text = "${item.instructors?.first()?.name}"
-                item.instructors?.first()?.photo?.let { courseCardInstructorImg1.loadImage(it) }
-                if (item.instructors!!.size > 1) {
-                    courseCardInstructorsTv.append(", ${item.instructors!![1].name}")
-                    item.instructors!![1].photo?.let { courseCardInstructorImg2.loadImage(it) }
-                } else {
-                    courseCardInstructorImg2.visibility = View.INVISIBLE
-                }
-            }
-            var list = item.runs?.filter { run ->
-                !run.unlisted && run.enrollmentEnd?.greater()!! && !run.enrollmentStart!!.greater()
-            }?.sortedWith(compareBy { run -> run.price })
-            if (list.isNullOrEmpty()) {
-                list =
-                    item.runs?.sortedWith(compareBy { run -> run.price })
-            }
-            courseCardPriceTv.text = "₹ " + list?.first()?.price
-            courseCardMrpTv.text = "₹ " + list?.first()?.mrp
-            courseCardMrpTv.paintFlags = courseCardPriceTv.paintFlags or
-                Paint.STRIKE_THRU_TEXT_FLAG
             ratingTv.text = "${item.rating}/5, ${item.reviewCount} ratings"
             setOnClickListener {
                 itemClickListener?.onClick(
                     item.id, item.logo, courseLogo
                 )
+            }
+            if (type != "POPULAR") {
+                if (!item.instructors.isNullOrEmpty()) {
+                    courseCardInstructorsTv.text = "${item.instructors?.first()?.name}"
+                    item.instructors?.first()?.photo?.let { courseCardInstructorImg1.loadImage(it) }
+                    if (item.instructors!!.size > 1) {
+                        courseCardInstructorsTv.append(", ${item.instructors!![1].name}")
+                        item.instructors!![1].photo?.let { courseCardInstructorImg2.loadImage(it) }
+                    } else {
+                        courseCardInstructorImg2.visibility = View.INVISIBLE
+                    }
+                }
+                var list = item.runs?.filter { run ->
+                    !run.unlisted && run.enrollmentEnd?.greater()!! && !run.enrollmentStart!!.greater()
+                }?.sortedWith(compareBy { run -> run.price })
+                if (list.isNullOrEmpty()) {
+                    list =
+                        item.runs?.sortedWith(compareBy { run -> run.price })
+                }
+                courseCardPriceTv.text = "₹ " + list?.first()?.price
+                courseCardMrpTv.text = "₹ " + list?.first()?.mrp
+                courseCardMrpTv.paintFlags = courseCardPriceTv.paintFlags or
+                    Paint.STRIKE_THRU_TEXT_FLAG
             }
         }
     }

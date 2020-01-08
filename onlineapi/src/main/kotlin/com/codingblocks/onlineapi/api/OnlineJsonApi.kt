@@ -106,7 +106,8 @@ interface OnlineJsonApi {
         @Query("exclude") query: String = "ratings,instructors.*,feedbacks,runs.*",
         @Query("filter[recommended]") recommended: String = "true",
         @Query("filter[unlisted]") unlisted: String = "false",
-        @Query("page[limit]") page: String = "12",
+        @Query("page[limit]") page: Int = 12,
+        @Query("page[offset]") offset: Int = 0,
         @Query("include") include: String = "instructors,runs",
         @Query("sort") sort: String = "difficulty"
     ): Response<List<Course>>

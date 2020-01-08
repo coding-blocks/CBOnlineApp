@@ -29,6 +29,7 @@ class DashboardViewModel(
     val topRun = homeRepo.getTopRun()
     private val runs = myCourseRepo.getMyRuns()
     var suggestedCourses = MutableLiveData<List<Course>>()
+    var trendingCourses = MutableLiveData<List<Course>>()
     private val coursesResponse = Transformations.switchMap(courseFilter) { query ->
         myCourseRepo.getMyRuns(query)
     }
@@ -112,15 +113,18 @@ class DashboardViewModel(
         }
     }
 
-    fun fetchRecommendedCourses(offset: Int = 0) {
+    fun fetchRecommendedCourses(offset: Int, page: Int) {
         runIO {
-            when (val response = exploreRepo.getSuggestedCourses()) {
+            when (val response = exploreRepo.getSuggestedCourses(offset, page)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
-                        suggestedCourses.postValue(body())
+                        if (offset == 0)
+                            suggestedCourses.postValue(body())
+                        else
+                            trendingCourses.postValue(body())
                     } else {
-                        setError(com.codingblocks.onlineapi.fetchError(code()))
+                        setError(fetchError(code()))
                     }
                 }
             }

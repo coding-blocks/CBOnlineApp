@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="280dp"
-    android:layout_height="100dp"
+    android:layout_height="130dp"
     android:layout_margin="@dimen/margin_small"
     android:background="?attr/selectableItemBackground"
     app:cardBackgroundColor="@color/white"
@@ -16,8 +16,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/courseLogo"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="@dimen/margin_medium_small"
@@ -53,8 +53,8 @@
 
         <ImageButton
             android:id="@+id/course_card_share"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignTop="@id/course_card_like"
             android:layout_marginStart="@dimen/margin_medium_small"
             android:layout_marginEnd="@dimen/margin_small"
@@ -68,8 +68,8 @@
 
         <ImageButton
             android:id="@+id/course_card_like"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginTop="@dimen/margin_medium_small"
             android:layout_marginEnd="@dimen/padding_medium"
             android:layout_marginBottom="@dimen/margin_large"
@@ -94,7 +94,8 @@
             android:fontFamily="@font/gilroy_bold"
             android:textColor="@color/white"
             android:textSize="16sp"
-            tools:text="Web Development" />
+            tools:text="
+Web Development(NodeJS) Online" />
 
         <TextView
             android:id="@+id/ratingTv"
