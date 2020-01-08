@@ -18,6 +18,7 @@ data class ContentModel(
     var contentable: String,
     var order: Int,
     var attempt_id: String,
+    var sectionTitle: String = "",
     @Embedded
     @Nullable
     var contentLecture: ContentLecture = ContentLecture(),

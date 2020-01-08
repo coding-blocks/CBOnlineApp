@@ -77,9 +77,14 @@ interface OnlineJsonApi {
     ): Response<List<Comment>>
 
     @GET("bookmark")
-    suspend fun markBookmark(
+    suspend fun addBookmark(
         @Body params: Bookmark
-    ): Response<List<Bookmark>>
+    ): Response<Bookmark>
+
+    @DELETE("bookmark/{id}")
+    suspend fun deleteBookmark(
+        @Path("id") id: String
+    ): Response<Bookmark>
 
 
     @GET("runs")

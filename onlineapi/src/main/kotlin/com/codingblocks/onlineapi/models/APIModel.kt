@@ -214,6 +214,7 @@ data class ContentProgress(
 
 @Type("bookmarks")
 data class Bookmark(
+    @Id
     val id: String?,
     @Relationship("run-attempt")
     val runAttempt: RunAttempts? = null,
@@ -258,7 +259,7 @@ data class Note(
     val createdAt: String? = null,
     val deletedAt: String? = null,
     val text: String,
-    @Relationship("run_attempt", "run-attempt")
+    @Relationship("run-attempt", "run_attempt")
     val runAttempt: RunAttempts? = null,
     @Relationship("content")
     val content: LectureContent? = null
@@ -299,7 +300,7 @@ class SectionContent(
 
 // =======Section Content Models =========
 
-@Type("code_challenges", "code_challenge")
+@Type("code-challenges", "code_challenges")
 class ContentCodeChallenge() : BaseModel() {
     @JvmField
     var contentId: String? = null

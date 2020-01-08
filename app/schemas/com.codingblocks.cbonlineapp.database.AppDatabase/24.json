@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "f957bc0089aa7a499db409a4e317e0fa",
+    "identityHash": "0d2045e1f9a56b4f70a2cb574b95ff8f",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -169,7 +169,7 @@
       },
       {
         "tableName": "ContentModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ccid` TEXT NOT NULL, `progress` TEXT NOT NULL, `progressId` TEXT NOT NULL, `title` TEXT NOT NULL, `contentDuration` INTEGER NOT NULL, `contentable` TEXT NOT NULL, `order` INTEGER NOT NULL, `attempt_id` TEXT NOT NULL, `lectureUid` TEXT NOT NULL, `lectureName` TEXT NOT NULL, `lectureDuration` INTEGER NOT NULL, `lectureId` TEXT NOT NULL, `lectureContentId` TEXT NOT NULL, `lectureUpdatedAt` TEXT NOT NULL, `isDownloaded` INTEGER NOT NULL, `date` INTEGER NOT NULL, `documentUid` TEXT NOT NULL, `documentName` TEXT NOT NULL, `documentPdfLink` TEXT NOT NULL, `documentContentId` TEXT NOT NULL, `documentUpdatedAt` TEXT NOT NULL, `videoUid` TEXT NOT NULL, `videoName` TEXT NOT NULL, `videoDuration` INTEGER NOT NULL, `videoDescription` TEXT, `videoUrl` TEXT NOT NULL, `videoContentId` TEXT NOT NULL, `videoUpdatedAt` TEXT NOT NULL, `qnaUid` TEXT NOT NULL, `qnaName` TEXT NOT NULL, `qnaQid` INTEGER NOT NULL, `qnaContentId` TEXT NOT NULL, `qnaUpdatedAt` TEXT NOT NULL, `codeUid` TEXT NOT NULL, `codeName` TEXT NOT NULL, `codeProblemId` INTEGER NOT NULL, `codeContestId` INTEGER NOT NULL, `codeContentId` TEXT NOT NULL, `codeUpdatedAt` TEXT NOT NULL, `csvUid` TEXT NOT NULL, `csvName` TEXT NOT NULL, `csvDescription` TEXT NOT NULL, `csvContentId` TEXT NOT NULL, `csvUpdatedAt` TEXT NOT NULL, PRIMARY KEY(`ccid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ccid` TEXT NOT NULL, `progress` TEXT NOT NULL, `progressId` TEXT NOT NULL, `title` TEXT NOT NULL, `contentDuration` INTEGER NOT NULL, `contentable` TEXT NOT NULL, `order` INTEGER NOT NULL, `attempt_id` TEXT NOT NULL, `sectionTitle` TEXT NOT NULL, `lectureUid` TEXT NOT NULL, `lectureName` TEXT NOT NULL, `lectureDuration` INTEGER NOT NULL, `lectureId` TEXT NOT NULL, `lectureContentId` TEXT NOT NULL, `lectureUpdatedAt` TEXT NOT NULL, `isDownloaded` INTEGER NOT NULL, `date` INTEGER NOT NULL, `documentUid` TEXT NOT NULL, `documentName` TEXT NOT NULL, `documentPdfLink` TEXT NOT NULL, `documentContentId` TEXT NOT NULL, `documentUpdatedAt` TEXT NOT NULL, `videoUid` TEXT NOT NULL, `videoName` TEXT NOT NULL, `videoDuration` INTEGER NOT NULL, `videoDescription` TEXT, `videoUrl` TEXT NOT NULL, `videoContentId` TEXT NOT NULL, `videoUpdatedAt` TEXT NOT NULL, `qnaUid` TEXT NOT NULL, `qnaName` TEXT NOT NULL, `qnaQid` INTEGER NOT NULL, `qnaContentId` TEXT NOT NULL, `qnaUpdatedAt` TEXT NOT NULL, `codeUid` TEXT NOT NULL, `codeName` TEXT NOT NULL, `codeProblemId` INTEGER NOT NULL, `codeContestId` INTEGER NOT NULL, `codeContentId` TEXT NOT NULL, `codeUpdatedAt` TEXT NOT NULL, `csvUid` TEXT NOT NULL, `csvName` TEXT NOT NULL, `csvDescription` TEXT NOT NULL, `csvContentId` TEXT NOT NULL, `csvUpdatedAt` TEXT NOT NULL, `bookmarkUid` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `contentId` TEXT NOT NULL, `sectionId` TEXT NOT NULL, `createdAt` TEXT NOT NULL, PRIMARY KEY(`ccid`))",
         "fields": [
           {
             "fieldPath": "ccid",
@@ -216,6 +216,12 @@
           {
             "fieldPath": "attempt_id",
             "columnName": "attempt_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sectionTitle",
+            "columnName": "sectionTitle",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -432,6 +438,36 @@
           {
             "fieldPath": "contentCsv.csvUpdatedAt",
             "columnName": "csvUpdatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bookmark.bookmarkUid",
+            "columnName": "bookmarkUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bookmark.runAttemptId",
+            "columnName": "runAttemptId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bookmark.contentId",
+            "columnName": "contentId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bookmark.sectionId",
+            "columnName": "sectionId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bookmark.createdAt",
+            "columnName": "createdAt",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -1219,7 +1255,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f957bc0089aa7a499db409a4e317e0fa')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0d2045e1f9a56b4f70a2cb574b95ff8f')"
     ]
   }
 }

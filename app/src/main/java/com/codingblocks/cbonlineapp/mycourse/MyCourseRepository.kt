@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.database.models.ContentQnaModel
 import com.codingblocks.cbonlineapp.database.models.ContentVideo
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
+import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.models.LectureContent
@@ -39,8 +40,7 @@ class MyCourseRepository(
 
     fun run(runId: String) = runDao.getRun(runId)
 
-    suspend fun
-        insertSections(runAttempt: RunAttempts) {
+    suspend fun insertSections(runAttempt: RunAttempts) {
         runAttempt.run?.sections?.forEach { courseSection ->
             courseSection.run {
                 val newSection = SectionModel(
@@ -192,6 +192,8 @@ class MyCourseRepository(
                     it.createdAt ?: "")
             }
 
+            val sectionTitle = sectionDao.getSectionTitle(sectionId)
+
             val newContent =
                 ContentModel(
                     content.id,
@@ -204,6 +206,7 @@ class MyCourseRepository(
                     content.sectionContent?.order
                         ?: 0,
                     attemptId,
+                    sectionTitle,
                     contentLecture,
                     contentDocument,
                     contentVideo,
@@ -212,9 +215,15 @@ class MyCourseRepository(
                     contentCsv,
                     bookmark
                 )
-            contentsDao.insertNew(
-                newContent
-            )
+            val oldModel: ContentModel? = contentsDao.getContent(content.id)
+            if (oldModel != null && !oldModel.sameAndEqual(newContent)) {
+                contentsDao.update(newContent)
+            } else {
+                contentsDao.insertNew(
+                    newContent
+                )
+            }
+
             sectionWithContentsDao.insert(
                 SectionContentHolder.SectionWithContent(
                     sectionId,

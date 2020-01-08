@@ -26,7 +26,7 @@ data class ContentLecture(
 data class BookmarkModel(
     var bookmarkUid: String = "",
     var runAttemptId: String = "",
-    var contentId: String = "0L",
+    var contentId: String = "",
     var sectionId: String = "",
     var createdAt: String = ""
 )
