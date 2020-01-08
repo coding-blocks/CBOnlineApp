@@ -5,6 +5,7 @@ import com.codingblocks.onlineapi.api.OnlineRestApi
 import com.codingblocks.onlineapi.models.Announcement
 import com.codingblocks.onlineapi.models.ApplicationId
 import com.codingblocks.onlineapi.models.Applications
+import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Choice
 import com.codingblocks.onlineapi.models.Comment
@@ -65,7 +66,7 @@ object Clients {
     private val onlineApiResourceConverter = ResourceConverter(
         om, Instructor::class.java, Course::class.java, Sections::class.java, Runs::class.java, RunAttempts::class.java, ContentVideoType::class.java,
         LectureContent::class.java, ContentDocumentType::class.java, ContentProgress::class.java, ContentLectureType::class.java, ContentCodeChallenge::class.java,
-        ContentQna::class.java, Announcement::class.java, Quizzes::class.java,
+        ContentQna::class.java, Announcement::class.java, Quizzes::class.java, Bookmark::class.java,
         Question::class.java, Choice::class.java, QuizAttempt::class.java, Doubts::class.java, ContentCsv::class.java, Comment::class.java,
         Note::class.java, Rating::class.java, Tags::class.java, CarouselCards::class.java, Jobs::class.java, Company::class.java, JobId::class.java,
         Applications::class.java, ApplicationId::class.java, DoubtLeaderBoard::class.java, User::class.java,

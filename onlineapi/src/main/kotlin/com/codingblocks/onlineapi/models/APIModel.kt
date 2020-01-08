@@ -175,10 +175,12 @@ data class LectureContent(
     @Relationship("qna")
     val qna: ContentQna?,
     @Relationship("csv")
-    val csv: ContentCsv?
+    val csv: ContentCsv?,
+    @Relationship("bookmark")
+    val bookmark: Bookmark?
 ) : BaseModel() {
     constructor(id: String)
-        : this("", 0L, "", null, null, null, null, null, null, null, null) {
+        : this("", 0L, "", null, null, null, null, null, null, null, null, null) {
         super.id = id
     }
 }
@@ -210,7 +212,7 @@ data class ContentProgress(
         : this(status = status, runAttempt = runAttemptId, content = contentId, id = progressId)
 }
 
-@Type("bookmark")
+@Type("bookmarks")
 data class Bookmark(
     val id: String?,
     @Relationship("run-attempt")
@@ -218,7 +220,11 @@ data class Bookmark(
     @Relationship("content")
     val content: LectureContent? = null,
     @Relationship("section")
-    val section: Sections? = null
+    val section: Sections? = null,
+    val createdAt: String? = null,
+    val runAttemptId: String? = null,
+    val sectionId: String? = null,
+    val contentId: String? = null
 ) {
     constructor(runAttemptId: RunAttempts, contentId: LectureContent, sectionId: Sections)
         : this(null, runAttemptId, contentId, sectionId)

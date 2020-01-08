@@ -35,7 +35,10 @@ data class ContentModel(
     var contentCode: ContentCodeChallenge = ContentCodeChallenge(),
     @Embedded
     @Nullable
-    var contentCsv: ContentCsvModel = ContentCsvModel()
+    var contentCsv: ContentCsvModel = ContentCsvModel(),
+    @Embedded
+    @Nullable
+    var bookmark: BookmarkModel = BookmarkModel()
 ) : ListObject() {
     @Ignore
     override fun getType(): Int = TYPE_CONTENT

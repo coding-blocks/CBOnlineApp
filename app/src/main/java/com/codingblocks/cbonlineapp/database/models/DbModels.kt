@@ -23,6 +23,15 @@ data class ContentLecture(
 )
 
 @Entity
+data class BookmarkModel(
+    var bookmarkUid: String = "",
+    var runAttemptId: String = "",
+    var contentId: String = "0L",
+    var sectionId: String = "",
+    var createdAt: String = ""
+)
+
+@Entity
 data class ContentDocument(
     var documentUid: String = "",
     var documentName: String = "",

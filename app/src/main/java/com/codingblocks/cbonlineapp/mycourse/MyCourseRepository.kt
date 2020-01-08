@@ -5,6 +5,7 @@ import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.SectionDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
+import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.database.models.ContentCodeChallenge
 import com.codingblocks.cbonlineapp.database.models.ContentCsvModel
 import com.codingblocks.cbonlineapp.database.models.ContentDocument
@@ -78,6 +79,8 @@ class MyCourseRepository(
                 ContentCodeChallenge()
             var contentCsv =
                 ContentCsvModel()
+            var bookmark =
+                BookmarkModel()
 
             when (content.contentable) {
                 "lecture" -> content.lecture?.let { contentLectureType ->
@@ -181,6 +184,13 @@ class MyCourseRepository(
                 status =
                     "UNDONE"
             }
+            content.bookmark?.let {
+                bookmark = BookmarkModel(it.id ?: "",
+                    it.runAttemptId ?: "",
+                    it.contentId ?: "",
+                    it.sectionId ?: "",
+                    it.createdAt ?: "")
+            }
 
             val newContent =
                 ContentModel(
@@ -199,7 +209,8 @@ class MyCourseRepository(
                     contentVideo,
                     contentQna,
                     contentCodeChallenge,
-                    contentCsv
+                    contentCsv,
+                    bookmark
                 )
             contentsDao.insertNew(
                 newContent
