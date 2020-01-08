@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_sign_in.*
 
 class SignInFragment : Fragment() {
 
-    lateinit var type: String
+    var type: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
