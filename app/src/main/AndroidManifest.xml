@@ -44,6 +44,7 @@
             android:name=".dashboard.DoubtCommentActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".dashboard.DashboardActivity"
             android:launchMode="singleTop">
             <intent-filter>

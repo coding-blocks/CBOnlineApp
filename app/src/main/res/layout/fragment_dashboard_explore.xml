@@ -2,6 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:overScrollMode="never"
     android:layout_height="match_parent"
     tools:context="com.codingblocks.cbonlineapp.dashboard.explore.DashboardExploreFragment">
 
@@ -16,6 +17,8 @@
             android:layout_marginStart="@dimen/margin_large"
             android:layout_marginTop="@dimen/margin_large"
             android:layout_marginEnd="@dimen/margin_large"
+            android:clickable="true"
+            android:focusable="true"
             android:background="?attr/selectableItemBackground"
             app:cardCornerRadius="@dimen/corner_radius">
 
@@ -157,6 +160,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
                 android:drawableEnd="@drawable/ic_dropright"
                 android:drawablePadding="10dp"
                 android:drawableTint="@color/orangish"
@@ -175,7 +181,7 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="4"
-            tools:listitem="@layout/item_course_card_secondary" />
+            tools:listitem="@layout/item_track" />
 
 
         <View
@@ -229,6 +235,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
                 android:drawableEnd="@drawable/ic_dropright"
                 android:drawablePadding="10dp"
                 android:drawableTint="@color/orangish"
@@ -248,7 +257,7 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="4"
-            tools:listitem="@layout/item_course_card_secondary" />
+            tools:listitem="@layout/item_course_card" />
 
 
     </LinearLayout>

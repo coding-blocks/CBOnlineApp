@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.AppPrefs
+import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
@@ -13,9 +14,11 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.getMeta
+import com.codingblocks.onlineapi.models.Course
 
 class DashboardViewModel(
     private val homeRepo: DashboardHomeRepository,
+    private val exploreRepo: CourseRepository,
     private val myCourseRepo: DashboardMyCoursesRepository,
     val prefs: AppPrefs
 ) : ViewModel() {
@@ -25,6 +28,7 @@ class DashboardViewModel(
     var isAdmin: MutableLiveData<Boolean> = MutableLiveData()
     val topRun = homeRepo.getTopRun()
     private val runs = myCourseRepo.getMyRuns()
+    var suggestedCourses = MutableLiveData<List<Course>>()
     private val coursesResponse = Transformations.switchMap(courseFilter) { query ->
         myCourseRepo.getMyRuns(query)
     }
@@ -103,6 +107,21 @@ class DashboardViewModel(
                             Clients.authJwt = jwt
                             Clients.refreshToken = rt
                         }
+                }
+            }
+        }
+    }
+
+    fun fetchRecommendedCourses(offset: Int = 0) {
+        runIO {
+            when (val response = exploreRepo.getSuggestedCourses()) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        suggestedCourses.postValue(body())
+                    } else {
+                        setError(com.codingblocks.onlineapi.fetchError(code()))
+                    }
                 }
             }
         }

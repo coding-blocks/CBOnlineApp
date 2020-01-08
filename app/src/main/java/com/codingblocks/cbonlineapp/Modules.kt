@@ -50,7 +50,7 @@ val viewModelModule = module {
     viewModel { DashboardDoubtsViewModel(get()) }
     viewModel { CourseViewModel(get()) }
     viewModel { LibraryViewModel(get()) }
-    viewModel { DashboardViewModel(get(), get(), get()) }
+    viewModel { DashboardViewModel(get(), get(), get(), get()) }
     viewModel { QuizViewModel(get()) }
 
     single { AdminDoubtRepository() }
