@@ -238,6 +238,12 @@ data class QuizAttempt(
 ) : BaseModel() {
     constructor(qnaId: ContentQna, runAttemptId: RunAttempts)
         : this(qna = qnaId, runAttempt = runAttemptId)
+
+    constructor(id: String, qnaId: ContentQna)
+        : this(qna = qnaId) {
+        super.id = id
+
+    }
 }
 
 @Type("notes")

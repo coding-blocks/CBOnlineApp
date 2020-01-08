@@ -13,7 +13,7 @@ import com.codingblocks.onlineapi.models.QuizAttempt
 import kotlinx.android.synthetic.main.quiz_attempt_list.view.*
 
 class QuizSubmissionListAdapter : ListAdapter<QuizAttempt, QuizSubmissionListAdapter.ItemViewHolder>(DiffCallback()) {
-
+    var onItemClick: ItemClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
             LayoutInflater.from(parent.context)
@@ -22,10 +22,14 @@ class QuizSubmissionListAdapter : ListAdapter<QuizAttempt, QuizSubmissionListAda
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.apply {
+            bind(getItem(position))
+            itemClickListener = onItemClick
+        }
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var itemClickListener: ItemClickListener? = null
         fun bind(item: QuizAttempt) = with(itemView) {
             numberTv.text = (adapterPosition + 1).toString()
             statusTv.text = item.status
@@ -35,7 +39,7 @@ class QuizSubmissionListAdapter : ListAdapter<QuizAttempt, QuizSubmissionListAda
             else
                 scoreTv.text = "N/A"
             setOnClickListener {
-                //                clickListner(attempt)
+                itemClickListener?.onClick(item)
             }
         }
     }
@@ -49,4 +53,8 @@ class QuizSubmissionListAdapter : ListAdapter<QuizAttempt, QuizSubmissionListAda
             return oldItem.sameAndEqual(newItem)
         }
     }
+}
+
+interface ItemClickListener {
+    fun onClick(quizAttempt: QuizAttempt)
 }

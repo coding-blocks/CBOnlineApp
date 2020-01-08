@@ -145,7 +145,7 @@
             android:launchMode="singleTop"
             android:theme="@style/NewAppTheme.Dark"
             android:parentActivityName=".mycourse.MyCourseActivity"
-            android:screenOrientation="fullSensor" />
+            android:screenOrientation="portrait" />
 
         <receiver android:name=".util.DownloadBroadcastReceiver">
             <intent-filter>

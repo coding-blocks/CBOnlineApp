@@ -167,16 +167,16 @@ interface OnlineJsonApi {
 
 
     @PATCH("quiz_attempts/{id}")
-    suspend fun updateQuizAttempt(
+    fun updateQuizAttempt(
         @Path("id") attemptId: String,
         @Body params: QuizAttempt
-    ): Response<QuizAttempt>
+    ): Call<QuizAttempt>
 
     @GET("questions/{questionId}")
-    suspend fun getQuestionById(
+    fun getQuestionById(
         @Path("questionId") id: String,
         @Query("include") include: String = "choices"
-    ): Response<Question>
+    ): Call<Question>
 
 
     @GET("quiz_attempts/{id}")

@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.mycourse.quiz
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.SparseArray
@@ -8,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.viewpager.widget.ViewPager
@@ -19,7 +23,7 @@ import kotlinx.android.synthetic.main.bottom_question_sheet.*
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener, ViewPagerAdapter.QuizInteractor {
 
@@ -29,7 +33,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     private var questionList = SparseArray<String>()
     private var sheetBehavior: BottomSheetBehavior<*>? = null
 
-    private val vm by viewModel<QuizViewModel>()
+    private val vm by sharedViewModel<QuizViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = inflater.inflate(R.layout.fragment_quiz, container, false)
@@ -56,12 +60,11 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
         }
 
         vm.quizAttempt.observer(viewLifecycleOwner) {
-            //                                mAdapter = ViewPagerAdapter(context!!, qnaId, quizAttemptId, questionList, it?.submission, it?.result, this, viewModel)
-//                                quizViewPager.adapter = mAdapter
-//                                quizViewPager.currentItem = 0
-//                                quizViewPager.offscreenPageLimit = quiz.questions?.size ?: 0
-//                                quizViewPager.setOnPageChangeListener(this)
-//                                quizViewPager.offscreenPageLimit = 3
+            mAdapter = ViewPagerAdapter(requireContext(), vm.quiz.qnaUid, vm.quizAttemptId, questionList, it?.submission, it?.result, this, vm)
+            quizViewPager.adapter = mAdapter
+            quizViewPager.currentItem = 0
+            quizViewPager.offscreenPageLimit = questionList.size()
+            quizViewPager.setOnPageChangeListener(this)
         }
     }
 
@@ -75,33 +78,26 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
     private fun setUpQuestionBottomSheet(size: Int) {
         var count = 0
-
-        val dpValue = 60 // margin in dips
-        val d = context!!.resources.displayMetrics.density
-        val buttonSize = (dpValue * d).toInt() // margin in pixels
-        val buttonParams = LinearLayout.LayoutParams(buttonSize, buttonSize)
-        buttonParams.setMargins(buttonSize / 6, buttonSize / 12, buttonSize / 6, buttonSize / 12)
-        var rowLayout: LinearLayout
-        rowLayout = LinearLayout(context)
+        var rowLayout = LinearLayout(context)
         rowLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         rowLayout.orientation = LinearLayout.HORIZONTAL
         numberLayout.addView(rowLayout)
         for (i in 0 until size) {
-            if (count == 3) {
+            if (count == 5) {
                 count = 0
                 rowLayout = LinearLayout(context)
                 rowLayout.orientation = LinearLayout.HORIZONTAL
                 rowLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 numberLayout.addView(rowLayout)
             }
-            val numberBtn = Button(context)
+
+            val numberBtn: AppCompatButton = LayoutInflater.from(context).inflate(R.layout.button_quiz_small, rowLayout, false) as AppCompatButton
 
             vm.bottomSheetQuizData.value?.get(i)?.observer(viewLifecycleOwner) {
-                numberBtn.background = if (it) context!!.getDrawable(R.drawable.submit_button_background) else context!!.getDrawable(R.drawable.button_rounded_background)
+                numberBtn.backgroundTintList = ColorStateList.valueOf(getColor(requireContext(), R.color.freshGreen))
+                numberBtn.textColor = getColor(requireContext(), R.color.freshGreen)
             }
 
-            numberBtn.textColor = context!!.resources.getColor(R.color.white)
-            numberBtn.layoutParams = buttonParams
             numberBtn.text = (i + 1).toString()
             numberBtn.setOnClickListener {
                 quizViewPager.currentItem = i
@@ -161,8 +157,8 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             }
             else -> {
                 nextBtn.text = "Next"
-                nextBtn.setTextColor(Color.parseColor("#000000"))
-                prevBtn.setTextColor(Color.parseColor("#000000"))
+                nextBtn.setTextColor(getColor(requireContext(), R.color.orangish))
+                prevBtn.setTextColor(getColor(requireContext(), R.color.orangish))
             }
         }
     }
@@ -196,8 +192,10 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
             R.id.questionBtn -> {
                 if (sheetBehavior?.state != BottomSheetBehavior.STATE_EXPANDED) {
                     sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+                    questionBtn.text = getString(R.string.hide_questions)
                 } else {
-                    sheetBehavior?.setState(BottomSheetBehavior.STATE_COLLAPSED)
+                    sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+                    questionBtn.text = getString(R.string.view_questions)
                 }
             }
         }

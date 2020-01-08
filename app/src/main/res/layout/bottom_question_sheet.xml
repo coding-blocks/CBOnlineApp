@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_weight="0.5"
-    android:background="@color/darkTwo"
+    android:background="@drawable/rounded_dialog"
     android:gravity="center"
+    android:backgroundTint="@color/darkTwo"
     android:orientation="vertical"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="60dp"
+    app:behavior_peekHeight="80dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <LinearLayout
