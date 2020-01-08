@@ -52,15 +52,31 @@ class LoginHomeFragment : Fragment() {
     private fun setSecondSpan() {
         val policySpan = SpannableString("By loggin in you agree to Coding Blocks’s\n" +
             "Privacy Policy & Terms of Service")
-        val clickableSpan: ClickableSpan = object : ClickableSpan() {
+        val privacySpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
-//                replaceFragmentSafely(SignInFragment(), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
+                requireContext().openChrome("https://codingblocks.com/privacypolicy.html")
             }
 
             override fun updateDrawState(ds: TextPaint) {
+                ds.color = ds.linkColor
+                ds.isUnderlineText = true
             }
         }
-        policySpan.setSpan(clickableSpan, 41, policySpan.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        val tosSpan: ClickableSpan = object : ClickableSpan() {
+            override fun onClick(textView: View) {
+                requireContext().openChrome("https://codingblocks.com/tos.html")
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+                ds.color = ds.linkColor
+                ds.isUnderlineText = true
+            }
+        }
+
+        policySpan.setSpan(privacySpan, 41, 56, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        policySpan.setSpan(tosSpan, 59, policySpan.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
         policyTv.apply {
             text = policySpan
             movementMethod = LinkMovementMethod.getInstance()

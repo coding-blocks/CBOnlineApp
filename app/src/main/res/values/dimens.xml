@@ -10,6 +10,7 @@
     <!-- margin specifics -->
     <dimen name="margin_xxl">44dp</dimen>
     <dimen name="margin_xxxl">48dp</dimen>
+    <dimen name="margin_9xl">72dp</dimen>
 
     <!-- text size -->
     <dimen name="text_size_moderate">18sp</dimen>

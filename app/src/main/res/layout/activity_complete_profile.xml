@@ -180,8 +180,8 @@
                     android:paddingEnd="0dp"
                     android:textColorHighlight="@color/orangish"
                     android:textColorHint="@color/black"
+                    android:layout_marginBottom="@dimen/margin_9xl"
                     android:textSize="16sp" />
-
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
@@ -194,7 +194,7 @@
         android:layout_gravity="bottom"
         android:layout_marginStart="@dimen/margin_large"
         android:layout_marginEnd="@dimen/margin_large"
-        android:layout_marginBottom="@dimen/margin_xl"
+        android:layout_marginBottom="@dimen/margin_large"
         android:text="@string/continue_to_dashboard"
         android:textSize="20sp" />
 
