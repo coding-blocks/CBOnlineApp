@@ -21,7 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/NewAppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".course.SearchCourseActivity" />
+        <activity
+            android:name=".course.SearchCourseActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".auth.onboarding.CompleteProfileActivity"
             android:windowSoftInputMode="adjustResize" />

@@ -13,6 +13,7 @@ import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import kotlinx.android.synthetic.main.activity_search_course.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -41,6 +42,8 @@ class SearchCourseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_course)
+        setToolbar(searchToolbar, title = "All Courses")
+
         viewModel.fetchRecommendedCourses()
 
         courseSearchRv.setRv(this@SearchCourseActivity, courseCardListAdapter, orientation = RecyclerView.VERTICAL, setDivider = true)

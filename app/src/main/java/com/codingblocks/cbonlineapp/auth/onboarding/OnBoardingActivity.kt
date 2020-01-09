@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.LoginActivity
-import com.codingblocks.cbonlineapp.course.CourseActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import kotlinx.android.synthetic.main.activity_on_boarding.*
 import org.jetbrains.anko.intentFor

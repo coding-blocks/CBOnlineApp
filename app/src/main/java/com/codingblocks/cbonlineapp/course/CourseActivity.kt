@@ -160,7 +160,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         tags?.take(5)?.forEach {
             val chip = Chip(this)
             chip.text = it.name
-            val font = Typeface.createFromAsset(assets, "fonts/gilroy_bold.ttf")
+            val font = Typeface.createFromAsset(assets, "fonts/gilroy_medium.ttf")
             chip.typeface = font
             courseChipsGroup.addView(chip)
         }

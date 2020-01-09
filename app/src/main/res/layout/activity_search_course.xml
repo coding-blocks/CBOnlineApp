@@ -13,8 +13,7 @@
         style="@style/ToolBarStyleDark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        app:title="All Courses" />
+        android:gravity="center_vertical" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
