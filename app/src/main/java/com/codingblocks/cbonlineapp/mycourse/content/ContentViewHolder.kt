@@ -23,6 +23,7 @@ import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.OnCleanDialogListener
 import com.codingblocks.cbonlineapp.util.QNA
+import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO
 import kotlinx.android.synthetic.main.item_content.view.*
 import org.jetbrains.anko.alert
@@ -106,19 +107,22 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                         )
                         VIDEO -> context.startActivity(
                             context.intentFor<VideoPlayerActivity>(
-                                CONTENT_ID to content.ccid
+                                CONTENT_ID to content.ccid,
+                                SECTION_ID to content.sectionId
                             ).singleTop()
                         )
 
                         QNA -> context.startActivity(
                             context.intentFor<QuizActivity>(
-                                CONTENT_ID to content.ccid
+                                CONTENT_ID to content.ccid,
+                                SECTION_ID to content.sectionId
                             ).singleTop()
                         )
 
                         LECTURE -> context.startActivity(
                             context.intentFor<VideoPlayerActivity>(
-                                CONTENT_ID to content.ccid
+                                CONTENT_ID to content.ccid,
+                                SECTION_ID to content.sectionId
                             ).singleTop()
                         )
                     }

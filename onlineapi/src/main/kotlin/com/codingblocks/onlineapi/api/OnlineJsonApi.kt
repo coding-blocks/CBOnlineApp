@@ -81,12 +81,12 @@ interface OnlineJsonApi {
         @Path("doubtId") id: String
     ): Response<List<Comment>>
 
-    @POST("bookmark")
+    @POST("bookmarks")
     suspend fun addBookmark(
         @Body params: Bookmark
     ): Response<Bookmark>
 
-    @DELETE("bookmark/{id}")
+    @DELETE("bookmarks/{id}")
     suspend fun deleteBookmark(
         @Path("id") id: String
     ): Response<Bookmark>

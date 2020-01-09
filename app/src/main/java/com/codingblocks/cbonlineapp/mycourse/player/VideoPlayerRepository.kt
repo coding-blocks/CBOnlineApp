@@ -95,8 +95,14 @@ class VideoPlayerRepository(
         contentDao.updateBookmark(id,
             bookmark.id ?: "",
             bookmark.createdAt ?: "",
-            bookmark.runAttemptId ?: "",
-            bookmark.sectionId ?: "",
-            bookmark.contentId ?: "")
+            bookmark.runAttempt?.id ?: "",
+            bookmark.section?.id ?: "",
+            bookmark.content?.id ?: "")
+    }
+
+    suspend fun removeBookmark(bookmarkUid: String) = safeApiCall { Clients.onlineV2JsonApi.deleteBookmark(bookmarkUid) }
+
+    suspend fun deleteBookmark(id: String) {
+        contentDao.updateBookmark(id, "", "", "", "", "")
     }
 }

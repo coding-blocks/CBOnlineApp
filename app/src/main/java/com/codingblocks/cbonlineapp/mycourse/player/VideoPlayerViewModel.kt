@@ -35,7 +35,7 @@ class VideoPlayerViewModel(
     var mOtp: String? = null
     var mPlaybackInfo: String? = null
     var attemptId = MutableLiveData<String>()
-    var sectionId = MutableLiveData<String>()
+    var sectionId = ""
     var videoId: String = ""
     var contentId: String = ""
     var getOtpProgress: MutableLiveData<Boolean> = MutableLiveData()
@@ -106,7 +106,7 @@ class VideoPlayerViewModel(
     fun markBookmark() {
         runIO {
             val bookmark = Bookmark(RunAttempts(attemptId.value
-                ?: ""), LectureContent(contentId), Sections(sectionId.value ?: ""))
+                ?: ""), LectureContent(contentId), Sections(sectionId ?: ""))
             when (val response = repo.markDoubt(bookmark)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
@@ -205,7 +205,7 @@ class VideoPlayerViewModel(
 
     fun getOtp() {
         runIO {
-            when (val response = repo.getOtp(videoId, attemptId.value ?: "", sectionId.value ?: "")) {
+            when (val response = repo.getOtp(videoId, attemptId.value ?: "", sectionId ?: "")) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
@@ -214,6 +214,21 @@ class VideoPlayerViewModel(
                             mPlaybackInfo = obj.get("playbackInfo")?.asString
                             getOtpProgress.postValue(true)
                         }
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun removeBookmark(bookmarkUid: String) {
+        runIO {
+            when (val response = repo.removeBookmark(bookmarkUid)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.code() == 204)
+                        repo.deleteBookmark(contentId)
                     else {
                         setError(fetchError(response.value.code()))
                     }

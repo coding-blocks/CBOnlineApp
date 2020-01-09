@@ -3,9 +3,12 @@ package com.codingblocks.onlineapi.api
 import com.codingblocks.onlineapi.models.DoubtStats
 import com.codingblocks.onlineapi.models.Extension
 import com.codingblocks.onlineapi.models.Leaderboard
+import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.PostStream
 import com.codingblocks.onlineapi.models.RatingModel
 import com.codingblocks.onlineapi.models.ResetRunAttempt
+import com.codingblocks.onlineapi.models.Runs
+import com.github.jasminb.jsonapi.JSONAPIDocument
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -33,6 +36,11 @@ interface OnlineRestApi {
     @POST("jwt/login?android=true")
     @FormUrlEncoded
     suspend fun getToken(@Field("code") code: String): Response<JsonObject>
+
+    @GET("progresses/stats/{id}")
+    suspend fun getMyStats(
+        @Path("runAttemptId") id: String
+    ): Response<PerformanceResponse>
 
     @GET("v2/courses/{id}/rating")
     suspend fun getCourseRating(@Path("id") id: String): RatingModel

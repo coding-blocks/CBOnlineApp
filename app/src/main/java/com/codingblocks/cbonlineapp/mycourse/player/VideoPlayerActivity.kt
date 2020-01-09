@@ -76,6 +76,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         setContentView(R.layout.activity_video_player)
 
         viewModel.contentId = intent.getStringExtra(CONTENT_ID) ?: ""
+        viewModel.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
 
         setupUI()
     }
@@ -90,7 +91,6 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         viewModel.content.observer(this) {
 
             viewModel.attemptId.value = it.attempt_id
-            viewModel.sectionId.value = it.sectionId
             sectionTitle.text = "Section ${it.sectionTitle}"
             contentTitle.text = it.title
             bookmarkBtn.isActivated = it.bookmark.bookmarkUid.isEmpty()
@@ -112,6 +112,14 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             } else {
                 finish()
             }
+
+            bookmarkBtn.setOnClickListener { view ->
+                if (it.bookmark.bookmarkUid.isEmpty())
+                    viewModel.markBookmark()
+                else {
+                    viewModel.removeBookmark(it.bookmark.bookmarkUid)
+                }
+            }
         }
 
         videoFab.setOnClickListener {
@@ -120,9 +128,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         downloadBtn.setOnClickListener {
             startDownloadWorker()
         }
-        bookmarkBtn.setOnClickListener {
-            viewModel.markBookmark()
-        }
+
         setupViewPager()
     }
 
