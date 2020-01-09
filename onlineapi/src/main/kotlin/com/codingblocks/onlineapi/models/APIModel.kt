@@ -145,16 +145,20 @@ data class Comment(
 
 @Type("sections")
 data class Sections(
-    var name: String?,
+    var name: String? = null,
     var premium: Boolean? = false,
     var status: String? = null,
     var order: Int? = 0,
     @Relationship("contents")
-    var contents: ArrayList<LectureContent>?,
+    var contents: ArrayList<LectureContent>? = null,
     val runId: String? = "",
     @RelationshipLinks("contents")
     val courseContentLinks: Links? = null
-) : BaseModel()
+) : BaseModel() {
+    constructor(id: String) : this() {
+        super.id = id
+    }
+}
 
 @Type("contents")
 data class LectureContent(

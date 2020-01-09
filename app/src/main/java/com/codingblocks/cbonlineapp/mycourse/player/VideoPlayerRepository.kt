@@ -8,6 +8,7 @@ import com.codingblocks.cbonlineapp.database.NotesDao
 import com.codingblocks.cbonlineapp.database.SectionDao
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.safeApiCall
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +29,8 @@ class VideoPlayerRepository(
     suspend fun deleteNote(noteId: String) = safeApiCall { Clients.onlineV2JsonApi.deleteNoteById(noteId) }
 
     suspend fun addNote(note: Note) = safeApiCall { Clients.onlineV2JsonApi.createNote(note) }
+
+    fun getContent(ccid: String) = contentDao.getContentLive(ccid)
 
     suspend fun insertNotes(notes: List<Note>) {
         notes.forEach {
@@ -86,4 +89,14 @@ class VideoPlayerRepository(
 
     suspend fun getOtp(videoId: String, attemptId: String, sectionId: String) =
         safeApiCall { Clients.api.getOtp(videoId, sectionId, attemptId) }
+
+    suspend fun markDoubt(bookmark: Bookmark) = safeApiCall { Clients.onlineV2JsonApi.addBookmark(bookmark) }
+    suspend fun updateBookmark(id: String, bookmark: Bookmark) {
+        contentDao.updateBookmark(id,
+            bookmark.id ?: "",
+            bookmark.createdAt ?: "",
+            bookmark.runAttemptId ?: "",
+            bookmark.sectionId ?: "",
+            bookmark.contentId ?: "")
+    }
 }

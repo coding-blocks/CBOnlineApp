@@ -65,11 +65,6 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_notes, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.fetchNotes()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         playerNotesRv.setRv(requireContext(), notesListAdapter, false)

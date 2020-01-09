@@ -109,4 +109,7 @@ class QuizViewModel(private val repo: QuizRepository) : ViewModel() {
 
     private fun setError(error: String) {
     }
+
+    fun getContentModel(contentId: String) {
+    }
 }

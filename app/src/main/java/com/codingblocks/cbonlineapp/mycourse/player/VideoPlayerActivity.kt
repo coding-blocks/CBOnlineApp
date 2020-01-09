@@ -18,10 +18,12 @@ import com.codingblocks.cbonlineapp.mycourse.player.notes.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.DownloadService
+import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
+import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -73,10 +75,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_player)
 
-        viewModel.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
         viewModel.contentId = intent.getStringExtra(CONTENT_ID) ?: ""
-        viewModel.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
-        viewModel.videoId = intent.getStringExtra(VIDEO_ID) ?: ""
 
         setupUI()
     }
@@ -88,60 +87,52 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         viewModel.currentOrientation = resources.configuration.orientation
+        viewModel.content.observer(this) {
 
-        val youtubeUrl = intent.getStringExtra("videoUrl")
-
-        if (youtubeUrl != null) {
-            youtubePlayerView.isVisible = true
-            setYoutubePlayer(youtubeUrl)
-        } else {
-            youtubePlayerView.isVisible = false
-            videoContainer.visibility = View.VISIBLE
-            playerFragment = supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerSupportFragment
-            playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
-            showControls(false)
-
-            if (download) {
-                initializePlayer()
+            viewModel.attemptId.value = it.attempt_id
+            viewModel.sectionId.value = it.sectionId
+            sectionTitle.text = "Section ${it.sectionTitle}"
+            contentTitle.text = it.title
+            bookmarkBtn.isActivated = it.bookmark.bookmarkUid.isEmpty()
+            if (it.contentable == LECTURE) {
+                viewModel.videoId = it.contentLecture.lectureId
+                youtubePlayerView.isVisible = false
+                videoContainer.visibility = View.VISIBLE
+                playerFragment = supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerSupportFragment
+                playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
+                showControls(false)
+                if (it.contentLecture.isDownloaded) {
+                    initializePlayer()
+                } else {
+                    setupVideoView()
+                }
+            } else if (it.contentable == VIDEO) {
+                youtubePlayerView.isVisible = true
+                setYoutubePlayer(it.contentVideo.videoUrl)
             } else {
-                setupVideoView()
+                finish()
             }
         }
+
         videoFab.setOnClickListener {
             updateSheet("")
         }
         downloadBtn.setOnClickListener {
             startDownloadWorker()
         }
+        bookmarkBtn.setOnClickListener {
+            viewModel.markBookmark()
+        }
         setupViewPager()
     }
 
     private fun startDownloadWorker() {
-//        val constraints = if (getPrefs().SP_WIFI)
-//            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
-//        else
-//            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-//        val videoData = workDataOf(VIDEO_ID to viewModel.videoId,
-//            TITLE to contentTitle.text.toString(),
-//            SECTION_ID to viewModel.sectionId,
-//            RUN_ATTEMPT_ID to viewModel.attemptId,
-//            CONTENT_ID to viewModel.contentId)
-//
-//        val request: OneTimeWorkRequest =
-//            OneTimeWorkRequestBuilder<DownloadWorker>()
-//                .setConstraints(constraints)
-//                .setInputData(videoData)
-//                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
-//                .build()
-//
-//        WorkManager.getInstance()
-//            .enqueue(request)
         startService(intentFor<DownloadService>(VIDEO_ID to viewModel.videoId,
             TITLE to contentTitle.text.toString(),
             SECTION_ID to viewModel.sectionId,
             RUN_ATTEMPT_ID to viewModel.attemptId,
             CONTENT_ID to viewModel.contentId))
-        rootLayout.showSnackbar("Download Video In Progress", Snackbar.LENGTH_LONG)
+        rootLayout.showSnackbar("Download Video In Progress", Snackbar.LENGTH_LONG, action = false)
     }
 
     private fun setupViewPager() {
@@ -152,10 +143,6 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         playerViewPager.adapter = adapter
         playerTabs.setupWithViewPager(playerViewPager)
         playerViewPager.offscreenPageLimit = 2
-        viewModel.sectionContentTitle.observer(this) {
-            sectionTitle.append(it.first ?: "")
-            contentTitle.text = it.second ?: ""
-        }
     }
 
     private fun setupVideoView() {
@@ -187,32 +174,6 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             setPlayer(player)
             setFullscreenActionListener(fullscreenToggleListener)
             setControllerVisibilityListener(visibilityListener)
-//            playNextButton.setOnClickListener {
-//                countDownTimer.cancel()
-//                viewModel.getNextVideo(contentId, sectionId, attemptId).observer(this@VideoPlayerActivity) {
-//                    when (it.contentable) {
-//                        LECTURE -> {
-//                            startActivity(
-//                                intentFor<VideoPlayerActivity>(
-//                                    VIDEO_ID to it.contentLecture.lectureId,
-//                                    RUN_ATTEMPT_ID to it.attempt_id,
-//                                    CONTENT_ID to it.ccid,
-//                                    SECTION_ID to sectionId,
-//                                    DOWNLOADED to it.contentLecture.isDownloaded
-//                                ))
-//                            finish()
-//                        }
-//                        VIDEO -> {
-//                            startActivity(intentFor<VideoPlayerActivity>(
-//                                VIDEO_URL to it.contentVideo.videoUrl,
-//                                RUN_ATTEMPT_ID to it.attempt_id,
-//                                CONTENT_ID to it.ccid
-//                            ).singleTop())
-//                            finish()
-//                        }
-//                    }
-//                }
-//            }
         }
         showControls(true)
 
@@ -488,7 +449,8 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                     dialog.dismiss()
                 }
                 bottomSheetSaveBtn.setOnClickListener {
-                    val note = Note(10.45000, sheetDialog.bottoSheetDescTv.text.toString(), RunAttempts(viewModel.attemptId), LectureContent(viewModel.contentId))
+                    val note = Note(10.45000, sheetDialog.bottoSheetDescTv.text.toString(), RunAttempts(viewModel.attemptId.value
+                        ?: ""), LectureContent(viewModel.contentId))
                     viewModel.createNote(note)
                     dialog.dismiss()
                 }

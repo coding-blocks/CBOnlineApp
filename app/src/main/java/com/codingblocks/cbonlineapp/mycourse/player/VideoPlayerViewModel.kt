@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.mycourse.player
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
@@ -18,9 +19,11 @@ import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
+import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
+import com.codingblocks.onlineapi.models.Sections
 import java.util.concurrent.TimeUnit
 
 class VideoPlayerViewModel(
@@ -31,25 +34,25 @@ class VideoPlayerViewModel(
     var currentOrientation: Int = 0
     var mOtp: String? = null
     var mPlaybackInfo: String? = null
-    var attemptId: String = ""
-    var sectionId: String = ""
+    var attemptId = MutableLiveData<String>()
+    var sectionId = MutableLiveData<String>()
     var videoId: String = ""
     var contentId: String = ""
     var getOtpProgress: MutableLiveData<Boolean> = MutableLiveData()
-    val doubts by lazy {
-        repoDoubts.getDoubtsByCourseRun(LIVE, attemptId)
-    }
-    val notes by lazy {
-        repo.getNotes(attemptId)
-    }
-    val sectionContentTitle = MutableLiveData<Pair<String, String>>()
-    val offlineSnackbar = MutableLiveData<String>()
 
-    init {
-        runIO {
-            sectionContentTitle.postValue(repo.getSectionTitle(sectionId, contentId))
-        }
+    val doubts = Transformations.switchMap(attemptId) {
+        fetchDoubts()
+        repoDoubts.getDoubtsByCourseRun(LIVE, it)
     }
+    val content by lazy {
+        repo.getContent(contentId)
+    }
+
+    val notes = Transformations.switchMap(attemptId) {
+        fetchNotes()
+        repo.getNotes(it)
+    }
+    val offlineSnackbar = MutableLiveData<String>()
 
     fun resolveDoubt(doubt: DoubtsModel) {
         runIO {
@@ -68,7 +71,7 @@ class VideoPlayerViewModel(
 
     fun fetchDoubts() {
         runIO {
-            when (val response = repoDoubts.fetchDoubtsByCourseRun(attemptId)) {
+            when (val response = repoDoubts.fetchDoubtsByCourseRun(attemptId.value ?: "")) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
@@ -85,12 +88,31 @@ class VideoPlayerViewModel(
 
     fun fetchNotes() {
         runIO {
-            when (val response = repo.fetchCourseNotes(attemptId)) {
+            when (val response = repo.fetchCourseNotes(attemptId.value ?: "")) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         response.value.body()?.let { notes ->
                             repo.insertNotes(notes)
+                        }
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun markBookmark() {
+        runIO {
+            val bookmark = Bookmark(RunAttempts(attemptId.value
+                ?: ""), LectureContent(contentId), Sections(sectionId.value ?: ""))
+            when (val response = repo.markDoubt(bookmark)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let { bookmark ->
+                            repo.updateBookmark(contentId, bookmark)
                         }
                     else {
                         setError(fetchError(response.value.code()))
@@ -183,7 +205,7 @@ class VideoPlayerViewModel(
 
     fun getOtp() {
         runIO {
-            when (val response = repo.getOtp(videoId, attemptId, sectionId)) {
+            when (val response = repo.getOtp(videoId, attemptId.value ?: "", sectionId.value ?: "")) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
