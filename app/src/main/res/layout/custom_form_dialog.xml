@@ -33,7 +33,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="8dp"
-                    android:fontFamily="@font/nunitosans_bold"
+                    android:fontFamily="@font/gilroy_bold"
                     android:text="Application Form"
                     android:textSize="24sp" />
 
@@ -58,7 +58,7 @@
                         android:layout_marginBottom="16dp"
                         android:layout_weight="0.8"
                         android:background="@drawable/button_background"
-                        android:fontFamily="@font/nunitosans_bold"
+                        android:fontFamily="@font/gilroy_bold"
                         android:paddingStart="8dp"
                         android:paddingTop="8dp"
                         android:paddingEnd="8dp"
@@ -78,7 +78,7 @@
                         android:layout_marginBottom="16dp"
                         android:layout_weight="1"
                         android:background="@drawable/button_background"
-                        android:fontFamily="@font/nunitosans_bold"
+                        android:fontFamily="@font/gilroy_bold"
                         android:paddingStart="8dp"
                         android:paddingTop="8dp"
                         android:paddingEnd="8dp"

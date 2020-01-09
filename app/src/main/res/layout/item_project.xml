@@ -11,7 +11,7 @@
         android:id="@+id/projectTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/gilroy_semibold"
+        android:fontFamily="@font/gilroy_bold"
         android:textColor="@color/orangish"
         android:textSize="@dimen/heading_text_size"
         tools:text="TodoList App" />

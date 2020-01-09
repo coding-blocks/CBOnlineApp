@@ -40,7 +40,7 @@
                     android:id="@+id/jobTitleTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/nunitosans_bold"
+                    android:fontFamily="@font/gilroy_bold"
                     android:textSize="20sp"
                     tools:text="Senior UI/UX Designer" />
 
@@ -48,7 +48,7 @@
                     android:id="@+id/companyTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/nunitosans_semibold"
+                    android:fontFamily="@font/gilroy_bold"
                     android:textSize="18sp"
                     tools:text="Book My Show" />
 
@@ -58,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:fontFamily="@font/nunitosans_regular"
+                    android:fontFamily="@font/gilroy_medium"
                     android:textColor="#999999"
                     android:textSize="16sp"
                     tools:text="Posted 2 weeks ago" />

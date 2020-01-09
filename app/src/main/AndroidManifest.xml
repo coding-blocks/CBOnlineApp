@@ -175,9 +175,7 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/cblogo" />
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
+
         <meta-data
             android:name="android.app.shortcuts"
             android:resource="@xml/shortcut" />

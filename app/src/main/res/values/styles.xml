@@ -25,10 +25,9 @@
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
         <!-- enable window content transitions -->
         <item name="android:windowActivityTransitions">true</item>
-
-        <!--        &lt;!&ndash; specify enter and exit transitions &ndash;&gt;-->
-        <!--        <item name="android:windowEnterTransition">@transition/explode</item>-->
-        <!--        <item name="android:windowExitTransition">@transition/explode</item>-->
+        <!-- specify enter and exit transitions -->
+        <item name="android:windowEnterTransition">@transition/explode</item>
+        <item name="android:windowExitTransition">@transition/explode</item>
     </style>
 
     <style name="NewAppTheme.Dark" parent="NewAppTheme">
@@ -160,7 +159,6 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="android:fontFamily">@font/nunitosans_regular</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
@@ -176,7 +174,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:fontFamily">@font/nunitosans_regular</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
@@ -189,7 +186,6 @@
     </style>
 
     <style name="Theme.Jobs" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:fontFamily">@font/nunitosans_semibold</item>
         <item name="colorPrimary">@color/colorPrimaryJobs</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkJobs</item>
         <item name="colorAccent">@color/colorPrimary</item>
@@ -202,7 +198,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:fontFamily">@font/nunitosans_semibold</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="android:textColor">@color/black</item>

@@ -4,7 +4,6 @@ import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import com.codingblocks.cbonlineapp.R
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
@@ -21,10 +20,8 @@ import org.jetbrains.anko.wrapContent
 class NotificationCardUi : AnkoComponent<ViewGroup> {
     lateinit var title: TextView
     lateinit var body: TextView
-    var font: Typeface? = null
     override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui) {
         frameLayout {
-            font = ResourcesCompat.getFont(ctx, R.font.nunitosans_semibold)
             cardView {
                 cardElevation = dip(4).toFloat()
                 radius = dip(15).toFloat()
@@ -32,12 +29,10 @@ class NotificationCardUi : AnkoComponent<ViewGroup> {
                     title = textView {
                         textSize = 20f
                         textColor = context.resources.getColor(R.color.black)
-                        typeface = font
                     }
                     body = textView {
                         textSize = 16f
                         textColor = context.resources.getColor(R.color.black)
-                        typeface = font
                     }
                 }.lparams(width = matchParent, height = wrapContent) {
                     margin = dip(8)

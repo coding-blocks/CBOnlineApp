@@ -1,13 +1,13 @@
 package com.codingblocks.cbonlineapp.course
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -39,7 +39,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetChangedListener {
 
     private val courseId by lazy {
-        intent.getStringExtra(COURSE_ID) ?: "17"
+        intent.getStringExtra(COURSE_ID)
     }
     private val courseLogoImage by lazy {
         intent.getStringExtra(LOGO_TRANSITION_NAME)
@@ -160,9 +160,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         tags?.take(5)?.forEach {
             val chip = Chip(this)
             chip.text = it.name
-            val typeFace =
-                ResourcesCompat.getFont(this, R.font.gilroy_medium)
-            chip.typeface = typeFace
+            val font = Typeface.createFromAsset(assets, "fonts/gilroy_bold.ttf")
+            chip.typeface = font
             courseChipsGroup.addView(chip)
         }
     }
@@ -201,7 +200,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
     }
 
     override fun onBackPressed() {
-//        youtubePlayerView.release()
+        youtubePlayerView.release()
 //        supportFinishAfterTransition()
         super.onBackPressed()
     }

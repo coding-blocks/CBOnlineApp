@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_marginEnd="8dp"
-        android:fontFamily="@font/gilroy_semibold"
+        android:fontFamily="@font/gilroy_medium"
         android:textColor="@color/black"
         android:textSize="16sp"
         tools:text="Networks, Protocols and Hardware" />
