@@ -16,11 +16,14 @@ import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
+import com.codingblocks.cbonlineapp.util.COURSE_FILTER_TYPE
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showEmptyView
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.codingblocks.cbonlineapp.util.extensions.getSharedPrefs
+import com.codingblocks.cbonlineapp.util.extensions.save
 import com.codingblocks.onlineapi.ErrorStatus
 import com.crashlytics.android.core.CrashlyticsCore
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -40,6 +43,7 @@ class DashboardMyCoursesFragment : Fragment() {
     private val viewModel by sharedViewModel<DashboardViewModel>()
     private val type = MutableLiveData<Int>()
     private val courseListAdapter = MyCourseListAdapter()
+    private val sharedPrefs by lazy { getSharedPrefs() }
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -73,9 +77,21 @@ class DashboardMyCoursesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpBottomSheet()
 
-        courseTypeTv.setOnClickListener {
-            dialog.show()
+        courseTypeTv.apply {
+            val lastSelected = sharedPrefs.getInt(COURSE_FILTER_TYPE, 0)
+            text = coursesType[lastSelected]
+
+            setCompoundDrawablesRelativeWithIntrinsicBounds(
+                requireContext().getDrawable(imgs.getResourceId(lastSelected, 0)),
+                null,
+                requireContext().getDrawable(R.drawable.ic_dropdown),
+                null)
+
+            setOnClickListener {
+                dialog.show()
+            }
         }
+
         type.observer(viewLifecycleOwner) { num ->
             courseTypeTv.apply {
                 viewModel.prefs.courseFilter = num
@@ -117,15 +133,16 @@ class DashboardMyCoursesFragment : Fragment() {
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_mycourses, null)
         val list = arrayListOf<SheetItem>()
         repeat(5) {
-            if (type.value == it)
-                list.add(SheetItem(coursesType[it], imgs.getResourceId(it, 0), true))
-            else
-                list.add(SheetItem(coursesType[it], imgs.getResourceId(it, 0)))
+            list.add(SheetItem(coursesType[it], imgs.getResourceId(it, 0)))
         }
         sheetDialog.run {
-            sheetLv.adapter = SheetAdapter(list)
+            val initialSelectedItem = sharedPrefs.getInt(COURSE_FILTER_TYPE, 0)
+            val sheetAdapter = SheetAdapter(list, initialSelectedItem)
+            sheetLv.adapter = sheetAdapter
             sheetLv.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
                 type.postValue(position)
+                sharedPrefs.save(COURSE_FILTER_TYPE, position)
+                sheetAdapter.selectedItem = position
                 dialog.dismiss()
             }
         }
