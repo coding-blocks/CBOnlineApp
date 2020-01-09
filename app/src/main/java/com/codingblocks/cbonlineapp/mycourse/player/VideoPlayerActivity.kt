@@ -464,4 +464,9 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         }
         dialog.show()
     }
+
+    override fun onDestroy() {
+        youtubePlayerView.release()
+        super.onDestroy()
+    }
 }

@@ -305,3 +305,13 @@ fun AppCompatActivity.setToolbar(
         supportActionBar?.show()
     } else supportActionBar?.hide()
 }
+
+/**
+ * @param event callback function receiving root view, item position and type
+ */
+fun <T : RecyclerView.ViewHolder> T.onClick(event: (view: View, position: Int, type: Int) -> Unit): T {
+    itemView.setOnClickListener {
+        event.invoke(it, adapterPosition, itemViewType)
+    }
+    return this
+}

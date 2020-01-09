@@ -238,5 +238,6 @@
     <string name="trending_now">Trending Now</string>
     <string name="trending_desc">Industry trending tech courses for you!</string>
     <string name="what_do_you_want_to_learn">What do you want to learn ?</string>
+    <string name="recommended_for_you">Recommended for you</string>
 
 </resources>
