@@ -47,7 +47,7 @@ class MyCourseListAdapter : ListAdapter<CourseInstructorPair, MyCourseListAdapte
 //                ImageViewCompat.setImageTintList(courseLogoImg, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.brownish_grey)))
 //            }
             val progress = item.courseRun.progress
-            progressTv.text = "$progress %"
+            progressTv.text = "${progress.toInt()} %"
             progressView1.progress = progress.toFloat()
             if (progress > 90) {
                 progressView1.highlightView.colorGradientStart = context.getColor(R.color.kiwigreen)

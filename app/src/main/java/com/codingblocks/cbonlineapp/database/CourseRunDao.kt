@@ -8,14 +8,11 @@ import com.codingblocks.cbonlineapp.database.models.RunModel
 @Dao
 abstract class CourseRunDao : BaseDao<RunModel> {
 
-    @Query("SELECT * FROM RunModel where crAttemptId != " + "'" + "' ORDER BY hits DESC limit 2")
-    abstract fun getTopRun(): LiveData<List<RunModel>>
+//    @Query("SELECT * FROM RunModel where crAttemptId != " + "'" + "' ORDER BY hits DESC limit 2")
+//    abstract fun getTopRun(): LiveData<List<RunModel>>
 
     @Query("SELECT * FROM RunModel where crAttemptId = :attemptId")
     abstract suspend fun getRunById(attemptId: String): RunModel
-
-    @Query("UPDATE RunModel SET hits = hits+1 where crAttemptId = :attemptId")
-    abstract suspend fun updateHit(attemptId: String)
 
     @Query("SELECT * FROM RunModel where crAttemptId = :attemptId")
     abstract fun getRunByAtemptId(attemptId: String): LiveData<RunModel>

@@ -34,7 +34,9 @@ class MyCourseRepository(
 
     fun getSectionWithContent(attemptId: String) = sectionWithContentsDao.getSectionWithContent(attemptId)
 
-    suspend fun updateHit(attemptId: String) = runDao.updateHit(attemptId)
+    fun updateHit(attemptId: String) {
+        // update lastaccessed
+    }
 
     fun resumeCourse(attemptId: String) = sectionWithContentsDao.resumeCourse(attemptId)
 

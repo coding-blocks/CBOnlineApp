@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "0d2045e1f9a56b4f70a2cb574b95ff8f",
+    "identityHash": "f7b03ebf60861219a8a5dd50c9ba9317",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -778,7 +778,7 @@
       },
       {
         "tableName": "RunModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`crUid` TEXT NOT NULL, `crName` TEXT NOT NULL, `crDescription` TEXT NOT NULL, `crEnrollmentStart` TEXT NOT NULL, `crEnrollmentEnd` TEXT NOT NULL, `crStart` TEXT NOT NULL, `crEnd` TEXT NOT NULL, `crPrice` TEXT NOT NULL, `crMrp` TEXT NOT NULL, `crCourseId` TEXT NOT NULL, `crUpdatedAt` TEXT NOT NULL, `whatsappLink` TEXT, `crAttemptId` TEXT, `premium` INTEGER NOT NULL, `crRunAttemptEnd` TEXT NOT NULL, `approvalRequested` INTEGER NOT NULL, `certificateApproved` INTEGER NOT NULL, `totalContents` INTEGER NOT NULL, `completedContents` INTEGER NOT NULL, `progress` REAL NOT NULL, `completionThreshold` INTEGER NOT NULL, `goodiesThreshold` INTEGER NOT NULL, `productId` INTEGER NOT NULL, `recommended` INTEGER NOT NULL, `hits` INTEGER NOT NULL, PRIMARY KEY(`crUid`), FOREIGN KEY(`crCourseId`) REFERENCES `CourseModel`(`cid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`crUid` TEXT NOT NULL, `crName` TEXT NOT NULL, `crDescription` TEXT NOT NULL, `crEnrollmentStart` TEXT NOT NULL, `crEnrollmentEnd` TEXT NOT NULL, `crStart` TEXT NOT NULL, `crEnd` TEXT NOT NULL, `crPrice` TEXT NOT NULL, `crMrp` TEXT NOT NULL, `crCourseId` TEXT NOT NULL, `crUpdatedAt` TEXT NOT NULL, `whatsappLink` TEXT, `crAttemptId` TEXT, `premium` INTEGER NOT NULL, `crRunAttemptEnd` TEXT NOT NULL, `approvalRequested` INTEGER NOT NULL, `certificateApproved` INTEGER NOT NULL, `totalContents` INTEGER NOT NULL, `completedContents` INTEGER NOT NULL, `progress` REAL NOT NULL, `completionThreshold` INTEGER NOT NULL, `goodiesThreshold` INTEGER NOT NULL, `productId` INTEGER NOT NULL, `recommended` INTEGER NOT NULL, `lastAccessed` TEXT NOT NULL, PRIMARY KEY(`crUid`), FOREIGN KEY(`crCourseId`) REFERENCES `CourseModel`(`cid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "crUid",
@@ -925,9 +925,9 @@
             "notNull": true
           },
           {
-            "fieldPath": "hits",
-            "columnName": "hits",
-            "affinity": "INTEGER",
+            "fieldPath": "lastAccessed",
+            "columnName": "lastAccessed",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -1255,7 +1255,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0d2045e1f9a56b4f70a2cb574b95ff8f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f7b03ebf60861219a8a5dd50c9ba9317')"
     ]
   }
 }

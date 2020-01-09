@@ -66,6 +66,11 @@ interface OnlineJsonApi {
         @Body params: Doubts
     ): Response<Doubts>
 
+    @GET("runs/lastAccessedRun")
+    suspend fun getLastAccessed(
+        @Query("include") include: String = "course,run_attempts"
+    ): Response<Runs>
+
     @PATCH("doubts/{doubtId}")
     suspend fun getDoubt(
         @Path("doubtId") id: String
@@ -76,7 +81,7 @@ interface OnlineJsonApi {
         @Path("doubtId") id: String
     ): Response<List<Comment>>
 
-    @GET("bookmark")
+    @POST("bookmark")
     suspend fun addBookmark(
         @Body params: Bookmark
     ): Response<Bookmark>

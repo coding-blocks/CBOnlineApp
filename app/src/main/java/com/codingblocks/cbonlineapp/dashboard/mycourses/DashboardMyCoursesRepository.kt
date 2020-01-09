@@ -35,6 +35,7 @@ class DashboardMyCoursesRepository(
             with(run) {
                 val response = withContext(Dispatchers.IO) { insertCourse(course) }
                 if (!runAttempts.isNullOrEmpty()) {
+                    val myAttempt = runAttempts!!.first()
                     val model = RunModel(
                         id,
                         name ?: "",
@@ -48,17 +49,18 @@ class DashboardMyCoursesRepository(
                         course?.id ?: "",
                         updatedAt,
                         whatsappLink,
-                        runAttempts?.first()?.id ?: "",
-                        runAttempts?.first()?.premium ?: false,
-                        runAttempts?.first()?.end ?: "",
-                        runAttempts?.first()?.approvalRequested ?: false,
-                        runAttempts?.first()?.certificateApproved ?: false,
+                        myAttempt.id,
+                        myAttempt.premium,
+                        myAttempt.end,
+                        myAttempt.approvalRequested,
+                        myAttempt.certificateApproved,
                         totalContents,
-                        completedContents,
-                        if (completedContents > 0) (totalContents / completedContents).toDouble() else 0.0,
+                        myAttempt.completedContents,
+                        if (myAttempt.completedContents > 0) (myAttempt.completedContents / totalContents.toDouble()) * 100 else 0.0,
                         completionThreshold ?: 0,
                         goodiesThreshold ?: 0,
-                        productId ?: 0
+                        productId ?: 0,
+                        lastAccessed = myAttempt.lastAccessedAt ?: ""
                     )
                     if (response == -2L && !runDao.getRun(id).isNullOrEmpty()) {
                         runDao.update(model)

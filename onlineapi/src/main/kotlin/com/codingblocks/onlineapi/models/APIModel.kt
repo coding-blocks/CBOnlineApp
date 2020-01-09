@@ -79,8 +79,7 @@ data class Runs(
     val productId: Int?,
     val completionThreshold: Int?,
     val goodiesThreshold: Int?,
-    val totalContents: Int,
-    val completedContents: Int
+    val totalContents: Int
 ) : BaseModel() {
 
 }
@@ -93,6 +92,8 @@ data class RunAttempts(
     val revoked: Boolean = false,
     val approvalRequested: Boolean = false,
     val doubtSupport: String? = "",
+    val completedContents: Int = 0,
+    val lastAccessedAt: String? = "",
     @Relationship("run")
     val run: Runs? = null
 ) : BaseModel() {

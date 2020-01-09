@@ -41,5 +41,5 @@ open class RunModel(
     var goodiesThreshold: Int = 0,
     var productId: Int = 0,
     var recommended: Boolean = false,
-    var hits: Int = 0
+    var lastAccessed: String = ""
 )
