@@ -70,7 +70,7 @@
 
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">18sp</item>
-        <item name="android:fontFamily">@font/gilroy_bold</item>
+        <item name="android:fontFamily">@as</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">

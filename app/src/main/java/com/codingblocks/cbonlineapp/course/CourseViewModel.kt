@@ -47,7 +47,7 @@ class CourseViewModel(
         fetchRecommendedCourses()
     }
 
-    private fun fetchRecommendedCourses() {
+    fun fetchRecommendedCourses() {
         runIO {
             when (val response = repo.getSuggestedCourses()) {
                 is ResultWrapper.GenericError -> setError(response.error)

@@ -119,6 +119,7 @@
                 android:drawableEnd="@drawable/ic_dropdown"
                 android:padding="@dimen/padding_small"
                 android:paddingStart="@dimen/padding_medium"
+                android:fontFamily="@font/gilroy_medium"
                 android:paddingEnd="@dimen/padding_medium"
                 android:text="@string/choose_batch"
                 android:textAlignment="textStart"

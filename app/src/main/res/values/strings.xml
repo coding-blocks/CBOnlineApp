@@ -237,5 +237,6 @@
     <string name="view_all">View all</string>
     <string name="trending_now">Trending Now</string>
     <string name="trending_desc">Industry trending tech courses for you!</string>
+    <string name="what_do_you_want_to_learn">What do you want to learn ?</string>
 
 </resources>

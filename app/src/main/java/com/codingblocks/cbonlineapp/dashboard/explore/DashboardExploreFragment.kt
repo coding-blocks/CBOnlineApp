@@ -14,6 +14,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.CourseActivity
 import com.codingblocks.cbonlineapp.course.CourseListAdapter
 import com.codingblocks.cbonlineapp.course.ItemClickListener
+import com.codingblocks.cbonlineapp.course.SearchCourseActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
@@ -22,6 +23,7 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import kotlinx.android.synthetic.main.activity_course.courseSuggestedRv
 import kotlinx.android.synthetic.main.fragment_dashboard_explore.*
+import org.jetbrains.anko.support.v4.startActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DashboardExploreFragment : Fragment() {
@@ -74,6 +76,12 @@ class DashboardExploreFragment : Fragment() {
 
         courseCardListAdapter.onItemClick = itemClickListener
         coursePopularListAdapter.onItemClick = itemClickListener
+        allCourseCardTv.setOnClickListener {
+            startActivity<SearchCourseActivity>()
+        }
+        allCourseCard.setOnClickListener {
+            startActivity<SearchCourseActivity>()
+        }
     }
 
     override fun onDestroyView() {
