@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.mycourse
 
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.database.RunPerformanceDao
 import com.codingblocks.cbonlineapp.database.SectionDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.database.models.BookmarkModel
@@ -12,12 +13,14 @@ import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.ContentQnaModel
 import com.codingblocks.cbonlineapp.database.models.ContentVideo
+import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.models.LectureContent
+import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.safeApiCall
 
@@ -25,7 +28,8 @@ class MyCourseRepository(
     private val sectionWithContentsDao: SectionWithContentsDao,
     private val contentsDao: ContentDao,
     private val sectionDao: SectionDao,
-    private val instructorDao: CourseWithInstructorDao
+    private val courseWithInstructorDao: CourseWithInstructorDao,
+    private val runPerformanceDao: RunPerformanceDao
 ) {
 
     fun getSectionWithContent(attemptId: String) = sectionWithContentsDao.getSectionWithContent(attemptId)
@@ -227,4 +231,20 @@ class MyCourseRepository(
     }
 
     suspend fun fetchSections(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.enrolledCourseById(attemptId) }
+
+    fun getRunById(attemptId: String) = courseWithInstructorDao.getRunById(attemptId)
+
+    fun getRunStats(attemptId: String) = runPerformanceDao.getPerformance(attemptId)
+    suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
+    suspend fun saveStats(body: PerformanceResponse, id: String) {
+        runPerformanceDao.insert(
+            RunPerformance(
+                id,
+                body.performance.percentile,
+                body.performance.remarks,
+                body.averageProgress,
+                body.userProgress
+            )
+        )
+    }
 }

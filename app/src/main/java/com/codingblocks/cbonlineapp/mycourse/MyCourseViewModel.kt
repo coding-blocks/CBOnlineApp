@@ -62,6 +62,10 @@ class MyCourseViewModel(
         errorLiveData.postValue(error)
     }
 
+    fun getRun() = repo.getRunById(attemptId)
+
+    fun getPerformance() = repo.getRunStats(attemptId)
+
     fun resetProgress() {
         val resetCourse = ResetRunAttempt(attemptId)
         Clients.api.resetProgress(resetCourse).enqueue(retrofitCallback { _, response ->
@@ -96,5 +100,22 @@ class MyCourseViewModel(
             }
         })
         return extensions
+    }
+
+    fun getStats(id: String) {
+        runIO {
+            when (val response = repo.getStats(id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        body()?.let { response ->
+                            repo.saveStats(response, id)
+                        }
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
     }
 }

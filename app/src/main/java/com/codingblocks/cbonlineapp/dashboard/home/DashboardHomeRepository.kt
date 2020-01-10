@@ -30,9 +30,6 @@ class DashboardHomeRepository(
     }
 
     suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
-
-    fun getTopRun() = courseWithInstructorDao.getTopRun()
-    fun getRunStats(query: String?) = query?.let { runPerformanceDao.getPerformance(it) }
     suspend fun saveStats(body: PerformanceResponse, id: String) {
         runPerformanceDao.insert(
             RunPerformance(
@@ -44,4 +41,7 @@ class DashboardHomeRepository(
             )
         )
     }
+
+    fun getTopRun() = courseWithInstructorDao.getTopRun()
+    fun getRunStats(query: String?) = query?.let { runPerformanceDao.getPerformance(it) }
 }

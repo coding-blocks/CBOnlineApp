@@ -42,7 +42,7 @@ val viewModelModule = module {
     viewModel { JobsViewModel(get()) }
     viewModel { JobDetailViewModel(get(), get()) }
 
-    single { MyCourseRepository(get(), get(), get(), get()) }
+    single { MyCourseRepository(get(), get(), get(), get(), get()) }
 
     viewModel { AdminDoubtsViewModel(get()) }
     viewModel { AdminOverviewViewModel(get()) }

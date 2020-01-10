@@ -258,5 +258,6 @@
     <string name="mentor_approval_pending">Mentor Approval - Pending</string>
     <string name="generate">Generate</string>
     <string name="threshold_completion_90">Threshold Completion: 90%+</string>
+    <string name="percentile">Percentile</string>
 
 </resources>

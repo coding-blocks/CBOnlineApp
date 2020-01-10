@@ -72,6 +72,7 @@ class DashboardHomeFragment : Fragment() {
         }
         viewModel.runPerformance.observer(viewLifecycleOwner) {
             homePerformanceTv.text = it.remarks
+            homePercentileTv.text = it.percentile.toString()
             loadData(it.averageProgress, it.userProgress)
         }
     }
@@ -87,8 +88,8 @@ class DashboardHomeFragment : Fragment() {
             values2.add(Entry(index.toFloat(), progressItem.progress.toFloat()))
         }
         values.add(Entry(2f, 100f))
-        var set1 = LineDataSet(values, "Sample Data")
-        var set2 = LineDataSet(values2, "Sample Data")
+        var set1 = LineDataSet(values, "Average Progress")
+        var set2 = LineDataSet(values2, "User Progress")
 
         val dataSets: ArrayList<ILineDataSet> = ArrayList()
         dataSets.add(set1)

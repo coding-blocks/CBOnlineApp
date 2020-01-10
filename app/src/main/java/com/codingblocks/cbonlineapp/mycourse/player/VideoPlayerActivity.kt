@@ -19,7 +19,7 @@ import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.DownloadService
 import com.codingblocks.cbonlineapp.util.LECTURE
-import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
@@ -411,7 +411,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 youtubePlayer = youTubePlayer
-                youTubePlayer.cueVideo(MediaUtils.getYotubeVideoId(promoVideo), 0F)
+                youTubePlayer.loadVideo(getYotubeVideoId(promoVideo), 0F)
             }
         })
     }
