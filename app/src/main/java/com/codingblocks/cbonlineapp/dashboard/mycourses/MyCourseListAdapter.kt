@@ -38,7 +38,7 @@ class MyCourseListAdapter : ListAdapter<CourseInstructorPair, MyCourseListAdapte
             if (item.instructor.size > 1) {
                 courseInstructorTv.append("and ${item.instructor.size - 1} more")
             }
-            val expired = item.courseRun.crRunAttemptEnd.toLong() * 1000 < System.currentTimeMillis()
+            val expired = item.courseRun.runAttempt.end.toLong() * 1000 < System.currentTimeMillis()
             progressContainer.isVisible = !expired
             openBtn.isVisible = !expired
             extensionTv.isVisible = expired
@@ -46,7 +46,7 @@ class MyCourseListAdapter : ListAdapter<CourseInstructorPair, MyCourseListAdapte
 //                //Todo Fix this
 //                ImageViewCompat.setImageTintList(courseLogoImg, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.brownish_grey)))
 //            }
-            val progress = item.courseRun.progress
+            val progress = if (item.courseRun.runAttempt.completedContents > 0) (item.courseRun.runAttempt.completedContents / item.courseRun.run.totalContents.toDouble()) * 100 else 0.0
             progressTv.text = "${progress.toInt()} %"
             progressView1.progress = progress.toFloat()
             if (progress > 90) {
@@ -60,8 +60,7 @@ class MyCourseListAdapter : ListAdapter<CourseInstructorPair, MyCourseListAdapte
                 if (expired) {
                     // TODO ( show extension modal )
                 } else {
-                    itemClickListener?.onClick(item.courseRun.crCourseId, item.courseRun.crUid, item.courseRun.crAttemptId
-                        ?: "", item.courseRun.course.title)
+                    itemClickListener?.onClick(item.courseRun.course.cid, item.courseRun.run.crUid, item.courseRun.runAttempt.attemptId, item.courseRun.course.title)
                 }
             }
         }

@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.dashboard.doubts
 
 import androidx.lifecycle.LiveData
 import com.codingblocks.cbonlineapp.database.CommentsDao
-import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.DoubtsDao
 import com.codingblocks.cbonlineapp.database.models.CommentModel
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
@@ -17,8 +16,7 @@ import com.codingblocks.onlineapi.safeApiCall
 
 class DashboardDoubtsRepository(
     private val doubtsDao: DoubtsDao,
-    private val commentsDao: CommentsDao,
-    private val runDao: CourseRunDao
+    private val commentsDao: CommentsDao
 ) {
 
     suspend fun fetchDoubtsByCourseRun(id: String) = safeApiCall {
@@ -83,5 +81,5 @@ class DashboardDoubtsRepository(
 
     fun getDoubtById(id: String) = doubtsDao.getDoubtById(id)
     fun getCommentsById(id: String) = commentsDao.getComments(id)
-    fun getRuns() = runDao.getAttemptIds()
+//    fun getRuns() = runDao.getAttemptIds()
 }

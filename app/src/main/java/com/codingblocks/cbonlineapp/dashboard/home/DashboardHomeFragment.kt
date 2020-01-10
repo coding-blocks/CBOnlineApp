@@ -51,8 +51,8 @@ class DashboardHomeFragment : Fragment() {
                 activity?.toolbarCourseResumeTv?.setOnClickListener {
                     startActivity(intentFor<MyCourseActivity>(
                         COURSE_ID to course.cid,
-                        RUN_ID to crUid,
-                        RUN_ATTEMPT_ID to crAttemptId,
+                        RUN_ID to run.crUid,
+                        RUN_ATTEMPT_ID to runAttempt.attemptId,
                         COURSE_NAME to course.title
                     ).singleTop())
                 }

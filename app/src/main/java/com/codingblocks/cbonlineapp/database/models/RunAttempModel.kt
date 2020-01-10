@@ -1,24 +1,14 @@
 package com.codingblocks.cbonlineapp.database.models
 
+import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.codingblocks.onlineapi.models.BaseModel
+import androidx.room.Relation
 
 /**
  * @author aggarwalpulkit596
  */
-@Entity(
-    indices = [Index("crCourseId")],
-    foreignKeys = [
-        ForeignKey(
-            entity = CourseModel::class,
-            parentColumns = ["cid"],
-            childColumns = ["attemptId"],
-            onDelete = ForeignKey.CASCADE)
-    ]
-)
+@Entity
 data class RunAttemptModel(
     @PrimaryKey
     val attemptId: String,
@@ -29,5 +19,20 @@ data class RunAttemptModel(
     val approvalRequested: Boolean = false,
     val doubtSupport: String,
     val completedContents: Int,
-    val lastAccessedAt: String
-) : BaseModel()
+    val lastAccessedAt: String,
+    val runId: String
+) {
+    constructor() : this("", end = "", doubtSupport = " ", completedContents = 0, lastAccessedAt = "", runId = "")
+}
+
+open class RunWithAttempt(
+    @Embedded
+    public var run: RunModel,
+    @Relation(
+        parentColumn = "crUid",
+        entityColumn = "runId"
+    )
+    public var runAttempt: RunAttemptModel
+) {
+    constructor() : this(RunModel(), RunAttemptModel())
+}

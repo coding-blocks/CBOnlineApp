@@ -15,7 +15,8 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE)
     ]
 )
-open class RunModel(
+
+data class RunModel(
     @PrimaryKey
     val crUid: String,
     val crName: String,
@@ -31,5 +32,8 @@ open class RunModel(
     var totalContents: Int,
     var completionThreshold: Int,
     var goodiesThreshold: Int,
-    var productId: Int
-)
+    var productId: Int,
+    var crCourseId: String
+) {
+    constructor() : this("", "", "", "", "", "", "", "", "", "", "", 0, 0, 0, -1, "")
+}

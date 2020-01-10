@@ -2,13 +2,16 @@ package com.codingblocks.cbonlineapp.dashboard.mycourses
 
 import androidx.lifecycle.LiveData
 import com.codingblocks.cbonlineapp.database.CourseDao
-import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.InstructorDao
+import com.codingblocks.cbonlineapp.database.RunAttemptDao
+import com.codingblocks.cbonlineapp.database.RunDao
+import com.codingblocks.cbonlineapp.database.RunWithAttemptDao
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.database.models.CourseModel
 import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
 import com.codingblocks.cbonlineapp.database.models.InstructorModel
+import com.codingblocks.cbonlineapp.database.models.RunAttemptModel
 import com.codingblocks.cbonlineapp.database.models.RunModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
@@ -22,7 +25,9 @@ import kotlinx.coroutines.withContext
 class DashboardMyCoursesRepository(
     private val courseWithInstructorDao: CourseWithInstructorDao,
     private val courseDao: CourseDao,
-    private val runDao: CourseRunDao,
+    private val runDao: RunDao,
+    private val attemptDao: RunAttemptDao,
+    private val runWithAttemptDao: RunWithAttemptDao,
     private val instructorDao: InstructorDao
 ) {
 
@@ -36,7 +41,7 @@ class DashboardMyCoursesRepository(
                 val response = withContext(Dispatchers.IO) { insertCourse(course) }
                 if (!runAttempts.isNullOrEmpty()) {
                     val myAttempt = runAttempts!!.first()
-                    val model = RunModel(
+                    val runModel = RunModel(
                         id,
                         name ?: "",
                         description ?: "",
@@ -45,27 +50,34 @@ class DashboardMyCoursesRepository(
                         start ?: "",
                         end ?: "",
                         price ?: "",
-                        mrp ?: price ?: "",
-                        course?.id ?: "",
+                        mrp ?: "",
                         updatedAt,
                         whatsappLink,
-                        myAttempt.id,
-                        myAttempt.premium,
-                        myAttempt.end,
-                        myAttempt.approvalRequested,
-                        myAttempt.certificateApproved,
                         totalContents,
-                        myAttempt.completedContents,
-                        if (myAttempt.completedContents > 0) (myAttempt.completedContents / totalContents.toDouble()) * 100 else 0.0,
                         completionThreshold ?: 0,
                         goodiesThreshold ?: 0,
                         productId ?: 0,
-                        lastAccessed = myAttempt.lastAccessedAt ?: ""
+                        course?.id ?: ""
                     )
-                    if (response == -2L && !runDao.getRun(id).isNullOrEmpty()) {
-                        runDao.update(model)
-                    } else if (response != -1L)
-                        runDao.insert(model)
+                    val runAttemptModel = RunAttemptModel(
+                        myAttempt.id,
+                        myAttempt.certificateApproved,
+                        myAttempt.end,
+                        myAttempt.premium,
+                        myAttempt.revoked,
+                        myAttempt.approvalRequested,
+                        myAttempt.doubtSupport ?: "",
+                        myAttempt.completedContents,
+                        myAttempt.lastAccessedAt ?: "",
+                        id
+                    )
+                    if (response == -2L && !attemptDao.getAttemptId(myAttempt.id).isNullOrEmpty()) {
+                        runDao.update(runModel)
+                        attemptDao.update(runAttemptModel)
+                    } else if (response != -1L) {
+                        runDao.insert(runModel)
+                        attemptDao.insert(runAttemptModel)
+                    }
                 }
             }
         }

@@ -41,16 +41,6 @@ class MyCourseViewModel(
         }
     }
 
-    fun getInstructor() = repo.getInstructorWithCourseId(courseId)
-
-    fun getResumeCourse() = repo.resumeCourse(attemptId)
-
-    fun getRun() = repo.run(runId)
-
-    fun updateHit(attemptId: String) = runIO {
-        repo.updateHit(attemptId)
-    }
-
     fun fetchSections() {
         runIO {
             when (val response = repo.fetchSections(attemptId)) {
