@@ -110,7 +110,7 @@ class SignInFragment : Fragment() {
             val cred = data.getParcelableExtra(Credential.EXTRA_KEY) as Credential
             val unformattedPhone = cred.id
             val formatNumber = SpannableString(unformattedPhone)
-            val boldSpan = StyleSpan1(Typeface.BOLD)// Span to make text bold
+            val boldSpan = StyleSpan1(Typeface.BOLD) // Span to make text bold
             formatNumber.setSpan(boldSpan, 0, 3, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             numberLayout.editText?.setText(formatNumber)
         }

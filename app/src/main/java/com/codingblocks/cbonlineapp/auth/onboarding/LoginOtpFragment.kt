@@ -18,9 +18,7 @@ import kotlinx.coroutines.withContext
 import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.runOnUiThread
 
-
 class LoginOtpFragment : Fragment() {
-
 
     var map = HashMap<String, String>()
 
@@ -29,7 +27,6 @@ class LoginOtpFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_login_otp, container, false)
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,10 +46,8 @@ class LoginOtpFragment : Fragment() {
                         verifyOtpBtn.isEnabled = true
                     }
             }
-
         }
     }
-
 
     private fun getOtp() {
         val client = SmsRetriever.getClient(requireContext())
