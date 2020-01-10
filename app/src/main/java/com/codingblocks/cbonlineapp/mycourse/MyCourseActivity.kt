@@ -40,7 +40,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
         }
         if (savedInstanceState == null) {
             viewModel.updateHit(viewModel.attemptId)
-//            viewModel.fetchCourse(viewModel.attemptId)
         }
     }
 
@@ -58,7 +57,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
 //                }
         myCourseTabs.setupWithViewPager(course_pager)
         pagerAdapter.apply {
-            add(OverviewFragment.newInstance(viewModel.attemptId, viewModel.runId), getString(R.string.dashboard))
+            add(OverviewFragment(), getString(R.string.dashboard))
             add(CourseContentFragment(), getString(R.string.curriculum))
             add(CourseLibraryFragment(), getString(R.string.library))
         }

@@ -29,6 +29,7 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".library.LibraryActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".mycourse.MyCourseActivity" />
         <activity
             android:name=".auth.LoginActivity"

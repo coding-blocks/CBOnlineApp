@@ -293,7 +293,6 @@ data class User(
     val verifiedemail: String?,
     val verifiedmobile: String?,
     val roleId: Int = 0
-
 ) : BaseModel()
 
 
