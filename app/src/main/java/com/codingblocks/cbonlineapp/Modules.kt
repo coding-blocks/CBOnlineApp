@@ -29,7 +29,6 @@ import com.codingblocks.cbonlineapp.settings.SettingsViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import tech.arnav.spork.Spork
 
 val viewModelModule = module {
 
@@ -50,7 +49,7 @@ val viewModelModule = module {
     viewModel { DashboardDoubtsViewModel(get()) }
     viewModel { CourseViewModel(get()) }
     viewModel { LibraryViewModel(get()) }
-    viewModel { DashboardViewModel(get(), get(), get(), get()) }
+    viewModel { DashboardViewModel(get(), get(), get()) }
     viewModel { QuizViewModel(get()) }
 
     single { AdminDoubtRepository() }
@@ -59,11 +58,9 @@ val viewModelModule = module {
     single { DashboardDoubtsRepository(get(), get()) }
     single { DashboardMyCoursesRepository(get(), get(), get(), get(), get(), get()) }
     single { LibraryRepository(get(), get()) }
-    single { DashboardHomeRepository(get(), get()) }
+    single { DashboardHomeRepository(get()) }
     single { VideoPlayerRepository(get(), get(), get(), get(), get()) }
     single { QuizRepository(get()) }
-
-    single { Spork.create(androidApplication(), AppPrefs::class) }
 }
 val databaseModule = module {
 

@@ -32,13 +32,18 @@ class SignInFragment : Fragment() {
 
     var type: String = ""
     var map = HashMap<String, String>()
+    lateinit var apiClient: GoogleApiClient
+    lateinit var hintRequest: HintRequest
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ):
-        View? = inflater.inflate(R.layout.fragment_sign_in, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_sign_in, container, false)
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,7 +84,8 @@ class SignInFragment : Fragment() {
             GlobalScope.launch {
                 val response = withContext(Dispatchers.IO) { Clients.api.getOtp(map) }
                 if (response.isSuccessful)
-                    replaceFragmentSafely(LoginOtpFragment(), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
+                    replaceFragmentSafely(LoginOtpFragment.newInstance(map["phone"]
+                        ?: ""), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
                 else
                     runOnUiThread {
                         proceedBtn.isEnabled = true
@@ -89,11 +95,11 @@ class SignInFragment : Fragment() {
     }
 
     private fun requestHint() {
-        val hintRequest = HintRequest.Builder()
+        hintRequest = HintRequest.Builder()
             .setPhoneNumberIdentifierSupported(true)
             .build()
 
-        val apiClient = GoogleApiClient.Builder(requireContext())
+        apiClient = GoogleApiClient.Builder(requireContext())
             .addApi(Auth.CREDENTIALS_API)
             .enableAutoManage(requireActivity()) {
                 Log.i("TAG", "Mobile Number: ${it.errorMessage}")
@@ -107,12 +113,14 @@ class SignInFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data != null) {
-            val cred = data.getParcelableExtra(Credential.EXTRA_KEY) as Credential
-            val unformattedPhone = cred.id
-            val formatNumber = SpannableString(unformattedPhone)
-            val boldSpan = StyleSpan1(Typeface.BOLD) // Span to make text bold
-            formatNumber.setSpan(boldSpan, 0, 3, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            numberLayout.editText?.setText(formatNumber)
+            val cred: Credential? = data?.getParcelableExtra(Credential.EXTRA_KEY)
+            if (cred != null) {
+                val unformattedPhone = cred.id
+                val formatNumber = SpannableString(unformattedPhone)
+                val boldSpan = StyleSpan1(Typeface.BOLD) // Span to make text bold
+                formatNumber.setSpan(boldSpan, 0, 3, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                numberLayout.editText?.setText(formatNumber)
+            }
         }
     }
 

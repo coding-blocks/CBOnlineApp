@@ -33,7 +33,7 @@ class LoginHomeFragment : Fragment() {
         setSecondSpan()
 
         mobileBtn.setOnClickListener {
-            replaceFragmentSafely(SignInFragment(), "SignIn", containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
+            replaceFragmentSafely(SignInFragment(), "SignIn", containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true, allowStateLoss = true)
         }
 
         gmailBtn.setOnClickListener {

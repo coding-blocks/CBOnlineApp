@@ -4,7 +4,6 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.codingblocks.cbonlineapp.AppPrefs
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
@@ -19,8 +18,7 @@ import com.codingblocks.onlineapi.models.Course
 class DashboardViewModel(
     private val homeRepo: DashboardHomeRepository,
     private val exploreRepo: CourseRepository,
-    private val myCourseRepo: DashboardMyCoursesRepository,
-    val prefs: AppPrefs
+    private val myCourseRepo: DashboardMyCoursesRepository
 ) : ViewModel() {
     var courses: MediatorLiveData<List<CourseInstructorPair>> = MediatorLiveData()
     var courseFilter = MutableLiveData<String>()

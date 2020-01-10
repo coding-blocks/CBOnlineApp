@@ -85,3 +85,7 @@ const val ALL = "ALL"
 const val RESOLVEHINT = 1001
 
 const val COURSE_FILTER_TYPE = "course_filter_type"
+
+const val JWT_TOKEN = "jwt_token"
+
+const val REFRESH_TOKEN = "refresh_token"

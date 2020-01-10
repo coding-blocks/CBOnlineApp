@@ -22,12 +22,15 @@ import com.codingblocks.cbonlineapp.dashboard.library.DashboardLibraryFragment
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesFragment
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
+import com.codingblocks.cbonlineapp.util.JWT_TOKEN
+import com.codingblocks.cbonlineapp.util.REFRESH_TOKEN
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.util.extensions.getSharedPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.fabnavigation.FabNavigationAdapter
+import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
@@ -49,10 +52,13 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     private val appUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
     private val viewModel by viewModel<DashboardViewModel>()
     private var doubleBackToExitPressedOnce = false
+    private val sharedPrefs by lazy { getSharedPrefs() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
+        Clients.authJwt = sharedPrefs.getString(JWT_TOKEN, "") ?: ""
+        Clients.refreshToken = sharedPrefs.getString(REFRESH_TOKEN, "") ?: ""
         setUser()
         initializeUI()
     }
@@ -62,12 +68,12 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             val navMenu = dashboardNavigation.menu
             navMenu.findItem(R.id.nav_admin).isVisible = it
         }
-        viewModel.prefs.run {
-            dashboardNavigation.getHeaderView(0).apply {
-                navHeaderImageView.loadImage(userImage, true)
-                navUsernameTv.append(" $firstName")
-            }
-        }
+//        viewModel.prefs.run {
+//            dashboardNavigation.getHeaderView(0).apply {
+//                navHeaderImageView.loadImage(userImage, true)
+//                navUsernameTv.append(" $firstName")
+//            }
+//        }
     }
 
     override fun onStart() {

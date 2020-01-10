@@ -94,7 +94,7 @@ class DashboardMyCoursesFragment : Fragment() {
 
         type.observer(viewLifecycleOwner) { num ->
             courseTypeTv.apply {
-                viewModel.prefs.courseFilter = num
+                //                viewModel.prefs.courseFilter = num
                 text = coursesType[num]
                 viewModel.courseFilter.postValue(coursesType[num])
                 setCompoundDrawablesRelativeWithIntrinsicBounds(requireContext().getDrawable(imgs.getResourceId(num, 0)), null, requireContext().getDrawable(R.drawable.ic_dropdown), null)
