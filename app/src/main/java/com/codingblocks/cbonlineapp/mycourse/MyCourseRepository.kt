@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.mycourse
 
 import com.codingblocks.cbonlineapp.database.ContentDao
-import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.SectionDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
@@ -23,24 +22,15 @@ import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.safeApiCall
 
 class MyCourseRepository(
-    private val runDao: CourseRunDao,
     private val sectionWithContentsDao: SectionWithContentsDao,
     private val contentsDao: ContentDao,
     private val sectionDao: SectionDao,
     private val instructorDao: CourseWithInstructorDao
 ) {
 
-    fun getInstructorWithCourseId(courseId: String) = instructorDao.getInstructorWithCourseId(courseId)
-
     fun getSectionWithContent(attemptId: String) = sectionWithContentsDao.getSectionWithContent(attemptId)
 
-    fun updateHit(attemptId: String) {
-        // update lastaccessed
-    }
-
     fun resumeCourse(attemptId: String) = sectionWithContentsDao.resumeCourse(attemptId)
-
-    fun run(runId: String) = runDao.getRun(runId)
 
     suspend fun insertSections(runAttempt: RunAttempts) {
         runAttempt.run?.sections?.forEach { courseSection ->

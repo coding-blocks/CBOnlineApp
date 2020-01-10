@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.jobs.jobdetails
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
@@ -32,15 +31,15 @@ class JobDetailViewModel(
     val courseIdList: MutableLiveData<ArrayList<Course>> = MutableLiveData()
     var jobCourses: LiveData<List<CourseInstructorPair>> = MutableLiveData()
 
-    init {
-        jobCourses = Transformations.switchMap(courseIdList) { list ->
-            val coureidlist = ArrayList<String>()
-            list.forEach {
-                it.id?.let { it1 -> coureidlist.add(it1) }
-            }
-            courseWithInstructorDao.getJobCourses(coureidlist)
-        }
-    }
+//    init {
+//        jobCourses = Transformations.switchMap(courseIdList) { list ->
+//            val coureidlist = ArrayList<String>()
+//            list.forEach {
+//                it.id?.let { it1 -> coureidlist.add(it1) }
+//            }
+// //            courseWithInstructorDao.getJobCourses(coureidlist)
+//        }
+//    }
 
     fun getJobById(id: String) = jobsDao.getJobById(id)
 

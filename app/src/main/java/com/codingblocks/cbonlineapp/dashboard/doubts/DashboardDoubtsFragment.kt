@@ -5,13 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.doubts.ChatClickListener
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
-import com.codingblocks.cbonlineapp.commons.SheetAdapter
-import com.codingblocks.cbonlineapp.commons.SheetItem
 import com.codingblocks.cbonlineapp.dashboard.ChatActivity
 import com.codingblocks.cbonlineapp.dashboard.DoubtCommentActivity
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
@@ -22,7 +19,6 @@ import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.REOPENED
 import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
-import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
@@ -178,21 +174,21 @@ class DashboardDoubtsFragment : Fragment() {
     }
 
     private fun setUpBottomSheet() {
-        // TODO( fix list overlapping)
+        // TODO( fetch list )
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_mycourses, null)
-        val list = arrayListOf<SheetItem>()
-        viewModel.getRunId().observeOnce {
-            it.forEach { run ->
-                list.add(SheetItem(run.crDescription, R.drawable.ic_course_logo))
-            }
-            sheetDialog.run {
-                sheetLv.adapter = SheetAdapter(list)
-                sheetLv.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-                    viewModel.courseId.postValue("30678")
-                    dialog.dismiss()
-                }
-            }
-        }
+//        val list = arrayListOf<SheetItem>(
+//        viewModel.getRunId().observeOnce {
+//            it.forEach { run ->
+//                list.add(SheetItem(run.crDescription, R.drawable.ic_course_logo))
+//            }
+//            sheetDialog.run {
+//                sheetLv.adapter = SheetAdapter(list)
+//                sheetLv.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+//                    viewModel.courseId.postValue("30678")
+//                    dialog.dismiss()
+//                }
+//            }
+//        }
 
         dialog.setContentView(sheetDialog)
     }

@@ -43,7 +43,7 @@ val viewModelModule = module {
     viewModel { JobsViewModel(get()) }
     viewModel { JobDetailViewModel(get(), get()) }
 
-    single { MyCourseRepository(get(), get(), get(), get(), get()) }
+    single { MyCourseRepository(get(), get(), get(), get()) }
 
     viewModel { AdminDoubtsViewModel(get()) }
     viewModel { AdminOverviewViewModel(get()) }
@@ -55,12 +55,12 @@ val viewModelModule = module {
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
-    single { CourseRepository(get(), get(), get(), get(), get()) }
-    single { DashboardDoubtsRepository(get(), get(), get()) }
-    single { DashboardMyCoursesRepository(get(), get(), get(), get()) }
+    single { CourseRepository() }
+    single { DashboardDoubtsRepository(get(), get()) }
+    single { DashboardMyCoursesRepository(get(), get(), get(), get(), get(), get()) }
     single { LibraryRepository(get(), get()) }
     single { DashboardHomeRepository(get(), get()) }
-    single { VideoPlayerRepository(get(), get(), get(), get(), get(), get()) }
+    single { VideoPlayerRepository(get(), get(), get(), get(), get()) }
     single { QuizRepository(get()) }
 
     single { Spork.create(androidApplication(), AppPrefs::class) }
@@ -104,11 +104,6 @@ val databaseModule = module {
 
     factory {
         val database: AppDatabase = get()
-        database.courseRunDao()
-    }
-
-    factory {
-        val database: AppDatabase = get()
         database.courseWithInstructorDao()
     }
 
@@ -138,5 +133,20 @@ val databaseModule = module {
     factory {
         val database: AppDatabase = get()
         database.commentsDao()
+    }
+
+    factory {
+        val database: AppDatabase = get()
+        database.runDao()
+    }
+
+    factory {
+        val database: AppDatabase = get()
+        database.runAttemptDao()
+    }
+
+    factory {
+        val database: AppDatabase = get()
+        database.runWithAttemptDao()
     }
 }

@@ -17,6 +17,7 @@ import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.database.models.Notification
+import com.codingblocks.cbonlineapp.database.models.RunAttemptModel
 import com.codingblocks.cbonlineapp.database.models.RunModel
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
@@ -25,13 +26,11 @@ import com.codingblocks.cbonlineapp.database.models.SectionModel
     entities = [CourseModel::class, SectionModel::class, ContentModel::class, InstructorModel::class, Notification::class,
         CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, RunModel::class,
         JobsModel::class, CourseFeatureModel::class, SectionContentHolder.SectionWithContent::class,
-        CommentModel::class
+        CommentModel::class, RunAttemptModel::class
     ], exportSchema = true, version = 24
 )
 @TypeConverters(TimestampConverter::class, CourseIdList::class, RunTagList::class, ProjectIdList::class)
 abstract class AppDatabase : RoomDatabase() {
-
-    abstract fun courseRunDao(): CourseRunDao
 
     abstract fun sectionDao(): SectionDao
 
@@ -56,4 +55,10 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun featuresDao(): FeaturesDao
 
     abstract fun commentsDao(): CommentsDao
+
+    abstract fun runDao(): RunDao
+
+    abstract fun runAttemptDao(): RunAttemptDao
+
+    abstract fun runWithAttemptDao(): RunWithAttemptDao
 }

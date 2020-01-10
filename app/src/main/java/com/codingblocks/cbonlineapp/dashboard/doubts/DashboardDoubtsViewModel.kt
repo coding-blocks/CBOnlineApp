@@ -80,7 +80,7 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
         }
     }
 
-    fun getRunId() = repo.getRuns()
+//    fun getRunId() = repo.getRuns()
 
     fun getDoubt(doubtId: String): LiveData<DoubtsModel> {
         fetchComments(doubtId)

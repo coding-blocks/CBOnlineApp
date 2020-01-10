@@ -107,6 +107,7 @@
             android:name=".mycourse.MyCourseActivity"
             android:label="@string/title_activity_my_course"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:parentActivityName=".dashboard.DashboardActivity">
             <intent-filter>
                 <action android:name="com.coddinblocks.appshortcuts.OPEN_DYNAMIC_SHORTCUT" />

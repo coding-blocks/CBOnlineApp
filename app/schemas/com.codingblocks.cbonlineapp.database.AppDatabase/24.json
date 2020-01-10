@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "f7b03ebf60861219a8a5dd50c9ba9317",
+    "identityHash": "7f2e4b0a5772c72ee5183737e943fdcd",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -778,7 +778,7 @@
       },
       {
         "tableName": "RunModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`crUid` TEXT NOT NULL, `crName` TEXT NOT NULL, `crDescription` TEXT NOT NULL, `crEnrollmentStart` TEXT NOT NULL, `crEnrollmentEnd` TEXT NOT NULL, `crStart` TEXT NOT NULL, `crEnd` TEXT NOT NULL, `crPrice` TEXT NOT NULL, `crMrp` TEXT NOT NULL, `crCourseId` TEXT NOT NULL, `crUpdatedAt` TEXT NOT NULL, `whatsappLink` TEXT, `crAttemptId` TEXT, `premium` INTEGER NOT NULL, `crRunAttemptEnd` TEXT NOT NULL, `approvalRequested` INTEGER NOT NULL, `certificateApproved` INTEGER NOT NULL, `totalContents` INTEGER NOT NULL, `completedContents` INTEGER NOT NULL, `progress` REAL NOT NULL, `completionThreshold` INTEGER NOT NULL, `goodiesThreshold` INTEGER NOT NULL, `productId` INTEGER NOT NULL, `recommended` INTEGER NOT NULL, `lastAccessed` TEXT NOT NULL, PRIMARY KEY(`crUid`), FOREIGN KEY(`crCourseId`) REFERENCES `CourseModel`(`cid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`crUid` TEXT NOT NULL, `crName` TEXT NOT NULL, `crDescription` TEXT NOT NULL, `crEnrollmentStart` TEXT NOT NULL, `crEnrollmentEnd` TEXT NOT NULL, `crStart` TEXT NOT NULL, `crEnd` TEXT NOT NULL, `crPrice` TEXT NOT NULL, `crMrp` TEXT NOT NULL, `crUpdatedAt` TEXT NOT NULL, `whatsappLink` TEXT, `totalContents` INTEGER NOT NULL, `completionThreshold` INTEGER NOT NULL, `goodiesThreshold` INTEGER NOT NULL, `productId` INTEGER NOT NULL, `crCourseId` TEXT NOT NULL, PRIMARY KEY(`crUid`), FOREIGN KEY(`crCourseId`) REFERENCES `CourseModel`(`cid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "crUid",
@@ -835,12 +835,6 @@
             "notNull": true
           },
           {
-            "fieldPath": "crCourseId",
-            "columnName": "crCourseId",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
             "fieldPath": "crUpdatedAt",
             "columnName": "crUpdatedAt",
             "affinity": "TEXT",
@@ -853,51 +847,9 @@
             "notNull": false
           },
           {
-            "fieldPath": "crAttemptId",
-            "columnName": "crAttemptId",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "premium",
-            "columnName": "premium",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "crRunAttemptEnd",
-            "columnName": "crRunAttemptEnd",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "approvalRequested",
-            "columnName": "approvalRequested",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "certificateApproved",
-            "columnName": "certificateApproved",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
             "fieldPath": "totalContents",
             "columnName": "totalContents",
             "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "completedContents",
-            "columnName": "completedContents",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "progress",
-            "columnName": "progress",
-            "affinity": "REAL",
             "notNull": true
           },
           {
@@ -919,14 +871,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "recommended",
-            "columnName": "recommended",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "lastAccessed",
-            "columnName": "lastAccessed",
+            "fieldPath": "crCourseId",
+            "columnName": "crCourseId",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -1250,12 +1196,86 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "RunAttemptModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`attemptId` TEXT NOT NULL, `certificateApproved` INTEGER NOT NULL, `end` TEXT NOT NULL, `premium` INTEGER NOT NULL, `revoked` INTEGER NOT NULL, `approvalRequested` INTEGER NOT NULL, `doubtSupport` TEXT NOT NULL, `completedContents` INTEGER NOT NULL, `lastAccessedAt` TEXT NOT NULL, `runId` TEXT NOT NULL, PRIMARY KEY(`attemptId`))",
+        "fields": [
+          {
+            "fieldPath": "attemptId",
+            "columnName": "attemptId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "certificateApproved",
+            "columnName": "certificateApproved",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "end",
+            "columnName": "end",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "premium",
+            "columnName": "premium",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "revoked",
+            "columnName": "revoked",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "approvalRequested",
+            "columnName": "approvalRequested",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "doubtSupport",
+            "columnName": "doubtSupport",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completedContents",
+            "columnName": "completedContents",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastAccessedAt",
+            "columnName": "lastAccessedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "runId",
+            "columnName": "runId",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "attemptId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f7b03ebf60861219a8a5dd50c9ba9317')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7f2e4b0a5772c72ee5183737e943fdcd')"
     ]
   }
 }

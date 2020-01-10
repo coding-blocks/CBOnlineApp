@@ -38,9 +38,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
         if (!MediaUtils.checkPermission(this)) {
             MediaUtils.isStoragePermissionGranted(this)
         }
-        if (savedInstanceState == null) {
-            viewModel.updateHit(viewModel.attemptId)
-        }
     }
 
     private fun initUI() {
