@@ -1,12 +1,17 @@
 package com.codingblocks.cbonlineapp.dashboard.home
 
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.database.RunPerformanceDao
+import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.User
 import com.codingblocks.onlineapi.safeApiCall
 
 class DashboardHomeRepository(
-    private val courseWithInstructorDao: CourseWithInstructorDao
+    private val courseWithInstructorDao: CourseWithInstructorDao,
+    private val runPerformanceDao: RunPerformanceDao
+
 ) {
 
     suspend fun fetchUser() = safeApiCall { Clients.onlineV2JsonApi.getMe() }
@@ -24,5 +29,19 @@ class DashboardHomeRepository(
         }
     }
 
+    suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
+
     fun getTopRun() = courseWithInstructorDao.getTopRun()
+    fun getRunStats(query: String?) = query?.let { runPerformanceDao.getPerformance(it) }
+    suspend fun saveStats(body: PerformanceResponse, id: String) {
+        runPerformanceDao.insert(
+            RunPerformance(
+                id,
+                body.performance.percentile,
+                body.performance.remarks,
+                body.averageProgress,
+                body.userProgress
+            )
+        )
+    }
 }

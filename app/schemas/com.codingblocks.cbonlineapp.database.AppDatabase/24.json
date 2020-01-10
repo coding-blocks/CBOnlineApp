@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "7f2e4b0a5772c72ee5183737e943fdcd",
+    "identityHash": "2891cc12d2ae21860dcf8325ce9e9e07",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -1270,12 +1270,56 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "RunPerformance",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `percentile` INTEGER NOT NULL, `remarks` TEXT NOT NULL, `averageProgress` TEXT NOT NULL, `userProgress` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "percentile",
+            "columnName": "percentile",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "remarks",
+            "columnName": "remarks",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "averageProgress",
+            "columnName": "averageProgress",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userProgress",
+            "columnName": "userProgress",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7f2e4b0a5772c72ee5183737e943fdcd')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2891cc12d2ae21860dcf8325ce9e9e07')"
     ]
   }
 }

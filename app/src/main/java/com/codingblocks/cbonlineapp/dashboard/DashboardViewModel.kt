@@ -28,8 +28,13 @@ class DashboardViewModel(
     private val runs = myCourseRepo.getMyRuns()
     var suggestedCourses = MutableLiveData<List<Course>>()
     var trendingCourses = MutableLiveData<List<Course>>()
+    val attemptId = MutableLiveData<String>()
     private val coursesResponse = Transformations.switchMap(courseFilter) { query ->
         myCourseRepo.getMyRuns(query)
+    }
+
+    val runPerformance = Transformations.switchMap(attemptId) { query ->
+        homeRepo.getRunStats(query)
     }
 
     init {
@@ -121,6 +126,24 @@ class DashboardViewModel(
                             suggestedCourses.postValue(body())
                         else
                             trendingCourses.postValue(body())
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun getStats(id: String) {
+        attemptId.postValue(id)
+        runIO {
+            when (val response = homeRepo.getStats(id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        body()?.let { response ->
+                            homeRepo.saveStats(response, id)
+                        }
                     } else {
                         setError(fetchError(code()))
                     }

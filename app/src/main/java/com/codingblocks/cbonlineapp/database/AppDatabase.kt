@@ -4,8 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.codingblocks.cbonlineapp.database.converters.CourseIdList
-import com.codingblocks.cbonlineapp.database.converters.ProjectIdList
-import com.codingblocks.cbonlineapp.database.converters.RunTagList
+import com.codingblocks.cbonlineapp.database.converters.ProgressItemConverter
 import com.codingblocks.cbonlineapp.database.converters.TimestampConverter
 import com.codingblocks.cbonlineapp.database.models.CommentModel
 import com.codingblocks.cbonlineapp.database.models.ContentModel
@@ -19,6 +18,7 @@ import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.database.models.Notification
 import com.codingblocks.cbonlineapp.database.models.RunAttemptModel
 import com.codingblocks.cbonlineapp.database.models.RunModel
+import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 
@@ -26,10 +26,10 @@ import com.codingblocks.cbonlineapp.database.models.SectionModel
     entities = [CourseModel::class, SectionModel::class, ContentModel::class, InstructorModel::class, Notification::class,
         CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, RunModel::class,
         JobsModel::class, CourseFeatureModel::class, SectionContentHolder.SectionWithContent::class,
-        CommentModel::class, RunAttemptModel::class
+        CommentModel::class, RunAttemptModel::class, RunPerformance::class
     ], exportSchema = true, version = 24
 )
-@TypeConverters(TimestampConverter::class, CourseIdList::class, RunTagList::class, ProjectIdList::class)
+@TypeConverters(TimestampConverter::class, CourseIdList::class, ProgressItemConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun sectionDao(): SectionDao
@@ -61,4 +61,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun runAttemptDao(): RunAttemptDao
 
     abstract fun runWithAttemptDao(): RunWithAttemptDao
+
+    abstract fun runPerformanceDao(): RunPerformanceDao
 }

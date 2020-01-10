@@ -2,8 +2,8 @@ package com.codingblocks.onlineapi.models
 
 data class PerformanceResponse(
     val performance: Performance,
-    val averageProgress: List<AverageProgressItem>,
-    val userProgress: List<UserProgressItem>
+    val averageProgress: ArrayList<ProgressItem>,
+    val userProgress: ArrayList<ProgressItem>
 )
 
 data class Performance(
@@ -11,12 +11,8 @@ data class Performance(
     val remarks: String
 )
 
-data class AverageProgressItem(
+data class ProgressItem(
     val date: String,
     val progress: String
 )
 
-data class UserProgressItem(
-    val date: String,
-    val progress: String
-)

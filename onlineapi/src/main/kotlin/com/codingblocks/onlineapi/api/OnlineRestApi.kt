@@ -36,9 +36,9 @@ interface OnlineRestApi {
     @FormUrlEncoded
     suspend fun getToken(@Field("code") code: String): Response<JsonObject>
 
-    @GET("progresses/stats/{id}")
+    @GET("v2/progresses/stats/{id}")
     suspend fun getMyStats(
-        @Path("runAttemptId") id: String
+        @Path("id") id: String
     ): Response<PerformanceResponse>
 
     @GET("v2/courses/{id}/rating")
