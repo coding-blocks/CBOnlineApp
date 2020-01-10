@@ -7,14 +7,13 @@ import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.PostStream
 import com.codingblocks.onlineapi.models.RatingModel
 import com.codingblocks.onlineapi.models.ResetRunAttempt
-import com.codingblocks.onlineapi.models.Runs
-import com.github.jasminb.jsonapi.JSONAPIDocument
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
+import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -98,6 +97,14 @@ interface OnlineRestApi {
 
     @POST("v2/chats/{id}")
     suspend fun getChatId(@Path("id") doubtId: String): Response<JsonObject>
+
+    @POST("jwt/otp")
+    @FormUrlEncoded
+    suspend fun getOtp(@FieldMap params: HashMap<String, String>): Response<JsonObject>
+
+    @POST("jwt/otp/verify")
+    @FormUrlEncoded
+    suspend fun getJwt(@FieldMap params: Map<String, String>): Response<JsonObject>
 
 
 }

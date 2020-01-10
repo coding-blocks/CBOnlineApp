@@ -1,8 +1,11 @@
 package com.codingblocks.cbonlineapp.auth.onboarding
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.InputType
+import android.text.Spannable
+import android.text.SpannableString
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,14 +15,23 @@ import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.RESOLVEHINT
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import com.codingblocks.onlineapi.Clients
 import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.HintRequest
 import com.google.android.gms.common.api.GoogleApiClient
 import kotlinx.android.synthetic.main.fragment_sign_in.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.jetbrains.anko.support.v4.runOnUiThread
+import android.text.style.StyleSpan as StyleSpan1
 
 class SignInFragment : Fragment() {
 
     var type: String = ""
+    var map = HashMap<String, String>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,7 +74,17 @@ class SignInFragment : Fragment() {
 
         requestHint()
         proceedBtn.setOnClickListener {
-            replaceFragmentSafely(LoginOtpFragment(), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
+            map["phone"] = "+91-${numberLayout.editText?.text?.substring(3)}"
+            proceedBtn.isEnabled = false
+            GlobalScope.launch {
+                val response = withContext(Dispatchers.IO) { Clients.api.getOtp(map) }
+                if (response.isSuccessful)
+                    replaceFragmentSafely(LoginOtpFragment(), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
+                else
+                    runOnUiThread {
+                        proceedBtn.isEnabled = true
+                    }
+            }
         }
     }
 
@@ -85,12 +107,12 @@ class SignInFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data != null) {
-//            val cred = data.getParcelableExtra(Credential.EXTRA_KEY) as Credential
-//            val unformattedPhone = cred.id
-//            val formatNumber = SpannableString(unformattedPhone)
-//            val boldSpan = StyleSpan(Typeface.BOLD)// Span to make text bold
-//            formatNumber.setSpan(boldSpan, 0, 3, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-//            numberLayout.editText?.setText(formatNumber)
+            val cred = data.getParcelableExtra(Credential.EXTRA_KEY) as Credential
+            val unformattedPhone = cred.id
+            val formatNumber = SpannableString(unformattedPhone)
+            val boldSpan = StyleSpan1(Typeface.BOLD)// Span to make text bold
+            formatNumber.setSpan(boldSpan, 0, 3, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            numberLayout.editText?.setText(formatNumber)
         }
     }
 
