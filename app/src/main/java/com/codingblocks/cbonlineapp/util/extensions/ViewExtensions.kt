@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.util.extensions
 import android.animation.Animator
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -315,3 +316,21 @@ fun <T : RecyclerView.ViewHolder> T.onClick(event: (view: View, position: Int, t
     }
     return this
 }
+
+
+fun Fragment.getSharedPrefs(): SharedPreferences = requireActivity().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+
+fun AppCompatActivity.getSharedPrefs(): SharedPreferences = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+
+fun SharedPreferences.save(key: String, value: Any) {
+    with(this.edit()) {
+        when (value) {
+            is Float -> putFloat(key, value).apply()
+            is Boolean -> putBoolean(key, value).apply()
+            is Int -> putInt(key, value).apply()
+            is String -> putString(key, value).apply()
+            else -> UnsupportedOperationException("Unsupported Type to save")
+        }
+    }
+}
+
