@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/textView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:drawableStart="@drawable/ic_recent"
+    android:drawablePadding="30dp"
+    android:fontFamily="@font/gilroy_medium"
+    android:paddingStart="43dp"
+    android:paddingTop="@dimen/margin_medium"
+    android:paddingEnd="@dimen/margin_large"
+    android:paddingBottom="@dimen/margin_medium"
+    android:text="@string/recently_accessed"
+    android:textColor="@color/black"
+    android:textSize="18sp" />

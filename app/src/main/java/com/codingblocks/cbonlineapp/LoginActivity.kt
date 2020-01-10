@@ -2,9 +2,9 @@ package com.codingblocks.cbonlineapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.codingblocks.cbonlineapp.home.HomeActivity
-import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.anko.AnkoLogger
@@ -22,12 +22,10 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
             }
         }
         loginBtn.setOnClickListener {
-            Components.openChrome(
-                this,
+            openChrome(
                 "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
             )
         }
-
         skipBtn.setOnClickListener {
             redirectToHome()
         }
@@ -36,7 +34,7 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
     private fun getAccessToken() = getPrefs().SP_ACCESS_TOKEN_KEY
 
     private fun redirectToHome() {
-        startActivity(intentFor<HomeActivity>().singleTop())
+        startActivity(intentFor<DashboardActivity>().singleTop())
         finish()
     }
 }

@@ -12,24 +12,19 @@ import com.codingblocks.cbonlineapp.PdfActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.DownloadStarter
 import com.codingblocks.cbonlineapp.database.models.ContentModel
-import com.codingblocks.cbonlineapp.player.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.quiz.QuizActivity
+import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CODE
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.Components.showConfirmation
 import com.codingblocks.cbonlineapp.util.DOCUMENT
-import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.OnCleanDialogListener
 import com.codingblocks.cbonlineapp.util.QNA
-import com.codingblocks.cbonlineapp.util.QUIZ_ID
-import com.codingblocks.cbonlineapp.util.QUIZ_QNA
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO
-import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import kotlinx.android.synthetic.main.item_content.view.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.intentFor
@@ -112,31 +107,26 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                         )
                         VIDEO -> context.startActivity(
                             context.intentFor<VideoPlayerActivity>(
-                                "videoUrl" to content.contentVideo.videoUrl,
-                                RUN_ATTEMPT_ID to content.attempt_id,
-                                CONTENT_ID to content.ccid
+                                CONTENT_ID to content.ccid,
+                                SECTION_ID to content.sectionId
                             ).singleTop()
                         )
 
                         QNA -> context.startActivity(
                             context.intentFor<QuizActivity>(
-                                QUIZ_QNA to content.contentQna.qnaUid,
-                                RUN_ATTEMPT_ID to content.attempt_id,
-                                QUIZ_ID to content.contentQna.qnaQid.toString()
+                                CONTENT_ID to content.ccid,
+                                SECTION_ID to content.sectionId
                             ).singleTop()
                         )
 
                         LECTURE -> context.startActivity(
                             context.intentFor<VideoPlayerActivity>(
-                                VIDEO_ID to content.contentLecture.lectureId,
-                                RUN_ATTEMPT_ID to content.attempt_id,
                                 CONTENT_ID to content.ccid,
-                                SECTION_ID to content.sectionId,
-                                DOWNLOADED to (content.contentLecture.isDownloaded || FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, content.contentLecture.lectureId))
+                                SECTION_ID to content.sectionId
                             ).singleTop()
                         )
                     }
-                    starterListener?.updateProgress(content.ccid, content.progressId)
+                    starterListener?.updateProgress(content.ccid)
                 } else {
                     showConfirmation(it.context, "unavailable")
                 }

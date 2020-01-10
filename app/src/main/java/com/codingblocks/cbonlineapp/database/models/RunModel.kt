@@ -11,32 +11,29 @@ import androidx.room.PrimaryKey
         ForeignKey(
             entity = CourseModel::class,
             parentColumns = ["cid"],
-            childColumns = ["crCourseId"])
+            childColumns = ["crCourseId"],
+            onDelete = ForeignKey.CASCADE)
     ]
 )
-open class RunModel(
+
+data class RunModel(
     @PrimaryKey
-    var crUid: String = "",
-    var crAttemptId: String? = null,
-    var crName: String = "",
-    var crDescription: String = "",
-    var crEnrollmentStart: String = "",
-    var crEnrollmentEnd: String = "",
-    var crStart: String = "",
-    var crEnd: String = "",
-    var crPrice: String = "",
-    var crMrp: String = "",
-    var crCourseId: String = "",
-    var crUpdatedAt: String = "",
-    var progress: Double = 0.0,
-    var premium: Boolean = false,
-    var whatsappLink: String? = "",
-    var crRunEnd: String = "",
-    var totalContents: Int = 0,
-    var completedContents: Int = 0,
-    var mentorApproved: Boolean = false,
-    var completionThreshold: Int = 90,
-    var productId: Int = 0,
-    var recommended: Boolean = false,
-    var hits: Int = 0
-)
+    val crUid: String,
+    val crName: String,
+    var crDescription: String,
+    var crEnrollmentStart: String,
+    var crEnrollmentEnd: String,
+    var crStart: String,
+    var crEnd: String,
+    var crPrice: String,
+    var crMrp: String,
+    var crUpdatedAt: String,
+    var whatsappLink: String?,
+    var totalContents: Int,
+    var completionThreshold: Int,
+    var goodiesThreshold: Int,
+    var productId: Int,
+    var crCourseId: String
+) {
+    constructor() : this("", "", "", "", "", "", "", "", "", "", "", 0, 0, 0, -1, "")
+}

@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.jobs.jobdetails
 
-import android.content.Context
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
@@ -16,7 +15,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.home.CourseDataAdapter
 import com.codingblocks.cbonlineapp.util.JOB_ID
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.isotomillisecond
@@ -31,7 +29,6 @@ import com.codingblocks.onlineapi.models.JobId
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.JsonObject
-import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_job_detail.*
 import kotlinx.android.synthetic.main.custom_form_dialog.view.*
 import kotlinx.android.synthetic.main.item_job.*
@@ -41,7 +38,7 @@ class JobDetailActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<JobDetailViewModel>()
 
-    private lateinit var courseDataAdapter: CourseDataAdapter
+//    private lateinit var courseDataAdapter: CourseDataAdapter
 
     lateinit var jobId: String
 
@@ -61,9 +58,9 @@ class JobDetailActivity : AppCompatActivity() {
 
         viewModel.fetchJob(jobId)
 
-        courseDataAdapter = CourseDataAdapter()
+//        courseDataAdapter = CourseDataAdapter()
         rvJobCourses.layoutManager = LinearLayoutManager(this)
-        rvJobCourses.adapter = courseDataAdapter
+//        rvJobCourses.adapter = courseDataAdapter
 
         jobDescriptionBtn.setOnClickListener {
             cardJobDescription.isVisible = !cardJobDescription.isVisible
@@ -92,7 +89,7 @@ class JobDetailActivity : AppCompatActivity() {
         }
 
         viewModel.jobCourses.distinctUntilChanged().nonNull().observer(this) {
-            courseDataAdapter.submitList(it)
+            //            courseDataAdapter.submitList(it)
         }
         viewModel.eligibleLiveData.observer(this) {
             when (it) {
@@ -236,9 +233,5 @@ class JobDetailActivity : AppCompatActivity() {
                 window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
             }
         }
-    }
-
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 }

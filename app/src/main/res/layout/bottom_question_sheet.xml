@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_weight="0.5"
-    android:background="#d3d3d3"
+    android:background="@drawable/rounded_dialog"
     android:gravity="center"
+    android:backgroundTint="@color/darkTwo"
     android:orientation="vertical"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="60dp"
+    app:behavior_peekHeight="80dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <LinearLayout
@@ -21,26 +22,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/margin_large"
             android:layout_weight="1"
-            android:fontFamily="@font/nunitosans_regular"
-            android:text="Previous"
-            android:textColor="#808080"
-            android:textSize="22sp" />
+            android:drawableStart="@drawable/ic_dropright"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/orangish"
+            android:fontFamily="@font/gilroy_medium"
+            android:text="@string/previous"
+            android:textColor="@color/orangish"
+            android:textSize="16sp" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/ButtonStyleChip"
             android:id="@+id/questionBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="18dp"
+            android:backgroundTint="@color/dark"
             android:background="@drawable/button_background"
-            android:paddingStart="10dp"
-            android:paddingTop="5dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="5dp"
-            android:text="Questions"
+            android:text="@string/view_questions"
             android:textColor="@color/white" />
 
         <TextView
@@ -48,13 +50,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="@dimen/margin_large"
             android:layout_weight="1"
-            android:fontFamily="@font/nunitosans_regular"
             android:gravity="end"
-            android:text="Next"
-            android:textColor="@color/black"
-            android:textSize="22sp" />
+            android:drawableEnd="@drawable/ic_dropright"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/orangish"
+            android:fontFamily="@font/gilroy_medium"
+            android:text="@string/next"
+            android:textColor="@color/orangish"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -62,7 +67,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="12dp"
         android:gravity="center"
         android:orientation="vertical" />
 

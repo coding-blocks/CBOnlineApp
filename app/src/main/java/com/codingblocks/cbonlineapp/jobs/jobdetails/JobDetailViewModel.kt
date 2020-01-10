@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.jobs.jobdetails
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
@@ -15,7 +14,7 @@ import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Applications
-import com.codingblocks.onlineapi.models.CourseId
+import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Form
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,18 +28,18 @@ class JobDetailViewModel(
     private val inactiveLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val acceptingLiveData: MutableLiveData<Boolean> = MutableLiveData()
     val formData: MutableLiveData<ArrayList<Form>> = MutableLiveData()
-    val courseIdList: MutableLiveData<ArrayList<CourseId>> = MutableLiveData()
+    val courseIdList: MutableLiveData<ArrayList<Course>> = MutableLiveData()
     var jobCourses: LiveData<List<CourseInstructorPair>> = MutableLiveData()
 
-    init {
-        jobCourses = Transformations.switchMap(courseIdList) { list ->
-            val coureidlist = ArrayList<String>()
-            list.forEach {
-                it.id?.let { it1 -> coureidlist.add(it1) }
-            }
-            courseWithInstructorDao.getJobCourses(coureidlist)
-        }
-    }
+//    init {
+//        jobCourses = Transformations.switchMap(courseIdList) { list ->
+//            val coureidlist = ArrayList<String>()
+//            list.forEach {
+//                it.id?.let { it1 -> coureidlist.add(it1) }
+//            }
+// //            courseWithInstructorDao.getJobCourses(coureidlist)
+//        }
+//    }
 
     fun getJobById(id: String) = jobsDao.getJobById(id)
 
@@ -76,7 +75,7 @@ class JobDetailViewModel(
                                     website ?: ""
                                 )
                             },
-                            courses ?: arrayListOf()
+                            courses ?: arrayListOf<Course>()
                         )
                         if (application != null) {
                             eligibleLiveData.value = mInstance.getString(R.string.applied)

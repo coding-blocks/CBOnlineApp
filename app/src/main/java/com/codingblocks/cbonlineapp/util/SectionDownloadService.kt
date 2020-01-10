@@ -9,8 +9,6 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
-import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
-import com.codingblocks.onlineapi.Clients
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.offline.DownloadOptions
 import com.vdocipher.aegis.offline.DownloadRequest
@@ -138,18 +136,18 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener, Anko
     }
 
     override fun onFailed(videoId: String, p1: DownloadStatus?) {
-        Clients.api.getOtp(videoId, sectionId ?: "", attemptId ?: "", true)
-            .enqueue(retrofitCallback { _, response ->
-                response?.let { json ->
-                    if (json.isSuccessful) {
-                        json.body()?.let {
-                            val mOtp = it.get("otp").asString
-                            val mPlaybackInfo = it.get("playbackInfo").asString
-                            initializeDownload(mOtp, mPlaybackInfo, videoId)
-                        }
-                    }
-                }
-            })
+//        Clients.api.getOtp(videoId, sectionId ?: "", attemptId ?: "", true)
+//            .enqueue(retrofitCallback { _, response ->
+//                response?.let { json ->
+//                    if (json.isSuccessful) {
+//                        json.body()?.let {
+//                            val mOtp = it.get("otp").asString
+//                            val mPlaybackInfo = it.get("playbackInfo").asString
+//                            initializeDownload(mOtp, mPlaybackInfo, videoId)
+//                        }
+//                    }
+//                }
+//            })
     }
 
     override fun onQueued(p0: String?, p1: DownloadStatus?) {

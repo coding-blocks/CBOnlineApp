@@ -6,7 +6,7 @@ const val SECTION_ID: String = "sectionId"
 
 const val VIDEO_ID: String = "videoId"
 
-val PROGRESS_ID = "progressId"
+const val PROGRESS_ID = "progressId"
 
 const val TITLE: String = "title"
 
@@ -24,9 +24,15 @@ const val COURSE_NAME = "course_name"
 
 const val COURSE_ID = "courseId"
 
+const val COURSE_LOGO = "courseLogo"
+
+const val LOGO_TRANSITION_NAME = "logo_transition"
+
 const val ROLE_ID = "roleId"
 
 const val RUN_ID = "runId"
+
+const val TYPE = "type"
 
 const val DOWNLOADED = "downloaded"
 
@@ -63,3 +69,23 @@ const val DOWNLOAD_CHANNEL_ID = "downloadChannel"
 const val ADMIN_CHANNEL_ID = "adminChannel"
 
 const val UNAUTHORIZED = "Unauthorized"
+
+const val LIVE = "LIVE"
+
+const val RESOLVED = "RESOLVED"
+
+const val REOPENED = "REOPENED"
+
+const val PENDING = "PENDING"
+
+const val DOUBT_ID = "doubtID"
+
+const val ALL = "ALL"
+
+const val RESOLVEHINT = 1001
+
+const val COURSE_FILTER_TYPE = "course_filter_type"
+
+const val JWT_TOKEN = "jwt_token"
+
+const val REFRESH_TOKEN = "refresh_token"

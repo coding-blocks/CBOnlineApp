@@ -17,7 +17,7 @@ class CourseWithInstructor(
     @ColumnInfo(name = "instructor_id") val instructorId: String
 )
 
-class CourseRunPair : RunModel() {
+class CourseRunPair : RunWithAttempt() {
     @Embedded
     var course: CourseModel = CourseModel()
 }

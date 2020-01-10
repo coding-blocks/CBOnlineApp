@@ -12,15 +12,15 @@ interface BaseDao<T> {
      *
      * @param obj the object to be inserted.
      */
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(obj: T)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(obj: T): Long
 
     /**
      * Insert an object in the database with Conflict Strategy REPLACE.
      *
      * @param obj the object to be inserted.
      */
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertNew(obj: T)
 
     /**

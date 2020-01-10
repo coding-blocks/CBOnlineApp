@@ -4,19 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.util.SingleLiveEvent
 import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
+import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.ResultWrapper
+import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.ProductExtensionsItem
 import com.codingblocks.onlineapi.models.ResetRunAttempt
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MyCourseViewModel(
-    private val repository: MyCourseRepository
+    private val repo: MyCourseRepository
 ) : ViewModel() {
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
@@ -25,6 +25,7 @@ class MyCourseViewModel(
     var attemptId: String = ""
     var runId: String = ""
     var courseId: String = ""
+    var name: String = ""
     private val mutablePopMessage = SingleLiveEvent<String>()
     private val extensions = MutableLiveData<List<ProductExtensionsItem>>()
     val popMessage: LiveData<String> = mutablePopMessage
@@ -32,56 +33,38 @@ class MyCourseViewModel(
     var filters: MutableLiveData<String> = MutableLiveData()
     var complete: MutableLiveData<String> = MutableLiveData("")
     var content: LiveData<List<SectionContentHolder.SectionContentPair>> = MutableLiveData()
+    var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
     init {
         content = Transformations.switchMap(DoubleTrigger(complete, filters)) {
-            repository.getSectionWithContent(attemptId)
+            repo.getSectionWithContent(attemptId)
         }
     }
 
-    fun getInstructor() = repository.getInstructorWithCourseId(courseId)
-
-    fun getResumeCourse() = repository.resumeCourse(attemptId)
-
-    fun getRun() = repository.run(runId)
-
-    fun updateHit(attemptId: String) = viewModelScope.launch(Dispatchers.IO) {
-        repository.updateHit(attemptId)
-    }
-
-    fun fetchCourse(attemptId: String) {
-        Clients.onlineV2JsonApi.enrolledCourseById(attemptId)
-            .enqueue(retrofitCallback { _, response ->
-                response?.let { runAttempt ->
-                    if (runAttempt.isSuccessful) {
-                        expired.value = runAttempt.body()?.end!!.toLong() * 1000 < System.currentTimeMillis()
-                        runAttempt.body()?.run?.sections?.let { sectionList ->
-                            viewModelScope.launch(Dispatchers.IO) {
-                                repository.insertSections(sectionList, attemptId)
-                            }
-                            sectionList.forEach { courseSection ->
-                                courseSection.courseContentLinks?.related?.href?.substring(7)
-                                    ?.let { contentLink ->
-                                        Clients.onlineV2JsonApi.getSectionContents(contentLink)
-                                            .enqueue(retrofitCallback { _, contentResponse ->
-                                                contentResponse?.let { contentList ->
-                                                    if (contentList.isSuccessful) {
-                                                        viewModelScope.launch(Dispatchers.IO) {
-                                                            contentList.body()?.let { repository.insertContents(it, attemptId, courseSection.id) }
-                                                        }
-                                                    }
-                                                }
-                                            })
-                                    }
-                            }
+    fun fetchSections() {
+        runIO {
+            when (val response = repo.fetchSections(attemptId)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let { runAttempt ->
+                            repo.insertSections(runAttempt)
                         }
-                        progress.value = false
-                    } else if (runAttempt.code() == 404) {
-                        revoked.value = true
+                    else {
+                        setError(fetchError(response.value.code()))
                     }
                 }
-            })
+            }
+        }
     }
+
+    private fun setError(error: String) {
+        errorLiveData.postValue(error)
+    }
+
+    fun getRun() = repo.getRunById(attemptId)
+
+    fun getPerformance() = repo.getRunStats(attemptId)
 
     fun resetProgress() {
         val resetCourse = ResetRunAttempt(attemptId)
@@ -117,5 +100,22 @@ class MyCourseViewModel(
             }
         })
         return extensions
+    }
+
+    fun getStats(id: String) {
+        runIO {
+            when (val response = repo.getStats(id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        body()?.let { response ->
+                            repo.saveStats(response, id)
+                        }
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
     }
 }

@@ -13,7 +13,6 @@ import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
-import kotlinx.android.synthetic.main.activity_admin.*
 import kotlinx.android.synthetic.main.fragment_inbox.*
 
 /**
@@ -110,7 +109,8 @@ class InboxFragment : Fragment() {
             }
 
             webView.loadUrl("file:///android_asset/Chat.html")
-            inboxRoot.addView(webView)
         })
+        if (inboxRoot != null)
+            inboxRoot.addView(webView)
     }
 }

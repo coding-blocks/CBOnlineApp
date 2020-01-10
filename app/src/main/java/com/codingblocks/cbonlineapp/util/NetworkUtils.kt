@@ -1,7 +1,5 @@
 package com.codingblocks.cbonlineapp.util
 
-import android.content.Context
-import android.net.ConnectivityManager
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import okhttp3.Cache
 import okhttp3.CacheControl
@@ -11,18 +9,6 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 object NetworkUtils {
-    fun isNetworkAvailable(context: Context): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo.isConnected
-    }
-
-    fun connectedToWifi(context: Context): Boolean? {
-        val connManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        val mWifi = connManager?.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-        return mWifi?.isConnected
-    }
 
     val okHttpClient = provideOkHttpClient()
 

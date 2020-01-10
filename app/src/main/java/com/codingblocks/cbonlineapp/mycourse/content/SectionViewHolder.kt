@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.mycourse.content
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.DownloadStarter
@@ -21,6 +22,9 @@ class SectionViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
      */
     fun bindTo(section: SectionModel) {
         this.section = section
+        if (adapterPosition == 0) {
+            itemView.dividerTop.isVisible = false
+        }
         itemView.title.text = section.name
         itemView.lectures.text = "${section.completedContent}/${section.totalContent} Lectures Completed"
         itemView.lectureTime.text = section.totalTime.getDurationBreakdown()

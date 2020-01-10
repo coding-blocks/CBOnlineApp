@@ -6,6 +6,7 @@ import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.database.models.Notification
+import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.otherwise
 import com.onesignal.OSNotification
 import com.onesignal.OSNotificationOpenResult
@@ -23,7 +24,7 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
         val url = result.notification.payload.launchURL
 
         Router.open("activity://courseRun/$url").otherwise {
-            Components.openChrome(mInstance, url, true)
+            mInstance.openChrome(url, true)
         }
         doAsync {
             notificationDao.updateseen(position)

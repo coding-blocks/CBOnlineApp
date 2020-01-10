@@ -1,15 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="#00000000" />
-    <corners android:radius="42.5dp" />
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <padding
-        android:bottom="7dp"
-        android:left="7dp"
-        android:right="7dp"
-        android:top="7dp" />
-    <stroke
-        android:width="5px"
-        android:color="@color/salmon" />
-</shape>
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="180"
+                android:endColor="@color/dusty_orange"
+                android:startColor="@color/pastel_red" />
+            <corners android:radius="@dimen/button_corner_radius" />
+
+        </shape>
+    </item>
+    <!-- create the stroke for top, left, bottom and right with the dp you want -->
+    <item
+        android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/button_corner_radius" />
+
+            <!-- fill the inside in the color you want (could also be a gradient again if you want to, just change solid to gradient and enter angle, start, maybe center, and end color) -->
+            <solid android:color="@color/white" />
+
+            <padding
+                android:bottom="@dimen/button_padding_small"
+                android:left="@dimen/button_padding_medium"
+                android:right="@dimen/button_padding_medium"
+                android:top="@dimen/button_padding_small" />
+        </shape>
+    </item>
+
+</layer-list>
+

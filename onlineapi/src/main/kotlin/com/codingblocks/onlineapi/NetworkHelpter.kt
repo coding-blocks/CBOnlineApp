@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import retrofit2.Response
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -14,12 +15,12 @@ suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, ap
             ResultWrapper.Success(apiCall.invoke())
         } catch (throwable: Throwable) {
             when (throwable) {
+                is IOException -> ResultWrapper.GenericError(103, "IOException")
                 is UnknownHostException -> ResultWrapper.GenericError(101, ErrorStatus.NO_CONNECTION)
                 is SocketTimeoutException -> ResultWrapper.GenericError(102, ErrorStatus.TIMEOUT)
-                is IOException -> ResultWrapper.GenericError(103, "IOException")
                 is HttpException -> ResultWrapper.GenericError(throwable.code(), "HttpException")
                 else -> {
-                    ResultWrapper.GenericError(null, ErrorStatus.NOT_DEFINED)
+                    ResultWrapper.GenericError(null, throwable.localizedMessage)
                 }
             }
         }

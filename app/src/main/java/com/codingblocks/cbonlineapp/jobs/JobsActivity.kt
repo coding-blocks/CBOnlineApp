@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.jobs
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -13,13 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.codingblocks.cbonlineapp.widgets.SheetDialog
+import com.codingblocks.cbonlineapp.util.widgets.SheetDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.tabs.TabLayout
-import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_jobs.*
 import org.jetbrains.anko.design.indefiniteSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -232,9 +230,5 @@ class JobsActivity : AppCompatActivity() {
                 }
             }
         })
-    }
-
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 }

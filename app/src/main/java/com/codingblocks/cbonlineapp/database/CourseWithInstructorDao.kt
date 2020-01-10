@@ -9,7 +9,6 @@ import androidx.room.Transaction
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.database.models.CourseRunPair
 import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
-import com.codingblocks.cbonlineapp.database.models.InstructorModel
 
 @Dao
 interface CourseWithInstructorDao {
@@ -17,58 +16,55 @@ interface CourseWithInstructorDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(join: CourseWithInstructor)
 
-    @Query("""
-        SELECT i.* FROM InstructorModel i
-        INNER JOIN coursewithinstructor ON
-        i.uid = coursewithinstructor.instructor_id
-        WHERE coursewithinstructor.course_id = :courseID
-        """)
-    fun getInstructorWithCourseId(courseID: String): LiveData<List<InstructorModel>>
-
-    @Query("""
-        SELECT i.* FROM InstructorModel i
-        INNER JOIN coursewithinstructor ON
-        i.uid = coursewithinstructor.instructor_id
-        WHERE coursewithinstructor.course_id = :courseID
-        """)
-    suspend fun getInstructors(courseID: String): List<InstructorModel>
+//
+//    @Transaction
+//    @Query("""
+//       SELECT c.*,r.* FROM RunModel r
+// 	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
+//       WHERE r.crCourseId IN (:courses) AND r.crAttemptId IS NULL
+//    """)
+//    fun getJobCourses(courses: ArrayList<String>): LiveData<List<CourseInstructorPair>>
 
     @Transaction
     @Query("""
-       SELECT c.*,r.* FROM RunModel r
-	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
-       WHERE r.crAttemptId IS NULL
-    """)
-    fun getCourses(): LiveData<List<CourseInstructorPair>>
-
-    @Transaction
-    @Query("""
-       SELECT c.*,r.* FROM RunModel r
-	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
-       WHERE r.crCourseId IN (:courses) AND r.crAttemptId IS NULL 
-    """)
-    fun getJobCourses(courses: ArrayList<String>): LiveData<List<CourseInstructorPair>>
-
-    @Transaction
-    @Query("""
-        SELECT c.*,r.* FROM RunModel r
-	    INNER JOIN CourseModel c ON c.cid = r.crCourseId
-        WHERE r.crAttemptId IS NULL AND recommended = 1
-            """)
-    fun getRecommendedCourses(): LiveData<List<CourseInstructorPair>>
-
-    @Transaction
-    @Query("""
-    SELECT c.*,r.* FROM RunModel r
-	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
-       WHERE r.crAttemptId IS NOT NULL ORDER BY hits DESC,crEnrollmentEnd DESC
+    SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
+ 	   INNER JOIN RunModel r ON r.crUid = rA.runId
+       INNER JOIN CourseModel c ON c.cid = r.crCourseId
+       ORDER BY rA.lastAccessedAt DESC
     """)
     fun getMyRuns(): LiveData<List<CourseInstructorPair>>
 
+    @Transaction
     @Query("""
-        SELECT * FROM RunModel r
-	   INNER JOIN CourseModel c ON c.cid = r.crCourseId
-       WHERE r.crAttemptId IS NOT NULL ORDER BY hits DESC LIMIT 2
+    SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
+ 	   INNER JOIN RunModel r ON r.crUid = rA.runId
+       INNER JOIN CourseModel c ON c.cid = r.crCourseId
+       ORDER BY rA.lastAccessedAt DESC LIMIT 3
     """)
-    fun getTopRun(): LiveData<List<CourseRunPair>>
+    fun getRecentRuns(): LiveData<List<CourseInstructorPair>>
+
+    @Transaction
+    @Query("""
+    SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
+ 	   INNER JOIN RunModel r ON r.crUid = rA.runId
+       INNER JOIN CourseModel c ON c.cid = r.crCourseId
+       WHERE rA.`end` < :currentTimeMillis
+    """)
+    fun getExpiredRuns(currentTimeMillis: Long): LiveData<List<CourseInstructorPair>>
+
+    @Query("""
+   SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
+ 	   INNER JOIN RunModel r ON r.crUid = rA.runId
+       INNER JOIN CourseModel c ON c.cid = r.crCourseId
+       ORDER BY rA.lastAccessedAt DESC LIMIT 1
+    """)
+    fun getTopRun(): LiveData<CourseRunPair>
+
+    @Query("""
+   SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
+ 	   INNER JOIN RunModel r ON r.crUid = rA.runId
+       INNER JOIN CourseModel c ON c.cid = r.crCourseId
+       WHERE rA.attemptId = :id ORDER BY rA.lastAccessedAt DESC LIMIT 1
+    """)
+    fun getRunById(id: String): LiveData<CourseRunPair>
 }

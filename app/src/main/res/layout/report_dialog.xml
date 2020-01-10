@@ -34,7 +34,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="8dp"
-                    android:fontFamily="@font/nunitosans_bold"
+                    android:fontFamily="@font/gilroy_bold"
                     android:text="Report A Bug"
                     android:textSize="24sp" />
 
@@ -48,7 +48,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:fontFamily="@font/nunitosans_bold"
+                        android:fontFamily="@font/gilroy_bold"
                         android:hint="Title"
                         android:textSize="18sp" />
 
@@ -64,7 +64,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:fontFamily="@font/nunitosans_bold"
+                        android:fontFamily="@font/gilroy_bold"
                         android:gravity="top"
                         android:hint="Description"
                         android:minLines="4"
@@ -83,7 +83,7 @@
                     android:layout_marginEnd="32dp"
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/button_background"
-                    android:fontFamily="@font/nunitosans_bold"
+                    android:fontFamily="@font/gilroy_bold"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:shadowColor="#664cceff"

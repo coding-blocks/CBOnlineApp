@@ -3,6 +3,7 @@ package com.codingblocks.onlineapi.api
 import com.codingblocks.onlineapi.models.DoubtStats
 import com.codingblocks.onlineapi.models.Extension
 import com.codingblocks.onlineapi.models.Leaderboard
+import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.PostStream
 import com.codingblocks.onlineapi.models.RatingModel
 import com.codingblocks.onlineapi.models.ResetRunAttempt
@@ -12,6 +13,7 @@ import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
+import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -23,16 +25,21 @@ interface OnlineRestApi {
     fun getMyCourseProgress(@Path("runid") id: String): Call<HashMap<Any, Any>>
 
     @GET("v2/lectures/otp")
-    fun getOtp(
+    suspend fun getOtp(
         @Query("videoId") videoId: String,
         @Query("sectionId") sectionId: String,
         @Query("runAttemptId") runAttemptId: String,
         @Query("offline") offline: Boolean = false
-    ): Call<JsonObject>
+    ): Response<JsonObject>
 
     @POST("jwt/login?android=true")
     @FormUrlEncoded
-    fun getToken(@Field("code") code: String): Call<JsonObject>
+    suspend fun getToken(@Field("code") code: String): Response<JsonObject>
+
+    @GET("v2/progresses/stats/{id}")
+    suspend fun getMyStats(
+        @Path("id") id: String
+    ): Response<PerformanceResponse>
 
     @GET("v2/courses/{id}/rating")
     suspend fun getCourseRating(@Path("id") id: String): RatingModel
@@ -90,6 +97,14 @@ interface OnlineRestApi {
 
     @POST("v2/chats/{id}")
     suspend fun getChatId(@Path("id") doubtId: String): Response<JsonObject>
+
+    @POST("jwt/otp")
+    @FormUrlEncoded
+    suspend fun getOtp(@FieldMap params: HashMap<String, String>): Response<JsonObject>
+
+    @POST("jwt/otp/verify")
+    @FormUrlEncoded
+    suspend fun getJwt(@FieldMap params: Map<String, String>): Response<JsonObject>
 
 
 }
