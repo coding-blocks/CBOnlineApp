@@ -28,7 +28,9 @@ data class BookmarkModel(
     var runAttemptId: String = "",
     var contentId: String = "",
     var sectionId: String = "",
-    var createdAt: String = ""
+    var createdAt: String = "",
+    var sectionName: String = "",
+    var contentName: String = ""
 )
 
 @Entity
@@ -97,8 +99,7 @@ data class NotesModel(
     var runAttemptId: String = "",
     var createdAt: String = "",
     var deletedAt: String? = "",
-    var contentTitle: String? = ""
-
+    val contentTitle: String = ""
 )
 
 @Entity

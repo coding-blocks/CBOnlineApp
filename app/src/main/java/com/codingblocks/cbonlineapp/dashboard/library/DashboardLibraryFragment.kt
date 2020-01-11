@@ -8,18 +8,24 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
+import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
+import com.codingblocks.cbonlineapp.dashboard.mycourses.MyCourseListAdapter
+import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.setRv
 import kotlinx.android.synthetic.main.fragment_dashboard_library.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DashboardLibraryFragment : Fragment() {
 
     private lateinit var listener: FragmentChangeListener
+    private val viewModel by sharedViewModel<DashboardViewModel>()
+    private val courseListAdapter = MyCourseListAdapter("RUN")
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? =
-        inflater.inflate(R.layout.fragment_dashboard_library, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_dashboard_library, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -27,6 +33,11 @@ class DashboardLibraryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dashboardCoursesRv.setRv(requireContext(), courseListAdapter, true)
+
+        viewModel.courses.observer(viewLifecycleOwner) {
+            courseListAdapter.submitList(it)
+        }
         dashboardLibraryEmptyBtn.setOnClickListener {
             listener.openExplore()
         }

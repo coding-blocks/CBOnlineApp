@@ -11,8 +11,6 @@ import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.safeApiCall
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
 class VideoPlayerRepository(
@@ -32,7 +30,6 @@ class VideoPlayerRepository(
 
     suspend fun insertNotes(notes: List<Note>) {
         notes.forEach {
-            val contentTitle = GlobalScope.async { contentDao.getContentTitle(it.content?.id ?: "") }
             val model = NotesModel(
                 it.id,
                 it.duration,
@@ -40,8 +37,7 @@ class VideoPlayerRepository(
                 it.content?.id ?: "",
                 it.runAttempt?.id ?: "",
                 it.createdAt ?: "",
-                it.deletedAt,
-                contentTitle.await()
+                it.deletedAt
             )
 //            val sum = notes + networkList
 //            sum.groupBy { it.nttUid }
@@ -59,7 +55,6 @@ class VideoPlayerRepository(
     }
 
     suspend fun addNewNote(newNote: Note) {
-        val contentTitle = GlobalScope.async { contentDao.getContentTitle(newNote.content?.id ?: "") }
         val model = NotesModel(
             newNote.id,
             newNote.duration,
@@ -67,8 +62,7 @@ class VideoPlayerRepository(
             newNote.content?.id ?: "",
             newNote.runAttempt?.id ?: "",
             newNote.createdAt ?: "",
-            newNote.deletedAt,
-            contentTitle.await()
+            newNote.deletedAt
         )
         notesDao.insert(model)
     }

@@ -68,5 +68,11 @@ class LibraryActivity : AppCompatActivity() {
         viewModel.notes.observer(this) { notes ->
             notesListAdapter.submitList(notes)
         }
+
+        viewModel.bookmark.observer(this) { bookmark ->
+            bookmark.forEach {
+                it
+            }
+        }
     }
 }

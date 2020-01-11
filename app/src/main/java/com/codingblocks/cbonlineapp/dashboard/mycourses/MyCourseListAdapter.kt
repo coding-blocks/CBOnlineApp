@@ -12,56 +12,94 @@ import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import kotlinx.android.synthetic.main.item_courses.view.*
 
-class MyCourseListAdapter : ListAdapter<CourseInstructorPair, MyCourseListAdapter.ItemViewHolder>(DiffCallback()) {
+class MyCourseListAdapter(val type: String = "DEFAULT") : ListAdapter<CourseInstructorPair, RecyclerView.ViewHolder>(DiffCallback()) {
 
     var onItemClick: ItemClickListener? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        return ItemViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_courses, parent, false)
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (type) {
+            "RUN" -> {
+                RunViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_courses, parent, false))
+            }
+            else -> {
+                DefaultViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_courses, parent, false))
+            }
+        }
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(getItem(position))
-        holder.itemClickListener = onItemClick
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (type) {
+            "RUN" -> {
+                (holder as RunViewHolder).apply {
+                    bind(getItem(position))
+                    itemClickListener = onItemClick
+                }
+            }
+            else -> {
+                (holder as DefaultViewHolder).apply {
+                    bind(getItem(position))
+                    itemClickListener = onItemClick
+                }
+            }
+        }
     }
 
-    class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class RunViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var itemClickListener: ItemClickListener? = null
 
         fun bind(item: CourseInstructorPair) = with(itemView) {
             courseTitleTv.text = item.courseRun.course.title
-            if (item.instructor.isNotEmpty())
-                courseInstructorTv.text = "Mentor: ${item.instructor.first().name} "
-            if (item.instructor.size > 1) {
-                courseInstructorTv.append("and ${item.instructor.size - 1} more")
-            }
-            val expired = item.courseRun.runAttempt.end.toLong() * 1000 < System.currentTimeMillis()
-            progressContainer.isVisible = !expired
-            openBtn.isVisible = !expired
-            extensionTv.isVisible = expired
-//            if (expired) {
-//                //Todo Fix this
-//                ImageViewCompat.setImageTintList(courseLogoImg, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.brownish_grey)))
-//            }
-            val progress = if (item.courseRun.runAttempt.completedContents > 0) (item.courseRun.runAttempt.completedContents / item.courseRun.run.totalContents.toDouble()) * 100 else 0.0
-            progressTv.text = "${progress.toInt()} %"
-            progressView1.progress = progress.toFloat()
-            if (progress > 90) {
-                progressView1.highlightView.colorGradientStart = context.getColor(R.color.kiwigreen)
-                progressView1.highlightView.colorGradientEnd = context.getColor(R.color.tealgreen)
-            } else {
-                progressView1.highlightView.colorGradientStart = context.getColor(R.color.pastel_red)
-                progressView1.highlightView.colorGradientEnd = context.getColor(R.color.dusty_orange)
-            }
+            courseInstructorTv.text = item.courseRun.run.crDescription
+            progressContainer.isVisible = false
             setOnClickListener {
-                if (expired) {
-                    // TODO ( show extension modal )
-                } else {
-                    itemClickListener?.onClick(item.courseRun.course.cid, item.courseRun.run.crUid, item.courseRun.runAttempt.attemptId, item.courseRun.course.title)
-                }
+                itemClickListener?.onClick(
+                    item.courseRun.course.cid,
+                    item.courseRun.run.crUid,
+                    item.courseRun.runAttempt.attemptId,
+                    item.courseRun.course.title
+                )
+            }
+        }
+    }
+}
+
+class DefaultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    var itemClickListener: ItemClickListener? = null
+
+    fun bind(item: CourseInstructorPair) = with(itemView) {
+        courseTitleTv.text = item.courseRun.course.title
+        if (item.instructor.isNotEmpty())
+            courseInstructorTv.text = "Mentor: ${item.instructor.first().name} "
+        if (item.instructor.size > 1) {
+            courseInstructorTv.append("and ${item.instructor.size - 1} more")
+        }
+        val expired = item.courseRun.runAttempt.end.toLong() * 1000 < System.currentTimeMillis()
+        progressContainer.isVisible = !expired
+        openBtn.isVisible = !expired
+        extensionTv.isVisible = expired
+        val progress = if (item.courseRun.runAttempt.completedContents > 0) (item.courseRun.runAttempt.completedContents / item.courseRun.run.totalContents.toDouble()) * 100 else 0.0
+        progressTv.text = "${progress.toInt()} %"
+        progressView1.progress = progress.toFloat()
+        if (progress > 90) {
+            progressView1.highlightView.colorGradientStart = context.getColor(R.color.kiwigreen)
+            progressView1.highlightView.colorGradientEnd = context.getColor(R.color.tealgreen)
+        } else {
+            progressView1.highlightView.colorGradientStart = context.getColor(R.color.pastel_red)
+            progressView1.highlightView.colorGradientEnd = context.getColor(R.color.dusty_orange)
+        }
+        setOnClickListener {
+            if (expired) {
+                // TODO ( show extension modal )
+            } else {
+                itemClickListener?.onClick(
+                    item.courseRun.course.cid,
+                    item.courseRun.run.crUid,
+                    item.courseRun.runAttempt.attemptId,
+                    item.courseRun.course.title)
             }
         }
     }

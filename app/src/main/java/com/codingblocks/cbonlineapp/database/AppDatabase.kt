@@ -63,4 +63,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun runWithAttemptDao(): RunWithAttemptDao
 
     abstract fun runPerformanceDao(): RunPerformanceDao
+
+    abstract fun libraryDao(): LibraryDao
 }

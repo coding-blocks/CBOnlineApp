@@ -57,7 +57,7 @@ val viewModelModule = module {
     single { CourseRepository() }
     single { DashboardDoubtsRepository(get(), get()) }
     single { DashboardMyCoursesRepository(get(), get(), get(), get(), get(), get()) }
-    single { LibraryRepository(get(), get()) }
+    single { LibraryRepository(get(), get(), get()) }
     single { DashboardHomeRepository(get(), get()) }
     single { VideoPlayerRepository(get(), get(), get(), get(), get()) }
     single { QuizRepository(get()) }
@@ -82,6 +82,11 @@ val databaseModule = module {
     factory {
         val database: AppDatabase = get()
         database.notesDao()
+    }
+
+    factory {
+        val database: AppDatabase = get()
+        database.libraryDao()
     }
 
     factory {

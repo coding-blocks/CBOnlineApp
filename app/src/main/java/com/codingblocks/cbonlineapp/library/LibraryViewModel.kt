@@ -11,6 +11,10 @@ class LibraryViewModel(private val repo: LibraryRepository) : ViewModel() {
     val notes by lazy {
         repo.getNotes(attemptId)
     }
+
+    val bookmark by lazy {
+        repo.getBookmarks(attemptId)
+    }
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
     fun fetchNotes() {
