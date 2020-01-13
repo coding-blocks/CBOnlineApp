@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.library.DeleteNoteClickListener
 import com.codingblocks.cbonlineapp.library.EditNoteClickListener
 import com.codingblocks.cbonlineapp.library.ItemClickListener
-import com.codingblocks.cbonlineapp.library.LibraryNotesListAdapter
+import com.codingblocks.cbonlineapp.library.LibraryListAdapter
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
-import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
@@ -25,7 +25,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class VideoNotesFragment : Fragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<VideoPlayerViewModel>()
-    private val notesListAdapter = LibraryNotesListAdapter(VIDEO)
+    private val notesListAdapter = LibraryListAdapter(LibraryTypes.NOTESVIDEO)
 
     private val deleteClickListener: DeleteNoteClickListener by lazy {
         object : DeleteNoteClickListener {

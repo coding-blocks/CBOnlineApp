@@ -4,15 +4,18 @@ import android.view.MotionEvent
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.codingblocks.cbonlineapp.library.LibraryNotesListAdapter
+import com.codingblocks.cbonlineapp.library.LibraryListAdapter
 
 class MyItemDetailsLookup(private val recyclerView: RecyclerView) :
     ItemDetailsLookup<Long>() {
     override fun getItemDetails(event: MotionEvent): ItemDetails<Long>? {
         val view = recyclerView.findChildViewUnder(event.x, event.y)
         if (view != null) {
-            return (recyclerView.getChildViewHolder(view) as LibraryNotesListAdapter.ItemViewHolder)
-                .getItemDetails()
+            return when (recyclerView.getChildViewHolder(view)) {
+                is LibraryListAdapter.NoteViewHolder -> (recyclerView.getChildViewHolder(view) as LibraryListAdapter.NoteViewHolder).getItemDetails()
+                is LibraryListAdapter.BookmarkViewHolder -> (recyclerView.getChildViewHolder(view) as LibraryListAdapter.BookmarkViewHolder).getItemDetails()
+                else -> (recyclerView.getChildViewHolder(view) as LibraryListAdapter.NoteViewHolder).getItemDetails()
+            }
         }
         return null
     }

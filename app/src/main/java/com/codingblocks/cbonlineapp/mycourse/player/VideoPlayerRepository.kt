@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.mycourse.player
 
+import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseDao
 import com.codingblocks.cbonlineapp.database.DoubtsDao
@@ -10,8 +11,6 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.safeApiCall
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class VideoPlayerRepository(
     private val doubtsDao: DoubtsDao,
@@ -26,7 +25,7 @@ class VideoPlayerRepository(
 
     suspend fun addNote(note: Note) = safeApiCall { Clients.onlineV2JsonApi.createNote(note) }
 
-    fun getContent(ccid: String) = contentDao.getContentLive(ccid)
+    fun getContent(ccid: String) = contentDao.getContentLive(ccid).distinctUntilChanged()
 
     suspend fun insertNotes(notes: List<Note>) {
         notes.forEach {
@@ -71,18 +70,13 @@ class VideoPlayerRepository(
 
     fun deleteNoteFromDb(noteId: String) = notesDao.deleteNoteByID(noteId)
 
-    suspend fun getSectionTitle(sectionId: String, contentId: String): Pair<String, String> {
-        val a = withContext(Dispatchers.IO) { sectionDao.getSectionTitle(sectionId) }
-        val b = withContext(Dispatchers.IO) { contentDao.getContentTitle(contentId) }
-        return Pair(a, b)
-    }
-
     suspend fun updateNote(note: Note) = safeApiCall { Clients.onlineV2JsonApi.updateNoteById(note.id, note) }
 
     suspend fun getOtp(videoId: String, attemptId: String, sectionId: String) =
         safeApiCall { Clients.api.getOtp(videoId, sectionId, attemptId) }
 
     suspend fun markDoubt(bookmark: Bookmark) = safeApiCall { Clients.onlineV2JsonApi.addBookmark(bookmark) }
+
     suspend fun updateBookmark(id: String, bookmark: Bookmark) {
         contentDao.updateBookmark(id,
             bookmark.id ?: "",

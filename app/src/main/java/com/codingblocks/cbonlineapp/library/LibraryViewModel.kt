@@ -1,23 +1,21 @@
 package com.codingblocks.cbonlineapp.library
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.database.models.BookmarkModel
+import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 
 class LibraryViewModel(private val repo: LibraryRepository) : ViewModel() {
     var attemptId: String = ""
-    val notes by lazy {
-        repo.getNotes(attemptId)
-    }
 
-    val bookmark by lazy {
-        repo.getBookmarks(attemptId)
-    }
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
-    fun fetchNotes() {
+    fun fetchNotes(): LiveData<List<NotesModel>> {
+        val notes = repo.getNotes(attemptId)
         runIO {
             when (val response = repo.fetchCourseNotes(attemptId)) {
                 is ResultWrapper.GenericError -> setError(response.error)
@@ -32,9 +30,16 @@ class LibraryViewModel(private val repo: LibraryRepository) : ViewModel() {
                 }
             }
         }
+        return notes
     }
 
     private fun setError(error: String) {
         errorLiveData.postValue(error)
+    }
+
+    fun fetchBookmarks(): LiveData<List<BookmarkModel>> {
+        val bookmark = repo.getBookmarks(attemptId)
+
+        return bookmark
     }
 }

@@ -31,7 +31,7 @@ data class BookmarkModel(
     var createdAt: String = "",
     var sectionName: String = "",
     var contentName: String = ""
-)
+) : BaseModel()
 
 @Entity
 data class ContentDocument(
@@ -100,7 +100,7 @@ data class NotesModel(
     var createdAt: String = "",
     var deletedAt: String? = "",
     val contentTitle: String = ""
-)
+) : BaseModel()
 
 @Entity
 data class Notification(
@@ -147,3 +147,9 @@ data class Companies(
     val companyDescription: String,
     val website: String
 )
+
+open class BaseModel()
+
+enum class LibraryTypes {
+    NOTE, NOTESVIDEO, BOOKMARK
+}

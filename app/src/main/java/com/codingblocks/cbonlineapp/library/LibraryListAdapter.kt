@@ -10,15 +10,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.database.models.BaseModel
+import com.codingblocks.cbonlineapp.database.models.BookmarkModel
+import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.database.models.NotesModel
-import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
 import kotlinx.android.synthetic.main.item_note.view.*
 import kotlinx.android.synthetic.main.item_note_player.view.*
 
-class LibraryNotesListAdapter(val type: String = "") : ListAdapter<NotesModel, RecyclerView.ViewHolder>(DiffCallback()) {
+class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, RecyclerView.ViewHolder>(DiffCallback()) {
 
     var onDeleteClick: DeleteNoteClickListener? = null
     var onEditClick: EditNoteClickListener? = null
@@ -32,36 +34,45 @@ class LibraryNotesListAdapter(val type: String = "") : ListAdapter<NotesModel, R
     override fun getItemId(position: Int): Long = position.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (type == VIDEO) {
-            ItemVideoViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_note_player, parent, false)
-            )
-        } else {
-            ItemViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_note, parent, false)
-            )
+        val inflater = LayoutInflater.from(parent.context)
+        return when (type) {
+            LibraryTypes.NOTESVIDEO -> NoteVideoViewHolder(
+                inflater.inflate(R.layout.item_note_player, parent, false))
+            LibraryTypes.NOTE -> NoteViewHolder(
+                inflater.inflate(R.layout.item_note, parent, false))
+            LibraryTypes.BOOKMARK -> BookmarkViewHolder(
+                inflater.inflate(R.layout.item_note, parent, false))
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (type == VIDEO)
-            (holder as ItemVideoViewHolder).apply {
-                bind(getItem(position))
-                deleteClickListener = onDeleteClick
-                editClickListener = onEditClick
-                itemClickListener = onItemClick
-            }
-        else
-            (holder as ItemViewHolder).apply {
-                tracker?.let {
-                    bind(getItem(position), it.isSelected(position.toLong()))
+        when (type) {
+            LibraryTypes.NOTESVIDEO -> {
+                (holder as NoteVideoViewHolder).apply {
+                    bind(getItem(position) as NotesModel)
+                    deleteClickListener = onDeleteClick
+                    editClickListener = onEditClick
+                    itemClickListener = onItemClick
                 }
             }
+            LibraryTypes.NOTE -> {
+                (holder as NoteViewHolder).apply {
+                    tracker?.let {
+                        bind(getItem(position) as NotesModel, it.isSelected(position.toLong()))
+                    }
+                }
+            }
+            LibraryTypes.BOOKMARK -> {
+                (holder as BookmarkViewHolder).apply {
+                    tracker?.let {
+                        bind(getItem(position) as BookmarkModel, it.isSelected(position.toLong()))
+                    }
+                }
+            }
+        }
     }
 
-    class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: NotesModel, isActivated: Boolean = false) = with(itemView) {
 
             noteTitleTv.text = item.contentTitle
@@ -78,7 +89,7 @@ class LibraryNotesListAdapter(val type: String = "") : ListAdapter<NotesModel, R
             }
     }
 
-    class ItemVideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class NoteVideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var deleteClickListener: DeleteNoteClickListener? = null
         var editClickListener: EditNoteClickListener? = null
         var itemClickListener: ItemClickListener? = null
@@ -99,14 +110,34 @@ class LibraryNotesListAdapter(val type: String = "") : ListAdapter<NotesModel, R
             }
         }
     }
+
+    class BookmarkViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(item: BookmarkModel, isActivated: Boolean = false) = with(itemView) {
+
+            noteTitleTv.text = item.sectionName
+            noteDescriptionTv.text = item.contentName
+            noteTimeTv.text = item.createdAt.timeAgo()
+            selectionImg.isVisible = isActivated
+            noteTimeTv.isVisible = !isActivated
+        }
+
+        fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
+            object : ItemDetailsLookup.ItemDetails<Long>() {
+                override fun getPosition(): Int = adapterPosition
+                override fun getSelectionKey(): Long? = itemId
+            }
+    }
 }
 
-class DiffCallback : DiffUtil.ItemCallback<NotesModel>() {
-    override fun areItemsTheSame(oldItem: NotesModel, newItem: NotesModel): Boolean {
-        return oldItem.nttUid == newItem.nttUid
+class DiffCallback : DiffUtil.ItemCallback<BaseModel>() {
+    override fun areItemsTheSame(oldItem: BaseModel, newItem: BaseModel):
+        Boolean = when (oldItem) {
+        is NotesModel -> if (newItem is NotesModel) oldItem.nttUid == newItem.nttUid else false
+        is BookmarkModel -> if (newItem is BookmarkModel) oldItem.bookmarkUid == newItem.bookmarkUid else false
+        else -> false
     }
 
-    override fun areContentsTheSame(oldItem: NotesModel, newItem: NotesModel): Boolean {
+    override fun areContentsTheSame(oldItem: BaseModel, newItem: BaseModel): Boolean {
         return oldItem.sameAndEqual(newItem)
     }
 }

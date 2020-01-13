@@ -9,6 +9,7 @@ import androidx.recyclerview.selection.StorageStrategy
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.doubts.MyItemDetailsLookup
 import com.codingblocks.cbonlineapp.dashboard.doubts.MyItemKeyProvider
+import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.TYPE
@@ -24,7 +25,7 @@ class LibraryActivity : AppCompatActivity() {
     val type by lazy {
         intent.getStringExtra(TYPE) ?: ""
     }
-    private val notesListAdapter = LibraryNotesListAdapter()
+    private lateinit var notesListAdapter: LibraryListAdapter
     private var tracker: SelectionTracker<Long>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,9 +37,19 @@ class LibraryActivity : AppCompatActivity() {
         typeTv.text = type
         viewModel.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
         when (type) {
-            getString(R.string.notes) -> viewModel.fetchNotes()
+            getString(R.string.notes) -> {
+                notesListAdapter = LibraryListAdapter(LibraryTypes.NOTE)
+                viewModel.fetchNotes().observer(this) {
+                    notesListAdapter.submitList(it)
+                }
+            }
             getString(R.string.announcements) -> viewModel.fetchNotes()
-            getString(R.string.bookmarks) -> viewModel.fetchNotes()
+            getString(R.string.bookmarks) -> {
+                notesListAdapter = LibraryListAdapter(LibraryTypes.BOOKMARK)
+                viewModel.fetchBookmarks().observer(this) {
+                    notesListAdapter.submitList(it)
+                }
+            }
             getString(R.string.downloads) -> viewModel.fetchNotes()
         }
 
@@ -64,15 +75,5 @@ class LibraryActivity : AppCompatActivity() {
                     }
                 }
             })
-
-        viewModel.notes.observer(this) { notes ->
-            notesListAdapter.submitList(notes)
-        }
-
-        viewModel.bookmark.observer(this) { bookmark ->
-            bookmark.forEach {
-                it
-            }
-        }
     }
 }

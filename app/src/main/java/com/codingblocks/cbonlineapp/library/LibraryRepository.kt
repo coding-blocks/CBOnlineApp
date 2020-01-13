@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.library
 
+import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.LibraryDao
 import com.codingblocks.cbonlineapp.database.NotesDao
@@ -32,7 +33,7 @@ class LibraryRepository(
         }
     }
 
-    fun getNotes(attemptId: String) = notesDao.getNotes(attemptId)
+    fun getNotes(attemptId: String) = notesDao.getNotes(attemptId).distinctUntilChanged()
 
-    fun getBookmarks(attemptId: String) = libraryDao.getBookmarks(attemptId)
+    fun getBookmarks(attemptId: String) = libraryDao.getBookmarks(attemptId).distinctUntilChanged()
 }
