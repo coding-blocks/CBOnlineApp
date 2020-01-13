@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.mycourse
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
@@ -13,6 +14,8 @@ import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
+import com.codingblocks.cbonlineapp.util.extensions.animateVisibility
+import com.codingblocks.cbonlineapp.util.extensions.pageChangeCallback
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
@@ -45,24 +48,29 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
     }
 
     private fun setupViewPager() {
-//        if (position == 1) {
-//                    fab.animateVisibility(View.VISIBLE)
-//                } else {
-//                    if (fab.visibility == View.VISIBLE) {
-//                        fab.animateVisibility(View.GONE)
-//                    }
-//                }
         myCourseTabs.setupWithViewPager(course_pager)
         pagerAdapter.apply {
             add(OverviewFragment(), getString(R.string.dashboard))
             add(CourseContentFragment(), getString(R.string.curriculum))
             add(CourseLibraryFragment(), getString(R.string.library))
         }
+
         course_pager.apply {
             setPagingEnabled(true)
             adapter = pagerAdapter
             currentItem = 0
             offscreenPageLimit = 3
+            addOnPageChangeListener(
+                pageChangeCallback { pos, fl, i2 ->
+                    if (pos == 1) {
+                        fab.animateVisibility(View.VISIBLE)
+                    } else {
+                        if (fab.visibility == View.VISIBLE) {
+                            fab.animateVisibility(View.GONE)
+                        }
+                    }
+                }
+            )
         }
     }
 

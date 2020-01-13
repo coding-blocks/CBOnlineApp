@@ -68,6 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="32dp"
+        android:visibility="gone"
         android:background="@drawable/button_background"
         android:drawableStart="@drawable/ic_menu"
         android:fontFamily="@font/gilroy_bold"

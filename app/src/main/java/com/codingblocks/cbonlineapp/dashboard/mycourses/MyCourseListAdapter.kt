@@ -53,7 +53,7 @@ class MyCourseListAdapter(val type: String = "DEFAULT") : ListAdapter<CourseInst
 
         fun bind(item: CourseInstructorPair) = with(itemView) {
             courseTitleTv.text = item.courseRun.course.title
-            courseInstructorTv.text = item.courseRun.run.crDescription
+            courseInstructorTv.text = item.courseRun.run.crName
             progressContainer.isVisible = false
             setOnClickListener {
                 itemClickListener?.onClick(

@@ -1,7 +1,7 @@
 package com.codingblocks.onlineapi.models
 
 data class PerformanceResponse(
-    val performance: Performance,
+    val performance: Performance?,
     val averageProgress: ArrayList<ProgressItem>,
     val userProgress: ArrayList<ProgressItem>
 )

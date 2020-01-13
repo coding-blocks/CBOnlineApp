@@ -240,8 +240,8 @@ class MyCourseRepository(
         runPerformanceDao.insert(
             RunPerformance(
                 id,
-                body.performance.percentile ?: 0,
-                body.performance.remarks,
+                body.performance?.percentile ?: 0,
+                body.performance?.remarks ?: "Average",
                 body.averageProgress,
                 body.userProgress
             )
