@@ -18,7 +18,8 @@ class QuizActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
         setToolbar(quizToolbar, hasUpEnabled = true, homeButtonEnabled = true)
-        viewModel.getContentModel(intent.getStringExtra(CONTENT_ID) ?: "")
+        viewModel.contentId = intent.getStringExtra(CONTENT_ID) ?: ""
+
         replaceFragmentSafely(AboutQuizFragment(), containerViewId = R.id.quizContainer)
     }
 

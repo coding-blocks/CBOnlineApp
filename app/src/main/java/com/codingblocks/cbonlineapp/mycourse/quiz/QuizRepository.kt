@@ -1,19 +1,13 @@
 package com.codingblocks.cbonlineapp.mycourse.quiz
 
 import com.codingblocks.cbonlineapp.database.ContentDao
-import com.codingblocks.cbonlineapp.database.models.ContentModel
-import com.codingblocks.cbonlineapp.database.models.ContentQnaModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.safeApiCall
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class QuizRepository(private var contentDao: ContentDao) {
 
-    suspend fun getContent(contentId: String): ContentQnaModel = withContext(Dispatchers.IO) { contentDao.getContent(contentId) }.contentQna
-
-    suspend fun getContentModel(contentId: String): ContentModel = withContext(Dispatchers.IO) { contentDao.getContent(contentId) }
+    fun getContent(contentId: String) = contentDao.getContentLive(contentId)
 
     suspend fun getQuizDetails(quizId: String) = safeApiCall { Clients.onlineV2JsonApi.getQuizById(quizId) }
 

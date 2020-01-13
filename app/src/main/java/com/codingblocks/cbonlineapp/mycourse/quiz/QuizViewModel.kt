@@ -10,8 +10,6 @@ import com.codingblocks.onlineapi.models.ContentQna
 import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.RunAttempts
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class QuizViewModel(private val repo: QuizRepository) : ViewModel() {
 
@@ -25,11 +23,13 @@ class QuizViewModel(private val repo: QuizRepository) : ViewModel() {
     val quizDetails = MutableLiveData<Quizzes>()
     val quizAttempts = MutableLiveData<List<QuizAttempt>>()
     val quizAttempt = MutableLiveData<QuizAttempt>()
+    val content by lazy {
+        repo.getContent(contentId)
+    }
 
     fun fetchQuiz() {
         runIO {
-            quiz = withContext(Dispatchers.IO) { repo.getContent(contentId) }
-            when (val response = quiz?.qnaQid?.let { repo.getQuizDetails(quizId = it.toString()) }) {
+            when (val response = quiz.qnaQid.let { repo.getQuizDetails(quizId = it.toString()) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {

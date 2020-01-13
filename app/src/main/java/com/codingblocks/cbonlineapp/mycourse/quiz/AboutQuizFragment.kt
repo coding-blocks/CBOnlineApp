@@ -9,6 +9,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.quiz.info.QuizInfoFragment
 import com.codingblocks.cbonlineapp.mycourse.quiz.submissions.QuizSubmissionsFragment
+import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_about_quiz.*
 import org.jetbrains.anko.AnkoLogger
@@ -32,7 +33,10 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        vm.fetchQuiz()
+        vm.content.observer(this) {
+            vm.quiz = it.contentQna
+            vm.fetchQuiz()
+        }
 
         quizStartBtn.setOnClickListener {
             quizStartBtn.isEnabled = false
@@ -56,7 +60,8 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         adapter.add(QuizInfoFragment(), "About")
         adapter.add(QuizSubmissionsFragment(), "Submissions")
         quizViewPager.adapter = adapter
-        quizViewPager.offscreenPageLimit = 2
+//   FragmentManager is already executing transactions
+//   quizViewPager.offscreenPageLimit = 2
         quizTabs.setupWithViewPager(quizViewPager)
     }
 }

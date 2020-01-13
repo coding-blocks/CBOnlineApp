@@ -70,7 +70,7 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     private fun setupMutableBottomSheetData(size: Int) {
         val tempList = mutableListOf<MutableLiveData<Boolean>>()
         repeat(size) {
-            tempList.add(MutableLiveData(false))
+            tempList.add(MutableLiveData())
         }
         vm.bottomSheetQuizData.value = tempList
     }
