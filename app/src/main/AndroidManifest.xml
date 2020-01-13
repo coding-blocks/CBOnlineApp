@@ -33,6 +33,7 @@
             android:parentActivityName=".mycourse.MyCourseActivity" />
         <activity
             android:name=".auth.LoginActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".auth.onboarding.OnBoardingActivity">
             <intent-filter>

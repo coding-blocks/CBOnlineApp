@@ -7,7 +7,7 @@ data class PerformanceResponse(
 )
 
 data class Performance(
-    val percentile: Int,
+    val percentile: Int?,
     val remarks: String
 )
 

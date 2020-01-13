@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.auth.onboarding
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -82,10 +83,12 @@ class LoginOtpFragment : Fragment() {
 
         task.addOnSuccessListener {
             // Successfully started retriever, expect broadcast intent
+            Log.i("SMS", "$it")
         }
 
         task.addOnFailureListener {
             // Failed to start retriever, inspect Exception for more details
+            Log.i("SMS", "$it")
         }
     }
 }

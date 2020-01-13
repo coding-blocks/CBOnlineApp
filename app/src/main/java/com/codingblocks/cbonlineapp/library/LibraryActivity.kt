@@ -25,33 +25,33 @@ class LibraryActivity : AppCompatActivity() {
     val type by lazy {
         intent.getStringExtra(TYPE) ?: ""
     }
-    private lateinit var notesListAdapter: LibraryListAdapter
+    private lateinit var libraryListAdapter: LibraryListAdapter
     private var tracker: SelectionTracker<Long>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_library)
         setToolbar(libraryToolbar)
-        libraryRv.setRv(this, notesListAdapter)
         title = intent.getStringExtra(COURSE_NAME)
         typeTv.text = type
         viewModel.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
         when (type) {
             getString(R.string.notes) -> {
-                notesListAdapter = LibraryListAdapter(LibraryTypes.NOTE)
+                libraryListAdapter = LibraryListAdapter(LibraryTypes.NOTE)
                 viewModel.fetchNotes().observer(this) {
-                    notesListAdapter.submitList(it)
+                    libraryListAdapter.submitList(it)
                 }
             }
             getString(R.string.announcements) -> viewModel.fetchNotes()
             getString(R.string.bookmarks) -> {
-                notesListAdapter = LibraryListAdapter(LibraryTypes.BOOKMARK)
+                libraryListAdapter = LibraryListAdapter(LibraryTypes.BOOKMARK)
                 viewModel.fetchBookmarks().observer(this) {
-                    notesListAdapter.submitList(it)
+                    libraryListAdapter.submitList(it)
                 }
             }
             getString(R.string.downloads) -> viewModel.fetchNotes()
         }
+        libraryRv.setRv(this, libraryListAdapter)
 
         tracker = SelectionTracker.Builder<Long>(
             "mySelection",
@@ -63,7 +63,7 @@ class LibraryActivity : AppCompatActivity() {
             SelectionPredicates.createSelectAnything()
         ).build()
 
-        notesListAdapter.tracker = tracker
+        libraryListAdapter.tracker = tracker
 
         tracker?.addObserver(
             object : SelectionTracker.SelectionObserver<Long>() {

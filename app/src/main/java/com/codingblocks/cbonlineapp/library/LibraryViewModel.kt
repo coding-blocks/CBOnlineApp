@@ -3,7 +3,6 @@ package com.codingblocks.cbonlineapp.library
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
@@ -37,9 +36,5 @@ class LibraryViewModel(private val repo: LibraryRepository) : ViewModel() {
         errorLiveData.postValue(error)
     }
 
-    fun fetchBookmarks(): LiveData<List<BookmarkModel>> {
-        val bookmark = repo.getBookmarks(attemptId)
-
-        return bookmark
-    }
+    fun fetchBookmarks() = repo.getBookmarks(attemptId)
 }

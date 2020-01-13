@@ -132,6 +132,16 @@ interface OnlineJsonApi {
         @Path("runAttemptId") id: String
     ): Response<List<Note>>
 
+    @GET("bookmarks")
+    suspend fun getBookmarksByAttemptId(
+        @Query("exclude") query: String = "section.*,content.*",
+        @Query("filter[runAttemptId]") id: String,
+        @Query("page[limit]") page: Int = 10,
+        @Query("page[offset]") offset: Int = 0,
+        @Query("include") include: String = "section,content",
+        @Query("sort") sort: String = "-createdAt"
+    ): Response<List<Bookmark>>
+
     @DELETE("notes/{noteid}")
     suspend fun deleteNoteById(
         @Path("noteid") id: String
@@ -287,5 +297,6 @@ interface OnlineJsonApi {
 
     @PATCH("doubts/{id}")
     suspend fun acknowledgeDoubt(@Path("id") doubtId: String, @Body params: Doubts): Response<List<Doubts>>
+
 
 }

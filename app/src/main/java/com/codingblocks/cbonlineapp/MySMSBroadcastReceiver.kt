@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
@@ -23,6 +24,7 @@ class MySMSBroadcastReceiver : BroadcastReceiver() {
             when (status!!.statusCode) {
                 CommonStatusCodes.SUCCESS -> { // Get SMS message contents
                     var message: String? = extras[SmsRetriever.EXTRA_SMS_MESSAGE] as String?
+                    Log.i("SMS", "$message")
                 }
                 CommonStatusCodes.TIMEOUT -> {
                 }

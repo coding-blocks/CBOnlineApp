@@ -17,7 +17,9 @@ import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
+import kotlinx.android.synthetic.main.item_bookmark.view.*
 import kotlinx.android.synthetic.main.item_note.view.*
+import kotlinx.android.synthetic.main.item_note.view.selectionImg
 import kotlinx.android.synthetic.main.item_note_player.view.*
 
 class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, RecyclerView.ViewHolder>(DiffCallback()) {
@@ -41,7 +43,7 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
             LibraryTypes.NOTE -> NoteViewHolder(
                 inflater.inflate(R.layout.item_note, parent, false))
             LibraryTypes.BOOKMARK -> BookmarkViewHolder(
-                inflater.inflate(R.layout.item_note, parent, false))
+                inflater.inflate(R.layout.item_bookmark, parent, false))
         }
     }
 
@@ -114,11 +116,13 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
     class BookmarkViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: BookmarkModel, isActivated: Boolean = false) = with(itemView) {
 
-            noteTitleTv.text = item.sectionName
-            noteDescriptionTv.text = item.contentName
-            noteTimeTv.text = item.createdAt.timeAgo()
-            selectionImg.isVisible = isActivated
-            noteTimeTv.isVisible = !isActivated
+            bookmarkTitleTv.text = item.sectionName
+            bookmarkSubtitleTv.text = item.contentName
+            bookmarkTimeTv.apply {
+                text = item.createdAt.timeAgo()
+                isVisible = !isActivated
+            }
+            bookmarkSelectionImg.isVisible = isActivated
         }
 
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
