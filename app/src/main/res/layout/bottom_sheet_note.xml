@@ -17,6 +17,20 @@
         android:textColor="@color/black"
         android:textSize="16sp" />
 
+    <EditText
+        android:id="@+id/doubtTitleTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:fontFamily="@font/gilroy_medium"
+        android:hint="Title of Doubt"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:visibility="gone"
+        tools:text="Hello New World" />
+
     <com.google.android.material.textfield.TextInputEditText
         android:layout_width="match_parent"
         android:id="@+id/bottoSheetDescTv"

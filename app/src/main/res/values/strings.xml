@@ -259,5 +259,8 @@
     <string name="generate">Generate</string>
     <string name="threshold_completion_90">Threshold Completion: 90%+</string>
     <string name="percentile">Percentile</string>
+    <string name="my_wishlist">My Wishlist</string>
+    <string name="wishlisted_desc">Your wishlisted courses appear here</string>
+    <string name="ask_doubt">Ask Doubt</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.course
 
 import android.content.Intent
+import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Menu
@@ -20,6 +21,7 @@ import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
+import com.codingblocks.cbonlineapp.util.extensions.getDateForTime
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.loadSvg
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -100,7 +102,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             courseSummaryTv.text = course.summary
             title = course.title
             shortTv.text = course.subtitle
-            ratingBar.numStars = course.rating.toInt()
+            ratingBar.progress = course.rating.toInt()
             ratingTv.text = "${course.rating}/5, ${course.reviewCount} ratings"
             if (courseLogoUrl.isNullOrEmpty()) courseLogo.loadImage(course.logo)
             courseBackdrop.loadImage(course.coverImage)
@@ -109,6 +111,14 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             viewModel.fetchSections(course.runs?.first()?.sections)
             instructorAdapter.submitList(course.instructors)
             batchListAdapter.submitList(course.activeRuns)
+            course.activeRuns?.first()?.let {
+                priceTv.text = "₹ ${it.price}"
+                mrpTv.text = "₹ ${it.mrp}"
+                batchBtn.text = it.name
+                deadlineTv.text = "Enrollment Ends ${it.enrollmentEnd?.let { it1 -> getDateForTime(it1) }}"
+                mrpTv.paintFlags = mrpTv.paintFlags or
+                    Paint.STRIKE_THRU_TEXT_FLAG
+            }
         }
 
         viewModel.projects.observer(this) { projects ->

@@ -22,7 +22,6 @@ import com.codingblocks.cbonlineapp.dashboard.library.DashboardLibraryFragment
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesFragment
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
-import com.codingblocks.cbonlineapp.util.JWT_TOKEN
 import com.codingblocks.cbonlineapp.util.REFRESH_TOKEN
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
 import com.codingblocks.cbonlineapp.util.extensions.getSharedPrefs
@@ -57,7 +56,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        Clients.authJwt = sharedPrefs.getString(JWT_TOKEN, "") ?: ""
+        Clients.authJwt = Clients.localJwt
         Clients.refreshToken = sharedPrefs.getString(REFRESH_TOKEN, "") ?: ""
         setUser()
         initializeUI()

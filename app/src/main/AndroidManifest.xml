@@ -21,6 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/NewAppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".profile.ProfileActivity"></activity>
         <activity
             android:name=".course.SearchCourseActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
@@ -29,8 +30,8 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".library.LibraryActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".mycourse.MyCourseActivity" />
+            android:parentActivityName=".mycourse.MyCourseActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".auth.LoginActivity"
             android:screenOrientation="portrait"
@@ -108,8 +109,8 @@
             android:name=".mycourse.MyCourseActivity"
             android:label="@string/title_activity_my_course"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".dashboard.DashboardActivity">
+            android:parentActivityName=".dashboard.DashboardActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.coddinblocks.appshortcuts.OPEN_DYNAMIC_SHORTCUT" />
 
@@ -180,7 +181,6 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/cblogo" />
-
         <meta-data
             android:name="android.app.shortcuts"
             android:resource="@xml/shortcut" />
@@ -189,7 +189,6 @@
             android:name=".admin.doubts.DoubtReceiver"
             android:enabled="true"
             android:exported="false" />
-
         <receiver
             android:name=".MySMSBroadcastReceiver"
             android:exported="true">

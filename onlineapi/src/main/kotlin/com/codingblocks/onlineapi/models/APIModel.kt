@@ -133,6 +133,12 @@ data class Doubts(
     ) : this(title, body, status, discourseTopicId, conversationId, runAttempt, content, createdAt) {
         super.id = id
     }
+
+    constructor(id: String?, title: String,
+                body: String,
+                runAttempt: RunAttempts?,
+                content: LectureContent?
+    ) : this(title = title, body = body, runAttempt = runAttempt, content = content)
 }
 
 @Type("comment")

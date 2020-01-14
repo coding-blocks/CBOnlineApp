@@ -12,14 +12,16 @@ import com.codingblocks.cbonlineapp.util.JWT_TOKEN
 import com.codingblocks.cbonlineapp.util.REFRESH_TOKEN
 import com.codingblocks.cbonlineapp.util.extensions.getSharedPrefs
 import com.codingblocks.cbonlineapp.util.extensions.save
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.ResultWrapper
+import com.codingblocks.onlineapi.safeApiCall
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_login_otp.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.runOnUiThread
 
@@ -45,24 +47,30 @@ class LoginOtpFragment : Fragment() {
             map["otp"] = numberLayout.editText?.text.toString()
             verifyOtpBtn.isEnabled = false
             GlobalScope.launch {
-                val response = withContext(Dispatchers.IO) { Clients.api.getJwt(map) }
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        with(it["jwt"].asString) {
-                            Clients.authJwt = this
-                            sharedPrefs.save(JWT_TOKEN, this)
-                        }
-                        with(it["refresh_token"].asString) {
-                            Clients.refreshToken = this
-                            sharedPrefs.save(REFRESH_TOKEN, this)
-                        }
+                when (val response = safeApiCall { Clients.api.getJwt(map) }) {
+                    is ResultWrapper.GenericError -> {
+                        otpRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
                     }
-                    startActivity(intentFor<DashboardActivity>())
-                    requireActivity().finish()
-                } else
-                    runOnUiThread {
-                        verifyOtpBtn.isEnabled = true
+                    is ResultWrapper.Success -> {
+                        if (response.value.isSuccessful) {
+                            response.value.body()?.let {
+                                with(it["jwt"].asString) {
+                                    Clients.authJwt = this
+                                    sharedPrefs.save(JWT_TOKEN, this)
+                                }
+                                with(it["refresh_token"].asString) {
+                                    Clients.refreshToken = this
+                                    sharedPrefs.save(REFRESH_TOKEN, this)
+                                }
+                            }
+                            startActivity(intentFor<DashboardActivity>())
+                            requireActivity().finish()
+                        } else
+                            runOnUiThread {
+                                verifyOtpBtn.isEnabled = true
+                            }
                     }
+                }
             }
         }
     }

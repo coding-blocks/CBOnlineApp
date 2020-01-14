@@ -20,6 +20,7 @@ import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Bookmark
+import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
@@ -229,6 +230,22 @@ class VideoPlayerViewModel(
                 is ResultWrapper.Success -> {
                     if (response.value.code() == 204)
                         repo.deleteBookmark(contentId)
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun createDoubt(title: String, body: String) {
+        val doubt = Doubts(null, title, body, RunAttempts(attemptId.value ?: ""), LectureContent(contentId))
+        runIO {
+            when (val response = repo.addDoubt(doubt)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        fetchDoubts()
                     else {
                         setError(fetchError(response.value.code()))
                     }
