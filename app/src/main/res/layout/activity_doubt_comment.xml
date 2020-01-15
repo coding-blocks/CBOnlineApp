@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="?attr/background"
+    android:id="@+id/rootComment"
+    android:orientation="vertical"
     tools:context="com.codingblocks.cbonlineapp.dashboard.DoubtCommentActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -94,8 +95,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/divider4"
-        android:overScrollMode="never"
         android:layout_below="@id/doubtContainer"
+        android:overScrollMode="never"
         tools:itemCount="2"
         tools:listitem="@layout/item_comment" />
 
@@ -153,22 +154,36 @@
     <LinearLayout
         android:id="@+id/chatContainer"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="?attr/divider"
-        android:gravity="center">
+        android:gravity="center"
+        android:minHeight="60dp">
 
         <EditText
             android:id="@+id/commentBox"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_large"
-            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_weight="1"
             android:background="@null"
-            android:hint="@string/commenting_as"
             android:fontFamily="@font/gilroy_medium"
+            android:hint="@string/commenting_as"
             android:imeOptions="actionSend"
             android:textColor="@color/brownish_grey" />
+
+        <TextView
+            android:id="@+id/sendBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:background="?attr/selectableItemBackground"
+            android:drawableStart="@drawable/ic_send"
+            android:drawablePadding="10dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:text="Send"
+            android:textColor="@color/black" />
 
     </LinearLayout>
 

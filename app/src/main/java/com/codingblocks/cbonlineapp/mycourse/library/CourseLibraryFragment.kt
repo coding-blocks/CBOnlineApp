@@ -13,6 +13,7 @@ import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.TYPE
 import kotlinx.android.synthetic.main.fragment_course_library.*
+import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class CourseLibraryFragment : Fragment(), View.OnClickListener {
@@ -36,11 +37,23 @@ class CourseLibraryFragment : Fragment(), View.OnClickListener {
         intent.putExtra(COURSE_NAME, viewModel.name)
         intent.putExtra(RUN_ATTEMPT_ID, viewModel.attemptId)
         when (v.id) {
-            R.id.notesBtn -> intent.putExtra(TYPE, getString(R.string.notes))
-            R.id.downloadBtn -> intent.putExtra(TYPE, getString(R.string.downloads))
-            R.id.bookmarkBtn -> intent.putExtra(TYPE, getString(R.string.bookmarks))
-            R.id.announcementsBtn -> intent.putExtra(TYPE, getString(R.string.announcements))
+            R.id.notesBtn -> {
+                intent.putExtra(TYPE, getString(R.string.notes))
+                startActivity(intent)
+            }
+            R.id.bookmarkBtn -> {
+                intent.putExtra(TYPE, getString(R.string.bookmarks))
+                startActivity(intent)
+            }
+            R.id.downloadBtn -> {
+                toast("Will be added Soon!")
+                intent.putExtra(TYPE, getString(R.string.downloads))
+            }
+
+            R.id.announcementsBtn -> {
+                toast("Will be added Soon!")
+                intent.putExtra(TYPE, getString(R.string.announcements))
+            }
         }
-        startActivity(intent)
     }
 }

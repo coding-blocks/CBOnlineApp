@@ -5,11 +5,6 @@
     android:orientation="vertical"
     tools:context="com.codingblocks.cbonlineapp.mycourse.library.CourseLibraryFragment">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/veryLightPink" />
-
     <LinearLayout
         android:id="@+id/notesBtn"
         android:layout_width="match_parent"

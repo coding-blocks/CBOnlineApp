@@ -10,7 +10,10 @@ import com.codingblocks.cbonlineapp.util.DOUBT_ID
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
+import com.crashlytics.android.core.CrashlyticsCore
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_doubt_comment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -44,9 +47,13 @@ class DoubtCommentActivity : AppCompatActivity() {
         }
 
         commentBox.hint = "${getString(R.string.commenting_as)} aggarwalpulkit ...."
-        commentBox.setOnEditorActionListener { v, actionId, event ->
+        sendBtn.setOnClickListener {
             viewModel.createComment(commentBox.text.toString(), doubtId, discourseId)
-            true
+        }
+
+        viewModel.errorLiveData.observer(this) {
+            rootComment.showSnackbar(it, Snackbar.LENGTH_SHORT)
+            CrashlyticsCore.getInstance().log(it)
         }
     }
 }
