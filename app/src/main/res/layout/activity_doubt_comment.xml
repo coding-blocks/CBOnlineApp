@@ -159,13 +159,15 @@
         android:gravity="center">
 
         <EditText
+            android:id="@+id/commentBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_large"
             android:layout_marginEnd="@dimen/margin_large"
             android:background="@null"
+            android:hint="@string/commenting_as"
             android:fontFamily="@font/gilroy_medium"
-            android:hint="Commenting as sidjain2901..."
+            android:imeOptions="actionSend"
             android:textColor="@color/brownish_grey" />
 
     </LinearLayout>

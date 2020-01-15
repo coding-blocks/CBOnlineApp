@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.doubts.ChatClickListener
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
+import com.codingblocks.cbonlineapp.commons.SheetAdapter
+import com.codingblocks.cbonlineapp.commons.SheetItem
 import com.codingblocks.cbonlineapp.dashboard.ChatActivity
 import com.codingblocks.cbonlineapp.dashboard.DoubtCommentActivity
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
@@ -42,7 +45,8 @@ class DashboardDoubtsFragment : Fragment() {
     private val viewModel by viewModel<DashboardDoubtsViewModel>()
     private val doubtListAdapter = DashboardDoubtListAdapter()
     private val dialog by lazy { BottomSheetDialog(requireContext()) }
-
+    val list = arrayListOf<SheetItem>()
+    val adapter = SheetAdapter(list)
     private val resolveClickListener: ResolveDoubtClickListener by lazy {
         object : ResolveDoubtClickListener {
             override fun onClick(doubt: DoubtsModel) {
@@ -85,12 +89,12 @@ class DashboardDoubtsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.fetchDoubts()
         dashboardDoubtShimmer.startShimmer()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpBottomSheet()
 
         doubtEmptyBtn.setOnClickListener {
             listener.openExplore()
@@ -108,7 +112,6 @@ class DashboardDoubtsFragment : Fragment() {
         }
 
         filterTv.setOnClickListener {
-            setUpBottomSheet()
             dialog.show()
         }
 
@@ -137,6 +140,14 @@ class DashboardDoubtsFragment : Fragment() {
             }
         }
 
+        viewModel.getRuns().observer(viewLifecycleOwner) {
+            viewModel.attemptId.value = it.first().courseRun.runAttempt.attemptId
+//            viewModel.fetchDoubts()
+//            it.forEach {
+//                list.add(SheetItem(it.courseRun.run.crName, image = it.courseRun.course.logo, courseId = it.courseRun.runAttempt.attemptId))
+//            }
+//            adapter.notifyDataSetChanged()
+        }
         dashboardDoubtRv.setRv(requireContext(), doubtListAdapter, true, "thick")
 
         viewModel.doubts.observer(viewLifecycleOwner) {
@@ -174,22 +185,18 @@ class DashboardDoubtsFragment : Fragment() {
     }
 
     private fun setUpBottomSheet() {
-        // TODO( fetch list )
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_mycourses, null)
-//        val list = arrayListOf<SheetItem>(
-//        viewModel.getRunId().observeOnce {
-//            it.forEach { run ->
-//                list.add(SheetItem(run.crDescription, R.drawable.ic_course_logo))
-//            }
-//            sheetDialog.run {
-//                sheetLv.adapter = SheetAdapter(list)
-//                sheetLv.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-//                    viewModel.courseId.postValue("30678")
-//                    dialog.dismiss()
-//                }
-//            }
-//        }
 
+        sheetDialog.run {
+            sheetLv.adapter = adapter
+            sheetLv.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+                viewModel.attemptId.postValue(list[position].courseId)
+                adapter.selectedItem = position
+                dialog.dismiss()
+            }
+        }
+
+        dialog.dismissWithAnimation = true
         dialog.setContentView(sheetDialog)
     }
 

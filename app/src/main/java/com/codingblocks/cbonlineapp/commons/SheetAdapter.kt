@@ -50,4 +50,4 @@ class SheetAdapter(val items: ArrayList<SheetItem>, initialSelectedItem: Int = 0
     override fun getCount() = items.size
 }
 
-data class SheetItem(val name: String, val icon: Int)
+data class SheetItem(val name: String, val icon: Int = 0, val image: String = "", val courseId: String = "")

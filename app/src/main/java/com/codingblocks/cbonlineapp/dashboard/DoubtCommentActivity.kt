@@ -19,6 +19,7 @@ class DoubtCommentActivity : AppCompatActivity() {
     private val doubtId: String by lazy {
         intent.getStringExtra(DOUBT_ID)
     }
+    private var discourseId: String = ""
 
     private val viewModel by viewModel<DashboardDoubtsViewModel>()
     private val commentsListAdapter = CommentsListAdapter()
@@ -34,11 +35,18 @@ class DoubtCommentActivity : AppCompatActivity() {
             doubtTitleTv.text = it.title
             doubtDescriptionTv.text = it.body
             doubtTimeTv.text = it.createdAt.timeAgo()
+            discourseId = it.discourseTopicId
             chatTv.isVisible = !it.conversationId.isNullOrEmpty()
         }
 
         viewModel.getComments(doubtId).observer(this) {
             commentsListAdapter.submitList(it)
+        }
+
+        commentBox.hint = "${getString(R.string.commenting_as)} aggarwalpulkit ...."
+        commentBox.setOnEditorActionListener { v, actionId, event ->
+            viewModel.createComment(commentBox.text.toString(), doubtId, discourseId)
+            true
         }
     }
 }

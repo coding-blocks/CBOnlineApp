@@ -262,5 +262,6 @@
     <string name="my_wishlist">My Wishlist</string>
     <string name="wishlisted_desc">Your wishlisted courses appear here</string>
     <string name="ask_doubt">Ask Doubt</string>
+    <string name="commenting_as">Commenting as</string>
 
 </resources>

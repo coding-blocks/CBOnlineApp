@@ -54,6 +54,7 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
                 "RESOLVED" -> {
                     markResolvedTv.isVisible = false
                     chatTv.apply {
+                        isVisible = true
                         setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, context.getDrawable(R.drawable.ic_reopen_small), null)
                         text = context.getString(R.string.reopen_doubt)
                         setOnClickListener {
