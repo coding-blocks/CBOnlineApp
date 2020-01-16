@@ -15,19 +15,23 @@ def CLIENT_ID = System.getenv('CLIENT_ID') ?: "5633768694"
 def REDIRECT_URI = System.getenv('REDIRECT_URI') ?: "app://online.codingblocks.com"
 def OAUTH_URL = System.getenv('OAUTH_URL') ?: "https://account.codingblocks.com/oauth/authorize"
 
+// Include signing configs
+apply from: './signingconfigs.gradle'
+
 android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 100060600
+        versionCode 100006052
         // 1 (versioning scheme)
         // 00 (major version)
         // 06 (minor version)
         // 03 (patch version)
         // 04 spare for betas/RCs
-        versionName "0.6.5-internal"
+        versionName "1.0.0-internal"
+        signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false
         manifestPlaceholders = [
@@ -49,12 +53,14 @@ android {
     }
     buildTypes {
         debug {
+            signingConfig signingConfigs.debug
             minifyEnabled false
             versionNameSuffix '-debug-version'
             applicationIdSuffix = '.debug'
 
         }
         release {
+            signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
@@ -64,7 +70,6 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
-
     kotlinOptions {
         jvmTarget = "1.8"
     }

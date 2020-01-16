@@ -1,0 +1,14 @@
+android.signingConfigs {
+    debug {
+        keyAlias = "cbdebug"
+        keyPassword = "cbdebug"
+        storeFile = rootProject.file('keystores/debug.keystore')
+        storePassword = "cbdebug"
+    }
+    release {
+        keyAlias = "cbonlineapp"
+        keyPassword = System.getenv("CB_APP_SIGNING_PASS")
+        storeFile = rootProject.file('keystores/release.keystore')
+        storePassword = System.getenv("CB_APP_SIGNING_PASS")
+    }
+}
