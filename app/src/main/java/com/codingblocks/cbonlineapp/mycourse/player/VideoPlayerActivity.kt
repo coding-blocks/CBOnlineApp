@@ -19,7 +19,6 @@ import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.DownloadService
 import com.codingblocks.cbonlineapp.util.LECTURE
-import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
@@ -43,7 +42,9 @@ import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
+import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.android.synthetic.main.activity_video_player.*
+import kotlinx.android.synthetic.main.activity_video_player.youtubePlayerView
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
@@ -79,6 +80,9 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         viewModel.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
 
         setupUI()
+        viewModel.offlineSnackbar.observer(this) {
+            rootLayout.showSnackbar(it, Snackbar.LENGTH_SHORT, action = false)
+        }
     }
 
     private fun setupUI() {
@@ -107,6 +111,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                     setupVideoView()
                 }
             } else if (it.contentable == VIDEO) {
+                lifecycle.addObserver(youtubePlayerView)
                 youtubePlayerView.isVisible = true
                 setYoutubePlayer(it.contentVideo.videoUrl)
             } else {
@@ -123,7 +128,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         }
 
         videoFab.setOnClickListener {
-            updateSheet("")
+            updateSheet("DOUBT")
         }
         downloadBtn.setOnClickListener {
             startDownloadWorker()
@@ -407,11 +412,9 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
     }
 
     private fun setYoutubePlayer(promoVideo: String) {
-        lifecycle.addObserver(youtubePlayerView)
         youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-            override fun onReady(youTubePlayer: YouTubePlayer) {
-                youtubePlayer = youTubePlayer
-                youTubePlayer.loadVideo(getYotubeVideoId(promoVideo), 0F)
+            override fun onReady(youTubePlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer) {
+                youTubePlayer.cueVideo(promoVideo.substring(33), 0F)
             }
         })
     }
@@ -430,35 +433,60 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
     }
 
     private fun updateSheet(type: String, model: Any? = null) {
-        if (type == "EDIT") {
-            val notes = model as NotesModel
-            sheetDialog.apply {
-                bottomSheetTitleTv.text = getString(R.string.edit_note)
-                bottoSheetDescTv.setText(notes.text)
-                bottomSheetInfoTv.text = "${notes.contentTitle} | ${notes.duration.secToTime()}"
-                bottomSheetCancelBtn.setOnClickListener {
-                    dialog.dismiss()
-                }
-                bottomSheetSaveBtn.setOnClickListener {
-                    viewModel.updateNote(notes.apply {
-                        text = sheetDialog.bottoSheetDescTv.text.toString()
-                    })
-                    dialog.dismiss()
+        when (type) {
+            "EDIT" -> {
+                val notes = model as NotesModel
+                sheetDialog.apply {
+                    bottomSheetTitleTv.text = getString(R.string.edit_note)
+                    bottoSheetDescTv.setText(notes.text)
+                    bottomSheetInfoTv.text = "${notes.contentTitle} | ${notes.duration.secToTime()}"
+                    bottomSheetCancelBtn.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    bottomSheetSaveBtn.setOnClickListener {
+                        viewModel.updateNote(notes.apply {
+                            text = sheetDialog.bottoSheetDescTv.text.toString()
+                        })
+                        dialog.dismiss()
+                    }
                 }
             }
-        } else {
-            sheetDialog.apply {
-                bottomSheetTitleTv.text = getString(R.string.add_note)
-                bottoSheetDescTv.setText("")
-                bottomSheetInfoTv.text = "${contentTitle.text} | 10:00"
-                bottomSheetCancelBtn.setOnClickListener {
-                    dialog.dismiss()
+            "DOUBT" -> {
+                sheetDialog.apply {
+                    bottomSheetTitleTv.text = getString(R.string.ask_doubt)
+                    doubtTitleTv.isVisible = true
+                    bottoSheetDescTv.apply {
+                        setText("")
+                        hint = "Description of Doubt"
+                    }
+                    bottomSheetInfoTv.text = "${contentTitle.text}"
+                    bottomSheetCancelBtn.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    bottomSheetSaveBtn.apply {
+                        setOnClickListener {
+                            viewModel.createDoubt(sheetDialog.doubtTitleTv.text.toString(),
+                                sheetDialog.bottoSheetDescTv.text.toString())
+                            dialog.dismiss()
+                        }
+                        text = "Post"
+                    }
                 }
-                bottomSheetSaveBtn.setOnClickListener {
-                    val note = Note(10.45000, sheetDialog.bottoSheetDescTv.text.toString(), RunAttempts(viewModel.attemptId.value
-                        ?: ""), LectureContent(viewModel.contentId))
-                    viewModel.createNote(note)
-                    dialog.dismiss()
+            }
+            else -> {
+                sheetDialog.apply {
+                    bottomSheetTitleTv.text = getString(R.string.add_note)
+                    bottoSheetDescTv.setText("")
+                    bottomSheetInfoTv.text = "${contentTitle.text} | 10:00"
+                    bottomSheetCancelBtn.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    bottomSheetSaveBtn.setOnClickListener {
+                        val note = Note(10.45000, sheetDialog.bottoSheetDescTv.text.toString(), RunAttempts(viewModel.attemptId.value
+                            ?: ""), LectureContent(viewModel.contentId))
+                        viewModel.createNote(note)
+                        dialog.dismiss()
+                    }
                 }
             }
         }

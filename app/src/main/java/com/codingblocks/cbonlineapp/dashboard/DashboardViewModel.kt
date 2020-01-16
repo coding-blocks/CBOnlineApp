@@ -25,7 +25,7 @@ class DashboardViewModel(
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
     var isAdmin: MutableLiveData<Boolean> = MutableLiveData()
     val topRun = homeRepo.getTopRun()
-    private val runs = myCourseRepo.getMyRuns()
+    private val runs = myCourseRepo.getMyRuns(courseFilter.value ?: "")
     var suggestedCourses = MutableLiveData<List<Course>>()
     var trendingCourses = MutableLiveData<List<Course>>()
     val attemptId = MutableLiveData<String>()

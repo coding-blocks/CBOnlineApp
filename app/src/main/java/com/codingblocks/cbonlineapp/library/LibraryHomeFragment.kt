@@ -1,24 +1,19 @@
-package com.codingblocks.cbonlineapp.mycourse.library
+package com.codingblocks.cbonlineapp.library
 
-import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.library.LibraryActivity
-import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.util.COURSE_NAME
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.TYPE
+import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_course_library.*
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class CourseLibraryFragment : Fragment(), View.OnClickListener {
+class LibraryHomeFragment : Fragment(), View.OnClickListener {
 
-    private val viewModel by sharedViewModel<MyCourseViewModel>()
+    private val vm by sharedViewModel<LibraryViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = inflater.inflate(R.layout.fragment_course_library, container, false)
@@ -33,26 +28,23 @@ class CourseLibraryFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View) {
-        val intent = Intent(requireContext(), LibraryActivity::class.java)
-        intent.putExtra(COURSE_NAME, viewModel.name)
-        intent.putExtra(RUN_ATTEMPT_ID, viewModel.attemptId)
         when (v.id) {
             R.id.notesBtn -> {
-                intent.putExtra(TYPE, getString(R.string.notes))
-                startActivity(intent)
+                vm.type = getString(R.string.notes)
+                replaceFragmentSafely(LibraryViewFragment(), "LibraryView", containerViewId = R.id.libraryContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
             }
             R.id.bookmarkBtn -> {
-                intent.putExtra(TYPE, getString(R.string.bookmarks))
-                startActivity(intent)
+                vm.type = getString(R.string.bookmarks)
+                replaceFragmentSafely(LibraryViewFragment(), "LibraryView", containerViewId = R.id.libraryContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
             }
             R.id.downloadBtn -> {
                 toast("Will be added Soon!")
-                intent.putExtra(TYPE, getString(R.string.downloads))
+                vm.type = getString(R.string.downloads)
             }
 
             R.id.announcementsBtn -> {
                 toast("Will be added Soon!")
-                intent.putExtra(TYPE, getString(R.string.announcements))
+                vm.type = getString(R.string.announcements)
             }
         }
     }

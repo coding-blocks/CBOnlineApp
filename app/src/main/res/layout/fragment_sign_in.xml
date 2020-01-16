@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:paddingStart="@dimen/margin_large"
     android:paddingEnd="@dimen/margin_large"
+    android:id="@+id/signInRoot"
     tools:context="com.codingblocks.cbonlineapp.auth.onboarding.SignInFragment">
 
     <LinearLayout

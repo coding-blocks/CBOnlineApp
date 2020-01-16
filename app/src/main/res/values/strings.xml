@@ -259,5 +259,12 @@
     <string name="generate">Generate</string>
     <string name="threshold_completion_90">Threshold Completion: 90%+</string>
     <string name="percentile">Percentile</string>
+    <string name="my_wishlist">My Wishlist</string>
+    <string name="wishlisted_desc">Your wishlisted courses appear here</string>
+    <string name="ask_doubt">Ask Doubt</string>
+    <string name="commenting_as">Commenting as</string>
+    <string name="my_couurse_logged_out">Your enrolled courses will appear here.\nLogin now to explore more!</string>
+    <string name="my_doubts_logged_out">All your course related doubts will appear here.\nLogin now to explore more!</string>
+    <string name="my_dashboard_logged_out">Your dashboard consists of uour course performance,\n your wishlisted courses, your applied jobs \n and many more</string>
 
 </resources>

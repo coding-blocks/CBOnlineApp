@@ -9,6 +9,7 @@ import com.codingblocks.cbonlineapp.database.SectionDao
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Bookmark
+import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.safeApiCall
 
@@ -91,4 +92,6 @@ class VideoPlayerRepository(
     suspend fun deleteBookmark(id: String) {
         contentDao.updateBookmark(id, "", "", "", "", "")
     }
+
+    suspend fun addDoubt(doubt: Doubts) = safeApiCall { Clients.onlineV2JsonApi.createDoubt(doubt) }
 }

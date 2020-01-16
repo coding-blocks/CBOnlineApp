@@ -5,14 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.JWT_TOKEN
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
+import com.codingblocks.cbonlineapp.util.extensions.getSharedPrefs
 import com.codingblocks.cbonlineapp.util.extensions.loadSvg
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.models.ProgressItem
@@ -30,13 +33,13 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class DashboardHomeFragment : Fragment() {
 
     private val viewModel by sharedViewModel<DashboardViewModel>()
+    private val sharedPrefs by lazy { getSharedPrefs() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? =
-        inflater.inflate(R.layout.fragment_dashboard_home, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_dashboard_home, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -44,36 +47,41 @@ class DashboardHomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.topRun.observer(viewLifecycleOwner) { courseAndRun ->
-            viewModel.getStats(courseAndRun.runAttempt.attemptId)
-            with(courseAndRun) {
-                activity?.toolbarCourseTitleTv?.text = course.title
-                activity?.toolbarCourseResumeTv?.setOnClickListener {
-                    startActivity(intentFor<MyCourseActivity>(
-                        COURSE_ID to course.cid,
-                        RUN_ID to run.crUid,
-                        RUN_ATTEMPT_ID to runAttempt.attemptId,
-                        COURSE_NAME to course.title
-                    ).singleTop())
-                }
-                homeCourseLogoImg.loadSvg(course.logo)
-                val progress = if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
+        if ((sharedPrefs.getString(JWT_TOKEN, "") ?: "").isNotEmpty()) {
+            viewModel.topRun.observer(viewLifecycleOwner) { courseAndRun ->
+                viewModel.getStats(courseAndRun.runAttempt.attemptId)
+                with(courseAndRun) {
+                    activity?.toolbarCourseTitleTv?.text = course.title
+                    activity?.toolbarCourseResumeTv?.setOnClickListener {
+                        startActivity(intentFor<MyCourseActivity>(
+                            COURSE_ID to course.cid,
+                            RUN_ID to run.crUid,
+                            RUN_ATTEMPT_ID to runAttempt.attemptId,
+                            COURSE_NAME to course.title
+                        ).singleTop())
+                    }
+                    homeCourseLogoImg.loadSvg(course.logo)
+                    val progress = if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
 
-                homeProgressTv.text = "${progress.toInt()} %"
-                homeProgressView.progress = progress.toFloat()
-                if (progress > 90) {
-                    homeProgressView.highlightView.colorGradientStart = getColor(requireContext(), R.color.kiwigreen)
-                    homeProgressView.highlightView.colorGradientEnd = getColor(requireContext(), R.color.tealgreen)
-                } else {
-                    homeProgressView.highlightView.colorGradientStart = getColor(requireContext(), R.color.pastel_red)
-                    homeProgressView.highlightView.colorGradientEnd = getColor(requireContext(), R.color.dusty_orange)
+                    homeProgressTv.text = "${progress.toInt()} %"
+                    homeProgressView.progress = progress.toFloat()
+                    if (progress > 90) {
+                        homeProgressView.highlightView.colorGradientStart = getColor(requireContext(), R.color.kiwigreen)
+                        homeProgressView.highlightView.colorGradientEnd = getColor(requireContext(), R.color.tealgreen)
+                    } else {
+                        homeProgressView.highlightView.colorGradientStart = getColor(requireContext(), R.color.pastel_red)
+                        homeProgressView.highlightView.colorGradientEnd = getColor(requireContext(), R.color.dusty_orange)
+                    }
                 }
             }
-        }
-        viewModel.runPerformance.observer(viewLifecycleOwner) {
-            homePerformanceTv.text = it.remarks
-            homePercentileTv.text = it.percentile.toString()
-            loadData(it.averageProgress, it.userProgress)
+            viewModel.runPerformance.observer(viewLifecycleOwner) {
+                homePerformanceTv.text = it.remarks
+                homePercentileTv.text = it.percentile.toString()
+                loadData(it.averageProgress, it.userProgress)
+            }
+        } else {
+            dashboardHome.isVisible = false
+            dashboardHomeLoggedOut.isVisible = true
         }
     }
 

@@ -5,20 +5,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.doubts.ChatClickListener
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
+import com.codingblocks.cbonlineapp.commons.SheetAdapter
+import com.codingblocks.cbonlineapp.commons.SheetItem
 import com.codingblocks.cbonlineapp.dashboard.ChatActivity
 import com.codingblocks.cbonlineapp.dashboard.DoubtCommentActivity
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.DOUBT_ID
+import com.codingblocks.cbonlineapp.util.JWT_TOKEN
 import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.REOPENED
 import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
+import com.codingblocks.cbonlineapp.util.extensions.getSharedPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
@@ -31,6 +37,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard_doubts.*
+import kotlinx.android.synthetic.main.fragment_dashboard_home.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -42,6 +49,9 @@ class DashboardDoubtsFragment : Fragment() {
     private val viewModel by viewModel<DashboardDoubtsViewModel>()
     private val doubtListAdapter = DashboardDoubtListAdapter()
     private val dialog by lazy { BottomSheetDialog(requireContext()) }
+    val list = arrayListOf<SheetItem>()
+    val adapter = SheetAdapter(list)
+    private val sharedPrefs by lazy { getSharedPrefs() }
 
     private val resolveClickListener: ResolveDoubtClickListener by lazy {
         object : ResolveDoubtClickListener {
@@ -85,12 +95,12 @@ class DashboardDoubtsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.fetchDoubts()
         dashboardDoubtShimmer.startShimmer()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpBottomSheet()
 
         doubtEmptyBtn.setOnClickListener {
             listener.openExplore()
@@ -108,7 +118,6 @@ class DashboardDoubtsFragment : Fragment() {
         }
 
         filterTv.setOnClickListener {
-            setUpBottomSheet()
             dialog.show()
         }
 
@@ -137,6 +146,21 @@ class DashboardDoubtsFragment : Fragment() {
             }
         }
 
+        if ((sharedPrefs.getString(JWT_TOKEN, "") ?: "").isNotEmpty()) {
+
+            viewModel.getRuns().observer(viewLifecycleOwner) {
+                if (it.isNotEmpty())
+                    viewModel.attemptId.value = it.first().courseRun.runAttempt.attemptId
+//            viewModel.fetchDoubts()
+//            it.forEach {
+//                list.add(SheetItem(it.courseRun.run.crName, image = it.courseRun.course.logo, courseId = it.courseRun.runAttempt.attemptId))
+//            }
+//            adapter.notifyDataSetChanged()
+            }
+        } else {
+            dashboardDoubts.isVisible = false
+            dashboardDoubtsLoggedOut.isVisible = true
+        }
         dashboardDoubtRv.setRv(requireContext(), doubtListAdapter, true, "thick")
 
         viewModel.doubts.observer(viewLifecycleOwner) {
@@ -174,22 +198,18 @@ class DashboardDoubtsFragment : Fragment() {
     }
 
     private fun setUpBottomSheet() {
-        // TODO( fetch list )
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_mycourses, null)
-//        val list = arrayListOf<SheetItem>(
-//        viewModel.getRunId().observeOnce {
-//            it.forEach { run ->
-//                list.add(SheetItem(run.crDescription, R.drawable.ic_course_logo))
-//            }
-//            sheetDialog.run {
-//                sheetLv.adapter = SheetAdapter(list)
-//                sheetLv.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-//                    viewModel.courseId.postValue("30678")
-//                    dialog.dismiss()
-//                }
-//            }
-//        }
 
+        sheetDialog.run {
+            sheetLv.adapter = adapter
+            sheetLv.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+                viewModel.attemptId.postValue(list[position].courseId)
+                adapter.selectedItem = position
+                dialog.dismiss()
+            }
+        }
+
+        dialog.dismissWithAnimation = true
         dialog.setContentView(sheetDialog)
     }
 

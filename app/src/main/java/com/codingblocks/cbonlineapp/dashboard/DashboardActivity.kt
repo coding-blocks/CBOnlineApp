@@ -37,7 +37,6 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
-import kotlinx.android.synthetic.main.nav_header_home.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -57,10 +56,14 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        Clients.authJwt = sharedPrefs.getString(JWT_TOKEN, "") ?: ""
+//        Clients.authJwt = Clients.localJwt
         Clients.refreshToken = sharedPrefs.getString(REFRESH_TOKEN, "") ?: ""
-        setUser()
-        initializeUI()
+        if ((sharedPrefs.getString(JWT_TOKEN, "") ?: "").isNotEmpty()) {
+            setUser()
+            initializeUI(true)
+        } else {
+            initializeUI(false)
+        }
     }
 
     private fun setUser() {
@@ -91,7 +94,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         viewModel.fetchToken(grantCode)
     }
 
-    private fun initializeUI() {
+    private fun initializeUI(loggedIn: Boolean) {
         setToolbar(dashboardToolbar, hasUpEnabled = false, homeButtonEnabled = false, title = "Dashboard")
         val toggle = ActionBarDrawerToggle(
             this,
@@ -111,7 +114,11 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             titleState = (FabNavigation.TitleState.ALWAYS_SHOW)
             setOnTabSelectedListener(this@DashboardActivity)
         }
-        dashboardBottomNav.setCurrentItem(1)
+        if (loggedIn)
+            dashboardBottomNav.setCurrentItem(1)
+        else {
+            dashboardBottomNav.setCurrentItem(0)
+        }
     }
 
     private fun setupViewPager() {
@@ -217,11 +224,13 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
         when (position) {
             0 -> {
+                title = getString(R.string.explore)
                 dashboardToolbarSearch.isVisible = true
                 dashboardToolbarSecondary.isVisible = false
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             }
             2 -> {
+                title = getString(R.string.my_courses)
                 dashboardToolbarSecondary.isVisible = true
                 dashboardToolbarSearch.isVisible = false
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))

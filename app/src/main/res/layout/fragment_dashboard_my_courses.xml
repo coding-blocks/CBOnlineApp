@@ -7,126 +7,157 @@
     tools:context="com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsFragment">
 
 
-    <TextView
-        android:id="@+id/courseTypeTv"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/dashboardMyCourse"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/ic_dropdown"
-        android:paddingStart="@dimen/margin_large"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:drawablePadding="12dp"
-        android:paddingEnd="@dimen/margin_large"
-        android:drawableTint="@color/orangish"
-        android:focusable="true"
-        android:fontFamily="@font/gilroy_bold"
-        android:paddingTop="14dp"
-        android:paddingBottom="14dp"
-        android:textColor="@color/orangish"
-        android:textSize="18sp"
-        android:text="@string/filters" />
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/courseTypeTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableEnd="@drawable/ic_dropdown"
+            android:drawablePadding="12dp"
+            android:drawableTint="@color/orangish"
+            android:focusable="true"
+            android:fontFamily="@font/gilroy_bold"
+            android:paddingStart="@dimen/margin_large"
+            android:paddingTop="14dp"
+            android:paddingEnd="@dimen/margin_large"
+            android:paddingBottom="14dp"
+            android:text="@string/filters"
+            android:textColor="@color/orangish"
+            android:textSize="18sp" />
 
 
-    <View
-        android:id="@+id/divider4"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/veryLightPink" />
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/veryLightPink" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/dashboardCoursesRv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:visibility="gone"
-        tools:itemCount="4"
-        tools:listitem="@layout/item_courses" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dashboardCoursesRv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:visibility="gone"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_courses" />
+
+        <LinearLayout
+            android:id="@+id/emptyLl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_courses"
+                android:tint="@color/orangish" />
+
+            <TextView
+                android:id="@+id/emptyMessageTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="@string/no_doubts"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/emptyDescriptionTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_extra_small"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="@string/doubts_that_you_ask_appear_here"
+                android:textAlignment="center"
+                android:textColor="@color/brownish_grey"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:paddingStart="20dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="10dp"
+                android:text="@string/go_to_classroom" />
+        </LinearLayout>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/dashboardCourseShimmer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:background="@color/dark_white"
+            android:visibility="visible">
+
+            <include layout="@layout/item_skeleton_content" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
+    </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/emptyLl"
+        android:id="@+id/dashboardMyCourseLoggedOut"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/margin_9xl"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone">
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_courses"
-            android:tint="@color/orangish" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_courses_gradient" />
 
         <TextView
-            android:id="@+id/emptyMessageTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_large"
             android:fontFamily="@font/gilroy_bold"
-            android:text="@string/no_doubts"
-            android:textAlignment="center"
-            android:textSize="20sp" />
+            android:text="@string/my_courses"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/emptyDescriptionTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_extra_small"
-            android:fontFamily="@font/gilroy_bold"
-            android:text="@string/doubts_that_you_ask_appear_here"
+            android:layout_marginTop="@dimen/margin_medium_small"
+            android:fontFamily="@font/gilroy_medium"
+            android:text="@string/my_couurse_logged_out"
             android:textAlignment="center"
-            android:textColor="@color/brownish_grey"
-            android:textSize="16sp" />
+            android:textColor="@color/brownish_grey" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <View
+            android:layout_width="200dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:background="@drawable/divider" />
+
+        <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_medium"
-            android:paddingStart="20dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="10dp"
-            android:text="@string/go_to_classroom" />
+            android:drawableEnd="@drawable/ic_dropright"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/orangish"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/login_now"
+            android:textSize="16sp" />
+
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/internetll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="150dp"
-            android:src="@drawable/ic_no_connection"
-            android:tint="@color/colorPrimary" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="150dp"
-            android:text="@string/no_internet"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/dashboardCourseShimmer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:background="@color/dark_white"
-        android:visibility="visible">
-
-        <include layout="@layout/item_skeleton_content" />
-    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </LinearLayout>
 

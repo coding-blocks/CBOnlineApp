@@ -133,12 +133,23 @@ data class Doubts(
     ) : this(title, body, status, discourseTopicId, conversationId, runAttempt, content, createdAt) {
         super.id = id
     }
+
+    constructor(id: String?, title: String,
+                body: String,
+                runAttempt: RunAttempts?,
+                content: LectureContent?
+    ) : this(title = title, body = body, runAttempt = runAttempt, content = content)
+
+    constructor(id: String) : this() {
+        super.id = id
+    }
 }
 
-@Type("comment")
+@Type("comments", "comment")
 data class Comment(
     val body: String = "",
     val username: String = "",
+    val discourseTopicId: String = "",
     @Relationship("doubt")
     val doubt: Doubts? = null
 ) : BaseModel()

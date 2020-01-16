@@ -15,16 +15,18 @@ import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.RESOLVEHINT
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.ResultWrapper
+import com.codingblocks.onlineapi.safeApiCall
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.HintRequest
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_sign_in.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.jetbrains.anko.support.v4.runOnUiThread
 import android.text.style.StyleSpan as StyleSpan1
 
@@ -82,14 +84,20 @@ class SignInFragment : Fragment() {
             map["phone"] = "+91-${numberLayout.editText?.text?.substring(3)}"
             proceedBtn.isEnabled = false
             GlobalScope.launch {
-                val response = withContext(Dispatchers.IO) { Clients.api.getOtp(map) }
-                if (response.isSuccessful)
-                    replaceFragmentSafely(LoginOtpFragment.newInstance(map["phone"]
-                        ?: ""), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
-                else
-                    runOnUiThread {
-                        proceedBtn.isEnabled = true
+                when (val response = safeApiCall { Clients.api.getOtp(map) }) {
+                    is ResultWrapper.GenericError -> {
+                        signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
                     }
+                    is ResultWrapper.Success -> {
+                        if (response.value.isSuccessful)
+                            replaceFragmentSafely(LoginOtpFragment.newInstance(map["phone"]
+                                ?: ""), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
+                        else
+                            runOnUiThread {
+                                proceedBtn.isEnabled = true
+                            }
+                    }
+                }
             }
         }
     }

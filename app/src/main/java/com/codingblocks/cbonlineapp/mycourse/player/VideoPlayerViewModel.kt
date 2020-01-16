@@ -20,6 +20,7 @@ import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Bookmark
+import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
@@ -112,6 +113,7 @@ class VideoPlayerViewModel(
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         response.value.body()?.let { bookmark ->
+                            offlineSnackbar.postValue(("Bookmark Added Successfully !"))
                             repo.updateBookmark(contentId, bookmark)
                         }
                     else {
@@ -193,9 +195,10 @@ class VideoPlayerViewModel(
             when (val response = repo.addNote(note)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful)
+                    if (response.value.isSuccessful) {
+                        offlineSnackbar.postValue(("Note Created Successfully !"))
                         fetchNotes()
-                    else {
+                    } else {
                         setError(fetchError(response.value.code()))
                     }
                 }
@@ -227,9 +230,27 @@ class VideoPlayerViewModel(
             when (val response = repo.removeBookmark(bookmarkUid)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
-                    if (response.value.code() == 204)
+                    if (response.value.code() == 204) {
+                        offlineSnackbar.postValue(("Removed Bookmark Successfully !"))
                         repo.deleteBookmark(contentId)
-                    else {
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun createDoubt(title: String, body: String) {
+        val doubt = Doubts(null, title, body, RunAttempts(attemptId.value ?: ""), LectureContent(contentId))
+        runIO {
+            when (val response = repo.addDoubt(doubt)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        offlineSnackbar.postValue(("Doubt Created Successfully !"))
+                        fetchDoubts()
+                    } else {
                         setError(fetchError(response.value.code()))
                     }
                 }

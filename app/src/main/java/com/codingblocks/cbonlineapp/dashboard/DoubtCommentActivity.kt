@@ -10,7 +10,10 @@ import com.codingblocks.cbonlineapp.util.DOUBT_ID
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
+import com.crashlytics.android.core.CrashlyticsCore
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_doubt_comment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -19,6 +22,7 @@ class DoubtCommentActivity : AppCompatActivity() {
     private val doubtId: String by lazy {
         intent.getStringExtra(DOUBT_ID)
     }
+    private var discourseId: String = ""
 
     private val viewModel by viewModel<DashboardDoubtsViewModel>()
     private val commentsListAdapter = CommentsListAdapter()
@@ -34,11 +38,22 @@ class DoubtCommentActivity : AppCompatActivity() {
             doubtTitleTv.text = it.title
             doubtDescriptionTv.text = it.body
             doubtTimeTv.text = it.createdAt.timeAgo()
+            discourseId = it.discourseTopicId
             chatTv.isVisible = !it.conversationId.isNullOrEmpty()
         }
 
         viewModel.getComments(doubtId).observer(this) {
             commentsListAdapter.submitList(it)
+        }
+
+        commentBox.hint = "${getString(R.string.commenting_as)} aggarwalpulkit ...."
+        sendBtn.setOnClickListener {
+            viewModel.createComment(commentBox.text.toString(), doubtId, discourseId)
+        }
+
+        viewModel.errorLiveData.observer(this) {
+            rootComment.showSnackbar(it, Snackbar.LENGTH_SHORT)
+            CrashlyticsCore.getInstance().log(it)
         }
     }
 }

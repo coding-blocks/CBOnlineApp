@@ -10,7 +10,8 @@ import com.codingblocks.onlineapi.fetchError
 
 class LibraryViewModel(private val repo: LibraryRepository) : ViewModel() {
     var attemptId: String = ""
-
+    var type: String = ""
+    var name: String = ""
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
     fun fetchNotes(): LiveData<List<NotesModel>> {
