@@ -21,7 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/NewAppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".profile.ProfileActivity"></activity>
+        <activity android:name=".tracks.TracksActivity"></activity>
+        <activity android:name=".profile.ProfileActivity" />
         <activity
             android:name=".course.SearchCourseActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />

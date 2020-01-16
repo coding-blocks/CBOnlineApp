@@ -28,6 +28,7 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.onlineapi.ErrorStatus
+import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Tags
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -36,6 +37,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.android.synthetic.main.bottom_sheet_batch.view.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.share
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetChangedListener {
@@ -112,12 +114,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             instructorAdapter.submitList(course.instructors)
             batchListAdapter.submitList(course.activeRuns)
             course.activeRuns?.first()?.let {
-                priceTv.text = "₹ ${it.price}"
-                mrpTv.text = "₹ ${it.mrp}"
-                batchBtn.text = it.name
-                deadlineTv.text = "Enrollment Ends ${it.enrollmentEnd?.let { it1 -> getDateForTime(it1) }}"
-                mrpTv.paintFlags = mrpTv.paintFlags or
-                    Paint.STRIKE_THRU_TEXT_FLAG
+                setRun(it)
             }
         }
 
@@ -157,8 +154,23 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         appbar.addOnOffsetChangedListener(this)
 
         courseCardListAdapter.onItemClick = itemClickListener
-        buyBtn.setOnClickListener {
+        batchBtn.setOnClickListener {
             dialog.show()
+        }
+    }
+
+    private fun setRun(it: Runs) {
+        priceTv.text = "₹ ${it.price}"
+        mrpTv.text = "₹ ${it.mrp}"
+        batchBtn.text = it.name
+        deadlineTv.text = "Enrollment Ends ${it.enrollmentEnd?.let { it1 -> getDateForTime(it1) }}"
+        mrpTv.paintFlags = mrpTv.paintFlags or
+            Paint.STRIKE_THRU_TEXT_FLAG
+        buyBtn.setOnClickListener {
+
+        }
+        trialBtn.setOnClickListener {
+
         }
     }
 
@@ -190,7 +202,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-
+        R.id.share ->{
+            share("New Course")
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 

@@ -165,7 +165,6 @@
     <string name="report_a_bug">Report A Bug</string>
     <string name="admin_panel">Admin Panel</string>
     <string name="settings">Settings</string>
-    <string name="learning_tracks">Learning Tracks</string>
     <string name="my_purchases">My Purchases</string>
     <string name="hiring_blocks">Hiring Blocks</string>
     <string name="login_signup">Login/Signup</string>
@@ -266,5 +265,6 @@
     <string name="my_couurse_logged_out">Your enrolled courses will appear here.\nLogin now to explore more!</string>
     <string name="my_doubts_logged_out">All your course related doubts will appear here.\nLogin now to explore more!</string>
     <string name="my_dashboard_logged_out">Your dashboard consists of uour course performance,\n your wishlisted courses, your applied jobs \n and many more</string>
+    <string name="learning_tracks">Learning Tracks</string>
 
 </resources>
