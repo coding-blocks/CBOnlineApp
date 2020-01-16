@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import com.codingblocks.cbonlineapp.R
@@ -12,18 +13,19 @@ import com.codingblocks.cbonlineapp.commons.SheetAdapter
 import com.codingblocks.cbonlineapp.commons.SheetItem
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
+import com.codingblocks.cbonlineapp.util.COURSE_FILTER_TYPE
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.JWT_TOKEN
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
-import com.codingblocks.cbonlineapp.util.COURSE_FILTER_TYPE
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
+import com.codingblocks.cbonlineapp.util.extensions.getSharedPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.save
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showEmptyView
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
-import com.codingblocks.cbonlineapp.util.extensions.getSharedPrefs
-import com.codingblocks.cbonlineapp.util.extensions.save
 import com.codingblocks.onlineapi.ErrorStatus
 import com.crashlytics.android.core.CrashlyticsCore
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -69,7 +71,6 @@ class DashboardMyCoursesFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         dashboardCourseShimmer.startShimmer()
-        viewModel.fetchMyCourses()
 //        type.value = viewModel.prefs.courseFilter
     }
 
@@ -102,10 +103,15 @@ class DashboardMyCoursesFragment : Fragment() {
         }
 
         dashboardCoursesRv.setRv(requireContext(), courseListAdapter, true)
-
-        viewModel.courses.observer(viewLifecycleOwner) {
-            courseListAdapter.submitList(it)
-            changeViewState(dashboardCoursesRv, internetll, emptyLl, dashboardCourseShimmer, it.isEmpty())
+        if ((sharedPrefs.getString(JWT_TOKEN, "") ?: "").isNotEmpty()) {
+            viewModel.fetchMyCourses()
+            viewModel.courses.observer(viewLifecycleOwner) {
+                courseListAdapter.submitList(it)
+                changeViewState(dashboardCoursesRv, emptyLl, dashboardCourseShimmer, it.isEmpty())
+            }
+        } else {
+            dashboardMyCourseLoggedOut.isVisible = true
+            dashboardMyCourse.isVisible = false
         }
 
         viewModel.errorLiveData.observer(viewLifecycleOwner) {
