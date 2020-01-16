@@ -151,7 +151,6 @@ class DashboardDoubtsFragment : Fragment() {
             viewModel.getRuns().observer(viewLifecycleOwner) {
                 if (it.isNotEmpty())
                     viewModel.attemptId.value = it.first().courseRun.runAttempt.attemptId
-//            viewModel.fetchDoubts()
 //            it.forEach {
 //                list.add(SheetItem(it.courseRun.run.crName, image = it.courseRun.course.logo, courseId = it.courseRun.runAttempt.attemptId))
 //            }

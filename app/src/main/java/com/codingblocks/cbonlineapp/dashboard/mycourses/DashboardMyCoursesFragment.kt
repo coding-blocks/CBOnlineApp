@@ -16,7 +16,6 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.util.COURSE_FILTER_TYPE
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
-import com.codingblocks.cbonlineapp.util.JWT_TOKEN
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
@@ -81,7 +80,7 @@ class DashboardMyCoursesFragment : Fragment() {
         courseTypeTv.apply {
             val lastSelected = sharedPrefs.getInt(COURSE_FILTER_TYPE, 0)
             text = coursesType[lastSelected]
-
+            viewModel.courseFilter.postValue(coursesType[lastSelected])
             setCompoundDrawablesRelativeWithIntrinsicBounds(
                 requireContext().getDrawable(imgs.getResourceId(lastSelected, 0)),
                 null,
@@ -103,15 +102,17 @@ class DashboardMyCoursesFragment : Fragment() {
         }
 
         dashboardCoursesRv.setRv(requireContext(), courseListAdapter, true)
-        if ((sharedPrefs.getString(JWT_TOKEN, "") ?: "").isNotEmpty()) {
-            viewModel.fetchMyCourses()
-            viewModel.courses.observer(viewLifecycleOwner) {
-                courseListAdapter.submitList(it)
-                changeViewState(dashboardCoursesRv, emptyLl, dashboardCourseShimmer, it.isEmpty())
+        viewModel.isLoggedIn.observer(viewLifecycleOwner) { isLoggedIn ->
+            if (isLoggedIn) {
+                viewModel.fetchMyCourses()
+                viewModel.courses.observer(viewLifecycleOwner) {
+                    courseListAdapter.submitList(it)
+                    changeViewState(dashboardCoursesRv, emptyLl, dashboardCourseShimmer, it.isEmpty())
+                }
+            } else {
+                dashboardMyCourseLoggedOut.isVisible = true
+                dashboardMyCourse.isVisible = false
             }
-        } else {
-            dashboardMyCourseLoggedOut.isVisible = true
-            dashboardMyCourse.isVisible = false
         }
 
         viewModel.errorLiveData.observer(viewLifecycleOwner) {

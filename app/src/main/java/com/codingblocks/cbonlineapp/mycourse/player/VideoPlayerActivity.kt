@@ -495,6 +495,17 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
 
     override fun onDestroy() {
         youtubePlayerView.release()
+        videoPlayer?.release()
         super.onDestroy()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        videoPlayer?.stop()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        videoPlayer?.playWhenReady = true
     }
 }

@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.dashboard.home
 
+import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
@@ -42,6 +43,6 @@ class DashboardHomeRepository(
         )
     }
 
-    fun getTopRun() = courseWithInstructorDao.getTopRun()
+    fun getTopRun() = courseWithInstructorDao.getTopRun().distinctUntilChanged()
     fun getRunStats(query: String?) = query?.let { runPerformanceDao.getPerformance(it) }
 }

@@ -49,7 +49,7 @@ class DashboardLibraryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         dashboardCoursesRv.setRv(requireContext(), courseListAdapter, true)
 
-        viewModel.courses.observer(viewLifecycleOwner) {
+        viewModel.allRuns.observer(viewLifecycleOwner) {
             courseListAdapter.submitList(it)
         }
         dashboardLibraryEmptyBtn.setOnClickListener {

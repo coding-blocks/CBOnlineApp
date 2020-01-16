@@ -5,6 +5,4 @@ import androidx.lifecycle.ViewModel
 /**
  * @author aggarwalpulkit596
  */
-class CheckoutViewModel(private val repo: CheckoutRepository) : ViewModel() {
-
-}
+class CheckoutViewModel(private val repo: CheckoutRepository) : ViewModel()

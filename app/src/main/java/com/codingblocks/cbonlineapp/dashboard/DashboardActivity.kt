@@ -56,8 +56,9 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-//        Clients.authJwt = Clients.localJwt
+//        Clients.authJwt = sharedPrefs.getString(JWT_TOKEN, "") ?: ""
         Clients.refreshToken = sharedPrefs.getString(REFRESH_TOKEN, "") ?: ""
+        viewModel.isLoggedIn.postValue((sharedPrefs.getString(JWT_TOKEN, "") ?: "").isNotEmpty())
         if ((sharedPrefs.getString(JWT_TOKEN, "") ?: "").isNotEmpty()) {
             setUser()
             initializeUI(true)

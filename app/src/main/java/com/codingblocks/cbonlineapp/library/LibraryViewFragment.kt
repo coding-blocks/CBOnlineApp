@@ -10,8 +10,6 @@ import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.dashboard.doubts.MyItemDetailsLookup
-import com.codingblocks.cbonlineapp.dashboard.doubts.MyItemKeyProvider
 import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv

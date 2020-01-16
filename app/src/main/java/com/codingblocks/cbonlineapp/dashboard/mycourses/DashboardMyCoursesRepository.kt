@@ -6,7 +6,6 @@ import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.InstructorDao
 import com.codingblocks.cbonlineapp.database.RunAttemptDao
 import com.codingblocks.cbonlineapp.database.RunDao
-import com.codingblocks.cbonlineapp.database.RunWithAttemptDao
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.database.models.CourseModel
 import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
@@ -27,7 +26,6 @@ class DashboardMyCoursesRepository(
     private val courseDao: CourseDao,
     private val runDao: RunDao,
     private val attemptDao: RunAttemptDao,
-    private val runWithAttemptDao: RunWithAttemptDao,
     private val instructorDao: InstructorDao
 ) {
 

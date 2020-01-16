@@ -1,10 +1,9 @@
-package com.codingblocks.cbonlineapp.dashboard.doubts
+package com.codingblocks.cbonlineapp.library
 
 import android.view.MotionEvent
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.codingblocks.cbonlineapp.library.LibraryListAdapter
 
 class MyItemDetailsLookup(private val recyclerView: RecyclerView) :
     ItemDetailsLookup<Long>() {
