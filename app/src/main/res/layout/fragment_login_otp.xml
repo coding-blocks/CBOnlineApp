@@ -26,8 +26,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="@dimen/margin_xxl"
+            android:id="@+id/numberTv"
             android:fontFamily="@font/gilroy_medium"
-            android:text="We will auto verify the OTP sent to +91 9560839425"
+            android:text="We will auto verify the OTP sent to "
             android:textColor="@color/brownish_grey"
             android:textSize="14sp"
             android:visibility="visible" />

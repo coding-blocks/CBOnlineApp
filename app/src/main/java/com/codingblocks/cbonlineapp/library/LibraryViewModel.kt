@@ -9,8 +9,10 @@ import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 
-class LibraryViewModel(private val repo: LibraryRepository,
-                       private val courseRepo: MyCourseRepository) : ViewModel() {
+class LibraryViewModel(
+    private val repo: LibraryRepository,
+    private val courseRepo: MyCourseRepository
+) : ViewModel() {
     var attemptId: String = ""
     var type: String = ""
     var name: String = ""

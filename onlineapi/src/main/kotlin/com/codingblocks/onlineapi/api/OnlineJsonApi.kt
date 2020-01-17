@@ -108,7 +108,7 @@ interface OnlineJsonApi {
 
     @GET("courses")
     suspend fun getRecommendedCourses(
-        @Query("exclude") query: String = "ratings,instructors.*,feedbacks,runs.*",
+        @Query("exclude") query: String = "ratings,instructors.*,jobs,runs.*",
         @Query("filter[recommended]") recommended: String = "true",
         @Query("filter[unlisted]") unlisted: String = "false",
         @Query("page[limit]") page: Int = 12,

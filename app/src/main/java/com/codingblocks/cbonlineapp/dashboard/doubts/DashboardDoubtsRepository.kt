@@ -90,4 +90,8 @@ class DashboardDoubtsRepository(
             it.username
         ))
     }
+
+    suspend fun updateDb(dbtUid: String) {
+        doubtsDao.updateStatus(dbtUid, "RESOLVED")
+    }
 }

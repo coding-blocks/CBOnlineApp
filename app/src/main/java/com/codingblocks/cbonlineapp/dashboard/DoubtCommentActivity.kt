@@ -8,8 +8,6 @@ import com.codingblocks.cbonlineapp.dashboard.doubts.CommentsListAdapter
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsViewModel
 import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.DOUBT_ID
-import com.codingblocks.cbonlineapp.util.LIVE
-import com.codingblocks.cbonlineapp.util.REOPENED
 import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
@@ -52,16 +50,12 @@ class DoubtCommentActivity : AppCompatActivity() {
                 }
             }
             markResolvedTv.setOnClickListener { _ ->
-                if (it.status == RESOLVED) {
-                    showDialog(RESOLVED, cancelable = true) {
-                        viewModel.type.value = RESOLVED
-                    }
-                } else {
-                    showDialog(REOPENED, cancelable = true) {
-                        viewModel.type.value = LIVE
-                    }
+                viewModel.resolveDoubt(it.apply {
+                    status = RESOLVED
+                }, true)
+                showDialog(RESOLVED, cancelable = true) {
+                    onBackPressed()
                 }
-                viewModel.resolveDoubt(it)
             }
         }
 

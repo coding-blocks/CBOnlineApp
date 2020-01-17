@@ -21,6 +21,7 @@ import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeFragment
 import com.codingblocks.cbonlineapp.dashboard.library.DashboardLibraryFragment
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesFragment
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
+import com.codingblocks.cbonlineapp.profile.ReferralActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.util.JWT_TOKEN
 import com.codingblocks.cbonlineapp.util.REFRESH_TOKEN
@@ -37,11 +38,13 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
+import kotlinx.android.synthetic.main.nav_header_home.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.startActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, FragmentChangeListener, FabNavigation.OnTabSelectedListener {
@@ -73,10 +76,13 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             navMenu.findItem(R.id.nav_admin).isVisible = it
         }
 //        viewModel.prefs.run {
-//            dashboardNavigation.getHeaderView(0).apply {
+        dashboardNavigation.getHeaderView(0).apply {
+            navHeaderImageView.setOnClickListener {
+                startActivity<ReferralActivity>()
+            }
 //                navHeaderImageView.loadImage(userImage, true)
 //                navUsernameTv.append(" $firstName")
-//            }
+        }
 //        }
     }
 

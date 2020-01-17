@@ -47,13 +47,17 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
         errorLiveData.postValue(error)
     }
 
-    fun resolveDoubt(doubt: DoubtsModel) {
+    fun resolveDoubt(doubt: DoubtsModel, saveToDb: Boolean = false) {
         runIO {
             when (val response = repo.resolveDoubt(doubt)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        fetchDoubts()
+                        if (saveToDb) {
+                            repo.updateDb(doubt.dbtUid)
+                        } else {
+                            fetchDoubts()
+                        }
                     } else {
                         setError(fetchError(response.value.code()))
                     }

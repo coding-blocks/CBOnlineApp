@@ -24,6 +24,7 @@ import com.codingblocks.cbonlineapp.util.TITLE
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
@@ -94,7 +95,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         viewModel.currentOrientation = resources.configuration.orientation
-        viewModel.content.observer(this) {
+        viewModel.content.observeOnce {
 
             viewModel.attemptId.value = it.attempt_id
             sectionTitle.text = "Section ${it.sectionTitle}"
@@ -503,11 +504,6 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         youtubePlayerView.release()
         videoPlayer?.release()
         super.onDestroy()
-    }
-
-    override fun onPause() {
-        videoPlayer?.stop()
-        super.onPause()
     }
 
     override fun onResume() {

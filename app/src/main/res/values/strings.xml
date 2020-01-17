@@ -270,5 +270,8 @@
     <string name="your_referral_code">Your Referral Code</string>
     <string name="how_our_referral_program_works">How our referral program works?</string>
     <string name="on_their_first_purchase">on their first purchase</string>
+    <string name="referral_url">https://cb.lk/join/</string>
+    <string name="share_via_whatsapp">Share via Whatsapp</string>
+    <string name="more">More</string>
 
 </resources>

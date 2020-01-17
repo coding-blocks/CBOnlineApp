@@ -45,6 +45,7 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/referralTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_extra_small"
@@ -53,7 +54,7 @@
                     android:fontFamily="@font/gilroy_bold"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    tools:text="https://cb.lk/join/SID0YL" />
+                    android:text="@string/referral_url" />
 
 
             </LinearLayout>
@@ -198,9 +199,10 @@
             android:drawableStart="@drawable/ic_whatsapp"
             android:drawablePadding="10dp"
             android:fontFamily="@font/gilroy_bold"
-            android:text="Share via Whatsapp"
+            android:id="@+id/shareReferralWA"
             android:textColor="@color/white"
             android:textSize="16sp"
+            android:text="@string/share_via_whatsapp"
             app:cornerRadius="30dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -213,7 +215,8 @@
             android:minHeight="0dp"
             android:paddingTop="@dimen/margin_small"
             android:paddingBottom="@dimen/margin_small"
-            android:text="More"
+            android:id="@+id/shareReferral"
+            android:text="@string/more"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:icon="@drawable/ic_share"

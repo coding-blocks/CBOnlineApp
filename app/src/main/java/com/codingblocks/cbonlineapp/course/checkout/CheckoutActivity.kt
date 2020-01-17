@@ -19,7 +19,6 @@ class CheckoutActivity : AppCompatActivity() {
         setToolbar(checkoutToolbar)
         replaceFragmentSafely(CheckoutOrderDetailsFragment(), containerViewId = R.id.checkoutContainer)
         vm.response.observer(this) {
-
         }
     }
 }

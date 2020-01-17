@@ -19,6 +19,5 @@ class CheckoutOrderDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vm.response.value = false
-
     }
 }
