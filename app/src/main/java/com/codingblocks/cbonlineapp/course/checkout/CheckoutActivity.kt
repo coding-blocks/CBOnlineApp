@@ -6,10 +6,13 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.razorpay.Checkout
+import com.razorpay.PaymentResultListener
 import kotlinx.android.synthetic.main.activity_checkout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CheckoutActivity : AppCompatActivity() {
+class CheckoutActivity : AppCompatActivity(), PaymentResultListener {
+
 
     private val vm by viewModel<CheckoutViewModel>()
 
@@ -17,8 +20,30 @@ class CheckoutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_checkout)
         setToolbar(checkoutToolbar)
+        Checkout.preload(applicationContext)
+
         replaceFragmentSafely(CheckoutOrderDetailsFragment(), containerViewId = R.id.checkoutContainer)
         vm.response.observer(this) {
         }
+    }
+
+
+    override fun onPaymentError(p0: Int, p1: String?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+
+    }
+
+    override fun onPaymentSuccess(p0: String?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        /** Make Network call to capture payment.
+         *  Body : {
+         *
+         *       razorpay_payment_id: payment_ksdnvsdlv,
+         *       razorpay_order_id: order_ijkdbsn,
+         *       txnId: 192721,
+         *       amount: 2394723 (paise)
+         *  }
+         */
     }
 }

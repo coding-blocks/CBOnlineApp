@@ -251,6 +251,7 @@
             tools:text="9499 " />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_open_checkout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/ic_dropright"
