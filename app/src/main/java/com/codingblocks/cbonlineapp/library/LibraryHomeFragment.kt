@@ -20,7 +20,7 @@ class LibraryHomeFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        vm.fetchSections()
         notesBtn.setOnClickListener(this)
         downloadBtn.setOnClickListener(this)
         bookmarkBtn.setOnClickListener(this)

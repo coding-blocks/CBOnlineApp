@@ -4,11 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
+import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 
-class LibraryViewModel(private val repo: LibraryRepository) : ViewModel() {
+class LibraryViewModel(private val repo: LibraryRepository,
+                       private val courseRepo: MyCourseRepository) : ViewModel() {
     var attemptId: String = ""
     var type: String = ""
     var name: String = ""
@@ -31,6 +33,23 @@ class LibraryViewModel(private val repo: LibraryRepository) : ViewModel() {
             }
         }
         return notes
+    }
+
+    fun fetchSections() {
+        runIO {
+            when (val response = courseRepo.fetchSections(attemptId)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let { runAttempt ->
+                            courseRepo.insertSections(runAttempt)
+                        }
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
     }
 
     private fun setError(error: String) {

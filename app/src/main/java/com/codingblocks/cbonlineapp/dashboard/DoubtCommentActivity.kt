@@ -6,15 +6,22 @@ import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.doubts.CommentsListAdapter
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsViewModel
+import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.DOUBT_ID
+import com.codingblocks.cbonlineapp.util.LIVE
+import com.codingblocks.cbonlineapp.util.REOPENED
+import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
 import com.crashlytics.android.core.CrashlyticsCore
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_doubt_comment.*
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DoubtCommentActivity : AppCompatActivity() {
@@ -28,7 +35,6 @@ class DoubtCommentActivity : AppCompatActivity() {
     private val commentsListAdapter = CommentsListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // TODO(Add Chat,Resolve and Post Comment)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doubt_comment)
         setToolbar(commentsToolbar)
@@ -39,7 +45,24 @@ class DoubtCommentActivity : AppCompatActivity() {
             doubtDescriptionTv.text = it.body
             doubtTimeTv.text = it.createdAt.timeAgo()
             discourseId = it.discourseTopicId
-            chatTv.isVisible = !it.conversationId.isNullOrEmpty()
+            chatTv.apply {
+                isVisible = !it.conversationId.isNullOrEmpty()
+                setOnClickListener { _ ->
+                    startActivity(intentFor<ChatActivity>(CONVERSATION_ID to it.conversationId).singleTop())
+                }
+            }
+            markResolvedTv.setOnClickListener { _ ->
+                if (it.status == RESOLVED) {
+                    showDialog(RESOLVED, cancelable = true) {
+                        viewModel.type.value = RESOLVED
+                    }
+                } else {
+                    showDialog(REOPENED, cancelable = true) {
+                        viewModel.type.value = LIVE
+                    }
+                }
+                viewModel.resolveDoubt(it)
+            }
         }
 
         viewModel.getComments(doubtId).observer(this) {
