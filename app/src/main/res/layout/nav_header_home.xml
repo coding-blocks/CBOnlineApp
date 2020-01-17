@@ -5,6 +5,7 @@
     android:id="@+id/navViewProfileRoot"
     android:clickable="true"
     android:focusable="true"
+    android:onClick="openProfile"
     android:layout_width="match_parent"
     android:background="@drawable/toolbar_bg_dark"
     android:gravity="center_vertical">

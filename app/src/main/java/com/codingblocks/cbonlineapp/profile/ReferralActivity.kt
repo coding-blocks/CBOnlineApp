@@ -20,9 +20,11 @@ class ReferralActivity : AppCompatActivity() {
             when (val response = safeApiCall { Clients.api.myReferral() }) {
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
-                        referralTv.append(body()?.get("code")?.asString)
-                        shareReferral.setOnClickListener {
-                            share(referralTv.text.toString())
+                        runOnUiThread {
+                            referralTv.append(body()?.get("code")?.asString)
+                            shareReferral.setOnClickListener {
+                                share(referralTv.text.toString() + "\n You get 500 CB Credits on your successful Sign Up.")
+                            }
                         }
                     }
                 }

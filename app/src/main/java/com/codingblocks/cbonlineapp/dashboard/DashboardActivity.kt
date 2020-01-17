@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -77,9 +78,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         }
 //        viewModel.prefs.run {
         dashboardNavigation.getHeaderView(0).apply {
-            navHeaderImageView.setOnClickListener {
-                startActivity<ReferralActivity>()
-            }
+
 //                navHeaderImageView.loadImage(userImage, true)
 //                navUsernameTv.append(" $firstName")
         }
@@ -252,5 +251,9 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         }
         dashboardPager.setCurrentItem(position, true)
         return true
+    }
+
+    fun openProfile(view: View) {
+        startActivity<ReferralActivity>()
     }
 }
