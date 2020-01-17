@@ -21,13 +21,9 @@ class DashboardDoubtsRepository(
     private val runDao: CourseWithInstructorDao
 ) {
 
-    suspend fun fetchDoubtsByCourseRun(id: String) = safeApiCall {
-        Clients.onlineV2JsonApi.getDoubtByAttemptId(id)
-    }
+    suspend fun fetchDoubtsByCourseRun(id: String) = safeApiCall { Clients.onlineV2JsonApi.getDoubtByAttemptId(id) }
 
-    suspend fun fetchCommentsByDoubtId(id: String) = safeApiCall {
-        Clients.onlineV2JsonApi.getCommentsById(id)
-    }
+    suspend fun fetchCommentsByDoubtId(id: String) = safeApiCall { Clients.onlineV2JsonApi.getCommentsById(id) }
 
     suspend fun insertDoubts(doubts: List<Doubts>) {
         doubts.forEach {
@@ -73,7 +69,7 @@ class DashboardDoubtsRepository(
         }
     }
 
-    fun getDoubtsByCourseRun(type: String?, attemptId: String): LiveData<List<DoubtsModel>> {
+    fun getDoubtsByCourseRun(type: String?, attemptId: String = ""): LiveData<List<DoubtsModel>> {
         return when (type) {
             LIVE -> doubtsDao.getLiveDoubts(attemptId)
             RESOLVED -> doubtsDao.getResolveDoubts(attemptId)
@@ -93,5 +89,9 @@ class DashboardDoubtsRepository(
             it.updatedAt,
             it.username
         ))
+    }
+
+    suspend fun updateDb(dbtUid: String) {
+        doubtsDao.updateStatus(dbtUid, "RESOLVED")
     }
 }

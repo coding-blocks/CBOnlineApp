@@ -1,13 +1,11 @@
 package com.codingblocks.cbonlineapp.dashboard
 
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
-import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
@@ -20,35 +18,49 @@ class DashboardViewModel(
     private val exploreRepo: CourseRepository,
     private val myCourseRepo: DashboardMyCoursesRepository
 ) : ViewModel() {
-    var courses: MediatorLiveData<List<CourseInstructorPair>> = MediatorLiveData()
     var courseFilter = MutableLiveData<String>()
-    var errorLiveData: MutableLiveData<String> = MutableLiveData()
     var isAdmin: MutableLiveData<Boolean> = MutableLiveData()
-    val topRun = homeRepo.getTopRun()
-    private val runs = myCourseRepo.getMyRuns(courseFilter.value ?: "")
+    var isLoggedIn: MutableLiveData<Boolean> = MutableLiveData()
     var suggestedCourses = MutableLiveData<List<Course>>()
     var trendingCourses = MutableLiveData<List<Course>>()
+
+    val courses by lazy {
+        Transformations.switchMap(courseFilter) { query ->
+            myCourseRepo.getMyRuns(query)
+        }
+    }
     val attemptId = MutableLiveData<String>()
-    private val coursesResponse = Transformations.switchMap(courseFilter) { query ->
-        myCourseRepo.getMyRuns(query)
+    val topRun by lazy {
+        homeRepo.getTopRun()
     }
 
     val runPerformance = Transformations.switchMap(attemptId) { query ->
         homeRepo.getRunStats(query)
     }
+    val allRuns by lazy {
+        myCourseRepo.getMyRuns("")
+    }
+    var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
     init {
-        courses.addSource(coursesResponse) {
-            courses.postValue(it)
-        }
+        fetchUser()
+    }
 
-        courses.addSource(runs) {
-            if (it.isNotEmpty()) {
-                courses.postValue(it)
-                courses.removeSource(runs)
+    fun fetchToken(grantCode: String) {
+        runIO {
+            when (val response = homeRepo.getToken(grantCode)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let {
+                            val jwt = it.asJsonObject.get("jwt").asString
+                            val rt = it.asJsonObject.get("refresh_token").asString
+                            Clients.authJwt = jwt
+                            Clients.refreshToken = rt
+                        }
+                }
             }
         }
-        fetchUser()
     }
 
     private fun fetchUser() {
@@ -66,51 +78,6 @@ class DashboardViewModel(
                     else {
                         setError(fetchError(response.value.code()))
                     }
-                }
-            }
-        }
-    }
-
-    fun fetchMyCourses(offset: String = "0") {
-        runIO {
-            when (val response = myCourseRepo.fetchMyCourses(offset)) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful)
-                        response.value.body()?.let {
-                            myCourseRepo.insertCourses(it.get() ?: emptyList())
-                            val currentOffSet = getMeta(it.meta, "currentOffset").toString()
-                            val nextOffSet = getMeta(it.meta, "nextOffset").toString()
-                            if (currentOffSet != nextOffSet && nextOffSet != "null") {
-                                fetchMyCourses(nextOffSet)
-                                if (it.get()?.isEmpty() == true)
-                                    courses.postValue(emptyList())
-                            }
-                        }
-                    else {
-                        setError(fetchError(response.value.code()))
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setError(error: String) {
-        errorLiveData.postValue(error)
-    }
-
-    fun fetchToken(grantCode: String) {
-        runIO {
-            when (val response = homeRepo.getToken(grantCode)) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful)
-                        response.value.body()?.let {
-                            val jwt = it.asJsonObject.get("jwt").asString
-                            val rt = it.asJsonObject.get("refresh_token").asString
-                            Clients.authJwt = jwt
-                            Clients.refreshToken = rt
-                        }
                 }
             }
         }
@@ -134,6 +101,30 @@ class DashboardViewModel(
         }
     }
 
+    fun fetchMyCourses(offset: String = "0") {
+        runIO {
+            when (val response = myCourseRepo.fetchMyCourses(offset)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let {
+                            myCourseRepo.insertCourses(it.get() ?: emptyList())
+                            val currentOffSet = getMeta(it.meta, "currentOffset").toString()
+                            val nextOffSet = getMeta(it.meta, "nextOffset").toString()
+                            if (currentOffSet != nextOffSet && nextOffSet != "null") {
+                                fetchMyCourses(nextOffSet)
+                                if (it.get()?.isEmpty() == true)
+                                    courseFilter.postValue("")
+                            }
+                        }
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
     fun getStats(id: String) {
         attemptId.postValue(id)
         runIO {
@@ -150,5 +141,9 @@ class DashboardViewModel(
                 }
             }
         }
+    }
+
+    private fun setError(error: String) {
+        errorLiveData.postValue(error)
     }
 }

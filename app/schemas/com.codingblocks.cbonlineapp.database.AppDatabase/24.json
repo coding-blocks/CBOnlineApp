@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "b72e6cbf6b823810a1a950e65fdf941c",
+    "identityHash": "36066d80cbf7ef044108d2c5369eb03a",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -1036,65 +1036,6 @@
         "foreignKeys": []
       },
       {
-        "tableName": "CourseFeatureModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `icon` TEXT NOT NULL, `text` TEXT NOT NULL, `crCourseId` TEXT NOT NULL, FOREIGN KEY(`crCourseId`) REFERENCES `CourseModel`(`cid`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "icon",
-            "columnName": "icon",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "text",
-            "columnName": "text",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "crCourseId",
-            "columnName": "crCourseId",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [
-          {
-            "name": "index_CourseFeatureModel_crCourseId",
-            "unique": false,
-            "columnNames": [
-              "crCourseId"
-            ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_CourseFeatureModel_crCourseId` ON `${TABLE_NAME}` (`crCourseId`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "CourseModel",
-            "onDelete": "NO ACTION",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "crCourseId"
-            ],
-            "referencedColumns": [
-              "cid"
-            ]
-          }
-        ]
-      },
-      {
         "tableName": "SectionWithContent",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`section_id` TEXT NOT NULL, `content_id` TEXT NOT NULL, `order` INTEGER NOT NULL, PRIMARY KEY(`section_id`, `content_id`))",
         "fields": [
@@ -1331,7 +1272,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b72e6cbf6b823810a1a950e65fdf941c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '36066d80cbf7ef044108d2c5369eb03a')"
     ]
   }
 }

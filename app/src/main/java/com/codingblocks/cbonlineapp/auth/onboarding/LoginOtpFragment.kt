@@ -41,6 +41,7 @@ class LoginOtpFragment : Fragment() {
         getOtp()
         map["client"] = "android"
         arguments?.let {
+            numberTv.append(it.getString("phone") ?: "")
             map["phone"] = it.getString("phone") ?: ""
         }
         verifyOtpBtn.setOnClickListener {

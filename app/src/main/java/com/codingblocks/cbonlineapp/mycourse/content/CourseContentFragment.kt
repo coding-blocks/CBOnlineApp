@@ -41,7 +41,6 @@ import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.codingblocks.cbonlineapp.util.extensions.setRv
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
@@ -70,8 +69,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     private val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
         override fun onClick(pos: Int) {
             popupWindowDogs?.dismiss()
-            // Todo - Improvise the scroll
-            mLayoutManager.scrollToPosition(pos - 10)
+            mLayoutManager.scrollToPosition(pos)
 //            smoothScroller.targetPosition = pos
 //            mLayoutManager.startSmoothScroll(smoothScroller)
         }
@@ -130,7 +128,10 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         swiperefresh.setOnRefreshListener {
             (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
         }
-        rvExpendableView.setRv(requireContext(), sectionItemsAdapter)
+        rvExpendableView.apply {
+            adapter = sectionItemsAdapter
+            layoutManager = mLayoutManager
+        }
 
         attachObservers()
         sectionListAdapter.onSectionListClick = sectionListClickListener

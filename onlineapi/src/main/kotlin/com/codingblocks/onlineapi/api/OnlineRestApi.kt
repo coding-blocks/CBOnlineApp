@@ -61,6 +61,10 @@ interface OnlineRestApi {
         @Path("runid") id: String
     ): Call<List<Leaderboard>>
 
+
+    @GET("v2/users/myReferral")
+    suspend fun myReferral(): Response<JsonObject>
+
     @GET("v2/courses/{runid}/doubts?order=latest")
     fun getDoubts(@Path("runid") id: String): Call<ResponseBody>
 

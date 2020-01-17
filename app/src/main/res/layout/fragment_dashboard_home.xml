@@ -9,7 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:paddingTop="@dimen/margin_large"
+        android:paddingBottom="@dimen/margin_large"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -17,9 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="@dimen/margin_large"
-            android:paddingBottom="@dimen/margin_large"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -276,7 +275,7 @@
             android:layout_marginBottom="@dimen/margin_9xl"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="wrap_content"

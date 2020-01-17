@@ -266,5 +266,12 @@
     <string name="my_doubts_logged_out">All your course related doubts will appear here.\nLogin now to explore more!</string>
     <string name="my_dashboard_logged_out">Your dashboard consists of uour course performance,\n your wishlisted courses, your applied jobs \n and many more</string>
     <string name="learning_tracks">Learning Tracks</string>
+    <string name="invite_earn"><![CDATA[Invite & Earn]]></string>
+    <string name="your_referral_code">Your Referral Code</string>
+    <string name="how_our_referral_program_works">How our referral program works?</string>
+    <string name="on_their_first_purchase">on their first purchase</string>
+    <string name="referral_url">https://cb.lk/join/</string>
+    <string name="share_via_whatsapp">Share via Whatsapp</string>
+    <string name="more">More</string>
 
 </resources>

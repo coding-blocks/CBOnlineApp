@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,7 @@ import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeFragment
 import com.codingblocks.cbonlineapp.dashboard.library.DashboardLibraryFragment
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesFragment
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
+import com.codingblocks.cbonlineapp.profile.ReferralActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.util.JWT_TOKEN
 import com.codingblocks.cbonlineapp.util.REFRESH_TOKEN
@@ -37,11 +39,13 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
+import kotlinx.android.synthetic.main.nav_header_home.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.startActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, FragmentChangeListener, FabNavigation.OnTabSelectedListener {
@@ -56,8 +60,9 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-//        Clients.authJwt = Clients.localJwt
+        Clients.authJwt = sharedPrefs.getString(JWT_TOKEN, "") ?: ""
         Clients.refreshToken = sharedPrefs.getString(REFRESH_TOKEN, "") ?: ""
+        viewModel.isLoggedIn.postValue((sharedPrefs.getString(JWT_TOKEN, "") ?: "").isNotEmpty())
         if ((sharedPrefs.getString(JWT_TOKEN, "") ?: "").isNotEmpty()) {
             setUser()
             initializeUI(true)
@@ -72,10 +77,11 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             navMenu.findItem(R.id.nav_admin).isVisible = it
         }
 //        viewModel.prefs.run {
-//            dashboardNavigation.getHeaderView(0).apply {
+        dashboardNavigation.getHeaderView(0).apply {
+
 //                navHeaderImageView.loadImage(userImage, true)
 //                navUsernameTv.append(" $firstName")
-//            }
+        }
 //        }
     }
 
@@ -231,8 +237,10 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             }
             2 -> {
                 title = getString(R.string.my_courses)
-                dashboardToolbarSecondary.isVisible = true
-                dashboardToolbarSearch.isVisible = false
+                if (viewModel.isLoggedIn.value == true) {
+                    dashboardToolbarSecondary.isVisible = true
+                    dashboardToolbarSearch.isVisible = false
+                }
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             }
             else -> {
@@ -243,5 +251,9 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         }
         dashboardPager.setCurrentItem(position, true)
         return true
+    }
+
+    fun openProfile(view: View) {
+        startActivity<ReferralActivity>()
     }
 }

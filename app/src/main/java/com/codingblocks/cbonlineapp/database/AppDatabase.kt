@@ -8,7 +8,6 @@ import com.codingblocks.cbonlineapp.database.converters.ProgressItemConverter
 import com.codingblocks.cbonlineapp.database.converters.TimestampConverter
 import com.codingblocks.cbonlineapp.database.models.CommentModel
 import com.codingblocks.cbonlineapp.database.models.ContentModel
-import com.codingblocks.cbonlineapp.database.models.CourseFeatureModel
 import com.codingblocks.cbonlineapp.database.models.CourseModel
 import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
@@ -25,7 +24,7 @@ import com.codingblocks.cbonlineapp.database.models.SectionModel
 @Database(
     entities = [CourseModel::class, SectionModel::class, ContentModel::class, InstructorModel::class, Notification::class,
         CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, RunModel::class,
-        JobsModel::class, CourseFeatureModel::class, SectionContentHolder.SectionWithContent::class,
+        JobsModel::class, SectionContentHolder.SectionWithContent::class,
         CommentModel::class, RunAttemptModel::class, RunPerformance::class
     ], exportSchema = true, version = 24
 )
@@ -51,8 +50,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun notificationDao(): NotificationDao
 
     abstract fun jobsDao(): JobsDao
-
-    abstract fun featuresDao(): FeaturesDao
 
     abstract fun commentsDao(): CommentsDao
 

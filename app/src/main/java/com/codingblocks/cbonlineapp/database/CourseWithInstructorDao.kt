@@ -52,6 +52,7 @@ interface CourseWithInstructorDao {
     """)
     fun getExpiredRuns(currentTimeMillis: Long): LiveData<List<CourseInstructorPair>>
 
+    @Transaction
     @Query("""
    SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
@@ -60,6 +61,7 @@ interface CourseWithInstructorDao {
     """)
     fun getTopRun(): LiveData<CourseRunPair>
 
+    @Transaction
     @Query("""
    SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId

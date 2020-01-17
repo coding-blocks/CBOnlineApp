@@ -167,10 +167,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         mrpTv.paintFlags = mrpTv.paintFlags or
             Paint.STRIKE_THRU_TEXT_FLAG
         buyBtn.setOnClickListener {
-
         }
         trialBtn.setOnClickListener {
-
         }
     }
 
@@ -202,7 +200,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        R.id.share ->{
+        R.id.share -> {
             share("New Course")
             true
         }

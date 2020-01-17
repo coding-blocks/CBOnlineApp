@@ -7,6 +7,8 @@ import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewRepository
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.course.CourseViewModel
+import com.codingblocks.cbonlineapp.course.checkout.CheckoutRepository
+import com.codingblocks.cbonlineapp.course.checkout.CheckoutViewModel
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsViewModel
@@ -48,19 +50,21 @@ val viewModelModule = module {
     viewModel { AdminOverviewViewModel(get()) }
     viewModel { DashboardDoubtsViewModel(get()) }
     viewModel { CourseViewModel(get()) }
-    viewModel { LibraryViewModel(get()) }
+    viewModel { LibraryViewModel(get(), get()) }
     viewModel { DashboardViewModel(get(), get(), get()) }
     viewModel { QuizViewModel(get()) }
+    viewModel { CheckoutViewModel(get()) }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
     single { CourseRepository() }
     single { DashboardDoubtsRepository(get(), get(), get()) }
-    single { DashboardMyCoursesRepository(get(), get(), get(), get(), get(), get()) }
+    single { DashboardMyCoursesRepository(get(), get(), get(), get(), get()) }
     single { LibraryRepository(get(), get(), get()) }
     single { DashboardHomeRepository(get(), get()) }
     single { VideoPlayerRepository(get(), get(), get(), get(), get()) }
     single { QuizRepository(get()) }
+    single { CheckoutRepository() }
 }
 val databaseModule = module {
 
@@ -97,11 +101,6 @@ val databaseModule = module {
     factory {
         val database: AppDatabase = get()
         database.instructorDao()
-    }
-
-    factory {
-        val database: AppDatabase = get()
-        database.featuresDao()
     }
 
     factory {
