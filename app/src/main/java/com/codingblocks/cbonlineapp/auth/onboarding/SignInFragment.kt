@@ -104,7 +104,7 @@ class SignInFragment : Fragment() {
                         is ResultWrapper.Success -> {
                             if (response.value.isSuccessful)
                                 replaceFragmentSafely(LoginOtpFragment.newInstance(map["phone"]
-                                    ?: ""), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
+                                    ?: ""), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
                             else
                                 runOnUiThread {
                                     proceedBtn.isEnabled = true

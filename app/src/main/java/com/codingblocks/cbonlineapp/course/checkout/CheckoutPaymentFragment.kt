@@ -10,7 +10,6 @@ import com.codingblocks.cbonlineapp.R
 import com.razorpay.Checkout
 import org.json.JSONObject
 
-
 /**
  * A simple [Fragment] subclass.
  */
@@ -47,9 +46,5 @@ class CheckoutPaymentFragment : Fragment() {
         } catch (e: Exception) {
             Log.e("CheckoutFragment.kt", "Error in starting Razorpay Checkout", e)
         }
-
-
     }
-
-
 }

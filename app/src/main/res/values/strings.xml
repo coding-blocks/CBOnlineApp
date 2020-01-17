@@ -273,5 +273,6 @@
     <string name="referral_url">https://cb.lk/join/</string>
     <string name="share_via_whatsapp">Share via Whatsapp</string>
     <string name="more">More</string>
+    <string name="rupee_sign">₹ </string>
 
 </resources>

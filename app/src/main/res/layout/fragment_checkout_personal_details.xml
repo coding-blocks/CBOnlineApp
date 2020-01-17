@@ -27,7 +27,9 @@
         android:drawableEnd="@drawable/ic_dropdown"
         android:layout_width="match_parent"
         android:fontFamily="@font/gilroy_medium"
-        android:text="Select Country"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="India"
         android:layout_height="wrap_content"/>
 
     <EditText
@@ -50,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/margin_large"
-        android:layout_marginBottom="@dimen/margin_large">
+        android:paddingBottom="@dimen/margin_large">
 
         <TextView
             android:layout_width="wrap_content"

@@ -48,13 +48,13 @@ interface OnlineRestApi {
     fun getMe(): Call<JsonObject>
 
     @GET("v2/runs/{runId}/enroll")
-    fun enrollTrial(@Path("runId") id: String): Call<JsonObject>
+    suspend fun enrollTrial(@Path("runId") id: String): Response<JsonObject>
 
     @GET("v2/jwt/logout")
     fun logout(): Call<JsonObject>
 
     @GET("v2/runs/{runId}/buy")
-    fun addToCart(@Path("runId") id: String): Call<JsonObject>
+    suspend fun addToCart(@Path("runId") id: String): Response<JsonObject>
 
     @GET("v2/runs/{runid}/leaderboard")
     fun leaderboardById(
@@ -72,7 +72,7 @@ interface OnlineRestApi {
     fun getDoubtById(@Path("doubtid") id: Int): Call<PostStream>
 
     @GET("v2/runs/cart")
-    fun getCart(): Call<JsonObject>
+    suspend fun getCart(): Response<JsonObject>
 
     @GET("v2/runs/clear_cart")
     fun clearCart(): Call<JsonObject>

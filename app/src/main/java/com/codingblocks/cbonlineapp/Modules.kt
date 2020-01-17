@@ -53,7 +53,7 @@ val viewModelModule = module {
     viewModel { LibraryViewModel(get(), get()) }
     viewModel { DashboardViewModel(get(), get(), get()) }
     viewModel { QuizViewModel(get()) }
-    viewModel { CheckoutViewModel(get()) }
+    viewModel { CheckoutViewModel() }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }

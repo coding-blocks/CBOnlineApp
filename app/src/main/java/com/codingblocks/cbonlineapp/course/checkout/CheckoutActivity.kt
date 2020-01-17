@@ -3,7 +3,6 @@ package com.codingblocks.cbonlineapp.course.checkout
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.razorpay.Checkout
@@ -12,7 +11,6 @@ import kotlinx.android.synthetic.main.activity_checkout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CheckoutActivity : AppCompatActivity(), PaymentResultListener {
-
 
     private val vm by viewModel<CheckoutViewModel>()
 
@@ -23,19 +21,14 @@ class CheckoutActivity : AppCompatActivity(), PaymentResultListener {
         Checkout.preload(applicationContext)
 
         replaceFragmentSafely(CheckoutOrderDetailsFragment(), containerViewId = R.id.checkoutContainer)
-        vm.response.observer(this) {
-        }
     }
 
-
     override fun onPaymentError(p0: Int, p1: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-
-
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onPaymentSuccess(p0: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         /** Make Network call to capture payment.
          *  Body : {
          *

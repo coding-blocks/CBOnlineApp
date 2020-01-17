@@ -125,6 +125,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:17.3.0'
 
+    //Koin Does Not Support This
+//    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-rc03'
+
+
     // 3rd party libs
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
     implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'

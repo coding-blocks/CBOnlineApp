@@ -94,17 +94,17 @@ class CourseViewModel(
         errorLiveData.postValue(error)
     }
 
-    fun getCart() {
-        Clients.api.getCart().enqueue(retrofitCallback { _, response ->
-            response?.body().let { json ->
-                json?.getAsJsonArray("cartItems")?.get(0)?.asJsonObject.let {
-                    image.value = it?.get("image_url")?.asString
-                    name.value = it?.get("productName")?.asString
-                    sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-                }
-            }
-        })
-    }
+//    fun getCart() {
+//        Clients.api.getCart().enqueue(retrofitCallback { _, response ->
+//            response?.body().let { json ->
+//                json?.getAsJsonArray("cartItems")?.get(0)?.asJsonObject.let {
+//                    image.value = it?.get("image_url")?.asString
+//                    name.value = it?.get("productName")?.asString
+//                    sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+//                }
+//            }
+//        })
+//    }
 
     fun clearCart() {
         Clients.api.clearCart().enqueue(retrofitCallback { _, response ->
@@ -113,14 +113,32 @@ class CourseViewModel(
     }
 
     fun enrollTrial(id: String) {
-        Clients.api.enrollTrial(id).enqueue(retrofitCallback { _, response ->
-            enrollTrialProgress.value = (response?.isSuccessful == true)
-        })
+        runIO {
+            when (val response = repo.enrollToTrial(id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        enrollTrialProgress.postValue(true)
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
     }
 
     fun addToCart(id: String) {
-        Clients.api.addToCart(id).enqueue(retrofitCallback { _, response ->
-            addedToCartProgress.value = (response?.isSuccessful ?: false)
-        })
+        runIO {
+            when (val response = repo.addToCart(id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        addedToCartProgress.postValue(true)
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
     }
 }

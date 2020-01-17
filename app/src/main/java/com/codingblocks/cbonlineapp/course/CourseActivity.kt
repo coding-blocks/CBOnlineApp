@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.InstructorListAdapter
 import com.codingblocks.cbonlineapp.course.batches.BatchListAdapter
+import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
+import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.Components
@@ -24,6 +26,7 @@ import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.getDateForTime
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.loadSvg
+import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
@@ -35,10 +38,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import kotlinx.android.synthetic.main.activity_course.*
-import kotlinx.android.synthetic.main.bottom_sheet_batch.*
 import kotlinx.android.synthetic.main.bottom_sheet_batch.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.share
+import org.jetbrains.anko.startActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetChangedListener {
@@ -158,18 +161,27 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         batchBtn.setOnClickListener {
             dialog.show()
         }
+        viewModel.addedToCartProgress.observeOnce {
+            startActivity<CheckoutActivity>()
+        }
+        viewModel.enrollTrialProgress.observeOnce {
+            startActivity<DashboardActivity>()
+            finish()
+        }
     }
 
     private fun setRun(it: Runs) {
-        priceTv.text = "₹ ${it.price}"
+        priceTv.text = "${getString(R.string.rupee_sign)}${it.price}"
         mrpTv.text = "₹ ${it.mrp}"
         batchBtn.text = it.name
         deadlineTv.text = "Enrollment Ends ${it.enrollmentEnd?.let { it1 -> getDateForTime(it1) }}"
         mrpTv.paintFlags = mrpTv.paintFlags or
             Paint.STRIKE_THRU_TEXT_FLAG
-        buyBtn.setOnClickListener {
+        buyBtn.setOnClickListener { _ ->
+            viewModel.addToCart(it.id)
         }
-        trialBtn.setOnClickListener {
+        trialBtn.setOnClickListener { _ ->
+            viewModel.enrollTrial(it.id)
         }
     }
 
