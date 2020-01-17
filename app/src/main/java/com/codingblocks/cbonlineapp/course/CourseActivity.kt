@@ -35,6 +35,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import kotlinx.android.synthetic.main.activity_course.*
+import kotlinx.android.synthetic.main.bottom_sheet_batch.*
 import kotlinx.android.synthetic.main.bottom_sheet_batch.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.share
@@ -217,6 +218,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_batch, null)
         sheetDialog.run {
             batchRv.setRv(this@CourseActivity, batchListAdapter)
+        }
+        batchListAdapter.onItemClick = {
+            setRun(it)
+            dialog.dismiss()
         }
         dialog.dismissWithAnimation = true
         dialog.setContentView(sheetDialog)

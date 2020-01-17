@@ -13,8 +13,13 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
+import com.codingblocks.cbonlineapp.util.JWT_TOKEN
+import com.codingblocks.cbonlineapp.util.REFRESH_TOKEN
 import com.codingblocks.cbonlineapp.util.RESOLVEHINT
+import com.codingblocks.cbonlineapp.util.extensions.getSharedPrefs
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import com.codingblocks.cbonlineapp.util.extensions.save
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
@@ -27,6 +32,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.runOnUiThread
 import android.text.style.StyleSpan as StyleSpan1
 
@@ -36,6 +42,7 @@ class SignInFragment : Fragment() {
     var map = HashMap<String, String>()
     lateinit var apiClient: GoogleApiClient
     lateinit var hintRequest: HintRequest
+    private val sharedPrefs by lazy { getSharedPrefs() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,7 +59,7 @@ class SignInFragment : Fragment() {
         arguments?.let {
             type = it.getString("type") ?: ""
         }
-        if (!type.isNullOrEmpty())
+        if (type.isNotEmpty())
             if (type.equals("new", true)) {
                 errorDrawableTv.isVisible = true
                 numberTitle.text = getString(R.string.welcome)
@@ -73,30 +80,70 @@ class SignInFragment : Fragment() {
                 numberTitle.text = getString(R.string.enter_mobile_number_for_verification)
                 numberDesc.text = getString(R.string.number_desc)
                 passwordLayout.isVisible = !passwordLayout.isVisible
-                numberLayout.editText?.inputType = InputType.TYPE_CLASS_TEXT or
-                    InputType.TYPE_CLASS_PHONE
+                numberLayout.editText?.apply {
+                    inputType = InputType.TYPE_CLASS_TEXT or
+                        InputType.TYPE_CLASS_PHONE
+                    setText("")
+                }
                 numberLayout.hint = getString(R.string.mobile_number)
             }
         }
 
         requestHint()
         proceedBtn.setOnClickListener {
-            map["phone"] = "+91-${numberLayout.editText?.text?.substring(3)}"
-            proceedBtn.isEnabled = false
-            GlobalScope.launch {
-                when (val response = safeApiCall { Clients.api.getOtp(map) }) {
-                    is ResultWrapper.GenericError -> {
-                        signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
+            if (type.equals("new", true)) {
+                validateEmailPassWord()
+            } else {
+                map["phone"] = "+91-${numberLayout.editText?.text?.substring(3)}"
+                proceedBtn.isEnabled = false
+                GlobalScope.launch {
+                    when (val response = safeApiCall { Clients.api.getOtp(map) }) {
+                        is ResultWrapper.GenericError -> {
+                            signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
+                        }
+                        is ResultWrapper.Success -> {
+                            if (response.value.isSuccessful)
+                                replaceFragmentSafely(LoginOtpFragment.newInstance(map["phone"]
+                                    ?: ""), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
+                            else
+                                runOnUiThread {
+                                    proceedBtn.isEnabled = true
+                                }
+                        }
                     }
-                    is ResultWrapper.Success -> {
-                        if (response.value.isSuccessful)
-                            replaceFragmentSafely(LoginOtpFragment.newInstance(map["phone"]
-                                ?: ""), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
-                        else
-                            runOnUiThread {
-                                proceedBtn.isEnabled = true
+                }
+            }
+        }
+    }
+
+    private fun validateEmailPassWord() {
+        map["client"] = "android"
+        map["username"] = numberLayout.editText?.text.toString()
+        map["password"] = passwordLayout.editText?.text.toString()
+
+        GlobalScope.launch {
+            when (val response = safeApiCall { Clients.api.getJwtWithEmail(map) }) {
+                is ResultWrapper.GenericError -> {
+                    signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
+                }
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        response.value.body()?.let {
+                            with(it["jwt"].asString) {
+                                Clients.authJwt = this
+                                sharedPrefs.save(JWT_TOKEN, this)
                             }
-                    }
+                            with(it["refresh_token"].asString) {
+                                Clients.refreshToken = this
+                                sharedPrefs.save(REFRESH_TOKEN, this)
+                            }
+                        }
+                        startActivity(intentFor<DashboardActivity>())
+                        requireActivity().finish()
+                    } else
+                        runOnUiThread {
+                            proceedBtn.isEnabled = true
+                        }
                 }
             }
         }

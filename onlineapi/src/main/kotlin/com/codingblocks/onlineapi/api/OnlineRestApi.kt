@@ -110,5 +110,9 @@ interface OnlineRestApi {
     @FormUrlEncoded
     suspend fun getJwt(@FieldMap params: Map<String, String>): Response<JsonObject>
 
+    @POST("jwt/login")
+    @FormUrlEncoded
+    suspend fun getJwtWithEmail(@FieldMap params: Map<String, String>): Response<JsonObject>
+
 
 }
