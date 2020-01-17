@@ -102,7 +102,7 @@ data class RunAttempts(
     }
 }
 
-@Type("doubts")
+@Type("doubts", "doubt")
 data class Doubts(
     val body: String = "",
     val title: String = "",

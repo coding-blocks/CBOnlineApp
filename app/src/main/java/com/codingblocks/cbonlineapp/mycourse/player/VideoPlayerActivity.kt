@@ -16,7 +16,6 @@ import com.codingblocks.cbonlineapp.library.EditNoteClickListener
 import com.codingblocks.cbonlineapp.mycourse.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.player.notes.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.DOWNLOADED
 import com.codingblocks.cbonlineapp.util.DownloadService
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
@@ -28,7 +27,7 @@ import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
-import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControlView
+import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
@@ -42,9 +41,7 @@ import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
-import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.android.synthetic.main.activity_video_player.*
-import kotlinx.android.synthetic.main.activity_video_player.youtubePlayerView
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
@@ -53,16 +50,21 @@ import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogger, VdoPlayer.InitializationListener {
-    private val download: Boolean by lazy { intent.getBooleanExtra(DOWNLOADED, false) }
+    private var download = false
     private val viewModel by viewModel<VideoPlayerViewModel>()
-    private val fullscreenToggleListener = VdoPlayerControlView.FullscreenActionListener { enterFullscreen ->
-        showFullScreen(enterFullscreen)
-        true
+    private val fullscreenToggleListener = object : VdoPlayerControls.FullscreenActionListener {
+        override fun onFullscreenAction(enterFullscreen: Boolean): Boolean {
+            showFullScreen(enterFullscreen)
+            return true
+        }
     }
-    private val visibilityListener = VdoPlayerControlView.ControllerVisibilityListener { visibility ->
-        if (viewModel.currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (visibility != View.VISIBLE) {
-                showSystemUi(false)
+
+    private val visibilityListener = object : VdoPlayerControls.ControllerVisibilityListener {
+        override fun onControllerVisibilityChange(visibility: Int) {
+            if (viewModel.currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                if (visibility != View.VISIBLE) {
+                    showSystemUi(false)
+                }
             }
         }
     }
@@ -99,6 +101,10 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             contentTitle.text = it.title
             bookmarkBtn.isActivated = it.bookmark.bookmarkUid.isEmpty()
             if (it.contentable == LECTURE) {
+                download = it.contentLecture.isDownloaded
+                if (download) {
+                    initializePlayer()
+                }
                 viewModel.videoId = it.contentLecture.lectureId
                 youtubePlayerView.isVisible = false
                 videoContainer.visibility = View.VISIBLE
@@ -141,7 +147,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         startService(intentFor<DownloadService>(VIDEO_ID to viewModel.videoId,
             TITLE to contentTitle.text.toString(),
             SECTION_ID to viewModel.sectionId,
-            RUN_ATTEMPT_ID to viewModel.attemptId,
+            RUN_ATTEMPT_ID to viewModel.attemptId.value,
             CONTENT_ID to viewModel.contentId))
         rootLayout.showSnackbar("Download Video In Progress", Snackbar.LENGTH_LONG, action = false)
     }
@@ -500,8 +506,8 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
     }
 
     override fun onPause() {
-        super.onPause()
         videoPlayer?.stop()
+        super.onPause()
     }
 
     override fun onResume() {

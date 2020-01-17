@@ -24,7 +24,7 @@
             android:layout_gravity="center"
             android:keepScreenOn="true" />
 
-        <com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControlView
+        <com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
             android:id="@+id/playerControlView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -56,7 +56,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-//        Clients.authJwt = sharedPrefs.getString(JWT_TOKEN, "") ?: ""
+        Clients.authJwt = sharedPrefs.getString(JWT_TOKEN, "") ?: ""
         Clients.refreshToken = sharedPrefs.getString(REFRESH_TOKEN, "") ?: ""
         viewModel.isLoggedIn.postValue((sharedPrefs.getString(JWT_TOKEN, "") ?: "").isNotEmpty())
         if ((sharedPrefs.getString(JWT_TOKEN, "") ?: "").isNotEmpty()) {
@@ -232,8 +232,10 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             }
             2 -> {
                 title = getString(R.string.my_courses)
-                dashboardToolbarSecondary.isVisible = true
-                dashboardToolbarSearch.isVisible = false
+                if (viewModel.isLoggedIn.value == true) {
+                    dashboardToolbarSecondary.isVisible = true
+                    dashboardToolbarSearch.isVisible = false
+                }
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             }
             else -> {

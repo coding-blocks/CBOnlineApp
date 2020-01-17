@@ -37,7 +37,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard_doubts.*
-import kotlinx.android.synthetic.main.fragment_dashboard_home.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -149,12 +148,13 @@ class DashboardDoubtsFragment : Fragment() {
         if ((sharedPrefs.getString(JWT_TOKEN, "") ?: "").isNotEmpty()) {
 
             viewModel.getRuns().observer(viewLifecycleOwner) {
-                if (it.isNotEmpty())
+                if (it.isNotEmpty()) {
                     viewModel.attemptId.value = it.first().courseRun.runAttempt.attemptId
-//            it.forEach {
-//                list.add(SheetItem(it.courseRun.run.crName, image = it.courseRun.course.logo, courseId = it.courseRun.runAttempt.attemptId))
-//            }
-//            adapter.notifyDataSetChanged()
+                    it.forEach {
+                        list.add(SheetItem(it.courseRun.run.crName, image = it.courseRun.course.logo, courseId = it.courseRun.runAttempt.attemptId))
+                    }
+                    adapter.notifyDataSetChanged()
+                }
             }
         } else {
             dashboardDoubts.isVisible = false

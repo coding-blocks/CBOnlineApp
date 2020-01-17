@@ -3,15 +3,7 @@ package com.codingblocks.cbonlineapp.database.models
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(
-//    indices = [Index("contentId")],
-//    foreignKeys = [(ForeignKey(
-//        entity = ContentModel::class,
-//        parentColumns = ["ccid"],
-//        childColumns = ["contentId"],
-//        onDelete = ForeignKey.CASCADE // or CASCADE
-//    ))]
-)
+@Entity
 data class DoubtsModel(
     @PrimaryKey
     var dbtUid: String,

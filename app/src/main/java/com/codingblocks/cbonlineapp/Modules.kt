@@ -105,11 +105,6 @@ val databaseModule = module {
 
     factory {
         val database: AppDatabase = get()
-        database.featuresDao()
-    }
-
-    factory {
-        val database: AppDatabase = get()
         database.runPerformanceDao()
     }
 
