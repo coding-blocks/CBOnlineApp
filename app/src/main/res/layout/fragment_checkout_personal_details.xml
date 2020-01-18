@@ -28,17 +28,27 @@
         android:layout_width="match_parent"
         android:fontFamily="@font/gilroy_medium"
         android:clickable="false"
+        android:textSize="18sp"
         android:focusable="false"
         android:text="India"
         android:layout_height="wrap_content"/>
 
-    <EditText
+    <AutoCompleteTextView
         android:fontFamily="@font/gilroy_medium"
-        android:text="Select State"
+        android:id="@+id/spinner"
+        android:completionThreshold="1"
         android:layout_marginTop="@dimen/margin_medium"
+        android:hint="Select State"
+        android:textColorHint="@color/black"
+        android:textSize="18sp"
         android:drawableEnd="@drawable/ic_dropdown"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <View
         android:layout_width="match_parent"
@@ -48,9 +58,8 @@
 
     <LinearLayout
         android:gravity="bottom"
-        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_large"
         android:paddingBottom="@dimen/margin_large">
 
@@ -58,8 +67,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gilroy_medium"
-            android:text="Amount to Pay"
-            android:textColor="@color/orangish"
+            android:text="Final Amount "
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <TextView
@@ -69,8 +78,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_medium_small"
             android:fontFamily="@font/gilroy_bold"
-            android:textColor="@color/orangish"
-            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
             tools:text="9499 " />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -78,9 +87,10 @@
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/ic_dropright"
             android:drawablePadding="10dp"
-            android:enabled="true"
+            android:id="@+id/checkoutBtn"
             android:minHeight="0dp"
-            android:text="Procees to Pay" />
+            android:enabled="false"
+            android:text="Next" />
 
 
     </LinearLayout>

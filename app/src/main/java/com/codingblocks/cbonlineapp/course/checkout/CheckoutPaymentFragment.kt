@@ -7,19 +7,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.razorpay.Checkout
+import kotlinx.android.synthetic.main.fragment_checkout_payment.*
 import org.json.JSONObject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 /**
  * A simple [Fragment] subclass.
  */
 class CheckoutPaymentFragment : Fragment() {
 
+    val vm by sharedViewModel<CheckoutViewModel>()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = inflater.inflate(R.layout.fragment_checkout_payment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        vm.cart.observer(this) {
+            payBtn.setOnClickListener {
+                showRazorPayCheckoutForm()
+            }
+        }
     }
 
     /** Call this function at the last step after applying coupon and everything.
@@ -30,7 +40,7 @@ class CheckoutPaymentFragment : Fragment() {
     override fun onPaymentError(p0: Int, p1: String?) - Show retry payment or payment declined.
 
      */
-    fun showRazorpayCheckoutForm() {
+    fun showRazorPayCheckoutForm() {
 
         val checkout = Checkout()
         val activity = activity

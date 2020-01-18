@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.course.checkout
 
+import android.annotation.SuppressLint
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -27,10 +28,11 @@ class CheckoutOrderDetailsFragment : Fragment(), AnkoLogger {
         vm.getCart()
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vm.cart.observer(viewLifecycleOwner) {
-            finalPriceTv.append(it["totalAmount"].asString)
+            finalPriceTv.text = "${getString(R.string.rupee_sign)} ${it["totalAmount"].asString}"
             it.getAsJsonArray("cartItems")?.get(0)?.asJsonObject?.run {
                 val df = DecimalFormat("0.00")
 
@@ -38,15 +40,15 @@ class CheckoutOrderDetailsFragment : Fragment(), AnkoLogger {
                 courseTitleTv.text = get("productDescription")?.asString
                 batchTileTv.text = get("productName")?.asString
                 val price = get("final_price")?.asDouble?.div(100).toString()
-                priceTv.append(price)
+                priceTv.text = "${getString(R.string.rupee_sign)} $price"
                 mrpTv.apply {
-                    append(get("list_price")?.asDouble?.div(100).toString())
+                    text = "${getString(R.string.rupee_sign)} ${get("list_price")?.asDouble?.div(100)}"
                     paintFlags = mrpTv.paintFlags or
                         Paint.STRIKE_THRU_TEXT_FLAG
                 }
-                subTotalTv.append(price)
-                totalTv.append(price)
-                taxesTv.append(get("tax")?.asDouble?.div(100).toString())
+                subTotalTv.text = "${getString(R.string.rupee_sign)} $price"
+                totalTv.text = "${getString(R.string.rupee_sign)} $price"
+                taxesTv.text = "${getString(R.string.rupee_sign)} ${get("tax")?.asDouble?.div(100)}"
                 orderBtn.setOnClickListener {
                     replaceFragmentSafely(CheckoutPersonalDetailsFragment(), containerViewId = R.id.checkoutContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
                 }

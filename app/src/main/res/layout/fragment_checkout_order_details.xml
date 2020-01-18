@@ -123,7 +123,7 @@
             android:fontFamily="@font/gilroy_medium"
             android:text="Subtotal"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/subTotalTv"
@@ -133,7 +133,7 @@
             android:layout_marginStart="8dp"
             android:fontFamily="@font/gilroy_medium"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="16sp"
             tools:text="9499 " />
 
     </LinearLayout>
@@ -152,7 +152,7 @@
             android:fontFamily="@font/gilroy_medium"
             android:text="Total"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/totalTv"
@@ -162,7 +162,7 @@
             android:layout_marginStart="8dp"
             android:fontFamily="@font/gilroy_medium"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="16sp"
             tools:text="9499 " />
 
     </LinearLayout>
@@ -181,7 +181,7 @@
             android:fontFamily="@font/gilroy_medium"
             android:text="Taxes"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/taxesTv"
@@ -191,7 +191,7 @@
             android:text="@string/rupee_sign"
             android:fontFamily="@font/gilroy_medium"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="16sp"
             tools:text="499 " />
 
     </LinearLayout>
@@ -210,7 +210,7 @@
             android:fontFamily="@font/gilroy_medium"
             android:text="Round Off"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/roundOffTv"
@@ -219,7 +219,7 @@
             android:layout_marginStart="8dp"
             android:fontFamily="@font/gilroy_medium"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:text="0.00" />
     </LinearLayout>
 
@@ -247,7 +247,7 @@
             android:fontFamily="@font/gilroy_medium"
             android:text="Final Amount"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:layout_weight="1"
@@ -258,7 +258,7 @@
             android:fontFamily="@font/gilroy_bold"
             android:textColor="@color/black"
             android:text="@string/rupee_sign"
-            android:textSize="20sp"
+            android:textSize="18sp"
             tools:text="9499 " />
 
         <androidx.appcompat.widget.AppCompatButton

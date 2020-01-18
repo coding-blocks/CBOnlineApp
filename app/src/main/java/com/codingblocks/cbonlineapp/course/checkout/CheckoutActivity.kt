@@ -27,7 +27,8 @@ class CheckoutActivity : AppCompatActivity(), PaymentResultListener {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onPaymentSuccess(p0: String?) {
+    override fun onPaymentSuccess(paymentId: String?) {
+        vm.capturePayment()
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         /** Make Network call to capture payment.
          *  Body : {

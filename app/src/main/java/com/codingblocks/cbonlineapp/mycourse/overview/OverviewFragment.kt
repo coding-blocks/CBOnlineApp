@@ -46,6 +46,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getRun().observer(viewLifecycleOwner) { courseAndRun ->
+            viewModel.expired.value = courseAndRun.runAttempt.end.toLong() * 1000 < System.currentTimeMillis()
             viewModel.getStats(courseAndRun.runAttempt.attemptId)
             val progressValue = if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
             homeProgressTv.text = "${progressValue.toInt()} %"

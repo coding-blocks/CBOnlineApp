@@ -35,4 +35,19 @@ class CheckoutViewModel : ViewModel() {
     private fun setError(error: String) {
         errorLiveData.postValue(error)
     }
+
+    fun capturePayment() {
+        runIO {
+            when (val response = safeApiCall { Clients.api.capturePayment(mapOf()) }) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        cart.postValue(body())
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
 }

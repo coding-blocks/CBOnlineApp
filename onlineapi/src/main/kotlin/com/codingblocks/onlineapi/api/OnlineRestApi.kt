@@ -114,5 +114,9 @@ interface OnlineRestApi {
     @FormUrlEncoded
     suspend fun getJwtWithEmail(@FieldMap params: Map<String, String>): Response<JsonObject>
 
+    @POST("v2/run_attempts/purchase")
+    @FormUrlEncoded
+    suspend fun capturePayment(@FieldMap params: Map<String, String>): Response<JsonObject>
+
 
 }
