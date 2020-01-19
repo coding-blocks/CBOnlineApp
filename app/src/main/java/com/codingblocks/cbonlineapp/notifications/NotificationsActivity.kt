@@ -40,7 +40,8 @@ class NotificationsActivity : AppCompatActivity() {
                 notificationID: Long,
                 url: String,
                 videoId: String
-            ) {
+            )
+            {
                 notificationDao.updateseen(notificationID)
                 if (url.contains("courseRun", true) ||
                     url.contains("classroom", true)

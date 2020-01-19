@@ -23,7 +23,7 @@ class QuizChoiceAdapter(
         ChoiceViewHolder(
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.quiz_single_option, parent, false)
-        ).apply {
+        ).apply git
             context = parent.context
         }
 

@@ -83,7 +83,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         viewModel.sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
         viewModel.sheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-
         fetchCourse()
     }
 
