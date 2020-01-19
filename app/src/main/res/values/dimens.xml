@@ -43,6 +43,8 @@
     <dimen name="margin_medium_small">14dp</dimen>
     <dimen name="button_size">20dp</dimen>
     <dimen name="margin_xl">42dp</dimen>
+    <dimen name="dashboard_toolbar_neg">-40dp</dimen>
+    <dimen name="dashboard_toolbar_comp">40dp</dimen>
 
 
 </resources>

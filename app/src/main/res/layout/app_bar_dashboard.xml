@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dashboardRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/dashboardAppBarLayout"
+        android:background="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -17,7 +20,7 @@
                 android:id="@+id/dashboardToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="1dp"
+                android:elevation="4dp"
                 app:title="Dashboard"
                 app:layout_scrollFlags="scroll|enterAlways" />
 
@@ -66,17 +69,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:background="@color/white"
-                android:elevation="1dp"
+                android:elevation="4dp"
                 android:orientation="horizontal"
                 android:visibility="visible">
 
                 <View
+                    android:elevation="2dp"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/toolbar_bg_dark" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:elevation="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_large"
@@ -90,6 +94,7 @@
 
     <com.codingblocks.fabnavigation.FabNavigationViewPager
         android:id="@+id/dashboardPager"
+        android:layout_marginTop="@dimen/dashboard_toolbar_neg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
