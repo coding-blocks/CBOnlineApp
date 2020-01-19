@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:layout_margin="8dp"
-            android:fontFamily="@font/nunitosans_bold"
+            android:fontFamily="@font/gilroy_bold"
             android:text="Up next in"
             android:textColor="@color/white"
             android:textSize="16sp" />
@@ -143,7 +143,7 @@
             android:text="Play Next"
             android:textColor="@color/white"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/nunitosans_bold"
+            android:fontFamily="@font/gilroy_bold"
             android:textSize="24sp" />
 
 

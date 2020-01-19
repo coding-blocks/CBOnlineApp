@@ -4,4 +4,10 @@
     <declare-styleable name="ExpandableTextView">
         <attr name="trimLength" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="GradientTextView">
+        <attr name="startColor" format="reference|color" />
+        <attr name="endColor" format="reference|color" />
+
+    </declare-styleable>
 </resources>

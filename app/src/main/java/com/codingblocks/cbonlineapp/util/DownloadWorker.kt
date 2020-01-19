@@ -8,12 +8,12 @@ import android.graphics.BitmapFactory
 import android.os.Environment
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.models.DownloadData
-import com.codingblocks.cbonlineapp.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.onlineapi.Clients
 import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
@@ -23,14 +23,17 @@ import com.vdocipher.aegis.offline.DownloadSelections
 import com.vdocipher.aegis.offline.DownloadStatus
 import com.vdocipher.aegis.offline.OptionsDownloader
 import com.vdocipher.aegis.offline.VdoDownloadManager
-import org.jetbrains.anko.doAsync
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import retrofit2.Response
 import java.io.File
 
 class DownloadWorker(context: Context, private val workerParameters: WorkerParameters) :
-    Worker(context, workerParameters),
+    CoroutineWorker(context, workerParameters),
     KoinComponent,
     VdoDownloadManager.EventListener {
 
@@ -40,14 +43,14 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
 
     val contentDao: ContentDao by inject()
 
-    override fun onStopped() {
-        super.onStopped()
-        for (data in downloadList) {
-            notificationManager.cancel(data.notificationId)
-        }
-    }
+//    override fun onStopped() {
+//        super.onStopped()
+//        for (data in downloadList) {
+//            notificationManager.cancel(data.notificationId)
+//        }
+//    }
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         val contentId = workerParameters.inputData.getString(CONTENT_ID) ?: ""
         val attemptId = workerParameters.inputData.getString(RUN_ATTEMPT_ID) ?: ""
         val videoId = workerParameters.inputData.getString(VIDEO_ID) ?: ""
@@ -67,14 +70,13 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
                 setContentText("Waiting to Download")
                 setProgress(100, 0, false)
                 color = applicationContext.resources.getColor(R.color.colorPrimaryDark)
-                setOngoing(true) // THIS is the important line
+                setOngoing(false) // THIS is the important line
                 setAutoCancel(false)
             }
         )
         notificationManager.notify(downloadData.notificationId, downloadData.notificationBuilder.build())
         val response: Response<JsonObject>
-        response = Clients.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true).execute()
-
+        response = withContext(Dispatchers.IO) { Clients.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
         if (response.isSuccessful) {
             response.body()?.let {
                 downloadList.add(downloadData)
@@ -95,7 +97,7 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
         }
     }
 
-    private fun initializeDownload(mOtp: String?, mPlaybackInfo: String?, videoId: String) {
+    private fun initializeDownload(mOtp: String, mPlaybackInfo: String, videoId: String) {
         val optionsDownloader = OptionsDownloader()
         // assuming we have otp and playbackInfo
         optionsDownloader.downloadOptionsWithOtp(
@@ -176,7 +178,7 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
         if (videoId != null) {
             val data = findDataWithId(videoId)
             if (data != null) {
-                doAsync {
+                GlobalScope.launch(Dispatchers.IO) {
                     contentDao.updateContent(data.contentId, 1)
                 }
                 val intent = Intent(applicationContext, VideoPlayerActivity::class.java)

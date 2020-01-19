@@ -18,6 +18,7 @@ data class ContentModel(
     var contentable: String,
     var order: Int,
     var attempt_id: String,
+    var sectionTitle: String = "",
     @Embedded
     @Nullable
     var contentLecture: ContentLecture = ContentLecture(),
@@ -29,13 +30,16 @@ data class ContentModel(
     var contentVideo: ContentVideo = ContentVideo(),
     @Embedded
     @Nullable
-    var contentQna: ContentQna = ContentQna(),
+    var contentQna: ContentQnaModel = ContentQnaModel(),
     @Embedded
     @Nullable
     var contentCode: ContentCodeChallenge = ContentCodeChallenge(),
     @Embedded
     @Nullable
-    var contentCsv: ContentCsvModel = ContentCsvModel()
+    var contentCsv: ContentCsvModel = ContentCsvModel(),
+    @Embedded
+    @Nullable
+    var bookmark: BookmarkModel = BookmarkModel()
 ) : ListObject() {
     @Ignore
     override fun getType(): Int = TYPE_CONTENT

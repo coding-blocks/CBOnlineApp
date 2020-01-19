@@ -1,46 +1,47 @@
 package com.codingblocks.cbonlineapp.jobs.jobdetails
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.CourseDao
-import com.codingblocks.cbonlineapp.database.CourseRunDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.JobsDao
 import com.codingblocks.cbonlineapp.database.models.Companies
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.database.models.JobsModel
-import com.codingblocks.cbonlineapp.database.models.RunModel
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Applications
-import com.codingblocks.onlineapi.models.CourseId
+import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Form
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class JobDetailViewModel(
     private val jobsDao: JobsDao,
-    private val courseWithInstructorDao: CourseWithInstructorDao,
-    private val courseDao: CourseDao,
-    private val runDao: CourseRunDao
+    private val courseWithInstructorDao: CourseWithInstructorDao
 ) : ViewModel() {
 
     val eligibleLiveData: MutableLiveData<String> = MutableLiveData()
-
-    val inactiveLiveData: MutableLiveData<Boolean> = MutableLiveData()
-
-    val acceptingLiveData: MutableLiveData<Boolean> = MutableLiveData()
-
+    private val inactiveLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    private val acceptingLiveData: MutableLiveData<Boolean> = MutableLiveData()
     val formData: MutableLiveData<ArrayList<Form>> = MutableLiveData()
+    val courseIdList: MutableLiveData<ArrayList<Course>> = MutableLiveData()
+    var jobCourses: LiveData<List<CourseInstructorPair>> = MutableLiveData()
 
-    val jobCourses: MutableLiveData<List<RunModel>> = MutableLiveData()
+//    init {
+//        jobCourses = Transformations.switchMap(courseIdList) { list ->
+//            val coureidlist = ArrayList<String>()
+//            list.forEach {
+//                it.id?.let { it1 -> coureidlist.add(it1) }
+//            }
+// //            courseWithInstructorDao.getJobCourses(coureidlist)
+//        }
+//    }
 
     fun getJobById(id: String) = jobsDao.getJobById(id)
-
-    fun getCourseDao() = courseDao
-
-    fun getCourseWithInstructorDao() = courseWithInstructorDao
 
     fun fetchJob(jobId: String) {
         Clients.onlineV2JsonApi.getJobById(
@@ -74,26 +75,18 @@ class JobDetailViewModel(
                                     website ?: ""
                                 )
                             },
-                            courses ?: arrayListOf()
+                            courses ?: arrayListOf<Course>()
                         )
                         if (application != null) {
                             eligibleLiveData.value = mInstance.getString(R.string.applied)
                         }
-                        viewModelScope.launch {
+                        viewModelScope.launch(Dispatchers.IO) {
                             jobsDao.insert(job)
                         }
                     }
                 }
             }
         })
-    }
-
-    fun getCourses(courseId: ArrayList<CourseId>) {
-        val coureidlist = ArrayList<String>()
-        courseId.forEach {
-            it.id?.let { it1 -> coureidlist.add(it1) }
-        }
-        jobCourses.value = runDao.getJobCourses(coureidlist)
     }
 
     fun applyJob(application: Applications) {

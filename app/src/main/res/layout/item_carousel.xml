@@ -35,7 +35,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_toEndOf="@id/imgView"
-                android:fontFamily="@font/nunitosans_bold"
+                android:fontFamily="@font/gilroy_bold"
                 android:textAlignment="viewStart"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
@@ -50,7 +50,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="4dp"
                 android:layout_toEndOf="@id/imgView"
-                android:fontFamily="@font/nunitosans_semibold"
+                android:fontFamily="@font/gilroy_bold"
                 android:textAlignment="viewStart"
                 android:textColor="@color/grey850" />
 
@@ -63,7 +63,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/button_background"
-                android:fontFamily="@font/nunitosans_semibold"
+                android:fontFamily="@font/gilroy_medium"
                 android:paddingStart="24dp"
                 android:paddingEnd="24dp"
                 android:textColor="#fff"

@@ -13,9 +13,9 @@ import androidx.core.app.NotificationCompat
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.models.DownloadData
-import com.codingblocks.cbonlineapp.player.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
+import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.onlineapi.Clients
+import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.offline.DownloadOptions
 import com.vdocipher.aegis.offline.DownloadRequest
@@ -23,8 +23,13 @@ import com.vdocipher.aegis.offline.DownloadSelections
 import com.vdocipher.aegis.offline.DownloadStatus
 import com.vdocipher.aegis.offline.OptionsDownloader
 import com.vdocipher.aegis.offline.VdoDownloadManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.doAsync
 import org.koin.android.ext.android.inject
+import retrofit2.Response
 import java.io.File
 
 class DownloadService : Service(), VdoDownloadManager.EventListener {
@@ -60,25 +65,22 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
             )
             notificationManager.notify(downloadData.notificationId, downloadData.notificationBuilder.build())
 
-            Clients.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true)
-                .enqueue(retrofitCallback { _, response ->
-                    response?.let { json ->
-                        if (json.isSuccessful) {
-                            json.body()?.let {
-                                val mOtp = it.get("otp").asString
-                                val mPlaybackInfo = it.get("playbackInfo").asString
-                                initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
-                            }
-                        }
+            GlobalScope.launch {
+                val response: Response<JsonObject> = withContext(Dispatchers.IO) { Clients.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        downloadList.add(downloadData)
+                        val mOtp = it.get("otp").asString
+                        val mPlaybackInfo = it.get("playbackInfo").asString
+                        initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
                     }
-                })
-
-            downloadList.add(downloadData)
+                }
+            }
         }
         return START_STICKY
     }
 
-    private fun initializeDownload(mOtp: String?, mPlaybackInfo: String?, videoId: String) {
+    private fun initializeDownload(mOtp: String, mPlaybackInfo: String, videoId: String) {
         val optionsDownloader = OptionsDownloader()
         // assuming we have otp and playbackInfo
         optionsDownloader.downloadOptionsWithOtp(
@@ -118,6 +120,13 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
         return null
     }
 
+    override fun onDestroy() {
+        for (data in downloadList) {
+            notificationManager.cancel(data.notificationId)
+        }
+        super.onDestroy()
+    }
+
     private fun sendNotification(data: DownloadData, downloadPercent: Int) {
         data.notificationBuilder.setProgress(100, downloadPercent, false)
         data.notificationBuilder.setContentText("Downloaded $downloadPercent %")
@@ -136,6 +145,7 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
         for (data in downloadList) {
             notificationManager.cancel(data.notificationId)
         }
+        super.onTaskRemoved(rootIntent)
     }
 
     // VdoDownloadManager Events

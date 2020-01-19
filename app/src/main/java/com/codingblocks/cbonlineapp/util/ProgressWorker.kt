@@ -1,41 +1,39 @@
 package com.codingblocks.cbonlineapp.util
 
 import android.content.Context
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.ContentsId
-import com.codingblocks.onlineapi.models.Progress
-import com.codingblocks.onlineapi.models.RunAttemptsId
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import com.codingblocks.onlineapi.models.ContentProgress
+import com.codingblocks.onlineapi.models.LectureContent
+import com.codingblocks.onlineapi.models.RunAttempts
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import retrofit2.Response
 
-class ProgressWorker(context: Context, private val workerParameters: WorkerParameters) : Worker(context, workerParameters), KoinComponent {
+class ProgressWorker(context: Context, private val workerParameters: WorkerParameters) : CoroutineWorker(context, workerParameters), KoinComponent {
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         val contentDao: ContentDao by inject()
         val contentId = workerParameters.inputData.getString(CONTENT_ID)
         val attemptId = workerParameters.inputData.getString(RUN_ATTEMPT_ID)
-        val progressId = workerParameters.inputData.getString(PROGRESS_ID)
-
-        val progress = Progress()
-        progress.status = "DONE"
-        progress.runs = RunAttemptsId(attemptId)
-        progress.content = ContentsId(contentId)
-        val response: Response<Progress>
+        var progressId: String? = withContext(Dispatchers.IO) { contentDao.getProgressId(contentId ?: "") }
         if (progressId.isNullOrEmpty()) {
-            response = Clients.onlineV2JsonApi.setProgress(progress).execute()
-        } else {
-            progress.id = progressId
-            response = Clients.onlineV2JsonApi.updateProgress(progressId, progress).execute()
+            progressId = null
         }
-
+        val progress = ContentProgress("DONE", RunAttempts(attemptId ?: ""), LectureContent(contentId
+            ?: ""), progressId)
+        val response: Response<ContentProgress> = if (progressId.isNullOrEmpty()) {
+            Clients.onlineV2JsonApi.setProgress(progress)
+        } else {
+            Clients.onlineV2JsonApi.updateProgress(progressId, progress)
+        }
         if (response.isSuccessful) {
             response.body()?.let {
-                contentDao.updateProgress(it.contentId, it.runAttemptId, "DONE")
-                contentDao.updateProgressID(it.contentId, it.runAttemptId, it.id)
+                contentDao.update(it.contentId ?: "", it.runAttemptId ?: "", it.id ?: "", "DONE")
             }
             return Result.success()
         } else {

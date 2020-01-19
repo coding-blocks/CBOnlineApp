@@ -1,0 +1,299 @@
+[
+  {
+    "Sr": 1,
+    "stateId": "AP",
+    "state": "Andhra Pradesh",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 2,
+    "stateId": "AR",
+    "state": "Arunachal Pradesh",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 3,
+    "stateId": "AS",
+    "state": "Assam",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 4,
+    "stateId": "BR",
+    "state": "Bihar",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 5,
+    "stateId": "CG",
+    "state": "Chhattisgarh",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 6,
+    "stateId": "CH",
+    "state": "Chandigarh",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 7,
+    "stateId": "DN",
+    "state": "Dadra and Nagar Haveli",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 8,
+    "stateId": "DD",
+    "state": "Daman and Diu",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 9,
+    "stateId": "DL",
+    "state": "Delhi",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 10,
+    "stateId": "GA",
+    "state": "Goa",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 11,
+    "stateId": "GJ",
+    "state": "Gujarat",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 12,
+    "stateId": "HR",
+    "state": "Haryana",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 13,
+    "stateId": "HP",
+    "state": "Himachal Pradesh",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 14,
+    "stateId": "JK",
+    "state": "Jammu and Kashmir",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 15,
+    "stateId": "JH",
+    "state": "Jharkhand",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 16,
+    "stateId": "KA",
+    "state": "Karnataka",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 17,
+    "stateId": "KL",
+    "state": "Kerala",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 18,
+    "stateId": "MP",
+    "state": "Madhya Pradesh",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 19,
+    "stateId": "MH",
+    "state": "Maharashtra",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 20,
+    "stateId": "MN",
+    "state": "Manipur",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 21,
+    "stateId": "ML",
+    "state": "Meghalaya",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 22,
+    "stateId": "MZ",
+    "state": "Mizoram",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 23,
+    "stateId": "NL",
+    "state": "Nagaland",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 24,
+    "stateId": "OR",
+    "state": "Orissa",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 25,
+    "stateId": "PB",
+    "state": "Punjab",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 26,
+    "stateId": "PY",
+    "state": "Pondicherry",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 27,
+    "stateId": "RJ",
+    "state": "Rajasthan",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 28,
+    "stateId": "SK",
+    "state": "Sikkim",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 29,
+    "stateId": "TN",
+    "state": "Tamil Nadu",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 30,
+    "stateId": "TR",
+    "state": "Tripura",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 31,
+    "stateId": "UP",
+    "state": "Uttar Pradesh",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 32,
+    "stateId": "UK",
+    "state": "Uttarakhand",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  },
+  {
+    "Sr": 33,
+    "stateId": "WB",
+    "state": "West Bengal",
+    "createdAt": "2019-05-22 12:53:56.894413+00",
+    "updatedAt": "2019-05-22 12:53:56.894413+00",
+    "deletedAt": "",
+    "country_code": "IN"
+  }
+]

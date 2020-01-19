@@ -2,25 +2,17 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/grey850"
-    tools:context=".fragments.NotesFragment">
+    android:id="@+id/videoNotesRoot"
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/notesRv"
+        android:id="@+id/playerNotesRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        tools:listitem="@layout/item_notes" />
+        android:overScrollMode="never"
+        android:visibility="visible"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_note" />
 
-    <TextView
-        android:id="@+id/emptyTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/empty_notes_text"
-        android:textColor="@color/salmon"
-        android:textSize="20sp"
-        android:visibility="gone" />
 
 </FrameLayout>

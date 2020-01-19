@@ -5,14 +5,14 @@ import android.os.Bundle
 import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
 import cn.campusapp.router.Router
-import com.codingblocks.cbonlineapp.home.HomeActivity
+import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.otherwise
 import org.jetbrains.anko.intentFor
 
 class URLRouterActivity : AppCompatActivity() {
 
-    private fun fallBack() = startActivity(intentFor<HomeActivity>())
+    private fun fallBack() = startActivity(intentFor<DashboardActivity>())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

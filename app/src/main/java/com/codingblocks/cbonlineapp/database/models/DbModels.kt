@@ -7,7 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.util.FileUtils
-import com.codingblocks.onlineapi.models.CourseId
+import com.codingblocks.onlineapi.models.Course
 import java.sql.Date
 
 @Entity
@@ -21,6 +21,17 @@ data class ContentLecture(
     var isDownloaded: Boolean = FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, lectureId),
     var date: Date = Date(0L)
 )
+
+@Entity
+data class BookmarkModel(
+    var bookmarkUid: String = "",
+    var runAttemptId: String = "",
+    var contentId: String = "",
+    var sectionId: String = "",
+    var createdAt: String = "",
+    var sectionName: String = "",
+    var contentName: String = ""
+) : BaseModel()
 
 @Entity
 data class ContentDocument(
@@ -53,7 +64,7 @@ data class ContentCodeChallenge(
 )
 
 @Entity
-data class ContentQna(
+data class ContentQnaModel(
     var qnaUid: String = "",
     var qnaName: String = "",
     var qnaQid: Int = 0,
@@ -76,27 +87,7 @@ data class ContentCsvModel(
         entity = ContentModel::class,
         parentColumns = ["ccid"],
         childColumns = ["contentId"],
-        onDelete = ForeignKey.CASCADE // or CASCADE
-    ))]
-)
-data class DoubtsModel(
-    @PrimaryKey
-    var dbtUid: String = "",
-    var title: String = "",
-    var body: String = "",
-    var contentId: String = "",
-    var status: String = "",
-    var runAttemptId: String = "",
-    var discourseTopicId: String = ""
-)
-
-@Entity(
-    indices = [Index("contentId")],
-    foreignKeys = [(ForeignKey(
-        entity = ContentModel::class,
-        parentColumns = ["ccid"],
-        childColumns = ["contentId"],
-        onDelete = ForeignKey.CASCADE // or CASCADE
+        onDelete = ForeignKey.CASCADE
     ))]
 )
 data class NotesModel(
@@ -107,8 +98,9 @@ data class NotesModel(
     var contentId: String = "",
     var runAttemptId: String = "",
     var createdAt: String = "",
-    var deletedAt: String = ""
-)
+    var deletedAt: String? = "",
+    val contentTitle: String = ""
+) : BaseModel()
 
 @Entity
 data class Notification(
@@ -137,7 +129,7 @@ data class JobsModel(
     val title: String,
     @Embedded
     val company: Companies,
-    val courseId: ArrayList<CourseId>
+    val courseId: ArrayList<Course>
 )
 
 class FormModel(
@@ -155,3 +147,9 @@ data class Companies(
     val companyDescription: String,
     val website: String
 )
+
+open class BaseModel()
+
+enum class LibraryTypes {
+    NOTE, NOTESVIDEO, BOOKMARK
+}

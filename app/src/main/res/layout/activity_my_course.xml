@@ -11,10 +11,48 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_mycourse"
+            style="@style/ToolBarStyleDark"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:theme="@style/ToolBarStyle" />
+            android:layout_height="?attr/actionBarSize">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/courseResumeBtn"
+                style="@style/ButtonStyleChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:background="@drawable/button_background"
+                android:drawableEnd="@drawable/ic_dropright"
+                android:text="@string/resume" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/myCourseTabs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="@dimen/margin_medium"
+            android:paddingEnd="@dimen/margin_medium"
+            app:tabIndicatorColor="@color/black"
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@color/dark"
+            app:tabTextAppearance="@style/AppTabTextAppearance">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dashboard" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/curriculum" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/library" />
+        </com.google.android.material.tabs.TabLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.codingblocks.fabnavigation.FabNavigationViewPager
@@ -23,26 +61,19 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/fab"
-        fontPath="fonts/nunitosans_semibold.ttf"
+        style="@style/ButtonStyleChip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="64dp"
-        android:text="Sections"
-        android:textColor="@color/white"
-        app:backgroundTint="@color/colorPrimary"
-        app:icon="@drawable/ic_menu"
-        app:iconTint="@color/white" />
+        android:layout_gravity="end|bottom"
+        android:layout_margin="32dp"
+        android:visibility="gone"
+        android:background="@drawable/button_background"
+        android:drawableStart="@drawable/ic_menu"
+        android:fontFamily="@font/gilroy_bold"
+        android:text="@string/contents"
+        android:textColor="@color/white" />
 
-
-    <com.codingblocks.fabnavigation.FabNavigation
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:selectedBackgroundVisible="false" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

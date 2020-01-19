@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/dashboard_explore"
+        android:icon="@drawable/ic_explore"
+        android:title="@string/explore" />
+
+
+    <item
+        android:id="@+id/dashboard_courses"
+        android:icon="@drawable/ic_courses"
+        android:title="@string/my_courses" />
+
+    <item
+        android:id="@+id/dashboard_home"
+        android:icon="@drawable/ic_dashboard"
+        android:title="@string/dashboard" />
+
+    <item
+        android:id="@+id/dashboard_doubts"
+        android:icon="@drawable/ic_doubts"
+        android:title="@string/doubts" />
+
+    <item
+        android:id="@+id/dashboard_library"
+        android:icon="@drawable/ic_library"
+        android:title="@string/library" />
+
+</menu>

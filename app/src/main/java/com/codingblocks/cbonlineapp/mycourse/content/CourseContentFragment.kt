@@ -9,7 +9,6 @@ import android.widget.PopupWindow
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.BackoffPolicy
@@ -26,91 +25,142 @@ import com.codingblocks.cbonlineapp.commons.SectionListClickListener
 import com.codingblocks.cbonlineapp.database.ListObject
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
+import com.codingblocks.cbonlineapp.util.CODE
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.DownloadWorker
-import com.codingblocks.cbonlineapp.util.PROGRESS_ID
+import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.ProgressWorker
+import com.codingblocks.cbonlineapp.util.QNA
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.SectionDownloadService
+import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.startService
-import org.jetbrains.anko.yesButton
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.concurrent.TimeUnit
 
 class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
 
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
-    lateinit var attemptId: String
-    private val sectionItemsAdapter = SectionItemsAdapter()
-    var areLecturesLoaded: Boolean = false
     var popupWindowDogs: PopupWindow? = null
-    val mLayoutManager by lazy {
-        LinearLayoutManager(requireContext())
+    var sectionitem = ArrayList<SectionModel>()
+    var type: String = ""
+
+    private val sectionItemsAdapter = SectionItemsAdapter()
+    private val sectionListAdapter = SectionListAdapter(sectionitem)
+    private val viewModel by sharedViewModel<MyCourseViewModel>()
+    private val mLayoutManager by lazy { LinearLayoutManager(requireContext()) }
+//    val smoothScroller: RecyclerView.SmoothScroller by lazy {
+//        object : LinearSmoothScroller(requireContext()) {
+//            override fun getVerticalSnapPreference(): Int {
+//                return SNAP_TO_START
+//            }
+//        }
+//    }
+
+    private val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
+        override fun onClick(pos: Int) {
+            popupWindowDogs?.dismiss()
+            mLayoutManager.scrollToPosition(pos)
+//            smoothScroller.targetPosition = pos
+//            mLayoutManager.startSmoothScroll(smoothScroller)
+        }
     }
 
-    var sectionitem = ArrayList<SectionModel>()
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+        View? = inflater.inflate(R.layout.fragment_course_content, container, false)
 
-    private val sectionListAdapter = SectionListAdapter(sectionitem)
-
-    private val viewModel by sharedViewModel<MyCourseViewModel>()
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
-        arguments?.let {
-            attemptId = it.getString(RUN_ATTEMPT_ID) ?: ""
-        }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.fetchSections()
         sectionItemsAdapter.starter = this
         viewModel.expired.observer(viewLifecycleOwner) {
             sectionItemsAdapter.setExpiry(it)
         }
-
-        return inflater.inflate(R.layout.fragment_course_content, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val smoothScroller: RecyclerView.SmoothScroller = object : LinearSmoothScroller(context) {
-            override fun getVerticalSnapPreference(): Int {
-                return SNAP_TO_START
+        typeChipGroup.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.webinarChip -> viewModel.filters.value = VIDEO.also {
+                    type = VIDEO
+                }
+                R.id.lectureChip -> viewModel.filters.value = LECTURE.also {
+                    type = LECTURE
+                }
+                R.id.quizChip -> viewModel.filters.value = QNA.also {
+                    type = QNA
+                }
+                R.id.codeChip -> viewModel.filters.value = CODE.also {
+                    type = CODE
+                }
+                R.id.documentChip -> viewModel.filters.value = DOCUMENT.also {
+                    type = DOCUMENT
+                }
+                View.NO_ID -> viewModel.filters.value = "".also {
+                    type = ""
+                }
             }
         }
 
         popupWindowDogs = popUpWindowSection()
+
         activity?.fab?.setOnClickListener {
-            it as ExtendedFloatingActionButton
-            if (it.isExtended) {
-                it.shrink()
-                popupWindowDogs?.showAsDropDown(it, 0, 0, Gravity.BOTTOM)
-                view.applyDim(0.5F)
-            } else {
-                it.extend()
-            }
+            // Todo Check for different screens
+            popupWindowDogs?.showAsDropDown(it, -280, -50, Gravity.BOTTOM)
+            view.applyDim(0.5F)
         }
 
         popupWindowDogs?.setOnDismissListener {
-            activity?.fab?.extend()
             view.clearDim()
         }
+
         swiperefresh.setOnRefreshListener {
             (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
         }
-        rvExpendableView.layoutManager = mLayoutManager
-        rvExpendableView.adapter = sectionItemsAdapter
+        rvExpendableView.apply {
+            adapter = sectionItemsAdapter
+            layoutManager = mLayoutManager
+        }
 
-        viewModel.getAllContent().observer(this) { SectionContent ->
+        attachObservers()
+        sectionListAdapter.onSectionListClick = sectionListClickListener
+    }
+
+    private fun attachObservers() {
+
+        viewModel.progress.observer(viewLifecycleOwner) {
+            swiperefresh.isRefreshing = it
+        }
+
+//        viewModel.revoked.observer(viewLifecycleOwner) { value ->
+//            if (value) {
+//                alert {
+//                    title = "Error Fetching Course"
+//                    message = """
+//                        There was an error downloading courseRun contents.
+//                        Please contact support@codingblocks.com
+//                        """.trimIndent()
+//                    yesButton {
+//                        it.dismiss()
+//                        activity?.finish()
+//                    }
+//                    isCancelable = false
+//                }.show()
+//            }
+//        }
+
+        viewModel.content.observer(viewLifecycleOwner) { SectionContent ->
             sectionitem.clear()
             val consolidatedList = ArrayList<ListObject>()
             SectionContent.forEach { sectionContent ->
@@ -138,62 +188,37 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 })
                 sectionitem.add(sectionContent.section)
                 sectionListAdapter.notifyDataSetChanged()
-
-                consolidatedList.addAll(sectionContent.contents.sortedBy { it.order })
+                if (viewModel.complete.value!!.isEmpty() && type.isEmpty()) {
+                    consolidatedList.addAll(sectionContent.contents.sortedBy { it.order })
+                } else if (type.isEmpty()) {
+                    consolidatedList.addAll(sectionContent.contents
+                        .filter { it.progress == viewModel.complete.value }
+                        .sortedBy { it.order })
+                } else if (viewModel.complete.value!!.isEmpty()) {
+                    consolidatedList.addAll(sectionContent.contents
+                        .filter { it.contentable == type }
+                        .sortedBy { it.order })
+                } else {
+                    consolidatedList.addAll(sectionContent.contents
+                        .filter { it.contentable == type }
+                        .filter { it.progress == viewModel.complete.value!! }
+                        .sortedBy { it.order })
+                }
                 sectionItemsAdapter.submitList(consolidatedList)
             }
             contentShimmer.isVisible = SectionContent.isEmpty()
         }
-
-        viewModel.progress.observer(viewLifecycleOwner) {
-            swiperefresh.isRefreshing = it
-        }
-
-        viewModel.revoked.observer(viewLifecycleOwner) { value ->
-            if (value) {
-                alert {
-                    title = "Error Fetching Course"
-                    message = """
-                        There was an error downloading courseRun contents.
-                        Please contact support@codingblocks.com
-                        """.trimIndent()
-                    yesButton {
-                        it.dismiss()
-                        activity?.finish()
-                    }
-                    isCancelable = false
-                }.show()
-            }
-        }
-
-        val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
-            override fun onClick(pos: Int) {
-                popupWindowDogs?.dismiss()
-                // Todo - Improvise the scroll
-                mLayoutManager.scrollToPosition(pos - 10)
-                smoothScroller.targetPosition = pos
-                mLayoutManager.startSmoothScroll(smoothScroller)
-            }
-        }
-        sectionListAdapter.onSectionListClick = sectionListClickListener
     }
 
-    override fun updateProgress(contentId: String, progressId: String) {
+    override fun updateProgress(contentId: String) {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val progressData: Data = if (progressId.isNotEmpty()) {
-            workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to attemptId, PROGRESS_ID to progressId)
-        } else {
-            workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to attemptId)
-        }
-
+        val progressData: Data = workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to viewModel.attemptId)
         val request: OneTimeWorkRequest =
             OneTimeWorkRequestBuilder<ProgressWorker>()
                 .setConstraints(constraints)
                 .setInputData(progressData)
                 .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
                 .build()
-//        Snackbar.make(contentRoot, "Progress Will Be Synced Once Your Device Get Online", Snackbar.LENGTH_SHORT)
-//            .setAnchorView(bottom_navigation).show()
 
         WorkManager.getInstance()
             .enqueue(request)
@@ -227,18 +252,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             .enqueue(request)
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser && !areLecturesLoaded) {
-            if (view != null) {
-                val params = Bundle()
-                params.putString(FirebaseAnalytics.Param.ITEM_ID, getPrefs()?.SP_ONEAUTH_ID)
-                params.putString(FirebaseAnalytics.Param.ITEM_NAME, "ContentModel")
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params)
-            }
-        }
-    }
-
     override fun startSectionDownlod(sectionId: String) {
         startService<SectionDownloadService>(SECTION_ID to sectionId)
     }
@@ -256,15 +269,5 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         popupWindow.contentView = listViewDogs
 
         return popupWindow
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String) =
-            CourseContentFragment().apply {
-                arguments = Bundle().apply {
-                    putString(RUN_ATTEMPT_ID, param1)
-                }
-            }
     }
 }

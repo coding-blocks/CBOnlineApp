@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/margin_medium_small"
+    android:paddingBottom="@dimen/margin_medium_small"
+    android:weightSum="4">
+
+    <TextView
+        android:id="@+id/numberTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.3"
+        android:fontFamily="@font/gilroy_medium"
+        android:textColor="@color/white"
+        tools:text="1" />
+
+    <TextView
+        android:id="@+id/scoreTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.8"
+        android:fontFamily="@font/gilroy_bold"
+        android:gravity="center"
+        android:textColor="@color/freshGreen"
+        tools:text="100/100" />
+
+    <TextView
+        android:id="@+id/dateTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.9"
+        android:fontFamily="@font/gilroy_medium"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        tools:text="24.12.19 | 10:45pm" />
+
+
+    <TextView
+        android:id="@+id/statusTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?attr/selectableItemBackground"
+        android:fontFamily="@font/gilroy_bold"
+        android:text="@string/view"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/orangish" />
+</LinearLayout>

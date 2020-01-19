@@ -3,45 +3,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:background="?attr/selectableItemBackground"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/margin_large"
+    android:paddingTop="8dp"
+    android:paddingEnd="@dimen/margin_large"
+    android:paddingBottom="8dp">
 
     <ImageView
         android:id="@+id/contentType"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:src="@drawable/ic_lecture"
-        android:visibility="visible" />
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_play" />
 
 
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
+        android:fontFamily="@font/gilroy_medium"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:layout_weight="0.6"
-        fontPath="fonts/nunitosans_semibold.ttf"
         android:textSize="16sp"
-        tools:ignore="MissingPrefix"
+        android:textColor="@color/orangish"
         tools:text="Course Introduction" />
 
 
     <ImageView
+        android:layout_width="20dp"
         android:id="@+id/downloadBtn"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/colorPrimary"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_dropdown"
         android:visibility="visible" />
 
 </LinearLayout>

@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.jobs.jobdetails
 
-import android.content.Context
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
@@ -13,13 +12,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.distinctUntilChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.home.CourseDataAdapter
 import com.codingblocks.cbonlineapp.util.JOB_ID
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.isotomillisecond
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.util.extensions.nonNull
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
@@ -29,7 +29,6 @@ import com.codingblocks.onlineapi.models.JobId
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.JsonObject
-import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_job_detail.*
 import kotlinx.android.synthetic.main.custom_form_dialog.view.*
 import kotlinx.android.synthetic.main.item_job.*
@@ -39,7 +38,7 @@ class JobDetailActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<JobDetailViewModel>()
 
-    private lateinit var courseDataAdapter: CourseDataAdapter
+//    private lateinit var courseDataAdapter: CourseDataAdapter
 
     lateinit var jobId: String
 
@@ -59,17 +58,9 @@ class JobDetailActivity : AppCompatActivity() {
 
         viewModel.fetchJob(jobId)
 
-//        courseDataAdapter =
-//            CourseDataAdapter(
-//                ArrayList(),
-//                viewModel.getCourseDao(),
-//                this,
-//                viewModel.getCourseWithInstructorDao(),
-//                "allCourses"
-//            )
-
+//        courseDataAdapter = CourseDataAdapter()
         rvJobCourses.layoutManager = LinearLayoutManager(this)
-        rvJobCourses.adapter = courseDataAdapter
+//        rvJobCourses.adapter = courseDataAdapter
 
         jobDescriptionBtn.setOnClickListener {
             cardJobDescription.isVisible = !cardJobDescription.isVisible
@@ -93,14 +84,13 @@ class JobDetailActivity : AppCompatActivity() {
                 jobDescriptionTv.text = description
                 companyDescriptionTv.text = company.companyDescription
                 eligibleTv.text = "Eligibility:    $eligibility"
-                viewModel.getCourses(courseId)
+                viewModel.courseIdList.postValue(courseId)
             }
         }
 
-//        viewModel.jobCourses.observer(this) {
-//            courseDataAdapter.setData(it as ArrayList<CourseRun>)
-//        }
-
+        viewModel.jobCourses.distinctUntilChanged().nonNull().observer(this) {
+            //            courseDataAdapter.submitList(it)
+        }
         viewModel.eligibleLiveData.observer(this) {
             when (it) {
                 "eligible" -> statusTv.text = getString(R.string.job_eligible)
@@ -167,7 +157,7 @@ class JobDetailActivity : AppCompatActivity() {
                         }
                     }
                     inputLayout.boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_OUTLINE
-                    inputLayout.setBoxCornerRadii(20f, 20f, 20f, 20f)
+//                    inputLayout.setBoxCornerRadii(20f, 20f, 20f, 20f)
                     val edittext = TextInputEditText(inputLayout.context)
                     edittext.setOnFocusChangeListener { view, b ->
                     }
@@ -243,9 +233,5 @@ class JobDetailActivity : AppCompatActivity() {
                 window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
             }
         }
-    }
-
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 }

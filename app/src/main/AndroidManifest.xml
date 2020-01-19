@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.codingblocks.cbonlineapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -8,8 +9,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
-
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".CBOnlineApp"
@@ -19,7 +19,60 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppThemeMain">
+        android:theme="@style/NewAppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".profile.ReferralActivity"></activity>
+        <activity android:name=".tracks.TracksActivity" />
+        <activity android:name=".profile.ProfileActivity" />
+        <activity
+            android:name=".course.SearchCourseActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity
+            android:name=".auth.onboarding.CompleteProfileActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".library.LibraryActivity"
+            android:parentActivityName=".mycourse.MyCourseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".auth.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".auth.onboarding.OnBoardingActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".dashboard.ChatActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity
+            android:name=".dashboard.DoubtCommentActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity
+            android:name=".dashboard.DashboardActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+
+                <data
+                    android:host="online.codingblocks.com"
+                    android:scheme="app" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".admin.AdminActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity android:name=".course.checkout.CheckoutActivity" />
         <activity
             android:name=".URLRouterActivity"
             android:theme="@style/SplashTheme">
@@ -36,16 +89,10 @@
                 <data android:pathPrefix="/courses" />
                 <data android:pathPrefix="/player" />
             </intent-filter>
-        </activity> <!-- <meta-data android:name="android.max_aspect" android:value="2.1" /> -->
-
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -58,48 +105,32 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".home.HomeActivity"
-            android:configChanges="orientation"
-            android:label="@string/app_name"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="online.codingblocks.com"
-                    android:scheme="app" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".course.CourseActivity"
-            android:parentActivityName=".home.HomeActivity"
-            android:theme="@style/Theme.CB.Course" />
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".mycourse.MyCourseActivity"
             android:label="@string/title_activity_my_course"
             android:launchMode="singleTop"
-            android:parentActivityName=".home.HomeActivity"
-            android:theme="@style/AppThemeMain">
+            android:parentActivityName=".dashboard.DashboardActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.coddinblocks.appshortcuts.OPEN_DYNAMIC_SHORTCUT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.codingblocks.cbonlineapp.home.HomeActivity" />
+                android:value="com.codingblocks.cbonlineapp.dashboard.DashboardActivity" />
         </activity>
         <activity
             android:name=".notifications.NotificationsActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".home.HomeActivity" />
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".jobs.JobsActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".home.HomeActivity"
+            android:parentActivityName=".dashboard.DashboardActivity"
             android:theme="@style/Theme.Jobs" />
         <activity
             android:name=".jobs.jobdetails.JobDetailActivity"
@@ -109,24 +140,24 @@
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".home.HomeActivity" />
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".AboutActivity"
-            android:parentActivityName=".home.HomeActivity" />
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
-            android:name=".player.VideoPlayerActivity"
+            android:name=".mycourse.player.VideoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:supportsPictureInPicture="true"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+            android:theme="@style/NewAppTheme.Dark" />
         <activity
             android:name=".PdfActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".quiz.QuizActivity"
+            android:name=".mycourse.quiz.QuizActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".mycourse.MyCourseActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeMain" />
+            android:theme="@style/NewAppTheme.Dark" />
 
         <receiver android:name=".util.DownloadBroadcastReceiver">
             <intent-filter>
@@ -153,11 +184,22 @@
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/cblogo" />
         <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
-        <meta-data
             android:name="android.app.shortcuts"
             android:resource="@xml/shortcut" />
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_test_zACC3cdl7lqt9k" />
+        <receiver
+            android:name=".admin.doubts.DoubtReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".MySMSBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

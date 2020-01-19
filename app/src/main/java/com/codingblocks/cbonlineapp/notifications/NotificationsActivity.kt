@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.notifications
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -14,10 +13,9 @@ import cn.campusapp.router.route.ActivityRoute
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.NotificationClickListener
 import com.codingblocks.cbonlineapp.database.NotificationDao
-import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import io.github.inflationx.viewpump.ViewPumpContextWrapper
+import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import kotlinx.android.synthetic.main.activity_notifications.*
 import org.koin.android.ext.android.inject
 
@@ -53,7 +51,7 @@ class NotificationsActivity : AppCompatActivity() {
                         .withParams(VIDEO_ID, videoId)
                         .open()
                 } else {
-                    Components.openChrome(this@NotificationsActivity, url)
+                    this@NotificationsActivity.openChrome(url)
                 }
             }
         }
@@ -131,9 +129,5 @@ class NotificationsActivity : AppCompatActivity() {
         notificationAdapter.apply {
             onClick = null
         }
-    }
-
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 }

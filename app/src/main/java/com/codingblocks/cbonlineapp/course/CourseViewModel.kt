@@ -1,71 +1,110 @@
 package com.codingblocks.cbonlineapp.course
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
-import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
-import com.codingblocks.cbonlineapp.database.FeaturesDao
-import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
+import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.ResultWrapper
+import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Course
-import com.codingblocks.onlineapi.models.CourseFeatures
+import com.codingblocks.onlineapi.models.Project
+import com.codingblocks.onlineapi.models.Sections
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CourseViewModel(
-    private val courseWithInstructorDao: CourseWithInstructorDao,
-    private val featuresDao: FeaturesDao
-
+    private val repo: CourseRepository
 ) : ViewModel() {
-    private val repository = CourseRepository()
+    lateinit var id: String
+    var course = MutableLiveData<Course>()
+    var suggestedCourses = MutableLiveData<List<Course>>()
+    val projects = MutableLiveData<List<Project>>()
+    val sections = MutableLiveData<List<Sections>>()
+    var errorLiveData = MutableLiveData<String>()
 
     var sheetBehavior: BottomSheetBehavior<*>? = null
-
     var image: MutableLiveData<String> = MutableLiveData()
     var name: MutableLiveData<String> = MutableLiveData()
-    lateinit var instructors: MutableLiveData<List<InstructorModel>>
-    lateinit var features: MutableLiveData<List<CourseFeatures>>
-
-    var fetchedCourse: MutableLiveData<Course> = MutableLiveData()
     var addedToCartProgress: MutableLiveData<Boolean> = MutableLiveData()
     var clearCartProgress: MutableLiveData<Boolean> = MutableLiveData()
     var enrollTrialProgress: MutableLiveData<Boolean> = MutableLiveData()
 
-    fun getInstructors(id: String): LiveData<List<InstructorModel>> {
-        if (!::instructors.isInitialized) {
-            instructors = MutableLiveData()
-            viewModelScope.launch {
-                instructors.postValue(courseWithInstructorDao.getInstructors(id))
-            }
-        }
-        return instructors
-    }
-
-    fun getCourseFeatures(id: String): LiveData<List<CourseFeatures>> {
-        if (!::features.isInitialized) {
-            features = MutableLiveData()
-            viewModelScope.launch {
-                features.postValue(featuresDao.getFeatures(id))
-            }
-        }
-        return features
-    }
-    fun getCart() {
-        Clients.api.getCart().enqueue(retrofitCallback { _, response ->
-            response?.body().let { json ->
-                json?.getAsJsonArray("cartItems")?.get(0)?.asJsonObject.let {
-                    image.value = it?.get("image_url")?.asString
-                    name.value = it?.get("productName")?.asString
-
-                    sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+    fun fetchCourse() {
+        runIO {
+            when (val response = repo.getCourse(id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        course.postValue(body())
+                    } else {
+                        setError(fetchError(code()))
+                    }
                 }
             }
-        })
+        }
+        fetchRecommendedCourses()
     }
+
+    fun fetchRecommendedCourses() {
+        runIO {
+            when (val response = repo.getSuggestedCourses()) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        suggestedCourses.postValue(body())
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun fetchProjects(projectIdList: ArrayList<Project>?) {
+        val list = arrayListOf<Project>()
+        if (!projectIdList.isNullOrEmpty()) {
+            runIO {
+                projectIdList.forEach {
+                    val projectRes = withContext(Dispatchers.IO) { repo.getProjects(it.id) }
+                    projectRes.body()?.let { it1 -> list.add(it1) }
+                }
+                projects.postValue(list)
+            }
+        } else {
+            projects.postValue(emptyList())
+        }
+    }
+
+    fun fetchSections(sectionIdList: ArrayList<Sections>?) {
+        val list = arrayListOf<Sections>()
+        if (!sectionIdList.isNullOrEmpty()) {
+            runIO {
+                sectionIdList.take(5).forEach {
+                    val sectionRes = withContext(Dispatchers.IO) { repo.getSection(it.id) }
+                    sectionRes.body()?.let { it1 -> list.add(it1) }
+                }
+                sections.postValue(list)
+            }
+        }
+    }
+
+    private fun setError(error: String) {
+        errorLiveData.postValue(error)
+    }
+
+//    fun getCart() {
+//        Clients.api.getCart().enqueue(retrofitCallback { _, response ->
+//            response?.body().let { json ->
+//                json?.getAsJsonArray("cartItems")?.get(0)?.asJsonObject.let {
+//                    image.value = it?.get("image_url")?.asString
+//                    name.value = it?.get("productName")?.asString
+//                    sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+//                }
+//            }
+//        })
+//    }
 
     fun clearCart() {
         Clients.api.clearCart().enqueue(retrofitCallback { _, response ->
@@ -73,28 +112,33 @@ class CourseViewModel(
         })
     }
 
-    fun getCourse(courseId: String) {
-        Clients.onlineV2JsonApi.courseById(courseId).enqueue(retrofitCallback { _, response ->
-            if (response?.isSuccessful == true)
-                fetchedCourse.value = response.body()
-        })
-    }
-
-    fun getCourseRating(id: String) = liveData(Dispatchers.IO) {
-        emit(repository.getRating(id))
-    }
-
-    suspend fun getCourseSection(id: String) = repository.getCourseSections(id)
-
     fun enrollTrial(id: String) {
-        Clients.api.enrollTrial(id).enqueue(retrofitCallback { _, response ->
-            enrollTrialProgress.value = (response?.isSuccessful == true)
-        })
+        runIO {
+            when (val response = repo.enrollToTrial(id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        enrollTrialProgress.postValue(true)
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
     }
 
     fun addToCart(id: String) {
-        Clients.api.addToCart(id).enqueue(retrofitCallback { _, response ->
-            addedToCartProgress.value = (response?.isSuccessful ?: false)
-        })
+        runIO {
+            when (val response = repo.addToCart(id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        addedToCartProgress.postValue(true)
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
     }
 }

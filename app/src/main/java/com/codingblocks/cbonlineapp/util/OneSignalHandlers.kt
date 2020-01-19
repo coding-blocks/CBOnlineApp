@@ -6,16 +6,17 @@ import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.database.models.Notification
+import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.otherwise
 import com.onesignal.OSNotification
 import com.onesignal.OSNotificationOpenResult
 import com.onesignal.OneSignal
 import org.jetbrains.anko.doAsync
-import org.koin.standalone.StandAloneContext
+import org.koin.core.context.GlobalContext
 
 var position: Long = 0
 
-private val notificationDao = StandAloneContext.getKoin().koinContext.get<NotificationDao>()
+private val notificationDao = GlobalContext.get().koin.get<NotificationDao>()
 
 class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
 
@@ -23,7 +24,7 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
         val url = result.notification.payload.launchURL
 
         Router.open("activity://courseRun/$url").otherwise {
-            Components.openChrome(mInstance, url, true)
+            mInstance.openChrome(url, true)
         }
         doAsync {
             notificationDao.updateseen(position)

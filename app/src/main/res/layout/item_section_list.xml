@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="250dp"
+    android:layout_width="230dp"
     android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
     android:gravity="center"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:paddingStart="14dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="14dp"
+    android:paddingBottom="8dp">
 
     <TextView
         android:id="@+id/sectionTitle"
@@ -15,11 +19,13 @@
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textSize="18sp"
+        android:fontFamily="@font/gilroy_medium"
+        android:textSize="16sp"
         tools:text="Space time Complexity Analysis Object" />
 
     <TextView
         android:id="@+id/sectionCount"
+        android:fontFamily="@font/gilroy_bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
