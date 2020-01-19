@@ -32,6 +32,7 @@ class CheckoutOrderDetailsFragment : Fragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vm.cart.observer(viewLifecycleOwner) {
+            orderBtn.isEnabled = true
             finalPriceTv.text = "${getString(R.string.rupee_sign)} ${it["totalAmount"].asString}"
             it.getAsJsonArray("cartItems")?.get(0)?.asJsonObject?.run {
                 val df = DecimalFormat("0.00")
@@ -46,6 +47,7 @@ class CheckoutOrderDetailsFragment : Fragment(), AnkoLogger {
                     paintFlags = mrpTv.paintFlags or
                         Paint.STRIKE_THRU_TEXT_FLAG
                 }
+                vm.map["invoice_id"] = get("invoice_id").asString
                 subTotalTv.text = "${getString(R.string.rupee_sign)} $price"
                 totalTv.text = "${getString(R.string.rupee_sign)} $price"
                 taxesTv.text = "${getString(R.string.rupee_sign)} ${get("tax")?.asDouble?.div(100)}"

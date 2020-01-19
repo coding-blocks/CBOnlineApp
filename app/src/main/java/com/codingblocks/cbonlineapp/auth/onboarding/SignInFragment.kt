@@ -120,7 +120,7 @@ class SignInFragment : Fragment() {
         map["client"] = "android"
         map["username"] = numberLayout.editText?.text.toString()
         map["password"] = passwordLayout.editText?.text.toString()
-
+        proceedBtn.isEnabled = false
         GlobalScope.launch {
             when (val response = safeApiCall { Clients.api.getJwtWithEmail(map) }) {
                 is ResultWrapper.GenericError -> {

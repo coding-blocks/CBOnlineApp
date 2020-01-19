@@ -16,6 +16,7 @@ class CheckoutViewModel : ViewModel() {
 
     var errorLiveData = MutableLiveData<String>()
     var cart = MutableLiveData<JsonObject>()
+    var map = hashMapOf<String, String>()
 
     fun getCart() {
         runIO {
@@ -31,6 +32,23 @@ class CheckoutViewModel : ViewModel() {
             }
         }
     }
+
+    fun updateCart() {
+        runIO {
+            when (val response = safeApiCall { Clients.api.updateCart(map) }) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        cart.postValue(body())
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
+
+
 
     private fun setError(error: String) {
         errorLiveData.postValue(error)

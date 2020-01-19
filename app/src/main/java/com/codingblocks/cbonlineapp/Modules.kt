@@ -7,7 +7,6 @@ import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewRepository
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.course.CourseViewModel
-import com.codingblocks.cbonlineapp.course.checkout.CheckoutRepository
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutViewModel
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
@@ -64,7 +63,6 @@ val viewModelModule = module {
     single { DashboardHomeRepository(get(), get()) }
     single { VideoPlayerRepository(get(), get(), get(), get(), get()) }
     single { QuizRepository(get()) }
-    single { CheckoutRepository() }
 }
 val databaseModule = module {
 

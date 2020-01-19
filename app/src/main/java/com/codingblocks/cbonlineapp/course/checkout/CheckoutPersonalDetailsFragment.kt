@@ -12,9 +12,12 @@ import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_checkout_personal_details.*
 import org.json.JSONArray
 import org.json.JSONException
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.io.InputStream
 
 class CheckoutPersonalDetailsFragment : Fragment() {
+
+    val vm by sharedViewModel<CheckoutViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = inflater.inflate(R.layout.fragment_checkout_personal_details, container, false)
@@ -35,9 +38,11 @@ class CheckoutPersonalDetailsFragment : Fragment() {
         val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, refList)
         spinner.setAdapter(arrayAdapter)
         spinner.setOnItemClickListener { parent, view, position, id ->
+            vm.map["stateId"] = json?.getJSONObject(position)?.getString("stateId") ?: "DL"
             checkoutBtn.isEnabled = true
         }
         checkoutBtn.setOnClickListener {
+            vm.updateCart()
             replaceFragmentSafely(CheckoutPaymentFragment(), containerViewId = R.id.checkoutContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
         }
     }

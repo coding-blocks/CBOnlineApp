@@ -16,6 +16,7 @@ import retrofit2.http.Field
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -73,6 +74,9 @@ interface OnlineRestApi {
 
     @GET("v2/runs/cart")
     suspend fun getCart(): Response<JsonObject>
+
+    @PATCH("v2/runs/cart")
+    suspend fun updateCart(@FieldMap params: Map<String, String>): Response<JsonObject>
 
     @GET("v2/runs/clear_cart")
     fun clearCart(): Call<JsonObject>

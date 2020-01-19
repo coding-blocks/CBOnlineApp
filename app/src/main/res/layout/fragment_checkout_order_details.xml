@@ -267,7 +267,7 @@
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/ic_dropright"
             android:drawablePadding="10dp"
-            android:enabled="true"
+            android:enabled="false"
             android:minHeight="0dp"
             android:text="Next" />
 
