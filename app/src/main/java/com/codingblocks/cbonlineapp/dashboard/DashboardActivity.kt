@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.AboutActivity
 import com.codingblocks.cbonlineapp.R
@@ -125,6 +126,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         else {
             dashboardBottomNav.setCurrentItem(0)
         }
+        dashboardAppBarLayout.bringToFront()
     }
 
     private fun setupViewPager() {
