@@ -4,6 +4,7 @@ import android.animation.LayoutTransition
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import android.view.WindowManager
 import android.widget.RelativeLayout
@@ -19,6 +20,7 @@ import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DownloadService
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.LECTURE
+import com.codingblocks.cbonlineapp.util.MediaUtils.deleteRecursive
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
@@ -29,6 +31,7 @@ import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
 import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
@@ -45,14 +48,21 @@ import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTA
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
+
 
 class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogger, VdoPlayer.InitializationListener {
-    private var download = false
+    private var isDownloaded = false
     private val viewModel by viewModel<VideoPlayerViewModel>()
     private val fullscreenToggleListener = object : VdoPlayerControls.FullscreenActionListener {
         override fun onFullscreenAction(enterFullscreen: Boolean): Boolean {
@@ -69,6 +79,9 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                 }
             }
         }
+    }
+    val progressDialog by lazy {
+        ProgressDialog.progressDialog(this)
     }
     private val dialog by lazy { BottomSheetDialog(this) }
     private val sheetDialog: View by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, null) }
@@ -103,7 +116,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             contentTitle.text = it.title
             bookmarkBtn.isActivated = it.bookmark.bookmarkUid.isEmpty()
             if (it.contentable == LECTURE) {
-                val isDownloaded = FileUtils.checkDownloadFileExists(this, it.contentLecture.lectureId)
+                isDownloaded = FileUtils.checkDownloadFileExists(this, it.contentLecture.lectureId)
                 viewModel.videoId = it.contentLecture.lectureId
                 youtubePlayerView.isVisible = false
                 videoContainer.visibility = View.VISIBLE
@@ -136,7 +149,11 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             updateSheet("DOUBT")
         }
         downloadBtn.setOnClickListener {
-            startDownloadWorker()
+            if (isDownloaded)
+                deleteFolder(viewModel.videoId)
+            else
+                startDownloadWorker()
+
         }
 
         setupViewPager()
@@ -194,7 +211,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         showControls(true)
 
         // load a media to the player
-        val vdoParams: VdoPlayer.VdoInitParams? = if (download) {
+        val vdoParams: VdoPlayer.VdoInitParams? = if (isDownloaded) {
             VdoPlayer.VdoInitParams.createParamsForOffline(viewModel.videoId)
         } else {
             VdoPlayer.VdoInitParams.Builder()
@@ -286,9 +303,9 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         override fun onLoadError(p0: VdoPlayer.VdoInitParams, p1: ErrorDescription) {
             Crashlytics.log("Error Message: ${p1.errorMsg}, " +
                 "Error Code: ${p1.errorCode} , ${p1.httpStatusCode}")
-            if (p1.errorCode == 4101 || p1.errorCode == 5110) {
+            if (p1.errorCode == 5110) {
                 rootLayout.snackbar("Seems like your download was corrupted.Please Download Again")
-//                viewModel.deleteVideo(contentId)
+                deleteFolder(viewModel.videoId)
             } else if (p1.errorCode in (2010..2020)) {
                 viewModel.getOtp()
             }
@@ -306,6 +323,18 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             viewModel.playWhenReady = playWhenReady
         }
     }
+
+    private fun deleteFolder(contentId: String) {
+        val dir = File(getExternalFilesDir(Environment.getDataDirectory().absolutePath), contentId)
+        GlobalScope.launch(Dispatchers.Main) {
+            progressDialog.show()
+            withContext(Dispatchers.IO) { deleteRecursive(dir) }
+            delay(5000)
+            progressDialog.dismiss()
+            onBackPressed()
+        }
+    }
+
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         val newOrientation = newConfig.orientation
