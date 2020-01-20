@@ -32,11 +32,12 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard_my_courses.*
+import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class DashboardMyCoursesFragment : Fragment() {
+class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
 
     private val dialog by lazy { BottomSheetDialog(requireContext()) }
     private val imgs by lazy { resources.obtainTypedArray(R.array.course_type_img) }

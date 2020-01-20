@@ -44,29 +44,32 @@ class DashboardHomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.isLoggedIn.observer(viewLifecycleOwner) { isLoggedIn ->
             if (isLoggedIn) {
-                viewModel.topRun.observer(viewLifecycleOwner) { courseAndRun ->
-                    viewModel.getStats(courseAndRun.runAttempt.attemptId)
-                    with(courseAndRun) {
-                        activity?.toolbarCourseTitleTv?.text = course.title
-                        activity?.toolbarCourseResumeTv?.setOnClickListener {
-                            startActivity(intentFor<MyCourseActivity>(
-                                COURSE_ID to course.cid,
-                                RUN_ID to run.crUid,
-                                RUN_ATTEMPT_ID to runAttempt.attemptId,
-                                COURSE_NAME to course.title
-                            ).singleTop())
-                        }
-                        homeCourseLogoImg.loadSvg(course.logo)
-                        val progress = if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
+                viewModel.added.observer(viewLifecycleOwner) {
 
-                        homeProgressTv.text = "${progress.toInt()} %"
-                        homeProgressView.progress = progress.toFloat()
-                        if (progress > 90) {
-                            homeProgressView.highlightView.colorGradientStart = getColor(requireContext(), R.color.kiwigreen)
-                            homeProgressView.highlightView.colorGradientEnd = getColor(requireContext(), R.color.tealgreen)
-                        } else {
-                            homeProgressView.highlightView.colorGradientStart = getColor(requireContext(), R.color.pastel_red)
-                            homeProgressView.highlightView.colorGradientEnd = getColor(requireContext(), R.color.dusty_orange)
+                    viewModel.topRun.observer(viewLifecycleOwner) { courseAndRun ->
+                        viewModel.getStats(courseAndRun.runAttempt.attemptId)
+                        with(courseAndRun) {
+                            activity?.toolbarCourseTitleTv?.text = course.title
+                            activity?.toolbarCourseResumeTv?.setOnClickListener {
+                                startActivity(intentFor<MyCourseActivity>(
+                                    COURSE_ID to course.cid,
+                                    RUN_ID to run.crUid,
+                                    RUN_ATTEMPT_ID to runAttempt.attemptId,
+                                    COURSE_NAME to course.title
+                                ).singleTop())
+                            }
+                            homeCourseLogoImg.loadSvg(course.logo)
+                            val progress = if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
+
+                            homeProgressTv.text = "${progress.toInt()} %"
+                            homeProgressView.progress = progress.toFloat()
+                            if (progress > 90) {
+                                homeProgressView.highlightView.colorGradientStart = getColor(requireContext(), R.color.kiwigreen)
+                                homeProgressView.highlightView.colorGradientEnd = getColor(requireContext(), R.color.tealgreen)
+                            } else {
+                                homeProgressView.highlightView.colorGradientStart = getColor(requireContext(), R.color.pastel_red)
+                                homeProgressView.highlightView.colorGradientEnd = getColor(requireContext(), R.color.dusty_orange)
+                            }
                         }
                     }
                 }

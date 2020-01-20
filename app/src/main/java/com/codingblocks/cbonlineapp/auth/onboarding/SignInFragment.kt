@@ -36,6 +36,7 @@ import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.runOnUiThread
 import android.text.style.StyleSpan as StyleSpan1
 
+
 class SignInFragment : Fragment() {
 
     var type: String = ""
@@ -94,38 +95,43 @@ class SignInFragment : Fragment() {
 
         requestHint()
         proceedBtn.setOnClickListener {
-            if (errorDrawableTv.isVisible) {
+            if (passwordLayout.isVisible) {
                 validateEmailPassWord()
             } else {
-                val numberEditText = numberLayout.editText?.text
-                if (numberEditText.isNullOrEmpty()) {
-                    signInRoot.showSnackbar("Number is too short", Snackbar.LENGTH_SHORT)
-                } else {
-                    val number = if (numberEditText.length == 10) numberEditText.toString() else "+91-${numberEditText.substring(3)}"
-                    map["phone"] = number
-                    proceedBtn.isEnabled = false
-                    GlobalScope.launch {
-                        when (val response = safeApiCall { Clients.api.getOtp(map) }) {
-                            is ResultWrapper.GenericError -> {
-                                signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
+                loginWithNumber()
+            }
+        }
+    }
+
+    private fun loginWithNumber() {
+        val numberEditText = numberLayout.editText?.text
+        if (numberEditText.isNullOrEmpty()) {
+            signInRoot.showSnackbar("Number is too short", Snackbar.LENGTH_SHORT)
+        } else {
+            val number = if (numberEditText.length > 10) "+91-${numberEditText.substring(3)}" else "+91-${numberEditText}"
+            map["phone"] = number
+            proceedBtn.isEnabled = false
+            GlobalScope.launch {
+                when (val response = safeApiCall { Clients.api.getOtp(map) }) {
+                    is ResultWrapper.GenericError -> {
+                        signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
+                    }
+                    is ResultWrapper.Success -> {
+                        if (response.value.isSuccessful)
+                            replaceFragmentSafely(LoginOtpFragment.newInstance(map["phone"]
+                                ?: ""), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
+                        else
+                            runOnUiThread {
+                                errorDrawableTv.isVisible = true
+                                signInRoot.showSnackbar("Invalid Number.Please Try Again", Snackbar.LENGTH_SHORT)
+                                proceedBtn.isEnabled = true
                             }
-                            is ResultWrapper.Success -> {
-                                if (response.value.isSuccessful)
-                                    replaceFragmentSafely(LoginOtpFragment.newInstance(map["phone"]
-                                        ?: ""), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
-                                else
-                                    runOnUiThread {
-                                        errorDrawableTv.isVisible = true
-                                        signInRoot.showSnackbar("Invalid Number.Please Try Again", Snackbar.LENGTH_SHORT)
-                                        proceedBtn.isEnabled = true
-                                    }
-                            }
-                        }
                     }
                 }
             }
         }
     }
+
 
     private fun validateEmailPassWord() {
         map["client"] = "android"
@@ -153,6 +159,7 @@ class SignInFragment : Fragment() {
                         requireActivity().finish()
                     } else
                         runOnUiThread {
+                            signInRoot.showSnackbar("Invalid Username or Password.Please Try Again", Snackbar.LENGTH_SHORT)
                             proceedBtn.isEnabled = true
                         }
                 }
@@ -190,6 +197,12 @@ class SignInFragment : Fragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        apiClient.stopAutoManage(requireActivity())
+        apiClient.disconnect()
+    }
+
     companion object {
         @JvmStatic
         fun newInstance(type: String) =
@@ -199,4 +212,6 @@ class SignInFragment : Fragment() {
                 }
             }
     }
+
+
 }
