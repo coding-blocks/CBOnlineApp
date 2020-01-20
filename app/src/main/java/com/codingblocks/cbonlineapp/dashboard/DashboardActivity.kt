@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.AboutActivity
 import com.codingblocks.cbonlineapp.R
@@ -36,8 +35,6 @@ import com.codingblocks.fabnavigation.FabNavigationAdapter
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.install.model.AppUpdateType
-import com.google.android.play.core.install.model.UpdateAvailability
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.nav_header_home.*

@@ -95,16 +95,38 @@ class OverviewFragment : Fragment(), AnkoLogger {
             values2.add(Entry(index.toFloat(), progressItem.progress.toFloat()))
         }
         values.add(Entry(2f, 100f))
-        var set1 = LineDataSet(values, "Average Progress")
-        var set2 = LineDataSet(values2, "User Progress")
+        val set1 = LineDataSet(values, "Average Progress")
+        set1.apply {
+            setDrawCircles(false)
+            color = R.color.tealgreen
+            setDrawValues(false)
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            lineWidth = 3f
+        }
 
+        val set2 = LineDataSet(values2, "User Progress")
+        set2.apply {
+            setDrawCircles(false)
+            color = R.color.pastel_red
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            setDrawValues(false)
+            lineWidth = 3f
+        }
         val dataSets: ArrayList<ILineDataSet> = ArrayList()
         dataSets.add(set1)
         dataSets.add(set2)
         val data = LineData(dataSets)
 
-        chart1.data = data
-        chart1.notifyDataSetChanged()
+        chart1.apply {
+            this.data = data
+            setTouchEnabled(false)
+            axisRight.setDrawGridLines(false)
+            axisLeft.setDrawGridLines(true)
+            xAxis.setDrawGridLines(true)
+            notifyDataSetChanged()
+            xAxis.labelCount = 20
+            invalidate()
+        }
     }
 
     private fun setUpObservers(view: View) {
