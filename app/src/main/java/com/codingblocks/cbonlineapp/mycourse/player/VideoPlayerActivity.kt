@@ -17,6 +17,7 @@ import com.codingblocks.cbonlineapp.mycourse.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.player.notes.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DownloadService
+import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
@@ -102,17 +103,14 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             contentTitle.text = it.title
             bookmarkBtn.isActivated = it.bookmark.bookmarkUid.isEmpty()
             if (it.contentable == LECTURE) {
-                download = it.contentLecture.isDownloaded
-                if (download) {
-                    initializePlayer()
-                }
+                val isDownloaded = FileUtils.checkDownloadFileExists(this, it.contentLecture.lectureId)
                 viewModel.videoId = it.contentLecture.lectureId
                 youtubePlayerView.isVisible = false
                 videoContainer.visibility = View.VISIBLE
                 playerFragment = supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerSupportFragment
                 playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
                 showControls(false)
-                if (it.contentLecture.isDownloaded) {
+                if (isDownloaded) {
                     initializePlayer()
                 } else {
                     setupVideoView()

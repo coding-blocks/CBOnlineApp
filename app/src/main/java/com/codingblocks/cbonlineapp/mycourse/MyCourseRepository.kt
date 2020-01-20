@@ -34,8 +34,6 @@ class MyCourseRepository(
 
     fun getSectionWithContent(attemptId: String) = sectionWithContentsDao.getSectionWithContent(attemptId)
 
-    fun resumeCourse(attemptId: String) = sectionWithContentsDao.resumeCourse(attemptId)
-
     suspend fun insertSections(runAttempt: RunAttempts) {
         runAttempt.run?.sections?.forEach { courseSection ->
             courseSection.run {
@@ -247,4 +245,6 @@ class MyCourseRepository(
             )
         )
     }
+
+    fun getNextContent(attemptId: String) = sectionWithContentsDao.getNextContent(attemptId)
 }

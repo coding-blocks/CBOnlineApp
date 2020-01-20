@@ -36,7 +36,6 @@ import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.runOnUiThread
 import android.text.style.StyleSpan as StyleSpan1
 
-
 class SignInFragment : Fragment() {
 
     var type: String = ""
@@ -108,7 +107,7 @@ class SignInFragment : Fragment() {
         if (numberEditText.isNullOrEmpty()) {
             signInRoot.showSnackbar("Number is too short", Snackbar.LENGTH_SHORT)
         } else {
-            val number = if (numberEditText.length > 10) "+91-${numberEditText.substring(3)}" else "+91-${numberEditText}"
+            val number = if (numberEditText.length > 10) "+91-${numberEditText.substring(3)}" else "+91-$numberEditText"
             map["phone"] = number
             proceedBtn.isEnabled = false
             GlobalScope.launch {
@@ -131,7 +130,6 @@ class SignInFragment : Fragment() {
             }
         }
     }
-
 
     private fun validateEmailPassWord() {
         map["client"] = "android"
@@ -212,6 +210,4 @@ class SignInFragment : Fragment() {
                 }
             }
     }
-
-
 }

@@ -118,4 +118,6 @@ class MyCourseViewModel(
             }
         }
     }
+
+    fun getNextContent() = repo.getNextContent(attemptId)
 }

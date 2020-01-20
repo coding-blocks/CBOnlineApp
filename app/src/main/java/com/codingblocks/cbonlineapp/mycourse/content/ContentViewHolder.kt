@@ -105,7 +105,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                                 "fileName" to content.contentDocument.documentName + ".pdf"
                             ).singleTop()
                         )
-                        VIDEO -> context.startActivity(
+                        VIDEO, LECTURE -> context.startActivity(
                             context.intentFor<VideoPlayerActivity>(
                                 CONTENT_ID to content.ccid,
                                 SECTION_ID to content.sectionId
@@ -114,13 +114,6 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
                         QNA -> context.startActivity(
                             context.intentFor<QuizActivity>(
-                                CONTENT_ID to content.ccid,
-                                SECTION_ID to content.sectionId
-                            ).singleTop()
-                        )
-
-                        LECTURE -> context.startActivity(
-                            context.intentFor<VideoPlayerActivity>(
                                 CONTENT_ID to content.ccid,
                                 SECTION_ID to content.sectionId
                             ).singleTop()
