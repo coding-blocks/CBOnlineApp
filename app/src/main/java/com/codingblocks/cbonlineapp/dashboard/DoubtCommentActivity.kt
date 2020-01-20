@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.dashboard
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
@@ -72,5 +73,15 @@ class DoubtCommentActivity : AppCompatActivity() {
             rootComment.showSnackbar(it, Snackbar.LENGTH_SHORT)
             CrashlyticsCore.getInstance().log(it)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

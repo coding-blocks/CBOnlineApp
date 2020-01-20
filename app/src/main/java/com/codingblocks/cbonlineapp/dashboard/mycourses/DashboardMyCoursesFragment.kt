@@ -105,9 +105,11 @@ class DashboardMyCoursesFragment : Fragment() {
         viewModel.isLoggedIn.observer(viewLifecycleOwner) { isLoggedIn ->
             if (isLoggedIn) {
                 viewModel.fetchMyCourses()
-                viewModel.courses.observer(viewLifecycleOwner) {
-                    courseListAdapter.submitList(it)
-                    changeViewState(dashboardCoursesRv, emptyLl, dashboardCourseShimmer, it.isEmpty())
+                viewModel.added.observer(viewLifecycleOwner) {
+                    viewModel.courses.observer(viewLifecycleOwner) {
+                        courseListAdapter.submitList(it)
+                        changeViewState(dashboardCoursesRv, emptyLl, dashboardCourseShimmer, it.isEmpty())
+                    }
                 }
             } else {
                 dashboardMyCourseLoggedOut.isVisible = true

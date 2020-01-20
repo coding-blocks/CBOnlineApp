@@ -12,6 +12,8 @@ import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.getMeta
 import com.codingblocks.onlineapi.models.Course
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class DashboardViewModel(
     private val homeRepo: DashboardHomeRepository,
@@ -23,6 +25,7 @@ class DashboardViewModel(
     var isLoggedIn: MutableLiveData<Boolean> = MutableLiveData()
     var suggestedCourses = MutableLiveData<List<Course>>()
     var trendingCourses = MutableLiveData<List<Course>>()
+    val added = MutableLiveData<Boolean>()
 
     val courses by lazy {
         Transformations.switchMap(courseFilter) { query ->
@@ -104,17 +107,22 @@ class DashboardViewModel(
     fun fetchMyCourses(offset: String = "0") {
         runIO {
             when (val response = myCourseRepo.fetchMyCourses(offset)) {
-                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.GenericError -> {
+                    added.postValue(true)
+                    setError(response.error)
+                }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
-                            myCourseRepo.insertCourses(it.get() ?: emptyList())
+                            withContext(Dispatchers.Default) {
+                                myCourseRepo.insertCourses(it.get() ?: emptyList())
+                            }
                             val currentOffSet = getMeta(it.meta, "currentOffset").toString()
                             val nextOffSet = getMeta(it.meta, "nextOffset").toString()
                             if (currentOffSet != nextOffSet && nextOffSet != "null") {
                                 fetchMyCourses(nextOffSet)
-                                if (it.get()?.isEmpty() == true)
-                                    courseFilter.postValue("")
+                            } else {
+                                added.postValue(true)
                             }
                         }
                     else {
