@@ -72,8 +72,11 @@ class SignInFragment : Fragment() {
                 numberTitle.text = getString(R.string.email_title)
                 numberDesc.text = getString(R.string.email_desc)
                 numberLayout.hint = "Email ID"
-                numberLayout.editText?.inputType = InputType.TYPE_CLASS_TEXT or
-                    InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+                numberLayout.editText?.apply {
+                    inputType = InputType.TYPE_CLASS_TEXT or
+                        InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+                    setText("")
+                }
                 passwordLayout.isVisible = !passwordLayout.isVisible
             } else {
                 errorDrawableTv.text = getString(R.string.use_email)
@@ -91,24 +94,32 @@ class SignInFragment : Fragment() {
 
         requestHint()
         proceedBtn.setOnClickListener {
-            if (type.equals("new", true)) {
+            if (errorDrawableTv.isVisible) {
                 validateEmailPassWord()
             } else {
-                map["phone"] = "+91-${numberLayout.editText?.text?.substring(3)}"
-                proceedBtn.isEnabled = false
-                GlobalScope.launch {
-                    when (val response = safeApiCall { Clients.api.getOtp(map) }) {
-                        is ResultWrapper.GenericError -> {
-                            signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
-                        }
-                        is ResultWrapper.Success -> {
-                            if (response.value.isSuccessful)
-                                replaceFragmentSafely(LoginOtpFragment.newInstance(map["phone"]
-                                    ?: ""), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
-                            else
-                                runOnUiThread {
-                                    proceedBtn.isEnabled = true
-                                }
+                val numberEditText = numberLayout.editText?.text
+                if (numberEditText.isNullOrEmpty()) {
+                    signInRoot.showSnackbar("Number is too short", Snackbar.LENGTH_SHORT)
+                } else {
+                    val number = if (numberEditText.length == 10) numberEditText.toString() else "+91-${numberEditText.substring(3)}"
+                    map["phone"] = number
+                    proceedBtn.isEnabled = false
+                    GlobalScope.launch {
+                        when (val response = safeApiCall { Clients.api.getOtp(map) }) {
+                            is ResultWrapper.GenericError -> {
+                                signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
+                            }
+                            is ResultWrapper.Success -> {
+                                if (response.value.isSuccessful)
+                                    replaceFragmentSafely(LoginOtpFragment.newInstance(map["phone"]
+                                        ?: ""), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
+                                else
+                                    runOnUiThread {
+                                        errorDrawableTv.isVisible = true
+                                        signInRoot.showSnackbar("Invalid Number.Please Try Again", Snackbar.LENGTH_SHORT)
+                                        proceedBtn.isEnabled = true
+                                    }
+                            }
                         }
                     }
                 }

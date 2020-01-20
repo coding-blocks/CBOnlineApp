@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
@@ -33,6 +34,7 @@ class LibraryViewFragment : Fragment() {
                 libraryListAdapter = LibraryListAdapter(LibraryTypes.NOTE)
                 vm.fetchNotes().observer(this) {
                     libraryListAdapter.submitList(it)
+                    hideRecyclerView(it.isNotEmpty())
                 }
             }
             getString(R.string.announcements) -> vm.fetchNotes()
@@ -40,6 +42,7 @@ class LibraryViewFragment : Fragment() {
                 libraryListAdapter = LibraryListAdapter(LibraryTypes.BOOKMARK)
                 vm.fetchBookmarks().observer(this) {
                     libraryListAdapter.submitList(it)
+                    hideRecyclerView(it.isNotEmpty())
                 }
             }
             getString(R.string.downloads) -> vm.fetchNotes()
@@ -68,5 +71,22 @@ class LibraryViewFragment : Fragment() {
                     }
                 }
             })
+    }
+
+    private fun hideRecyclerView(notEmpty: Boolean) {
+        libraryRv.isVisible = notEmpty
+        emptyLl.isVisible = !notEmpty
+        when (vm.type) {
+            getString(R.string.notes) -> {
+                libEmptyImg.setImageResource(R.drawable.ic_note_big)
+                libEmptyMessageTv.text = getString(R.string.empty_notes_title)
+                libEmptyDescriptionTv.text = getString(R.string.empty_notes_text)
+            }
+            getString(R.string.bookmarks) -> {
+                libEmptyImg.setImageResource(R.drawable.ic_bookmark)
+                libEmptyMessageTv.text = getString(R.string.empty_bookmark_title)
+                libEmptyDescriptionTv.text = getString(R.string.empty_bookmark_text)
+            }
+        }
     }
 }

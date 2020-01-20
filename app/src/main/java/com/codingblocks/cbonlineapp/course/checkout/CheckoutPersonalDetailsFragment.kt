@@ -39,10 +39,12 @@ class CheckoutPersonalDetailsFragment : Fragment() {
         spinner.setAdapter(arrayAdapter)
         spinner.setOnItemClickListener { parent, view, position, id ->
             vm.map["stateId"] = json?.getJSONObject(position)?.getString("stateId") ?: "DL"
+            vm.map["coupon"] = "null"
+            vm.map["applyCredits"] = "null"
             checkoutBtn.isEnabled = true
+            vm.updateCart()
         }
         checkoutBtn.setOnClickListener {
-            vm.updateCart()
             replaceFragmentSafely(CheckoutPaymentFragment(), containerViewId = R.id.checkoutContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
         }
     }

@@ -46,7 +46,10 @@
     <string name="showComments">Show Comments</string>
     <string name="hideComments">Hide Comments</string>
     <string name="empty_doubts_text">No doubts yet. Ask one?</string>
-    <string name="empty_notes_text">No notes yet. Write one?</string>
+    <string name="empty_notes_title">No Notes</string>
+    <string name="empty_notes_text">Take important notes while accessing the content</string>
+    <string name="empty_bookmark_title">No Bookmarks</string>
+    <string name="empty_bookmark_text">You do not have any bookmarks. Start \nbookmarking important sections.</string>
     <string name="verify_desc">You need to verify your account first before continuing</string>
     <string name="verify_title">Verify Now</string>
     <string name="enroll_desc">You have been successfully enrolled into this course</string>

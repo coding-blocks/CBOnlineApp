@@ -75,7 +75,8 @@ interface OnlineRestApi {
     @GET("v2/runs/cart")
     suspend fun getCart(): Response<JsonObject>
 
-    @PATCH("v2/runs/cart")
+    @PATCH("v2/runs/purchase")
+    @FormUrlEncoded
     suspend fun updateCart(@FieldMap params: Map<String, String>): Response<JsonObject>
 
     @GET("v2/runs/clear_cart")

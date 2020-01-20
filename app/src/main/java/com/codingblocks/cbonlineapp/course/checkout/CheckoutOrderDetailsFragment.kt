@@ -23,11 +23,6 @@ class CheckoutOrderDetailsFragment : Fragment(), AnkoLogger {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = inflater.inflate(R.layout.fragment_checkout_order_details, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        vm.getCart()
-    }
-
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,7 +47,7 @@ class CheckoutOrderDetailsFragment : Fragment(), AnkoLogger {
                 totalTv.text = "${getString(R.string.rupee_sign)} $price"
                 taxesTv.text = "${getString(R.string.rupee_sign)} ${get("tax")?.asDouble?.div(100)}"
                 orderBtn.setOnClickListener {
-                    replaceFragmentSafely(CheckoutPersonalDetailsFragment(), containerViewId = R.id.checkoutContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
+                    replaceFragmentSafely(CheckoutPersonalDetailsFragment(), containerViewId = R.id.checkoutContainer, addToStack = true)
                 }
             }
         }

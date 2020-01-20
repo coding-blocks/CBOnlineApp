@@ -48,13 +48,11 @@ class CheckoutViewModel : ViewModel() {
         }
     }
 
-
-
     private fun setError(error: String) {
         errorLiveData.postValue(error)
     }
 
-    fun capturePayment() {
+    fun capturePayment(paymentId: String?) {
         runIO {
             when (val response = safeApiCall { Clients.api.capturePayment(mapOf()) }) {
                 is ResultWrapper.GenericError -> setError(response.error)

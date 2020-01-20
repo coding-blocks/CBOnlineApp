@@ -59,7 +59,7 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
             setPagingEnabled(true)
             adapter = pagerAdapter
             currentItem = 0
-            offscreenPageLimit = 3
+            offscreenPageLimit = 1
             addOnPageChangeListener(
                 pageChangeCallback { pos, fl, i2 ->
                     if (pos == 1) {

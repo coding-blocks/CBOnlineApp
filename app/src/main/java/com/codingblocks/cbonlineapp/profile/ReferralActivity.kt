@@ -1,8 +1,10 @@
 package com.codingblocks.cbonlineapp.profile
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.safeApiCall
@@ -16,6 +18,7 @@ class ReferralActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_referral)
+        setToolbar(referralToolbar)
         GlobalScope.launch {
             when (val response = safeApiCall { Clients.api.myReferral() }) {
                 is ResultWrapper.Success -> with(response.value) {
@@ -30,5 +33,16 @@ class ReferralActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 }

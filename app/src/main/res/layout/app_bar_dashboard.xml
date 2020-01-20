@@ -8,9 +8,9 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/dashboardAppBarLayout"
-        android:background="@android:color/transparent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -21,8 +21,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="4dp"
-                app:title="Dashboard"
-                app:layout_scrollFlags="scroll|enterAlways" />
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:title="Dashboard" />
 
             <LinearLayout
                 android:id="@+id/dashboardToolbarSecondary"
@@ -31,34 +31,38 @@
                 android:layout_marginTop="32dp"
                 android:background="@drawable/toolbar_bg_colored"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/toolbarCourseTitleTv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_large"
                     android:ellipsize="end"
-                    android:maxLength="17"
+                    android:layout_weight="1"
                     android:fontFamily="@font/gilroy_bold"
                     android:paddingTop="@dimen/margin_xxl"
                     android:paddingBottom="@dimen/margin_medium"
+                    android:lines="1"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    tools:text="Android App Development" />
 
                 <TextView
                     android:id="@+id/toolbarCourseResumeTv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_large"
-                    android:paddingTop="@dimen/margin_xxl"
-                    android:paddingBottom="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:layout_weight="1.1"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:drawableEnd="@drawable/ic_dropright"
                     android:drawablePadding="@dimen/margin_medium_small"
                     android:focusable="true"
                     android:fontFamily="@font/gilroy_medium"
+                    android:paddingTop="@dimen/margin_xxl"
+                    android:paddingBottom="@dimen/margin_medium"
                     android:text="@string/continue_learning"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
@@ -71,21 +75,21 @@
                 android:layout_marginTop="40dp"
                 android:elevation="4dp"
                 android:orientation="horizontal"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <View
-                    android:elevation="2dp"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="@drawable/toolbar_bg_dark" />
+                    android:background="@drawable/toolbar_bg_dark"
+                    android:elevation="2dp" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:elevation="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="28dp"
                     android:layout_marginEnd="@dimen/margin_large"
+                    android:elevation="4dp"
                     android:text="@string/what_do_you_want_to_become" />
             </FrameLayout>
         </FrameLayout>
@@ -94,9 +98,9 @@
 
     <com.codingblocks.fabnavigation.FabNavigationViewPager
         android:id="@+id/dashboardPager"
-        android:layout_marginTop="@dimen/dashboard_toolbar_neg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dashboard_toolbar_neg"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 

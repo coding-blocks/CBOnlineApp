@@ -19,17 +19,16 @@ class CheckoutActivity : AppCompatActivity(), PaymentResultListener {
         setContentView(R.layout.activity_checkout)
         setToolbar(checkoutToolbar)
         Checkout.preload(applicationContext)
-
+        vm.getCart()
         replaceFragmentSafely(CheckoutOrderDetailsFragment(), containerViewId = R.id.checkoutContainer)
     }
 
     override fun onPaymentError(p0: Int, p1: String?) {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onPaymentSuccess(paymentId: String?) {
-        vm.capturePayment()
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        vm.capturePayment(paymentId)
+        // To change body of created functions use File | Settings | File Templates.
         /** Make Network call to capture payment.
          *  Body : {
          *

@@ -33,7 +33,7 @@ class LoginHomeFragment : Fragment() {
         setSecondSpan()
 
         mobileBtn.setOnClickListener {
-            replaceFragmentSafely(SignInFragment(), "SignIn", containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
+            replaceFragmentSafely(SignInFragment(), containerViewId = R.id.loginContainer)
         }
 
         gmailBtn.setOnClickListener {
@@ -88,7 +88,7 @@ class LoginHomeFragment : Fragment() {
         val wordToSpan = SpannableString("New here? Create an account")
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
-                replaceFragmentSafely(SignInFragment.newInstance("NEW"), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
+                replaceFragmentSafely(SignInFragment.newInstance("NEW"), containerViewId = R.id.loginContainer)
             }
 
             override fun updateDrawState(ds: TextPaint) {

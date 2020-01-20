@@ -127,11 +127,11 @@ fun <F : Fragment> F.replaceFragmentSafely(
     tag: String = "",
     allowStateLoss: Boolean = false,
     @IdRes containerViewId: Int,
-    @AnimatorRes enterAnimation: Int = 0,
-    @AnimatorRes exitAnimation: Int = 0,
+    @AnimatorRes enterAnimation: Int = R.animator.slide_in_right,
+    @AnimatorRes exitAnimation: Int = R.animator.slide_out_left,
     @AnimRes popEnterAnimation: Int = 0,
     @AnimRes popExitAnimation: Int = 0,
-    addToStack: Boolean = false
+    addToStack: Boolean = true
 ) {
     val ft = fragmentManager!!
         .beginTransaction()
