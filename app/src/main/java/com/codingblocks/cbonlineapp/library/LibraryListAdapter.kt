@@ -30,13 +30,14 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
     var onDeleteClick: DeleteNoteClickListener? = null
     var onEditClick: EditNoteClickListener? = null
     var onItemClick: ItemClickListener? = null
-    var tracker: SelectionTracker<Long>? = null
+    var tracker: SelectionTracker<String>? = null
 
     init {
         setHasStableIds(true)
     }
 
     override fun getItemId(position: Int): Long = position.toLong()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -65,14 +66,16 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
             LibraryTypes.NOTE -> {
                 (holder as NoteViewHolder).apply {
                     tracker?.let {
-                        bind(getItem(position) as NotesModel, it.isSelected(position.toLong()))
+                        val item = getItem(position) as NotesModel
+                        bind(item, it.isSelected(item.nttUid))
                     }
                 }
             }
             LibraryTypes.BOOKMARK -> {
                 (holder as BookmarkViewHolder).apply {
                     tracker?.let {
-                        bind(getItem(position) as BookmarkModel, it.isSelected(position.toLong()))
+                        val item = getItem(position) as BookmarkModel
+                        bind(item, it.isSelected(item.bookmarkUid))
                     }
                 }
             }
@@ -80,14 +83,15 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
             LibraryTypes.DOWNLOADS -> {
                 (holder as DownloadViewHolder).apply {
                     tracker?.let {
-                        bind(getItem(position) as ContentLecture, it.isSelected(position.toLong()))
+                        val item = getItem(position) as ContentLecture
+                        bind(item, it.isSelected(item.lectureId))
                     }
                 }
             }
         }
     }
 
-    class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: NotesModel, isActivated: Boolean = false) = with(itemView) {
 
             noteTitleTv.text = item.contentTitle
@@ -97,10 +101,10 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
             noteTimeTv.isVisible = !isActivated
         }
 
-        fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
-            object : ItemDetailsLookup.ItemDetails<Long>() {
+        fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> =
+            object : ItemDetailsLookup.ItemDetails<String>() {
                 override fun getPosition(): Int = adapterPosition
-                override fun getSelectionKey(): Long? = itemId
+                override fun getSelectionKey(): String? = (getItem(adapterPosition) as NotesModel).nttUid
             }
     }
 
@@ -126,7 +130,7 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
         }
     }
 
-    class BookmarkViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class BookmarkViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: BookmarkModel, isActivated: Boolean = false) = with(itemView) {
 
             bookmarkTitleTv.text = item.sectionName
@@ -138,14 +142,14 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
             bookmarkSelectionImg.isVisible = isActivated
         }
 
-        fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
-            object : ItemDetailsLookup.ItemDetails<Long>() {
+        fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> =
+            object : ItemDetailsLookup.ItemDetails<String>() {
                 override fun getPosition(): Int = adapterPosition
-                override fun getSelectionKey(): Long? = itemId
+                override fun getSelectionKey(): String? = (getItem(adapterPosition) as BookmarkModel).bookmarkUid
             }
     }
 
-    class DownloadViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class DownloadViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: ContentLecture, isActivated: Boolean = false) = with(itemView) {
 
             downloadTitleTv.text = item.lectureName
@@ -157,10 +161,10 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
             downloadSelectionImg.isVisible = isActivated
         }
 
-        fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
-            object : ItemDetailsLookup.ItemDetails<Long>() {
+        fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> =
+            object : ItemDetailsLookup.ItemDetails<String>() {
                 override fun getPosition(): Int = adapterPosition
-                override fun getSelectionKey(): Long? = itemId
+                override fun getSelectionKey(): String? = (getItem(adapterPosition) as ContentLecture).lectureId
             }
     }
 }
@@ -170,6 +174,7 @@ class DiffCallback : DiffUtil.ItemCallback<BaseModel>() {
         Boolean = when (oldItem) {
         is NotesModel -> if (newItem is NotesModel) oldItem.nttUid == newItem.nttUid else false
         is BookmarkModel -> if (newItem is BookmarkModel) oldItem.bookmarkUid == newItem.bookmarkUid else false
+        is ContentLecture -> if (newItem is ContentLecture) oldItem.lectureId == newItem.lectureId else false
         else -> false
     }
 

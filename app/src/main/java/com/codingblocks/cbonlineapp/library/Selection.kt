@@ -4,10 +4,13 @@ import android.view.MotionEvent
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.database.models.BookmarkModel
+import com.codingblocks.cbonlineapp.database.models.ContentLecture
+import com.codingblocks.cbonlineapp.database.models.NotesModel
 
 class MyItemDetailsLookup(private val recyclerView: RecyclerView) :
-    ItemDetailsLookup<Long>() {
-    override fun getItemDetails(event: MotionEvent): ItemDetails<Long>? {
+    ItemDetailsLookup<String>() {
+    override fun getItemDetails(event: MotionEvent): ItemDetails<String>? {
         val view = recyclerView.findChildViewUnder(event.x, event.y)
         if (view != null) {
             return when (recyclerView.getChildViewHolder(view)) {
@@ -21,15 +24,24 @@ class MyItemDetailsLookup(private val recyclerView: RecyclerView) :
     }
 }
 
-class MyItemKeyProvider(private val recyclerView: RecyclerView) :
-    ItemKeyProvider<Long>(SCOPE_MAPPED) {
+class MyItemKeyProvider(private val adapter: LibraryListAdapter) : ItemKeyProvider<String>(SCOPE_CACHED) {
+    override fun getKey(position: Int): String? = when (adapter.currentList[position]) {
+        is NotesModel -> (adapter.currentList[position] as NotesModel).nttUid
+        is BookmarkModel -> (adapter.currentList[position] as BookmarkModel).bookmarkUid
+        is ContentLecture -> (adapter.currentList[position] as ContentLecture).lectureId
+        else -> null
 
-    override fun getKey(position: Int): Long? {
-        return recyclerView.adapter?.getItemId(position)
     }
 
-    override fun getPosition(key: Long): Int {
-        val viewHolder = recyclerView.findViewHolderForItemId(key)
-        return viewHolder?.layoutPosition ?: RecyclerView.NO_POSITION
-    }
+    override fun getPosition(key: String): Int =
+        adapter.currentList.indexOfFirst {
+            when (it) {
+                is NotesModel -> it.nttUid == key
+                is BookmarkModel -> it.bookmarkUid == key
+                is ContentLecture -> it.lectureId == key
+                else -> false
+
+            }
+        }
+
 }
