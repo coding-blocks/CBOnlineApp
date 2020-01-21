@@ -60,7 +60,6 @@ import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
-
 class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogger, VdoPlayer.InitializationListener {
     private var isDownloaded = false
     private val viewModel by viewModel<VideoPlayerViewModel>()
@@ -153,7 +152,6 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                 deleteFolder(viewModel.videoId)
             else
                 startDownloadWorker()
-
         }
 
         setupViewPager()
@@ -329,12 +327,10 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         GlobalScope.launch(Dispatchers.Main) {
             progressDialog.show()
             withContext(Dispatchers.IO) { deleteRecursive(dir) }
-            delay(5000)
+            delay(3000)
             progressDialog.dismiss()
-            onBackPressed()
         }
     }
-
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         val newOrientation = newConfig.orientation

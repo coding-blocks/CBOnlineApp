@@ -6,7 +6,7 @@ interface NotificationClickListener {
 
 interface SectionListClickListener {
 
-    fun onClick(pos: Int)
+    fun onClick(pos: Int, adapterPosition: Int)
 }
 
 interface OnCartItemClickListener {

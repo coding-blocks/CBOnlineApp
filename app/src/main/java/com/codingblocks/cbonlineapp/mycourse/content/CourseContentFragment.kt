@@ -9,6 +9,7 @@ import android.widget.PopupWindow
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.BackoffPolicy
@@ -58,20 +59,22 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     private val sectionListAdapter = SectionListAdapter(sectionitem)
     private val viewModel by sharedViewModel<MyCourseViewModel>()
     private val mLayoutManager by lazy { LinearLayoutManager(requireContext()) }
-//    val smoothScroller: RecyclerView.SmoothScroller by lazy {
-//        object : LinearSmoothScroller(requireContext()) {
-//            override fun getVerticalSnapPreference(): Int {
-//                return SNAP_TO_START
-//            }
-//        }
-//    }
+
+    val smoothScroller by lazy {
+        object : LinearSmoothScroller(context) {
+
+            override fun getVerticalSnapPreference(): Int {
+                return SNAP_TO_START
+            }
+        }
+    }
 
     private val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
-        override fun onClick(pos: Int) {
+        override fun onClick(pos: Int, adapterPosition: Int) {
             popupWindowDogs?.dismiss()
-            mLayoutManager.scrollToPosition(pos)
-//            smoothScroller.targetPosition = pos
-//            mLayoutManager.startSmoothScroll(smoothScroller)
+            mLayoutManager.scrollToPosition(sectionitem[adapterPosition - 2].pos)
+            smoothScroller.targetPosition = pos
+            mLayoutManager.startSmoothScroll(smoothScroller)
         }
     }
 

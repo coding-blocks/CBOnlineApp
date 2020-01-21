@@ -30,7 +30,7 @@ class SectionListAdapter(private val sectionList: ArrayList<SectionModel>) : Rec
         }
     }
 
-    class SectionListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class SectionListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var sectionClickListener: SectionListClickListener? = null
 
@@ -38,7 +38,7 @@ class SectionListAdapter(private val sectionList: ArrayList<SectionModel>) : Rec
             itemView.sectionTitle.text = item.name
             itemView.sectionCount.text = item.totalContent.toString()
             itemView.setOnClickListener {
-                sectionClickListener?.onClick(item.pos)
+                sectionClickListener?.onClick(item.pos, adapterPosition)
             }
         }
     }
