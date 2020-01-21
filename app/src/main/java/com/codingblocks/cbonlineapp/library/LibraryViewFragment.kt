@@ -45,9 +45,15 @@ class LibraryViewFragment : Fragment() {
                     hideRecyclerView(it.isNotEmpty())
                 }
             }
-            getString(R.string.downloads) -> vm.fetchNotes()
+            getString(R.string.downloads) -> {
+                libraryListAdapter = LibraryListAdapter(LibraryTypes.DOWNLOADS)
+                vm.fetchDownloads().observer(this) {
+                    libraryListAdapter.submitList(it)
+                    hideRecyclerView(it.isNotEmpty())
+                }
+            }
         }
-        libraryRv.setRv(requireContext(), libraryListAdapter)
+        libraryRv.setRv(requireContext(), libraryListAdapter, true)
 
         tracker = SelectionTracker.Builder<Long>(
             "mySelection",
@@ -86,6 +92,11 @@ class LibraryViewFragment : Fragment() {
                 libEmptyImg.setImageResource(R.drawable.ic_bookmark)
                 libEmptyMessageTv.text = getString(R.string.empty_bookmark_title)
                 libEmptyDescriptionTv.text = getString(R.string.empty_bookmark_text)
+            }
+            getString(R.string.downloads) -> {
+                libEmptyImg.setImageResource(R.drawable.ic_download_big)
+                libEmptyMessageTv.text = getString(R.string.empty_download_title)
+                libEmptyDescriptionTv.text = getString(R.string.empty_download_text)
             }
         }
     }

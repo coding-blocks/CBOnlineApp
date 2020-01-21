@@ -38,4 +38,5 @@ class LibraryRepository(
     fun getBookmarks(attemptId: String) = libraryDao.getBookmarks(attemptId).distinctUntilChanged()
 
     suspend fun fetchCourseBookmark(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.getBookmarksByAttemptId(id = attemptId) }
+    fun getDownloads(attemptId: String) = libraryDao.getDownloads(attemptId).distinctUntilChanged()
 }

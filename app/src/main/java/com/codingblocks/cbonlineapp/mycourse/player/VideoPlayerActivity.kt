@@ -10,6 +10,13 @@ import android.view.WindowManager
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.models.NotesModel
@@ -17,8 +24,7 @@ import com.codingblocks.cbonlineapp.library.EditNoteClickListener
 import com.codingblocks.cbonlineapp.mycourse.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.player.notes.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.DownloadService
-import com.codingblocks.cbonlineapp.util.FileUtils
+import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils.deleteRecursive
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
@@ -55,10 +61,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
-import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogger, VdoPlayer.InitializationListener {
     private var isDownloaded = false
@@ -115,7 +121,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             contentTitle.text = it.title
             bookmarkBtn.isActivated = it.bookmark.bookmarkUid.isEmpty()
             if (it.contentable == LECTURE) {
-                isDownloaded = FileUtils.checkDownloadFileExists(this, it.contentLecture.lectureId)
+                isDownloaded = it.contentLecture.isDownloaded
                 viewModel.videoId = it.contentLecture.lectureId
                 youtubePlayerView.isVisible = false
                 videoContainer.visibility = View.VISIBLE
@@ -158,11 +164,30 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
     }
 
     private fun startDownloadWorker() {
-        startService(intentFor<DownloadService>(VIDEO_ID to viewModel.videoId,
+        val constraints = if (getPrefs().SP_WIFI)
+            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
+        else
+            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val videoData = workDataOf(VIDEO_ID to viewModel.videoId,
             TITLE to contentTitle.text.toString(),
             SECTION_ID to viewModel.sectionId,
             RUN_ATTEMPT_ID to viewModel.attemptId.value,
-            CONTENT_ID to viewModel.contentId))
+            CONTENT_ID to viewModel.contentId)
+
+        val request: OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<DownloadWorker>()
+                .setConstraints(constraints)
+                .setInputData(videoData)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                .build()
+
+        WorkManager.getInstance()
+            .enqueue(request)
+//        startService(intentFor<DownloadService>(VIDEO_ID to viewModel.videoId,
+//            TITLE to contentTitle.text.toString(),
+//            SECTION_ID to viewModel.sectionId,
+//            RUN_ATTEMPT_ID to viewModel.attemptId.value,
+//            CONTENT_ID to viewModel.contentId))
         rootLayout.showSnackbar("Download Video In Progress", Snackbar.LENGTH_LONG, action = false)
     }
 

@@ -46,8 +46,8 @@ class CourseLibraryFragment : Fragment(), View.OnClickListener {
                 startActivity(intent)
             }
             R.id.downloadBtn -> {
-                toast("Will be added Soon!")
                 intent.putExtra(TYPE, getString(R.string.downloads))
+                startActivity(intent)
             }
 
             R.id.announcementsBtn -> {

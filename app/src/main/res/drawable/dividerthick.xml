@@ -3,4 +3,5 @@
     android:shape="rectangle">
     <solid android:color="?attr/divider" />
     <size android:height="3dp" />
+
 </shape>

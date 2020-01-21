@@ -59,4 +59,5 @@ class LibraryViewModel(
     }
 
     fun fetchBookmarks() = repo.getBookmarks(attemptId)
+    fun fetchDownloads() = repo.getDownloads(attemptId)
 }

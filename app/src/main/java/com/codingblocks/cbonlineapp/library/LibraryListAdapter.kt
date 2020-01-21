@@ -12,12 +12,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.BaseModel
 import com.codingblocks.cbonlineapp.database.models.BookmarkModel
+import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.database.models.NotesModel
+import com.codingblocks.cbonlineapp.util.extensions.getDurationBreakdown
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
 import kotlinx.android.synthetic.main.item_bookmark.view.*
+import kotlinx.android.synthetic.main.item_download.view.*
 import kotlinx.android.synthetic.main.item_note.view.*
 import kotlinx.android.synthetic.main.item_note.view.selectionImg
 import kotlinx.android.synthetic.main.item_note_player.view.*
@@ -44,6 +47,8 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
                 inflater.inflate(R.layout.item_note, parent, false))
             LibraryTypes.BOOKMARK -> BookmarkViewHolder(
                 inflater.inflate(R.layout.item_bookmark, parent, false))
+            LibraryTypes.DOWNLOADS -> DownloadViewHolder(
+                inflater.inflate(R.layout.item_download, parent, false))
         }
     }
 
@@ -68,6 +73,14 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
                 (holder as BookmarkViewHolder).apply {
                     tracker?.let {
                         bind(getItem(position) as BookmarkModel, it.isSelected(position.toLong()))
+                    }
+                }
+            }
+
+            LibraryTypes.DOWNLOADS -> {
+                (holder as DownloadViewHolder).apply {
+                    tracker?.let {
+                        bind(getItem(position) as ContentLecture, it.isSelected(position.toLong()))
                     }
                 }
             }
@@ -123,6 +136,25 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
                 isVisible = !isActivated
             }
             bookmarkSelectionImg.isVisible = isActivated
+        }
+
+        fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
+            object : ItemDetailsLookup.ItemDetails<Long>() {
+                override fun getPosition(): Int = adapterPosition
+                override fun getSelectionKey(): Long? = itemId
+            }
+    }
+
+    class DownloadViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(item: ContentLecture, isActivated: Boolean = false) = with(itemView) {
+
+            downloadTitleTv.text = item.lectureName
+            downloadSubtitleTv.text = "Duration ${item.lectureDuration.getDurationBreakdown()}"
+            downloadArwBtn.apply {
+                isVisible = isActivated
+                isVisible = !isActivated
+            }
+            downloadSelectionImg.isVisible = isActivated
         }
 
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =

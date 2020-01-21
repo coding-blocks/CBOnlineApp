@@ -13,6 +13,7 @@ class MyItemDetailsLookup(private val recyclerView: RecyclerView) :
             return when (recyclerView.getChildViewHolder(view)) {
                 is LibraryListAdapter.NoteViewHolder -> (recyclerView.getChildViewHolder(view) as LibraryListAdapter.NoteViewHolder).getItemDetails()
                 is LibraryListAdapter.BookmarkViewHolder -> (recyclerView.getChildViewHolder(view) as LibraryListAdapter.BookmarkViewHolder).getItemDetails()
+                is LibraryListAdapter.DownloadViewHolder -> (recyclerView.getChildViewHolder(view) as LibraryListAdapter.DownloadViewHolder).getItemDetails()
                 else -> (recyclerView.getChildViewHolder(view) as LibraryListAdapter.NoteViewHolder).getItemDetails()
             }
         }

@@ -38,8 +38,8 @@ class LibraryHomeFragment : Fragment(), View.OnClickListener {
                 replaceFragmentSafely(LibraryViewFragment(), "LibraryView", containerViewId = R.id.libraryContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
             }
             R.id.downloadBtn -> {
-                toast("Will be added Soon!")
                 vm.type = getString(R.string.downloads)
+                replaceFragmentSafely(LibraryViewFragment(), "LibraryView", containerViewId = R.id.libraryContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
             }
 
             R.id.announcementsBtn -> {

@@ -18,9 +18,10 @@ data class ContentLecture(
     var lectureId: String = "",
     var lectureContentId: String = "",
     var lectureUpdatedAt: String = "",
-    var isDownloaded: Boolean = FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, lectureId),
-    var date: Date = Date(0L)
-)
+    var isDownloaded: Boolean = if (lectureId.isEmpty()) false else FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, lectureId),
+    var date: Date = Date(0L),
+    var lectureSectionId: String = ""
+) : BaseModel()
 
 @Entity
 data class BookmarkModel(
@@ -151,5 +152,5 @@ data class Companies(
 open class BaseModel()
 
 enum class LibraryTypes {
-    NOTE, NOTESVIDEO, BOOKMARK
+    NOTE, NOTESVIDEO, BOOKMARK, DOWNLOADS
 }
