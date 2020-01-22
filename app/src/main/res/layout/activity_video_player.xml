@@ -14,7 +14,7 @@
         android:id="@+id/videoContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <fragment
             android:id="@+id/videoView"
@@ -141,17 +141,8 @@
                 android:layout_height="match_parent"
                 android:background="@color/dark" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/videoFab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:layout_margin="16dp"
-                android:background="@drawable/button_background"
-                android:elevation="10dp"
-                android:padding="14dp"
-                android:src="@drawable/ic_add"
-                app:backgroundTint="@color/colorPrimary" />
+            <include layout="@layout/my_fab_menu" />
+
         </FrameLayout>
     </LinearLayout>
 

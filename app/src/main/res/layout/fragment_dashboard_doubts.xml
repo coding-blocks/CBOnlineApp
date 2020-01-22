@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingTop="@dimen/dashboard_toolbar_comp"
+    android:paddingBottom="@dimen/margin_9xl"
     tools:context="com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsFragment">
 
     <LinearLayout

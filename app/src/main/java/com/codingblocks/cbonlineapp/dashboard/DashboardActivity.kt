@@ -24,6 +24,7 @@ import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesFragme
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
 import com.codingblocks.cbonlineapp.profile.ReferralActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
+import com.codingblocks.cbonlineapp.tracks.TracksActivity
 import com.codingblocks.cbonlineapp.util.JWT_TOKEN
 import com.codingblocks.cbonlineapp.util.REFRESH_TOKEN
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
@@ -169,6 +170,9 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             R.id.nav_settings -> {
                 startActivity(intentFor<SettingsActivity>().singleTop())
             }
+            R.id.nav_tracks -> {
+                startActivity(intentFor<TracksActivity>().singleTop())
+            }
         }
         dashboardDrawer.closeDrawer(GravityCompat.START)
         return true
@@ -230,7 +234,12 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         when (position) {
             0 -> {
                 title = getString(R.string.explore)
-                dashboardToolbarSearch.isVisible = true
+                dashboardToolbarSearch.apply {
+                    isVisible = true
+                    setOnClickListener {
+                        startActivity(intentFor<TracksActivity>().singleTop())
+                    }
+                }
                 dashboardToolbarSecondary.isVisible = false
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             }

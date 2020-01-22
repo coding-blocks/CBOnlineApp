@@ -29,7 +29,7 @@ class TracksListAdapter : ListAdapter<CareerTracks, TracksListAdapter.ItemViewHo
         fun bind(item: CareerTracks) = with(itemView) {
             trackTitleTv.text = item.name
             trackLogo.loadImage(item.logo)
-            trackCourseNumTv.text = item.courses?.size.toString()
+            trackCourseNumTv.text = "${item.courses?.size} Courses"
         }
     }
 

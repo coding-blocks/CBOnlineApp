@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -54,6 +55,7 @@ import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTA
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
+import kotlinx.android.synthetic.main.my_fab_menu.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -88,6 +90,19 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
     val progressDialog by lazy {
         ProgressDialog.progressDialog(this)
     }
+    private val fab_open by lazy {
+        AnimationUtils.loadAnimation(applicationContext, R.anim.fab_open)
+    }
+    private val fab_close by lazy {
+        AnimationUtils.loadAnimation(applicationContext, R.anim.fab_close)
+    }
+    private val fab_clock by lazy {
+        AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_clock)
+    }
+    private val fab_anticlock by lazy {
+        AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_anticlock)
+    }
+
     private val dialog by lazy { BottomSheetDialog(this) }
     private val sheetDialog: View by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, null) }
     private lateinit var youtubePlayer: YouTubePlayer
@@ -151,7 +166,29 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         }
 
         videoFab.setOnClickListener {
+            with(noteFabTv.isVisible) {
+                noteFabTv.isVisible = !this
+                doubtFabTv.isVisible = !this
+
+                if (this) {
+                    doubtFab.startAnimation(fab_close)
+                    noteFab.startAnimation(fab_close)
+                    videoFab.startAnimation(fab_anticlock)
+                    fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
+                } else {
+                    doubtFab.startAnimation(fab_open)
+                    noteFab.startAnimation(fab_open)
+                    videoFab.startAnimation(fab_clock)
+                    fabMenu.setBackgroundColor(getColor(R.color.black_95))
+                }
+            }
+        }
+        doubtFab.setOnClickListener {
             updateSheet("DOUBT")
+        }
+
+        noteFab.setOnClickListener {
+            updateSheet("")
         }
         downloadBtn.setOnClickListener {
             if (isDownloaded)
@@ -493,6 +530,8 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                 val notes = model as NotesModel
                 sheetDialog.apply {
                     bottomSheetTitleTv.text = getString(R.string.edit_note)
+                    doubtTitleTv.isVisible = false
+
                     bottoSheetDescTv.setText(notes.text)
                     bottomSheetInfoTv.text = "${notes.contentTitle} | ${notes.duration.secToTime()}"
                     bottomSheetCancelBtn.setOnClickListener {
@@ -531,16 +570,24 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             else -> {
                 sheetDialog.apply {
                     bottomSheetTitleTv.text = getString(R.string.add_note)
+                    doubtTitleTv.isVisible = false
                     bottoSheetDescTv.setText("")
-                    bottomSheetInfoTv.text = "${contentTitle.text} | 10:00"
+                    bottomSheetInfoTv.text = "${contentTitle.text} | ${videoPlayer?.currentTime?.toDouble()?.secToTime()}"
                     bottomSheetCancelBtn.setOnClickListener {
                         dialog.dismiss()
                     }
-                    bottomSheetSaveBtn.setOnClickListener {
-                        val note = Note(10.45000, sheetDialog.bottoSheetDescTv.text.toString(), RunAttempts(viewModel.attemptId.value
-                            ?: ""), LectureContent(viewModel.contentId))
-                        viewModel.createNote(note)
-                        dialog.dismiss()
+                    bottoSheetDescTv.apply {
+                        setText("")
+                        hint = "Add a note here"
+                    }
+                    bottomSheetSaveBtn.apply {
+                        setOnClickListener {
+                            val note = Note(10.45000, sheetDialog.bottoSheetDescTv.text.toString(), RunAttempts(viewModel.attemptId.value
+                                ?: ""), LectureContent(viewModel.contentId))
+                            viewModel.createNote(note)
+                            dialog.dismiss()
+                        }
+                        text = "Save"
                     }
                 }
             }
