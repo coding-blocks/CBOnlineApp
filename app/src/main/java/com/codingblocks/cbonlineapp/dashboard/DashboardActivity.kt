@@ -222,18 +222,15 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
     override fun openClassroom() {
         dashboardBottomNav.setCurrentItem(1)
-//        dashboardPager.setCurrentItem(1,true)
     }
 
     override fun openExplore() {
-        dashboardBottomNav.setCurrentItem(2)
-//        dashboardPager.setCurrentItem(2,true)
+        dashboardBottomNav.setCurrentItem(0)
     }
 
     override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
         when (position) {
             0 -> {
-                title = getString(R.string.explore)
                 dashboardToolbarSearch.apply {
                     isVisible = true
                     setOnClickListener {
@@ -244,9 +241,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             }
             2 -> {
-                title = getString(R.string.my_courses)
                 if (viewModel.isLoggedIn.value == true) {
-                    dashboardToolbarSecondary.isVisible = true
                     dashboardToolbarSearch.isVisible = false
                 }
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))

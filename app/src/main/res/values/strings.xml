@@ -279,5 +279,6 @@
     <string name="share_via_whatsapp">Share via Whatsapp</string>
     <string name="more">More</string>
     <string name="rupee_sign">₹ </string>
+    <string name="dashboard_empty_progress">You need to enroll in atleast one course.\nYour course metrics and performance graph \nwill appear here.</string>
 
 </resources>

@@ -43,7 +43,7 @@ cache:
   - "${TRAVIS_BUILD_DIR}/android/gradle/caches/"
   - "${TRAVIS_BUILD_DIR}/android/gradle/wrapper/dists/"
 script:
-  - ./gradlew assembleDebug
+  - ./gradlew build
 - ./gradlew test
 - ./gradlew spotlessCheck
 

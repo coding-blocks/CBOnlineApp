@@ -293,7 +293,7 @@ data class Note(
     }
 }
 
-@Type("users")
+@Type("users", "user")
 data class User(
     val email: String?,
     val firstname: String,

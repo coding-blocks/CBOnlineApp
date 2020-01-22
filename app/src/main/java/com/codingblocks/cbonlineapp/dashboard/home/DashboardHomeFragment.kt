@@ -45,19 +45,24 @@ class DashboardHomeFragment : Fragment() {
         viewModel.isLoggedIn.observer(viewLifecycleOwner) { isLoggedIn ->
             if (isLoggedIn) {
                 viewModel.added.observer(viewLifecycleOwner) {
-
                     viewModel.topRun.observer(viewLifecycleOwner) { courseAndRun ->
                         viewModel.getStats(courseAndRun.runAttempt.attemptId)
                         with(courseAndRun) {
-                            activity?.toolbarCourseTitleTv?.text = course.title
-                            activity?.toolbarCourseResumeTv?.setOnClickListener {
-                                startActivity(intentFor<MyCourseActivity>(
-                                    COURSE_ID to course.cid,
-                                    RUN_ID to run.crUid,
-                                    RUN_ATTEMPT_ID to runAttempt.attemptId,
-                                    COURSE_NAME to course.title
-                                ).singleTop())
+                            dashboardProgressContainer.isVisible = true
+                            dashboardEmptyProgress.isVisible = false
+                            requireActivity().let {
+                                dashboardToolbarSecondary.isVisible = true
+                                toolbarCourseTitleTv?.text = course.title
+                                toolbarCourseResumeTv?.setOnClickListener {
+                                    startActivity(intentFor<MyCourseActivity>(
+                                        COURSE_ID to course.cid,
+                                        RUN_ID to run.crUid,
+                                        RUN_ATTEMPT_ID to runAttempt.attemptId,
+                                        COURSE_NAME to course.title
+                                    ).singleTop())
+                                }
                             }
+
                             homeCourseLogoImg.loadSvg(course.logo)
                             val progress = if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
 
@@ -82,6 +87,9 @@ class DashboardHomeFragment : Fragment() {
                 dashboardHome.isVisible = false
                 dashboardHomeLoggedOut.isVisible = true
             }
+        }
+        exploreBtn.setOnClickListener {
+            requireActivity().dashboardBottomNav.setCurrentItem(0)
         }
     }
 
