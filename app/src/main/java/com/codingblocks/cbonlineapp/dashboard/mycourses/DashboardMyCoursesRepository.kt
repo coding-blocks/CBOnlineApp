@@ -41,14 +41,14 @@ class DashboardMyCoursesRepository(
                     val myAttempt = runAttempts!!.first()
                     val runModel = RunModel(
                         id,
-                        name ?: "",
-                        description ?: "",
-                        enrollmentStart ?: "",
-                        enrollmentEnd ?: "",
-                        start ?: "",
-                        end ?: "",
-                        price ?: "",
-                        mrp ?: "",
+                        name,
+                        description,
+                        enrollmentStart,
+                        enrollmentEnd,
+                        start,
+                        end,
+                        price,
+                        mrp,
                         updatedAt,
                         whatsappLink,
                         totalContents,
@@ -98,7 +98,7 @@ class DashboardMyCoursesRepository(
                     rating,
                     slug,
                     coverImage,
-                    categoryId
+                    categoryId ?: 0
                 ))
             } else if (!refresh)
             return -2L

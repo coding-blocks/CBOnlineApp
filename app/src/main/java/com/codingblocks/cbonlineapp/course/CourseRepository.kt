@@ -19,4 +19,6 @@ class CourseRepository() : AnkoLogger {
     suspend fun addToCart(id: String) = safeApiCall { Clients.api.addToCart(id) }
 
     suspend fun enrollToTrial(id: String) = safeApiCall { Clients.api.enrollTrial(id) }
+
+    suspend fun getTracks() = safeApiCall { Clients.onlineV2JsonApi.getTracks() }
 }

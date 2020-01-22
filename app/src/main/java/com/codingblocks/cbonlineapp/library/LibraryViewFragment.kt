@@ -14,7 +14,6 @@ import com.codingblocks.cbonlineapp.database.models.BaseModel
 import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.LibraryTypes
-import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
@@ -93,11 +92,9 @@ class LibraryViewFragment : Fragment() {
                     super.onSelectionChanged()
                     val items = selectionTracker?.selection!!.size()
 //                    deleteContainer.isVisible = items > 0
-
                 }
             })
     }
-
 
     override fun onDestroy() {
         libraryListAdapter.apply {

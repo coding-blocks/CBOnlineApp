@@ -31,17 +31,17 @@ data class Project(
 
 @Type("courses", "course")
 data class Course(
-    val title: String,
-    val subtitle: String,
-    val logo: String,
-    val summary: String,
-    val categoryId: Int,
-    val promoVideo: String,
-    val reviewCount: Int,
-    val difficulty: String,
-    val rating: Float,
-    val slug: String?,
-    val coverImage: String,
+    val title: String = "",
+    val subtitle: String = "",
+    val logo: String = "",
+    val summary: String = "",
+    val categoryId: Int?,
+    val promoVideo: String = "",
+    val reviewCount: Int = 0,
+    val difficulty: String = "",
+    val rating: Float = 0f,
+    val slug: String = "",
+    val coverImage: String = "",
     val faq: String?,
     val coursefeatures: ArrayList<CourseFeatures>?,
     @Relationship("instructors")
@@ -58,15 +58,15 @@ data class Course(
 
 @Type("runs", "run")
 data class Runs(
-    val name: String?,
-    val description: String?,
-    val start: String?,
-    val end: String?,
-    val price: String?,
-    val mrp: String?,
+    val name: String = "",
+    val description: String = "",
+    val start: String = "",
+    val end: String = "",
+    val price: String = "",
+    val mrp: String = "",
     val unlisted: Boolean,
-    val enrollmentStart: String?,
-    val enrollmentEnd: String?,
+    val enrollmentStart: String = "",
+    val enrollmentEnd: String = "",
     @Relationship("sections")
     val sections: ArrayList<Sections>?,
     @Relationship("run-attempts", "run_attempts")
@@ -502,6 +502,24 @@ class CarouselCards(
     var buttonText: String,
     var buttonLink: String
 ) : BaseModel()
+
+@Type("career_tracks")
+data class CareerTracks(
+    var name: String,
+    var slug: String,
+    var unlisted: Boolean,
+    var logo: String,
+    var background: String,
+    var status: String?,
+    val languages: List<String>,
+    @Relationship("courses")
+    var courses: List<Course>?,
+    @Relationship("professions")
+    var professions: List<Professions>?
+) : BaseModel()
+
+@Type("professions")
+class Professions : BaseModel()
 
 @Type("player")
 class Player(

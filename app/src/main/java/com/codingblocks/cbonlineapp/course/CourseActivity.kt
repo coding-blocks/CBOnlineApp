@@ -174,7 +174,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         priceTv.text = "${getString(R.string.rupee_sign)}${it.price}"
         mrpTv.text = "₹ ${it.mrp}"
         batchBtn.text = it.name
-        deadlineTv.text = "Enrollment Ends ${it.enrollmentEnd?.let { it1 -> getDateForTime(it1) }}"
+        deadlineTv.text = "Enrollment Ends ${it.enrollmentEnd.let { it1 -> getDateForTime(it1) }}"
         mrpTv.paintFlags = mrpTv.paintFlags or
             Paint.STRIKE_THRU_TEXT_FLAG
         buyBtn.setOnClickListener { _ ->

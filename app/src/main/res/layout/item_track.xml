@@ -10,17 +10,17 @@
     android:orientation="vertical">
 
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/courseLogo"
+    <ImageView
+        android:id="@+id/trackLogo"
         android:layout_width="80dp"
-        android:layout_height="80dp"
         android:elevation="1dp"
+        android:layout_height="80dp"
         android:src="@drawable/ic_course_logo"
-        app:civ_border_color="@color/white" />
+        android:scaleType="fitXY" />
 
 
     <TextView
-        android:id="@+id/courseCardTitleTv"
+        android:id="@+id/trackTitleTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_medium_small"

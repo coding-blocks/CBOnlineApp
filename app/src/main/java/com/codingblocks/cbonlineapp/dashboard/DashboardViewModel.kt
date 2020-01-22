@@ -11,6 +11,7 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.getMeta
+import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.Course
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,6 +26,7 @@ class DashboardViewModel(
     var isLoggedIn: MutableLiveData<Boolean> = MutableLiveData()
     var suggestedCourses = MutableLiveData<List<Course>>()
     var trendingCourses = MutableLiveData<List<Course>>()
+    var tracks = MutableLiveData<List<CareerTracks>>()
     val added = MutableLiveData<Boolean>()
 
     val courses by lazy {
@@ -96,6 +98,21 @@ class DashboardViewModel(
                             suggestedCourses.postValue(body())
                         else
                             trendingCourses.postValue(body())
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun fetchTracks() {
+        runIO {
+            when (val response = exploreRepo.getTracks()) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        tracks.postValue(body())
                     } else {
                         setError(fetchError(code()))
                     }

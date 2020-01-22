@@ -88,7 +88,7 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                     }
                 }
                 var list = item.runs?.filter { run ->
-                    !run.unlisted && run.enrollmentEnd?.greater()!! && !run.enrollmentStart!!.greater()
+                    !run.unlisted && run.enrollmentEnd.greater() && !run.enrollmentStart.greater()
                 }?.sortedWith(compareBy { run -> run.price })
                 if (list.isNullOrEmpty()) {
                     list =

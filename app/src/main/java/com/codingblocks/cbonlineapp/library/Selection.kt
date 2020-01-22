@@ -30,7 +30,6 @@ class MyItemKeyProvider(private val adapter: LibraryListAdapter) : ItemKeyProvid
         is BookmarkModel -> (adapter.currentList[position] as BookmarkModel).bookmarkUid
         is ContentLecture -> (adapter.currentList[position] as ContentLecture).lectureId
         else -> null
-
     }
 
     override fun getPosition(key: String): Int =
@@ -40,8 +39,6 @@ class MyItemKeyProvider(private val adapter: LibraryListAdapter) : ItemKeyProvid
                 is BookmarkModel -> it.bookmarkUid == key
                 is ContentLecture -> it.lectureId == key
                 else -> false
-
             }
         }
-
 }

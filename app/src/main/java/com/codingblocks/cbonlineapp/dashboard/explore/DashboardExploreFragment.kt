@@ -16,6 +16,7 @@ import com.codingblocks.cbonlineapp.course.CourseListAdapter
 import com.codingblocks.cbonlineapp.course.ItemClickListener
 import com.codingblocks.cbonlineapp.course.SearchCourseActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
+import com.codingblocks.cbonlineapp.tracks.TracksListAdapter
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
@@ -31,6 +32,7 @@ class DashboardExploreFragment : Fragment() {
     private val vm by sharedViewModel<DashboardViewModel>()
     private val courseCardListAdapter = CourseListAdapter()
     private val coursePopularListAdapter = CourseListAdapter("POPULAR")
+    private val tracksListAdapter = TracksListAdapter()
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -60,18 +62,23 @@ class DashboardExploreFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         vm.fetchRecommendedCourses(0, 4)
         vm.fetchRecommendedCourses(4, 4)
+        vm.fetchTracks()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dashboardPopularRv.setRv(requireContext(), coursePopularListAdapter, orientation = RecyclerView.HORIZONTAL)
         courseSuggestedRv.setRv(requireContext(), courseCardListAdapter, orientation = RecyclerView.HORIZONTAL)
+        dashboardTracksRv.setRv(requireContext(), tracksListAdapter, orientation = RecyclerView.HORIZONTAL)
 
         vm.suggestedCourses.observer(this) { courses ->
             courseCardListAdapter.submitList(courses)
         }
         vm.trendingCourses.observer(this) { courses ->
             coursePopularListAdapter.submitList(courses)
+        }
+        vm.tracks.observer(this) { courses ->
+            tracksListAdapter.submitList(courses)
         }
 
         courseCardListAdapter.onItemClick = itemClickListener

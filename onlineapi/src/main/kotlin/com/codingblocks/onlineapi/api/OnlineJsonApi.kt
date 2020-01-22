@@ -2,6 +2,7 @@ package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.Applications
 import com.codingblocks.onlineapi.models.Bookmark
+import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Company
@@ -259,6 +260,11 @@ interface OnlineJsonApi {
 
     @GET("users/me")
     suspend fun getMe(): Response<User>
+
+    @GET("career_tracks")
+    suspend fun getTracks(
+        @Query("page[limit]") pageLimit: String = "5"
+    ): Response<List<CareerTracks>>
 
 
     /**
