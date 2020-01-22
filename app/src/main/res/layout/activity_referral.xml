@@ -8,7 +8,6 @@
     tools:context="com.codingblocks.cbonlineapp.library.LibraryActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/libraryAppbar"
         style="@style/ToolBarStyleDark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -26,7 +25,6 @@
                 app:title="@string/invite_earn" />
 
             <LinearLayout
-                android:id="@+id/referralToolbarSecondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
@@ -198,7 +196,6 @@
             android:drawableStart="@drawable/ic_whatsapp"
             android:drawablePadding="5dp"
             android:fontFamily="@font/gilroy_bold"
-            android:id="@+id/shareReferralWA"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:text="@string/share_via_whatsapp"

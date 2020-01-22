@@ -88,7 +88,6 @@
                     tools:text="9499" />
 
                 <TextView
-                    android:id="@+id/checkoutTaxTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -213,7 +212,6 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/roundOffTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

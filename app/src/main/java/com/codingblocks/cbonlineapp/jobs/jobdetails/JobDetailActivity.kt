@@ -54,7 +54,7 @@ class JobDetailActivity : AppCompatActivity() {
 
         jobId = intent.getStringExtra(JOB_ID)
 
-        deadlinell.visibility = View.GONE
+//        deadlinell.visibility = View.GONE
 
         viewModel.fetchJob(jobId)
 
@@ -76,7 +76,7 @@ class JobDetailActivity : AppCompatActivity() {
                 jobTitleTv.text = title
                 supportActionBar?.title = title
                 companyTv.text = company.name
-                postedAgoTv.text = timeAgo(postedOn.isotomillisecond())
+//                postedAgoTv.text = timeAgo(postedOn.isotomillisecond())
                 locationTv.text = getSpannableSring("Job Location: ", location)
                 experienceTv.text = getSpannableSring("Experience: ", experience)
                 typeTv.text = getSpannableSring("Job Type: ", type)

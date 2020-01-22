@@ -8,10 +8,11 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.widgets.SheetDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
@@ -25,7 +26,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class JobsActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<JobsViewModel>()
-    private val jobsAdapter = JobsAdapter(JobsDiffCallback())
+    private val jobsAdapter = JobsAdapter()
 
     private val bottomSheetDialog by lazy {
         SheetDialog(this, R.style.sheetStyle)
@@ -37,9 +38,8 @@ class JobsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_jobs)
-
-        rvJobs.layoutManager = LinearLayoutManager(this)
-        rvJobs.adapter = jobsAdapter
+        setToolbar(jobsToolbar)
+        rvJobs.setRv(this, jobsAdapter, true, "thick")
 
         viewModel.getJobs()
 
@@ -52,18 +52,18 @@ class JobsActivity : AppCompatActivity() {
             setupBottomFilterSheet()
         }
 
-        viewModel.filteredJobsProgress.observer(this) {
-            if (it) {
-                shimmerJobs.isVisible = true
-                rvJobs.isVisible = false
-                tvNoJobs.isVisible = false
-            } else {
-                shimmerJobs.isVisible = false
-                rvJobs.isVisible = !viewModel.noFilteredJobs
-                tvNoJobs.isVisible = viewModel.noFilteredJobs
-                updateJobsList()
-            }
-        }
+//        viewModel.filteredJobsProgress.observer(this) {
+//            if (it) {
+//                shimmerJobs.isVisible = true
+//                rvJobs.isVisible = false
+//                tvNoJobs.isVisible = false
+//            } else {
+//                shimmerJobs.isVisible = false
+//                rvJobs.isVisible = !viewModel.noFilteredJobs
+//                tvNoJobs.isVisible = viewModel.noFilteredJobs
+//                updateJobsList()
+//            }
+//        }
 
         viewModel.jobProgress.observe(this) {
             if (it) {
@@ -84,20 +84,11 @@ class JobsActivity : AppCompatActivity() {
             }
         }
 
-        filter_button.setOnClickListener {
-            bottomSheetDialog.show()
-        }
+//        filter_button.setOnClickListener {
+//            bottomSheetDialog.show()
+//        }
     }
-    /*
-            * To solve the problem with listAdapter.submitList() with referencing
-            * the list. i.e.
-            *
-            *  if(oldList == newList){
-            *       return;
-            *  }
-            *
-            *  therefore, make different object
-            */
+
 
     private fun updateJobsList() {
         val updatedJobs = mutableListOf<JobsModel>().apply {

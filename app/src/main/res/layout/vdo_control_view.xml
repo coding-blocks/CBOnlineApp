@@ -107,7 +107,6 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/video_complete_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#a6000000"
@@ -116,7 +115,6 @@
 
         <TextView
 
-            android:id="@+id/timerTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top"

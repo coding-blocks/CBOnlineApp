@@ -3,7 +3,6 @@
     <color name="colorPrimaryDark">#f2734c</color>
     <color name="colorPrimary">@color/orangish</color>
     <color name="colorAccent">@color/veryLightPink</color>
-    <color name="grey_transparent">#80878787</color>
     <color name="black">#333333</color>
     <color name="grey850">#343434</color>
     <color name="salmon">#ff6666</color>
@@ -16,9 +15,7 @@
     <color name="algae_green">#25d366</color>
 
     <color name="dark_grey">#222222</color>
-    <color name="indigo_blue">#381184</color>
     <color name="neon_red">#ff003a</color>
-    <color name="shimmer_color">#a2878787</color>
     <color name="light_transparent">#16000000</color>
 
     <!--    New Colors-->

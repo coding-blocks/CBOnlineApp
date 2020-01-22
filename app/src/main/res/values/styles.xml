@@ -59,14 +59,6 @@
     </style>
 
 
-    <style name="ToolBarStyleWhite" parent="Widget.MaterialComponents.Toolbar">
-        <item name="titleTextAppearance">@style/Toolbar.TitleText</item>
-        <item name="titleTextColor">@color/white</item>
-        <item name="android:background">@drawable/toolbar_bg_dark</item>
-        <item name="contentInsetStartWithNavigation">0dp</item>
-    </style>
-
-
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/gilroy_bold</item>
@@ -169,29 +161,6 @@
         <item name="android:background">@drawable/rounded_dialog</item>
     </style>
 
-
-
-    <style name="Theme.Jobs" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimaryJobs</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDarkJobs</item>
-        <item name="colorAccent">@color/colorPrimary</item>
-        <item name="windowActionBarOverlay">true</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
-
-    <style name="Theme.CB.Course" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="windowActionBarOverlay">true</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:statusBarColor">@color/white_transparency</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@drawable/background_splash</item>
@@ -199,27 +168,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-
-    <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
-        <!-- reference our hint & error styles -->
-        <item name="hintTextAppearance">@style/HintText</item>
-        <item name="errorTextAppearance">@style/ErrorText</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textColorHint">@color/battleship_gray</item>
-        <item name="colorControlNormal">@color/battleship_gray</item>
-        <item name="colorControlActivated">@color/salmon</item>
-        <item name="colorControlHighlight">@color/green</item>
-    </style>
-
-    <style name="ErrorText" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/salmon</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="HintText" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">14sp</item>
-    </style>
 
     <style name="ColorSwitchStyle">
         <item name="colorControlActivated">@color/colorPrimary</item>
@@ -233,8 +181,5 @@
         <item name="android:layout_height">40dp</item>
     </style>
 
-
-    <color name="colorPrimaryDarkJobs">#452ba3</color>
-    <color name="colorPrimaryJobs">#692fdc</color>
 
 </resources>

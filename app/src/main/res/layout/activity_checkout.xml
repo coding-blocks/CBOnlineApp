@@ -6,7 +6,6 @@
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/checkoutAppbar"
         style="@style/ToolBarStyleDark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

@@ -7,7 +7,6 @@
     tools:context="com.codingblocks.cbonlineapp.library.LibraryActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/libraryAppbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -17,19 +16,16 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/deleteContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone">
 
                 <ImageView
-                    android:id="@+id/removeSelectionImg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_close" />
 
                 <TextView
-                    android:id="@+id/itemsTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_large"
@@ -41,7 +37,6 @@
 
                 <ImageView
 
-                    android:id="@+id/deleteImg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_large"

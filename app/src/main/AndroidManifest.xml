@@ -22,7 +22,7 @@
         android:theme="@style/NewAppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".settings.PurchasesActivity"
+            android:name=".purchases.PurchasesActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity android:name=".profile.ReferralActivity" />
         <activity android:name=".tracks.TracksActivity" />
@@ -133,12 +133,10 @@
         <activity
             android:name=".jobs.JobsActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".dashboard.DashboardActivity"
-            android:theme="@style/Theme.Jobs" />
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".jobs.jobdetails.JobDetailActivity"
             android:parentActivityName=".jobs.JobsActivity"
-            android:theme="@style/Theme.Jobs"
             android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".settings.SettingsActivity"

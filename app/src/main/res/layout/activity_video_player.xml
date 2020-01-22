@@ -131,7 +131,6 @@
             android:background="@color/divider" />
 
         <FrameLayout
-            android:id="@+id/pagerFrame"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

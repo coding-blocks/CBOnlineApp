@@ -302,7 +302,6 @@
 
                 <TextView
                     android:fontFamily="@font/gilroy_medium"
-                    android:id="@+id/email2_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/centre_container_textviews_horizontal"
@@ -318,7 +317,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/centre_container_margin"
@@ -416,7 +414,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/phone3_1" />
 
                 <TextView
-                    android:id="@+id/email3_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/centre_container_textviews_horizontal"

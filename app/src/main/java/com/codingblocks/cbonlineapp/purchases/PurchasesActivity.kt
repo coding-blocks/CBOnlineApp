@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.settings
+package com.codingblocks.cbonlineapp.purchases
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

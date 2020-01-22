@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_overview"
         android:icon="@drawable/ic_chart_line"
         android:title="Overview" />
 
 
     <item
-        android:id="@+id/menu_doubts"
         android:icon="@drawable/ic_conversation"
         android:title="Doubts" />
 
     <item
-        android:id="@+id/menu_inbox"
         android:icon="@drawable/ic_speech"
         android:title="Inbox" />
 

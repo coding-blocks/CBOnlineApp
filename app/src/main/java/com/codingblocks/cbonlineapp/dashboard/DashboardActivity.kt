@@ -21,9 +21,10 @@ import com.codingblocks.cbonlineapp.dashboard.explore.DashboardExploreFragment
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeFragment
 import com.codingblocks.cbonlineapp.dashboard.library.DashboardLibraryFragment
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesFragment
+import com.codingblocks.cbonlineapp.jobs.JobsActivity
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
 import com.codingblocks.cbonlineapp.profile.ReferralActivity
-import com.codingblocks.cbonlineapp.settings.PurchasesActivity
+import com.codingblocks.cbonlineapp.purchases.PurchasesActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.TracksActivity
 import com.codingblocks.cbonlineapp.util.JWT_TOKEN
@@ -175,6 +176,9 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             }
             R.id.nav_purchases -> {
                 startActivity(intentFor<PurchasesActivity>().singleTop())
+            }
+            R.id.nav_hiring -> {
+                startActivity(intentFor<JobsActivity>().singleTop())
             }
         }
         dashboardDrawer.closeDrawer(GravityCompat.START)

@@ -21,7 +21,6 @@
             app:toolbarId="@+id/toolbar">
 
             <RelativeLayout
-                android:id="@+id/collapseContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/toolbar_bg_borderless"
@@ -357,13 +356,11 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/lectureImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_lecture" />
 
                     <TextView
-                        android:id="@+id/lectureText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_medium"
@@ -375,14 +372,12 @@
                         android:textSize="14sp" />
 
                     <ImageView
-                        android:id="@+id/mentorImg"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:src="@drawable/ic_mentor" />
 
                     <TextView
-                        android:id="@+id/mentorText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -404,13 +399,11 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/reviseImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_revise" />
 
                     <TextView
-                        android:id="@+id/reviseText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_medium"
@@ -422,14 +415,12 @@
                         android:textSize="14sp" />
 
                     <ImageView
-                        android:id="@+id/certificateImg"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:src="@drawable/ic_certificate" />
 
                     <TextView
-                        android:id="@+id/certificateText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

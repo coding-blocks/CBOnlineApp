@@ -10,7 +10,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.formatDate
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.QuizAttempt
-import kotlinx.android.synthetic.main.quiz_attempt_list.view.*
+import kotlinx.android.synthetic.main.item_quiz_attempt.view.*
 
 class QuizSubmissionListAdapter : ListAdapter<QuizAttempt, QuizSubmissionListAdapter.ItemViewHolder>(DiffCallback()) {
     var onItemClick: ItemClickListener? = null
