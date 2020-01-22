@@ -45,6 +45,9 @@ class DashboardViewModel(
     val allRuns by lazy {
         myCourseRepo.getMyRuns("")
     }
+    val purchasedRuns by lazy {
+        myCourseRepo.getPurchasedRuns()
+    }
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
     init {

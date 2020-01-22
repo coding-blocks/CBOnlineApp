@@ -23,6 +23,7 @@ import com.codingblocks.cbonlineapp.dashboard.library.DashboardLibraryFragment
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesFragment
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
 import com.codingblocks.cbonlineapp.profile.ReferralActivity
+import com.codingblocks.cbonlineapp.settings.PurchasesActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.TracksActivity
 import com.codingblocks.cbonlineapp.util.JWT_TOKEN
@@ -38,7 +39,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
-import kotlinx.android.synthetic.main.nav_header_home.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -78,7 +78,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 //        viewModel.prefs.run {
         dashboardNavigation.getHeaderView(0).apply {
 
-//                navHeaderImageView.loadImage(userImage, true)
+            //                navHeaderImageView.loadImage(userImage, true)
 //                navUsernameTv.append(" $firstName")
         }
 //        }
@@ -173,6 +173,9 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             R.id.nav_tracks -> {
                 startActivity(intentFor<TracksActivity>().singleTop())
             }
+            R.id.nav_purchases -> {
+                startActivity(intentFor<PurchasesActivity>().singleTop())
+            }
         }
         dashboardDrawer.closeDrawer(GravityCompat.START)
         return true
@@ -231,11 +234,9 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
         when (position) {
             0 -> {
-                dashboardToolbarSearch.apply {
-                    isVisible = true
-                    setOnClickListener {
-                        startActivity(intentFor<TracksActivity>().singleTop())
-                    }
+                dashboardToolbarSearch.isVisible = true
+                searchBtn.setOnClickListener {
+                    startActivity(intentFor<TracksActivity>().singleTop())
                 }
                 dashboardToolbarSecondary.isVisible = false
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
@@ -243,6 +244,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             2 -> {
                 if (viewModel.isLoggedIn.value == true) {
                     dashboardToolbarSearch.isVisible = false
+                    dashboardToolbarSecondary.isVisible = true
                 }
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             }

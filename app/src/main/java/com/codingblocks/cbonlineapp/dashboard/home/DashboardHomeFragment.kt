@@ -50,17 +50,14 @@ class DashboardHomeFragment : Fragment() {
                         with(courseAndRun) {
                             dashboardProgressContainer.isVisible = true
                             dashboardEmptyProgress.isVisible = false
-                            requireActivity().let {
-                                dashboardToolbarSecondary.isVisible = true
-                                toolbarCourseTitleTv?.text = course.title
-                                toolbarCourseResumeTv?.setOnClickListener {
-                                    startActivity(intentFor<MyCourseActivity>(
-                                        COURSE_ID to course.cid,
-                                        RUN_ID to run.crUid,
-                                        RUN_ATTEMPT_ID to runAttempt.attemptId,
-                                        COURSE_NAME to course.title
-                                    ).singleTop())
-                                }
+                            activity?.toolbarCourseTitleTv?.text = course.title
+                            activity?.toolbarCourseResumeTv?.setOnClickListener {
+                                startActivity(intentFor<MyCourseActivity>(
+                                    COURSE_ID to course.cid,
+                                    RUN_ID to run.crUid,
+                                    RUN_ATTEMPT_ID to runAttempt.attemptId,
+                                    COURSE_NAME to course.title
+                                ).singleTop())
                             }
 
                             homeCourseLogoImg.loadSvg(course.logo)
@@ -135,9 +132,5 @@ class DashboardHomeFragment : Fragment() {
             xAxis.labelCount = 20
             invalidate()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 }

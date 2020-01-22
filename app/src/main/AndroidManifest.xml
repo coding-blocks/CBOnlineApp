@@ -21,7 +21,10 @@
         android:supportsRtl="true"
         android:theme="@style/NewAppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".profile.ReferralActivity"></activity>
+        <activity
+            android:name=".settings.PurchasesActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity android:name=".profile.ReferralActivity" />
         <activity android:name=".tracks.TracksActivity" />
         <activity android:name=".profile.ProfileActivity" />
         <activity
@@ -189,6 +192,7 @@
         <meta-data
             android:name="com.razorpay.ApiKey"
             android:value="rzp_test_zACC3cdl7lqt9k" />
+
         <receiver
             android:name=".admin.doubts.DoubtReceiver"
             android:enabled="true"

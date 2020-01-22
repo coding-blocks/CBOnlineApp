@@ -134,4 +134,6 @@ class DashboardMyCoursesRepository(
             else -> courseWithInstructorDao.getMyRuns()
         }
     }
+
+    fun getPurchasedRuns() = courseWithInstructorDao.getPurchasesRuns()
 }
