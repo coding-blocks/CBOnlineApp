@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.library
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,16 +15,31 @@ import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.database.models.NotesModel
+import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import kotlinx.android.synthetic.main.fragment_library_view.*
+import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class LibraryViewFragment : Fragment() {
 
     private val vm by sharedViewModel<LibraryViewModel>()
     private lateinit var libraryListAdapter: LibraryListAdapter
-    private var tracker: SelectionTracker<String>? = null
+    private var selectionTracker: SelectionTracker<String>? = null
+    private val itemClickListener: ItemClickListener by lazy {
+        object : ItemClickListener {
+            override fun onClick(item: BaseModel) {
+                when (item) {
+                    is ContentLecture -> startActivity(intentFor<VideoPlayerActivity>(CONTENT_ID to item.lectureContentId, SECTION_ID to item.lectureSectionId).singleTop())
+                    is BookmarkModel -> startActivity(intentFor<VideoPlayerActivity>(CONTENT_ID to item.contentId, SECTION_ID to item.sectionId).singleTop())
+                }
+            }
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = inflater.inflate(R.layout.fragment_library_view, container, false)
@@ -59,7 +73,7 @@ class LibraryViewFragment : Fragment() {
         }
         libraryRv.setRv(requireContext(), libraryListAdapter, true)
 
-        tracker = SelectionTracker.Builder<String>(
+        selectionTracker = SelectionTracker.Builder<String>(
             "mySelection",
             libraryRv,
             MyItemKeyProvider(libraryListAdapter),
@@ -69,18 +83,27 @@ class LibraryViewFragment : Fragment() {
             SelectionPredicates.createSelectAnything()
         ).build()
 
-        libraryListAdapter.tracker = tracker
-
-        tracker?.addObserver(
+        libraryListAdapter.apply {
+            onItemClick = itemClickListener
+            this.tracker = selectionTracker
+        }
+        selectionTracker?.addObserver(
             object : SelectionTracker.SelectionObserver<Long>() {
                 override fun onSelectionChanged() {
                     super.onSelectionChanged()
-                    val items = tracker?.selection!!.size()
-                    tracker?.selection!!.forEach {
-                        Log.i("Selection Keys", "Note ID : $it")
-                    }
+                    val items = selectionTracker?.selection!!.size()
+//                    deleteContainer.isVisible = items > 0
+
                 }
             })
+    }
+
+
+    override fun onDestroy() {
+        libraryListAdapter.apply {
+            onItemClick = null
+        }
+        super.onDestroy()
     }
 
     private fun hideRecyclerView(notEmpty: Boolean) {

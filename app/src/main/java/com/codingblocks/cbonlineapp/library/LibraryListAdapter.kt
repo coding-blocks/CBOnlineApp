@@ -85,6 +85,7 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
                     tracker?.let {
                         val item = getItem(position) as ContentLecture
                         bind(item, it.isSelected(item.lectureId))
+                        itemClickListener = onItemClick
                     }
                 }
             }
@@ -150,6 +151,8 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
     }
 
     inner class DownloadViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var itemClickListener: ItemClickListener? = null
+
         fun bind(item: ContentLecture, isActivated: Boolean = false) = with(itemView) {
 
             downloadTitleTv.text = item.lectureName
@@ -159,6 +162,10 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
                 isVisible = !isActivated
             }
             downloadSelectionImg.isVisible = isActivated
+
+            setOnClickListener {
+                itemClickListener?.onClick(item)
+            }
         }
 
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> =
@@ -192,5 +199,5 @@ interface EditNoteClickListener {
 }
 
 interface ItemClickListener {
-    fun onClick(note: NotesModel)
+    fun onClick(item: BaseModel)
 }

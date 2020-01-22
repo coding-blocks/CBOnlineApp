@@ -19,7 +19,7 @@ interface LibraryDao {
     fun getBookmarks(id: String): LiveData<List<BookmarkModel>>
 
     @Query("""
-        SELECT c.lectureUid,c.lectureName,c.lectureDuration,c.lectureDuration,c.lectureId,c.lectureContentId,c.lectureUpdatedAt,c.isDownloaded,c.date,s.csid as lectureSectionId FROM  ContentModel c
+        SELECT c.lectureUid,c.lectureName,c.lectureDuration,c.lectureDuration,c.lectureId,c.lectureSectionId,c.lectureUpdatedAt,c.isDownloaded,c.date,c.ccid as lectureContentId FROM  ContentModel c
  	   INNER JOIN SectionModel s ON s.csid = c.sectionId
        WHERE c.attempt_id = :attemptId AND c.isDownloaded = 1 ORDER BY c.createdAt DESC
     """)

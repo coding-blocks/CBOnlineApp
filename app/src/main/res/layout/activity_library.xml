@@ -14,7 +14,42 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/libraryToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/deleteContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/removeSelectionImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_close" />
+
+                <TextView
+                    android:id="@+id/itemsTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="Delete 5 Downloads"
+                    android:textColor="@color/orangish"
+                    android:textSize="18sp" />
+
+                <ImageView
+
+                    android:id="@+id/deleteImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:src="@drawable/ic_delete" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout

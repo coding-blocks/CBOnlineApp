@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.database.models.BaseModel
 import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.library.DeleteNoteClickListener
@@ -54,7 +55,7 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
-            override fun onClick(note: NotesModel) {
+            override fun onClick(model: BaseModel) {
             }
         }
     }

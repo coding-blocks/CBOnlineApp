@@ -16,11 +16,11 @@ data class ContentLecture(
     var lectureName: String = "",
     var lectureDuration: Long = 0L,
     var lectureId: String = "",
-    var lectureContentId: String = "",
+    var lectureSectionId: String = "",
     var lectureUpdatedAt: String = "",
     var isDownloaded: Boolean = if (lectureId.isEmpty()) false else FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, lectureId),
     var date: Date = Date(0L),
-    var lectureSectionId: String = ""
+    var lectureContentId: String = ""
 ) : BaseModel()
 
 @Entity
