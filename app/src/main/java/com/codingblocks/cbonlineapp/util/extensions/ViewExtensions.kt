@@ -323,10 +323,6 @@ fun <T : RecyclerView.ViewHolder> T.onClick(event: (view: View, position: Int, t
     return this
 }
 
-fun Fragment.getSharedPrefs(): SharedPreferences = requireActivity().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-
-fun AppCompatActivity.getSharedPrefs(): SharedPreferences = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-
 fun SharedPreferences.save(key: String, value: Any) {
     with(this.edit()) {
         when (value) {

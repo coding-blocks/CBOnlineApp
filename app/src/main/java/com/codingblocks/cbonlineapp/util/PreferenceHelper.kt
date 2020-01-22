@@ -3,10 +3,91 @@ package com.codingblocks.cbonlineapp.util
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import com.codingblocks.cbonlineapp.util.extensions.save
 
 class PreferenceHelper private constructor() {
+
+    var SP_ACCESS_TOKEN_KEY: String
+        get() = prefs?.getString(ACCESS_TOKEN, ACCESS_TOKEN) ?: ""
+        set(value) {
+            prefs?.save(ACCESS_TOKEN, value)
+        }
+
+    var SP_JWT_TOKEN_KEY: String
+        get() = prefs?.getString(JWT_TOKEN, JWT_TOKEN) ?: ""
+        set(value) {
+            prefs?.save(JWT_TOKEN, value)
+        }
+
+    var SP_JWT_REFRESH_TOKEN: String
+        get() = prefs?.getString(REFRESH_TOKEN, REFRESH_TOKEN) ?: ""
+        set(value) {
+            prefs?.save(REFRESH_TOKEN, value)
+        }
+    var SP_USER_IMAGE: String
+        get() = prefs?.getString(USER_IMAGE, USER_IMAGE) ?: "Empty"
+        set(value) {
+            prefs?.save(USER_IMAGE, value)
+        }
+    var SP_ONEAUTH_ID: String
+        get() = prefs?.getString(ONEAUTH_ID, ONEAUTH_ID) ?: ""
+        set(value) {
+            prefs?.save(ONEAUTH_ID, value)
+        }
+
+    var SP_USER_ID: String
+        get() = prefs?.getString(USER_ID, USER_ID) ?: ""
+        set(value) {
+            prefs?.save(USER_ID, value)
+        }
+
+    var SP_USER_NAME: String
+        get() = prefs?.getString(USER_NAME, USER_NAME) ?: ""
+        set(value) {
+            prefs?.save(USER_NAME, value)
+        }
+
+    var SP_EMAIL_ID: String
+        get() = prefs?.getString(EMAIL_ID, EMAIL_ID) ?: ""
+        set(value) {
+            prefs?.save(EMAIL_ID, value)
+        }
+
+    var SP_ROLE_ID: Int
+        get() = prefs?.getInt(ROLE_ID, ROLE_ID_DEFAULT) ?: ROLE_ID_DEFAULT
+        set(value) {
+            prefs?.save(ROLE_ID, value)
+        }
+
+    var SP_WIFI: Boolean
+        get() = prefs?.getBoolean(WIFI, WIFI_DEFAULT) ?: WIFI_DEFAULT
+        set(value) {
+            prefs?.save(WIFI, value)
+        }
+    var SP_DATA_LIMIT: Float
+        get() = prefs?.getFloat(DATA_LIMIT, DATA_LIMIT_DEFAULT) ?: DATA_LIMIT_DEFAULT
+        set(value) {
+            prefs?.save(DATA_LIMIT, value)
+        }
+    var SP_PLAYBACK_SPEED: Float
+        get() = prefs?.getFloat(PLAYBACK_SPEED, PLAYBACK_SPEED_DEFAULT) ?: PLAYBACK_SPEED_DEFAULT
+        set(value) {
+            prefs?.save(PLAYBACK_SPEED, value)
+        }
+    var SP_PIP: Boolean
+        get() = prefs?.getBoolean(PIP, PIP_DEFAULT) ?: PIP_DEFAULT
+        set(value) {
+            prefs?.save(PIP, value)
+        }
+
+    var SP_COURSE_FILTER_TYPE: Int
+        get() = prefs?.getInt("COURSE_FILTER_TYPE", COURSE_FILTER_TYPE) ?: COURSE_FILTER_TYPE
+        set(value) {
+            prefs?.save("COURSE_FILTER_TYPE", value)
+        }
+
     companion object {
-        const val PREFS_FILENAME = "com.codingblocks.cbonlineapp.prefs"
+        const val PREFS_FILENAME = "com.codingblocks.cbonline.app.prefs"
         const val ACCESS_TOKEN = "access_token"
         const val JWT_TOKEN = "jwt_token"
         const val REFRESH_TOKEN = "refresh_token"
@@ -17,6 +98,7 @@ class PreferenceHelper private constructor() {
         const val ROLE_ID = "role_id"
         const val EMAIL_ID = "email_id"
         const val ROLE_ID_DEFAULT = 0
+        const val COURSE_FILTER_TYPE = 0
 
         const val WIFI = "wifi"
         const val WIFI_DEFAULT = false
@@ -37,77 +119,4 @@ class PreferenceHelper private constructor() {
             return instance
         }
     }
-
-    var SP_ACCESS_TOKEN_KEY: String
-        get() = prefs?.getString(ACCESS_TOKEN, ACCESS_TOKEN) ?: ""
-        set(value) {
-            prefs?.edit()?.putString(ACCESS_TOKEN, value)?.apply()
-        }
-
-    var SP_JWT_TOKEN_KEY: String
-        get() = prefs?.getString(JWT_TOKEN, JWT_TOKEN) ?: ""
-        set(value) {
-            prefs?.edit()?.putString(JWT_TOKEN, value)?.apply()
-        }
-
-    var SP_JWT_REFRESH_TOKEN: String
-        get() = prefs?.getString(REFRESH_TOKEN, REFRESH_TOKEN) ?: ""
-        set(value) {
-            prefs?.edit()?.putString(REFRESH_TOKEN, value)?.apply()
-        }
-    var SP_USER_IMAGE: String
-        get() = prefs?.getString(USER_IMAGE, USER_IMAGE) ?: "Empty"
-        set(value) {
-            prefs?.edit()?.putString(USER_IMAGE, value)?.apply()
-        }
-    var SP_ONEAUTH_ID: String
-        get() = prefs?.getString(ONEAUTH_ID, ONEAUTH_ID) ?: ""
-        set(value) {
-            prefs?.edit()?.putString(ONEAUTH_ID, value)?.apply()
-        }
-
-    var SP_USER_ID: String
-        get() = prefs?.getString(USER_ID, USER_ID) ?: ""
-        set(value) {
-            prefs?.edit()?.putString(USER_ID, value)?.apply()
-        }
-
-    var SP_USER_NAME: String
-        get() = prefs?.getString(USER_NAME, USER_NAME) ?: ""
-        set(value) {
-            prefs?.edit()?.putString(USER_NAME, value)?.apply()
-        }
-
-    var SP_EMAIL_ID: String
-        get() = prefs?.getString(EMAIL_ID, EMAIL_ID) ?: ""
-        set(value) {
-            prefs?.edit()?.putString(EMAIL_ID, value)?.apply()
-        }
-
-    var SP_ROLE_ID: Int
-        get() = prefs?.getInt(ROLE_ID, ROLE_ID_DEFAULT) ?: ROLE_ID_DEFAULT
-        set(value) {
-            prefs?.edit()?.putInt(ROLE_ID, value)?.apply()
-        }
-
-    var SP_WIFI: Boolean
-        get() = prefs?.getBoolean(WIFI, WIFI_DEFAULT) ?: WIFI_DEFAULT
-        set(value) {
-            prefs?.edit()?.putBoolean(WIFI, value)?.apply()
-        }
-    var SP_DATA_LIMIT: Float
-        get() = prefs?.getFloat(DATA_LIMIT, DATA_LIMIT_DEFAULT) ?: DATA_LIMIT_DEFAULT
-        set(value) {
-            prefs?.edit()?.putFloat(DATA_LIMIT, value)?.apply()
-        }
-    var SP_PLAYBACK_SPEED: Float
-        get() = prefs?.getFloat(PLAYBACK_SPEED, PLAYBACK_SPEED_DEFAULT) ?: PLAYBACK_SPEED_DEFAULT
-        set(value) {
-            prefs?.edit()?.putFloat(PLAYBACK_SPEED, value)?.apply()
-        }
-    var SP_PIP: Boolean
-        get() = prefs?.getBoolean(PIP, PIP_DEFAULT) ?: PIP_DEFAULT
-        set(value) {
-            prefs?.edit()?.putBoolean(PIP, value)?.apply()
-        }
 }

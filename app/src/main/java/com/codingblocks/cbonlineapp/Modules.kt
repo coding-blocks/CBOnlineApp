@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp
 
+import android.app.Application
 import androidx.room.Room
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtRepository
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtsViewModel
@@ -28,6 +29,7 @@ import com.codingblocks.cbonlineapp.mycourse.quiz.QuizRepository
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
 import com.codingblocks.cbonlineapp.notifications.NotificationViewModel
 import com.codingblocks.cbonlineapp.settings.SettingsViewModel
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -44,10 +46,8 @@ val viewModelModule = module {
     viewModel { JobsViewModel(get()) }
     viewModel { JobDetailViewModel(get(), get()) }
 
-    single { MyCourseRepository(get(), get(), get(), get(), get()) }
-
     viewModel { AdminDoubtsViewModel(get()) }
-    viewModel { AdminOverviewViewModel(get()) }
+    viewModel { AdminOverviewViewModel(get(), get()) }
     viewModel { DashboardDoubtsViewModel(get()) }
     viewModel { CourseViewModel(get()) }
     viewModel { LibraryViewModel(get(), get()) }
@@ -61,11 +61,18 @@ val viewModelModule = module {
     single { DashboardDoubtsRepository(get(), get(), get()) }
     single { DashboardMyCoursesRepository(get(), get(), get(), get(), get()) }
     single { LibraryRepository(get(), get(), get()) }
-    single { DashboardHomeRepository(get(), get()) }
+    single { DashboardHomeRepository(get(), get(), get()) }
     single { VideoPlayerRepository(get(), get(), get(), get(), get()) }
     single { QuizRepository(get()) }
     single { JobRepository(get()) }
+    single { MyCourseRepository(get(), get(), get(), get(), get()) }
 }
+val preferencesModule = module {
+    single { provideSettingsPreferences(androidApplication()) }
+}
+
+fun provideSettingsPreferences(app: Application): PreferenceHelper = PreferenceHelper.getPrefs(app)
+
 val databaseModule = module {
 
     single {

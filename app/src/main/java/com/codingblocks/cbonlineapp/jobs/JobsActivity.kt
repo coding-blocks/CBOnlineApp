@@ -10,8 +10,6 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.APPLIED
 import com.codingblocks.cbonlineapp.util.ELIGIBLE
-import com.codingblocks.cbonlineapp.util.LIVE
-import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar

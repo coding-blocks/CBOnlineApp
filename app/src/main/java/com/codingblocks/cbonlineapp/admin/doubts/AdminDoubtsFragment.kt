@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.setRv
@@ -28,13 +28,12 @@ import kotlinx.android.synthetic.main.doubts_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AdminDoubtsFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
-    val userId by lazy {
-        getPrefs()?.SP_USER_ID
-    }
+    private val sharedPrefs by inject<PreferenceHelper>()
 
     private lateinit var listener: FragmentChangeListener
 
@@ -57,7 +56,7 @@ class AdminDoubtsFragment : Fragment(), TabLayout.OnTabSelectedListener {
     private val resolveClickListener: ResolveClickListener by lazy {
         object : ResolveClickListener {
             override fun onClick(doubtId: String, doubt: Doubts) {
-                userId?.let { viewModel.acknowledgeDoubt(doubtId, doubt, it) }
+                sharedPrefs.SP_USER_ID.let { viewModel.acknowledgeDoubt(doubtId, doubt, it) }
             }
         }
     }
@@ -191,7 +190,7 @@ class AdminDoubtsFragment : Fragment(), TabLayout.OnTabSelectedListener {
                 viewModel.fetchLiveDoubts()
             }
             1 -> {
-                userId?.let { viewModel.fetchMyDoubts(it) }
+                sharedPrefs.SP_USER_ID.let { viewModel.fetchMyDoubts(it) }
             }
         }
     }

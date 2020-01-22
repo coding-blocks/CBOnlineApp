@@ -4,6 +4,7 @@ import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.User
@@ -11,7 +12,8 @@ import com.codingblocks.onlineapi.safeApiCall
 
 class DashboardHomeRepository(
     private val courseWithInstructorDao: CourseWithInstructorDao,
-    private val runPerformanceDao: RunPerformanceDao
+    private val runPerformanceDao: RunPerformanceDao,
+    private val prefs: PreferenceHelper
 
 ) {
 
@@ -21,12 +23,12 @@ class DashboardHomeRepository(
 
     fun insertUser(user: User) {
         with(user) {
-            //            prefs.oneAuthId = oneauthId ?: ""
-//            prefs.userId = id
-//            prefs.userImage = photo ?: "empty"
-//            prefs.roleId = roleId
-//            prefs.firstName = firstname
-//            prefs.lastName = lastname
+            prefs.apply {
+                SP_ONEAUTH_ID = oneauthId ?: ""
+                SP_USER_ID = id
+                SP_USER_IMAGE = photo ?: "empty"
+                SP_USER_NAME = "$firstname $lastname"
+            }
         }
     }
 

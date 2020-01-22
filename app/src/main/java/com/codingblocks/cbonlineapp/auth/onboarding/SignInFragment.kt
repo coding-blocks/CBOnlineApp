@@ -14,12 +14,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
-import com.codingblocks.cbonlineapp.util.JWT_TOKEN
-import com.codingblocks.cbonlineapp.util.REFRESH_TOKEN
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RESOLVEHINT
-import com.codingblocks.cbonlineapp.util.extensions.getSharedPrefs
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
-import com.codingblocks.cbonlineapp.util.extensions.save
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
@@ -34,6 +31,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.runOnUiThread
+import org.koin.android.ext.android.inject
 import android.text.style.StyleSpan as StyleSpan1
 
 class SignInFragment : Fragment() {
@@ -42,7 +40,7 @@ class SignInFragment : Fragment() {
     var map = HashMap<String, String>()
     lateinit var apiClient: GoogleApiClient
     lateinit var hintRequest: HintRequest
-    private val sharedPrefs by lazy { getSharedPrefs() }
+    private val sharedPrefs by inject<PreferenceHelper>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -146,11 +144,11 @@ class SignInFragment : Fragment() {
                         response.value.body()?.let {
                             with(it["jwt"].asString) {
                                 Clients.authJwt = this
-                                sharedPrefs.save(JWT_TOKEN, this)
+                                sharedPrefs.SP_JWT_TOKEN_KEY = this
                             }
                             with(it["refresh_token"].asString) {
                                 Clients.refreshToken = this
-                                sharedPrefs.save(REFRESH_TOKEN, this)
+                                sharedPrefs.SP_JWT_REFRESH_TOKEN = this
                             }
                         }
                         startActivity(intentFor<DashboardActivity>())

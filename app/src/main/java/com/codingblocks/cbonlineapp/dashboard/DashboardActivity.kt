@@ -27,10 +27,9 @@ import com.codingblocks.cbonlineapp.profile.ReferralActivity
 import com.codingblocks.cbonlineapp.purchases.PurchasesActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.TracksActivity
-import com.codingblocks.cbonlineapp.util.JWT_TOKEN
-import com.codingblocks.cbonlineapp.util.REFRESH_TOKEN
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
-import com.codingblocks.cbonlineapp.util.extensions.getSharedPrefs
+import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.fabnavigation.FabNavigation
@@ -40,12 +39,14 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
+import kotlinx.android.synthetic.main.nav_header_home.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.startActivity
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, FragmentChangeListener, FabNavigation.OnTabSelectedListener {
@@ -55,15 +56,15 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     private val appUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
     private val viewModel by viewModel<DashboardViewModel>()
     private var doubleBackToExitPressedOnce = false
-    private val sharedPrefs by lazy { getSharedPrefs() }
+    private val prefs by inject<PreferenceHelper>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        Clients.authJwt = sharedPrefs.getString(JWT_TOKEN, "") ?: ""
-        Clients.refreshToken = sharedPrefs.getString(REFRESH_TOKEN, "") ?: ""
-        viewModel.isLoggedIn.postValue((sharedPrefs.getString(JWT_TOKEN, "") ?: "").isNotEmpty())
-        if ((sharedPrefs.getString(JWT_TOKEN, "") ?: "").isNotEmpty()) {
+        Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
+        Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
+        viewModel.isLoggedIn.postValue(prefs.SP_JWT_REFRESH_TOKEN.isNotEmpty())
+        if (prefs.SP_JWT_REFRESH_TOKEN.isNotEmpty()) {
             setUser()
             initializeUI(true)
         } else {
@@ -76,13 +77,10 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             val navMenu = dashboardNavigation.menu
             navMenu.findItem(R.id.nav_admin).isVisible = it
         }
-//        viewModel.prefs.run {
         dashboardNavigation.getHeaderView(0).apply {
-
-            //                navHeaderImageView.loadImage(userImage, true)
-//                navUsernameTv.append(" $firstName")
+            navHeaderImageView.loadImage(prefs.SP_USER_IMAGE, true)
+            navUsernameTv.append(" ${prefs.SP_USER_NAME}")
         }
-//        }
     }
 
     override fun onStart() {

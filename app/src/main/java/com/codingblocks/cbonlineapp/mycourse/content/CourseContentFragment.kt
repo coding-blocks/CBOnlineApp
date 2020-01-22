@@ -31,6 +31,7 @@ import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.LECTURE
+import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
 import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.QNA
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
@@ -40,7 +41,6 @@ import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
@@ -234,7 +234,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         attemptId: String,
         sectionId: String
     ) {
-        val constraints = if (getPrefs()?.SP_WIFI == true)
+        val constraints = if (getPrefs(requireContext()).SP_WIFI)
             Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
         else
             Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()

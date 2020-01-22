@@ -12,9 +12,9 @@ import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
-import com.codingblocks.cbonlineapp.util.extensions.getSharedPrefs
 import com.codingblocks.cbonlineapp.util.extensions.loadSvg
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.models.ProgressItem
@@ -27,12 +27,13 @@ import kotlinx.android.synthetic.main.fragment_dashboard_home.*
 import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DashboardHomeFragment : Fragment() {
 
     private val viewModel by sharedViewModel<DashboardViewModel>()
-    private val sharedPrefs by lazy { getSharedPrefs() }
+    private val sharedPrefs by inject<PreferenceHelper>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

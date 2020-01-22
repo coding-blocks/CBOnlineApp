@@ -13,15 +13,13 @@ import com.codingblocks.cbonlineapp.commons.SheetAdapter
 import com.codingblocks.cbonlineapp.commons.SheetItem
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
-import com.codingblocks.cbonlineapp.util.COURSE_FILTER_TYPE
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
-import com.codingblocks.cbonlineapp.util.extensions.getSharedPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.codingblocks.cbonlineapp.util.extensions.save
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showEmptyView
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
@@ -35,6 +33,7 @@ import kotlinx.android.synthetic.main.fragment_dashboard_my_courses.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
@@ -45,7 +44,7 @@ class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
     private val viewModel by sharedViewModel<DashboardViewModel>()
     private val type = MutableLiveData<Int>()
     private val courseListAdapter = MyCourseListAdapter()
-    private val sharedPrefs by lazy { getSharedPrefs() }
+    private val sharedPrefs by inject<PreferenceHelper>()
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -79,7 +78,7 @@ class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
         setUpBottomSheet()
 
         courseTypeTv.apply {
-            val lastSelected = sharedPrefs.getInt(COURSE_FILTER_TYPE, 0)
+            val lastSelected = sharedPrefs.SP_COURSE_FILTER_TYPE
             text = coursesType[lastSelected]
             viewModel.courseFilter.postValue(coursesType[lastSelected])
             setCompoundDrawablesRelativeWithIntrinsicBounds(
@@ -146,12 +145,12 @@ class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
             list.add(SheetItem(coursesType[it], imgs.getResourceId(it, 0)))
         }
         sheetDialog.run {
-            val initialSelectedItem = sharedPrefs.getInt(COURSE_FILTER_TYPE, 0)
+            val initialSelectedItem = sharedPrefs.SP_COURSE_FILTER_TYPE
             val sheetAdapter = SheetAdapter(list, initialSelectedItem)
             sheetLv.adapter = sheetAdapter
             sheetLv.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
                 type.postValue(position)
-                sharedPrefs.save(COURSE_FILTER_TYPE, position)
+                sharedPrefs.SP_COURSE_FILTER_TYPE = position
                 sheetAdapter.selectedItem = position
                 dialog.dismiss()
             }

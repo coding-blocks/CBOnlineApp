@@ -19,12 +19,11 @@ import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.DOUBT_ID
-import com.codingblocks.cbonlineapp.util.JWT_TOKEN
 import com.codingblocks.cbonlineapp.util.LIVE
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.REOPENED
 import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
-import com.codingblocks.cbonlineapp.util.extensions.getSharedPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
@@ -39,6 +38,7 @@ import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard_doubts.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DashboardDoubtsFragment : Fragment() {
@@ -50,7 +50,7 @@ class DashboardDoubtsFragment : Fragment() {
     private val dialog by lazy { BottomSheetDialog(requireContext()) }
     val list = arrayListOf<SheetItem>()
     val adapter = SheetAdapter(list)
-    private val sharedPrefs by lazy { getSharedPrefs() }
+    private val sharedPrefs by inject<PreferenceHelper>()
 
     private val resolveClickListener: ResolveDoubtClickListener by lazy {
         object : ResolveDoubtClickListener {
@@ -145,7 +145,7 @@ class DashboardDoubtsFragment : Fragment() {
             }
         }
 
-        if ((sharedPrefs.getString(JWT_TOKEN, "") ?: "").isNotEmpty()) {
+        if (sharedPrefs.SP_JWT_TOKEN_KEY.isNotEmpty()) {
 
             viewModel.getRuns().observer(viewLifecycleOwner) {
                 if (it.isNotEmpty()) {

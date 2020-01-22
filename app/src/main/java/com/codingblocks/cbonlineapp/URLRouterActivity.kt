@@ -6,17 +6,19 @@ import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
 import cn.campusapp.router.Router
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.otherwise
 import org.jetbrains.anko.intentFor
+import org.koin.android.ext.android.inject
 
 class URLRouterActivity : AppCompatActivity() {
 
     private fun fallBack() = startActivity(intentFor<DashboardActivity>())
+    private val sharedPrefs by inject<PreferenceHelper>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (getPrefs().SP_JWT_TOKEN_KEY != "jwt_token") {
+        if (sharedPrefs.SP_JWT_TOKEN_KEY != "jwt_token") {
             intent?.data?.let { uri ->
 
                 if (TextUtils.isEmpty(uri.host)) fallBack()

@@ -28,12 +28,12 @@ import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils.deleteRecursive
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
@@ -64,6 +64,7 @@ import kotlinx.coroutines.withContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.toast
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -77,6 +78,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             return true
         }
     }
+    private val prefs by inject<PreferenceHelper>()
 
     private val visibilityListener = object : VdoPlayerControls.ControllerVisibilityListener {
         override fun onControllerVisibilityChange(visibility: Int) {
@@ -201,7 +203,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
     }
 
     private fun startDownloadWorker() {
-        val constraints = if (getPrefs().SP_WIFI)
+        val constraints = if (prefs.SP_WIFI)
             Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
         else
             Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
@@ -347,7 +349,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
 
         override fun onLoaded(p0: VdoPlayer.VdoInitParams?) {
             videoPlayer?.playWhenReady = true
-            videoPlayer?.playbackSpeed = getPrefs().SP_PLAYBACK_SPEED
+            videoPlayer?.playbackSpeed = prefs.SP_PLAYBACK_SPEED
         }
 
         override fun onBufferUpdate(p0: Long) {
@@ -357,7 +359,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         }
 
         override fun onPlaybackSpeedChanged(speed: Float) {
-            getPrefs().SP_PLAYBACK_SPEED = speed
+            prefs.SP_PLAYBACK_SPEED = speed
         }
 
         override fun onLoadError(p0: VdoPlayer.VdoInitParams, p1: ErrorDescription) {
@@ -405,6 +407,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             Configuration.ORIENTATION_LANDSCAPE -> {
                 // hide other views
                 videoContentContainer.isVisible = false
+                fabMenu.isVisible = false
                 playerControlView.fitsSystemWindows = true
 
                 if (::playerFragment.isInitialized) {
@@ -422,6 +425,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             else -> {
                 // show other views
                 videoContentContainer.isVisible = true
+                fabMenu.isVisible = true
                 playerControlView.fitsSystemWindows = false
 
                 if (::playerFragment.isInitialized) {
