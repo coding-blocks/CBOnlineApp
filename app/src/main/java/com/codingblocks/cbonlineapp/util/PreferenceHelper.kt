@@ -87,7 +87,7 @@ class PreferenceHelper private constructor() {
         }
 
     companion object {
-        const val PREFS_FILENAME = "com.codingblocks.cbonline.app.prefs"
+        const val PREFS_FILENAME = "com.codingblocks.cbonline.prefs"
         const val ACCESS_TOKEN = "access_token"
         const val JWT_TOKEN = "jwt_token"
         const val REFRESH_TOKEN = "refresh_token"

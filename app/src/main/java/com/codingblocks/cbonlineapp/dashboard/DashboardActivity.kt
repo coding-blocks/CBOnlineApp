@@ -29,7 +29,6 @@ import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.TracksActivity
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.fabnavigation.FabNavigation
@@ -77,10 +76,10 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             val navMenu = dashboardNavigation.menu
             navMenu.findItem(R.id.nav_admin).isVisible = it
         }
-        dashboardNavigation.getHeaderView(0).apply {
-            navHeaderImageView.loadImage(prefs.SP_USER_IMAGE, true)
-            navUsernameTv.append(" ${prefs.SP_USER_NAME}")
-        }
+//        dashboardNavigation.getHeaderView(0).apply {
+//            navHeaderImageView.loadImage(prefs.SP_USER_IMAGE, true)
+//            navUsernameTv.append(" ${prefs.SP_USER_NAME}")
+//        }
     }
 
     override fun onStart() {

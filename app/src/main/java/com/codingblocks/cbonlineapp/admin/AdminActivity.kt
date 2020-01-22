@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtsFragment
 import com.codingblocks.cbonlineapp.admin.doubts.DoubtReceiver
@@ -55,7 +54,7 @@ class AdminActivity : AppCompatActivity(), FragmentChangeListener {
         setupAlarm()
 
         keyboardVisibilityHelper = KeyboardVisibilityUtil(contentView!!) {
-            completeBtn.isVisible = it
+            //            completeBtn.isVisible = it
         }
 
         val roleId = 1
