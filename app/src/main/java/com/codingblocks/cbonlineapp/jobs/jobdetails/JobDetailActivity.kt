@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.jobs.jobdetails
 
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.RadioButton
@@ -17,12 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.JOB_ID
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
-import com.codingblocks.cbonlineapp.util.extensions.isotomillisecond
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.nonNull
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.codingblocks.cbonlineapp.util.extensions.timeAgo
 import com.codingblocks.onlineapi.models.Applications
 import com.codingblocks.onlineapi.models.Form
 import com.codingblocks.onlineapi.models.JobId

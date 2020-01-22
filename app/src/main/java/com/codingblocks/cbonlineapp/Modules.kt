@@ -16,6 +16,7 @@ import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesReposi
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.jobs.JobsViewModel
 import com.codingblocks.cbonlineapp.jobs.jobdetails.JobDetailViewModel
+import com.codingblocks.cbonlineapp.jobs.jobdetails.JobRepository
 import com.codingblocks.cbonlineapp.library.LibraryRepository
 import com.codingblocks.cbonlineapp.library.LibraryViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
@@ -63,6 +64,7 @@ val viewModelModule = module {
     single { DashboardHomeRepository(get(), get()) }
     single { VideoPlayerRepository(get(), get(), get(), get(), get()) }
     single { QuizRepository(get()) }
+    single { JobRepository(get()) }
 }
 val databaseModule = module {
 

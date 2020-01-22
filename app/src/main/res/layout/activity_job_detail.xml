@@ -15,7 +15,6 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             app:titleTextColor="@color/white"
-            android:background="@color/colorPrimaryJobs"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" />
 
@@ -26,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:background="@color/colorPrimaryDarkJobs"
             android:text="View Job Description"
             android:textColor="@color/white" />
 

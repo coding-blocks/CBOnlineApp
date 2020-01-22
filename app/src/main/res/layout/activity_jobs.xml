@@ -44,8 +44,7 @@
                 android:drawableEnd="@drawable/ic_circle_white_small"
                 android:drawablePadding="4dp"
                 android:fontFamily="@font/gilroy_medium"
-                android:text="@string/all_jobs"
-                android:textSize="12sp" />
+                android:text="@string/all_jobs" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/resolvedDoubtBtn"
@@ -55,8 +54,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:fontFamily="@font/gilroy_medium"
-                android:text="@string/eligible_jobs"
-                android:textSize="12sp" />
+                android:text="@string/eligible_jobs" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/allDoubtBtn"
@@ -66,8 +64,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:fontFamily="@font/gilroy_medium"
-                android:text="@string/applied"
-                android:textSize="12sp" />
+                android:text="@string/applied" />
 
             <TextView
                 android:id="@+id/filterTv"

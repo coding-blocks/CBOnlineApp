@@ -76,6 +76,10 @@ const val RESOLVED = "RESOLVED"
 
 const val REOPENED = "REOPENED"
 
+const val APPLIED = "Applied"
+
+const val ELIGIBLE = "Eligible Jobs"
+
 const val PENDING = "PENDING"
 
 const val DOUBT_ID = "doubtID"

@@ -8,15 +8,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.JobsModel
-import com.codingblocks.cbonlineapp.jobs.jobdetails.JobDetailActivity
-import com.codingblocks.cbonlineapp.util.JOB_ID
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
-import com.codingblocks.cbonlineapp.util.extensions.isotomillisecond
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.timeAgo
 import kotlinx.android.synthetic.main.item_job.view.*
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.singleTop
 
 class JobsAdapter() : ListAdapter<JobsModel, JobsAdapter.JobsViewHolder>(JobsDiffCallback()) {
 
@@ -57,7 +51,6 @@ class JobsAdapter() : ListAdapter<JobsModel, JobsAdapter.JobsViewHolder>(JobsDif
 }
 
 class JobsDiffCallback : DiffUtil.ItemCallback<JobsModel>() {
-
 
     override fun areContentsTheSame(oldItem: JobsModel, newItem: JobsModel): Boolean {
         return oldItem == newItem

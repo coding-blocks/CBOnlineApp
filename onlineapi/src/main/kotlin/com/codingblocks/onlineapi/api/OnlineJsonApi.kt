@@ -235,7 +235,7 @@ interface OnlineJsonApi {
     fun setPlayerId(@Body params: Player): Call<ResponseBody>
 
     @GET("jobs")
-    fun getJobs(
+    suspend fun getJobs(
         @Query("filter[deadline][\$gt]") deadline: String,
         @Query("filter[postedOn][\$lte]") postedOn: String,
         @Query("filter[location][\$ilike][\$any][]") filterLoc: List<String>? = null,
@@ -243,12 +243,12 @@ interface OnlineJsonApi {
         @Query("page[offset]") pageOffSet: String = "0",
         @Query("page[limit]") pageLimit: String = "12",
         @Query("sort") sort: String = "-postedOn"
-    ): Call<ArrayList<Jobs>>
+    ): Response<JSONAPIDocument<List<Jobs>>>
 
     @GET("companies/{id}")
-    fun getCompany(
+    suspend fun getCompany(
         @Path("id") id: String
-    ): Call<Company>
+    ): Response<Company>
 
     @GET("jobs/{id}")
     fun getJobById(
