@@ -130,10 +130,16 @@ fun getDate(): String {
     return dateFormat.format(calendar.time)
 }
 
-fun getSpannableSring(normalText: String, boldText: String): SpannableStringBuilder =
+fun getSpannableSring(boldText: String, normalText: String): SpannableStringBuilder =
+    SpannableStringBuilder()
+        .bold { append(boldText) }
+        .append(normalText)
+
+fun getSpannableStringSecondBold(normalText: String, boldText: String): SpannableStringBuilder =
     SpannableStringBuilder()
         .append(normalText)
         .bold { append(boldText) }
+
 
 fun timeAgo(time: Long): String {
     val diff = floor(((System.currentTimeMillis() - time) / 1000).toDouble())

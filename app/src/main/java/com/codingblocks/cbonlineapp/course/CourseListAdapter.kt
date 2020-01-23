@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.CustomTypefaceSpan
+import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
+import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
 import com.codingblocks.cbonlineapp.util.extensions.greater
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
@@ -56,7 +58,8 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                 else -> "Beginner"
             }
             courseCardTitleTv.text = item.title
-            val ratingText = "${item.rating}/5, ${item.reviewCount} ratings"
+
+            val ratingText = getSpannableSring("${item.rating}/5.0", ", ${item.reviewCount} ratings")
             if (type != "LIST") {
                 courseCover.loadImage(item.coverImage)
                 ratingTv.text = ratingText
@@ -76,7 +79,8 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
             }
             if (type != "POPULAR") {
                 if (!item.instructors.isNullOrEmpty()) {
-                    courseCardInstructorsTv.text = "${item.instructors?.first()?.name}"
+                    courseCardInstructorsTv.text = getSpannableStringSecondBold("Instructor:", item.instructors?.first()?.name
+                        ?: "")
                     if (type != "LIST") {
                         item.instructors?.first()?.photo?.let { courseCardInstructorImg1.loadImage(it) }
                         if (item.instructors!!.size > 1) {

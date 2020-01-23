@@ -116,6 +116,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             defaultBackgroundColor = getColor(R.color.dark)
             titleState = (FabNavigation.TitleState.ALWAYS_SHOW)
             setOnTabSelectedListener(this@DashboardActivity)
+            accentColor = getColor(R.color.bottomNavSelected)
         }
         if (loggedIn)
             dashboardBottomNav.setCurrentItem(1)

@@ -55,7 +55,7 @@
                     android:background="?attr/selectableItemBackground"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/reset"
-                    android:onClick="confirmReset"
+                    android:id="@+id/confirmReset"
                     android:textAlignment="viewEnd"
                     android:textColor="#ff6666"
                     android:textSize="12sp" />

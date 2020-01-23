@@ -82,6 +82,16 @@ class OverviewFragment : Fragment(), AnkoLogger {
             homePercentileTv.text = it.percentile.toString()
             loadData(it.averageProgress, it.userProgress)
         }
+
+        confirmReset.setOnClickListener {
+            Components.showConfirmation(requireContext(), "reset") {
+                if (it) {
+                    viewModel.resetProgress().observer(viewLifecycleOwner) {
+                        requireActivity().finish()
+                    }
+                }
+            }
+        }
     }
 
     private fun loadData(averageProgress: ArrayList<ProgressItem>, userProgress: ArrayList<ProgressItem>) {
@@ -134,22 +144,9 @@ class OverviewFragment : Fragment(), AnkoLogger {
 //            buyBtn.isEnabled = it != -1
 //        }
 
-        viewModel.resetProgress.observer(viewLifecycleOwner) {
-            requireActivity().finish()
-        }
 
         viewModel.popMessage.observer(viewLifecycleOwner) { message ->
             Snackbar.make(view.rootView, message, Snackbar.LENGTH_LONG).show()
-        }
-    }
-
-    fun confirmReset(view: View) {
-        Components.showConfirmation(requireContext(), "reset") {
-            if (it) {
-                viewModel.resetProgress().observer(viewLifecycleOwner) {
-                    requireActivity().finish()
-                }
-            }
         }
     }
 }

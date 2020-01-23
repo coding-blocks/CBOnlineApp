@@ -38,6 +38,7 @@
             android:id="@+id/chip"
             style="@style/ButtonStyleChip"
             android:layout_width="wrap_content"
+            android:fontFamily="@font/gilroy_medium"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_medium"
             android:layout_marginTop="@dimen/margin_medium_small"
@@ -54,22 +55,22 @@
         <ImageButton
             android:id="@+id/course_card_share"
             android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_height="21dp"
             android:layout_alignTop="@id/course_card_like"
             android:layout_marginStart="@dimen/margin_medium_small"
             android:layout_marginEnd="@dimen/margin_small"
             android:layout_toEndOf="@id/chip"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
+            android:scaleType="fitXY"
             android:contentDescription="@string/share"
             android:focusable="true"
-            android:scaleType="centerCrop"
             android:src="@drawable/ic_share" />
 
         <ImageButton
             android:id="@+id/course_card_like"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
             android:layout_marginTop="@dimen/margin_medium_small"
             android:layout_marginEnd="@dimen/padding_medium"
             android:layout_marginBottom="@dimen/margin_large"
@@ -82,6 +83,8 @@
             android:src="@drawable/ic_like" />
 
         <TextView
+            android:ellipsize="end"
+            android:lines="1"
             android:id="@+id/courseCardTitleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -94,8 +97,7 @@
             android:fontFamily="@font/gilroy_bold"
             android:textColor="@color/white"
             android:textSize="16sp"
-            tools:text="
-Web Development(NodeJS) Online" />
+            tools:text="Web Development(NodeJS) Online" />
 
         <TextView
             android:id="@+id/ratingTv"

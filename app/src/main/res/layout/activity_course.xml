@@ -43,12 +43,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="68dp"
+                    android:layout_marginBottom="@dimen/margin_medium"
                     android:layout_marginEnd="@dimen/margin_large"
-                    android:layout_marginBottom="@dimen/margin_extra_small"
+                    android:lineSpacingExtra="4dp"
                     android:layout_toStartOf="@id/courseLogo"
                     android:fontFamily="@font/gilroy_medium"
                     android:textColor="@color/white"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     tools:text="Learn full-stack web development using JavaScript and NodeJS" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -58,7 +59,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="68dp"
                     android:layout_marginEnd="@dimen/margin_large"
-                    android:layout_marginBottom="@dimen/margin_large"
+                    android:layout_marginBottom="@dimen/margin_xl"
                     app:civ_border_color="@color/white"
                     app:civ_border_width="2dp" />
 
@@ -67,6 +68,8 @@
                     style="@style/Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:numStars="5"
+                    android:progressTint="#F8BE33"
+                    android:stepSize="1"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/ratingTv"
                     android:layout_alignBottom="@id/ratingTv"

@@ -21,6 +21,7 @@
         <item name="android:clipToPadding">false</item>
         <item name="background">@color/white</item>
         <item name="divider">@color/veryLightPink</item>
+        <!--        <item name="chipStyle">@style/ThinChip</item>-->
         <!--        <item name="materialButtonStyle">@style/MaterialButton</item>-->
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
         <!-- enable window content transitions -->
@@ -78,6 +79,7 @@
         <item name="android:paddingEnd">20dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
+        <item name="android:stateListAnimator">@null</item>
         <item name="android:background">@drawable/button_background_states</item>
     </style>
 
@@ -90,6 +92,7 @@
         <item name="android:paddingEnd">20dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
+        <item name="android:stateListAnimator">@null</item>
         <item name="android:background">@drawable/button_background_outline</item>
     </style>
 
@@ -179,6 +182,27 @@
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:layout_width">54dp</item>
         <item name="android:layout_height">40dp</item>
+    </style>
+
+    <style name="ThinChip" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="android:textAppearance">@style/chipText</item>
+        <item name="chipSurfaceColor">@color/white_transparent</item>
+
+        <item name="android:textColor">@color/white</item>
+        <item name="chipMinTouchTargetSize">0dp</item>
+        <item name="textEndPadding">@dimen/margin_extra_small</item>
+        <item name="textStartPadding">@dimen/margin_extra_small</item>
+        <item name="chipEndPadding">0dp</item>
+        <item name="chipStartPadding">0dp</item>
+        <!--        <item name="strokeWidth">2dp</item>-->
+        <!--        <item name="strokeColor">@color/white</item>-->
+        <!--        <item name="android:strokeColor">@color/white</item>-->
+        <!--        <item name="android:strokeWidth">1dp</item>-->
+    </style>
+
+    <style name="chipText" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/my_font_family</item>
     </style>
 
 

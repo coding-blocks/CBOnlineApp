@@ -24,6 +24,7 @@ import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.getDateForTime
+import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.loadSvg
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
@@ -109,7 +110,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             title = course.title
             shortTv.text = course.subtitle
             ratingBar.progress = course.rating.toInt()
-            ratingTv.text = "${course.rating}/5, ${course.reviewCount} ratings"
+            ratingTv.text = getSpannableSring("${course.rating}/5.0, ", "${course.reviewCount} ratings")
             if (courseLogoUrl.isNullOrEmpty()) courseLogo.loadImage(course.logo)
             courseBackdrop.loadImage(course.coverImage)
             setYoutubePlayer(course.promoVideo)

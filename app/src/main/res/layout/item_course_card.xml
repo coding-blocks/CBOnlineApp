@@ -141,6 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/courseCardInstructorImg1"
                     android:layout_marginStart="@dimen/margin_extra_small"
+                    android:textColor="#333"
                     android:layout_toEndOf="@id/courseCardInstructorImg2"
                     android:fontFamily="@font/gilroy_medium"
                     android:text="@string/instructors"

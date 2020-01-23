@@ -29,7 +29,6 @@ class MyCourseViewModel(
     private val mutablePopMessage = SingleLiveEvent<String>()
     private val extensions = MutableLiveData<List<ProductExtensionsItem>>()
     val popMessage: LiveData<String> = mutablePopMessage
-    var resetProgress: MutableLiveData<Boolean> = MutableLiveData()
     var filters: MutableLiveData<String> = MutableLiveData()
     var complete: MutableLiveData<String> = MutableLiveData("")
     var content: LiveData<List<SectionContentHolder.SectionContentPair>> = MutableLiveData()
@@ -74,7 +73,7 @@ class MyCourseViewModel(
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
-                        resetProgress.value = true
+                        resetProgress.postValue(true)
                     else {
                         setError(fetchError(response.value.code()))
                     }

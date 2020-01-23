@@ -37,13 +37,13 @@
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/card_title"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:drawableEnd="@drawable/ic_back"
+                    android:drawableEnd="@drawable/ic_back_small"
                     android:drawablePadding="10dp"
                     android:fontFamily="@font/gilroy_medium"
                     android:gravity="center"
