@@ -1,6 +1,7 @@
 package com.codingblocks.onlineapi.models
 
 import com.github.jasminb.jsonapi.Links
+import com.github.jasminb.jsonapi.RelType
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.RelationshipLinks
@@ -36,7 +37,7 @@ data class Course(
     val logo: String = "",
     val summary: String = "",
     val categoryId: Int?,
-    val promoVideo: String = "",
+    val promoVideo: String? = "",
     val reviewCount: Int = 0,
     val difficulty: String = "",
     val rating: Float = 0f,
@@ -161,7 +162,7 @@ data class Sections(
     var premium: Boolean = false,
     var status: String? = null,
     var order: Int? = 0,
-    @Relationship("contents")
+    @Relationship("contents", relType = RelType.RELATED)
     var contents: ArrayList<LectureContent>? = null,
     val runId: String? = "",
     @RelationshipLinks("contents")
@@ -512,10 +513,12 @@ data class CareerTracks(
     var background: String = "",
     var status: String? = "",
     val languages: List<String>,
-    @Relationship("courses")
+    @Relationship("courses", relType = RelType.RELATED)
     var courses: List<Course>?,
     @Relationship("professions")
-    var professions: List<Professions>?
+    var professions: List<Professions>?,
+    @RelationshipLinks("courses")
+    val coursesLinks: Links? = null
 ) : BaseModel()
 
 @Type("professions")

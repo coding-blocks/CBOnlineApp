@@ -31,6 +31,7 @@ class URLRouterActivity : AppCompatActivity() {
                     "classroom" -> openRouter(uri)
                     "courses" -> openRouter(uri)
                     "player" -> openRouter(uri)
+                    "tracks" -> openRouter(uri)
                     else -> fallBack()
                 }
             }

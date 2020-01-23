@@ -64,12 +64,13 @@
                     app:civ_border_color="@color/white"
                     app:civ_border_width="2dp" />
 
-                <RatingBar
+                <com.codingblocks.cbonlineapp.util.widgets.SvgRatingBar
                     android:id="@+id/ratingBar"
                     style="@style/CustomRatingBar"
                     android:layout_width="wrap_content"
                     android:numStars="5"
-                    android:stepSize="1"
+                    android:isIndicator="true"
+                    android:stepSize="0.01"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/ratingTv"
                     android:layout_alignBottom="@id/ratingTv"

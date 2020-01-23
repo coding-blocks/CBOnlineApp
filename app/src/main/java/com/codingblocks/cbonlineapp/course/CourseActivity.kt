@@ -109,11 +109,11 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             courseSummaryTv.text = course.summary
             title = course.title
             shortTv.text = course.subtitle
-            ratingBar.progress = course.rating.toInt()
+            ratingBar.rating = course.rating
             ratingTv.text = getSpannableSring("${course.rating}/5.0, ", "${course.reviewCount} ratings")
             if (courseLogoUrl.isNullOrEmpty()) courseLogo.loadImage(course.logo)
             courseBackdrop.loadImage(course.coverImage)
-            setYoutubePlayer(course.promoVideo)
+            setYoutubePlayer(course.promoVideo ?: "")
             viewModel.fetchProjects(course.projects)
             viewModel.fetchSections(course.runs?.first()?.sections)
             instructorAdapter.submitList(course.instructors)

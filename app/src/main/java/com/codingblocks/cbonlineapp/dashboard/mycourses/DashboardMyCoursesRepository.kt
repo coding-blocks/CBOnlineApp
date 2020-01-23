@@ -92,7 +92,7 @@ class DashboardMyCoursesRepository(
                     subtitle,
                     logo,
                     summary,
-                    promoVideo,
+                    promoVideo ?: "",
                     difficulty,
                     reviewCount,
                     rating,

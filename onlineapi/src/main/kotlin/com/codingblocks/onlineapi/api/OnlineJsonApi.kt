@@ -267,6 +267,17 @@ interface OnlineJsonApi {
         @Query("include") include: String = "professions"
     ): Response<List<CareerTracks>>
 
+    @GET("{id}")
+    suspend fun getTrackCourses(
+        @Path("id") path: String
+    ): Response<List<Course>>
+
+    @GET("career_tracks/{id}")
+    suspend fun getTrack(
+        @Path("id") id: String
+    ): Response<CareerTracks>
+
+
 
     /**
      * Admin Side API"s

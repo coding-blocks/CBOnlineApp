@@ -10,6 +10,7 @@ import cn.campusapp.router.router.IActivityRouteTableInitializer
 import com.codingblocks.cbonlineapp.course.CourseActivity
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.tracks.TrackActivity
 import com.codingblocks.cbonlineapp.util.ADMIN_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.AppSignatureHelper
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
@@ -90,6 +91,8 @@ class CBOnlineApp : Application() {
                     CourseActivity::class.java
                 router["activity://courseRun/https://online.codingblocks.com/player/:s{$RUN_ATTEMPT_ID}/content/:s{$SECTION_ID}/:s{$CONTENT_ID}"] =
                     VideoPlayerActivity::class.java
+                router["activity://courseRun/https://online.codingblocks.com/career_tracks/:s{trackId}"] =
+                    TrackActivity::class.java
             })
         } catch (e: ConcurrentModificationException) {
             Crashlytics.log("Router not working : ${e.localizedMessage}")

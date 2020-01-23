@@ -29,6 +29,8 @@ import com.codingblocks.cbonlineapp.mycourse.quiz.QuizRepository
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
 import com.codingblocks.cbonlineapp.notifications.NotificationViewModel
 import com.codingblocks.cbonlineapp.settings.SettingsViewModel
+import com.codingblocks.cbonlineapp.tracks.TrackViewModel
+import com.codingblocks.cbonlineapp.tracks.TracksRepository
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -54,6 +56,7 @@ val viewModelModule = module {
     viewModel { DashboardViewModel(get(), get(), get()) }
     viewModel { QuizViewModel(get()) }
     viewModel { CheckoutViewModel() }
+    viewModel { TrackViewModel(get()) }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
@@ -66,6 +69,7 @@ val viewModelModule = module {
     single { QuizRepository(get()) }
     single { JobRepository(get()) }
     single { MyCourseRepository(get(), get(), get(), get(), get()) }
+    single { TracksRepository() }
 }
 val preferencesModule = module {
     single { provideSettingsPreferences(androidApplication()) }
