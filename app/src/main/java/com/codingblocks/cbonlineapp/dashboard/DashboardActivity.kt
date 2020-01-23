@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -27,8 +28,10 @@ import com.codingblocks.cbonlineapp.profile.ReferralActivity
 import com.codingblocks.cbonlineapp.purchases.PurchasesActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.TracksActivity
+import com.codingblocks.cbonlineapp.util.JWT_TOKEN
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
+import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.fabnavigation.FabNavigation
@@ -36,9 +39,9 @@ import com.codingblocks.fabnavigation.FabNavigationAdapter
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
-import kotlinx.android.synthetic.main.nav_header_home.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -62,7 +65,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         setContentView(R.layout.activity_dashboard)
         Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
         Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
-        viewModel.isLoggedIn.postValue(prefs.SP_JWT_REFRESH_TOKEN.isNotEmpty())
+        viewModel.isLoggedIn.postValue(prefs.SP_JWT_REFRESH_TOKEN != JWT_TOKEN)
         if (prefs.SP_JWT_REFRESH_TOKEN.isNotEmpty()) {
             setUser()
             initializeUI(true)
@@ -76,10 +79,10 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             val navMenu = dashboardNavigation.menu
             navMenu.findItem(R.id.nav_admin).isVisible = it
         }
-//        dashboardNavigation.getHeaderView(0).apply {
-//            navHeaderImageView.loadImage(prefs.SP_USER_IMAGE, true)
-//            navUsernameTv.append(" ${prefs.SP_USER_NAME}")
-//        }
+        dashboardNavigation.getHeaderView(0).apply {
+            findViewById<CircleImageView>(R.id.navHeaderImageView).loadImage(prefs.SP_USER_IMAGE, true)
+            findViewById<TextView>(R.id.navUsernameTv).append(" ${prefs.SP_USER_NAME}")
+        }
     }
 
     override fun onStart() {

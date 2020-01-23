@@ -92,7 +92,7 @@
     <string name="doubts_that_you_ask_appear_here">Doubts that you ask appear here</string>
     <string name="reopen_doubt">Reopen Doubt</string>
     <string name="filter">Filter</string>
-    <string name="live_doubts">Live Doubts</string>
+    <string name="live_doubts">Live</string>
     <string name="resolved">Resolved</string>
     <string name="all">All</string>
     <string name="recently_accessed">Recently Accessed</string>
@@ -183,7 +183,7 @@
     <string name="trending_desc">Industry trending tech courses for you!</string>
     <string name="what_do_you_want_to_learn">What do you want to learn ?</string>
     <string name="recommended_for_you">Recommended for you</string>
-    <string name="revise"><![CDATA[Revise & Revisit \nAnytime]]></string>
+    <string name="revise"><![CDATA[Revise & Revisit]]></string>
     <string name="lectures_text">200+ Live \nLectures</string>
     <string name="mentor_support">24*7 Mentor \nSupport</string>
     <string name="completion_certificate">Completion \nCertificate</string>
@@ -223,5 +223,6 @@
     <string name="all_jobs">All Jobs</string>
     <string name="eligible_jobs">Eligible Jobs</string>
     <string name="dashboard_empty_wish">You have not wishlisted any course! \nStart exploring courses now!</string>
+    <string name="course_includes">Course Includes</string>
 
 </resources>

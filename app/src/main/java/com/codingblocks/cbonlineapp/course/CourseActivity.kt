@@ -230,7 +230,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
     private fun setUpBottomSheet() {
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_batch, null)
         sheetDialog.run {
-            batchRv.setRv(this@CourseActivity, batchListAdapter)
+            batchRv.setRv(this@CourseActivity, batchListAdapter, true)
         }
         batchListAdapter.onItemClick = {
             setRun(it)

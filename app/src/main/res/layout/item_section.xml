@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
         android:layout_marginTop="4dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
         android:layout_toEndOf="@id/lectures"
         android:maxLines="1"
         android:fontFamily="@font/gilroy_medium"

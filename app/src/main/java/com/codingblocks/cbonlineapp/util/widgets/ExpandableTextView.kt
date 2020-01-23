@@ -62,6 +62,6 @@ class ExpandableTextView @JvmOverloads constructor(context: Context, attrs: Attr
 
     companion object {
         private val DEFAULT_TRIM_LENGTH = 200
-        private val ELLIPSIS = "..... View More"
+        private val ELLIPSIS = "...more"
     }
 }

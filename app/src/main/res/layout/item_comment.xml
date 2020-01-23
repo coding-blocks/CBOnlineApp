@@ -22,13 +22,14 @@
             android:layout_weight="1"
             android:fontFamily="@font/gilroy_bold"
             android:textSize="16sp"
+            android:lines="1"
             tools:text="This is the title of the doubt " />
 
         <TextView
             android:id="@+id/commentTimeTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
+            android:layout_gravity="center"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:fontFamily="@font/gilroy_medium"

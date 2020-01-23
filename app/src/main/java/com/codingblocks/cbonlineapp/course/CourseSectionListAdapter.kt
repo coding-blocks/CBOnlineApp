@@ -38,7 +38,7 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
 
         fun bind(item: Sections) = with(itemView) {
             title.text = item.name
-            lectures.text = " ${item.contents?.size ?: 0} Items"
+            lectures.text = " ${item.contents?.size ?: 0} Items |"
             var duration: Long = 0
             for (subItems in item.contents!!) {
                 if (subItems.contentable == "lecture" || subItems.contentable == "video")
@@ -82,16 +82,17 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
             }
 
             setOnClickListener {
-                showOrHide(ll)
+                showOrHide(ll, title)
             }
 
             arrow.setOnClickListener {
-                showOrHide(ll)
+                showOrHide(ll, title)
             }
         }
 
-        private fun showOrHide(ll: View) {
+        private fun showOrHide(ll: View, title: TextView) {
             if (ll.visibility == View.GONE) {
+                title.setTextColor(ll.context.getColor(R.color.orangish))
                 ll.visibility = View.VISIBLE
                 arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                     0.5f)
@@ -100,6 +101,7 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
 
                 itemView.arrow.startAnimation(arrowAnimation)
             } else {
+                title.setTextColor(ll.context.getColor(R.color.black))
                 ll.visibility = View.GONE
                 arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                     0.5f)

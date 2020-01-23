@@ -15,66 +15,62 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-        <HorizontalScrollView
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_medium"
-            android:layout_marginEnd="@dimen/margin_medium">
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:paddingTop="@dimen/margin_medium"
+            android:paddingBottom="@dimen/margin_medium">
 
-            <LinearLayout
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/liveDoubtBtn"
+                style="@style/ButtonStyleChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:drawableEnd="@drawable/ic_circle_white_small"
+                android:drawablePadding="4dp"
+                android:text="@string/live_doubts" />
 
-                android:paddingTop="14dp"
-                android:paddingBottom="14dp">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/resolvedDoubtBtn"
+                style="@style/ButtonStyleChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:text="@string/resolved" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/liveDoubtBtn"
-                    style="@style/ButtonStyleChip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:drawableEnd="@drawable/ic_circle_white_small"
-                    android:drawablePadding="4dp"
-                    android:text="@string/live_doubts" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/allDoubtBtn"
+                style="@style/ButtonStyleChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:text="@string/all" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/resolvedDoubtBtn"
-                    style="@style/ButtonStyleChip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:text="@string/resolved" />
+            <TextView
+                android:id="@+id/filterTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:drawableEnd="@drawable/ic_filter"
+                android:drawablePadding="8dp"
+                android:focusable="true"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="@string/filter"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/allDoubtBtn"
-                    style="@style/ButtonStyleChip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:text="@string/all" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/filterTv"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:drawableEnd="@drawable/ic_filter"
-                    android:drawablePadding="8dp"
-                    android:focusable="true"
-                    android:fontFamily="@font/gilroy_bold"
-                    android:text="@string/filter"
-                    android:textAlignment="viewEnd"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-        </HorizontalScrollView>
 
         <View
             android:id="@+id/divider4"

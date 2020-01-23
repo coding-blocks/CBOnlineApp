@@ -47,7 +47,7 @@
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/course_progress"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/homeProgressTv"
@@ -58,7 +58,7 @@
                     android:layout_toEndOf="@id/homeProgress"
                     android:fontFamily="@font/gilroy_bold"
                     android:textColor="@color/orangish"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     tools:text="100%" />
 
 
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/cards"
                     android:layout_marginStart="@dimen/margin_large"
-                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_large"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/performance_graph"
                     android:textSize="18sp" />

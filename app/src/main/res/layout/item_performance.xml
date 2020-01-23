@@ -18,6 +18,9 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/veryLightPink"
+            app:strokeWidth="1dp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="10dp">
 
@@ -57,7 +60,10 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:cardElevation="0dp"
             android:layout_marginStart="@dimen/margin_medium"
+            app:strokeColor="@color/veryLightPink"
+            app:strokeWidth="1dp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="10dp">
 

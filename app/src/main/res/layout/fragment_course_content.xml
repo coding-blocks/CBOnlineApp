@@ -40,11 +40,6 @@
 
         <!--        </LinearLayout>-->
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/veryLightPink" />
-
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,7 +52,8 @@
                 android:id="@+id/typeChipGroup"
                 android:layout_height="wrap_content"
                 app:singleLine="true"
-                android:padding="@dimen/margin_small"
+                android:padding="@dimen/margin_medium_small"
+                app:chipSpacingHorizontal="15dp"
                 app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
@@ -113,6 +109,7 @@
             android:id="@+id/contentShimmer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_margin="4dp">
             <include layout="@layout/item_skeleton_content" />
         </com.facebook.shimmer.ShimmerFrameLayout>
@@ -122,7 +119,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:overScrollMode="never"
-            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_extra_small"
             tools:listitem="@layout/item_section" />
     </LinearLayout>
 

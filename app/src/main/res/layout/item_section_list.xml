@@ -6,10 +6,10 @@
     android:background="?attr/selectableItemBackground"
     android:gravity="center"
     android:orientation="horizontal"
-    android:paddingStart="14dp"
-    android:paddingTop="8dp"
-    android:paddingEnd="14dp"
-    android:paddingBottom="8dp">
+    android:paddingStart="16dp"
+    android:paddingTop="@dimen/margin_medium_small"
+    android:paddingEnd="16dp"
+    android:paddingBottom="@dimen/margin_extra_small">
 
     <TextView
         android:id="@+id/sectionTitle"

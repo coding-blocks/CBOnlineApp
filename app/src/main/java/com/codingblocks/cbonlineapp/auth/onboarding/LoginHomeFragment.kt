@@ -13,6 +13,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
+import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_login_home.*
@@ -85,7 +87,7 @@ class LoginHomeFragment : Fragment() {
     }
 
     private fun setfirstSpan() {
-        val wordToSpan = SpannableString("New here? Create an account")
+        val wordToSpan = getSpannableStringSecondBold("New here? ", "Create an account")
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
                 replaceFragmentSafely(SignInFragment.newInstance("NEW"), containerViewId = R.id.loginContainer)

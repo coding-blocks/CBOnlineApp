@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
-                android:fontFamily="@font/gilroy_bold"
+                android:fontFamily="@font/gilroy_medium"
                 android:textColor="@color/black"
                 android:layout_gravity="center"
                 android:textColorLink="@color/orangish"
@@ -81,7 +81,7 @@
                 android:gravity="center"
                 android:textColorLink="@color/brownish_grey"
                 android:layout_marginBottom="@dimen/margin_large"
-                android:fontFamily="@font/gilroy_bold"
+                android:fontFamily="@font/gilroy_medium"
                 android:layout_marginTop="@dimen/margin_xxxl"
                 android:textColor="@color/brownish_grey" />
         </LinearLayout>

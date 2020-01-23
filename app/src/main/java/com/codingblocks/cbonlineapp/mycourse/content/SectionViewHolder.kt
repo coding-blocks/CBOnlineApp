@@ -26,7 +26,8 @@ class SectionViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             itemView.dividerTop.isVisible = false
         }
         itemView.title.text = section.name
-        itemView.lectures.text = "${section.completedContent}/${section.totalContent} Lectures Completed"
-        itemView.lectureTime.text = section.totalTime.getDurationBreakdown()
+        itemView.lectures.text = "${section.totalContent} Items |"
+        itemView.lectureTime.text = "Duration : ${section.totalTime.getDurationBreakdown()}"
+
     }
 }

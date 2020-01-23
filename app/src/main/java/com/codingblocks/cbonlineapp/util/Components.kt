@@ -54,7 +54,7 @@ object Components {
             "reset" -> {
                 updateView.okBtn.text = "Yes"
                 updateView.cancelBtn.text = "No"
-                updateView.description.text = "Are you sure you want to reset progress?"
+                updateView.description.text = "You will lose all your course progress.\nAre you sure you want to reset ?"
             }
             "quiz" -> {
                 updateView.okBtn.text = "Yes"

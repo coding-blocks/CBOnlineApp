@@ -20,6 +20,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:ellipsize="end"
+            android:lines="1"
             android:fontFamily="@font/gilroy_bold"
             android:textSize="16sp"
             tools:text="This is the title of the doubt " />
@@ -28,8 +30,8 @@
             android:id="@+id/doubtTimeTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="4dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/margin_extra_small"
             android:layout_marginEnd="4dp"
             android:fontFamily="@font/gilroy_medium"
             android:textColor="@color/brownish_grey"
@@ -60,13 +62,13 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginTop="16dp"
         android:background="?attr/divider" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="16dp"
         android:id="@+id/buttonsContainer"
         android:gravity="center">
 
@@ -84,18 +86,29 @@
             android:gravity="start"
             android:text="@string/comment" />
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
         <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
             android:id="@+id/chatTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/ic_chat"
             android:drawablePadding="8dp"
+
             android:fontFamily="@font/gilroy_medium"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
             android:text="@string/chat_with_ta"
             android:visibility="visible" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/markResolvedTv"

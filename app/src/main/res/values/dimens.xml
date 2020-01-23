@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
@@ -38,6 +38,7 @@
     <dimen name="margin_xl">42dp</dimen>
     <dimen name="dashboard_toolbar_neg">-40dp</dimen>
     <dimen name="dashboard_toolbar_comp">40dp</dimen>
+    <dimen name="design_navigation_separator_vertical_padding" tools:override="true">20dp</dimen>
 
 
 </resources>
