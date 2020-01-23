@@ -93,9 +93,7 @@ class DashboardHomeFragment : Fragment() {
             }
         }
         exploreBtn.setOnClickListener { requireActivity().dashboardBottomNav.setCurrentItem(0) }
-
     }
-
 
     private fun loadData(averageProgress: ArrayList<ProgressItem>, userProgress: ArrayList<ProgressItem>) {
         val values: ArrayList<Entry> = ArrayList()

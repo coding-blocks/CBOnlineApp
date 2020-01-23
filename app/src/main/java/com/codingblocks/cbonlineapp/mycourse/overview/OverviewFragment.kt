@@ -144,7 +144,6 @@ class OverviewFragment : Fragment(), AnkoLogger {
 //            buyBtn.isEnabled = it != -1
 //        }
 
-
         viewModel.popMessage.observer(viewLifecycleOwner) { message ->
             Snackbar.make(view.rootView, message, Snackbar.LENGTH_LONG).show()
         }

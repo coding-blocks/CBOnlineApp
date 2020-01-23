@@ -28,6 +28,5 @@ class SectionViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         itemView.title.text = section.name
         itemView.lectures.text = "${section.totalContent} Items |"
         itemView.lectureTime.text = "Duration : ${section.totalTime.getDurationBreakdown()}"
-
     }
 }

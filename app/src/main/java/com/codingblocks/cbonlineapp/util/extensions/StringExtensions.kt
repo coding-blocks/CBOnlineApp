@@ -140,7 +140,6 @@ fun getSpannableStringSecondBold(normalText: String, boldText: String): Spannabl
         .append(normalText)
         .bold { append(boldText) }
 
-
 fun timeAgo(time: Long): String {
     val diff = floor(((System.currentTimeMillis() - time) / 1000).toDouble())
     var interval = floor(diff / 31536000).toInt()

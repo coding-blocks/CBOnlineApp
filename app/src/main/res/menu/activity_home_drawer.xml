@@ -21,6 +21,7 @@
     </group>
 
     <group
+        android:id="@+id/features"
         android:checkableBehavior="none"
         android:menuCategory="system">
 
@@ -31,6 +32,7 @@
             android:visible="false" />
     </group>
     <group
+        android:id="@+id/communication"
         android:checkableBehavior="none"
         android:menuCategory="system">
 
@@ -40,6 +42,7 @@
             android:title="@string/settings" />
 
         <item
+            android:id="@+id/nav_feedback"
             android:icon="@drawable/ic_help"
             android:title="@string/help_amp_feedback" />
         <item

@@ -114,13 +114,13 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
         var itemClickListener: ItemClickListener? = null
 
         fun bind(item: NotesModel) = with(itemView) {
-            noteVTitleTv.text = item.contentTitle
+            //            noteVTitleTv.text = item.contentTitle
             noteVDescriptionTv.text = item.text
             noteVTimeTv.text = item.createdAt.timeAgo()
             noteVCreateTv.text = item.duration.secToTime()
-            noteVDeleteImg.setOnClickListener {
-                deleteClickListener?.onClick(item.nttUid, adapterPosition, itemView)
-            }
+//            noteVDeleteImg.setOnClickListener {
+//                deleteClickListener?.onClick(item.nttUid, adapterPosition, itemView)
+//            }
             noteVEditImg.setOnClickListener {
                 editClickListener?.onClick(item)
             }

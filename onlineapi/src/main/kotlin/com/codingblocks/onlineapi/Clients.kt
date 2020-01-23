@@ -94,7 +94,7 @@ object Clients {
         .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
         .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
         .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
-//        .addInterceptor(logging)
+        .addInterceptor(logging)
         .addInterceptor { chain ->
             chain.proceed(
                 chain.request().newBuilder().addHeader(
@@ -105,14 +105,14 @@ object Clients {
         }
         .build()
 
-    private const val LOCAL = "192.168.1.8:3000"
+    private const val LOCAL = "192.168.1.17:3000"
     private const val DEBUG = "api-online.codingblocks.xyz"
     private const val PROD = "online-api.codingblocks.com"
 
 
     private val onlineV2JsonRetrofit = Retrofit.Builder()
         .client(ClientInterceptor)
-        .baseUrl("http://$DEBUG/api/v2/")
+        .baseUrl("http://$LOCAL/api/v2/")
         .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
         .addConverterFactory(JacksonConverterFactory.create(om))
         .build()
@@ -126,7 +126,7 @@ object Clients {
 
     private val retrofit = Retrofit.Builder()
         .client(ClientInterceptor)
-        .baseUrl("http://$DEBUG/api/")
+        .baseUrl("http://$LOCAL/api/")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
     val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)

@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
