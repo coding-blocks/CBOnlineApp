@@ -1,4 +1,4 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingTop="@dimen/margin_large"
+        android:layout_marginBottom="@dimen/margin_9xl"
         android:paddingBottom="@dimen/margin_large">
 
         <LinearLayout
@@ -31,8 +32,8 @@
                     android:id="@+id/homeCourseLogoImg"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:layout_marginStart="@dimen/margin_large"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginEnd="@dimen/margin_medium"
                     android:src="@drawable/ic_course_logo" />
 
@@ -175,51 +176,53 @@
                 android:layout_marginTop="@dimen/margin_large"
                 android:background="@drawable/dividerthick" />
 
-            <LinearLayout
+            <RelativeLayout
+                android:layout_marginTop="@dimen/margin_large"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginTop="@dimen/margin_large"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:visibility="gone">
 
                 <ImageView
+                    android:id="@+id/wishImg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_extra_small"
                     android:src="@drawable/ic_like_gradient" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/wishTitleTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/gilroy_bold"
-                        android:text="@string/my_wishlist"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:drawablePadding="10dp"
-                        android:fontFamily="@font/gilroy_medium"
-                        android:gravity="center"
-                        android:text="@string/wishlisted_desc"
-                        android:textColor="@color/brownish_grey"
-                        android:textSize="13sp" />
-
-                </LinearLayout>
+                    android:layout_toEndOf="@id/wishImg"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/my_wishlist"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:id="@+id/wishSubTv"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_below="@id/wishTitleTv"
+                    android:layout_alignStart="@id/wishTitleTv"
+                    android:layout_marginTop="4dp"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:gravity="center"
+                    android:text="@string/wishlisted_desc"
+                    android:textColor="@color/brownish_grey"
+                    android:textSize="13sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/wishImg"
+                    android:layout_alignBottom="@+id/wishImg"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/margin_large"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:drawableEnd="@drawable/ic_dropright"
@@ -230,19 +233,74 @@
                     android:text="@string/view_all"
                     android:textAlignment="viewEnd"
                     android:textColor="@color/orangish" />
-            </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/wishSubTv"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_marginBottom="@dimen/margin_9xl"
+                    android:orientation="horizontal"
+                    android:overScrollMode="never"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="4"
+                    tools:listitem="@layout/item_course_card_secondary" />
+            </RelativeLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginBottom="@dimen/margin_9xl"
-                android:orientation="horizontal"
-                android:overScrollMode="never"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="4"
-                tools:listitem="@layout/item_course_card_secondary" />
+                android:layout_marginTop="@dimen/margin_xl"
+                android:layout_marginBottom="@dimen/margin_large"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/ic_like_gradient" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/my_wishlist"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium_small"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:text="@string/dashboard_empty_wish"
+                    android:textAlignment="center"
+                    android:textColor="@color/brownish_grey" />
+
+                <View
+                    android:layout_width="200dp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:background="@drawable/divider" />
+
+                <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_dropright"
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/orangish"
+                    android:focusable="true"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/explore_courses"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
 
 
         </LinearLayout>
@@ -300,4 +358,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

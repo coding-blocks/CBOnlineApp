@@ -66,11 +66,22 @@ class MyCourseViewModel(
 
     fun getPerformance() = repo.getRunStats(attemptId)
 
-    fun resetProgress() {
+    fun resetProgress(): MutableLiveData<Boolean> {
+        val resetProgress = MutableLiveData<Boolean>()
         val resetCourse = ResetRunAttempt(attemptId)
-        Clients.api.resetProgress(resetCourse).enqueue(retrofitCallback { _, response ->
-            resetProgress.value = response?.isSuccessful ?: false
-        })
+        runIO {
+            when (val response = repo.resetProgress(resetCourse)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        resetProgress.value = true
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+        return resetProgress
     }
 
     fun requestApproval() {

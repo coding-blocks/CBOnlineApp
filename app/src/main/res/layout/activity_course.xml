@@ -264,12 +264,21 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     app:lineSpacing="10dp" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:background="@drawable/dividerthick" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="@dimen/margin_medium"
                     android:layout_marginEnd="@dimen/margin_large"
+                    android:drawableStart="@drawable/ic_courses"
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/orangish"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/course_content"
                     android:textColor="#333333"
@@ -284,6 +293,13 @@
                     android:overScrollMode="never"
                     tools:itemCount="1"
                     tools:listitem="@layout/item_course_section" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:background="@drawable/dividerthick" />
+
 
                 <TextView
                     android:id="@+id/projectsTv"
@@ -304,7 +320,7 @@
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginEnd="@dimen/margin_large"
                     android:overScrollMode="never"
-                    tools:itemCount="5"
+                    tools:itemCount="1"
                     tools:listitem="@layout/item_project" />
 
                 <LinearLayout

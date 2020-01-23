@@ -14,7 +14,7 @@ class PreferenceHelper private constructor() {
         }
 
     var SP_JWT_TOKEN_KEY: String
-        get() = prefs?.getString(JWT_TOKEN, JWT_TOKEN) ?: ""
+        get() = prefs?.getString(JWT_TOKEN, "") ?: ""
         set(value) {
             prefs?.save(JWT_TOKEN, value)
         }

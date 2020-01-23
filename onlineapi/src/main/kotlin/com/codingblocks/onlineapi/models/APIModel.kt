@@ -158,7 +158,7 @@ data class Comment(
 @Type("sections")
 data class Sections(
     var name: String? = null,
-    var premium: Boolean? = false,
+    var premium: Boolean = false,
     var status: String? = null,
     var order: Int? = 0,
     @Relationship("contents")

@@ -87,7 +87,7 @@ interface OnlineRestApi {
     fun refreshToken(@Field("refresh_token") refresh_token: String): Call<JsonObject>
 
     @POST("v2/progresses/reset")
-    fun resetProgress(@Body runAttemptId: ResetRunAttempt): Call<ResponseBody>
+    suspend fun resetProgress(@Body runAttemptId: ResetRunAttempt): Response<ResponseBody>
 
     @GET("v2/run_attempts/{runAttemptId}/requestApproval")
     fun requestApproval(@Path("runAttemptId") id: String): Call<ResponseBody>

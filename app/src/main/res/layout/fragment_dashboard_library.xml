@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
-        android:visibility="visible"
+        android:visibility="gone"
         tools:itemCount="4"
         tools:listitem="@layout/item_courses" />
 

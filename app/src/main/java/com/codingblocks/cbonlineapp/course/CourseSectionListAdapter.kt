@@ -8,6 +8,8 @@ import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +17,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.Sections
 import kotlinx.android.synthetic.main.item_course_section.view.*
+import kotlinx.android.synthetic.main.item_section_content_info.view.*
 
 class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.ItemViewHolder>(DiffCallback()) {
 
@@ -59,6 +62,7 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
                 val inflatedView = factory.inflate(R.layout.item_section_content_info, ll, false)
                 val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
                 val contentImg = inflatedView.findViewById(R.id.imageView3) as ImageView
+                val premiumImg = inflatedView.premiumImg
                 if (i.contentable == "lecture" || i.contentable == "video") {
                     contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_play_lock))
                 } else if (i.contentable == "document") {
@@ -66,8 +70,14 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
                 } else if (i.contentable == "code-challenge") {
                     contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_play_lock))
                 }
+                if (!item.premium) {
+                    subTitle.setTextColor(getColor(context, R.color.orangish))
+                    premiumImg.isVisible = false
+                } else {
+                    subTitle.setTextColor(getColor(context, R.color.black))
+                    premiumImg.isVisible = true
+                }
                 subTitle.text = i.title
-
                 ll.addView(inflatedView)
             }
 

@@ -14,9 +14,12 @@ import com.codingblocks.cbonlineapp.dashboard.mycourses.MyCourseListAdapter
 import com.codingblocks.cbonlineapp.library.LibraryActivity
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import kotlinx.android.synthetic.main.fragment_dashboard_library.*
+import kotlinx.android.synthetic.main.fragment_dashboard_library.dashboardCoursesRv
+import kotlinx.android.synthetic.main.fragment_dashboard_library.emptyLl
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -48,10 +51,13 @@ class DashboardLibraryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dashboardCoursesRv.setRv(requireContext(), courseListAdapter, true)
-
-        viewModel.allRuns.observer(viewLifecycleOwner) {
-            courseListAdapter.submitList(it)
+        viewModel.added.observer(viewLifecycleOwner) {
+            viewModel.allRuns.observer(viewLifecycleOwner) {
+                courseListAdapter.submitList(it)
+                changeViewState(dashboardCoursesRv, emptyLl, dashboardCourseShimmer, it.isEmpty())
+            }
         }
+
         dashboardLibraryEmptyBtn.setOnClickListener {
             listener.openExplore()
         }

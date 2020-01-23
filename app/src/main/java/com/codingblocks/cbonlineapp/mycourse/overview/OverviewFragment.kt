@@ -94,7 +94,6 @@ class OverviewFragment : Fragment(), AnkoLogger {
         userProgress.forEachIndexed { index, progressItem ->
             values2.add(Entry(index.toFloat(), progressItem.progress.toFloat()))
         }
-        values.add(Entry(2f, 100f))
         val set1 = LineDataSet(values, "Average Progress")
         set1.apply {
             setDrawCircles(false)
@@ -144,10 +143,12 @@ class OverviewFragment : Fragment(), AnkoLogger {
         }
     }
 
-    private fun confirmReset() {
+    fun confirmReset(view: View) {
         Components.showConfirmation(requireContext(), "reset") {
             if (it) {
-                viewModel.resetProgress()
+                viewModel.resetProgress().observer(viewLifecycleOwner) {
+                    requireActivity().finish()
+                }
             }
         }
     }

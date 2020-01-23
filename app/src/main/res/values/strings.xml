@@ -222,5 +222,6 @@
     <string name="dashboard_empty_progress">You need to enroll in atleast one course.\nYour course metrics and performance graph \nwill appear here.</string>
     <string name="all_jobs">All Jobs</string>
     <string name="eligible_jobs">Eligible Jobs</string>
+    <string name="dashboard_empty_wish">You have not wishlisted any course! \nStart exploring courses now!</string>
 
 </resources>

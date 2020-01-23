@@ -54,8 +54,8 @@
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:fontFamily="@font/gilroy_bold"
-                    android:paddingStart="8dp"
                     android:text="@string/reset"
+                    android:onClick="confirmReset"
                     android:textAlignment="viewEnd"
                     android:textColor="#ff6666"
                     android:textSize="12sp" />

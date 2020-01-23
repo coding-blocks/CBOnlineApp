@@ -21,6 +21,7 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.PerformanceResponse
+import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.safeApiCall
 
@@ -247,4 +248,6 @@ class MyCourseRepository(
     }
 
     fun getNextContent(attemptId: String) = sectionWithContentsDao.getNextContent(attemptId)
+
+    suspend fun resetProgress(attemptId: ResetRunAttempt) = safeApiCall { Clients.api.resetProgress(attemptId) }
 }
