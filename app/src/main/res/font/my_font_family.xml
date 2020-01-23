@@ -4,4 +4,5 @@
         app:font="@font/gilroy_medium"
         app:fontStyle="normal"
         app:fontWeight="400" />
+
 </font-family>

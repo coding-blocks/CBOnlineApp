@@ -16,7 +16,7 @@ import org.koin.android.ext.android.inject
 class ChatActivity : AppCompatActivity() {
 
     private val conversationId: String by lazy {
-        intent.getStringExtra(CONVERSATION_ID)
+        intent.getStringExtra(CONVERSATION_ID) ?: ""
     }
     private val prefs by inject<PreferenceHelper>()
 

@@ -224,5 +224,7 @@
     <string name="eligible_jobs">Eligible Jobs</string>
     <string name="dashboard_empty_wish">You have not wishlisted any course! \nStart exploring courses now!</string>
     <string name="course_includes">Course Includes</string>
+    <string name="inbox">Inbox</string>
+    <string name="career_options">Career Options</string>
 
 </resources>

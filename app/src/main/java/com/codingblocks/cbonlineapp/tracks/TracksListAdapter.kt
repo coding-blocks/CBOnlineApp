@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.tracks
 
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,26 +11,44 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.CareerTracks
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
 import kotlinx.android.synthetic.main.item_track.view.*
+import kotlinx.android.synthetic.main.item_track.view.trackCourseNumTv
+import kotlinx.android.synthetic.main.item_track.view.trackLogo
+import kotlinx.android.synthetic.main.item_track.view.trackTitleTv
+import kotlinx.android.synthetic.main.item_track_card.view.*
 
-class TracksListAdapter : ListAdapter<CareerTracks, TracksListAdapter.ItemViewHolder>(DiffCallback()) {
+class TracksListAdapter(val type: String = "") : ListAdapter<CareerTracks, TracksListAdapter.ItemViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_track, parent, false)
+            when (type) {
+                "LIST" -> LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_track_card, parent, false)
+                else -> LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_track, parent, false)
+            }
         )
     }
 
-    override fun onBindViewHolder(holder: TracksListAdapter.ItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: CareerTracks) = with(itemView) {
             trackTitleTv.text = item.name
-            trackLogo.loadImage(item.logo)
+//            trackLogo.loadImage(item.logo)
             trackCourseNumTv.text = "${item.courses?.size} Courses"
+            if (type == "LIST") {
+//                trackCover.loadImage(item.background)
+                item.professions?.forEach {
+                    val chip = LayoutInflater.from(context).inflate(R.layout.single_chip_layout, trackChips, false) as Chip
+                    chip.text = it.title
+                    trackChips.addView(chip)
+                }
+            }
         }
     }
 

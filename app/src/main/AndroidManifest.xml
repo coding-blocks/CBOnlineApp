@@ -26,7 +26,7 @@
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity android:name=".profile.ReferralActivity" />
         <activity
-            android:name=".tracks.TracksActivity"
+            android:name=".tracks.LearningTracksActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity android:name=".profile.ProfileActivity" />
         <activity

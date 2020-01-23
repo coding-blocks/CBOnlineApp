@@ -27,7 +27,7 @@ import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
 import com.codingblocks.cbonlineapp.profile.ReferralActivity
 import com.codingblocks.cbonlineapp.purchases.PurchasesActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
-import com.codingblocks.cbonlineapp.tracks.TracksActivity
+import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.util.JWT_TOKEN
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
@@ -173,13 +173,16 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 startActivity(intentFor<SettingsActivity>().singleTop())
             }
             R.id.nav_tracks -> {
-                startActivity(intentFor<TracksActivity>().singleTop())
+                startActivity(intentFor<LearningTracksActivity>().singleTop())
             }
             R.id.nav_purchases -> {
                 startActivity(intentFor<PurchasesActivity>().singleTop())
             }
             R.id.nav_hiring -> {
                 startActivity(intentFor<JobsActivity>().singleTop())
+            }
+            R.id.nav_inbox -> {
+                startActivity(intentFor<ChatActivity>().singleTop())
             }
         }
         dashboardDrawer.closeDrawer(GravityCompat.START)
@@ -241,7 +244,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             0 -> {
                 dashboardToolbarSearch.isVisible = true
                 searchBtn.setOnClickListener {
-                    startActivity(intentFor<TracksActivity>().singleTop())
+                    startActivity(intentFor<LearningTracksActivity>().singleTop())
                 }
                 dashboardToolbarSecondary.isVisible = false
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))

@@ -505,12 +505,12 @@ class CarouselCards(
 
 @Type("career_tracks")
 data class CareerTracks(
-    var name: String,
-    var slug: String,
+    var name: String = "",
+    var slug: String = "",
     var unlisted: Boolean,
-    var logo: String,
-    var background: String,
-    var status: String?,
+    var logo: String = "",
+    var background: String = "",
+    var status: String? = "",
     val languages: List<String>,
     @Relationship("courses")
     var courses: List<Course>?,
@@ -519,7 +519,9 @@ data class CareerTracks(
 ) : BaseModel()
 
 @Type("professions")
-class Professions : BaseModel()
+class Professions(
+    val title: String = ""
+) : BaseModel()
 
 @Type("player")
 class Player(
