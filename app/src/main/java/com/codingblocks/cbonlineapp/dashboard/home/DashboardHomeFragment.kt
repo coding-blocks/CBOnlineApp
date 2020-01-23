@@ -51,14 +51,20 @@ class DashboardHomeFragment : Fragment() {
                         with(courseAndRun) {
                             dashboardProgressContainer.isVisible = true
                             dashboardEmptyProgress.isVisible = false
-                            activity?.toolbarCourseTitleTv?.text = course.title
-                            activity?.toolbarCourseResumeTv?.setOnClickListener {
-                                startActivity(intentFor<MyCourseActivity>(
-                                    COURSE_ID to course.cid,
-                                    RUN_ID to run.crUid,
-                                    RUN_ATTEMPT_ID to runAttempt.attemptId,
-                                    COURSE_NAME to course.title
-                                ).singleTop())
+                            activity?.toolbarCourseTitleTv?.apply {
+                                text = course.title
+                                isVisible = true
+                            }
+                            activity?.toolbarCourseResumeTv?.apply {
+                                isVisible = true
+                                setOnClickListener {
+                                    startActivity(intentFor<MyCourseActivity>(
+                                        COURSE_ID to course.cid,
+                                        RUN_ID to run.crUid,
+                                        RUN_ATTEMPT_ID to runAttempt.attemptId,
+                                        COURSE_NAME to course.title
+                                    ).singleTop())
+                                }
                             }
 
                             homeCourseLogoImg.loadSvg(course.logo)
@@ -86,10 +92,10 @@ class DashboardHomeFragment : Fragment() {
                 dashboardHomeLoggedOut.isVisible = true
             }
         }
-        exploreBtn.setOnClickListener {
-            requireActivity().dashboardBottomNav.setCurrentItem(0)
-        }
+        exploreBtn.setOnClickListener { requireActivity().dashboardBottomNav.setCurrentItem(0) }
+
     }
+
 
     private fun loadData(averageProgress: ArrayList<ProgressItem>, userProgress: ArrayList<ProgressItem>) {
         val values: ArrayList<Entry> = ArrayList()

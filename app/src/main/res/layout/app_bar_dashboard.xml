@@ -43,11 +43,13 @@
                     android:paddingTop="@dimen/margin_xxl"
                     android:paddingBottom="@dimen/margin_medium"
                     android:lines="1"
+                    android:visibility="gone"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     tools:text="Android App Development" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/toolbarCourseResumeTv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
