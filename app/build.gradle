@@ -130,7 +130,6 @@ dependencies {
 
     // 3rd party libs
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
-    implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
     implementation 'com.onesignal:OneSignal:3.12.5'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'com.github.aggarwalpulkit596:FabNavigation:1.0'
@@ -138,6 +137,11 @@ dependencies {
     implementation "com.github.skydoves:progressview:1.0.5"
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.razorpay:checkout:1.5.13'
+    implementation "io.noties.markwon:core:$markwon_version"
+    implementation "io.noties.markwon:editor:$markwon_version"
+    implementation "io.noties.markwon:ext-strikethrough:$markwon_version"
+    implementation "io.noties.markwon:html:$markwon_version"
+    implementation "io.noties.markwon:linkify:$markwon_version"
 
 
     // Image view libraries

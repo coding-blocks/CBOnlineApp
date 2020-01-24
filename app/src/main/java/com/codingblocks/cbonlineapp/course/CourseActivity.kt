@@ -38,8 +38,11 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import io.noties.markwon.Markwon
+import io.noties.markwon.core.CorePlugin
 import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.android.synthetic.main.bottom_sheet_batch.view.*
+import kotlinx.android.synthetic.main.item_instructor.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
@@ -106,7 +109,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
 
         viewModel.course.observer(this) { course ->
             showTags(course.tags)
-            courseSummaryTv.text = course.summary
+            val markWon = Markwon.builder(this)
+                .usePlugin(CorePlugin.create())
+                .build()
+            markWon.setMarkdown(courseSummaryTv, course.summary)
             title = course.title
             shortTv.text = course.subtitle
             ratingBar.rating = course.rating
