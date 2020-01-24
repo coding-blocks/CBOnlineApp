@@ -18,7 +18,6 @@ import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.Course
 import com.google.android.material.chip.Chip
-import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.android.synthetic.main.item_course_card.view.*
 import kotlinx.android.synthetic.main.item_course_card.view.courseCardInstructorsTv
 import kotlinx.android.synthetic.main.item_course_card.view.courseCardTitleTv
@@ -66,7 +65,8 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
             }
             if (type == "TRACKS") {
 
-//                courseCardInstructorsTv.text = getSpannableStringSecondBold("Instructor:", item.instructors?.first()?.name?:"")
+                if (!item.instructors.isNullOrEmpty()) courseCardInstructorsTv.text = getSpannableStringSecondBold("Instructor: ", item.instructors?.first()?.name
+                    ?: "")
                 ratingBar.rating = item.rating
                 item.tags?.take(5)?.forEach {
                     val chip = Chip(context)
@@ -89,7 +89,7 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
 
                 if (type != "POPULAR") {
                     if (!item.instructors.isNullOrEmpty()) {
-                        courseCardInstructorsTv.text = getSpannableStringSecondBold("Instructor:", item.instructors?.first()?.name
+                        courseCardInstructorsTv.text = getSpannableStringSecondBold("Instructor: ", item.instructors?.first()?.name
                             ?: "")
                         if (type != "LIST") {
                             item.instructors?.first()?.photo?.let { courseCardInstructorImg1.loadImage(it) }

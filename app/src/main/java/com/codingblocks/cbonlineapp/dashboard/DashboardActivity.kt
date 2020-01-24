@@ -28,7 +28,6 @@ import com.codingblocks.cbonlineapp.profile.ReferralActivity
 import com.codingblocks.cbonlineapp.purchases.PurchasesActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
-import com.codingblocks.cbonlineapp.util.JWT_TOKEN
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
@@ -65,8 +64,8 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         setContentView(R.layout.activity_dashboard)
         Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
         Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
-        viewModel.isLoggedIn.postValue(prefs.SP_JWT_REFRESH_TOKEN != JWT_TOKEN)
-        if (prefs.SP_JWT_REFRESH_TOKEN.isNotEmpty()) {
+        viewModel.isLoggedIn.postValue(prefs.SP_JWT_TOKEN_KEY.isNotEmpty())
+        if (prefs.SP_JWT_TOKEN_KEY.isNotEmpty()) {
             setUser()
             initializeUI(true)
         } else {
@@ -242,6 +241,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
         when (position) {
             0 -> {
+                supportActionBar?.title = getString(R.string.welcome)
                 dashboardToolbarSearch.isVisible = true
                 searchBtn.setOnClickListener {
                     startActivity(intentFor<LearningTracksActivity>().singleTop())
@@ -250,6 +250,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             }
             2 -> {
+                supportActionBar?.title = getString(R.string.explore)
                 if (viewModel.isLoggedIn.value == true) {
                     dashboardToolbarSearch.isVisible = false
                     dashboardToolbarSecondary.isVisible = true
@@ -257,6 +258,11 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             }
             else -> {
+                when (position) {
+                    3 -> supportActionBar?.title = getString(R.string.my_doubs)
+                    1 -> supportActionBar?.title = getString(R.string.my_courses)
+                    else -> supportActionBar?.title = getString(R.string.my_library)
+                }
                 dashboardToolbarSecondary.isVisible = false
                 dashboardToolbarSearch.isVisible = false
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))

@@ -228,5 +228,7 @@
     <string name="career_options">Career Options</string>
     <string name="projects_you_will_build">Projects you will build</string>
     <string name="what_will_you_learn">What will you learn</string>
+    <string name="my_library">My Library</string>
+    <string name="my_doubs">My Doubts</string>
 
 </resources>

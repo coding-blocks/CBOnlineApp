@@ -115,10 +115,11 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             courseBackdrop.loadImage(course.coverImage)
             setYoutubePlayer(course.promoVideo ?: "")
             viewModel.fetchProjects(course.projects)
-            viewModel.fetchSections(course.runs?.first()?.sections)
+            if (!course.runs.isNullOrEmpty()) viewModel.fetchSections(course.runs?.first()?.sections)
             instructorAdapter.submitList(course.instructors)
             batchListAdapter.submitList(course.activeRuns)
-            course.activeRuns?.first()?.let {
+            if (!course.activeRuns.isNullOrEmpty())
+                course.activeRuns?.first()?.let {
                 setRun(it)
             }
         }

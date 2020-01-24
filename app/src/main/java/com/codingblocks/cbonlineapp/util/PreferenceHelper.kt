@@ -8,7 +8,7 @@ import com.codingblocks.cbonlineapp.util.extensions.save
 class PreferenceHelper private constructor() {
 
     var SP_ACCESS_TOKEN_KEY: String
-        get() = prefs?.getString(ACCESS_TOKEN, ACCESS_TOKEN) ?: ""
+        get() = prefs?.getString(ACCESS_TOKEN, "") ?: ""
         set(value) {
             prefs?.save(ACCESS_TOKEN, value)
         }
@@ -20,7 +20,7 @@ class PreferenceHelper private constructor() {
         }
 
     var SP_JWT_REFRESH_TOKEN: String
-        get() = prefs?.getString(REFRESH_TOKEN, REFRESH_TOKEN) ?: ""
+        get() = prefs?.getString(REFRESH_TOKEN, "") ?: ""
         set(value) {
             prefs?.save(REFRESH_TOKEN, value)
         }
