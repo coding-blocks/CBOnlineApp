@@ -11,6 +11,8 @@ import com.codingblocks.cbonlineapp.dashboard.doubts.CommentsListAdapter.ItemVie
 import com.codingblocks.cbonlineapp.database.models.CommentModel
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
+import io.noties.markwon.Markwon
+import kotlinx.android.synthetic.main.activity_doubt_comment.*
 import kotlinx.android.synthetic.main.item_comment.view.*
 
 class CommentsListAdapter : ListAdapter<CommentModel, ItemViewHolder>(DiffCallback()) {
@@ -29,7 +31,8 @@ class CommentsListAdapter : ListAdapter<CommentModel, ItemViewHolder>(DiffCallba
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: CommentModel) = with(itemView) {
             commentUserTv.text = item.username
-            commentBodyTv.text = item.body
+            val markWon = Markwon.create(context)
+            markWon.setMarkdown(commentBodyTv, item.body)
             commentTimeTv.text = item.updatedAt.timeAgo()
         }
     }

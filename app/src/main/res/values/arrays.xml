@@ -15,4 +15,10 @@
         <item>@string/expired_courses</item>
         <item>@string/all_courses</item>
     </string-array>
+
+    <integer-array name="tourslide">
+        <item>@drawable/intro1</item>
+        <item>@drawable/intro2</item>
+        <item>@drawable/intro3</item>
+    </integer-array>
 </resources>

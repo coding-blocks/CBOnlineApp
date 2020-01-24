@@ -18,6 +18,7 @@ import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
 import com.crashlytics.android.core.CrashlyticsCore
 import com.google.android.material.snackbar.Snackbar
+import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.activity_doubt_comment.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
@@ -41,7 +42,8 @@ class DoubtCommentActivity : AppCompatActivity() {
 
         viewModel.getDoubt(doubtId).observer(this) {
             doubtTitleTv.text = it.title
-            doubtDescriptionTv.text = it.body
+            val markWon = Markwon.create(this)
+            markWon.setMarkdown(doubtDescriptionTv, it.body)
             doubtTimeTv.text = it.createdAt.timeAgo()
             discourseId = it.discourseTopicId
             chatTv.apply {
