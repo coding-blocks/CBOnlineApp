@@ -80,13 +80,10 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="@dimen/margin_extra_large"
         android:layout_marginBottom="@dimen/margin_large"
-        android:background="@drawable/button_background_outline"
-        android:backgroundTint="@color/orangish"
         android:clickable="true"
         android:elevation="10dp"
         android:focusable="true"
-        android:padding="14dp"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/ic_fab"
         android:visibility="visible" />
 
 

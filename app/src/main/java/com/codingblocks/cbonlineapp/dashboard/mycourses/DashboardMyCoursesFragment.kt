@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.commons.SheetAdapter
 import com.codingblocks.cbonlineapp.commons.SheetItem
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
@@ -136,6 +137,7 @@ class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
                 showEmptyView(emptyView = emptyLl, shimmerView = dashboardCourseShimmer)
         }
         courseListAdapter.onItemClick = itemClickListener
+        loginBtn.setOnClickListener { startActivity(intentFor<LoginActivity>()) }
     }
 
     private fun setUpBottomSheet() {

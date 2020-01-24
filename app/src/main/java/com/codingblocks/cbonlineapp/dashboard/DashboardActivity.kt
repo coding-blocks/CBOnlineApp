@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.dashboard
 
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -74,6 +75,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     }
 
     private fun setUser() {
+        referralContainer.isVisible = true
         viewModel.isAdmin.observer(this) {
             val navMenu = dashboardNavigation.menu
             navMenu.findItem(R.id.nav_admin).isVisible = it
@@ -115,6 +117,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         setupViewPager()
 
         dashboardBottomNav.apply {
+            setTitleTypeface(Typeface.createFromAsset(assets, "fonts/gilroy_medium.ttf"))
             defaultBackgroundColor = getColor(R.color.dark)
             titleState = (FabNavigation.TitleState.ALWAYS_SHOW)
             setOnTabSelectedListener(this@DashboardActivity)

@@ -57,7 +57,7 @@ class OnBoardingActivity : AppCompatActivity() {
                     dots[pos].isSelected = true
                 }
             )
-            setScrollDuration(500)
+            setScrollDuration(200)
         }
         dotsCount = mAdapter.count
         for (i in 0..2) {

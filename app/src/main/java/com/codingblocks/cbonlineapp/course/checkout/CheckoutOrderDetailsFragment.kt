@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
@@ -27,6 +28,8 @@ class CheckoutOrderDetailsFragment : Fragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vm.cart.observer(viewLifecycleOwner) {
+            emptyCart.isVisible = false
+            cartLayout.isVisible = true
             orderBtn.isEnabled = true
             finalPriceTv.text = "${getString(R.string.rupee_sign)} ${it["totalAmount"].asString}"
             it.getAsJsonArray("cartItems")?.get(0)?.asJsonObject?.run {
@@ -51,5 +54,6 @@ class CheckoutOrderDetailsFragment : Fragment(), AnkoLogger {
                 }
             }
         }
+        exploreBtn.setOnClickListener { requireActivity().finish() }
     }
 }

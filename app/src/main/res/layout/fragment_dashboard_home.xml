@@ -348,6 +348,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_medium"
+                android:id="@+id/loginBtn"
                 android:drawableEnd="@drawable/ic_dropright"
                 android:drawablePadding="10dp"
                 android:drawableTint="@color/orangish"

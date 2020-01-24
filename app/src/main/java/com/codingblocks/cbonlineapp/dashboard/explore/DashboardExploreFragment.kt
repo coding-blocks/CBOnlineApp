@@ -55,8 +55,7 @@ class DashboardExploreFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? =
-        inflater.inflate(R.layout.fragment_dashboard_explore, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_dashboard_explore, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

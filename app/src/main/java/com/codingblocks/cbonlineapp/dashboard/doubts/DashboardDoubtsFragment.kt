@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.doubts.ChatClickListener
+import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import com.codingblocks.cbonlineapp.commons.SheetAdapter
 import com.codingblocks.cbonlineapp.commons.SheetItem
@@ -38,6 +39,7 @@ import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard_doubts.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.support.v4.intentFor
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -100,7 +102,6 @@ class DashboardDoubtsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpBottomSheet()
-
         doubtEmptyBtn.setOnClickListener {
             listener.openExplore()
         }
@@ -194,6 +195,7 @@ class DashboardDoubtsFragment : Fragment() {
             onCommentClick = commentsClickListener
             onChatClick = chatClickListener
         }
+        loginBtn.setOnClickListener { startActivity(intentFor<LoginActivity>()) }
     }
 
     private fun setUpBottomSheet() {

@@ -62,6 +62,7 @@ class DashboardLibraryFragment : Fragment() {
             listener.openExplore()
         }
         courseListAdapter.onItemClick = itemClickListener
+//        loginBtn.setOnClickListener{ startActivity(intentFor<LoginActivity>()) }
     }
 
     override fun onAttach(context: Context) {

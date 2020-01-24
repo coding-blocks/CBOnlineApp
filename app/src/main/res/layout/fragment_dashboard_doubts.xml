@@ -218,6 +218,7 @@
             android:layout_marginTop="@dimen/margin_medium"
             android:drawableEnd="@drawable/ic_dropright"
             android:drawablePadding="10dp"
+            android:id="@+id/loginBtn"
             android:drawableTint="@color/orangish"
             android:fontFamily="@font/gilroy_bold"
             android:text="@string/login_now"

@@ -230,5 +230,8 @@
     <string name="what_will_you_learn">What will you learn</string>
     <string name="my_library">My Library</string>
     <string name="my_doubs">My Doubts</string>
+    <string name="nothing_here">There’s nothing in here!</string>
+    <string name="empty_cart_desc">Your cart is empty.\n Choose from our list of courses</string>
+    <string name="earn_upto_2000_wallet_credits">Earn upto 2000 wallet credits</string>
 
 </resources>
