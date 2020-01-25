@@ -43,6 +43,7 @@ fun ImageView.loadImage(imgUrl: String, scale: Boolean = false, callback: () -> 
     if (imgUrl.isNotEmpty())
         createGlideRequest(Uri.parse(imgUrl), context)
             .listener(SvgSoftwareLayerSetter1())
+            .fitCenter()
             .error(createGlideRequest(Uri.parse(imgUrl), context))
             .into(this)
     callback()
