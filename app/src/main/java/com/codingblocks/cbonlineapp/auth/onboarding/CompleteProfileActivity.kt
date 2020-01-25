@@ -38,15 +38,23 @@ class CompleteProfileActivity : AppCompatActivity() {
             startActivity(intentFor<DashboardActivity>())
             finish()
         }
-        val json = FileUtils.loadJsonObjectFromAsset(this, "demographics.json")
+        val json = FileUtils.loadJsonObjectFromAsset(this, "demographics.json", "obj") as JSONObject?
+        val collegeArray = json?.getJSONArray("colleges")
+        val branchArray = json?.getJSONArray("branches")
         val collegeList: MutableList<String> = ArrayList()
         val branchList: MutableList<String> = ArrayList()
         try {
-            for (i in 0 until json?.length()!!) {
-                val ref = json.getJSONArray(0).getJSONObject(i).getString("name")
-                val ref2 = json.getJSONArray(1).getJSONObject(i).getString("name")
-                branchList.add(ref2)
-                collegeList.add(ref)
+            for (i in 0 until collegeArray?.length()!!) {
+                val ref = collegeArray.getJSONObject(i)?.getString("name")
+                if (ref != null) {
+                    collegeList.add(ref)
+                }
+            }
+            for (i in 0 until branchArray?.length()!!) {
+                val ref = branchArray.getJSONObject(i)?.getString("name")
+                if (ref != null) {
+                    branchList.add(ref)
+                }
             }
         } catch (e: JSONException) {
             e.printStackTrace()

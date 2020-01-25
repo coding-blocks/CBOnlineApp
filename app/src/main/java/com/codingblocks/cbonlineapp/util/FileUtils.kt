@@ -6,6 +6,7 @@ import android.util.Log
 import com.codingblocks.cbonlineapp.util.extensions.folderSize
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import org.json.JSONArray
+import org.json.JSONObject
 import java.io.File
 import java.io.InputStream
 
@@ -64,10 +65,13 @@ object FileUtils {
         return File(getCommonPath(context), "/$lectureId").exists()
     }
 
-    fun loadJsonObjectFromAsset(context: Context, assetName: String): JSONArray? {
+    fun loadJsonObjectFromAsset(context: Context, assetName: String, jsonType: String = "array"): Any? {
         try {
             val json = loadStringFromAsset(context, assetName)
-            if (json != null) return JSONArray(json)
+            return if (jsonType == "array")
+                JSONArray(json)
+            else
+                JSONObject(json)
         } catch (e: Exception) {
             Log.e("JsonUtils", e.toString())
         }
