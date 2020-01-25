@@ -46,6 +46,6 @@ before_script:
   - echo $RELEASE_KEYSTORE_B64 | base64 --decode > keystores/release.keystore
 script:
   - ./gradlew build
-- ./gradlew test
-- ./gradlew spotlessCheck
+  - ./gradlew test
+  - ./gradlew spotlessCheck
 
