@@ -25,7 +25,8 @@ class CheckoutPersonalDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val json = loadJsonObjectFromAsset(requireContext(), "csvjson.json")
+        val json = loadJsonObjectFromAsset(requireContext(), "csvjson.json") as JSONArray?
+
         val refList: MutableList<String> = ArrayList()
         try {
             for (i in 0 until json?.length()!!) {

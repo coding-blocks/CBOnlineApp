@@ -30,7 +30,7 @@ public class JWTUtils {
     public static long getIdentity(String token) throws JSONException {
         SparseArrayCompat<String> decoded = decode(token);
 
-        return Long.parseLong(new JSONObject(decoded.get(1)).get("identity").toString());
+        return Long.parseLong(new JSONObject(decoded.get(1)).get("id").toString());
     }
 
     public static boolean isExpired(String token) {
