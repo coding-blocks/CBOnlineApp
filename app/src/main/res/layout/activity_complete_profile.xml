@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/completeRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -71,7 +72,9 @@
                 android:layout_marginTop="@dimen/margin_xl"
                 android:layout_marginEnd="@dimen/margin_large">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/college"
+                    style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/white"
@@ -93,7 +96,9 @@
                 android:layout_marginEnd="@dimen/margin_large"
                 app:errorEnabled="true">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/branch"
+                    style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/white"
@@ -116,6 +121,7 @@
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/graduation"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/white"
@@ -142,20 +148,21 @@
                 android:textSize="18sp" />
 
             <RadioGroup
+                android:id="@+id/genderRadio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_large"
-                android:orientation="horizontal"
                 android:layout_marginEnd="@dimen/margin_large"
+                android:orientation="horizontal"
                 app:errorEnabled="true">
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="@font/gilroy_medium"
                     android:text="Male"
                     android:textColor="@color/brownish_grey"
-                    android:fontFamily="@font/gilroy_medium"
                     android:textSize="16sp" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
@@ -181,22 +188,23 @@
                 android:textSize="18sp" />
 
             <RadioGroup
+                android:id="@+id/apparelRadio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
                 android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
                 android:layout_marginBottom="@dimen/margin_9xl"
                 android:orientation="horizontal"
-                android:layout_marginEnd="@dimen/margin_large"
                 app:errorEnabled="true">
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="@font/gilroy_medium"
                     android:text="S"
                     android:textColor="@color/brownish_grey"
-                    android:fontFamily="@font/gilroy_medium"
                     android:textSize="16sp" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
@@ -233,7 +241,7 @@
     </ScrollView>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/completeBtn"
+        android:id="@+id/proceedBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

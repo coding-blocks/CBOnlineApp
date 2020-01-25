@@ -50,7 +50,6 @@ class QuizChoiceAdapter(
                         // If this is marked
                         optionTitle.textColor = getColor(context, R.color.white)
                         markedImgView.background = getDrawable(context, R.drawable.ic_incorrect)
-
                     } else {
                         optionTitle.textColor = getColor(context, R.color.white)
                         markedImgView.backgroundTintList =

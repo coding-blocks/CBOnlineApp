@@ -2,9 +2,12 @@ package com.codingblocks.cbonlineapp.util
 
 import android.content.Context
 import android.os.Environment
+import android.util.Log
 import com.codingblocks.cbonlineapp.util.extensions.folderSize
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
+import org.json.JSONArray
 import java.io.File
+import java.io.InputStream
 
 const val FILE_THRESHOLD = 256000
 const val GB_TO_KB = 1024 * 1024
@@ -59,6 +62,25 @@ object FileUtils {
 
     fun checkDownloadFileExists(context: Context, lectureId: String): Boolean {
         return File(getCommonPath(context), "/$lectureId").exists()
+    }
+
+    fun loadJsonObjectFromAsset(context: Context, assetName: String): JSONArray? {
+        try {
+            val json = loadStringFromAsset(context, assetName)
+            if (json != null) return JSONArray(json)
+        } catch (e: Exception) {
+            Log.e("JsonUtils", e.toString())
+        }
+        return null
+    }
+
+    fun loadStringFromAsset(context: Context, assetName: String): String? {
+        val `is`: InputStream = context.assets.open(assetName)
+        val size: Int = `is`.available()
+        val buffer = ByteArray(size)
+        `is`.read(buffer)
+        `is`.close()
+        return String(buffer)
     }
 }
 
