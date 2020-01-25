@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.util.FileUtils.loadJsonObjectFromAsset
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_checkout_personal_details.*
 import org.json.JSONArray
@@ -24,7 +25,7 @@ class CheckoutPersonalDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val json = loadJsonObjectFromAsset("csvjson.json")
+        val json = loadJsonObjectFromAsset(requireContext(), "csvjson.json")
         val refList: MutableList<String> = ArrayList()
         try {
             for (i in 0 until json?.length()!!) {
@@ -47,22 +48,5 @@ class CheckoutPersonalDetailsFragment : Fragment() {
         }
     }
 
-    private fun loadJsonObjectFromAsset(assetName: String): JSONArray? {
-        try {
-            val json = loadStringFromAsset(assetName)
-            if (json != null) return JSONArray(json)
-        } catch (e: Exception) {
-            Log.e("JsonUtils", e.toString())
-        }
-        return null
-    }
 
-    private fun loadStringFromAsset(assetName: String): String? {
-        val `is`: InputStream = requireContext().assets.open(assetName)
-        val size: Int = `is`.available()
-        val buffer = ByteArray(size)
-        `is`.read(buffer)
-        `is`.close()
-        return String(buffer)
-    }
 }
