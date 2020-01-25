@@ -80,6 +80,7 @@
                     android:backgroundTint="@color/white"
                     android:fontFamily="@font/gilroy_medium"
                     android:hint="@string/college"
+                    android:completionThreshold="1"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
                     android:textColorHighlight="@color/orangish"
@@ -104,6 +105,7 @@
                     android:backgroundTint="@color/white"
                     android:fontFamily="@font/gilroy_medium"
                     android:hint="@string/branch"
+                    android:completionThreshold="1"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
                     android:textColorHighlight="@color/orangish"
@@ -128,6 +130,8 @@
                     android:fontFamily="@font/gilroy_medium"
                     android:hint="@string/graduation_year"
                     android:paddingStart="0dp"
+                    android:inputType="number"
+                    android:maxLength="4"
                     android:paddingEnd="0dp"
                     android:textColorHighlight="@color/orangish"
                     android:textColorHint="@color/black"
@@ -158,6 +162,7 @@
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:layout_width="wrap_content"
+                    android:id="@+id/radioMale"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/gilroy_medium"

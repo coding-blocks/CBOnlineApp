@@ -122,7 +122,7 @@ interface OnlineRestApi {
         @FieldMap params: Map<String, String>
     ): Response<JsonObject>
 
-    @POST("users/{id}")
+    @PATCH("users/{id}")
     @FormUrlEncoded
     suspend fun updateUser(
         @Path("id") id: String,
