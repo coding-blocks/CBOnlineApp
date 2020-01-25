@@ -15,7 +15,6 @@ import com.codingblocks.cbonlineapp.util.ADMIN_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.AppSignatureHelper
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_ID
-import com.codingblocks.cbonlineapp.util.COURSE_TAB
 import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.NotificationOpenedHandler
 import com.codingblocks.cbonlineapp.util.NotificationReceivedHandler
