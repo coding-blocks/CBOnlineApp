@@ -1,15 +1,17 @@
 package com.codingblocks.cbonlineapp.auth
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.onboarding.LoginHomeFragment
-import com.codingblocks.cbonlineapp.util.RESOLVEHINT
+import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import org.jetbrains.anko.AnkoLogger
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), AnkoLogger {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,11 +22,11 @@ class LoginActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val frg: Fragment? = supportFragmentManager.findFragmentByTag("SignIn")
-
-        if (requestCode == RESOLVEHINT) {
-            if (resultCode == RESULT_OK) {
-                frg?.onActivityResult(requestCode, resultCode, data)
-            }
+        when (requestCode) {
+            CREDENTIAL_PICKER_REQUEST ->
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    frg?.onActivityResult(requestCode, resultCode, data)
+                }
         }
     }
 

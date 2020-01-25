@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
     android:paddingStart="@dimen/margin_large"
     android:paddingEnd="@dimen/margin_large"
     tools:context="com.codingblocks.cbonlineapp.course.checkout.CheckoutOrderDetailsFragment">
@@ -286,6 +285,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_marginTop="150dp"
         android:orientation="vertical"
         android:visibility="visible">
 

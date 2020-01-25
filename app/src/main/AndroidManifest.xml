@@ -80,6 +80,7 @@
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".course.checkout.CheckoutActivity"
+            android:windowSoftInputMode="adjustResize"
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".URLRouterActivity"

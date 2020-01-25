@@ -62,7 +62,8 @@
             android:fontFamily="@font/gilroy_bold"
             android:textColor="@color/orangish"
             android:textSize="14sp"
-            tools:text="This is the title of the ddladalnkjboblkzbkjbakjbkjsdbbfkjboubt " />
+            android:lines="1"
+            tools:text="This is the title of the doubt " />
 
         <TextView
             android:id="@+id/bottomSheetCancelBtn"
@@ -76,6 +77,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             style="@style/ButtonStyleChip"
+            android:textColor="@color/white"
             android:id="@+id/bottomSheetSaveBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

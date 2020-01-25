@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.text.InputType
 import android.text.Spannable
 import android.text.SpannableString
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,17 +13,17 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
+import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
-import com.codingblocks.cbonlineapp.util.RESOLVEHINT
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.safeApiCall
-import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.credentials.Credential
+import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
-import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 import kotlinx.coroutines.GlobalScope
@@ -36,10 +35,8 @@ import android.text.style.StyleSpan as StyleSpan1
 
 class SignInFragment : Fragment() {
 
-    var type: String = ""
     var map = HashMap<String, String>()
-    lateinit var apiClient: GoogleApiClient
-    lateinit var hintRequest: HintRequest
+    lateinit var apiClient: GoogleSignInOptions
     private val sharedPrefs by inject<PreferenceHelper>()
 
     override fun onCreateView(
@@ -48,21 +45,8 @@ class SignInFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_sign_in, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.let {
-            type = it.getString("type") ?: ""
-        }
-        if (type.isNotEmpty())
-            if (type.equals("new", true)) {
-                errorDrawableTv.isVisible = true
-                numberTitle.text = getString(R.string.welcome)
-                numberDesc.text = getString(R.string.welcome_desc)
-            }
 
         errorDrawableTv.setOnClickListener {
             if (errorDrawableTv.text == getString(R.string.use_email)) {
@@ -111,12 +95,13 @@ class SignInFragment : Fragment() {
             GlobalScope.launch {
                 when (val response = safeApiCall { Clients.api.getOtp(map) }) {
                     is ResultWrapper.GenericError -> {
+                        proceedBtn.isEnabled = true
                         signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
                     }
                     is ResultWrapper.Success -> {
                         if (response.value.isSuccessful)
                             replaceFragmentSafely(LoginOtpFragment.newInstance(map["phone"]
-                                ?: ""), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
+                                ?: ""), containerViewId = R.id.loginContainer)
                         else
                             runOnUiThread {
                                 errorDrawableTv.isVisible = true
@@ -164,25 +149,21 @@ class SignInFragment : Fragment() {
     }
 
     private fun requestHint() {
-        hintRequest = HintRequest.Builder()
+        val hintRequest = HintRequest.Builder()
             .setPhoneNumberIdentifierSupported(true)
             .build()
-
-        apiClient = GoogleApiClient.Builder(requireContext())
-            .addApi(Auth.CREDENTIALS_API)
-            .enableAutoManage(requireActivity()) {
-                Log.i("TAG", "Mobile Number: ${it.errorMessage}")
-            }.build()
-
-        val intent = Auth.CredentialsApi.getHintPickerIntent(apiClient, hintRequest)
+        val credentialsClient = Credentials.getClient(requireContext())
+        val intent = credentialsClient.getHintPickerIntent(hintRequest)
         startIntentSenderForResult(
             intent.intentSender,
-            RESOLVEHINT, null, 0, 0, 0, null)
+            CREDENTIAL_PICKER_REQUEST,
+            null, 0, 0, 0, null
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data != null) {
-            val cred: Credential? = data?.getParcelableExtra(Credential.EXTRA_KEY)
+            val cred: Credential? = data.getParcelableExtra(Credential.EXTRA_KEY)
             if (cred != null) {
                 val unformattedPhone = cred.id
                 val formatNumber = SpannableString(unformattedPhone)
@@ -191,21 +172,5 @@ class SignInFragment : Fragment() {
                 numberLayout.editText?.setText(formatNumber)
             }
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        apiClient.stopAutoManage(requireActivity())
-        apiClient.disconnect()
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(type: String) =
-            SignInFragment().apply {
-                arguments = Bundle().apply {
-                    putString("type", type)
-                }
-            }
     }
 }

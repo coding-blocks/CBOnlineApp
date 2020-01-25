@@ -123,6 +123,8 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:17.3.0'
+    implementation "androidx.drawerlayout:drawerlayout:1.1.0-alpha03"
+
 
     //Koin Does Not Support This
 //    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-rc03'
@@ -143,7 +145,6 @@ dependencies {
     implementation "io.noties.markwon:html:$markwon_version"
     implementation "io.noties.markwon:linkify:$markwon_version"
     implementation 'com.github.AppIntro:AppIntro:5.1.0'
-
 
 
     // Image view libraries

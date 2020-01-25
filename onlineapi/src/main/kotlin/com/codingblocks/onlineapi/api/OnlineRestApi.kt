@@ -1,5 +1,6 @@
 package com.codingblocks.onlineapi.api
 
+import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.DoubtStats
 import com.codingblocks.onlineapi.models.Extension
 import com.codingblocks.onlineapi.models.Leaderboard
@@ -114,6 +115,12 @@ interface OnlineRestApi {
     @POST("jwt/otp/verify")
     @FormUrlEncoded
     suspend fun getJwt(@FieldMap params: Map<String, String>): Response<JsonObject>
+
+    @POST("users")
+    @FormUrlEncoded
+    suspend fun createUser(
+        @FieldMap params: Map<String, String>
+    ): Response<JsonObject>
 
     @POST("jwt/login")
     @FormUrlEncoded

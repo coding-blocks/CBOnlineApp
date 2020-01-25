@@ -51,7 +51,7 @@ class LoginHomeFragment : Fragment() {
     }
 
     private fun setSecondSpan() {
-        val policySpan = SpannableString("By loggin in you agree to Coding Blocks’s\n" +
+        val policySpan = SpannableString("By logging in you agree to Coding Blocks’s\n" +
             "Privacy Policy & Terms of Service")
         val privacySpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
@@ -89,7 +89,7 @@ class LoginHomeFragment : Fragment() {
         val wordToSpan = getSpannableStringSecondBold("New here? ", "Create an account")
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
-                replaceFragmentSafely(SignInFragment.newInstance("NEW"), containerViewId = R.id.loginContainer)
+                replaceFragmentSafely(SignUpFragment(), containerViewId = R.id.loginContainer)
             }
 
             override fun updateDrawState(ds: TextPaint) {

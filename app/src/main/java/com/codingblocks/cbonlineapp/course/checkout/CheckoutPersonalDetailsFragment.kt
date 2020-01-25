@@ -39,8 +39,6 @@ class CheckoutPersonalDetailsFragment : Fragment() {
         spinner.setAdapter(arrayAdapter)
         spinner.setOnItemClickListener { parent, view, position, id ->
             vm.map["stateId"] = json?.getJSONObject(position)?.getString("stateId") ?: "DL"
-            vm.map["coupon"] = "null"
-            vm.map["applyCredits"] = "null"
             checkoutBtn.isEnabled = true
             vm.updateCart()
         }

@@ -86,7 +86,9 @@ const val DOUBT_ID = "doubtID"
 
 const val ALL = "ALL"
 
-const val RESOLVEHINT = 1001
+const val CREDENTIAL_PICKER_REQUEST = 1
+
+const val SMS_CONSENT_REQUEST = 2
 
 const val COURSE_FILTER_TYPE = "course_filter_type"
 

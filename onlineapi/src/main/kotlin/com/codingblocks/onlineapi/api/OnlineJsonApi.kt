@@ -278,7 +278,6 @@ interface OnlineJsonApi {
     ): Response<CareerTracks>
 
 
-
     /**
      * Admin Side API"s
      */

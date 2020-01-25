@@ -234,4 +234,9 @@
     <string name="empty_cart_desc">Your cart is empty.\n Choose from our list of courses</string>
     <string name="earn_upto_2000_wallet_credits">Earn upto 2000 wallet credits</string>
 
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="signup_desc">Let’s get you onboard</string>
+    <string name="username">Username</string>
+    <string name="back">Back</string>
+
 </resources>
