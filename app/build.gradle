@@ -24,13 +24,13 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 100060505
+        versionCode 100060506
         // 1 (versioning scheme)
         // 00 (major version)
         // 06 (minor version)
         // 05 (patch version)
         // 05 spare for betas/RCs
-        versionName "0.6.5-beta05"
+        versionName "0.6.5-beta06"
         signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false
@@ -151,6 +151,7 @@ dependencies {
 
     // Image view libraries
     implementation 'de.hdodenhof:circleimageview:3.0.2'
+    implementation 'com.caverock:androidsvg-aar:1.4'
 
     //database
     implementation "androidx.room:room-runtime:$room_version"

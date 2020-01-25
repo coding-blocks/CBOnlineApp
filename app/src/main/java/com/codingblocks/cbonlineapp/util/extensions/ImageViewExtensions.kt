@@ -7,9 +7,7 @@ import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.ImageViewTarget
 import com.caverock.androidsvg.SVG
@@ -75,7 +73,5 @@ class SvgSoftwareLayerSetter1 : RequestListener<Drawable> {
 private fun createGlideRequest(source: Uri?, context: Context): GlideRequest<Drawable> {
     return GlideApp.with(context)
         .load(source)
-        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-        .optionalFitCenter()
-        .transition(withCrossFade())
+        .dontAnimate() // will load image
 }
