@@ -42,8 +42,10 @@ class CBOnlineApp : Application() {
         appContext = applicationContext
         mInstance = this
 
-        AppSignatureHelper(this).appSignatures.forEach {
-            Log.d("APPSIG", it)
+        if (BuildConfig.DEBUG) {
+            AppSignatureHelper(this).appSignatures.forEach {
+                Log.d("APPSIG", it)
+            }
         }
 
         // Create Notification Channel
