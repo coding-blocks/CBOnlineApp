@@ -42,8 +42,10 @@ cache:
   - $HOME/.android/build-cache
   - "${TRAVIS_BUILD_DIR}/android/gradle/caches/"
   - "${TRAVIS_BUILD_DIR}/android/gradle/wrapper/dists/"
+before_script:
+  - echo $RELEASE_KEYSTORE_B64 | base64 --decode > keystores/release.keystore
 script:
   - ./gradlew build
-- ./gradlew test
-- ./gradlew spotlessCheck
+  - ./gradlew test
+  - ./gradlew spotlessCheck
 
