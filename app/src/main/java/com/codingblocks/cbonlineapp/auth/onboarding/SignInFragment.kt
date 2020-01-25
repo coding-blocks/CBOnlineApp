@@ -95,7 +95,7 @@ class SignInFragment : Fragment() {
             GlobalScope.launch {
                 when (val response = safeApiCall { Clients.api.getOtp(map) }) {
                     is ResultWrapper.GenericError -> {
-                        proceedBtn.isEnabled = true
+                        runOnUiThread { proceedBtn.isEnabled = true }
                         signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
                     }
                     is ResultWrapper.Success -> {
