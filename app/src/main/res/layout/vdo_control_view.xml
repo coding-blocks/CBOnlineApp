@@ -48,7 +48,7 @@
             <TextView
                 android:id="@+id/vdo_position"
                 android:text="00:00"
-                android:textStyle="bold"
+                android:fontFamily="@font/gilroy_medium"
                 android:textColor="@android:color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -56,13 +56,15 @@
                 android:id="@+id/vdo_seekbar"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:progressDrawable="@drawable/sq_seekbar_clipped"
                 android:paddingLeft="10dp"
+                android:thumb="@null"
                 android:paddingRight="10dp"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/vdo_duration"
                 android:text="00:00"
-                android:textStyle="bold"
+                android:fontFamily="@font/gilroy_medium"
                 android:textColor="@android:color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -84,17 +86,26 @@
             <ImageButton android:id="@+id/vdo_ffwd"
                 style="@style/VdoMediaButton"
                 android:src="@drawable/ic_forward_10_white_24dp"/>
-            <Button
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/vdo_speed"
-                style="@style/VdoMediaButton"
+                android:layout_width="wrap_content"
                 android:minWidth="0dp"
+                android:layout_height="30dp"
+                android:background="@drawable/button_gradient"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:textSize="14sp"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:text="1x"/>
             <ImageButton android:id="@+id/vdo_captions"
+                android:visibility="gone"
                 style="@style/VdoMediaButton"
                 android:src="@drawable/ic_closed_caption_white_24dp"/>
             <ImageButton android:id="@+id/vdo_quality"
+                android:visibility="gone"
+
                 style="@style/VdoMediaButton"
                 android:src="@drawable/ic_high_quality_white_24dp"/>
             <ImageButton android:id="@+id/vdo_enter_fullscreen"

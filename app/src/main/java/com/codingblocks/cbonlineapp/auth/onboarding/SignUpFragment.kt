@@ -14,7 +14,6 @@ import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.safeApiCall
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_sign_up.*
-import kotlinx.android.synthetic.main.fragment_sign_up.proceedBtn
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.support.v4.runOnUiThread
@@ -65,11 +64,8 @@ class SignUpFragment : Fragment() {
                             }
                         } else
                             runOnUiThread {
-                                val error = if (response.value.errorBody()?.string().isNullOrEmpty()) {
-                                    "Please Try Again"
-                                } else {
-                                    JSONObject(response.value.errorBody()?.string()).getString("description")
-                                }
+                                val errRes = response.value.errorBody()?.string()
+                                val error = if (errRes.isNullOrEmpty()) "Please Try Again" else JSONObject(errRes).getString("description")
                                 signUpRoot.showSnackbar(error.capitalize(), Snackbar.LENGTH_SHORT)
                                 proceedBtn.isEnabled = true
                             }
