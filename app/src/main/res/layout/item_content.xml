@@ -25,6 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:lines="1"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:layout_weight="0.6"
@@ -37,7 +39,7 @@
         android:layout_width="20dp"
         android:id="@+id/downloadBtn"
         android:layout_height="20dp"
-        android:src="@drawable/ic_dropdown"
+        android:src="@drawable/ic_download"
         android:visibility="visible" />
 
 </LinearLayout>

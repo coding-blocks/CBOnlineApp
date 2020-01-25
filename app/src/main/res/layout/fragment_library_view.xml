@@ -85,6 +85,7 @@
             android:layout_marginTop="@dimen/margin_medium"
             android:paddingStart="20dp"
             android:paddingTop="10dp"
+            android:id="@+id/classRoomBtn"
             android:paddingEnd="20dp"
             android:paddingBottom="10dp"
             android:text="@string/go_to_classroom" />

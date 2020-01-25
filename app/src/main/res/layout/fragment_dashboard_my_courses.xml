@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
                 android:fontFamily="@font/gilroy_bold"
-                android:text="@string/no_doubts"
+                android:text="@string/my_courses"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -79,8 +79,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_extra_small"
-                android:fontFamily="@font/gilroy_bold"
-                android:text="@string/doubts_that_you_ask_appear_here"
+                android:fontFamily="@font/gilroy_medium"
+                android:text="@string/your_courses_will_start_showing_once_you_enroll_nin_any_course"
                 android:textAlignment="center"
                 android:textColor="@color/brownish_grey"
                 android:textSize="16sp" />
@@ -89,11 +89,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_medium"
-                android:paddingStart="20dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="10dp"
-                android:text="@string/go_to_classroom" />
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:text="@string/explore_courses" />
         </LinearLayout>
 
         <com.facebook.shimmer.ShimmerFrameLayout
@@ -147,12 +144,12 @@
             android:background="@drawable/divider" />
 
         <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+            android:id="@+id/loginBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_medium"
             android:drawableEnd="@drawable/ic_dropright"
             android:drawablePadding="10dp"
-            android:id="@+id/loginBtn"
             android:drawableTint="@color/orangish"
             android:fontFamily="@font/gilroy_bold"
             android:text="@string/login_now"

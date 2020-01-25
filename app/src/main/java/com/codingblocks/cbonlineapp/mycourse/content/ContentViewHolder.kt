@@ -6,6 +6,8 @@ import android.os.Environment
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.ContextCompat.getDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.PdfActivity
@@ -51,21 +53,22 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             title.text = content.title
 
             if (content.progress == "DONE") {
-                title.textColor = resources.getColor(R.color.freshGreen)
-                downloadBtn.setImageResource(R.drawable.ic_status_done)
+                contentType.isActivated = true
+                title.textColor = getColor(context, R.color.freshGreen)
             } else {
+                contentType.isActivated = false
                 downloadBtn.setImageResource(0)
-                title.textColor = resources.getColor(R.color.black)
+                title.textColor = getColor(context, R.color.black)
             }
             downloadBtn.background = null
             downloadBtn.setOnClickListener(null)
             when (content.contentable) {
                 DOCUMENT -> {
-                    contentType.setImageResource(R.drawable.ic_document)
+                    contentType.setImageResource(R.drawable.ic_doc)
                 }
 
                 VIDEO -> {
-                    contentType.setImageResource(R.drawable.ic_youtube_video)
+                    contentType.setImageResource(R.drawable.ic_video)
                 }
 
                 QNA -> {
@@ -76,12 +79,11 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                     contentType.setImageResource(R.drawable.ic_code)
                 }
                 LECTURE -> {
-                    contentType.setImageResource(R.drawable.ic_lecture)
+                    contentType.setImageResource(R.drawable.ic_video)
                     val downloadStatus = !FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, content.contentLecture.lectureId)
                     if (downloadStatus) {
                         downloadBtn.setImageDrawable(null)
-                        downloadBtn.background =
-                            itemView.context.getDrawable(android.R.drawable.stat_sys_download)
+                        downloadBtn.background = getDrawable(context, R.drawable.ic_download)
                     }
                     downloadBtn.setOnClickListener {
                         it as ImageView

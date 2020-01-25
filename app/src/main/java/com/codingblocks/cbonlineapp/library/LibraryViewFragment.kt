@@ -94,6 +94,9 @@ class LibraryViewFragment : Fragment() {
 //                    deleteContainer.isVisible = items > 0
                 }
             })
+        classRoomBtn.setOnClickListener {
+            //            browse(url)
+        }
     }
 
     override fun onDestroy() {

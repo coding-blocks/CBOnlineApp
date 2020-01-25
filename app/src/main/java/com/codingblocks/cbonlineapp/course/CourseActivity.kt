@@ -113,6 +113,11 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
                 .usePlugin(CorePlugin.create())
                 .build()
             markWon.setMarkdown(courseSummaryTv, course.summary)
+            course.faq?.let {
+                faqTv.isVisible = true
+                courseFaqTv.isVisible = true
+                markWon.setMarkdown(courseFaqTv, it)
+            }
             title = course.title
             shortTv.text = course.subtitle
             ratingBar.rating = course.rating

@@ -471,6 +471,34 @@
                 </LinearLayout>
 
 
+                <TextView
+                    android:id="@+id/faqTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/frequently_asked_questions"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:visibility="gone" />
+
+                <com.codingblocks.cbonlineapp.util.widgets.ExpandableTextView
+                    android:id="@+id/courseFaqTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:lineSpacingExtra="4dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    app:trimLength="200" />
+
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="3dp"

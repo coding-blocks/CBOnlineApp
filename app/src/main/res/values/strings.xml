@@ -238,5 +238,7 @@
     <string name="signup_desc">Let’s get you onboard</string>
     <string name="username">Username</string>
     <string name="back">Back</string>
+    <string name="your_courses_will_start_showing_once_you_enroll_nin_any_course">Your Courses will start showing once you enroll\nin any course</string>
+    <string name="frequently_asked_questions">Frequently Asked Questions</string>
 
 </resources>

@@ -136,9 +136,10 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             viewModel.attemptId.value = it.attempt_id
             sectionTitle.text = "Section ${it.sectionTitle}"
             contentTitle.text = it.title
-            bookmarkBtn.isActivated = it.bookmark.bookmarkUid.isEmpty()
+            bookmarkBtn.isActivated = it.bookmark.bookmarkUid.isNotEmpty()
             if (it.contentable == LECTURE) {
                 isDownloaded = it.contentLecture.isDownloaded
+                downloadBtn.isActivated = isDownloaded
                 viewModel.videoId = it.contentLecture.lectureId
                 youtubePlayerView.isVisible = false
                 videoContainer.visibility = View.VISIBLE
