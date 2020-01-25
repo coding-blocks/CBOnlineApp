@@ -48,7 +48,7 @@ class DashboardMyCoursesRepository(
                         start,
                         end,
                         price,
-                        mrp,
+                        mrp ?: "",
                         updatedAt,
                         whatsappLink,
                         totalContents,
@@ -97,7 +97,7 @@ class DashboardMyCoursesRepository(
                     reviewCount,
                     rating,
                     slug,
-                    coverImage,
+                    coverImage ?: "",
                     categoryId ?: 0
                 ))
             } else if (!refresh)

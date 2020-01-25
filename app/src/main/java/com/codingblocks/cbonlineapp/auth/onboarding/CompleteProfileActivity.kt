@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
-import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.KeyboardVisibilityUtil
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import kotlinx.android.synthetic.main.activity_complete_profile.*
@@ -18,11 +17,10 @@ class CompleteProfileActivity : AppCompatActivity() {
     private lateinit var keyboardVisibilityHelper: KeyboardVisibilityUtil
     private val sharedPrefs by inject<PreferenceHelper>()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_complete_profile)
-        val id = JWTUtils.getIdentity(sharedPrefs.SP_JWT_TOKEN_KEY).toString()
+//        val id = JWTUtils.getIdentity(sharedPrefs.SP_JWT_TOKEN_KEY).toString()
         completeBtn.setOnClickListener {
             startActivity(intentFor<DashboardActivity>())
             finish()

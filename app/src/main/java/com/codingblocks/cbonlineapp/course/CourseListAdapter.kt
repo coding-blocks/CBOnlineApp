@@ -84,7 +84,7 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                 }
 
                 if (type != "LIST") {
-                    courseCover.loadImage(item.coverImage)
+                    courseCover.loadImage(item.coverImage ?: "")
                 }
 
                 if (type != "POPULAR") {

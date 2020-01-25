@@ -42,7 +42,7 @@ data class Course(
     val difficulty: String = "",
     val rating: Float = 0f,
     val slug: String = "",
-    val coverImage: String = "",
+    val coverImage: String? = "",
     val faq: String?,
     val coursefeatures: ArrayList<CourseFeatures>?,
     @Relationship("instructors")
@@ -64,7 +64,7 @@ data class Runs(
     val start: String = "",
     val end: String = "",
     val price: String = "",
-    val mrp: String = "",
+    val mrp: String? = "",
     val unlisted: Boolean,
     val enrollmentStart: String = "",
     val enrollmentEnd: String = "",

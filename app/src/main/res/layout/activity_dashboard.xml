@@ -34,7 +34,7 @@
             android:clickable="true"
             android:focusable="true"
             android:gravity="center_vertical"
-            android:onClick="openProfile"
+            android:onClick="openReferral"
             android:orientation="horizontal"
             android:padding="16dp"
             android:visibility="gone">

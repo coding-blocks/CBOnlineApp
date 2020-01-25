@@ -122,6 +122,13 @@ interface OnlineRestApi {
         @FieldMap params: Map<String, String>
     ): Response<JsonObject>
 
+    @POST("users/{id}")
+    @FormUrlEncoded
+    suspend fun updateUser(
+        @Path("id") id: String,
+        @FieldMap params: Map<String, String>
+    ): Response<JsonObject>
+
     @POST("jwt/login")
     @FormUrlEncoded
     suspend fun getJwtWithEmail(@FieldMap params: Map<String, String>): Response<JsonObject>

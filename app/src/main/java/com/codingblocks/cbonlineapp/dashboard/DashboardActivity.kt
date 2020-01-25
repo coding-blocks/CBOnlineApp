@@ -15,6 +15,7 @@ import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.AboutActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
+import com.codingblocks.cbonlineapp.auth.onboarding.CompleteProfileActivity
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
@@ -276,6 +277,10 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     }
 
     fun openProfile(view: View) {
+        startActivity<CompleteProfileActivity>()
+    }
+
+    fun openReferral(view: View) {
         startActivity<ReferralActivity>()
     }
 }

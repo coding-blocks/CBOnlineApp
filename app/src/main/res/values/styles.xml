@@ -21,6 +21,7 @@
         <item name="android:clipToPadding">false</item>
         <item name="background">@color/white</item>
         <item name="divider">@color/veryLightPink</item>
+        <item name="radioButtonStyle">@style/MyRadioButtonStyle</item>
         <!--        <item name="chipStyle">@style/ThinChip</item>-->
         <!--        <item name="materialButtonStyle">@style/MaterialButton</item>-->
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
@@ -218,6 +219,11 @@
         <item name="android:progressDrawable">@drawable/custom_rating</item>
         <item name="android:minHeight">10dip</item>
         <item name="android:maxHeight">13dip</item>
+    </style>
+
+    <style name="MyRadioButtonStyle" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/custom_btn_radio</item>
+        <item name="android:padding">4dp</item>
     </style>
 
 

@@ -123,7 +123,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             ratingBar.rating = course.rating
             ratingTv.text = getSpannableSring("${course.rating}/5.0, ", "${course.reviewCount} ratings")
             if (courseLogoUrl.isNullOrEmpty()) courseLogo.loadImage(course.logo)
-            courseBackdrop.loadImage(course.coverImage)
+            courseBackdrop.loadImage(course.coverImage ?: "")
             setYoutubePlayer(course.promoVideo ?: "")
             viewModel.fetchProjects(course.projects)
             if (!course.runs.isNullOrEmpty()) viewModel.fetchSections(course.runs?.first()?.sections)
