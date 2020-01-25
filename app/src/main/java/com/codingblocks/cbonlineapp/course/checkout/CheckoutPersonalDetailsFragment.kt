@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.course.checkout
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import kotlinx.android.synthetic.main.fragment_checkout_personal_details.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.io.InputStream
 
 class CheckoutPersonalDetailsFragment : Fragment() {
 
@@ -48,6 +46,4 @@ class CheckoutPersonalDetailsFragment : Fragment() {
             replaceFragmentSafely(CheckoutPaymentFragment(), containerViewId = R.id.checkoutContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
         }
     }
-
-
 }

@@ -16,7 +16,7 @@ import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
-import com.codingblocks.cbonlineapp.util.extensions.loadSvg
+import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.models.ProgressItem
 import com.github.mikephil.charting.data.Entry
@@ -69,7 +69,7 @@ class DashboardHomeFragment : Fragment() {
                                 }
                             }
 
-                            homeCourseLogoImg.loadSvg(course.logo)
+                            homeCourseLogoImg.loadImage(course.logo)
                             val progress = if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
 
                             homeProgressTv.text = "${progress.toInt()} %"

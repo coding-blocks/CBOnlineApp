@@ -65,8 +65,6 @@ class CompleteProfileActivity : AppCompatActivity() {
             map["collegeId"] = collegeArray?.getJSONObject(position)?.getString("id") ?: "DL"
         }
 
-
-
         val arrayAdapter2: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, branchList)
         branch.setAdapter(arrayAdapter2)
         branch.setOnItemClickListener { _, _, position, id ->
@@ -80,8 +78,6 @@ class CompleteProfileActivity : AppCompatActivity() {
         }
         proceedBtn.setOnClickListener {
             map["gradYear"] = graduation.text.toString()
-
-
 
             proceedBtn.isEnabled = false
 
@@ -107,7 +103,6 @@ class CompleteProfileActivity : AppCompatActivity() {
                     }
                 }
             }
-
         }
 
         keyboardVisibilityHelper = KeyboardVisibilityUtil(contentView!!) {

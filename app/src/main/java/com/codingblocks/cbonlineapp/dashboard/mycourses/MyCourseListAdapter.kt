@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
+import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import kotlinx.android.synthetic.main.item_courses.view.*
 
@@ -55,6 +56,8 @@ class MyCourseListAdapter(val type: String = "DEFAULT") : ListAdapter<CourseInst
             courseTitleTv.text = item.courseRun.course.title
             courseInstructorTv.text = item.courseRun.run.crName
             progressContainer.isVisible = false
+            courseLogoImg.loadImage(item.courseRun.course.logo)
+
             setOnClickListener {
                 itemClickListener?.onClick(
                     item.courseRun.course.cid,
@@ -77,6 +80,7 @@ class DefaultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         if (item.instructor.size > 1) {
             courseInstructorTv.append("and ${item.instructor.size - 1} more")
         }
+        courseLogoImg.loadImage(item.courseRun.course.logo)
         val expired = item.courseRun.runAttempt.end.toLong() * 1000 < System.currentTimeMillis()
         progressContainer.isVisible = !expired
         openBtn.isVisible = !expired
