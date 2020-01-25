@@ -28,12 +28,13 @@ class ChatActivity : AppCompatActivity() {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val webView = WebView(this)
+        WebView.setWebContentsDebuggingEnabled(true)
+
         webView.settings.apply {
             javaScriptEnabled = true
-            webView.settings.javaScriptCanOpenWindowsAutomatically = true
-            webView.settings.allowFileAccess = true
-            webView.settings.allowFileAccessFromFileURLs = true
+            javaScriptCanOpenWindowsAutomatically = true
+            allowFileAccess = true
+            allowFileAccessFromFileURLs = true
         }
         Clients.api.getSignature().enqueue(retrofitCallback { _, response ->
             val signature = response?.body()?.get("signature")
@@ -92,7 +93,5 @@ class ChatActivity : AppCompatActivity() {
 
             webView.loadUrl("file:///android_asset/Chat.html")
         })
-        if (chatRoot != null)
-            chatRoot.addView(webView)
     }
 }

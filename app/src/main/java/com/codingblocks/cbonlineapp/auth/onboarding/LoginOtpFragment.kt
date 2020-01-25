@@ -42,7 +42,8 @@ class LoginOtpFragment : Fragment() {
             val phone = it.getString("phone") ?: ""
             numberTv.append(phone)
             map["phone"] = phone
-            map["oneauth_id"] = it.getString("oneauth_id") ?: ""
+            if (!it.getString("oneauth_id").isNullOrEmpty())
+                map["oneauth_id"] = it.getString("oneauth_id") ?: ""
         }
         verifyOtpBtn.setOnClickListener {
             map["otp"] = numberLayout.editText?.text.toString()
