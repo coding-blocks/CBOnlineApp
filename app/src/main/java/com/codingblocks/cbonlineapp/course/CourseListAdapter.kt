@@ -64,7 +64,11 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                 )
             }
             if (type == "TRACKS") {
-
+                item.projects?.take(3)?.forEach {
+                    val chip = LayoutInflater.from(context).inflate(R.layout.single_chip_layout, tagsChips, false) as Chip
+                    chip.text = it.title
+                    projectsChips.addView(chip)
+                }
                 if (!item.instructors.isNullOrEmpty()) courseCardInstructorsTv.text = getSpannableStringSecondBold("Instructor: ", item.instructors?.first()?.name
                     ?: "")
                 ratingBar.rating = item.rating

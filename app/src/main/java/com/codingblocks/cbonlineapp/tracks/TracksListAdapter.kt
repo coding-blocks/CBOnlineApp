@@ -13,8 +13,6 @@ import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.CareerTracks
 import com.google.android.material.chip.Chip
-import kotlinx.android.synthetic.main.item_course_card.view.*
-import kotlinx.android.synthetic.main.item_track.view.*
 import kotlinx.android.synthetic.main.item_track.view.trackCourseNumTv
 import kotlinx.android.synthetic.main.item_track.view.trackLogo
 import kotlinx.android.synthetic.main.item_track.view.trackTitleTv
@@ -51,11 +49,10 @@ class TracksListAdapter(val type: String = "") : ListAdapter<CareerTracks, Track
             trackCourseNumTv.text = "${item.courses?.size} Courses"
             if (type == "LIST") {
                 trackCover.loadImage(item.background)
-                item.professions?.forEach {
-                    val chip = LayoutInflater.from(context).inflate(R.layout.single_chip_layout, trackChips, false) as Chip
-                    chip.text = it.title
-                    trackChips.addView(chip)
-                }
+                val profession = item.professions?.takeIf { it.isNotEmpty() }?.first()
+                val chip = LayoutInflater.from(context).inflate(R.layout.single_chip_layout, trackChips, false) as Chip
+                chip.text = profession?.title
+                trackChips.addView(chip)
             }
             setOnClickListener {
                 itemClickListener?.onClick(

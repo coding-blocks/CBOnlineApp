@@ -16,6 +16,7 @@ import com.codingblocks.cbonlineapp.course.CourseListAdapter
 import com.codingblocks.cbonlineapp.course.ItemClickListener
 import com.codingblocks.cbonlineapp.course.SearchCourseActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
+import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.tracks.TracksListAdapter
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
@@ -87,6 +88,9 @@ class DashboardExploreFragment : Fragment() {
         }
         allCourseCard.setOnClickListener {
             startActivity<SearchCourseActivity>()
+        }
+        allTracksTv.setOnClickListener {
+            startActivity<LearningTracksActivity>()
         }
     }
 

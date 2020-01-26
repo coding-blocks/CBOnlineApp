@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
+import android.view.animation.TranslateAnimation
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.annotation.AnimRes
@@ -349,7 +350,7 @@ fun View.crossfade(view: View, otherView: View?, type: Int = View.INVISIBLE) {
     this.apply {
         // Set the content view to 0% opacity but visible, so that it is visible
         // (but fully transparent) during the animation.
-        if (otherView == null || !isVisible) {
+        if (otherView == null && !isVisible) {
             val cx = this.width / 2
             val cy = this.height / 2
 
@@ -388,5 +389,35 @@ fun View.crossfade(view: View, otherView: View?, type: Int = View.INVISIBLE) {
             }
         })
         anim.start()
+    }
+}
+
+fun View.slideUp() {
+    let {
+        val cx = it.width / 2
+        val cy = it.height / 2
+        val initialRadius = hypot(cx.toDouble(), cy.toDouble()).toFloat()
+        val anim = ViewAnimationUtils.createCircularReveal(it, cx, cy, initialRadius, 0f)
+        anim.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                it.visibility = View.GONE
+            }
+        })
+        anim.start()
+    }
+}
+
+// slide the view from its current position to below itself
+fun View.slideDown() {
+    if (!isVisible) {
+        visibility = View.VISIBLE
+        val animate = TranslateAnimation(
+            0f, // fromXDelta
+            0f, // toXDelta
+            -height.toFloat(), // fromYDelta
+            0f) // toYDelta
+        animate.duration = 500
+        startAnimation(animate)
     }
 }

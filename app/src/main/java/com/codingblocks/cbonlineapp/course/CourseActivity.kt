@@ -236,6 +236,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         val alpha = (appBarLayout.totalScrollRange + verticalOffset).toFloat() / appBarLayout.totalScrollRange
         courseLogo.alpha = alpha
         shortTv.alpha = alpha
+        ratingBar.alpha = alpha
+        ratingTv.alpha = alpha
     }
 
     private fun setUpBottomSheet() {

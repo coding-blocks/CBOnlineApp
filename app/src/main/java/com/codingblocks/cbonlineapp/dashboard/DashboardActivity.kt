@@ -32,10 +32,11 @@ import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
-import com.codingblocks.cbonlineapp.util.extensions.crossfade
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.extensions.slideDown
+import com.codingblocks.cbonlineapp.util.extensions.slideUp
 import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.fabnavigation.FabNavigationAdapter
 import com.codingblocks.onlineapi.Clients
@@ -250,17 +251,21 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 searchBtn.setOnClickListener {
                     startActivity(intentFor<LearningTracksActivity>().singleTop())
                 }
-                dashboardToolbarSecondary.post {
-                    dashboardToolbarSearch.crossfade(dashboardToolbarSecondary, null)
-                }
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+                dashboardToolbarSecondary.post {
+                    dashboardToolbarSearch.slideDown()
+                    dashboardToolbarSecondary.slideUp()
+                }
             }
             2 -> {
                 supportActionBar?.title = getString(R.string.explore)
-                if (viewModel.isLoggedIn.value == true) {
-                    dashboardToolbarSecondary.crossfade(dashboardToolbarSearch, null)
-                }
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+
+                if (viewModel.isLoggedIn.value == true) {
+                    dashboardToolbarSearch.slideUp()
+                    dashboardToolbarSecondary.slideDown()
+//                    dashboardToolbarSecondary.crossfade(dashboardToolbarSearch, null)
+                }
             }
             else -> {
                 when (position) {
@@ -268,10 +273,11 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                     1 -> supportActionBar?.title = getString(R.string.my_courses)
                     else -> supportActionBar?.title = getString(R.string.my_library)
                 }
-                dashboardToolbarSecondary.post {
-                    dashboardToolbarSearch.crossfade(dashboardToolbarSecondary, dashboardToolbarSearch, View.GONE)
-                }
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
+                dashboardToolbarSecondary.post {
+                    dashboardToolbarSearch.slideUp()
+                    dashboardToolbarSecondary.slideUp()
+                }
             }
         }
         dashboardPager.setCurrentItem(position, true)

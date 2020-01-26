@@ -17,7 +17,6 @@ import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
-import com.crashlytics.android.core.CrashlyticsCore
 import com.google.android.material.snackbar.Snackbar
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.activity_doubt_comment.*

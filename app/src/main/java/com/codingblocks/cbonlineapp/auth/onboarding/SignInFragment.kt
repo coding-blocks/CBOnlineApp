@@ -6,14 +6,12 @@ import android.os.Bundle
 import android.text.InputType
 import android.text.Spannable
 import android.text.SpannableString
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.MySMSBroadcastReceiver
-import com.codingblocks.cbonlineapp.MySMSBroadcastReceiver.OnSmsOTPReceivedListener
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
@@ -109,13 +107,12 @@ class SignInFragment : Fragment() {
                             activity?.let {
                                 val otpFragment = LoginOtpFragment.newInstance(map["phone"] ?: "")
                                 SmsRetriever.getClient(it).startSmsRetriever() // start retriever
-                                replaceFragmentSafely( // replace fragment with otp fragment
+                                replaceFragmentSafely(
                                     otpFragment,
                                     containerViewId = R.id.loginContainer
                                 )
                                 MySMSBroadcastReceiver.register(it, otpFragment) // the new fragment will listen for otp
                             }
-
                         } else {
                             runOnUiThread {
                                 errorDrawableTv.isVisible = true
@@ -123,7 +120,6 @@ class SignInFragment : Fragment() {
                                 proceedBtn.isEnabled = true
                             }
                         }
-
                     }
                 }
             }

@@ -44,11 +44,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="68dp"
-                    android:layout_marginBottom="@dimen/margin_medium"
                     android:layout_marginEnd="@dimen/margin_large"
-                    android:lineSpacingExtra="4dp"
+                    android:layout_marginBottom="@dimen/margin_medium"
                     android:layout_toStartOf="@id/courseLogo"
                     android:fontFamily="@font/gilroy_medium"
+                    android:lineSpacingExtra="4dp"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     tools:text="Learn full-stack web development using JavaScript and NodeJS" />
@@ -68,13 +68,13 @@
                     android:id="@+id/ratingBar"
                     style="@style/CustomRatingBar"
                     android:layout_width="wrap_content"
-                    android:numStars="5"
-                    android:isIndicator="true"
-                    android:stepSize="0.01"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/ratingTv"
                     android:layout_alignBottom="@id/ratingTv"
-                    android:layout_marginStart="@dimen/margin_large" />
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:stepSize="0.01" />
 
                 <TextView
                     android:id="@+id/ratingTv"
@@ -115,20 +115,20 @@
             android:paddingEnd="@dimen/margin_large">
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/batchBtn"
                 style="@style/CustomOutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/batchBtn"
-                app:strokeWidth="0dp"
                 android:layout_marginTop="@dimen/margin_medium"
-                android:textColor="@color/black"
                 android:drawableEnd="@drawable/ic_dropdown"
-                android:text="@string/choose_batch" />
+                android:text="@string/choose_batch"
+                android:textColor="@color/black"
+                app:strokeWidth="0dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="4dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp">
 
                 <TextView
                     android:id="@+id/priceTv"
@@ -145,9 +145,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    android:textSize="15sp"
                     android:fontFamily="@font/gilroy_bold"
                     android:textColor="@color/brownish_grey"
+                    android:textSize="15sp"
                     tools:text="9499" />
 
                 <TextView
@@ -244,9 +244,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="@dimen/margin_medium"
-                    android:lineSpacingExtra="4dp"
                     android:layout_marginEnd="@dimen/margin_large"
                     android:fontFamily="@font/gilroy_medium"
+                    android:lineSpacingExtra="4dp"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     app:trimLength="200" />
@@ -284,9 +284,9 @@
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="@dimen/margin_large"
                     android:layout_marginEnd="@dimen/margin_large"
+                    android:layout_marginBottom="@dimen/margin_small"
                     android:drawableStart="@drawable/ic_courses"
                     android:drawablePadding="10dp"
-                    android:layout_marginBottom="@dimen/margin_small"
                     android:drawableTint="@color/orangish"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/course_content"
@@ -403,8 +403,8 @@
                         android:layout_marginStart="@dimen/margin_medium"
                         android:layout_weight="1"
                         android:fontFamily="@font/gilroy_medium"
-                        android:textAlignment="viewStart"
                         android:text="@string/lectures_text"
+                        android:textAlignment="viewStart"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -419,8 +419,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/gilroy_medium"
-                        android:textAlignment="viewStart"
                         android:text="@string/mentor_support"
+                        android:textAlignment="viewStart"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -446,8 +446,8 @@
                         android:layout_marginStart="@dimen/margin_medium"
                         android:layout_weight="1"
                         android:fontFamily="@font/gilroy_medium"
-                        android:textAlignment="viewStart"
                         android:text="@string/revise"
+                        android:textAlignment="viewStart"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -462,8 +462,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/gilroy_medium"
-                        android:textAlignment="viewStart"
                         android:text="@string/completion_certificate"
+                        android:textAlignment="viewStart"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 

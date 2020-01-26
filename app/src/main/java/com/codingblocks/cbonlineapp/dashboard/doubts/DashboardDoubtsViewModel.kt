@@ -29,18 +29,19 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
 
     fun fetchDoubts() {
         runIO {
-            when (val response = repo.fetchDoubtsByCourseRun(attemptId.value ?: "")) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful)
-                        response.value.body()?.let {
-                            repo.insertDoubts(it)
+            if (!attemptId.value.isNullOrEmpty())
+                when (val response = repo.fetchDoubtsByCourseRun(attemptId.value ?: "")) {
+                    is ResultWrapper.GenericError -> setError(response.error)
+                    is ResultWrapper.Success -> {
+                        if (response.value.isSuccessful)
+                            response.value.body()?.let {
+                                repo.insertDoubts(it)
+                            }
+                        else {
+                            setError(fetchError(response.value.code()))
                         }
-                    else {
-                        setError(fetchError(response.value.code()))
                     }
                 }
-            }
         }
     }
 

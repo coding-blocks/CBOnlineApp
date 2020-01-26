@@ -6,5 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_alignTop="@id/chip2"
     android:text="C++ Developer"
+    app:chipBackgroundColor="@color/white_transparent"
     android:textColor="@color/black"
-    app:chipSurfaceColor="@color/white_transparent" />
+    app:chipStrokeColor="#c4c4c4" />

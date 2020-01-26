@@ -26,7 +26,6 @@ import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showEmptyView
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.ErrorStatus
-import com.crashlytics.android.core.CrashlyticsCore
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar_dashboard.*

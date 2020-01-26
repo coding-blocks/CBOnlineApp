@@ -1,12 +1,9 @@
 package com.codingblocks.cbonlineapp
 
-import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.util.Log
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -14,7 +11,6 @@ import androidx.lifecycle.OnLifecycleEvent
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
-import java.util.regex.Pattern
 
 /**
  * @author aggarwalpulkit596
@@ -46,7 +42,6 @@ class MySMSBroadcastReceiver(val otpReceivedListener: OnSmsOTPReceivedListener) 
                             ?.get(0)?.value
                             ?.let { otp -> otpReceivedListener.onSmsOTPReceieved(otp) }
                             ?: otpReceivedListener.onSmsOTPReceieved("")
-
                     }
                 }
                 CommonStatusCodes.TIMEOUT -> otpReceivedListener.onSmsOTPTimeout()
@@ -70,10 +65,7 @@ class MySMSBroadcastReceiver(val otpReceivedListener: OnSmsOTPReceivedListener) 
                 )
 
                 activity.lifecycle.addObserver(lifecycleObserver)
-
             }
         }
     }
 }
-
-

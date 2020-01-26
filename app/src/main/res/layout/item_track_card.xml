@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="190dp"
+    android:layout_height="wrap_content"
     android:layout_margin="@dimen/margin_small"
     android:background="?attr/selectableItemBackground"
     app:cardBackgroundColor="@color/white"
@@ -32,18 +32,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:weightSum="1">
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".6">
+                android:layout_height="110dp">
 
                 <ImageView
                     android:id="@+id/trackCover"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_cpp" />
 
@@ -58,6 +56,7 @@
                     android:fontFamily="@font/gilroy_bold"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
+                    android:layout_marginBottom="8dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     android:textStyle="bold"
@@ -70,18 +69,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/course_card_like"
-                    android:layout_marginEnd="@dimen/margin_small"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/margin_medium_small"
                     android:layout_toStartOf="@id/course_card_like"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
+                    android:layout_marginEnd="@dimen/padding_medium"
+                    android:scaleType="centerCrop"
                     android:contentDescription="@string/share"
                     android:focusable="true"
                     android:src="@drawable/ic_share" />
 
                 <ImageButton
+                    android:layout_width="14dp"
                     android:id="@+id/course_card_like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="15dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="@dimen/margin_medium_small"
                     android:layout_marginEnd="@dimen/padding_medium"
@@ -95,12 +99,15 @@
                     android:id="@+id/trackTitleTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/course_card_like"
-                    android:layout_marginStart="100dp"
+                    android:layout_below="@id/course_card_share"
+                    android:layout_marginStart="110dp"
                     android:layout_marginEnd="@dimen/margin_small"
+                    android:layout_marginTop="7dp"
+                    android:ellipsize="end"
+                    android:lines="1"
                     android:fontFamily="@font/gilroy_bold"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     tools:text="Android App Development Online" />
 
                 <TextView
@@ -122,9 +129,9 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".4"
+                android:background="@color/white"
                 android:paddingStart="@dimen/padding_medium"
                 tools:ignore="RtlSymmetry">
 
@@ -140,6 +147,9 @@
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/trackChips"
+
+                    android:layout_marginBottom="@dimen/margin_medium"
+                    app:singleLine="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"

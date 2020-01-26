@@ -53,7 +53,7 @@ class LoginOtpFragment : Fragment(), OnSmsOTPReceivedListener {
         }
     }
 
-    fun verifyWithOtp () {
+    fun verifyWithOtp() {
         verifyOtpBtn.isEnabled = false
         GlobalScope.launch {
             when (val response = safeApiCall { Clients.api.getJwt(map) }) {
@@ -98,7 +98,6 @@ class LoginOtpFragment : Fragment(), OnSmsOTPReceivedListener {
     override fun onSmsOTPTimeout() {
         Log.w("SMS_OTP", "OTP timeout")
     }
-
 
     companion object {
         @JvmStatic

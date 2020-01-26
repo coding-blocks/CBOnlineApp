@@ -14,18 +14,20 @@ import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.loadSvg
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.android.synthetic.main.activity_course.courseToolbar
 import kotlinx.android.synthetic.main.activity_track.*
+import kotlinx.android.synthetic.main.activity_track.appbar
 import kotlinx.android.synthetic.main.activity_track.courseBackdrop
 import kotlinx.android.synthetic.main.activity_track.courseLogo
+import kotlinx.android.synthetic.main.activity_track.shortTv
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TrackActivity : AppCompatActivity() {
+class TrackActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
     private val courseId by lazy {
         intent.getStringExtra(COURSE_ID)
     }
@@ -66,7 +68,7 @@ class TrackActivity : AppCompatActivity() {
         trackCourseRv.setRv(this@TrackActivity, courseCardListAdapter, setDivider = true, type = "THICK")
         if (!courseLogoImage.isNullOrEmpty()) {
             courseLogo.transitionName = courseLogoImage
-            courseLogo.loadSvg(courseLogoUrl) {
+            courseLogo.loadImage(courseLogoUrl) {
                 supportStartPostponedEnterTransition()
             }
         }
@@ -84,5 +86,13 @@ class TrackActivity : AppCompatActivity() {
             courseCardListAdapter.submitList(courses)
         }
         courseCardListAdapter.onItemClick = itemClickListener
+        appbar.addOnOffsetChangedListener(this)
+    }
+
+    override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+        val alpha = (appBarLayout.totalScrollRange + verticalOffset).toFloat() / appBarLayout.totalScrollRange
+        courseLogo.alpha = alpha
+        shortTv.alpha = alpha
+        trackCourseNumTv.alpha = alpha
     }
 }

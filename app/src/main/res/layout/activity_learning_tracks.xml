@@ -9,6 +9,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         style="@style/ToolBarStyleDark"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -21,103 +22,113 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_large"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:layout_marginEnd="@dimen/margin_large">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/gilroy_medium"
-            android:text="I am a "
-
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/liveDoubtBtn"
-            style="@style/ButtonStyleChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_medium"
-            android:layout_marginEnd="5dp"
-            android:text="Student" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/resolvedDoubtBtn"
-            style="@style/ButtonStyleChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:text="Professional" />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_large"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:layout_marginEnd="@dimen/margin_large">
+        android:background="@drawable/toolbar_bg"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/margin_medium">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/gilroy_medium"
-            android:text="I want to become "
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_large">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_medium"
+                android:text="I am a "
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/CustomOutlinedButton"
-            android:layout_width="0dp"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/liveDoubtBtn"
+                style="@style/ButtonStyleChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginEnd="5dp"
+                android:text="Student" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/resolvedDoubtBtn"
+                style="@style/ButtonStyleChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:text="Professional" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="1"
-            android:drawableEnd="@drawable/ic_dropdown"
-            android:paddingStart="13dp"
-            android:paddingTop="7dp"
-            android:paddingEnd="13dp"
-            android:paddingBottom="7dp"
-            android:text="Choose Track"
-            android:textSize="14sp"
-            app:cornerRadius="20dp" />
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_large">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_medium"
+                android:text="I want to become "
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_large"
-        android:layout_marginTop="@dimen/margin_medium_small"
-        android:layout_marginEnd="@dimen/margin_large">
 
-        <TextView
-            android:layout_width="0dp"
+            <com.google.android.material.button.MaterialButton
+                style="@style/CustomOutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:drawableEnd="@drawable/ic_dropdown_small"
+                android:paddingStart="13dp"
+                android:paddingTop="7dp"
+                android:paddingEnd="13dp"
+                android:paddingBottom="7dp"
+                android:text="Choose Track"
+                android:textSize="14sp"
+                app:cornerRadius="20dp"
+                app:strokeWidth="0dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableStart="@drawable/ic_help_fill"
-            android:drawablePadding="10dp"
-            android:fontFamily="@font/gilroy_medium"
-            android:gravity="center_vertical"
-            android:text="Need Help?"
-            android:textColor="@color/orangish"
-            android:textSize="16sp" />
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_medium_small"
+            android:layout_marginEnd="@dimen/margin_large">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/ic_help_fill"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/gilroy_medium"
+                android:gravity="center_vertical"
+                android:text="Need Help?"
+                android:textColor="@color/orangish"
+                android:textSize="16sp" />
 
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/checkoutBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_dropright"
-            android:drawablePadding="10dp"
-            android:minHeight="0dp"
-            android:text="Continue" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/checkoutBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_dropright"
+                android:drawablePadding="10dp"
+                android:minHeight="0dp"
+                android:text="Continue" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
