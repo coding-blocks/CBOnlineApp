@@ -201,13 +201,6 @@
             android:name=".admin.doubts.DoubtReceiver"
             android:enabled="true"
             android:exported="false" />
-        <receiver
-            android:name=".MySMSBroadcastReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

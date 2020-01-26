@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.doubts.ChatClickListener
+import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import com.codingblocks.cbonlineapp.commons.SheetAdapter
@@ -179,7 +180,7 @@ class DashboardDoubtsFragment : Fragment() {
                 }
                 else -> {
                     dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
-                    CrashlyticsCore.getInstance().log(it)
+                    AppCrashlyticsWrapper.log(it)
                 }
             }
             if (doubtListAdapter.currentList.isEmpty())

@@ -5,6 +5,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.dashboard.doubts.CommentsListAdapter
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsViewModel
 import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
@@ -73,7 +74,7 @@ class DoubtCommentActivity : AppCompatActivity() {
 
         viewModel.errorLiveData.observer(this) {
             rootComment.showSnackbar(it, Snackbar.LENGTH_SHORT)
-            CrashlyticsCore.getInstance().log(it)
+            AppCrashlyticsWrapper.log(it)
         }
     }
 

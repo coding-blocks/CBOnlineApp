@@ -6,11 +6,14 @@ import android.os.Bundle
 import android.text.InputType
 import android.text.Spannable
 import android.text.SpannableString
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.codingblocks.cbonlineapp.MySMSBroadcastReceiver
+import com.codingblocks.cbonlineapp.MySMSBroadcastReceiver.OnSmsOTPReceivedListener
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
@@ -23,6 +26,7 @@ import com.codingblocks.onlineapi.safeApiCall
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
+import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_sign_in.*
@@ -95,19 +99,31 @@ class SignInFragment : Fragment() {
             GlobalScope.launch {
                 when (val response = safeApiCall { Clients.api.getOtp(map) }) {
                     is ResultWrapper.GenericError -> {
-                        runOnUiThread { proceedBtn.isEnabled = true }
-                        signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
+                        runOnUiThread {
+                            proceedBtn.isEnabled = true
+                            signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
+                        }
                     }
                     is ResultWrapper.Success -> {
-                        if (response.value.isSuccessful)
-                            replaceFragmentSafely(LoginOtpFragment.newInstance(map["phone"]
-                                ?: ""), containerViewId = R.id.loginContainer)
-                        else
+                        if (response.value.isSuccessful) {
+                            activity?.let {
+                                val otpFragment = LoginOtpFragment.newInstance(map["phone"] ?: "")
+                                SmsRetriever.getClient(it).startSmsRetriever() // start retriever
+                                replaceFragmentSafely( // replace fragment with otp fragment
+                                    otpFragment,
+                                    containerViewId = R.id.loginContainer
+                                )
+                                MySMSBroadcastReceiver.register(it, otpFragment) // the new fragment will listen for otp
+                            }
+
+                        } else {
                             runOnUiThread {
                                 errorDrawableTv.isVisible = true
                                 signInRoot.showSnackbar("Invalid Number.Please Try Again", Snackbar.LENGTH_SHORT)
                                 proceedBtn.isEnabled = true
                             }
+                        }
+
                     }
                 }
             }

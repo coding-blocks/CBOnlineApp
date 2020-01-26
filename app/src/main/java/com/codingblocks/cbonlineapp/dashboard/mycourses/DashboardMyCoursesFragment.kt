@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.commons.SheetAdapter
 import com.codingblocks.cbonlineapp.commons.SheetItem
@@ -130,7 +131,7 @@ class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
                 }
                 else -> {
                     dashboardCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
-                    CrashlyticsCore.getInstance().log(it)
+                    AppCrashlyticsWrapper.log(it)
                 }
             }
             if (courseListAdapter.currentList.isEmpty())

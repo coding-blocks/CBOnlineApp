@@ -41,7 +41,7 @@ data class Course(
     val reviewCount: Int = 0,
     val difficulty: String = "",
     val rating: Float = 0f,
-    val slug: String = "",
+    val slug: String? = "",
     val coverImage: String? = "",
     val faq: String?,
     val coursefeatures: ArrayList<CourseFeatures>?,
