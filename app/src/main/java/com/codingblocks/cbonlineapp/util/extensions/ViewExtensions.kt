@@ -10,6 +10,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
@@ -151,11 +152,14 @@ fun <F : Fragment> F.replaceFragmentSafely(
     }
 }
 
-fun RecyclerView.setRv(activity: Context, listAdapter: ListAdapter<out Any, out RecyclerView.ViewHolder>, setDivider: Boolean = false, type: String = "", orientation: Int = RecyclerView.VERTICAL) {
+fun RecyclerView.setRv(activity: Context, listAdapter: ListAdapter<out Any, out RecyclerView.ViewHolder>, setDivider: Boolean = false, type: String = "", orientation: Int = RecyclerView.VERTICAL, space: Float = 0f) {
     val dividerItemDecoration = if (type == "thick")
         DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.dividerthick)!!)
     else DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.divider)!!)
-
+    if (space != 0f) {
+        val spaceDp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, space, resources.displayMetrics)
+        addItemDecoration(SpacesItemDecoration(spaceDp))
+    }
     layoutManager = LinearLayoutManager(activity, orientation, false)
     if (setDivider) addItemDecoration(dividerItemDecoration)
     adapter = listAdapter
