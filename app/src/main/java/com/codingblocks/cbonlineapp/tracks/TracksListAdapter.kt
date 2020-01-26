@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.ItemClickListener
+import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.CareerTracks
 import com.google.android.material.chip.Chip
@@ -44,12 +45,12 @@ class TracksListAdapter(val type: String = "") : ListAdapter<CareerTracks, Track
 
         fun bind(item: CareerTracks) = with(itemView) {
             trackTitleTv.text = item.name
-//            trackLogo.loadImage(item.logo)
+            trackLogo.loadImage(item.logo)
             ViewCompat.setTransitionName(trackLogo, item.name)
 
             trackCourseNumTv.text = "${item.courses?.size} Courses"
             if (type == "LIST") {
-//                trackCover.loadImage(item.background)
+                trackCover.loadImage(item.background)
                 item.professions?.forEach {
                     val chip = LayoutInflater.from(context).inflate(R.layout.single_chip_layout, trackChips, false) as Chip
                     chip.text = it.title

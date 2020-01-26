@@ -24,13 +24,13 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 100060505
+        versionCode 100060506
         // 1 (versioning scheme)
         // 00 (major version)
         // 06 (minor version)
         // 05 (patch version)
         // 05 spare for betas/RCs
-        versionName "0.6.5-beta05"
+        versionName "0.6.5-beta06"
         signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false
@@ -145,6 +145,8 @@ dependencies {
     implementation "io.noties.markwon:html:$markwon_version"
     implementation "io.noties.markwon:linkify:$markwon_version"
     implementation 'com.github.AppIntro:AppIntro:5.1.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
 
     // Image view libraries

@@ -32,6 +32,7 @@ import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
+import com.codingblocks.cbonlineapp.util.extensions.crossfade
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
@@ -246,18 +247,18 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         when (position) {
             0 -> {
                 supportActionBar?.title = getString(R.string.welcome)
-                dashboardToolbarSearch.isVisible = true
                 searchBtn.setOnClickListener {
                     startActivity(intentFor<LearningTracksActivity>().singleTop())
                 }
-                dashboardToolbarSecondary.isVisible = false
+                dashboardToolbarSecondary.post {
+                    dashboardToolbarSearch.crossfade(dashboardToolbarSecondary, null)
+                }
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             }
             2 -> {
                 supportActionBar?.title = getString(R.string.explore)
                 if (viewModel.isLoggedIn.value == true) {
-                    dashboardToolbarSearch.isVisible = false
-                    dashboardToolbarSecondary.isVisible = true
+                    dashboardToolbarSecondary.crossfade(dashboardToolbarSearch, null)
                 }
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             }
@@ -267,8 +268,9 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                     1 -> supportActionBar?.title = getString(R.string.my_courses)
                     else -> supportActionBar?.title = getString(R.string.my_library)
                 }
-                dashboardToolbarSecondary.isVisible = false
-                dashboardToolbarSearch.isVisible = false
+                dashboardToolbarSecondary.post {
+                    dashboardToolbarSearch.crossfade(dashboardToolbarSecondary, dashboardToolbarSearch, View.GONE)
+                }
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
             }
         }

@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.util.extensions
 
 import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -10,6 +11,7 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.view.View
+import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
 import android.widget.ImageButton
@@ -42,6 +44,7 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.dialog.view.*
 import org.jetbrains.anko.layoutInflater
+import kotlin.math.hypot
 
 fun View.applyDim(dimAmount: Float) {
     val dim = ColorDrawable(Color.BLACK)
@@ -340,4 +343,50 @@ fun <T : RecyclerView.ViewHolder> T.listen(event: (position: Int, type: Int) -> 
         event.invoke(adapterPosition, itemViewType)
     }
     return this
+}
+
+fun View.crossfade(view: View, otherView: View?, type: Int = View.INVISIBLE) {
+    this.apply {
+        // Set the content view to 0% opacity but visible, so that it is visible
+        // (but fully transparent) during the animation.
+        if (otherView == null || !isVisible) {
+            val cx = this.width / 2
+            val cy = this.height / 2
+
+            // get the final radius for the clipping circle
+            val finalRadius = hypot(cx.toDouble(), cy.toDouble()).toFloat()
+
+            // create the animator for this view (the start radius is zero)
+            val anim = ViewAnimationUtils.createCircularReveal(this, cx, cy, 0f, finalRadius)
+            // make the view visible and start the animation
+            this.visibility = View.VISIBLE
+            anim.start()
+        }
+    }
+
+    var cx = view.width / 2
+    var cy = view.height / 2
+    var initialRadius = hypot(cx.toDouble(), cy.toDouble()).toFloat()
+    var anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, initialRadius, 0f)
+    anim.addListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator) {
+            super.onAnimationEnd(animation)
+            view.visibility = type
+        }
+    })
+    anim.start()
+
+    otherView?.let {
+        cx = it.width / 2
+        cy = it.height / 2
+        initialRadius = hypot(cx.toDouble(), cy.toDouble()).toFloat()
+        anim = ViewAnimationUtils.createCircularReveal(it, cx, cy, initialRadius, 0f)
+        anim.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                it.visibility = type
+            }
+        })
+        anim.start()
+    }
 }
