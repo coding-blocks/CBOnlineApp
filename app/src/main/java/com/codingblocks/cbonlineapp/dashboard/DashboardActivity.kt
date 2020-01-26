@@ -288,7 +288,8 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     }
 
     fun openProfile(view: View) {
-        startActivity<CompleteProfileActivity>()
+        if (prefs.SP_JWT_TOKEN_KEY.isNotEmpty())
+            startActivity<CompleteProfileActivity>()
     }
 
     fun openReferral(view: View) {

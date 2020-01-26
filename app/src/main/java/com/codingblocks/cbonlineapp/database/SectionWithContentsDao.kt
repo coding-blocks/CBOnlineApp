@@ -31,6 +31,15 @@ interface SectionWithContentsDao {
 
     //        """)
 //    fun getVideoIdsWithSectionId(sectionID: String): LiveData<List<ContentModel>>
+
+    @Query("""
+        SELECT c.ccid as contentId,s.csid as sectionId,c.contentable FROM  SectionModel s
+	    INNER JOIN SectionWithContent sc ON sc."section_id" = s."csid"
+	    INNER JOIN ContentModel c ON c."ccid" = sc."content_id"
+	    WHERE s.attemptId = :attemptId AND progress != "DONE" AND c.contentable == "lecture" OR c.contentable == "qna"
+        ORDER BY s."sectionOrder", sc."order" LIMIT 1;
+        """)
+    fun resumeCourse(attemptId: String): LiveData<SectionContentHolder.NextContent>
 //
     @Transaction
     @Query("""

@@ -41,7 +41,6 @@ class OnBoardingActivity : AppCompatActivity() {
                 withContext(Dispatchers.IO) { runMigration() }
             }
             val key = sharedPrefs.SP_JWT_TOKEN_KEY
-            JWTUtils.isExpired(key)
             if (key.isNotEmpty() && !JWTUtils.isExpired(key)) {
                 startActivity(intentFor<DashboardActivity>())
             }

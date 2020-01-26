@@ -247,7 +247,7 @@ class MyCourseRepository(
         )
     }
 
-    fun getNextContent(attemptId: String) = sectionWithContentsDao.getNextContent(attemptId)
+    fun getNextContent(attemptId: String) = sectionWithContentsDao.resumeCourse(attemptId)
 
     suspend fun resetProgress(attemptId: ResetRunAttempt) = safeApiCall { Clients.api.resetProgress(attemptId) }
 }

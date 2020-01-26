@@ -371,6 +371,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                 deleteFolder(viewModel.videoId)
             } else if (p1.errorCode in (2010..2020)) {
                 viewModel.getOtp()
+//                playerFragment.
             }
         }
 
