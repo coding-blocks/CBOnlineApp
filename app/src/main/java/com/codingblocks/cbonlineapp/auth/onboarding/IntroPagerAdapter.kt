@@ -21,7 +21,7 @@ class IntroPagerAdapter(private val mContext: Context) : PagerAdapter() {
 
     override fun instantiateItem(@NonNull container: ViewGroup, position: Int): View {
         val title = arrayOf("Learn from the best in\n the industry", "Learn on the go\n anytime, anywhere", "Resolve all your doubts with\n TA’s & Mentors")
-        val message = arrayOf("Experienced, engaging instructors take you\n through course material, step by step, in our\n high-quality video lessons.", "Get exclusive access to Live Webinars where\n you can interact with mentors for important\n course topics & can solve all your doubts.", "You can learn anytime, anywhere with our all\n new android app. Download and save videos\n offline.")
+        val message = arrayOf("Experienced, engaging instructors take you\n through course material, step by step, in our\n high-quality video lessons.", "You can learn anytime, anywhere with our all\n new android app. Download and save videos\n offline.", "Get exclusive access to Live Webinars where\n you can interact with mentors for important\n course topics & can solve all your doubts.")
 
         val img: TypedArray = mContext.resources.obtainTypedArray(R.array.tourslide)
         val itemView: View = LayoutInflater.from(mContext).inflate(R.layout.tour_layout, container, false)

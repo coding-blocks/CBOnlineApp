@@ -13,6 +13,7 @@ import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.getMeta
 import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.Course
+import com.codingblocks.onlineapi.models.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -22,7 +23,6 @@ class DashboardViewModel(
     private val myCourseRepo: DashboardMyCoursesRepository
 ) : ViewModel() {
     var courseFilter = MutableLiveData<String>()
-    var isAdmin: MutableLiveData<Boolean> = MutableLiveData()
     var isLoggedIn: MutableLiveData<Boolean> = MutableLiveData()
     var suggestedCourses = MutableLiveData<List<Course>>()
     var trendingCourses = MutableLiveData<List<Course>>()
@@ -50,8 +50,10 @@ class DashboardViewModel(
     }
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
-    init {
-        fetchUser()
+    val user by lazy {
+        Transformations.switchMap(isLoggedIn) {
+            fetchUser()
+        }
     }
 
     fun fetchToken(grantCode: String) {
@@ -71,17 +73,16 @@ class DashboardViewModel(
         }
     }
 
-    private fun fetchUser() {
+    private fun fetchUser(): MutableLiveData<User> {
+        val user = MutableLiveData<User>()
         runIO {
             when (val response = homeRepo.fetchUser()) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
+                            user.postValue(it)
                             homeRepo.insertUser(it)
-                            if (it.roleId == 1 || it.roleId == 3) {
-                                isAdmin.postValue(true)
-                            }
                         }
                     else {
                         setError(fetchError(response.value.code()))
@@ -89,6 +90,7 @@ class DashboardViewModel(
                 }
             }
         }
+        return user
     }
 
     fun fetchRecommendedCourses(offset: Int, page: Int) {

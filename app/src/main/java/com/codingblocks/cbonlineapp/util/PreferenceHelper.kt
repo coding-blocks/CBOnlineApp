@@ -59,6 +59,12 @@ class PreferenceHelper private constructor() {
             prefs?.save(ROLE_ID, value)
         }
 
+    var SP_ADMIN: Boolean
+        get() = prefs?.getBoolean(ADMIN, false) ?: false
+        set(value) {
+            prefs?.save(ADMIN, value)
+        }
+
     var SP_WIFI: Boolean
         get() = prefs?.getBoolean(WIFI, WIFI_DEFAULT) ?: WIFI_DEFAULT
         set(value) {
@@ -95,7 +101,7 @@ class PreferenceHelper private constructor() {
         const val ONEAUTH_ID = "oneauth_id"
         const val USER_ID = "user_id"
         const val USER_NAME = "user_name"
-        const val ROLE_ID = "role_id"
+        const val ADMIN = "admin"
         const val EMAIL_ID = "email_id"
         const val ROLE_ID_DEFAULT = 0
         const val COURSE_FILTER_TYPE = 0

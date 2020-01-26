@@ -40,6 +40,7 @@ import com.codingblocks.cbonlineapp.util.extensions.slideUp
 import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.fabnavigation.FabNavigationAdapter
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.User
 import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import de.hdodenhof.circleimageview.CircleImageView
@@ -69,20 +70,22 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
         Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
         viewModel.isLoggedIn.postValue(prefs.SP_JWT_TOKEN_KEY.isNotEmpty())
-        if (prefs.SP_JWT_TOKEN_KEY.isNotEmpty()) {
-            setUser()
-            initializeUI(true)
-        } else {
-            initializeUI(false)
+        initializeUI(false)
+        viewModel.user.observer(this) {
+            if (it != null) {
+                setUser(it)
+                initializeUI(true)
+            } else {
+            }
         }
     }
 
-    private fun setUser() {
+    private fun setUser(it: User) {
         referralContainer.isVisible = true
-        viewModel.isAdmin.observer(this) {
-            val navMenu = dashboardNavigation.menu
-            navMenu.findItem(R.id.nav_admin).isVisible = it
-        }
+        val navMenu = dashboardNavigation.menu
+        navMenu.findItem(R.id.nav_inbox).isVisible = true
+        navMenu.findItem(R.id.nav_admin).isVisible = it.roleId == 1 || it.roleId == 3
+
         dashboardNavigation.getHeaderView(0).apply {
             findViewById<CircleImageView>(R.id.navHeaderImageView).loadImage(prefs.SP_USER_IMAGE, true)
             findViewById<TextView>(R.id.navUsernameTv).append(" ${prefs.SP_USER_NAME}")

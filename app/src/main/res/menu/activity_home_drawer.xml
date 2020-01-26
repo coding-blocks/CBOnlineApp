@@ -35,7 +35,7 @@
             android:id="@+id/nav_inbox"
             android:icon="@drawable/ic_chat"
             android:title="@string/inbox"
-            android:visible="true" />
+            android:visible="false" />
     </group>
     <group
         android:id="@+id/communication"
