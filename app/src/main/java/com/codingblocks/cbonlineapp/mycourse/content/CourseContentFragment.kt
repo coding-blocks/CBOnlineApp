@@ -14,25 +14,27 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
-import androidx.work.Data
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import com.codingblocks.cbonlineapp.PdfActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.DownloadStarter
 import com.codingblocks.cbonlineapp.commons.SectionListClickListener
 import com.codingblocks.cbonlineapp.database.ListObject
+import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
+import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CODE
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
-import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.QNA
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
@@ -42,9 +44,11 @@ import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.startService
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.concurrent.TimeUnit
@@ -72,23 +76,17 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     private val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
         override fun onClick(pos: Int, adapterPosition: Int) {
             popupWindowDogs?.dismiss()
-            mLayoutManager.scrollToPosition(sectionitem[adapterPosition - 2].pos)
-            smoothScroller.targetPosition = pos
-            mLayoutManager.startSmoothScroll(smoothScroller)
+            val position = adapterPosition - 2
+            if (position > 0) {
+                mLayoutManager.scrollToPosition(sectionitem[adapterPosition - 2].pos)
+                smoothScroller.targetPosition = pos
+                mLayoutManager.startSmoothScroll(smoothScroller)
+            }
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = inflater.inflate(R.layout.fragment_course_content, container, false)
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.fetchSections()
-        sectionItemsAdapter.starter = this
-        viewModel.expired.observer(viewLifecycleOwner) {
-            sectionItemsAdapter.setExpiry(it)
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -135,7 +133,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             adapter = sectionItemsAdapter
             layoutManager = mLayoutManager
         }
-
         attachObservers()
         sectionListAdapter.onSectionListClick = sectionListClickListener
     }
@@ -213,20 +210,6 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         }
     }
 
-    override fun updateProgress(contentId: String) {
-        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val progressData: Data = workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to viewModel.attemptId)
-        val request: OneTimeWorkRequest =
-            OneTimeWorkRequestBuilder<ProgressWorker>()
-                .setConstraints(constraints)
-                .setInputData(progressData)
-                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
-                .build()
-
-        WorkManager.getInstance()
-            .enqueue(request)
-    }
-
     override fun startDownload(
         videoId: String,
         contentId: String,
@@ -272,5 +255,63 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         popupWindow.contentView = listViewDogs
 
         return popupWindow
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.fetchSections()
+        sectionItemsAdapter.starter = this
+        sectionItemsAdapter.onItemClick = {
+            when (it) {
+                is ContentModel -> with(it) {
+                    when (contentable) {
+                        DOCUMENT ->
+                            if (contentDocument.documentUid.isNotEmpty())
+                                startActivity(
+                                    intentFor<PdfActivity>(
+                                        "fileUrl" to contentDocument.documentPdfLink,
+                                        "fileName" to contentDocument.documentName + ".pdf"
+                                    )
+                                )
+                            else
+                                checkSection(premium)
+                        VIDEO, LECTURE ->
+                            if (contentLecture.lectureUid.isNotEmpty())
+                                startActivity(intentFor<VideoPlayerActivity>(
+                                    CONTENT_ID to ccid,
+                                    SECTION_ID to sectionId
+                                ))
+                            else
+                                checkSection(premium)
+                        QNA ->
+                            if (contentQna.qnaUid.isNotEmpty())
+                                startActivity(intentFor<QuizActivity>(CONTENT_ID to ccid, SECTION_ID to sectionId))
+                            else
+                                checkSection(premium)
+                        CODE ->
+                            requireContext().showDialog("unavailable")
+                    }
+                    viewModel.updateProgress(ccid)
+                }
+            }
+        }
+    }
+
+    private fun checkSection(premium: Boolean) {
+        when {
+            viewModel.runStartEnd.first < System.currentTimeMillis() -> {
+                requireContext().showDialog("expired")
+            }
+            viewModel.runStartEnd.second < System.currentTimeMillis() -> {
+                // show date in dialog
+                requireContext().showDialog("Wait")
+            }
+            premium -> {
+                requireContext().showDialog("purchase")
+            }
+            else -> {
+                requireContext().showDialog("revoked")
+            }
+        }
     }
 }

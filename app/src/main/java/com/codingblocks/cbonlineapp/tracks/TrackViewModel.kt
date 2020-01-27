@@ -98,7 +98,7 @@ class TrackViewModel(private val repo: TracksRepository) : ViewModel() {
         val track = MutableLiveData<CareerTracks>()
 
         runIO {
-            when (val response = repo.getRecommendedTrack(hashMapOf(id to "professionId", type.value!! to "status"))) {
+            when (val response = repo.getRecommendedTrack(hashMapOf("professionId" to id, "status" to type.value!!))) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {

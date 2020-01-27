@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.extensions.listen
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.BaseModel
 import com.codingblocks.onlineapi.models.Professions
@@ -22,8 +21,7 @@ class BatchListAdapter : ListAdapter<BaseModel, BatchListAdapter.ItemViewHolder>
         return ItemViewHolder(
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_batch, parent, false)
-        ).listen { position, type ->
-        }
+        )
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {

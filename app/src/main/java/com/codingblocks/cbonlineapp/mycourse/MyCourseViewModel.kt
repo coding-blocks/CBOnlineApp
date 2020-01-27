@@ -4,7 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.ProgressWorker
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SingleLiveEvent
 import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
@@ -14,6 +25,7 @@ import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.ProductExtensionsItem
 import com.codingblocks.onlineapi.models.ResetRunAttempt
+import java.util.concurrent.TimeUnit
 
 class MyCourseViewModel(
     private val repo: MyCourseRepository
@@ -21,7 +33,7 @@ class MyCourseViewModel(
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
     var revoked: MutableLiveData<Boolean> = MutableLiveData()
-    var expired: SingleLiveEvent<Boolean> = SingleLiveEvent()
+    lateinit var runStartEnd: Pair<Long, Long>
     var attemptId: String = ""
     var runId: String = ""
     var courseId: String = ""
@@ -130,4 +142,18 @@ class MyCourseViewModel(
     }
 
     fun getNextContent() = repo.getNextContent(attemptId)
+
+    fun updateProgress(contentId: String) {
+        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val progressData: Data = workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to attemptId)
+        val request: OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<ProgressWorker>()
+                .setConstraints(constraints)
+                .setInputData(progressData)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                .build()
+
+        WorkManager.getInstance()
+            .enqueue(request)
+    }
 }

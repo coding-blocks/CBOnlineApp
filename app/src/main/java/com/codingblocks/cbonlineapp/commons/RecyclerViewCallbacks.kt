@@ -17,8 +17,6 @@ interface DownloadStarter {
     fun startDownload(videoId: String, contentId: String, title: String, attemptId: String, sectionId: String)
 
     fun startSectionDownlod(sectionId: String)
-
-    fun updateProgress(contentId: String)
 }
 
 interface OnItemClickListener {

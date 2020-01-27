@@ -4,14 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.work.BackoffPolicy
-import androidx.work.Constraints
-import androidx.work.Data
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.content.CourseContentFragment
@@ -24,7 +16,6 @@ import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.QNA
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
@@ -39,7 +30,6 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.concurrent.TimeUnit
 
 class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
 
@@ -67,23 +57,9 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
                     LECTURE, VIDEO -> startActivity(intentFor<VideoPlayerActivity>(CONTENT_ID to content.contentId, SECTION_ID to content.sectionId).singleTop())
                     QNA -> startActivity(intentFor<QuizActivity>(CONTENT_ID to content.contentId, SECTION_ID to content.sectionId).singleTop())
                 }
-                updateProgress(content.contentId)
+                viewModel.updateProgress(content.contentId)
             }
         }
-    }
-
-    private fun updateProgress(contentId: String) {
-        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val progressData: Data = workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to viewModel.attemptId)
-        val request: OneTimeWorkRequest =
-            OneTimeWorkRequestBuilder<ProgressWorker>()
-                .setConstraints(constraints)
-                .setInputData(progressData)
-                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
-                .build()
-
-        WorkManager.getInstance()
-            .enqueue(request)
     }
 
     private fun initUI() {
