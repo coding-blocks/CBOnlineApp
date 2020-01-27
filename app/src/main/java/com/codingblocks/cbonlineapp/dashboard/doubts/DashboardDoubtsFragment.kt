@@ -37,13 +37,15 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard_doubts.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class DashboardDoubtsFragment : Fragment() {
+class DashboardDoubtsFragment : Fragment(), AnkoLogger {
 
     private lateinit var listener: FragmentChangeListener
 
@@ -102,6 +104,9 @@ class DashboardDoubtsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpBottomSheet()
+        viewLifecycleOwnerLiveData.observer(viewLifecycleOwner) {
+            info { it.lifecycle.currentState.name }
+        }
         doubtEmptyBtn.setOnClickListener {
             listener.openExplore()
         }
@@ -118,7 +123,7 @@ class DashboardDoubtsFragment : Fragment() {
         }
 
         filterTv.setOnClickListener {
-            dialog.show()
+            //            dialog.show()
         }
 
         viewModel.type.observer(viewLifecycleOwner) {

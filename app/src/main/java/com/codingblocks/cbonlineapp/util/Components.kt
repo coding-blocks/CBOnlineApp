@@ -39,7 +39,7 @@ object Components {
             "unavailable" -> {
                 updateView.okBtn.text = "Ok"
                 updateView.description.text =
-                    "This section is unavailable on mobile, please view it on the browser instead!"
+                    context.getString(R.string.unavailable)
             }
             "expired" -> {
                 updateView.okBtn.text = "Ok"

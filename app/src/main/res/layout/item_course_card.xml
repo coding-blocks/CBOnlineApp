@@ -165,9 +165,8 @@
                     android:layout_toEndOf="@id/courseCardInstructorImg"
                     android:fontFamily="@font/gilroy_bold"
                     android:ellipsize="end"
-                    android:lines="1"
                     android:textSize="14sp"
-                    tools:text="Arnav Gupta, Aayush Arora" />
+                    android:singleLine="true" />
 
                 <TextView
                     android:id="@+id/courseCardPriceTv"

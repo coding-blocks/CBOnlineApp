@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.NetworkType
@@ -126,9 +125,9 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             view.clearDim()
         }
 
-        swiperefresh.setOnRefreshListener {
-            (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
-        }
+//        swiperefresh.setOnRefreshListener {
+//            (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
+//        }
         rvExpendableView.apply {
             adapter = sectionItemsAdapter
             layoutManager = mLayoutManager
@@ -140,7 +139,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     private fun attachObservers() {
 
         viewModel.progress.observer(viewLifecycleOwner) {
-            swiperefresh.isRefreshing = it
+            //            swiperefresh.isRefreshing = it
         }
 
 //        viewModel.revoked.observer(viewLifecycleOwner) { value ->
@@ -289,7 +288,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                             else
                                 checkSection(premium)
                         CODE ->
-                            requireContext().showDialog("unavailable")
+                            requireContext().showDialog("unavailable", secondaryText = R.string.unavailable, buttonText = R.string.ok)
                     }
                     viewModel.updateProgress(ccid)
                 }
@@ -300,17 +299,23 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     private fun checkSection(premium: Boolean) {
         when {
             viewModel.runStartEnd.first < System.currentTimeMillis() -> {
-                requireContext().showDialog("expired")
-            }
-            viewModel.runStartEnd.second < System.currentTimeMillis() -> {
-                // show date in dialog
-                requireContext().showDialog("Wait")
+                requireContext().showDialog("expired", secondaryText = R.string.expired, buttonText = R.string.buy_extension) {
+                    // Show Extension Dialog
+                }
             }
             premium -> {
-                requireContext().showDialog("purchase")
+                requireContext().showDialog("purchase", secondaryText = R.string.purchase, buttonText = R.string.buy_now) {
+                    // add to cart
+                }
             }
+            viewModel.runStartEnd.second > System.currentTimeMillis() -> {
+                requireContext().showDialog("Wait", secondaryText = R.string.wait, buttonText = R.string.ok)
+            }
+
             else -> {
-                requireContext().showDialog("revoked")
+                requireContext().showDialog("revoked") {
+                    // open mail
+                }
             }
         }
     }

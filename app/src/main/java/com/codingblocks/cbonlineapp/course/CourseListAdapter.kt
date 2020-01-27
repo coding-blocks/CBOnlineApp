@@ -73,6 +73,9 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                 }
                 if (!item.instructors.isNullOrEmpty()) courseCardInstructorsTv.text = getSpannableStringSecondBold("Instructor: ", item.instructors?.first()?.name
                     ?: "")
+                if (item.instructors!!.size > 1) {
+                    courseCardInstructorsTv.append(" and ${item.instructors?.size!! - 1} more")
+                }
                 ratingBar.rating = item.rating
                 item.tags?.take(5)?.forEach {
                     val chip = Chip(context)
@@ -96,7 +99,9 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                     if (!item.instructors.isNullOrEmpty()) {
                         courseCardInstructorsTv.text = getSpannableStringSecondBold("", item.instructors?.first()?.name
                             ?: "")
-
+                        if (item.instructors!!.size > 1) {
+                            courseCardInstructorsTv.append(" and ${item.instructors?.size!! - 1} more")
+                        }
                         if (type != "LIST") {
                             course_card_share.setOnClickListener {
                                 context.share("online.codingblocks.com/courses/" + item.slug.toString())
@@ -104,7 +109,7 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                             item.instructors?.first()?.photo?.let { courseCardInstructorImg1.loadImage(it) }
                             if (item.instructors!!.size > 1) {
                                 courseCardInstructorImg2.isVisible = true
-                                courseCardInstructorsTv.append(", ${item.instructors!![1].name}")
+                                courseCardInstructorsTv.append("and ${item.instructors?.size!! - 1} more")
                                 item.instructors!![1].photo?.let { courseCardInstructorImg2.loadImage(it) }
                             } else {
                                 courseCardInstructorImg2.isVisible = false

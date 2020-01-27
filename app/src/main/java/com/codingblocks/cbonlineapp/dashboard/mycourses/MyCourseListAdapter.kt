@@ -96,15 +96,11 @@ class DefaultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             progressView1.highlightView.colorGradientEnd = context.getColor(R.color.dusty_orange)
         }
         setOnClickListener {
-            if (expired) {
-                // TODO ( show extension modal )
-            } else {
                 itemClickListener?.onClick(
                     item.courseRun.course.cid,
                     item.courseRun.run.crUid,
                     item.courseRun.runAttempt.attemptId,
                     item.courseRun.course.title)
-            }
         }
     }
 }

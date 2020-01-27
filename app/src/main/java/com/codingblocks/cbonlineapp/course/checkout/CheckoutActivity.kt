@@ -27,7 +27,9 @@ class CheckoutActivity : AppCompatActivity(), PaymentResultListener {
     }
 
     override fun onPaymentSuccess(paymentId: String?) {
-        vm.capturePayment(paymentId)
+        vm.paymentMap["razorpay_payment_id"] = (paymentId)!!
+        vm.capturePayment {
+        }
         // To change body of created functions use File | Settings | File Templates.
         /** Make Network call to capture payment.
          *  Body : {

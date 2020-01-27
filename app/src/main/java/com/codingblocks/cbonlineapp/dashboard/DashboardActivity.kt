@@ -33,6 +33,7 @@ import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.slideDown
 import com.codingblocks.cbonlineapp.util.extensions.slideUp
@@ -73,13 +74,15 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
     private fun setUser() {
         referralContainer.isVisible = true
-        val navMenu = dashboardNavigation.menu
-        navMenu.findItem(R.id.nav_inbox).isVisible = true
-        navMenu.findItem(R.id.nav_admin).isVisible = prefs.SP_ADMIN
+        viewModel.user.observer(this) {
+            val navMenu = dashboardNavigation.menu
+            navMenu.findItem(R.id.nav_inbox).isVisible = true
+            navMenu.findItem(R.id.nav_admin).isVisible = prefs.SP_ADMIN
 
-        dashboardNavigation.getHeaderView(0).apply {
-            findViewById<CircleImageView>(R.id.navHeaderImageView).loadImage(prefs.SP_USER_IMAGE, true)
-            findViewById<TextView>(R.id.navUsernameTv).append(" ${prefs.SP_USER_NAME}")
+            dashboardNavigation.getHeaderView(0).apply {
+                findViewById<CircleImageView>(R.id.navHeaderImageView).loadImage(prefs.SP_USER_IMAGE, true)
+                findViewById<TextView>(R.id.navUsernameTv).append(" ${prefs.SP_USER_NAME}")
+            }
         }
     }
 

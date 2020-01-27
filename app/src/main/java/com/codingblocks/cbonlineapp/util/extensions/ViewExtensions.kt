@@ -23,10 +23,10 @@ import androidx.annotation.AnimatorRes
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.appcompat.widget.ActionMenuView
 import androidx.appcompat.widget.Toolbar
@@ -192,7 +192,15 @@ fun View.showSnackbar(message: String, length: Int, anchorView: FabNavigation? =
     return snackBarView
 }
 
-fun Context.showDialog(type: String, cancelable: Boolean = false, callback: (state: Boolean) -> Unit = { status: Boolean -> }) {
+fun Context.showDialog(
+    type: String,
+    cancelable: Boolean = false,
+    @DrawableRes image: Int = R.drawable.ic_lock,
+    @StringRes primaryText: Int = R.string.confirm,
+    @StringRes secondaryText: Int = 0,
+    @StringRes buttonText: Int = 0,
+    callback: (state: Boolean) -> Unit = { }
+) {
 
     val dialog = AlertDialog.Builder(this).create()
     val view = layoutInflater.inflate(R.layout.dialog, null)
@@ -213,6 +221,14 @@ fun Context.showDialog(type: String, cancelable: Boolean = false, callback: (sta
                 dialogTitle.text = context.getString(R.string.doubt_reopen_title)
                 dialogDesc.text = context.getString(R.string.doubt_reopen_desc)
                 primaryBtn.text = context.getString(R.string.view_live_doubts)
+            }
+        }
+        else -> {
+            view.run {
+                dialogImg.setImageResource(image)
+                dialogTitle.text = context.getString(primaryText)
+                dialogDesc.text = context.getString(secondaryText)
+                primaryBtn.text = context.getString(buttonText)
             }
         }
     }

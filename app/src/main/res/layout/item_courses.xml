@@ -89,7 +89,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="16dp"
-            android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/ic_dropright"
             android:drawablePadding="10dp"
             android:drawableTint="@color/orangish"

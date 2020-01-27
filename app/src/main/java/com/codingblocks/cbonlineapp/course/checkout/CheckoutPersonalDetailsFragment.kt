@@ -8,13 +8,18 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.FileUtils.loadJsonObjectFromAsset
+import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import kotlinx.android.synthetic.main.fragment_checkout_order_details.*
 import kotlinx.android.synthetic.main.fragment_checkout_personal_details.*
+import kotlinx.android.synthetic.main.fragment_checkout_personal_details.finalPriceTv
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.json.JSONArray
 import org.json.JSONException
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class CheckoutPersonalDetailsFragment : Fragment() {
+class CheckoutPersonalDetailsFragment : Fragment(), AnkoLogger {
 
     val vm by sharedViewModel<CheckoutViewModel>()
 
@@ -23,6 +28,13 @@ class CheckoutPersonalDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        vm.getCart()
+        viewLifecycleOwnerLiveData.observer(viewLifecycleOwner) {
+            info { it.lifecycle.currentState.name }
+        }
+        vm.cart.observer(viewLifecycleOwner) {
+            finalPriceTv.text = "${getString(R.string.rupee_sign)} ${it["totalAmount"].asString}"
+        }
         val json = loadJsonObjectFromAsset(requireContext(), "csvjson.json") as JSONArray?
 
         val refList: MutableList<String> = ArrayList()
@@ -36,8 +48,8 @@ class CheckoutPersonalDetailsFragment : Fragment() {
         }
 
         val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, refList)
-        spinner.setAdapter(arrayAdapter)
-        spinner.setOnItemClickListener { parent, view, position, id ->
+        state.setAdapter(arrayAdapter)
+        state.setOnItemClickListener { parent, view, position, id ->
             vm.map["stateId"] = json?.getJSONObject(position)?.getString("stateId") ?: "DL"
             checkoutBtn.isEnabled = true
             vm.updateCart()

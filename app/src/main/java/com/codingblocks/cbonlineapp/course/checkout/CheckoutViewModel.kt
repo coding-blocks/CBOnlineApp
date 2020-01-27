@@ -17,6 +17,7 @@ class CheckoutViewModel : ViewModel() {
     var errorLiveData = MutableLiveData<String>()
     var cart = MutableLiveData<JsonObject>()
     var map = hashMapOf<String, String>()
+    var paymentMap = hashMapOf<String, String>()
 
     fun getCart() {
         runIO {
@@ -52,13 +53,14 @@ class CheckoutViewModel : ViewModel() {
         errorLiveData.postValue(error)
     }
 
-    fun capturePayment(paymentId: String?) {
+    fun capturePayment(function: () -> Unit) {
         runIO {
-            when (val response = safeApiCall { Clients.api.capturePayment(mapOf()) }) {
+            when (val response = safeApiCall { Clients.api.capturePayment(paymentMap) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
                         cart.postValue(body())
+                        function()
                     } else {
                         setError(fetchError(code()))
                     }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.google.gson.JsonObject
 import com.razorpay.Checkout
 import kotlinx.android.synthetic.main.fragment_checkout_payment.*
@@ -22,10 +23,40 @@ class CheckoutPaymentFragment : Fragment() {
         View? = inflater.inflate(R.layout.fragment_checkout_payment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        vm.getCart()
         super.onViewCreated(view, savedInstanceState)
-        vm.cart.observer(this) { json ->
-            payBtn.setOnClickListener {
-                showRazorPayCheckoutForm(json)
+        useBalance.setOnClickListener {
+            if (vm.map["applyCredits"] == "true")
+                vm.map.remove("applyCredits") else
+                vm.map["applyCredits"] = true.toString()
+            payBtn.isEnabled = false
+            vm.updateCart()
+            vm.getCart()
+        }
+        numberLayout.setEndIconOnClickListener {
+            vm.map["coupon"] = numberLayout.editText?.text.toString()
+            payBtn.isEnabled = false
+            vm.updateCart()
+            vm.getCart()
+        }
+        vm.cart.observer(viewLifecycleOwner) { json ->
+            json.getAsJsonArray("cartItems")?.get(0)?.asJsonObject?.run {
+
+                val credits = get("credits_used")?.asInt?.div(100) ?: 0
+                if (credits != 0) {
+                    vm.map["applyCredits"] = true.toString()
+                } else {
+                    vm.map["applyCredits"] = false.toString()
+                }
+                creditsTv.text = "- ${getString(R.string.rupee_sign)} $credits"
+                totalTv.text = "${getString(R.string.rupee_sign)} ${json["totalAmount"].asString}"
+                finalPriceTv.text = "${getString(R.string.rupee_sign)} ${json["totalAmount"].asString}"
+
+                payBtn.setOnClickListener {
+                    vm.paymentMap["amount"] = json["totalAmount"].asString!!
+                    replaceFragmentSafely(CheckoutOrderCompleted(), containerViewId = R.id.checkoutContainer, addToStack = true)
+                    showRazorPayCheckoutForm(json)
+                }
             }
         }
     }

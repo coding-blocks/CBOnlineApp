@@ -127,8 +127,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:id="@+id/useBalance"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableEnd="@drawable/ic_selected"
             android:fontFamily="@font/gilroy_medium"
             android:text="Use Wallet Balance"
+            android:focusable="true"
             android:textColor="@color/brownish_grey"
             android:textSize="16sp" />
 
@@ -136,6 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:id="@+id/creditsTv"
             android:fontFamily="@font/gilroy_bold"
             android:textColor="@color/brownish_grey"
             android:textSize="18sp"
@@ -175,6 +181,12 @@
             android:id="@+id/numberLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            app:endIconCheckable="true"
+            app:endIconDrawable="@drawable/ic_selected"
+            app:endIconMode="clear_text"
+            app:errorIconDrawable="@drawable/ic_selected"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -183,8 +195,9 @@
                 android:backgroundTint="@color/white"
                 android:fontFamily="@font/gilroy_medium"
                 android:hint="Coupon Code"
-                android:inputType="phone"
-                android:letterSpacing="1.5"
+                android:lines="1"
+                android:paddingEnd="0dp"
+                android:text="CBONLINEAPP"
                 android:paddingStart="0dp"
                 android:textColorHighlight="@color/orangish"
                 android:textColorHint="@color/black"
@@ -244,7 +257,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gilroy_medium"
-            android:text="Amount to Pay"
+            android:text="Final Amount"
             android:textColor="@color/orangish"
             android:textSize="16sp" />
 
