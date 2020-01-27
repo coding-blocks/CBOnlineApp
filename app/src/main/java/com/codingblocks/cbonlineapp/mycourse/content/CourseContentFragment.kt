@@ -274,8 +274,16 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                                 )
                             else
                                 checkSection(premium)
-                        VIDEO, LECTURE ->
+                        LECTURE ->
                             if (contentLecture.lectureUid.isNotEmpty())
+                                startActivity(intentFor<VideoPlayerActivity>(
+                                    CONTENT_ID to ccid,
+                                    SECTION_ID to sectionId
+                                ))
+                            else
+                                checkSection(premium)
+                        VIDEO ->
+                            if (contentVideo.videoUid.isNotEmpty())
                                 startActivity(intentFor<VideoPlayerActivity>(
                                     CONTENT_ID to ccid,
                                     SECTION_ID to sectionId

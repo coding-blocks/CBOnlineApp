@@ -197,8 +197,8 @@ fun Context.showDialog(
     cancelable: Boolean = false,
     @DrawableRes image: Int = R.drawable.ic_lock,
     @StringRes primaryText: Int = R.string.confirm,
-    @StringRes secondaryText: Int = 0,
-    @StringRes buttonText: Int = 0,
+    @StringRes secondaryText: Int = R.string.unavailable,
+    @StringRes buttonText: Int = R.string.ok,
     callback: (state: Boolean) -> Unit = { }
 ) {
 
