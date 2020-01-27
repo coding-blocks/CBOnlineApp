@@ -17,9 +17,11 @@ import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
+import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
@@ -126,6 +128,10 @@ class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
                 ErrorStatus.TIMEOUT -> {
                     dashboardCourseRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, dashboardBottomNav) {
                         viewModel.fetchMyCourses()
+                    }
+                }
+                ErrorStatus.UNAUTHORIZED -> {
+                    Components.showConfirmation(requireContext(), UNAUTHORIZED) {
                     }
                 }
                 else -> {

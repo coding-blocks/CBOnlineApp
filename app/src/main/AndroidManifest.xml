@@ -99,20 +99,20 @@
                 <data android:pathPrefix="/player" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+        <!--        <activity-->
+        <!--            android:name=".LoginActivity"-->
+        <!--            android:theme="@style/SplashTheme">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.VIEW" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+        <!--                <category android:name="android.intent.category.DEFAULT" />-->
+        <!--                <category android:name="android.intent.category.BROWSABLE" />-->
 
-                <data
-                    android:host="app.codingblocks.com"
-                    android:scheme="https" />
-            </intent-filter>
-        </activity>
+        <!--                <data-->
+        <!--                    android:host="app.codingblocks.com"-->
+        <!--                    android:scheme="https" />-->
+        <!--            </intent-filter>-->
+        <!--        </activity>-->
         <activity
             android:name=".course.CourseActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
