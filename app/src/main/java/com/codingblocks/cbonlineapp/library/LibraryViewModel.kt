@@ -8,6 +8,8 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class LibraryViewModel(
     private val repo: LibraryRepository,
@@ -39,18 +41,19 @@ class LibraryViewModel(
 
     fun fetchSections() {
         runIO {
-            when (val response = courseRepo.fetchSections(attemptId)) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful)
-                        response.value.body()?.let { runAttempt ->
-                            courseRepo.insertSections(runAttempt)
+            if (withContext(Dispatchers.IO) { courseRepo.getSectionWithContentNonLive(attemptId) }.isEmpty())
+                when (val response = courseRepo.fetchSections(attemptId)) {
+                    is ResultWrapper.GenericError -> setError(response.error)
+                    is ResultWrapper.Success -> {
+                        if (response.value.isSuccessful)
+                            response.value.body()?.let { runAttempt ->
+                                courseRepo.insertSections(runAttempt)
+                            }
+                        else {
+                            setError(fetchError(response.value.code()))
                         }
-                    else {
-                        setError(fetchError(response.value.code()))
                     }
                 }
-            }
         }
     }
 

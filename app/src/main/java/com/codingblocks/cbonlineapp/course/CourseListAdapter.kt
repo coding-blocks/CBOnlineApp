@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.item_course_card.view.courseCardTitleTv
 import kotlinx.android.synthetic.main.item_course_card.view.courseLogo
 import kotlinx.android.synthetic.main.item_course_card.view.ratingTv
 import kotlinx.android.synthetic.main.item_track_course.view.*
+import org.jetbrains.anko.share
 
 class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListAdapter.ItemViewHolder>(DiffCallback()) {
 
@@ -90,18 +91,21 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                 if (type != "LIST") {
                     courseCover.loadImage(item.coverImage ?: "")
                 }
-
                 if (type != "POPULAR") {
                     if (!item.instructors.isNullOrEmpty()) {
-                        courseCardInstructorsTv.text = getSpannableStringSecondBold("Instructor: ", item.instructors?.first()?.name
+                        courseCardInstructorsTv.text = getSpannableStringSecondBold("", item.instructors?.first()?.name
                             ?: "")
+
                         if (type != "LIST") {
+                            course_card_share.setOnClickListener {
+                                context.share("online.codingblocks.com/courses/" + item.slug.toString())
+                            }
                             item.instructors?.first()?.photo?.let { courseCardInstructorImg1.loadImage(it) }
                             if (item.instructors!!.size > 1) {
                                 courseCardInstructorsTv.append(", ${item.instructors!![1].name}")
                                 item.instructors!![1].photo?.let { courseCardInstructorImg2.loadImage(it) }
                             } else {
-                                courseCardInstructorImg2.visibility = View.INVISIBLE
+                                courseCardInstructorImg2.visibility = View.GONE
                             }
                         }
                     }
@@ -112,11 +116,19 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                         list =
                             item.runs?.sortedWith(compareBy { run -> run.price })
                     }
-                    courseCardPriceTv.text = "₹ " + list?.first()?.price
+                    val price = list?.first()?.price
+                    courseCardPriceTv.text = if (price == "0") "FREE" else "₹ $price"
                     courseCardMrpTv.text = "₹ " + list?.first()?.mrp
                     courseCardMrpTv.paintFlags = courseCardPriceTv.paintFlags or
                         Paint.STRIKE_THRU_TEXT_FLAG
                 } else {
+                    if (type != "LIST") {
+
+                        course_card_share.setOnClickListener {
+                            context.share("online.codingblocks.com/courses/" + item.slug.toString())
+                        }
+                    } else {
+                    }
                 }
             }
         }

@@ -33,14 +33,12 @@ import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.slideDown
 import com.codingblocks.cbonlineapp.util.extensions.slideUp
 import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.fabnavigation.FabNavigationAdapter
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.User
 import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import de.hdodenhof.circleimageview.CircleImageView
@@ -70,21 +68,14 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
         Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
         viewModel.isLoggedIn.postValue(prefs.SP_JWT_TOKEN_KEY.isNotEmpty())
-        initializeUI(false)
-        viewModel.user.observer(this) {
-            if (it != null) {
-                setUser(it)
-                initializeUI(true)
-            } else {
-            }
-        }
+        initializeUI(prefs.SP_JWT_TOKEN_KEY.isNotEmpty())
     }
 
-    private fun setUser(it: User) {
+    private fun setUser() {
         referralContainer.isVisible = true
         val navMenu = dashboardNavigation.menu
         navMenu.findItem(R.id.nav_inbox).isVisible = true
-        navMenu.findItem(R.id.nav_admin).isVisible = it.roleId == 1 || it.roleId == 3
+        navMenu.findItem(R.id.nav_admin).isVisible = prefs.SP_ADMIN
 
         dashboardNavigation.getHeaderView(0).apply {
             findViewById<CircleImageView>(R.id.navHeaderImageView).loadImage(prefs.SP_USER_IMAGE, true)
@@ -129,9 +120,10 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             setOnTabSelectedListener(this@DashboardActivity)
             accentColor = getColor(R.color.bottomNavSelected)
         }
-        if (loggedIn)
+        if (loggedIn) {
+            setUser()
             dashboardBottomNav.setCurrentItem(1)
-        else {
+        } else {
             dashboardBottomNav.setCurrentItem(0)
         }
         dashboardAppBarLayout.bringToFront()

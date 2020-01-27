@@ -26,6 +26,7 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.appcompat.widget.ActionMenuView
 import androidx.appcompat.widget.Toolbar
@@ -37,6 +38,7 @@ import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.DividerItemDecorator
 import com.codingblocks.cbonlineapp.util.REOPENED
@@ -45,6 +47,7 @@ import com.codingblocks.fabnavigation.FabNavigation
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.dialog.view.*
+import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.layoutInflater
 import kotlin.math.hypot
 
@@ -157,12 +160,15 @@ fun RecyclerView.setRv(activity: Context, listAdapter: ListAdapter<out Any, out 
         DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.dividerthick)!!)
     else DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.divider)!!)
     if (space != 0f) {
-        val spaceDp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, space, resources.displayMetrics)
-        addItemDecoration(SpacesItemDecoration(spaceDp))
+        addItemDecoration(SpacesItemDecoration(space.toDp()))
     }
     layoutManager = LinearLayoutManager(activity, orientation, false)
     if (setDivider) addItemDecoration(dividerItemDecoration)
     adapter = listAdapter
+}
+
+private fun Float.toDp(): Float {
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, CBOnlineApp.appContext?.displayMetrics)
 }
 
 fun View.showSnackbar(message: String, length: Int, anchorView: FabNavigation? = null, action: Boolean = true, actionText: String = "Retry", callback: () -> Unit = { }): Snackbar {

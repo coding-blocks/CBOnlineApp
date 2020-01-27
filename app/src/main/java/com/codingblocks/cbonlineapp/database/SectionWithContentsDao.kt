@@ -56,4 +56,12 @@ interface SectionWithContentsDao {
         ORDER BY s."sectionOrder"
         """)
     fun getSectionWithContent(attemptId: String): LiveData<List<SectionContentHolder.SectionContentPair>>
+
+    @Transaction
+    @Query("""
+        SELECT s.* FROM SectionModel s
+	    WHERE s.attemptId = :attemptId
+        ORDER BY s."sectionOrder"
+        """)
+    suspend fun getSectionWithContentNonLive(attemptId: String): List<SectionContentHolder.SectionContentPair>
 }

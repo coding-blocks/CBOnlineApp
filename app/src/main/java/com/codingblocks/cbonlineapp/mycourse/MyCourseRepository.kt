@@ -35,6 +35,8 @@ class MyCourseRepository(
 
     fun getSectionWithContent(attemptId: String) = sectionWithContentsDao.getSectionWithContent(attemptId)
 
+    suspend fun getSectionWithContentNonLive(attemptId: String) = sectionWithContentsDao.getSectionWithContentNonLive(attemptId)
+
     suspend fun insertSections(runAttempt: RunAttempts) {
         runAttempt.run?.sections?.forEach { courseSection ->
             courseSection.run {

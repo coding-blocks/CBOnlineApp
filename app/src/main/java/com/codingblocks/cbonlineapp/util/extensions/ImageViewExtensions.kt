@@ -43,7 +43,6 @@ fun ImageView.loadImage(imgUrl: String, scale: Boolean = false, callback: () -> 
     if (imgUrl.isNotEmpty())
         createGlideRequest(Uri.parse(imgUrl), context)
             .listener(SvgSoftwareLayerSetter1())
-            .centerCrop()
             .error(createGlideRequest(Uri.parse(imgUrl), context))
             .into(this)
     callback()
@@ -74,5 +73,6 @@ class SvgSoftwareLayerSetter1 : RequestListener<Drawable> {
 private fun createGlideRequest(source: Uri?, context: Context): GlideRequest<Drawable> {
     return GlideApp.with(context)
         .load(source)
+        .optionalCenterCrop()
         .dontAnimate() // will load image
 }

@@ -41,6 +41,7 @@ import io.noties.markwon.Markwon
 import io.noties.markwon.core.CorePlugin
 import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.android.synthetic.main.bottom_sheet_batch.view.*
+import kotlinx.android.synthetic.main.item_course_card.view.*
 import kotlinx.android.synthetic.main.item_instructor.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.share
@@ -96,7 +97,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         setUpBottomSheet()
 
         courseProjectsRv.setRv(this@CourseActivity, projectAdapter, true)
-        courseSuggestedRv.setRv(this@CourseActivity, courseCardListAdapter, orientation = RecyclerView.HORIZONTAL)
+        courseSuggestedRv.setRv(this@CourseActivity, courseCardListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
         courseInstructorRv.setRv(this@CourseActivity, instructorAdapter)
         courseContentRv.setRv(this@CourseActivity, courseSectionListAdapter, true)
         if (!courseLogoImage.isNullOrEmpty()) {
@@ -183,7 +184,11 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
     }
 
     private fun setRun(it: Runs) {
-        priceTv.text = "${getString(R.string.rupee_sign)}${it.price}"
+        val price = it.price
+        priceTv.text = if (price == "0") "FREE" else "${getString(R.string.rupee_sign)} $price"
+        if (price == "0") {
+            goodiesImg.isVisible = false
+        }
         mrpTv.text = "₹ ${it.mrp}"
         batchBtn.text = it.name
         deadlineTv.text = "Enrollment Ends ${it.enrollmentEnd.let { it1 -> getDateForTime(it1) }}"

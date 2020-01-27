@@ -65,7 +65,7 @@ class SignUpFragment : Fragment() {
                         } else
                             runOnUiThread {
                                 val errRes = response.value.errorBody()?.string()
-                                val error = if (errRes.isNullOrEmpty()) "Please Try Again" else JSONObject(errRes).getString("description")
+                                val error = if (errRes?.contains("Cannot")!!) "Please Try Again" else JSONObject(errRes).getString("description")
                                 signUpRoot.showSnackbar(error.capitalize(), Snackbar.LENGTH_SHORT)
                                 proceedBtn.isEnabled = true
                             }
