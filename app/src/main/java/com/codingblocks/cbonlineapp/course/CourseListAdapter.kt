@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -102,10 +103,11 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                             }
                             item.instructors?.first()?.photo?.let { courseCardInstructorImg1.loadImage(it) }
                             if (item.instructors!!.size > 1) {
+                                courseCardInstructorImg2.isVisible = true
                                 courseCardInstructorsTv.append(", ${item.instructors!![1].name}")
                                 item.instructors!![1].photo?.let { courseCardInstructorImg2.loadImage(it) }
                             } else {
-                                courseCardInstructorImg2.visibility = View.GONE
+                                courseCardInstructorImg2.isVisible = false
                             }
                         }
                     }

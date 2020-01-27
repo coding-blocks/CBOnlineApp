@@ -76,6 +76,10 @@ const val RESOLVED = "RESOLVED"
 
 const val REOPENED = "REOPENED"
 
+const val STUDENT = "student"
+
+const val PROFESSIONAL = "professional"
+
 const val APPLIED = "Applied"
 
 const val ELIGIBLE = "Eligible Jobs"

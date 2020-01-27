@@ -64,7 +64,7 @@ class TrackActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener 
         supportPostponeEnterTransition()
         setToolbar(courseToolbar)
         viewModel.id = courseId
-        viewModel.fetchTracks()
+        viewModel.fetchCurrentTrack()
         trackCourseRv.setRv(this@TrackActivity, courseCardListAdapter, setDivider = true, type = "THICK")
         if (!courseLogoImage.isNullOrEmpty()) {
             courseLogo.transitionName = courseLogoImage
@@ -73,7 +73,7 @@ class TrackActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener 
             }
         }
 
-        viewModel.track.observer(this) { track ->
+        viewModel.currentTrack.observer(this) { track ->
             title = track.name
 //            shortTv.text = course.subtitle
 

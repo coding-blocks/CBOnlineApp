@@ -50,7 +50,7 @@ data class Course(
     @Relationship("runs")
     val runs: ArrayList<Runs>?,
     @Relationship("active-runs", "active_runs")
-    val activeRuns: ArrayList<Runs>?,
+    val activeRuns: List<Runs>?,
     @Relationship("projects", resolve = true)
     var projects: ArrayList<Project>?,
     @Relationship("tags")

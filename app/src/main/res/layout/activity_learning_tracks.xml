@@ -39,28 +39,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/gilroy_medium"
-                android:text="I am a "
+                android:text="@string/i_am_a"
 
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/liveDoubtBtn"
+                android:id="@+id/studentBtn"
                 style="@style/ButtonStyleChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_medium"
                 android:layout_marginEnd="5dp"
-                android:text="Student" />
+                android:text="@string/student" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/resolvedDoubtBtn"
+                android:id="@+id/professionBtn"
                 style="@style/ButtonStyleChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:text="Professional" />
+                android:text="@string/professional" />
 
         </LinearLayout>
 
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/gilroy_medium"
-                android:text="I want to become "
+                android:text="@string/i_want_to_become"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -83,6 +83,7 @@
             <com.google.android.material.button.MaterialButton
                 style="@style/CustomOutlinedButton"
                 android:layout_width="0dp"
+                android:id="@+id/trackBtn"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
@@ -91,8 +92,9 @@
                 android:paddingStart="13dp"
                 android:paddingTop="7dp"
                 android:paddingEnd="13dp"
+                android:lines="1"
                 android:paddingBottom="7dp"
-                android:text="Choose Track"
+                android:text="@string/choose_track"
                 android:textSize="14sp"
                 app:cornerRadius="20dp"
                 app:strokeWidth="0dp" />
@@ -115,12 +117,15 @@
                 android:fontFamily="@font/gilroy_medium"
                 android:gravity="center_vertical"
                 android:text="Need Help?"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
                 android:textColor="@color/orangish"
                 android:textSize="16sp" />
 
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/checkoutBtn"
+                android:id="@+id/getTrackBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_dropright"

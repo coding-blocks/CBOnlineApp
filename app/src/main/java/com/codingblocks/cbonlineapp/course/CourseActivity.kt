@@ -171,9 +171,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         appbar.addOnOffsetChangedListener(this)
 
         courseCardListAdapter.onItemClick = itemClickListener
-        batchBtn.setOnClickListener {
-            dialog.show()
-        }
+
         viewModel.addedToCartProgress.observeOnce {
             startActivity<CheckoutActivity>()
         }
@@ -246,12 +244,15 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
     }
 
     private fun setUpBottomSheet() {
+        batchBtn.setOnClickListener {
+            dialog.show()
+        }
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_batch, null)
         sheetDialog.run {
-            batchRv.setRv(this@CourseActivity, batchListAdapter, true)
+            batchRv.setRv(this@CourseActivity, batchListAdapter)
         }
         batchListAdapter.onItemClick = {
-            setRun(it)
+            setRun(it as Runs)
             dialog.dismiss()
         }
         dialog.dismissWithAnimation = true

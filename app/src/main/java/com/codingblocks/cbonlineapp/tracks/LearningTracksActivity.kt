@@ -1,27 +1,36 @@
 package com.codingblocks.cbonlineapp.tracks
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.ItemClickListener
-import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
+import com.codingblocks.cbonlineapp.course.batches.BatchListAdapter
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
+import com.codingblocks.cbonlineapp.util.PROFESSIONAL
+import com.codingblocks.cbonlineapp.util.STUDENT
+import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.onlineapi.models.Professions
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.activity_learning_tracks.*
+import kotlinx.android.synthetic.main.bottom_sheet_batch.view.*
+import org.jetbrains.anko.intentFor
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LearningTracksActivity : AppCompatActivity() {
 
     private val tracksListAdapter = TracksListAdapter("LIST")
-    private val vm by viewModel<DashboardViewModel>()
+    private val vm by viewModel<TrackViewModel>()
+    private val dialog by lazy { BottomSheetDialog(this) }
+    private val batchListAdapter = BatchListAdapter()
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -44,11 +53,66 @@ class LearningTracksActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_learning_tracks)
         setToolbar(tracksToolbar)
-        vm.fetchTracks()
+        setUpBottomSheet()
+        setChips()
         tracksRv.setRv(this, tracksListAdapter)
-        vm.tracks.observer(this) { courses ->
+        vm.fetchTracks().observer(this) { courses ->
             tracksListAdapter.submitList(courses)
         }
+        vm.fetchProfessions().observer(this) {
+            it?.takeIf { it.isNotEmpty() }?.get(0)?.let { it1 -> setProfession(it1) }
+            batchListAdapter.submitList(it)
+        }
+
         tracksListAdapter.onItemClick = itemClickListener
+    }
+
+    private fun setUpBottomSheet() {
+        val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_batch, null)
+        sheetDialog.run {
+            batchRv.setRv(this@LearningTracksActivity, batchListAdapter)
+        }
+        batchListAdapter.onItemClick = {
+
+            setProfession(it as Professions)
+            dialog.dismiss()
+        }
+        dialog.dismissWithAnimation = true
+        dialog.setContentView(sheetDialog)
+        trackBtn.setOnClickListener {
+            dialog.show()
+        }
+    }
+
+    private fun setProfession(professions: Professions) {
+        trackBtn.text = professions.title
+        getTrackBtn.setOnClickListener {
+            vm.getRecommendedTrack(professions.id).observeOnce {
+                startActivity(intentFor<TrackActivity>(COURSE_ID to it.id))
+            }
+        }
+    }
+
+    private fun setChips() {
+        studentBtn.setOnClickListener {
+            vm.type.value = STUDENT
+        }
+
+        professionBtn.setOnClickListener {
+            vm.type.value = PROFESSIONAL
+        }
+
+        vm.type.observer(this) {
+            when (it) {
+                STUDENT -> {
+                    studentBtn.isActivated = true
+                    professionBtn.isActivated = false
+                }
+                PROFESSIONAL -> {
+                    studentBtn.isActivated = false
+                    professionBtn.isActivated = true
+                }
+            }
+        }
     }
 }

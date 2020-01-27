@@ -15,6 +15,7 @@ import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.Player
+import com.codingblocks.onlineapi.models.Professions
 import com.codingblocks.onlineapi.models.Project
 import com.codingblocks.onlineapi.models.Question
 import com.codingblocks.onlineapi.models.QuizAttempt
@@ -29,6 +30,8 @@ import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.FieldMap
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -277,6 +280,15 @@ interface OnlineJsonApi {
         @Path("id") id: String
     ): Response<CareerTracks>
 
+    @GET("professions")
+    suspend fun getProfessions(
+    ): Response<List<Professions>>
+
+    @POST("career_tracks/recommend")
+    @FormUrlEncoded
+    suspend fun getRecommendedTrack(
+        @FieldMap params: HashMap<String, String>
+    ): Response<CareerTracks>
 
     /**
      * Admin Side API"s
