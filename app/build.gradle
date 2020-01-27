@@ -187,6 +187,7 @@ dependencies {
 
 
     implementation project(':onlineapi')
+    implementation files('libs/YouTubeAndroidPlayerApi.jar')
 
     // Test Dependencies
     testImplementation 'junit:junit:4.12'

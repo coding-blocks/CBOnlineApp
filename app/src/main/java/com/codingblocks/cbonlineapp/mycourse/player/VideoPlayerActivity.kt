@@ -18,6 +18,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.models.NotesModel
@@ -27,6 +28,7 @@ import com.codingblocks.cbonlineapp.mycourse.player.notes.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.LECTURE
+import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.MediaUtils.deleteRecursive
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
@@ -46,8 +48,9 @@ import com.codingblocks.onlineapi.models.RunAttempts
 import com.crashlytics.android.Crashlytics
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.google.android.youtube.player.YouTubeInitializationResult
+import com.google.android.youtube.player.YouTubePlayer
+import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
@@ -107,9 +110,10 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
 
     private val dialog by lazy { BottomSheetDialog(this) }
     private val sheetDialog: View by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, null) }
-    private lateinit var youtubePlayer: YouTubePlayer
     private lateinit var playerFragment: VdoPlayerSupportFragment
     private var videoPlayer: VdoPlayer? = null
+    private var youtubePlayer: YouTubePlayer? = null
+    private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,7 +145,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                 isDownloaded = it.contentLecture.isDownloaded
                 downloadBtn.isActivated = isDownloaded
                 viewModel.videoId = it.contentLecture.lectureId
-                youtubePlayerView.isVisible = false
+                youtubePlayerView.view?.visibility = View.GONE
                 videoContainer.visibility = View.VISIBLE
                 playerFragment = supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerSupportFragment
                 playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
@@ -152,8 +156,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                     setupVideoView()
                 }
             } else if (it.contentable == VIDEO) {
-                lifecycle.addObserver(youtubePlayerView)
-                youtubePlayerView.isVisible = true
+                youtubePlayerView.view?.visibility = View.VISIBLE
                 setYoutubePlayer(it.contentVideo.videoUrl)
             } else {
                 finish()
@@ -509,12 +512,32 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         dialog.setContentView(sheetDialog)
     }
 
-    private fun setYoutubePlayer(promoVideo: String) {
-        youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-            override fun onReady(youTubePlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer) {
-                youTubePlayer.cueVideo(promoVideo.substring(33), 0F)
+    private fun setYoutubePlayer(youtubeUrl: String) {
+        youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
+            override fun onInitializationFailure(
+                p0: YouTubePlayer.Provider?,
+                p1: YouTubeInitializationResult?
+            ) {
             }
-        })
+
+            override fun onInitializationSuccess(
+                p0: YouTubePlayer.Provider?,
+                youtubePlayerInstance: YouTubePlayer?,
+                p2: Boolean
+            ) {
+                if (!p2) {
+                    youtubePlayer = youtubePlayerInstance
+                    val url = if (youtubeUrl.split("=").size == 2) youtubeUrl.split("=")[1]
+                    else {
+                        MediaUtils.getYotubeVideoId(youtubeUrl)
+                    }
+                    youtubePlayerInstance?.loadVideo(url)
+                }
+            }
+        }
+        val youTubePlayerSupportFragment =
+            supportFragmentManager.findFragmentById(R.id.youtubePlayerView) as YouTubePlayerSupportFragment?
+        youTubePlayerSupportFragment?.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
     }
 
     override fun onBackPressed() {
@@ -587,8 +610,14 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                         hint = "Add a note here"
                     }
                     bottomSheetSaveBtn.apply {
+                        val notePos: Double? =
+                            if (youtubePlayerView.isVisible)
+                                (youtubePlayer?.currentTimeMillis?.div(1000))?.toDouble()
+                            else
+                                (videoPlayer?.currentTime?.div(1000))?.toDouble()
                         setOnClickListener {
-                            val note = Note(10.45000, sheetDialog.bottoSheetDescTv.text.toString(), RunAttempts(viewModel.attemptId.value
+                            val note = Note(notePos
+                                ?: 0.0, sheetDialog.bottoSheetDescTv.text.toString(), RunAttempts(viewModel.attemptId.value
                                 ?: ""), LectureContent(viewModel.contentId))
                             viewModel.createNote(note)
                             dialog.dismiss()
@@ -602,7 +631,6 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
     }
 
     override fun onDestroy() {
-        youtubePlayerView.release()
         videoPlayer?.release()
         super.onDestroy()
     }
