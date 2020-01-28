@@ -55,7 +55,7 @@ class CheckoutPaymentFragment : Fragment() {
                 payBtn.setOnClickListener {
                     vm.paymentMap["amount"] = json["totalAmount"].asString!!
                     replaceFragmentSafely(CheckoutOrderCompleted(), containerViewId = R.id.checkoutContainer, addToStack = true)
-                    showRazorPayCheckoutForm(json)
+                    showRazorPayCheckoutForm(this)
                 }
             }
         }
@@ -77,7 +77,7 @@ class CheckoutPaymentFragment : Fragment() {
             options.put("name", "Coding Blocks")
             options.put("description", json.get("productName")?.asString) // Use products name
             options.put("currency", "INR")
-            options.put("order_id", json.get("id")?.asString) // razorpay_order_id from API
+            options.put("order_id", json.get("razorpay_order_id")?.asString) // razorpay_order_id from API
             options.put("image", "https://codingblocks.com/assets/images/cb/cblogo.png")
             options.put("amount", json.get("final_price")?.asString) // Amount in paise from carts API after applying coupon and everything
             checkout.open(activity, options)
