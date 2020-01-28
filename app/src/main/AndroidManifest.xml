@@ -195,7 +195,7 @@
             android:resource="@xml/shortcut" />
         <meta-data
             android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_zACC3cdl7lqt9k" />
+            android:value="rzp_test_bgCo9sxFZStVvT" />
 
         <receiver
             android:name=".admin.doubts.DoubtReceiver"
