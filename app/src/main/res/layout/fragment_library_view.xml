@@ -2,7 +2,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/deleteContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/margin_large"
+        android:paddingTop="@dimen/margin_medium"
+        android:paddingEnd="@dimen/margin_large"
+        android:paddingBottom="@dimen/margin_medium"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/closeDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close" />
+
+        <TextView
+            android:id="@+id/deleteTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_weight="1"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="Delete 5 Downloads"
+            android:textColor="@color/orangish"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/deleteAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -80,12 +115,12 @@
             android:textSize="14sp" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/classRoomBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_medium"
             android:paddingStart="20dp"
             android:paddingTop="10dp"
-            android:id="@+id/classRoomBtn"
             android:paddingEnd="20dp"
             android:paddingBottom="10dp"
             android:text="@string/go_to_classroom" />
@@ -96,7 +131,7 @@
         android:id="@+id/libraryRv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:itemCount="4"
         android:visibility="gone"
+        tools:itemCount="4"
         tools:listitem="@layout/item_note" />
 </LinearLayout>

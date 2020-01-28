@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.R
@@ -58,6 +59,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             setOnClickListener {
                 onItemClick?.invoke(contentModel)
             }
+            downloadBtn.isVisible = false
             when (content.contentable) {
                 DOCUMENT -> {
                     contentType.setImageResource(R.drawable.ic_doc)
@@ -75,6 +77,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                     contentType.setImageResource(R.drawable.ic_code)
                 }
                 LECTURE -> {
+                    downloadBtn.isVisible = true
                     contentType.setImageResource(R.drawable.ic_video)
                     val id = content.contentLecture.lectureUid.isEmpty()
                     val downloadStatus = if (id) false else FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, content.contentLecture.lectureId)

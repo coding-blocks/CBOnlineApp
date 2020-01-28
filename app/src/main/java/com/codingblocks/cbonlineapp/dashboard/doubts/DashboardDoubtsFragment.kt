@@ -175,7 +175,7 @@ class DashboardDoubtsFragment : Fragment(), AnkoLogger {
         viewModel.errorLiveData.observer(viewLifecycleOwner) {
             when (it) {
                 ErrorStatus.NO_CONNECTION -> {
-                    dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
+//                    dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
                 }
                 ErrorStatus.TIMEOUT -> {
                     dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, dashboardBottomNav) {

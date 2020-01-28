@@ -123,7 +123,7 @@ class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
         viewModel.errorLiveData.observer(viewLifecycleOwner) {
             when (it) {
                 ErrorStatus.NO_CONNECTION -> {
-                    dashboardCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
+//                    dashboardCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
                 }
                 ErrorStatus.TIMEOUT -> {
                     dashboardCourseRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, dashboardBottomNav) {

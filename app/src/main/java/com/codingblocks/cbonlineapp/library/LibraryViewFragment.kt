@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.library
 
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,13 +17,22 @@ import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.showDialog
+import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
 import kotlinx.android.synthetic.main.fragment_library_view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.io.File
 
 class LibraryViewFragment : Fragment() {
 
@@ -38,6 +48,9 @@ class LibraryViewFragment : Fragment() {
                 }
             }
         }
+    }
+    val progressDialog by lazy {
+        ProgressDialog.progressDialog(requireContext())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
@@ -91,13 +104,53 @@ class LibraryViewFragment : Fragment() {
                 override fun onSelectionChanged() {
                     super.onSelectionChanged()
                     val items = selectionTracker?.selection!!.size()
-//                    deleteContainer.isVisible = items > 0
+                    deleteContainer.isVisible = items > 0
+                    deleteTv.text = "Delete $items ${vm.type}"
                 }
             })
         classRoomBtn.setOnClickListener {
             //            browse(url)
         }
+
+        deleteAction.setOnClickListener {
+            requireContext().showDialog("DELETE", true, R.drawable.ic_delete, secondaryText = R.string.delete_confrim, buttonText = R.string.confirm) {
+                when (vm.type) {
+                    getString(R.string.notes) -> {
+                        selectionTracker?.selection?.forEach {
+                            vm.deleteNote(it)
+                        }
+                    }
+                    getString(R.string.bookmarks) -> {
+//                        libEmptyImg.setImageResource(R.drawable.ic_bookmark)
+//                        libEmptyMessageTv.text = getString(R.string.empty_bookmark_title)
+//                        libEmptyDescriptionTv.text = getString(R.string.empty_bookmark_text)
+                    }
+                    getString(R.string.downloads) -> {
+                        selectionTracker?.selection?.forEach {
+                            deleteFolder(it)
+                        }
+                    }
+                }
+            }
+        }
+
+        closeDelete.setOnClickListener {
+            selectionTracker?.clearSelection()
+            deleteContainer.isVisible = false
+        }
     }
+
+    private fun deleteFolder(lectureId: String) {
+        val dir = File(requireContext().getExternalFilesDir(Environment.getDataDirectory().absolutePath), lectureId)
+        GlobalScope.launch(Dispatchers.Main) {
+            progressDialog.show()
+            withContext(Dispatchers.IO) { MediaUtils.deleteRecursive(dir) }
+            delay(3000)
+            vm.updateDownload(0, lectureId)
+            progressDialog.dismiss()
+        }
+    }
+
 
     override fun onDestroy() {
         libraryListAdapter.apply {

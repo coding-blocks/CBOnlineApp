@@ -18,8 +18,9 @@ interface ContentDao : BaseDao<ContentModel> {
     @Query("UPDATE ContentModel SET isDownloaded = :status WHERE ccid = :contentId")
     suspend fun updateContent(contentId: String, status: Int)
 
-    //    @Query("UPDATE ContentModel SET isDownloaded = :downloadprogress WHERE lectureId = :videoId AND section_id = :section")
-//    abstract fun updateContentWithVideoId(section: String, videoId: String, downloadprogress: String)
+    @Query("UPDATE ContentModel SET isDownloaded = :status WHERE lectureId = :videoId")
+    suspend fun updateContentWithVideoId(videoId: String, status: Int)
+
     @Transaction
     suspend fun update(id: String, attemptId: String, progressId: String, status: String) {
         updateProgress(id, attemptId, status)
