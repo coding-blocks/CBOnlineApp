@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.item_track.view.trackCourseNumTv
 import kotlinx.android.synthetic.main.item_track.view.trackLogo
 import kotlinx.android.synthetic.main.item_track.view.trackTitleTv
 import kotlinx.android.synthetic.main.item_track_card.view.*
+import org.jetbrains.anko.share
 
 class TracksListAdapter(val type: String = "") : ListAdapter<CareerTracks, TracksListAdapter.ItemViewHolder>(DiffCallback()) {
 
@@ -53,6 +54,9 @@ class TracksListAdapter(val type: String = "") : ListAdapter<CareerTracks, Track
                 val chip = LayoutInflater.from(context).inflate(R.layout.single_chip_layout, trackChips, false) as Chip
                 chip.text = profession?.title
                 trackChips.addView(chip)
+                course_card_share.setOnClickListener {
+                    context.share("https://online.codingblocks.com/app/tracks/" + item.slug)
+                }
             }
             setOnClickListener {
                 itemClickListener?.onClick(

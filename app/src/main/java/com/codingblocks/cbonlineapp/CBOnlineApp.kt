@@ -90,7 +90,9 @@ class CBOnlineApp : Application() {
                     CourseActivity::class.java
                 router["activity://courseRun/https://online.codingblocks.com/app/player/:s{$RUN_ATTEMPT_ID}/content/:s{$SECTION_ID}/:s{$CONTENT_ID}"] =
                     VideoPlayerActivity::class.java
-                router["activity://courseRun/https://online.codingblocks.com/career_tracks/:s{trackId}"] =
+                router["activity://courseRun/https://online.codingblocks.com/app/tracks/:s{courseId}"] =
+                    TrackActivity::class.java
+                router["activity://courseRun/https://online.codingblocks.com/app/career_tracks/:s{courseId}"] =
                     TrackActivity::class.java
             })
         } catch (e: ConcurrentModificationException) {

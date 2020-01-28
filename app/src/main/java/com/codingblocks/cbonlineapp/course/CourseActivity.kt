@@ -173,6 +173,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         courseCardListAdapter.onItemClick = itemClickListener
 
         viewModel.addedToCartProgress.observeOnce {
+            buyBtn.isEnabled = true
             startActivity<CheckoutActivity>()
         }
         viewModel.enrollTrialProgress.observeOnce {
@@ -193,7 +194,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         mrpTv.paintFlags = mrpTv.paintFlags or
             Paint.STRIKE_THRU_TEXT_FLAG
         buyBtn.setOnClickListener { _ ->
-            viewModel.addToCart(it.id)
+            buyBtn.isEnabled = false
+            viewModel.clearCart(it.id)
         }
         trialBtn.setOnClickListener { _ ->
             viewModel.enrollTrial(it.id)
@@ -229,7 +231,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.share -> {
-            share("New Course")
+            share("http://online.codingblocks.com/app/$courseId")
             true
         }
         else -> super.onOptionsItemSelected(item)

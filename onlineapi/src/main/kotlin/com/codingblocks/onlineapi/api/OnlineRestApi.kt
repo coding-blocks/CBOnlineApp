@@ -81,7 +81,7 @@ interface OnlineRestApi {
     suspend fun updateCart(@FieldMap params: Map<String, String>): Response<JsonObject>
 
     @GET("v2/runs/clear_cart")
-    fun clearCart(): Call<JsonObject>
+    suspend fun clearCart(): Response<JsonObject>
 
     @POST("jwt/refresh/?android=true")
     @FormUrlEncoded

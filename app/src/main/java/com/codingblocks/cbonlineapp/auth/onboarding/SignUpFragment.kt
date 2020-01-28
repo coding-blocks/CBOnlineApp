@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.support.v4.runOnUiThread
 import org.json.JSONObject
 import org.koin.android.ext.android.inject
+import java.lang.Exception
 
 class SignUpFragment : Fragment() {
 
@@ -64,10 +65,16 @@ class SignUpFragment : Fragment() {
                             }
                         } else
                             runOnUiThread {
-                                val errRes = response.value.errorBody()?.string()
-                                val error = if (errRes?.contains("Cannot")!!) "Please Try Again" else JSONObject(errRes).getString("description")
-                                signUpRoot.showSnackbar(error.capitalize(), Snackbar.LENGTH_SHORT)
-                                proceedBtn.isEnabled = true
+                                var error = ""
+                                error = try {
+                                    val errRes = response.value.errorBody()?.string()
+                                    if (errRes?.contains("Cannot")!!) "Please Try Again" else JSONObject(errRes).getString("description")
+                                } catch (e: Exception) {
+                                    "All Fields are required"
+                                } finally {
+                                    signUpRoot.showSnackbar(error.capitalize(), Snackbar.LENGTH_SHORT)
+                                    proceedBtn.isEnabled = true
+                                }
                             }
                     }
                 }

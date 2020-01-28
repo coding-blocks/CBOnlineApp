@@ -27,7 +27,8 @@ class CheckoutPaymentFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         useBalance.setOnClickListener {
             if (vm.map["applyCredits"] == "true")
-                vm.map.remove("applyCredits") else
+                vm.map["applyCredits"] = "false"
+            else
                 vm.map["applyCredits"] = true.toString()
             payBtn.isEnabled = false
             vm.updateCart()
@@ -41,7 +42,7 @@ class CheckoutPaymentFragment : Fragment() {
         }
         vm.cart.observer(viewLifecycleOwner) { json ->
             json.getAsJsonArray("cartItems")?.get(0)?.asJsonObject?.run {
-
+                payBtn.isEnabled = true
                 val credits = get("credits_used")?.asInt?.div(100) ?: 0
                 if (credits != 0) {
                     vm.map["applyCredits"] = true.toString()

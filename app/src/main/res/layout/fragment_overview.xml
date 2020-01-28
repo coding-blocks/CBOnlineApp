@@ -203,6 +203,7 @@
                 android:paddingBottom="@dimen/margin_medium_small">
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:layout_width="210dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/background_purple"

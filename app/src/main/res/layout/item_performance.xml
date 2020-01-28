@@ -26,19 +26,19 @@
 
             <RelativeLayout
                 android:layout_width="165dp"
-                android:layout_height="115dp"
+                android:layout_height="120dp"
                 android:padding="@dimen/margin_medium">
 
                 <ImageView
                     android:id="@+id/performanceImg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:src="@drawable/ic_performance" />
 
                 <TextView
                     android:id="@+id/homePerformanceTv"
                     android:layout_width="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/performanceImg"
                     android:fontFamily="@font/gilroy_bold"
@@ -69,19 +69,19 @@
 
             <RelativeLayout
                 android:layout_width="165dp"
-                android:layout_height="115dp"
+                android:layout_height="120dp"
                 android:padding="@dimen/margin_medium">
 
                 <ImageView
                     android:id="@+id/leaderboardImg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:src="@drawable/ic_leaderboard" />
 
                 <TextView
                     android:id="@+id/homePercentileTv"
                     android:layout_width="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/leaderboardImg"
                     android:fontFamily="@font/gilroy_bold"

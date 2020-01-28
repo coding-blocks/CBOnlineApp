@@ -45,6 +45,7 @@ class LibraryViewFragment : Fragment() {
                 when (item) {
                     is ContentLecture -> startActivity(intentFor<VideoPlayerActivity>(CONTENT_ID to item.lectureContentId, SECTION_ID to item.lectureSectionId).singleTop())
                     is BookmarkModel -> startActivity(intentFor<VideoPlayerActivity>(CONTENT_ID to item.contentId, SECTION_ID to item.sectionId).singleTop())
+//                    is NotesModel -> startActivity(intentFor<VideoPlayerActivity>(CONTENT_ID to item.contentId, SECTION_ID to item.sectionId).singleTop())
                 }
             }
         }
@@ -151,7 +152,6 @@ class LibraryViewFragment : Fragment() {
         }
     }
 
-
     override fun onDestroy() {
         libraryListAdapter.apply {
             onItemClick = null
@@ -169,7 +169,7 @@ class LibraryViewFragment : Fragment() {
                 libEmptyDescriptionTv.text = getString(R.string.empty_notes_text)
             }
             getString(R.string.bookmarks) -> {
-                libEmptyImg.setImageResource(R.drawable.ic_bookmark)
+                libEmptyImg.setImageResource(R.drawable.ic_bookmark_big)
                 libEmptyMessageTv.text = getString(R.string.empty_bookmark_title)
                 libEmptyDescriptionTv.text = getString(R.string.empty_bookmark_text)
             }

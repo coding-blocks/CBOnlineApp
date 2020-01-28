@@ -75,6 +75,7 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
                     tracker?.let {
                         val item = getItem(position) as BookmarkModel
                         bind(item, it.isSelected(item.bookmarkUid))
+                        itemClickListener = onItemClick
                     }
                 }
             }
@@ -131,6 +132,8 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
     }
 
     inner class BookmarkViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var itemClickListener: ItemClickListener? = null
+
         fun bind(item: BookmarkModel, isActivated: Boolean = false) = with(itemView) {
 
             bookmarkTitleTv.text = item.sectionName
@@ -140,6 +143,10 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
                 isVisible = !isActivated
             }
             bookmarkSelectionImg.isVisible = isActivated
+
+            setOnClickListener {
+                itemClickListener?.onClick(item)
+            }
         }
 
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> =

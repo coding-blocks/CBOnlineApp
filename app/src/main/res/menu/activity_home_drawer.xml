@@ -6,6 +6,7 @@
     <group android:checkableBehavior="none">
         <item
             android:id="@+id/nav_hiring"
+            android:visible="false"
             android:icon="@drawable/ic_hiring"
             android:title="@string/hiring_blocks" />
         <item
@@ -18,6 +19,12 @@
             android:title="@string/learning_tracks"
             android:visible="true" />
 
+        <item
+            android:id="@+id/nav_inbox"
+            android:icon="@drawable/ic_chat"
+            android:title="@string/inbox"
+            android:visible="false" />
+
     </group>
 
     <group
@@ -29,12 +36,6 @@
             android:id="@+id/nav_admin"
             android:icon="@drawable/ic_chat"
             android:title="@string/admin_panel"
-            android:visible="false" />
-
-        <item
-            android:id="@+id/nav_inbox"
-            android:icon="@drawable/ic_chat"
-            android:title="@string/inbox"
             android:visible="false" />
     </group>
     <group

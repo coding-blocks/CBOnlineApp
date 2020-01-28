@@ -508,6 +508,7 @@ class CarouselCards(
 data class CareerTracks(
     var name: String = "",
     var slug: String = "",
+    var description: String? = "",
     var unlisted: Boolean,
     var logo: String = "",
     var background: String = "",

@@ -79,6 +79,7 @@ class TrackActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener 
 
             if (courseLogoUrl.isNullOrEmpty()) courseLogo.loadImage(track.logo)
             courseBackdrop.loadImage(track.background)
+            shortTv.text = track.description
             trackCourseNumTv.text = "${track.courses?.size} Courses"
         }
 

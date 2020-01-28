@@ -101,7 +101,7 @@
             android:background="@color/dark_white"
             android:visibility="visible">
 
-            <include layout="@layout/item_skeleton_content" />
+            <include layout="@layout/item_skeleten_course_list" />
         </com.facebook.shimmer.ShimmerFrameLayout>
     </LinearLayout>
 

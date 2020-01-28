@@ -88,7 +88,6 @@ class LibraryViewModel(
         }
     }
 
-
     private fun startWorkerRequest(noteId: String = "", noteModel: Note? = null) {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
         val progressData: Data

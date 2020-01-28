@@ -2,9 +2,7 @@ package com.codingblocks.cbonlineapp.course
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.extensions.runIO
-import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Course
@@ -81,7 +79,7 @@ class CourseViewModel(
         val list = arrayListOf<Sections>()
         if (!sectionIdList.isNullOrEmpty()) {
             runIO {
-                sectionIdList.take(5).forEach {
+                sectionIdList.forEach {
                     val sectionRes = withContext(Dispatchers.IO) { repo.getSection(it.id) }
                     sectionRes.body()?.let { it1 -> list.add(it1) }
                 }
@@ -106,10 +104,15 @@ class CourseViewModel(
 //        })
 //    }
 
-    fun clearCart() {
-        Clients.api.clearCart().enqueue(retrofitCallback { _, response ->
-            clearCartProgress.value = (response?.isSuccessful == true)
-        })
+    fun clearCart(id: String) {
+        runIO {
+            when (val response = repo.clearCart()) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    addToCart(id)
+                }
+            }
+        }
     }
 
     fun enrollTrial(id: String) {

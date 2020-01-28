@@ -104,7 +104,7 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                         }
                         if (type != "LIST") {
                             course_card_share.setOnClickListener {
-                                context.share("online.codingblocks.com/courses/" + item.slug.toString())
+                                context.share("https://online.codingblocks.com/app/courses/" + item.slug.toString())
                             }
                             item.instructors?.first()?.photo?.let { courseCardInstructorImg1.loadImage(it) }
                             if (item.instructors!!.size > 1) {
@@ -132,7 +132,7 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                     if (type != "LIST") {
 
                         course_card_share.setOnClickListener {
-                            context.share("online.codingblocks.com/courses/" + item.slug.toString())
+                            context.share("https://online.codingblocks.com/app/courses/" + item.slug.toString())
                         }
                     } else {
                     }

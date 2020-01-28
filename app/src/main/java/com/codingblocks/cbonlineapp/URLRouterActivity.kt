@@ -18,7 +18,8 @@ class URLRouterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (sharedPrefs.SP_JWT_TOKEN_KEY != "jwt_token") {
+        if (sharedPrefs.SP_JWT_TOKEN_KEY.isNotEmpty()) {
+
             intent?.data?.let { uri ->
 
                 if (TextUtils.isEmpty(uri.host)) fallBack()
@@ -27,7 +28,7 @@ class URLRouterActivity : AppCompatActivity() {
                 val pathSegments = uri.pathSegments
                 if (pathSegments.size < 2) fallBack()
 
-                when (pathSegments[0]) {
+                when (pathSegments[1]) {
                     "classroom" -> openRouter(uri)
                     "courses" -> openRouter(uri)
                     "player" -> openRouter(uri)

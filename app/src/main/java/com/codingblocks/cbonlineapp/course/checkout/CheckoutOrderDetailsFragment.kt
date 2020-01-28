@@ -35,8 +35,8 @@ class CheckoutOrderDetailsFragment : Fragment(), AnkoLogger {
 
                 get("image_url")?.asString?.let { it1 -> courseLogoImg.loadImage(it1) }
                 courseTitleTv.text = get("productDescription")?.asString
-                vm.paymentMap["txnId"] = get("txnId")?.asString!!
-                vm.paymentMap["razorpay_order_id"] = get("razorpay_order_id")?.asString!!
+                vm.paymentMap["txnId"] = get("txnId")?.asString ?: ""
+                vm.paymentMap["razorpay_order_id"] = get("razorpay_order_id")?.asString ?: ""
 
                 batchTileTv.text = get("productName")?.asString
                 val price = get("final_price")?.asInt?.div(100)

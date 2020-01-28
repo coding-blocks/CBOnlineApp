@@ -2,14 +2,10 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <item>
-        <color android:color="#222222" />
-    </item>
     <item
-        android:width="50dp"
-        android:height="50dp"
-        android:drawable="@drawable/cblogo"
+        android:width="250dp"
+        android:height="250dp"
+        android:drawable="@mipmap/ic_launcher"
         android:gravity="center" />
 
 </layer-list>

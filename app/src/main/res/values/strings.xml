@@ -255,5 +255,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="delete_confrim">Are your sure you want to delete selected items.</string>
+    <string name="proceed_to_pay">Proceed to Pay</string>
+    <string name="coupon_code">Coupon Code</string>
+    <string name="onlineUrl">online.codingblocks.com/app/courses/</string>
+    <string name="onlineTracksUrl">http://online.codingblocks.com/app/tracks/</string>
+
 
 </resources>

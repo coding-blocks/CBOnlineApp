@@ -35,6 +35,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         super.onActivityCreated(savedInstanceState)
         vm.content.observer(this) {
             vm.quiz = it.contentQna
+            vm.attemptId = it.attempt_id
             vm.fetchQuiz()
         }
 

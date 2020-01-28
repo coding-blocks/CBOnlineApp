@@ -10,13 +10,11 @@ import com.codingblocks.cbonlineapp.mycourse.content.CourseContentFragment
 import com.codingblocks.cbonlineapp.mycourse.library.CourseLibraryFragment
 import com.codingblocks.cbonlineapp.mycourse.overview.OverviewFragment
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.QNA
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
@@ -55,7 +53,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
             courseResumeBtn.setOnClickListener {
                 when (content.contentable) {
                     LECTURE, VIDEO -> startActivity(intentFor<VideoPlayerActivity>(CONTENT_ID to content.contentId, SECTION_ID to content.sectionId).singleTop())
-                    QNA -> startActivity(intentFor<QuizActivity>(CONTENT_ID to content.contentId, SECTION_ID to content.sectionId).singleTop())
                 }
                 viewModel.updateProgress(content.contentId)
             }

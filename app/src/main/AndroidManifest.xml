@@ -21,7 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/NewAppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".tracks.TrackActivity" />
+        <activity
+            android:name=".tracks.TrackActivity"
+            android:parentActivityName=".tracks.LearningTracksActivity" />
         <activity
             android:name=".purchases.PurchasesActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
@@ -44,14 +46,7 @@
             android:name=".auth.LoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".auth.onboarding.OnBoardingActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".auth.onboarding.OnBoardingActivity" />
         <activity
             android:name=".dashboard.ChatActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
@@ -80,8 +75,8 @@
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".course.checkout.CheckoutActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:parentActivityName=".dashboard.DashboardActivity" />
+            android:parentActivityName=".dashboard.DashboardActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".URLRouterActivity"
             android:theme="@style/SplashTheme">
@@ -95,24 +90,26 @@
                 <data android:scheme="https" />
                 <data android:host="online.codingblocks.com" />
                 <data android:pathPrefix="/classroom" />
+                <data android:pathPrefix="/app" />
                 <data android:pathPrefix="/courses" />
                 <data android:pathPrefix="/player" />
+                <data android:pathPrefix="/tracks" />
             </intent-filter>
         </activity>
-        <!--        <activity-->
-        <!--            android:name=".LoginActivity"-->
-        <!--            android:theme="@style/SplashTheme">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="android.intent.action.VIEW" />-->
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-        <!--                <category android:name="android.intent.category.DEFAULT" />-->
-        <!--                <category android:name="android.intent.category.BROWSABLE" />-->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-        <!--                <data-->
-        <!--                    android:host="app.codingblocks.com"-->
-        <!--                    android:scheme="https" />-->
-        <!--            </intent-filter>-->
-        <!--        </activity>-->
+                <data
+                    android:host="app.codingblocks.com"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".course.CourseActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
