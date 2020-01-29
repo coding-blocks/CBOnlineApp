@@ -45,14 +45,13 @@
     </LinearLayout>
 
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/downloadSelectionImg"
+    <ImageView
+        android:id="@+id/selectionImg"
         android:layout_width="21dp"
         android:layout_height="21dp"
-        android:background="@color/veryLightPink"
+        android:background="@drawable/ic_circle_pink"
         android:padding="6dp"
-        android:src="@drawable/ic_selected"
-        android:visibility="gone" />
+        android:src="@drawable/ic_selected" />
 
     <ImageView
         android:id="@+id/downloadArwBtn"

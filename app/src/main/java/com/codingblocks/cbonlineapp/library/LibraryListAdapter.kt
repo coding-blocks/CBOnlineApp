@@ -142,7 +142,7 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
                 text = item.createdAt.timeAgo()
                 isVisible = !isActivated
             }
-            bookmarkSelectionImg.isVisible = isActivated
+            selectionImg.isVisible = isActivated
 
             setOnClickListener {
                 itemClickListener?.onClick(item)
@@ -167,7 +167,7 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
                 isVisible = isActivated
                 isVisible = !isActivated
             }
-            downloadSelectionImg.isVisible = isActivated
+            selectionImg.isVisible = isActivated
 
             setOnClickListener {
                 itemClickListener?.onClick(item)

@@ -116,4 +116,19 @@ class LibraryViewModel(
     fun fetchBookmarks() = repo.getBookmarks(attemptId)
     fun fetchDownloads() = repo.getDownloads(attemptId)
     fun updateDownload(status: Int, lectureId: String) = runIO { repo.updateDownload(status, lectureId) }
+
+    fun removeBookmark(id: String) {
+        runIO {
+            when (val response = repo.removeBookmark(id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.code() == 204) {
+                        repo.deleteBookmark(id)
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
 }

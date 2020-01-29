@@ -84,7 +84,7 @@ class VideoPlayerRepository(
 
     suspend fun removeBookmark(bookmarkUid: String) = safeApiCall { Clients.onlineV2JsonApi.deleteBookmark(bookmarkUid) }
 
-    suspend fun deleteBookmark(id: String) = bookmarkDao.deleteBookmark(id)
+    fun deleteBookmark(id: String) = bookmarkDao.deleteBookmark(id)
 
     suspend fun addDoubt(doubt: Doubts) = safeApiCall { Clients.onlineV2JsonApi.createDoubt(doubt) }
 

@@ -135,9 +135,9 @@ class LibraryViewFragment : Fragment() {
                         }.also { deleteContainer.isVisible = false }
                     }
                     getString(R.string.bookmarks) -> {
-//                        libEmptyImg.setImageResource(R.drawable.ic_bookmark)
-//                        libEmptyMessageTv.text = getString(R.string.empty_bookmark_title)
-//                        libEmptyDescriptionTv.text = getString(R.string.empty_bookmark_text)
+                        selectionTracker?.selection?.forEach {
+                            vm.removeBookmark(it)
+                        }.also { deleteContainer.isVisible = false }
                     }
                     getString(R.string.downloads) -> {
                         selectionTracker?.selection?.forEach {

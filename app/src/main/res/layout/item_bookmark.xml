@@ -51,14 +51,13 @@
         android:textSize="12sp"
         tools:text="4 hours ago" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/bookmarkSelectionImg"
+    <ImageView
+        android:id="@+id/selectionImg"
         android:layout_width="21dp"
         android:layout_height="21dp"
-        android:background="@color/veryLightPink"
+        android:background="@drawable/ic_circle_pink"
         android:padding="6dp"
         android:src="@drawable/ic_selected" />
-
     <!--    <View-->
     <!--        android:id="@+id/divider3"-->
     <!--        android:layout_width="match_parent"-->
