@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "d6fd29b6ed09364fb1947e9c87ab9c82",
+    "identityHash": "300ee6a93185cda07f2182866de11072",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -1051,7 +1051,7 @@
       },
       {
         "tableName": "BookmarkModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookmarkUid` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `contentId` TEXT NOT NULL, `sectionId` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `sectionName` TEXT NOT NULL, `contentName` TEXT NOT NULL, PRIMARY KEY(`bookmarkUid`), FOREIGN KEY(`contentId`) REFERENCES `ContentModel`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookmarkUid` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `contentId` TEXT NOT NULL, `sectionId` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `sectionName` TEXT NOT NULL, `contentName` TEXT NOT NULL, PRIMARY KEY(`bookmarkUid`))",
         "fields": [
           {
             "fieldPath": "bookmarkUid",
@@ -1102,29 +1102,8 @@
           ],
           "autoGenerate": false
         },
-        "indices": [
-          {
-            "name": "index_BookmarkModel_contentId",
-            "unique": false,
-            "columnNames": [
-              "contentId"
-            ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_BookmarkModel_contentId` ON `${TABLE_NAME}` (`contentId`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "ContentModel",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "contentId"
-            ],
-            "referencedColumns": [
-              "ccid"
-            ]
-          }
-        ]
+        "indices": [],
+        "foreignKeys": []
       },
       {
         "tableName": "CommentModel",
@@ -1313,7 +1292,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd6fd29b6ed09364fb1947e9c87ab9c82')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '300ee6a93185cda07f2182866de11072')"
     ]
   }
 }

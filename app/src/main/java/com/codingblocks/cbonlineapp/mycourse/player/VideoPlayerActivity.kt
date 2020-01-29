@@ -11,6 +11,7 @@ import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.observe
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.NetworkType
@@ -161,8 +162,8 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             } else {
                 finish()
             }
-            viewModel.bookmark.observer(this) {
-                bookmarkBtn.isActivated = it.bookmarkUid.isNotEmpty()
+            viewModel.bookmark.observe(this) {
+                bookmarkBtn.isActivated = if (it == null) false else it.bookmarkUid.isNotEmpty()
             }
 
             bookmarkBtn.setOnClickListener { view ->

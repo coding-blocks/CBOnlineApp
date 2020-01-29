@@ -118,7 +118,7 @@ class VideoPlayerViewModel(
                     if (response.value.isSuccessful)
                         response.value.body()?.let { bookmark ->
                             offlineSnackbar.postValue(("Bookmark Added Successfully !"))
-                            repo.updateBookmark(contentId, bookmark)
+                            repo.updateBookmark(bookmark)
                         }
                     else {
                         setError(fetchError(response.value.code()))
@@ -236,7 +236,7 @@ class VideoPlayerViewModel(
                 is ResultWrapper.Success -> {
                     if (response.value.code() == 204) {
                         offlineSnackbar.postValue(("Removed Bookmark Successfully !"))
-                        repo.deleteBookmark(contentId)
+                        bookmark.value?.bookmarkUid?.let { repo.deleteBookmark(it) }
                     } else {
                         setError(fetchError(response.value.code()))
                     }

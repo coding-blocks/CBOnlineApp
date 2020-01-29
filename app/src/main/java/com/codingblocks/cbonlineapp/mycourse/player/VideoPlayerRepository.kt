@@ -74,13 +74,12 @@ class VideoPlayerRepository(
 
     suspend fun markDoubt(bookmark: Bookmark) = safeApiCall { Clients.onlineV2JsonApi.addBookmark(bookmark) }
 
-    suspend fun updateBookmark(id: String, bookmark: Bookmark) {
-        bookmarkDao.insert(BookmarkModel(id,
-            bookmark.id ?: "",
-            bookmark.createdAt ?: "",
+    suspend fun updateBookmark(bookmark: Bookmark) {
+        bookmarkDao.insert(BookmarkModel(bookmark.id ?: "",
             bookmark.runAttempt?.id ?: "",
+            bookmark.content?.id ?: "",
             bookmark.section?.id ?: "",
-            bookmark.content?.id ?: ""))
+            bookmark.createdAt ?: ""))
     }
 
     suspend fun removeBookmark(bookmarkUid: String) = safeApiCall { Clients.onlineV2JsonApi.deleteBookmark(bookmarkUid) }

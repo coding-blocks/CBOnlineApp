@@ -15,7 +15,7 @@ interface BookmarkDao : BaseDao<BookmarkModel> {
         SELECT b.*,c.title as contentName ,s.name as sectionName FROM  BookmarkModel b
  	   INNER JOIN ContentModel c ON c.ccid = b.contentId
   	   INNER JOIN SectionModel s ON s.csid = b.sectionId
-       WHERE bookmarkUid = :uid ORDER BY b.createdAt DESC
+       WHERE b.contentId = :uid ORDER BY b.createdAt DESC
         """
     )
     fun getBookmarkById(uid: String): LiveData<BookmarkModel>
