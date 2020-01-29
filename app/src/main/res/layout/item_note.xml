@@ -41,7 +41,7 @@
             android:id="@+id/selectionImg"
             android:layout_width="21dp"
             android:layout_height="21dp"
-            android:background="@color/veryLightPink"
+            android:background="@drawable/ic_circle_pink"
             android:padding="6dp"
             android:src="@drawable/ic_selected" />
     </LinearLayout>

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
@@ -63,23 +64,35 @@ class LibraryViewFragment : Fragment() {
         when (vm.type) {
             getString(R.string.notes) -> {
                 libraryListAdapter = LibraryListAdapter(LibraryTypes.NOTE)
-                vm.fetchNotes().observer(this) {
-                    libraryListAdapter.submitList(it)
+                vm.fetchNotes().observe(viewLifecycleOwner) {
+                    if (it.isNullOrEmpty()) {
+                        libraryListAdapter.submitList(emptyList())
+                    } else {
+                        libraryListAdapter.submitList(it)
+                    }
                     hideRecyclerView(it.isNotEmpty())
                 }
             }
             getString(R.string.announcements) -> vm.fetchNotes()
             getString(R.string.bookmarks) -> {
                 libraryListAdapter = LibraryListAdapter(LibraryTypes.BOOKMARK)
-                vm.fetchBookmarks().observer(this) {
-                    libraryListAdapter.submitList(it)
+                vm.fetchBookmarks().observe(viewLifecycleOwner) {
+                    if (it.isNullOrEmpty()) {
+                        libraryListAdapter.submitList(emptyList())
+                    } else {
+                        libraryListAdapter.submitList(it)
+                    }
                     hideRecyclerView(it.isNotEmpty())
                 }
             }
             getString(R.string.downloads) -> {
                 libraryListAdapter = LibraryListAdapter(LibraryTypes.DOWNLOADS)
-                vm.fetchDownloads().observer(this) {
-                    libraryListAdapter.submitList(it)
+                vm.fetchDownloads().observe(viewLifecycleOwner) {
+                    if (it.isNullOrEmpty()) {
+                        libraryListAdapter.submitList(emptyList())
+                    } else {
+                        libraryListAdapter.submitList(it)
+                    }
                     hideRecyclerView(it.isNotEmpty())
                 }
             }
@@ -115,11 +128,12 @@ class LibraryViewFragment : Fragment() {
 
         deleteAction.setOnClickListener {
             requireContext().showDialog("DELETE", true, R.drawable.ic_delete, secondaryText = R.string.delete_confrim, buttonText = R.string.confirm) {
+
                 when (vm.type) {
                     getString(R.string.notes) -> {
                         selectionTracker?.selection?.forEach {
                             vm.deleteNote(it)
-                        }
+                        }.also { deleteContainer.isVisible = false }
                     }
                     getString(R.string.bookmarks) -> {
 //                        libEmptyImg.setImageResource(R.drawable.ic_bookmark)
@@ -129,7 +143,7 @@ class LibraryViewFragment : Fragment() {
                     getString(R.string.downloads) -> {
                         selectionTracker?.selection?.forEach {
                             deleteFolder(it)
-                        }
+                        }.also { deleteContainer.isVisible = false }
                     }
                 }
             }
