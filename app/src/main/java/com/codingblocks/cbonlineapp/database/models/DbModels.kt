@@ -103,7 +103,15 @@ data class Notification(
     val videoId: String = ""
 )
 
-@Entity()
+@Entity(
+    indices = [Index("contentId")],
+    foreignKeys = [(ForeignKey(
+        entity = ContentModel::class,
+        parentColumns = ["ccid"],
+        childColumns = ["contentId"],
+        onDelete = ForeignKey.CASCADE
+    ))]
+)
 data class BookmarkModel(
     @PrimaryKey
     var bookmarkUid: String = "",

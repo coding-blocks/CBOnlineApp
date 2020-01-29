@@ -1,6 +1,12 @@
 package com.codingblocks.cbonlineapp.dashboard
 
+import android.annotation.TargetApi
+import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
 import android.graphics.Typeface
+import android.graphics.drawable.Icon
+import android.graphics.drawable.PictureDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -12,7 +18,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
-import com.codingblocks.cbonlineapp.settings.AboutActivity
+import com.caverock.androidsvg.SVG
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.auth.LoginActivity
@@ -25,12 +31,20 @@ import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeFragment
 import com.codingblocks.cbonlineapp.dashboard.library.DashboardLibraryFragment
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesFragment
 import com.codingblocks.cbonlineapp.jobs.JobsActivity
+import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
 import com.codingblocks.cbonlineapp.profile.ReferralActivity
 import com.codingblocks.cbonlineapp.purchases.PurchasesActivity
+import com.codingblocks.cbonlineapp.settings.AboutActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
+import com.codingblocks.cbonlineapp.util.COURSE_ID
+import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.NetworkUtils.okHttpClient
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -48,6 +62,8 @@ import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.Request
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.startActivity
@@ -125,14 +141,63 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         }
         if (loggedIn) {
             setUser()
+            createShortcut()
             dashboardBottomNav.setCurrentItem(1)
         } else {
+            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             dashboardNavigation.getHeaderView(0).apply {
                 findViewById<TextView>(R.id.navUsernameTv).text = "Login/Signup"
             }
             dashboardBottomNav.setCurrentItem(0)
         }
         dashboardAppBarLayout.bringToFront()
+    }
+
+    @TargetApi(28)
+    fun createShortcut() {
+
+        val sM = getSystemService(ShortcutManager::class.java)
+        val shortcutList: MutableList<ShortcutInfo> = ArrayList()
+
+        viewModel.courses.observer(this) {
+
+            doAsync {
+                it.take(2).forEachIndexed { index, courseRun ->
+
+                    val intent = Intent(this@DashboardActivity, MyCourseActivity::class.java)
+                    intent.action = Intent.ACTION_VIEW
+                    intent.putExtra(COURSE_ID, courseRun.courseRun.course.cid)
+                    intent.putExtra(RUN_ID, courseRun.courseRun.run.crUid)
+                    intent.putExtra(RUN_ATTEMPT_ID, courseRun.courseRun.runAttempt.attemptId)
+                    intent.putExtra(COURSE_NAME, courseRun.courseRun.course.title)
+
+                    val shortcut = ShortcutInfo.Builder(this@DashboardActivity, "topcourse$index")
+                    shortcut.setIntent(intent)
+                    shortcut.setLongLabel(courseRun.courseRun.course.subtitle)
+                    shortcut.setShortLabel(courseRun.courseRun.course.title)
+                    shortcut.setDisabledMessage("Login to open this")
+
+                    okHttpClient.newCall(Request.Builder().url(courseRun.courseRun.course.logo).build())
+                                    .execute().body?.let {
+                            with(SVG.getFromInputStream(it.byteStream())) {
+                                val picDrawable = PictureDrawable(
+                                    this.renderToPicture(
+                                        400, 400
+                                    )
+                                )
+                                val bitmap = MediaUtils.getBitmapFromPictureDrawable(picDrawable)
+                                val circularBitmap = MediaUtils.getCircularBitmap(bitmap)
+                                shortcut.setIcon(Icon.createWithBitmap(circularBitmap))
+                                shortcutList.add(index, shortcut.build())
+                            }
+                        }
+                }
+                sM?.apply {
+                    dynamicShortcuts.clear()
+                    dynamicShortcuts = shortcutList
+                }
+            }
+        }
     }
 
     private fun setupViewPager() {
