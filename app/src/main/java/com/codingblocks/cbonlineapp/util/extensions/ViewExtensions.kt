@@ -47,6 +47,8 @@ import com.codingblocks.fabnavigation.FabNavigation
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.dialog.view.*
+import kotlinx.android.synthetic.main.dialog.view.primaryBtn
+import kotlinx.android.synthetic.main.dialog_help.view.*
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.layoutInflater
 import kotlin.math.hypot
@@ -370,6 +372,35 @@ fun <T : RecyclerView.ViewHolder> T.listen(event: (position: Int, type: Int) -> 
         event.invoke(adapterPosition, itemViewType)
     }
     return this
+}
+
+fun Context.showHelpDialog(
+    type: String,
+    cancelable: Boolean = true,
+    callback: (state: Boolean, name: String, number: String) -> Unit = { b: Boolean, s: String, s1: String -> }
+) {
+
+    val dialog = AlertDialog.Builder(this).create()
+    val view = layoutInflater.inflate(R.layout.dialog_help, null)
+    view.primaryBtn.setOnClickListener {
+
+        if (view.nameLayout.editText?.text.isNullOrEmpty()) {
+            view.nameLayout.error = "Name Cannot Be Empty"
+            return@setOnClickListener
+        } else if (view.mobile.editText?.text.isNullOrEmpty() && view.mobile.editText?.text?.length!! < 10) {
+            view.nameLayout.error = "Name Cannot Be Empty"
+            return@setOnClickListener
+        } else {
+            callback(true, view.nameLayout.editText?.text.toString(), view.mobile.editText?.text.toString())
+            dialog.dismiss()
+        }
+    }
+    dialog.apply {
+        window?.setBackgroundDrawableResource(android.R.color.transparent)
+        setView(view)
+        setCancelable(cancelable)
+        show()
+    }
 }
 
 fun View.crossfade(view: View, otherView: View?, type: Int = View.INVISIBLE) {

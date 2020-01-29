@@ -259,6 +259,8 @@
     <string name="coupon_code">Coupon Code</string>
     <string name="onlineUrl">online.codingblocks.com/app/courses/</string>
     <string name="onlineTracksUrl">http://online.codingblocks.com/app/tracks/</string>
+    <string name="have_any_doubts">Have any doubts?</string>
+    <string name="just_fill_in_your_details_and_our_edu_counsellor_will_get_back_to_you">Just fill in your details and our edu. counsellor will get back to you!</string>
 
 
 </resources>

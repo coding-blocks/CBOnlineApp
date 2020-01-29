@@ -37,7 +37,7 @@
             android:textSize="12sp"
             tools:text="4 hours ago" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/selectionImg"
             android:layout_width="21dp"
             android:layout_height="21dp"

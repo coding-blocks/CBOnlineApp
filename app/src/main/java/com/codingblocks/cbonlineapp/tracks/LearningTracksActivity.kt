@@ -18,6 +18,7 @@ import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.extensions.showHelpDialog
 import com.codingblocks.onlineapi.models.Professions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.activity_learning_tracks.*
@@ -62,6 +63,12 @@ class LearningTracksActivity : AppCompatActivity() {
         vm.fetchProfessions().observer(this) {
             it?.takeIf { it.isNotEmpty() }?.get(0)?.let { it1 -> setProfession(it1) }
             batchListAdapter.submitList(it)
+        }
+
+        needHelp.setOnClickListener {
+            showHelpDialog(type = "Track") { b: Boolean, name: String, number: String ->
+                vm.generateLead(name, number)
+            }
         }
 
         tracksListAdapter.onItemClick = itemClickListener

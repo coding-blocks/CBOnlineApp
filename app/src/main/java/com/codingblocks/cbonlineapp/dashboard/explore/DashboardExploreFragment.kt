@@ -17,6 +17,7 @@ import com.codingblocks.cbonlineapp.course.ItemClickListener
 import com.codingblocks.cbonlineapp.course.SearchCourseActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
+import com.codingblocks.cbonlineapp.tracks.TrackActivity
 import com.codingblocks.cbonlineapp.tracks.TracksListAdapter
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
@@ -39,6 +40,22 @@ class DashboardExploreFragment : Fragment() {
         object : ItemClickListener {
             override fun onClick(id: String, name: String, logo: ImageView) {
                 val intent = Intent(requireContext(), CourseActivity::class.java)
+                intent.putExtra(COURSE_ID, id)
+                intent.putExtra(COURSE_LOGO, name)
+                intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
+
+                val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    requireActivity(),
+                    logo,
+                    ViewCompat.getTransitionName(logo)!!)
+                startActivity(intent, options.toBundle())
+            }
+        }
+    }
+    private val trackItemClickList: ItemClickListener by lazy {
+        object : ItemClickListener {
+            override fun onClick(id: String, name: String, logo: ImageView) {
+                val intent = Intent(requireContext(), TrackActivity::class.java)
                 intent.putExtra(COURSE_ID, id)
                 intent.putExtra(COURSE_LOGO, name)
                 intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
@@ -83,6 +100,8 @@ class DashboardExploreFragment : Fragment() {
 
         courseCardListAdapter.onItemClick = itemClickListener
         coursePopularListAdapter.onItemClick = itemClickListener
+        tracksListAdapter.onItemClick = trackItemClickList
+
         allCourseCardTv.setOnClickListener {
             startActivity<SearchCourseActivity>()
         }
@@ -98,5 +117,6 @@ class DashboardExploreFragment : Fragment() {
         super.onDestroyView()
         courseCardListAdapter.onItemClick = null
         coursePopularListAdapter.onItemClick = null
+        tracksListAdapter.onItemClick = null
     }
 }

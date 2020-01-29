@@ -111,4 +111,18 @@ class TrackViewModel(private val repo: TracksRepository) : ViewModel() {
         }
         return track
     }
+
+    fun generateLead(name: String, mobile: String) {
+        runIO {
+            when (val response = repo.generateLead(hashMapOf("name" to name, "mobile" to mobile))) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
 }

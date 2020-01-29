@@ -137,5 +137,8 @@ interface OnlineRestApi {
     @FormUrlEncoded
     suspend fun capturePayment(@FieldMap params: Map<String, String>): Response<JsonObject>
 
+    @POST("v2/hubspot/lead")
+    @FormUrlEncoded
+    suspend fun generateLead(@FieldMap params: Map<String, String>): Response<JsonObject>
 
 }

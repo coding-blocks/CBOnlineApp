@@ -7,16 +7,15 @@
     android:layout_marginStart="@dimen/margin_large"
     android:layout_marginTop="@dimen/margin_small"
     android:layout_marginBottom="@dimen/margin_small"
-    android:background="?attr/selectableItemBackground"
+    android:background="?attr/selectableItemBackgroundBorderless"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/trackLogo"
-        android:layout_width="80dp"
-        android:elevation="1dp"
-        android:layout_height="80dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:src="@drawable/ic_course_logo" />
 
 
