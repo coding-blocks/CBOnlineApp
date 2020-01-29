@@ -20,7 +20,6 @@ import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.SECTION_ID
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog

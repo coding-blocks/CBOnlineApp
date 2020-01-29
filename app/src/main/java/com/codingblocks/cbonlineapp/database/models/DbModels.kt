@@ -103,8 +103,7 @@ data class Notification(
     val videoId: String = ""
 )
 
-@Entity(
-)
+@Entity()
 data class BookmarkModel(
     @PrimaryKey
     var bookmarkUid: String = "",

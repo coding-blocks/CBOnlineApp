@@ -36,7 +36,7 @@ interface SectionWithContentsDao {
         SELECT c.ccid as contentId,s.csid as sectionId,c.contentable FROM  SectionModel s
 	    INNER JOIN SectionWithContent sc ON sc."section_id" = s."csid"
 	    INNER JOIN ContentModel c ON c."ccid" = sc."content_id"
-	    WHERE s.attemptId = :attemptId AND progress != "DONE" AND c.contentable == "lecture" OR c.contentable == "video"
+	    WHERE s.attemptId = :attemptId AND progress != "DONE" AND (c.contentable = "lecture" OR c.contentable = "video")
         ORDER BY s."sectionOrder", sc."order" LIMIT 1;
         """)
     fun resumeCourse(attemptId: String): LiveData<SectionContentHolder.NextContent>
