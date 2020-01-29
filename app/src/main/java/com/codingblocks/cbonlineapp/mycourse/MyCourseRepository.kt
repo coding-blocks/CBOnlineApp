@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.mycourse
 
+import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
@@ -30,7 +31,8 @@ class MyCourseRepository(
     private val contentsDao: ContentDao,
     private val sectionDao: SectionDao,
     private val courseWithInstructorDao: CourseWithInstructorDao,
-    private val runPerformanceDao: RunPerformanceDao
+    private val runPerformanceDao: RunPerformanceDao,
+    private val bookmarkDao: BookmarkDao
 ) {
 
     fun getSectionWithContent(attemptId: String) = sectionWithContentsDao.getSectionWithContent(attemptId)
@@ -207,9 +209,10 @@ class MyCourseRepository(
                     contentVideo,
                     contentQna,
                     contentCodeChallenge,
-                    contentCsv,
-                    bookmark
+                    contentCsv
                 )
+            if (bookmark.bookmarkUid != "")
+                bookmarkDao.insert(bookmark)
             val oldModel: ContentModel? = contentsDao.getContent(content.id)
             if (oldModel != null && !oldModel.sameAndEqual(newContent)) {
                 contentsDao.update(newContent)

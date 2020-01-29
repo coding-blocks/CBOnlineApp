@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "91fe4ca9e98be986640811a54a2d515e",
+    "identityHash": "d6fd29b6ed09364fb1947e9c87ab9c82",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -169,7 +169,7 @@
       },
       {
         "tableName": "ContentModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ccid` TEXT NOT NULL, `progress` TEXT NOT NULL, `progressId` TEXT NOT NULL, `title` TEXT NOT NULL, `contentDuration` INTEGER NOT NULL, `contentable` TEXT NOT NULL, `order` INTEGER NOT NULL, `attempt_id` TEXT NOT NULL, `sectionTitle` TEXT NOT NULL, `lectureUid` TEXT NOT NULL, `lectureName` TEXT NOT NULL, `lectureDuration` INTEGER NOT NULL, `lectureId` TEXT NOT NULL, `lectureContentId` TEXT NOT NULL, `lectureUpdatedAt` TEXT NOT NULL, `isDownloaded` INTEGER NOT NULL, `date` INTEGER NOT NULL, `lectureSectionId` TEXT NOT NULL, `documentUid` TEXT NOT NULL, `documentName` TEXT NOT NULL, `documentPdfLink` TEXT NOT NULL, `documentContentId` TEXT NOT NULL, `documentUpdatedAt` TEXT NOT NULL, `videoUid` TEXT NOT NULL, `videoName` TEXT NOT NULL, `videoDuration` INTEGER NOT NULL, `videoDescription` TEXT, `videoUrl` TEXT NOT NULL, `videoContentId` TEXT NOT NULL, `videoUpdatedAt` TEXT NOT NULL, `qnaUid` TEXT NOT NULL, `qnaName` TEXT NOT NULL, `qnaQid` INTEGER NOT NULL, `qnaContentId` TEXT NOT NULL, `qnaUpdatedAt` TEXT NOT NULL, `codeUid` TEXT NOT NULL, `codeName` TEXT NOT NULL, `codeProblemId` INTEGER NOT NULL, `codeContestId` INTEGER NOT NULL, `codeContentId` TEXT NOT NULL, `codeUpdatedAt` TEXT NOT NULL, `csvUid` TEXT NOT NULL, `csvName` TEXT NOT NULL, `csvDescription` TEXT NOT NULL, `csvContentId` TEXT NOT NULL, `csvUpdatedAt` TEXT NOT NULL, `bookmarkUid` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `contentId` TEXT NOT NULL, `sectionId` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `sectionName` TEXT NOT NULL, `contentName` TEXT NOT NULL, PRIMARY KEY(`ccid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ccid` TEXT NOT NULL, `progress` TEXT NOT NULL, `progressId` TEXT NOT NULL, `title` TEXT NOT NULL, `contentDuration` INTEGER NOT NULL, `contentable` TEXT NOT NULL, `order` INTEGER NOT NULL, `attempt_id` TEXT NOT NULL, `sectionTitle` TEXT NOT NULL, `lectureUid` TEXT NOT NULL, `lectureName` TEXT NOT NULL, `lectureDuration` INTEGER NOT NULL, `lectureId` TEXT NOT NULL, `lectureSectionId` TEXT NOT NULL, `lectureUpdatedAt` TEXT NOT NULL, `isDownloaded` INTEGER NOT NULL, `date` INTEGER NOT NULL, `lectureContentId` TEXT NOT NULL, `documentUid` TEXT NOT NULL, `documentName` TEXT NOT NULL, `documentPdfLink` TEXT NOT NULL, `documentContentId` TEXT NOT NULL, `documentUpdatedAt` TEXT NOT NULL, `videoUid` TEXT NOT NULL, `videoName` TEXT NOT NULL, `videoDuration` INTEGER NOT NULL, `videoDescription` TEXT, `videoUrl` TEXT NOT NULL, `videoContentId` TEXT NOT NULL, `videoUpdatedAt` TEXT NOT NULL, `qnaUid` TEXT NOT NULL, `qnaName` TEXT NOT NULL, `qnaQid` INTEGER NOT NULL, `qnaContentId` TEXT NOT NULL, `qnaUpdatedAt` TEXT NOT NULL, `codeUid` TEXT NOT NULL, `codeName` TEXT NOT NULL, `codeProblemId` INTEGER NOT NULL, `codeContestId` INTEGER NOT NULL, `codeContentId` TEXT NOT NULL, `codeUpdatedAt` TEXT NOT NULL, `csvUid` TEXT NOT NULL, `csvName` TEXT NOT NULL, `csvDescription` TEXT NOT NULL, `csvContentId` TEXT NOT NULL, `csvUpdatedAt` TEXT NOT NULL, PRIMARY KEY(`ccid`))",
         "fields": [
           {
             "fieldPath": "ccid",
@@ -250,8 +250,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "contentLecture.lectureContentId",
-            "columnName": "lectureContentId",
+            "fieldPath": "contentLecture.lectureSectionId",
+            "columnName": "lectureSectionId",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -274,8 +274,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "contentLecture.lectureSectionId",
-            "columnName": "lectureSectionId",
+            "fieldPath": "contentLecture.lectureContentId",
+            "columnName": "lectureContentId",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -444,48 +444,6 @@
           {
             "fieldPath": "contentCsv.csvUpdatedAt",
             "columnName": "csvUpdatedAt",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "bookmark.bookmarkUid",
-            "columnName": "bookmarkUid",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "bookmark.runAttemptId",
-            "columnName": "runAttemptId",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "bookmark.contentId",
-            "columnName": "contentId",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "bookmark.sectionId",
-            "columnName": "sectionId",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "bookmark.createdAt",
-            "columnName": "createdAt",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "bookmark.sectionName",
-            "columnName": "sectionName",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "bookmark.contentName",
-            "columnName": "contentName",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -1092,6 +1050,83 @@
         "foreignKeys": []
       },
       {
+        "tableName": "BookmarkModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookmarkUid` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `contentId` TEXT NOT NULL, `sectionId` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `sectionName` TEXT NOT NULL, `contentName` TEXT NOT NULL, PRIMARY KEY(`bookmarkUid`), FOREIGN KEY(`contentId`) REFERENCES `ContentModel`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "bookmarkUid",
+            "columnName": "bookmarkUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "runAttemptId",
+            "columnName": "runAttemptId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentId",
+            "columnName": "contentId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sectionId",
+            "columnName": "sectionId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sectionName",
+            "columnName": "sectionName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentName",
+            "columnName": "contentName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "bookmarkUid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_BookmarkModel_contentId",
+            "unique": false,
+            "columnNames": [
+              "contentId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_BookmarkModel_contentId` ON `${TABLE_NAME}` (`contentId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "ContentModel",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "contentId"
+            ],
+            "referencedColumns": [
+              "ccid"
+            ]
+          }
+        ]
+      },
+      {
         "tableName": "CommentModel",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `body` TEXT NOT NULL, `dbtId` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `username` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`dbtId`) REFERENCES `DoubtsModel`(`dbtUid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
@@ -1278,7 +1313,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '91fe4ca9e98be986640811a54a2d515e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd6fd29b6ed09364fb1947e9c87ab9c82')"
     ]
   }
 }

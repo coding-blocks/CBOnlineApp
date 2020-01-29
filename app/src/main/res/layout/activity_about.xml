@@ -22,7 +22,7 @@
         android:fillViewport="true"
         android:overScrollMode="never"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".AboutActivity">
+        tools:context=".settings.AboutActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

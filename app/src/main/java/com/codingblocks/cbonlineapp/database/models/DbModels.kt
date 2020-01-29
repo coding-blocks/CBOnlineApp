@@ -24,17 +24,6 @@ data class ContentLecture(
 ) : BaseModel()
 
 @Entity
-data class BookmarkModel(
-    var bookmarkUid: String = "",
-    var runAttemptId: String = "",
-    var contentId: String = "",
-    var sectionId: String = "",
-    var createdAt: String = "",
-    var sectionName: String = "",
-    var contentName: String = ""
-) : BaseModel()
-
-@Entity
 data class ContentDocument(
     var documentUid: String = "",
     var documentName: String = "",
@@ -113,6 +102,26 @@ data class Notification(
     val seen: Boolean = false,
     val videoId: String = ""
 )
+
+@Entity(
+    indices = [Index("contentId")],
+    foreignKeys = [(ForeignKey(
+        entity = ContentModel::class,
+        parentColumns = ["ccid"],
+        childColumns = ["contentId"],
+        onDelete = ForeignKey.CASCADE
+    ))]
+)
+data class BookmarkModel(
+    @PrimaryKey
+    var bookmarkUid: String = "",
+    var runAttemptId: String = "",
+    var contentId: String = "",
+    var sectionId: String = "",
+    var createdAt: String = "",
+    var sectionName: String = "",
+    var contentName: String = ""
+) : BaseModel()
 
 @Entity
 data class JobsModel(

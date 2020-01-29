@@ -215,17 +215,15 @@
                 android:orientation="vertical"
                 tools:context="com.codingblocks.cbonlineapp.auth.LoginActivity">
 
-                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-                    android:id="@+id/youtubePlayerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+
+                <fragment
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="@dimen/margin_large"
                     android:layout_marginEnd="@dimen/margin_large"
-                    app:autoPlay="false"
-                    app:showFullScreenButton="true"
-                    app:showYouTubeButton="false"
-                    app:useWebUi="false" />
+                    android:id="@+id/youtubePlayerView"
+                    android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp" />
 
                 <TextView
                     android:layout_width="wrap_content"

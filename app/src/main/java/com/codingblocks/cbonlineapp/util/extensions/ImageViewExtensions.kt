@@ -11,8 +11,8 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.ImageViewTarget
 import com.caverock.androidsvg.SVG
-import com.codingblocks.cbonlineapp.GlideApp
-import com.codingblocks.cbonlineapp.GlideRequest
+import com.codingblocks.cbonlineapp.util.GlideApp
+import com.codingblocks.cbonlineapp.util.GlideRequest
 import com.codingblocks.cbonlineapp.util.NetworkUtils.okHttpClient
 import kotlinx.android.synthetic.main.tour_layout.view.*
 import okhttp3.Request

@@ -59,11 +59,6 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
-
                 <data
                     android:host="online.codingblocks.com"
                     android:scheme="app" />
@@ -109,6 +104,12 @@
                     android:host="app.codingblocks.com"
                     android:scheme="https" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".course.CourseActivity"
@@ -146,7 +147,7 @@
             android:label="@string/title_activity_settings"
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
-            android:name=".AboutActivity"
+            android:name=".settings.AboutActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".mycourse.player.VideoPlayerActivity"

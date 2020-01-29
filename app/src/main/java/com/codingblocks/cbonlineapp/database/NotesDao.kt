@@ -6,14 +6,14 @@ import androidx.room.Query
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 
 @Dao
-abstract class NotesDao : BaseDao<NotesModel> {
+interface NotesDao : BaseDao<NotesModel> {
 
     @Query("""
         SElECT n.*,c.title as contentTitle FROM NotesModel n 
        INNER JOIN ContentModel c ON c.ccid = n.contentId
        where n.runAttemptId = :runAttemptId order by createdAt DESC
     """)
-    abstract fun getNotes(runAttemptId: String): LiveData<List<NotesModel>>
+    fun getNotes(runAttemptId: String): LiveData<List<NotesModel>>
 
     @Query("SElECT * FROM NotesModel")
     abstract fun getAllNotes(): LiveData<List<NotesModel>>

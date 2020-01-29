@@ -1,10 +1,11 @@
-package com.codingblocks.cbonlineapp
+package com.codingblocks.cbonlineapp.settings
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.codingblocks.cbonlineapp.R
 import kotlinx.android.synthetic.main.activity_about.*
 import org.jetbrains.anko.email
 

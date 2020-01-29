@@ -53,6 +53,10 @@ class VideoPlayerViewModel(
         fetchNotes()
         repo.getNotes(it)
     }
+
+    val bookmark by lazy {
+        repo.getBookmark(contentId)
+    }
     val offlineSnackbar = MutableLiveData<String>()
 
     fun resolveDoubt(doubt: DoubtsModel) {
@@ -225,9 +229,9 @@ class VideoPlayerViewModel(
         }
     }
 
-    fun removeBookmark(bookmarkUid: String) {
+    fun removeBookmark() {
         runIO {
-            when (val response = repo.removeBookmark(bookmarkUid)) {
+            when (val response = bookmark.value?.bookmarkUid?.let { repo.removeBookmark(it) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.code() == 204) {

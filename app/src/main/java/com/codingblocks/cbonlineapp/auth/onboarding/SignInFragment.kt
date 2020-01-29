@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.codingblocks.cbonlineapp.MySMSBroadcastReceiver
+import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
@@ -116,7 +116,7 @@ class SignInFragment : Fragment() {
                         } else {
                             runOnUiThread {
                                 errorDrawableTv.isVisible = true
-                                signInRoot.showSnackbar("Invalid Number.Please Try Again", Snackbar.LENGTH_SHORT)
+                                signInRoot.showSnackbar("Number Not Verified.Please Try Again !!", Snackbar.LENGTH_SHORT)
                                 proceedBtn.isEnabled = true
                             }
                         }

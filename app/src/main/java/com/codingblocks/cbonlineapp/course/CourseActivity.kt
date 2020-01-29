@@ -12,6 +12,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.InstructorListAdapter
 import com.codingblocks.cbonlineapp.course.batches.BatchListAdapter
@@ -21,6 +22,7 @@ import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
+import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.getDateForTime
@@ -36,7 +38,9 @@ import com.codingblocks.onlineapi.models.Tags
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.google.android.youtube.player.YouTubeInitializationResult
+import com.google.android.youtube.player.YouTubePlayer
+import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import io.noties.markwon.Markwon
 import io.noties.markwon.core.CorePlugin
 import kotlinx.android.synthetic.main.activity_course.*
@@ -68,6 +72,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
     private val courseCardListAdapter = CourseListAdapter()
     private val batchListAdapter = BatchListAdapter()
     private val dialog by lazy { BottomSheetDialog(this) }
+    private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -93,7 +98,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         setToolbar(courseToolbar)
         viewModel.id = courseId
         viewModel.fetchCourse()
-        lifecycle.addObserver(youtubePlayerView)
         setUpBottomSheet()
 
         courseProjectsRv.setRv(this@CourseActivity, projectAdapter, true)
@@ -216,12 +220,31 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         }
     }
 
-    private fun setYoutubePlayer(promoVideo: String) {
-        youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-            override fun onReady(youTubePlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer) {
-                youTubePlayer.cueVideo(getYotubeVideoId(promoVideo), 0F)
+    private fun setYoutubePlayer(youtubeUrl: String) {
+        youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
+            override fun onInitializationFailure(
+                p0: YouTubePlayer.Provider?,
+                p1: YouTubeInitializationResult?
+            ) {
             }
-        })
+
+            override fun onInitializationSuccess(
+                p0: YouTubePlayer.Provider?,
+                youtubePlayerInstance: YouTubePlayer?,
+                p2: Boolean
+            ) {
+                if (!p2) {
+                    val url = if (youtubeUrl.split("=").size == 2) youtubeUrl.split("=")[1]
+                    else {
+                        MediaUtils.getYotubeVideoId(youtubeUrl)
+                    }
+                    youtubePlayerInstance?.loadVideo(url)
+                }
+            }
+        }
+        val youTubePlayerSupportFragment =
+            supportFragmentManager.findFragmentById(R.id.youtubePlayerView) as YouTubePlayerSupportFragment?
+        youTubePlayerSupportFragment?.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -262,7 +285,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
     }
 
     override fun onBackPressed() {
-        youtubePlayerView.release()
 //        supportFinishAfterTransition()
         super.onBackPressed()
     }

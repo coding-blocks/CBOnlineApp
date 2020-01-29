@@ -140,7 +140,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             viewModel.attemptId.value = it.attempt_id
             sectionTitle.text = "Section ${it.sectionTitle}"
             contentTitle.text = it.title
-            bookmarkBtn.isActivated = it.bookmark.bookmarkUid.isNotEmpty()
+//            bookmarkBtn.isActivated = it.bookmark.bookmarkUid.isNotEmpty()
             if (it.contentable == LECTURE) {
                 isDownloaded = it.contentLecture.isDownloaded
                 downloadBtn.isActivated = isDownloaded
@@ -161,12 +161,15 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             } else {
                 finish()
             }
+            viewModel.bookmark.observer(this) {
+                bookmarkBtn.isActivated = it.bookmarkUid.isNotEmpty()
+            }
 
             bookmarkBtn.setOnClickListener { view ->
-                if (it.bookmark.bookmarkUid.isEmpty())
-                    viewModel.markBookmark()
+                if (bookmarkBtn.isActivated)
+                    viewModel.removeBookmark()
                 else {
-                    viewModel.removeBookmark(it.bookmark.bookmarkUid)
+                    viewModel.markBookmark()
                 }
             }
         }

@@ -1,11 +1,10 @@
 package com.codingblocks.cbonlineapp.mycourse.player
 
 import androidx.lifecycle.distinctUntilChanged
+import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.ContentDao
-import com.codingblocks.cbonlineapp.database.CourseDao
-import com.codingblocks.cbonlineapp.database.DoubtsDao
 import com.codingblocks.cbonlineapp.database.NotesDao
-import com.codingblocks.cbonlineapp.database.SectionDao
+import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Bookmark
@@ -14,11 +13,9 @@ import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.safeApiCall
 
 class VideoPlayerRepository(
-    private val doubtsDao: DoubtsDao,
     private val notesDao: NotesDao,
-    private val courseDao: CourseDao,
     private val contentDao: ContentDao,
-    private val sectionDao: SectionDao
+    private val bookmarkDao: BookmarkDao
 ) {
     suspend fun fetchCourseNotes(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.getNotesByAttemptId(attemptId) }
 
@@ -78,19 +75,19 @@ class VideoPlayerRepository(
     suspend fun markDoubt(bookmark: Bookmark) = safeApiCall { Clients.onlineV2JsonApi.addBookmark(bookmark) }
 
     suspend fun updateBookmark(id: String, bookmark: Bookmark) {
-        contentDao.updateBookmark(id,
+        bookmarkDao.insert(BookmarkModel(id,
             bookmark.id ?: "",
             bookmark.createdAt ?: "",
             bookmark.runAttempt?.id ?: "",
             bookmark.section?.id ?: "",
-            bookmark.content?.id ?: "")
+            bookmark.content?.id ?: ""))
     }
 
     suspend fun removeBookmark(bookmarkUid: String) = safeApiCall { Clients.onlineV2JsonApi.deleteBookmark(bookmarkUid) }
 
-    suspend fun deleteBookmark(id: String) {
-        contentDao.updateBookmark(id, "", "", "", "", "")
-    }
+    suspend fun deleteBookmark(id: String) = bookmarkDao.deleteBookmark(id)
 
     suspend fun addDoubt(doubt: Doubts) = safeApiCall { Clients.onlineV2JsonApi.createDoubt(doubt) }
+
+    fun getBookmark(contentId: String) = bookmarkDao.getBookmarkById(contentId)
 }

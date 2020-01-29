@@ -12,7 +12,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
-import com.codingblocks.cbonlineapp.AboutActivity
+import com.codingblocks.cbonlineapp.settings.AboutActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.auth.LoginActivity

@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp
+package com.codingblocks.cbonlineapp.util
 
 import android.graphics.Picture
 import android.graphics.drawable.PictureDrawable
