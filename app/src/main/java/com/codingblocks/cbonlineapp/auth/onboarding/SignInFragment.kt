@@ -88,10 +88,10 @@ class SignInFragment : Fragment() {
 
     private fun loginWithNumber() {
         val numberEditText = numberLayout.editText?.text
-        if (numberEditText.isNullOrEmpty()) {
+        if (numberEditText.isNullOrEmpty() || numberEditText.length < 10) {
             signInRoot.showSnackbar("Number is too short", Snackbar.LENGTH_SHORT)
         } else {
-            val number = if (numberEditText.length > 10) "+91-${numberEditText.substring(3)}" else "+91-$numberEditText"
+            val number = if (numberEditText.length > 10) "+91-${numberEditText.takeLast(10)}" else "+91-$numberEditText"
             map["phone"] = number
             proceedBtn.isEnabled = false
             GlobalScope.launch {

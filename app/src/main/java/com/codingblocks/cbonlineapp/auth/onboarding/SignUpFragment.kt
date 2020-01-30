@@ -36,7 +36,7 @@ class SignUpFragment : Fragment() {
         }
         proceedBtn.setOnClickListener {
             val name = nameLayout.editText?.text.toString().split(" ")
-            val number = if (mobileLayout.editText?.text?.length!! > 10) "+91-${mobileLayout.editText?.text?.substring(3)}" else "+91-${mobileLayout.editText?.text}"
+            val number = if (mobileLayout.editText?.text?.length!! > 10) "+91-${mobileLayout.editText?.text?.takeLast(10)}" else "+91-${mobileLayout.editText?.text}"
 
             if (name.size < 2) {
                 signUpRoot.showSnackbar("Last Name Cannot Be Empty", Snackbar.LENGTH_SHORT)

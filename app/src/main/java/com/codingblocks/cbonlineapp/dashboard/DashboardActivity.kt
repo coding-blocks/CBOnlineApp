@@ -153,7 +153,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         dashboardAppBarLayout.bringToFront()
     }
 
-    @TargetApi(28)
+    @TargetApi(25)
     fun createShortcut() {
 
         val sM = getSystemService(ShortcutManager::class.java)
