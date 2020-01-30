@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import android.view.WindowManager
+import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
 import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -47,6 +48,7 @@ import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.crashlytics.android.Crashlytics
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.youtube.player.YouTubeInitializationResult
@@ -71,6 +73,7 @@ import org.jetbrains.anko.toast
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
+import java.util.Objects
 import java.util.concurrent.TimeUnit
 
 class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogger, VdoPlayer.InitializationListener {
@@ -514,6 +517,13 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
     private fun setUpBottomSheet() {
         dialog.dismissWithAnimation = true
         dialog.setContentView(sheetDialog)
+        Objects.requireNonNull(dialog.window)
+            ?.setSoftInputMode(SOFT_INPUT_STATE_VISIBLE)
+        dialog.setOnShowListener {
+            val d = it as BottomSheetDialog
+            val sheet = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)!!
+            BottomSheetBehavior.from(sheet).setState(BottomSheetBehavior.STATE_EXPANDED)
+        }
     }
 
     private fun setYoutubePlayer(youtubeUrl: String) {

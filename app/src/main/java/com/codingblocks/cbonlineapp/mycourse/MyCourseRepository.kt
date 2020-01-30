@@ -211,8 +211,7 @@ class MyCourseRepository(
                     contentCodeChallenge,
                     contentCsv
                 )
-            if (bookmark.bookmarkUid != "")
-                bookmarkDao.insert(bookmark)
+
             val oldModel: ContentModel? = contentsDao.getContent(content.id)
             if (oldModel != null && !oldModel.sameAndEqual(newContent)) {
                 contentsDao.update(newContent)
@@ -221,6 +220,8 @@ class MyCourseRepository(
                     newContent
                 )
             }
+            if (bookmark.bookmarkUid != "")
+                bookmarkDao.insert(bookmark)
 
             sectionWithContentsDao.insert(
                 SectionContentHolder.SectionWithContent(
