@@ -47,6 +47,7 @@ import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.slideDown
@@ -160,7 +161,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         val sM = getSystemService(ShortcutManager::class.java)
         val shortcutList: MutableList<ShortcutInfo> = ArrayList()
 
-        viewModel.courses.observer(this) {
+        viewModel.courses.observeOnce {
 
             doAsync {
                 it.take(2).forEachIndexed { index, courseRun ->

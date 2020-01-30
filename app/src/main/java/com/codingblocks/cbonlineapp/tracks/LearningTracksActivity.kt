@@ -14,6 +14,7 @@ import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.PROFESSIONAL
 import com.codingblocks.cbonlineapp.util.STUDENT
+import com.codingblocks.cbonlineapp.util.extensions.nonNull
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
@@ -24,6 +25,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.activity_learning_tracks.*
 import kotlinx.android.synthetic.main.bottom_sheet_batch.view.*
 import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LearningTracksActivity : AppCompatActivity() {
@@ -94,8 +96,12 @@ class LearningTracksActivity : AppCompatActivity() {
     private fun setProfession(professions: Professions) {
         trackBtn.text = professions.title
         getTrackBtn.setOnClickListener {
-            vm.getRecommendedTrack(professions.id).observeOnce {
-                startActivity(intentFor<TrackActivity>(COURSE_ID to it.id))
+            try {
+                vm.getRecommendedTrack(professions.id).nonNull().observeOnce {
+                    startActivity(intentFor<TrackActivity>(COURSE_ID to it.id))
+                }
+            } catch (e: Exception) {
+                toast("No Track Found !!!")
             }
         }
     }

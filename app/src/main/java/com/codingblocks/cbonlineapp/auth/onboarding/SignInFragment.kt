@@ -26,7 +26,6 @@ import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
 import com.google.android.gms.auth.api.phone.SmsRetriever
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_sign_in.*
@@ -42,9 +41,8 @@ import android.text.style.StyleSpan as StyleSpan1
 class SignInFragment : Fragment() {
 
     val db: AppDatabase by inject()
-
     var map = HashMap<String, String>()
-    lateinit var apiClient: GoogleSignInOptions
+
     private val sharedPrefs by inject<PreferenceHelper>()
 
     override fun onCreateView(
@@ -145,7 +143,7 @@ class SignInFragment : Fragment() {
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         response.value.body()?.let {
-                            if (sharedPrefs.SP_JWT_TOKEN_KEY.isNotEmpty() && sharedPrefs.SP_JWT_TOKEN_KEY == it["jwt"].asString) {
+                            if (sharedPrefs.SP_JWT_TOKEN_KEY.isNotEmpty() && sharedPrefs.SP_JWT_TOKEN_KEY != it["jwt"].asString) {
                                 withContext(Dispatchers.IO) { db.clearAllTables() }
                                 saveKeys(it)
                             } else {

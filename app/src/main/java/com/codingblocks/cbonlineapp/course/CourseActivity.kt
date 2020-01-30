@@ -50,6 +50,7 @@ import kotlinx.android.synthetic.main.item_instructor.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetChangedListener {
@@ -107,7 +108,12 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         if (!courseLogoImage.isNullOrEmpty()) {
             courseLogo.transitionName = courseLogoImage
             courseLogo.loadImage(courseLogoUrl) {
-                supportStartPostponedEnterTransition()
+                if (it)
+                    supportStartPostponedEnterTransition()
+                else {
+                    toast("No Internet Connection Available")
+                    onBackPressed()
+                }
             }
         }
 
@@ -238,7 +244,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
                     else {
                         MediaUtils.getYotubeVideoId(youtubeUrl)
                     }
-                    youtubePlayerInstance?.loadVideo(url)
+                    youtubePlayerInstance?.cueVideo(url)
                 }
             }
         }
@@ -285,7 +291,6 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
     }
 
     override fun onBackPressed() {
-//        supportFinishAfterTransition()
         super.onBackPressed()
     }
 }
