@@ -292,6 +292,7 @@
                     android:layout_marginTop="@dimen/margin_medium"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
+                    android:id="@+id/exploreBtn2"
                     android:drawableEnd="@drawable/ic_dropright"
                     android:drawablePadding="10dp"
                     android:drawableTint="@color/orangish"

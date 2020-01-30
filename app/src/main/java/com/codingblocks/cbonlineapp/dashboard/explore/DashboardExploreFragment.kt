@@ -26,6 +26,10 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import kotlinx.android.synthetic.main.activity_course.courseSuggestedRv
 import kotlinx.android.synthetic.main.fragment_dashboard_explore.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.support.v4.startActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -110,6 +114,15 @@ class DashboardExploreFragment : Fragment() {
         }
         allTracksTv.setOnClickListener {
             startActivity<LearningTracksActivity>()
+        }
+        swipeToRefresh.setOnRefreshListener {
+            vm.fetchRecommendedCourses(0, 4)
+            vm.fetchRecommendedCourses(4, 4)
+            vm.fetchTracks()
+            GlobalScope.launch(Dispatchers.Main) {
+                delay(5000)
+                swipeToRefresh.isRefreshing = false
+            }
         }
     }
 

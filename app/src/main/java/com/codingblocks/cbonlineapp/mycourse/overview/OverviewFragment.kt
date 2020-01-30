@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
@@ -107,7 +108,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
         val set1 = LineDataSet(values, "Average Progress")
         set1.apply {
             setDrawCircles(false)
-            color = R.color.tealgreen
+            color = ContextCompat.getColor(requireContext(), R.color.tealgreen)
             setDrawValues(false)
             mode = LineDataSet.Mode.CUBIC_BEZIER
             lineWidth = 3f
@@ -116,7 +117,8 @@ class OverviewFragment : Fragment(), AnkoLogger {
         val set2 = LineDataSet(values2, "User Progress")
         set2.apply {
             setDrawCircles(false)
-            color = R.color.pastel_red
+            color = ContextCompat.getColor(requireContext(), R.color.neon_red)
+
             mode = LineDataSet.Mode.CUBIC_BEZIER
             setDrawValues(false)
             lineWidth = 3f

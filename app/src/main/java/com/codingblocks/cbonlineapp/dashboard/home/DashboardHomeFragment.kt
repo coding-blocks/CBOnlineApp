@@ -26,7 +26,6 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard_home.*
 import kotlinx.android.synthetic.main.item_performance.*
-import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
 import org.koin.android.ext.android.inject
@@ -95,6 +94,7 @@ class DashboardHomeFragment : Fragment() {
             }
         }
         exploreBtn.setOnClickListener { requireActivity().dashboardBottomNav.setCurrentItem(0) }
+        exploreBtn2.setOnClickListener { requireActivity().dashboardBottomNav.setCurrentItem(0) }
         loginBtn.setOnClickListener { startActivity(intentFor<LoginActivity>()) }
     }
 
@@ -111,7 +111,8 @@ class DashboardHomeFragment : Fragment() {
         val set1 = LineDataSet(values, "Average Progress")
         set1.apply {
             setDrawCircles(false)
-            color = R.color.tealgreen
+            color = getColor(requireContext(), R.color.tealgreen)
+
             setDrawValues(false)
             mode = LineDataSet.Mode.CUBIC_BEZIER
             lineWidth = 3f
@@ -120,7 +121,7 @@ class DashboardHomeFragment : Fragment() {
         val set2 = LineDataSet(values2, "User Progress")
         set2.apply {
             setDrawCircles(false)
-            color = R.color.pastel_red
+            color = getColor(requireContext(), R.color.neon_red)
             mode = LineDataSet.Mode.CUBIC_BEZIER
             setDrawValues(false)
             lineWidth = 3f
