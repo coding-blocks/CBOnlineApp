@@ -23,4 +23,6 @@ class CourseRepository() : AnkoLogger {
     suspend fun getTracks() = safeApiCall { Clients.onlineV2JsonApi.getTracks() }
 
     suspend fun clearCart() = safeApiCall { Clients.api.clearCart() }
+
+    suspend fun findCourses(query: String) = safeApiCall { Clients.onlineV2JsonApi.findCourses(query = "%$query%") }
 }

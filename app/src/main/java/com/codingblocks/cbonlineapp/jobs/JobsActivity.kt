@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.jobs
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -138,7 +137,7 @@ class JobsActivity : AppCompatActivity() {
 //    }
 
     private fun setupBottomFilterSheet() {
-        @SuppressLint("InflateParams") val sheetView = layoutInflater.inflate(R.layout.sheet_filter, null)
+        val sheetView = layoutInflater.inflate(R.layout.sheet_filter, null)
 
         setupTabFilters(sheetView)
 //        setupFilterChips(sheetView)

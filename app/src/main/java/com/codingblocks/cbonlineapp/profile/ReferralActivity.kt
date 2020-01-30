@@ -28,6 +28,9 @@ class ReferralActivity : AppCompatActivity() {
                             shareReferral.setOnClickListener {
                                 share(referralTv.text.toString() + "\n You get 500 CB Credits on your successful Sign Up.")
                             }
+                            shareWhatsapp.setOnClickListener {
+                                share(referralTv.text.toString() + "\n You get 500 CB Credits on your successful Sign Up.")
+                            }
                         }
                     }
                 }

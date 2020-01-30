@@ -108,7 +108,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
         val set1 = LineDataSet(values, "Average Progress")
         set1.apply {
             setDrawCircles(false)
-            color = ContextCompat.getColor(requireContext(), R.color.tealgreen)
+            color = ContextCompat.getColor(requireContext(), R.color.pastel_red)
             setDrawValues(false)
             mode = LineDataSet.Mode.CUBIC_BEZIER
             lineWidth = 3f
@@ -117,8 +117,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
         val set2 = LineDataSet(values2, "User Progress")
         set2.apply {
             setDrawCircles(false)
-            color = ContextCompat.getColor(requireContext(), R.color.neon_red)
-
+            color = ContextCompat.getColor(requireContext(), R.color.kiwigreen)
             mode = LineDataSet.Mode.CUBIC_BEZIER
             setDrawValues(false)
             lineWidth = 3f

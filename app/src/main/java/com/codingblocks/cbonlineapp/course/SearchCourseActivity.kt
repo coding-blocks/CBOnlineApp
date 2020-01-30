@@ -21,7 +21,9 @@ class SearchCourseActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<CourseViewModel>()
     private val courseCardListAdapter = CourseListAdapter("LIST")
-
+    val dialog by lazy {
+        CourseSearchFragment()
+    }
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
             override fun onClick(id: String, name: String, logo: ImageView) {
@@ -45,11 +47,14 @@ class SearchCourseActivity : AppCompatActivity() {
         setToolbar(searchToolbar, title = "All Courses")
 
         viewModel.fetchRecommendedCourses()
-
         courseSearchRv.setRv(this@SearchCourseActivity, courseCardListAdapter, orientation = RecyclerView.VERTICAL, setDivider = true)
 
         viewModel.suggestedCourses.observer(this) { courses ->
             courseCardListAdapter.submitList(courses)
+        }
+
+        searchBtn.setOnClickListener {
+            dialog.show(supportFragmentManager, "course_search")
         }
 
         courseCardListAdapter.onItemClick = itemClickListener

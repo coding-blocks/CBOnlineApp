@@ -18,6 +18,7 @@
     <com.google.android.material.button.MaterialButton
         style="@style/CustomOutlinedButton"
         app:strokeWidth="0dp"
+        android:id="@+id/searchBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_large"

@@ -99,7 +99,7 @@
             android:id="@+id/chart1"
             android:layout_width="match_parent"
             android:layout_height="160dp"
-            android:layout_marginTop="@dimen/margin_medium_small"
+            android:layout_marginTop="@dimen/margin_large"
             android:layout_marginStart="@dimen/margin_large"
             android:layout_marginEnd="@dimen/margin_large" />
 

@@ -106,9 +106,9 @@ class NotificationsActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_clear -> {
-                if (notificationDao.allNotificationNonLive.isNotEmpty()) {
-                    showconfirmation()
-                }
+//                if (notificationDao.allNotificationNonLive.isNotEmpty()) {
+//                    showconfirmation()
+//                }
                 true
             }
             android.R.id.home -> {

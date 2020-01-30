@@ -195,6 +195,7 @@
             android:backgroundTint="@color/algae_green"
             android:drawableStart="@drawable/ic_whatsapp"
             android:drawablePadding="5dp"
+            android:id="@+id/shareWhatsapp"
             android:fontFamily="@font/gilroy_bold"
             android:textColor="@color/white"
             android:textSize="14sp"

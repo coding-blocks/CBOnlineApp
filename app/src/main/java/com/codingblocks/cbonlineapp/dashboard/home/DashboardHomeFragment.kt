@@ -111,8 +111,7 @@ class DashboardHomeFragment : Fragment() {
         val set1 = LineDataSet(values, "Average Progress")
         set1.apply {
             setDrawCircles(false)
-            color = getColor(requireContext(), R.color.tealgreen)
-
+            color = getColor(requireContext(), R.color.pastel_red)
             setDrawValues(false)
             mode = LineDataSet.Mode.CUBIC_BEZIER
             lineWidth = 3f
@@ -121,7 +120,7 @@ class DashboardHomeFragment : Fragment() {
         val set2 = LineDataSet(values2, "User Progress")
         set2.apply {
             setDrawCircles(false)
-            color = getColor(requireContext(), R.color.neon_red)
+            color = getColor(requireContext(), R.color.kiwigreen)
             mode = LineDataSet.Mode.CUBIC_BEZIER
             setDrawValues(false)
             lineWidth = 3f
