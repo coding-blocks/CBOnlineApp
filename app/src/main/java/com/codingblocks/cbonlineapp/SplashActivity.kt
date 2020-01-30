@@ -29,6 +29,7 @@ class SplashActivity : AppCompatActivity() {
             } else {
                 startActivity(intentFor<OnBoardingActivity>())
             }
+            finish()
         }
     }
 

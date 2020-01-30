@@ -15,6 +15,7 @@ apply plugin: 'com.google.firebase.firebase-perf'
 def YOUTUBE_KEY = System.getenv('YOUTUBE_KEY') ?: "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
 def CLIENT_ID = System.getenv('CLIENT_ID') ?: "5633768694"
 def REDIRECT_URI = System.getenv('REDIRECT_URI') ?: "app://online.codingblocks.com"
+def DEBUG_REDIRECT_URI = System.getenv('REDIRECT_URI') ?: "app://online.codingblocks.xyz"
 def OAUTH_URL = System.getenv('OAUTH_URL') ?: "https://account.codingblocks.com/oauth/authorize"
 
 // Include signing configs
@@ -42,8 +43,9 @@ android {
         ]
         buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'
         buildConfigField "String", "CLIENT_ID", '"' + CLIENT_ID + '"'
-        buildConfigField "String", "REDIRECT_URI", '"' + REDIRECT_URI + '"'
         buildConfigField "String", "OAUTH_URL", '"' + OAUTH_URL + '"'
+        buildConfigField "String", "REDIRECT_URI", '"' + REDIRECT_URI + '"'
+
         kapt {
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas".toString())
@@ -59,6 +61,7 @@ android {
             minifyEnabled false
             versionNameSuffix '-debug-version'
 //            applicationIdSuffix = '.debug'
+
         }
         release {
             signingConfig signingConfigs.release

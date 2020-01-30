@@ -36,7 +36,6 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:layout_width="0dp"
                     android:id="@+id/fbBtn"
-                    android:enabled="false"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="@dimen/margin_medium"
@@ -51,7 +50,6 @@
                     android:id="@+id/gmailBtn"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:enabled="false"
                     android:layout_marginBottom="@dimen/margin_medium"
                     android:layout_weight="1"
                     android:backgroundTint="@color/gmail"

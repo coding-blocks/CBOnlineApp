@@ -97,7 +97,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
             dashboardNavigation.getHeaderView(0).apply {
                 findViewById<CircleImageView>(R.id.navHeaderImageView).loadImage(prefs.SP_USER_IMAGE, true)
-                findViewById<TextView>(R.id.navUsernameTv).append(" ${prefs.SP_USER_NAME}")
+                findViewById<TextView>(R.id.navUsernameTv).text = ("Hello ${prefs.SP_USER_NAME}")
             }
         }
     }
@@ -115,6 +115,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     private fun fetchToken(data: Uri) {
         val grantCode = data.getQueryParameter("code") as String
         viewModel.fetchToken(grantCode)
+        initializeUI(true)
     }
 
     private fun initializeUI(loggedIn: Boolean) {
@@ -324,7 +325,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 }
             }
             2 -> {
-                supportActionBar?.title = getString(R.string.explore)
+                supportActionBar?.title = getString(R.string.dashboard)
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
 
                 if (viewModel.isLoggedIn.value == true) {

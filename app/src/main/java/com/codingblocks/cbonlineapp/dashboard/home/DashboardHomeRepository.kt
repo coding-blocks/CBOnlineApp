@@ -13,7 +13,7 @@ import com.codingblocks.onlineapi.safeApiCall
 class DashboardHomeRepository(
     private val courseWithInstructorDao: CourseWithInstructorDao,
     private val runPerformanceDao: RunPerformanceDao,
-    private val prefs: PreferenceHelper
+    val prefs: PreferenceHelper
 
 ) {
 

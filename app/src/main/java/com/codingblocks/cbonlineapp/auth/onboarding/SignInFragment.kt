@@ -11,10 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
+import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
+import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
@@ -27,15 +28,20 @@ import com.google.android.gms.auth.api.credentials.HintRequest
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_sign_in.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.runOnUiThread
 import org.koin.android.ext.android.inject
 import android.text.style.StyleSpan as StyleSpan1
 
 class SignInFragment : Fragment() {
+
+    val db: AppDatabase by inject()
 
     var map = HashMap<String, String>()
     lateinit var apiClient: GoogleSignInOptions
@@ -139,13 +145,11 @@ class SignInFragment : Fragment() {
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         response.value.body()?.let {
-                            with(it["jwt"].asString) {
-                                Clients.authJwt = this
-                                sharedPrefs.SP_JWT_TOKEN_KEY = this
-                            }
-                            with(it["refresh_token"].asString) {
-                                Clients.refreshToken = this
-                                sharedPrefs.SP_JWT_REFRESH_TOKEN = this
+                            if (sharedPrefs.SP_JWT_TOKEN_KEY.isNotEmpty() && sharedPrefs.SP_JWT_TOKEN_KEY == it["jwt"].asString) {
+                                withContext(Dispatchers.IO) { db.clearAllTables() }
+                                saveKeys(it)
+                            } else {
+                                saveKeys(it)
                             }
                         }
                         startActivity(intentFor<DashboardActivity>())
@@ -157,6 +161,17 @@ class SignInFragment : Fragment() {
                         }
                 }
             }
+        }
+    }
+
+    private fun saveKeys(it: JsonObject) {
+        with(it["jwt"].asString) {
+            Clients.authJwt = this
+            sharedPrefs.SP_JWT_TOKEN_KEY = this
+        }
+        with(it["refresh_token"].asString) {
+            Clients.refreshToken = this
+            sharedPrefs.SP_JWT_REFRESH_TOKEN = this
         }
     }
 
