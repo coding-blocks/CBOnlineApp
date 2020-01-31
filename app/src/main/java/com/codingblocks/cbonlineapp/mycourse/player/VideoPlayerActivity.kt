@@ -62,6 +62,7 @@ import com.vdocipher.aegis.player.VdoPlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import kotlinx.android.synthetic.main.my_fab_menu.*
+import kotlinx.android.synthetic.main.vdo_control_view.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -166,6 +167,7 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                 finish()
             }
             viewModel.bookmark.observe(this) {
+                // Dont Remove
                 bookmarkBtn.isActivated = if (it == null) false else it.bookmarkUid.isNotEmpty()
             }
 
@@ -176,6 +178,9 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                     viewModel.markBookmark()
                 }
             }
+        }
+        playerControlView.vdo_back.setOnClickListener {
+            onBackPressed()
         }
 
         videoFab.setOnClickListener {

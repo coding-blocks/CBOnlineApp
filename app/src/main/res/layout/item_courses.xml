@@ -63,6 +63,7 @@
                 android:layout_width="0dp"
                 android:layout_height="8dp"
                 android:layout_weight="1"
+
                 app:progressView_autoAnimate="true"
                 app:progressView_colorBackground="@color/veryLightPink"
                 app:progressView_colorGradientEnd="@color/dusty_orange"

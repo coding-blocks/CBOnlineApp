@@ -4,7 +4,10 @@
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
             <corners android:radius="10dp" />
-            <solid android:color="#00c4c4c4" />
+            <solid android:color="@color/white" />
+            <stroke
+                android:width="10dp"
+                android:color="#00be0000" />
 
         </shape>
     </item>

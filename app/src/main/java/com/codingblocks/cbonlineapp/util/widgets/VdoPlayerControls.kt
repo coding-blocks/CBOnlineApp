@@ -66,6 +66,7 @@ class VdoPlayerControls @JvmOverloads constructor(
     private val positionView: TextView
     private val seekBar: SeekBar
     private val speedControlButton: ImageButton
+    private val backButton: ImageButton
     //    private val captionsButton: ImageButton
 //    private val qualityButton: ImageButton
     private val enterFullscreenButton: ImageButton
@@ -116,7 +117,7 @@ class VdoPlayerControls @JvmOverloads constructor(
         seekBar.setOnSeekBarChangeListener(uiListener)
         speedControlButton = findViewById(R.id.vdo_speed)
         speedControlButton.setOnClickListener(uiListener)
-//        captionsButton = findViewById(R.id.vdo_captions)
+        backButton = findViewById(R.id.vdo_back)
 //        captionsButton.setOnClickListener(uiListener)
 //        qualityButton = findViewById(R.id.vdo_quality)
 //        qualityButton.setOnClickListener(uiListener)
