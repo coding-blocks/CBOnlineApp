@@ -94,7 +94,7 @@ object Clients {
         .connectTimeout(connectTimeout.toLong(), TimeUnit.SECONDS)
         .readTimeout(readTimeout.toLong(), TimeUnit.SECONDS)
         .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
-        .addInterceptor(logging)
+//        .addInterceptor(logging)
         .addInterceptor { chain ->
             chain.proceed(
                 chain.request().newBuilder().addHeader(

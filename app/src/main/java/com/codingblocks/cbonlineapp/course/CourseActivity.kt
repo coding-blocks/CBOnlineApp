@@ -263,6 +263,10 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             share("http://online.codingblocks.com/app/$courseId")
             true
         }
+        android.R.id.home -> {
+            onBackPressed()
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 

@@ -165,7 +165,23 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             SectionContent.forEach { sectionContent ->
                 var duration: Long = 0
                 var sectionComplete = 0
-                sectionContent.contents.forEach { content ->
+                val list = if (viewModel.complete.value!!.isEmpty() && type.isEmpty()) {
+                    sectionContent.contents.sortedBy { it.order }
+                } else if (type.isEmpty()) {
+                    sectionContent.contents
+                        .filter { it.progress == viewModel.complete.value }
+                        .sortedBy { it.order }
+                } else if (viewModel.complete.value!!.isEmpty()) {
+                    sectionContent.contents
+                        .filter { it.contentable == type }
+                        .sortedBy { it.order }
+                } else {
+                    sectionContent.contents
+                        .filter { it.contentable == type }
+                        .filter { it.progress == viewModel.complete.value!! }
+                        .sortedBy { it.order }
+                }
+                list.forEach { content ->
                     content.premium = sectionContent.section.premium
                     if (content.progress == "DONE") {
                         sectionComplete++
@@ -179,30 +195,19 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                     // Map SectionId to ContentModel
                     content.sectionId = sectionContent.section.csid
                 }
-                consolidatedList.add(sectionContent.section.apply {
-                    totalContent = sectionContent.contents.size
+                val item = sectionContent.section.apply {
+                    totalContent = list.size
                     totalTime = duration
                     completedContent = sectionComplete
                     pos = consolidatedList.size
-                })
-                sectionitem.add(sectionContent.section)
-                sectionListAdapter.notifyDataSetChanged()
-                if (viewModel.complete.value!!.isEmpty() && type.isEmpty()) {
-                    consolidatedList.addAll(sectionContent.contents.sortedBy { it.order })
-                } else if (type.isEmpty()) {
-                    consolidatedList.addAll(sectionContent.contents
-                        .filter { it.progress == viewModel.complete.value }
-                        .sortedBy { it.order })
-                } else if (viewModel.complete.value!!.isEmpty()) {
-                    consolidatedList.addAll(sectionContent.contents
-                        .filter { it.contentable == type }
-                        .sortedBy { it.order })
-                } else {
-                    consolidatedList.addAll(sectionContent.contents
-                        .filter { it.contentable == type }
-                        .filter { it.progress == viewModel.complete.value!! }
-                        .sortedBy { it.order })
                 }
+                if (item.totalContent > 0) {
+                    consolidatedList.add(item)
+                    sectionitem.add(sectionContent.section)
+                }
+                consolidatedList.addAll(list)
+                sectionListAdapter.notifyDataSetChanged()
+
                 sectionItemsAdapter.submitList(consolidatedList)
             }
             contentShimmer.isVisible = SectionContent.isEmpty()

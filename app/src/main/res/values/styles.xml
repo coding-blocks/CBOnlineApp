@@ -7,7 +7,7 @@
     <style name="NewAppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/white_transparency</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/black</item>
         <item name="homeAsUpIndicator">@drawable/ic_back</item>
         <item name="textAllCaps">false</item>
         <item name="android:textSize">14sp</item>

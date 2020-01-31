@@ -177,7 +177,7 @@ class SignInFragment : Fragment() {
         val hintRequest = HintRequest.Builder()
             .setPhoneNumberIdentifierSupported(true)
             .build()
-        val credentialsClient = Credentials.getClient(requireContext())
+        val credentialsClient = Credentials.getClient(requireActivity())
         val intent = credentialsClient.getHintPickerIntent(hintRequest)
         startIntentSenderForResult(
             intent.intentSender,

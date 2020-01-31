@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.dashboard
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -93,5 +94,12 @@ class ChatActivity : AppCompatActivity() {
 
             webView.loadUrl("file:///android_asset/Chat.html")
         })
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        android.R.id.home -> {
+            onBackPressed()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 }

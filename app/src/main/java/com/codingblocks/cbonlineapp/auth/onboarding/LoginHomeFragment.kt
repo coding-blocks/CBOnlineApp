@@ -34,7 +34,7 @@ class LoginHomeFragment : Fragment() {
         setSecondSpan()
 
         mobileBtn.setOnClickListener {
-            replaceFragmentSafely(SignInFragment(), containerViewId = R.id.loginContainer)
+            replaceFragmentSafely(SignInFragment(), tag = "SignIn", containerViewId = R.id.loginContainer)
         }
 
         gmailBtn.setOnClickListener {

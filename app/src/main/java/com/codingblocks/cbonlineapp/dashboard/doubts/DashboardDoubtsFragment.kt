@@ -107,9 +107,7 @@ class DashboardDoubtsFragment : Fragment(), AnkoLogger {
         viewLifecycleOwnerLiveData.observer(viewLifecycleOwner) {
             info { it.lifecycle.currentState.name }
         }
-        doubtEmptyBtn.setOnClickListener {
-            listener.openExplore()
-        }
+        doubtEmptyBtn.setOnClickListener { requireActivity().dashboardBottomNav.setCurrentItem(1) }
         liveDoubtBtn.setOnClickListener {
             viewModel.type.value = LIVE
         }

@@ -57,6 +57,8 @@ import com.codingblocks.fabnavigation.FabNavigationAdapter
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
@@ -105,6 +107,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
     override fun onStart() {
         super.onStart()
+        checkForUpdates()
         val data = this.intent.data
         if (data != null && data.isHierarchical) {
             if (data.getQueryParameter("code") != null) {
@@ -264,24 +267,23 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
     override fun onResume() {
         super.onResume()
-        checkForUpdates()
     }
 
     private fun checkForUpdates() {
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
 
-//        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-//            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
-//                appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)
-//            ) {
-//                appUpdateManager.startUpdateFlowForResult(
-//                    appUpdateInfo,
-//                    AppUpdateType.FLEXIBLE,
-//                    this,
-//                    1001
-//                )
-//            }
-//        }
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+                appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)
+            ) {
+                appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.FLEXIBLE,
+                    this,
+                    1001
+                )
+            }
+        }
     }
 
     override fun onBackPressed() {
