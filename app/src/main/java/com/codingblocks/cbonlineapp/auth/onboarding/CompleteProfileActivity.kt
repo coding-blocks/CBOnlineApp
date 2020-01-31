@@ -62,13 +62,27 @@ class CompleteProfileActivity : AppCompatActivity() {
         val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, collegeList)
         college.setAdapter(arrayAdapter)
         college.setOnItemClickListener { _, _, position, id ->
-            map["collegeId"] = collegeArray?.getJSONObject(position)?.getString("id") ?: "DL"
+            val name = arrayAdapter.getItem(position)
+
+            for (i in 0 until collegeArray?.length()!!) {
+                val ref = collegeArray.getJSONObject(i)
+                if (ref.getString("name") == name) {
+                    map["collegeId"] = ref.getString("id")
+                }
+            }
         }
 
         val arrayAdapter2: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, branchList)
         branch.setAdapter(arrayAdapter2)
         branch.setOnItemClickListener { _, _, position, id ->
-            map["branchId"] = branchArray?.getJSONObject(position)?.getString("id") ?: "DL"
+            val name = arrayAdapter2.getItem(position)
+
+            for (i in 0 until branchArray?.length()!!) {
+                val ref = branchArray.getJSONObject(i)
+                if (ref.getString("name") == name) {
+                    map["branchId"] = ref.getString("id")
+                }
+            }
         }
         genderRadio?.setOnCheckedChangeListener { group, checkedId ->
             map["gender"] = if (R.id.radioMale == checkedId) "MALE" else "FEMALE"

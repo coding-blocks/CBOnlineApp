@@ -50,7 +50,13 @@ class CheckoutPersonalDetailsFragment : Fragment(), AnkoLogger {
         val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, refList)
         state.setAdapter(arrayAdapter)
         state.setOnItemClickListener { parent, view, position, id ->
-            vm.map["stateId"] = json?.getJSONObject(position)?.getString("stateId") ?: "DL"
+            val name = arrayAdapter.getItem(position)
+            for (i in 0 until json?.length()!!) {
+                val ref = json.getJSONObject(i)
+                if (ref.getString("state") == name) {
+                    vm.map["stateId"] = ref.getString("stateId")
+                }
+            }
             checkoutBtn.isEnabled = true
             vm.updateCart()
         }
