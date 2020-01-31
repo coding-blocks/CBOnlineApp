@@ -34,7 +34,7 @@
         android:background="@drawable/button_background_outline"
         android:elevation="10dp"
         android:padding="14dp"
-        android:src="@drawable/ic_note_small"
+        android:src="@drawable/ic_doubt_gradient"
         android:visibility="invisible" />
 
 

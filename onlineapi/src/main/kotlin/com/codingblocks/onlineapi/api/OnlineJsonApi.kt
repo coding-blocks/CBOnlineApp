@@ -124,7 +124,7 @@ interface OnlineJsonApi {
     @GET("courses")
     suspend fun findCourses(
         @Query("exclude") exclude: String = "ratings,instructors.*",
-        @Query("filter[title]['$'iLike]") query: String,
+        @Query("filter[title][\$iLike]") query: String,
         @Query("filter[unlisted]") unlisted: String = "false",
         @Query("page[limit]") page: Int = 100,
         @Query("include") include: String = "instructors,runs"): Response<List<Course>>

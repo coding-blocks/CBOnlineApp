@@ -201,7 +201,7 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                     completedContent = sectionComplete
                     pos = consolidatedList.size
                 }
-                if (item.totalContent > 0) {
+                if (item.totalContent > 0 || type.isEmpty()) {
                     consolidatedList.add(item)
                     sectionitem.add(sectionContent.section)
                 }

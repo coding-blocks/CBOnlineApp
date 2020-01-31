@@ -15,5 +15,5 @@ class TracksRepository {
 
     suspend fun getProfessions() = safeApiCall { Clients.onlineV2JsonApi.getProfessions() }
     suspend fun getRecommendedTrack(map: HashMap<String, String>) = safeApiCall { Clients.onlineV2JsonApi.getRecommendedTrack(map) }
-    suspend fun generateLead(map: HashMap<String, String>) = safeApiCall { Clients.api.generateLead(map) }
+    suspend fun generateLead(body: HashMap<String, Any>) = safeApiCall { Clients.api.generateLead(body) }
 }

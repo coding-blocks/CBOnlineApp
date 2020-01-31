@@ -59,7 +59,7 @@ fun ImageView.loadImage(imgUrl: String, scale: Boolean = false, callback: (loade
                     return false
                 }
             })
-            .apply(requestOptions)
+//            .apply(requestOptions)
             .error(createGlideRequest(Uri.parse(imgUrl), context))
             .into(this)
 }

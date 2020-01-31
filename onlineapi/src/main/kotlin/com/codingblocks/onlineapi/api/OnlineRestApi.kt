@@ -1,6 +1,5 @@
 package com.codingblocks.onlineapi.api
 
-import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.DoubtStats
 import com.codingblocks.onlineapi.models.Extension
 import com.codingblocks.onlineapi.models.Leaderboard
@@ -138,7 +137,6 @@ interface OnlineRestApi {
     suspend fun capturePayment(@FieldMap params: Map<String, String>): Response<JsonObject>
 
     @POST("v2/hubspot/lead")
-    @FormUrlEncoded
-    suspend fun generateLead(@FieldMap params: Map<String, String>): Response<JsonObject>
+    suspend fun generateLead(@Body body: HashMap<String, Any>): Response<JsonObject>
 
 }

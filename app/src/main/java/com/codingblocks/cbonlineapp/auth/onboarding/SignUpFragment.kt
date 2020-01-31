@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.util.KeyboardVisibilityUtil
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
@@ -13,7 +15,9 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.safeApiCall
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_complete_profile.*
 import kotlinx.android.synthetic.main.fragment_sign_up.*
+import kotlinx.android.synthetic.main.fragment_sign_up.proceedBtn
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.support.v4.runOnUiThread
@@ -25,6 +29,7 @@ class SignUpFragment : Fragment() {
 
     var map = HashMap<String, String>()
     private val sharedPrefs by inject<PreferenceHelper>()
+    private lateinit var keyboardVisibilityHelper: KeyboardVisibilityUtil
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = inflater.inflate(R.layout.fragment_sign_up, container, false)
@@ -80,6 +85,21 @@ class SignUpFragment : Fragment() {
                 }
             }
         }
+        keyboardVisibilityHelper = KeyboardVisibilityUtil(view) {
+            proceedBtn.isVisible = it
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        view!!.viewTreeObserver
+            .addOnGlobalLayoutListener(keyboardVisibilityHelper.visibilityListener)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        view!!.viewTreeObserver
+            .removeOnGlobalLayoutListener(keyboardVisibilityHelper.visibilityListener)
     }
 
     private fun sendOtp(id: String) {

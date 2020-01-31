@@ -136,4 +136,5 @@ class DashboardMyCoursesRepository(
     }
 
     fun getPurchasedRuns() = courseWithInstructorDao.getPurchasesRuns()
+    fun getActiveRuns() = courseWithInstructorDao.getActiveRuns(System.currentTimeMillis() / 1000)
 }

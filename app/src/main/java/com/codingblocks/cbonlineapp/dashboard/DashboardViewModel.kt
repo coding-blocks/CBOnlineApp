@@ -43,7 +43,7 @@ class DashboardViewModel(
         homeRepo.getRunStats(query)
     }
     val allRuns by lazy {
-        myCourseRepo.getMyRuns("")
+        myCourseRepo.getActiveRuns()
     }
     val purchasedRuns by lazy {
         myCourseRepo.getPurchasedRuns()

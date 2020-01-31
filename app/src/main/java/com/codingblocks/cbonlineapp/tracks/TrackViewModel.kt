@@ -114,7 +114,10 @@ class TrackViewModel(private val repo: TracksRepository) : ViewModel() {
 
     fun generateLead(name: String, mobile: String) {
         runIO {
-            when (val response = repo.generateLead(hashMapOf("name" to name, "mobile" to mobile))) {
+            val map = HashMap<String, Any>()
+            map["data"] = hashMapOf("name" to name, "mobile" to mobile, "course" to "track")
+            map["meta"] = hashMapOf("pageName" to "Android:Tracks")
+            when (val response = repo.generateLead(map)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
