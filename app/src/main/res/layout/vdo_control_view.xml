@@ -1,38 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/vdo_controller_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/vdo_error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_error_white_36dp" />
-
-        <TextView
-            android:id="@+id/vdo_error_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="Tap to retry"
-            android:textAlignment="gravity"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/vdo_loader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
 
     <RelativeLayout
         android:id="@+id/vdo_control_panel"
@@ -62,7 +35,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:src="@drawable/ic_vdo_back" />
+                    android:src="@drawable/ic_back"
+                    android:tint="@color/white" />
 
                 <ImageButton
                     style="@style/VdoMediaButton"
@@ -99,71 +73,77 @@
         </LinearLayout>
 
         <LinearLayout
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/vdo_control_panel_bottom"
+            android:layout_below="@+id/vdo_control_panel_top"
             android:layout_centerInParent="true"
-            android:gravity="center"
-            android:background="#be000000">
+            android:background="#be000000"
+            android:gravity="center">
 
-            <ImageButton
+
+            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/vdo_rewind"
-                style="@style/VdoMediaButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:src="@drawable/ic_replay" />
+                android:layout_width="65dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:scaleType="centerCrop"
+                app:lottie_autoPlay="true"
+                app:lottie_rawRes="@raw/rewind" />
 
             <ImageButton
                 android:id="@+id/vdo_play"
                 style="@style/VdoMediaButton"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:src="@drawable/ic_play" />
 
             <ImageButton
                 android:id="@+id/vdo_pause"
+                style="@style/VdoMediaButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
-                style="@style/VdoMediaButton"
                 android:src="@drawable/ic_pause" />
 
-            <ImageButton
+            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/vdo_ffwd"
-                android:layout_width="wrap_content"
                 style="@style/VdoMediaButton"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:src="@drawable/ic_forward" />
+                android:layout_width="65dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="@dimen/margin_large"
+                android:scaleType="centerCrop"
+                app:lottie_autoPlay="true"
+                app:lottie_rawRes="@raw/forward" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/vdo_control_panel_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="#be000000"
+            android:paddingStart="@dimen/margin_medium"
+            android:paddingTop="8dp"
+            android:paddingEnd="@dimen/margin_medium"
+            android:paddingBottom="8dp"
             android:orientation="vertical">
+
+            <SeekBar
+                android:id="@+id/vdo_seekbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progressDrawable="@drawable/sq_seekbar_clipped"
+                android:thumb="@drawable/thumb" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingStart="@dimen/margin_large"
-                android:paddingTop="8dp"
-                android:paddingEnd="@dimen/margin_large"
-                android:paddingBottom="8dp">
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
 
-
-                <SeekBar
-                    android:id="@+id/vdo_seekbar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:progressDrawable="@drawable/sq_seekbar_clipped"
-                    android:thumb="@drawable/thumb" />
 
                 <TextView
                     android:id="@+id/vdo_position"
@@ -171,6 +151,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/gilroy_medium"
                     android:text="00:00/"
+                    android:layout_marginStart="8dp"
+                    android:textSize="18sp"
                     android:textAlignment="viewEnd"
                     android:textColor="@android:color/white" />
 
@@ -180,12 +162,46 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/gilroy_medium"
                     android:text="00:00"
+                    android:textSize="18sp"
                     android:textColor="@android:color/white" />
 
+
             </LinearLayout>
+
+
         </LinearLayout>
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/vdo_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_error_white_36dp" />
+
+        <TextView
+            android:id="@+id/vdo_error_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Tap to retry"
+            android:textAlignment="gravity"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/vdo_loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
     <RelativeLayout
         android:layout_width="match_parent"

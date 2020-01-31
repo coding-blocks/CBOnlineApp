@@ -13,6 +13,7 @@ import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import com.airbnb.lottie.LottieAnimationView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.VideoUtils.digitalClockTime
 import com.codingblocks.cbonlineapp.util.VideoUtils.getClosestFloatIndex
@@ -60,8 +61,8 @@ class VdoPlayerControls @JvmOverloads constructor(
 
     private val playButton: View
     private val pauseButton: View
-    private val fastForwardButton: View
-    private val rewindButton: View
+    private val fastForwardButton: LottieAnimationView
+    private val rewindButton: LottieAnimationView
     private val durationView: TextView
     private val positionView: TextView
     private val seekBar: SeekBar
@@ -220,12 +221,14 @@ class VdoPlayerControls @JvmOverloads constructor(
 
     private fun rewind() {
         if (rewindMs > 0) {
+            rewindButton.playAnimation()
             player?.seekTo(max(0, player!!.currentTime - rewindMs))
         }
     }
 
     private fun fastForward() {
         if (ffwdMs > 0) {
+            fastForwardButton.playAnimation()
             player?.seekTo(min(player!!.duration, player!!.currentTime + ffwdMs))
         }
     }
