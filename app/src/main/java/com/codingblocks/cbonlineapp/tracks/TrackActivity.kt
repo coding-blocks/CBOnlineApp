@@ -108,6 +108,5 @@ class TrackActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener 
     override fun onBackPressed() {
         supportFinishAfterTransition()
         super.onBackPressed()
-
     }
 }

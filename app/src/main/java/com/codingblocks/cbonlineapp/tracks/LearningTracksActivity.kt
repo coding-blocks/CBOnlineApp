@@ -140,6 +140,5 @@ class LearningTracksActivity : AppCompatActivity() {
     override fun onBackPressed() {
         supportFinishAfterTransition()
         super.onBackPressed()
-
     }
 }

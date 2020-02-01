@@ -8,6 +8,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.Icon
 import android.graphics.drawable.PictureDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -15,10 +16,12 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import com.caverock.androidsvg.SVG
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.auth.LoginActivity
@@ -50,18 +53,23 @@ import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.extensions.slideDown
 import com.codingblocks.cbonlineapp.util.extensions.slideUp
 import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.fabnavigation.FabNavigationAdapter
 import com.codingblocks.onlineapi.Clients
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.firebase.firestore.FirebaseFirestore
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
+import kotlinx.android.synthetic.main.dialog.view.primaryBtn
+import kotlinx.android.synthetic.main.dialog_help.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -70,6 +78,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.toast
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -182,19 +191,19 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                     shortcut.setDisabledMessage("Login to open this")
 
                     okHttpClient.newCall(Request.Builder().url(courseRun.courseRun.course.logo).build())
-                                    .execute().body?.let {
-                            with(SVG.getFromInputStream(it.byteStream())) {
-                                val picDrawable = PictureDrawable(
-                                    this.renderToPicture(
-                                        400, 400
-                                    )
+                        .execute().body?.let {
+                        with(SVG.getFromInputStream(it.byteStream())) {
+                            val picDrawable = PictureDrawable(
+                                this.renderToPicture(
+                                    400, 400
                                 )
-                                val bitmap = MediaUtils.getBitmapFromPictureDrawable(picDrawable)
-                                val circularBitmap = MediaUtils.getCircularBitmap(bitmap)
-                                shortcut.setIcon(Icon.createWithBitmap(circularBitmap))
-                                shortcutList.add(index, shortcut.build())
-                            }
+                            )
+                            val bitmap = MediaUtils.getBitmapFromPictureDrawable(picDrawable)
+                            val circularBitmap = MediaUtils.getCircularBitmap(bitmap)
+                            shortcut.setIcon(Icon.createWithBitmap(circularBitmap))
+                            shortcutList.add(index, shortcut.build())
                         }
+                    }
                 }
                 sM?.apply {
                     dynamicShortcuts.clear()
@@ -259,13 +268,56 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             R.id.nav_inbox -> {
                 startActivity(intentFor<ChatActivity>().singleTop())
             }
+            R.id.nav_feedback -> {
+                showReportDialog()
+            }
         }
         dashboardDrawer.closeDrawer(GravityCompat.START)
         return true
     }
 
+    private fun showReportDialog() {
+        val dialog = AlertDialog.Builder(this).create()
+        val view = layoutInflater.inflate(R.layout.report_dialog, null)
+        view.primaryBtn.setOnClickListener {
+
+            if (view.nameLayout.editText?.text.isNullOrEmpty()) {
+                view.nameLayout.error = "Name Cannot Be Empty"
+                return@setOnClickListener
+            } else if (view.mobile.editText?.text.isNullOrEmpty() && view.mobile.editText?.text?.length!! < 10) {
+                view.mobile.error = "Number Cannot Be Empty"
+                return@setOnClickListener
+            } else {
+                val data = hashMapOf(
+                    "title" to view.nameLayout.editText?.text.toString(),
+                    "description" to view.mobile.editText?.text.toString(),
+                    "oneauth-id" to prefs.SP_ONEAUTH_ID,
+                    "device" to Build.MODEL,
+                    "version" to Build.VERSION.SDK_INT,
+                    "app-version" to BuildConfig.VERSION_CODE
+
+                )
+                FirebaseFirestore.getInstance().collection("Reports")
+                    .add(data)
+                    .addOnSuccessListener {
+                        dashboardDrawer.showSnackbar("Bug has been reported !!", Snackbar.LENGTH_SHORT)
+                    }.addOnFailureListener {
+                        toast("There was some error reporting the bug,Please Try Again")
+                    }
+                dialog.dismiss()
+            }
+        }
+        dialog.apply {
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            setView(view)
+            setCancelable(true)
+            show()
+        }
+    }
+
     override fun onResume() {
         super.onResume()
+        checkForUpdates()
     }
 
     private fun checkForUpdates() {

@@ -46,7 +46,6 @@ class CheckoutActivity : AppCompatActivity(), PaymentResultListener {
             GlobalScope.launch {
                 delay(3000)
                 finish()
-
             }
         }
         // To change body of created functions use File | Settings | File Templates.

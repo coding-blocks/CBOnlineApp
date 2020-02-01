@@ -149,7 +149,7 @@ class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
     private fun setUpBottomSheet() {
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_mycourses, null)
         val list = arrayListOf<SheetItem>()
-        repeat(5) {
+        repeat(3) {
             list.add(SheetItem(coursesType[it], imgs.getResourceId(it, 0)))
         }
         sheetDialog.run {

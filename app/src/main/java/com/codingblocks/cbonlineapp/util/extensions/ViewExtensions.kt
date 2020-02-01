@@ -388,7 +388,7 @@ fun Context.showHelpDialog(
             view.nameLayout.error = "Name Cannot Be Empty"
             return@setOnClickListener
         } else if (view.mobile.editText?.text.isNullOrEmpty() && view.mobile.editText?.text?.length!! < 10) {
-            view.nameLayout.error = "Name Cannot Be Empty"
+            view.mobile.error = "Number Cannot Be Empty"
             return@setOnClickListener
         } else {
             callback(true, view.nameLayout.editText?.text.toString(), view.mobile.editText?.text.toString())
