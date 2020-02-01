@@ -136,11 +136,10 @@ object Clients {
         .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
         .addInterceptor(logging)
         .addInterceptor { chain ->
-            chain.proceed(
-                chain.request().newBuilder().addHeader(
-                    "Authorization",
-                    "JWT $authJwt"
-                ).build()
+            if (authJwt.isEmpty())
+                chain.proceed(chain.request())
+            else chain.proceed(chain.request().newBuilder()
+                .addHeader("Authorization", "JWT $authJwt").build()
             )
         }
         .build()
@@ -152,7 +151,7 @@ object Clients {
 
     private val onlineV2JsonRetrofit = Retrofit.Builder()
         .client(ClientInterceptor)
-        .baseUrl("http://$PROD/api/v2/")
+        .baseUrl("https://$PROD/api/v2/")
         .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
         .addConverterFactory(JacksonConverterFactory.create(om))
         .build()
@@ -166,7 +165,7 @@ object Clients {
 
     private val retrofit = Retrofit.Builder()
         .client(ClientInterceptor)
-        .baseUrl("http://$PROD/api/")
+        .baseUrl("https://$PROD/api/")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
     val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)
