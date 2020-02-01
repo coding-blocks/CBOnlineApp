@@ -4,6 +4,7 @@
     android:id="@+id/swipeToRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:paddingTop="@dimen/dashboard_toolbar_comp"
     tools:context="com.codingblocks.cbonlineapp.dashboard.explore.DashboardExploreFragment">
 

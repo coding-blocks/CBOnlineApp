@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.google.gson.JsonObject
 import com.razorpay.Checkout
 import kotlinx.android.synthetic.main.fragment_checkout_payment.*
@@ -26,10 +25,7 @@ class CheckoutPaymentFragment : Fragment() {
         vm.getCart()
         super.onViewCreated(view, savedInstanceState)
         useBalance.setOnClickListener {
-            if (vm.map["applyCredits"] == "true")
-                vm.map["applyCredits"] = "false"
-            else
-                vm.map["applyCredits"] = true.toString()
+            vm.map["applyCredits"] = vm.map["applyCredits"] != "true"
             payBtn.isEnabled = false
             vm.updateCart()
             vm.getCart()
@@ -52,11 +48,12 @@ class CheckoutPaymentFragment : Fragment() {
                 creditsTv.text = "- ${getString(R.string.rupee_sign)} $credits"
                 totalTv.text = "${getString(R.string.rupee_sign)} ${json["totalAmount"].asString}"
                 finalPriceTv.text = "${getString(R.string.rupee_sign)} ${json["totalAmount"].asString}"
-                walletBal.text = "${getString(R.string.rupee_sign)} ${json["user"].asJsonObject.get("wallet_balance").asString}"
+                walletBal.text = "${getString(R.string.rupee_sign)} ${json?.get("user")?.asJsonObject?.get("wallet_amount")?.asInt?.div(100)
+                    ?: 0}"
 
                 payBtn.setOnClickListener {
                     vm.paymentMap["amount"] = json["totalAmount"].asString!!
-                    replaceFragmentSafely(CheckoutOrderCompleted(), containerViewId = R.id.checkoutContainer, addToStack = true)
+                    vm.paymentStart.value = true
                     showRazorPayCheckoutForm(this)
                 }
             }

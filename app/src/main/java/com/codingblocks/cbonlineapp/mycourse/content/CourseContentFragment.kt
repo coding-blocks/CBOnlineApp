@@ -80,6 +80,10 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                 mLayoutManager.scrollToPosition(sectionitem[adapterPosition - 2].pos)
                 smoothScroller.targetPosition = pos
                 mLayoutManager.startSmoothScroll(smoothScroller)
+            } else {
+                mLayoutManager.scrollToPosition(sectionitem[adapterPosition + 2].pos)
+                smoothScroller.targetPosition = pos
+                mLayoutManager.startSmoothScroll(smoothScroller)
             }
         }
     }

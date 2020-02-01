@@ -23,4 +23,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/payment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/payment" />
+
+
 </LinearLayout>

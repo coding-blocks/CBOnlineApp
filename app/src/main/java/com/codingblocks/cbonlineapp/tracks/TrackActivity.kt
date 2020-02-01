@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.tracks
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
@@ -95,5 +96,18 @@ class TrackActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener 
         courseLogo.alpha = alpha
         shortTv.alpha = alpha
         trackCourseNumTv.alpha = alpha
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        supportFinishAfterTransition()
+        super.onBackPressed()
+
     }
 }

@@ -149,7 +149,6 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             createShortcut()
             dashboardBottomNav.setCurrentItem(1)
         } else {
-            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             dashboardNavigation.getHeaderView(0).apply {
                 findViewById<TextView>(R.id.navUsernameTv).text = "Login/Signup"
             }

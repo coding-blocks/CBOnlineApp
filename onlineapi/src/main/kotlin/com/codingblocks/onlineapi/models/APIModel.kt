@@ -54,8 +54,7 @@ data class Course(
     @Relationship("projects", resolve = true)
     var projects: ArrayList<Project>?,
     @Relationship("tags")
-    val tags: ArrayList<Tags>?
-) : BaseModel()
+    val tags: ArrayList<Tags>?) : BaseModel()
 
 @Type("runs", "run")
 data class Runs(
