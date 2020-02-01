@@ -304,6 +304,7 @@ data class User(
     val photo: String?,
     val verifiedemail: String?,
     val verifiedmobile: String?,
+    val username: String = " "
     val roleId: Int = 0
 ) : BaseModel()
 

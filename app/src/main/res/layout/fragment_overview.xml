@@ -257,7 +257,7 @@
                     android:focusable="true"
                     android:layout_width="210dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_medium"
                     android:background="@drawable/background_green"
                     android:orientation="vertical"
                     android:paddingStart="@dimen/margin_medium_small"

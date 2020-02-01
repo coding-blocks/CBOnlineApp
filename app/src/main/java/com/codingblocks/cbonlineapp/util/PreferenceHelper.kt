@@ -47,6 +47,12 @@ class PreferenceHelper private constructor() {
             prefs?.save(USER_NAME, value)
         }
 
+    var SP_NAME: String
+        get() = prefs?.getString(NAME, NAME) ?: ""
+        set(value) {
+            prefs?.save(NAME, value)
+        }
+
     var SP_EMAIL_ID: String
         get() = prefs?.getString(EMAIL_ID, EMAIL_ID) ?: ""
         set(value) {
@@ -101,6 +107,7 @@ class PreferenceHelper private constructor() {
         const val ONEAUTH_ID = "oneauth_id"
         const val USER_ID = "user_id"
         const val USER_NAME = "user_name"
+        const val NAME = "name"
         const val ADMIN = "admin"
         const val EMAIL_ID = "email_id"
         const val ROLE_ID_DEFAULT = 0

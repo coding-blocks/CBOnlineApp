@@ -13,6 +13,7 @@ import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.airbnb.lottie.LottieAnimationView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.VideoUtils.digitalClockTime
@@ -235,6 +236,7 @@ class VdoPlayerControls @JvmOverloads constructor(
 
     private fun updateLoader(loading: Boolean) {
         loaderView.visibility = if (loading) VISIBLE else GONE
+        controlPanel.isVisible = !loading
     }
 
     private fun updateSpeedControlButton() {

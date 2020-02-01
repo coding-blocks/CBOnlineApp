@@ -5,6 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.content.CourseContentFragment
 import com.codingblocks.cbonlineapp.mycourse.library.CourseLibraryFragment
@@ -13,17 +14,23 @@ import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.extensions.animateVisibility
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.pageChangeCallback
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.codingblocks.onlineapi.ErrorStatus
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_my_course.*
+import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
@@ -55,6 +62,29 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
                     LECTURE, VIDEO -> startActivity(intentFor<VideoPlayerActivity>(CONTENT_ID to content.contentId, SECTION_ID to content.sectionId).singleTop())
                 }
                 viewModel.updateProgress(content.contentId)
+            }
+        }
+
+        viewModel.errorLiveData.observer(this) {
+            when (it) {
+                ErrorStatus.NO_CONNECTION -> {
+                    myCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
+                }
+                ErrorStatus.TIMEOUT -> {
+                    myCourseRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, dashboardBottomNav) {
+                        viewModel.fetchSections()
+                        viewModel.getStats()
+
+                    }
+                }
+                ErrorStatus.UNAUTHORIZED -> {
+                    Components.showConfirmation(this, UNAUTHORIZED) {
+                    }
+                }
+                else -> {
+                    myCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
+                    AppCrashlyticsWrapper.log(it)
+                }
             }
         }
     }

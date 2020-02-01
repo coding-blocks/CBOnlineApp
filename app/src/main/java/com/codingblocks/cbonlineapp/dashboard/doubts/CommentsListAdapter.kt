@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.dashboard.doubts
 
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,6 @@ import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
 import io.noties.markwon.Markwon
 import io.noties.markwon.core.CorePlugin
-import kotlinx.android.synthetic.main.activity_doubt_comment.*
 import kotlinx.android.synthetic.main.item_comment.view.*
 
 class CommentsListAdapter : ListAdapter<CommentModel, ItemViewHolder>(DiffCallback()) {
@@ -32,10 +32,14 @@ class CommentsListAdapter : ListAdapter<CommentModel, ItemViewHolder>(DiffCallba
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: CommentModel) = with(itemView) {
             commentUserTv.text = item.username
-            val markWon = Markwon.builder(context)
-                .usePlugin(CorePlugin.create())
-                .build()
-            markWon.setMarkdown(commentBodyTv, item.body)
+//            val markdown = instructor.description ?: ""
+//
+//            val markWon = Markwon.builder(context)
+//                .usePlugin(CorePlugin.create())
+//                .build()
+//            markWon.setMarkdown(instructorDescTv, markdown)
+            val string = Html.fromHtml(item.body)
+            commentBodyTv.text = string
             commentTimeTv.text = item.updatedAt.timeAgo()
         }
     }

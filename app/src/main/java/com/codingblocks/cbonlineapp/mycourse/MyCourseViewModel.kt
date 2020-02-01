@@ -124,7 +124,7 @@ class MyCourseViewModel(
         return extensions
     }
 
-    fun getStats(id: String) {
+    fun getStats(id: String = attemptId) {
         runIO {
             when (val response = repo.getStats(id)) {
                 is ResultWrapper.GenericError -> setError(response.error)
