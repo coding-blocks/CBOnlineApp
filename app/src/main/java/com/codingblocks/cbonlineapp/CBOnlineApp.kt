@@ -21,6 +21,7 @@ import com.codingblocks.cbonlineapp.util.NotificationReceivedHandler
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.onlineapi.Clients
 import com.crashlytics.android.Crashlytics
 import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
@@ -46,6 +47,7 @@ class CBOnlineApp : Application() {
             AppSignatureHelper(this).appSignatures.forEach {
                 Log.d("APPSIG", it)
             }
+            Clients.setHttpLogging(true)
         }
 
         // Create Notification Channel
