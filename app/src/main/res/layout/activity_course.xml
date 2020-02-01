@@ -278,15 +278,16 @@
 
                 <LinearLayout
                     android:orientation="horizontal"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_large"
                     android:layout_width="match_parent"
+                    android:layout_marginEnd="@dimen/margin_large"
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_large"
-                        android:layout_marginTop="@dimen/margin_large"
-                        android:layout_marginEnd="@dimen/margin_large"
+                        android:layout_weight="1"
                         android:layout_marginBottom="@dimen/margin_small"
                         android:drawableStart="@drawable/ic_courses"
                         android:drawablePadding="10dp"
@@ -299,19 +300,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/margin_large"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawableEnd="@drawable/ic_dropright"
                         android:drawablePadding="10dp"
-                        android:layout_marginTop="@dimen/margin_large"
                         android:drawableTint="@color/orangish"
                         android:focusable="true"
                         android:fontFamily="@font/gilroy_medium"
                         android:text="@string/view_all"
                         android:textAlignment="viewEnd"
                         android:textColor="@color/orangish"
-                        android:id="@+id/viewAlltv"/>
+                        android:id="@+id/viewAllTv" />
 
                 </LinearLayout>
 

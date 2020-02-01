@@ -191,14 +191,14 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             finish()
         }
 
-        viewAlltv.setOnClickListener {
-            //Bottom Sheet
+        viewAllTv.setOnClickListener {
+            // Bottom Sheet
             val courseSectionAllFragment = CourseSectionAllFragment()
             val bundle = Bundle()
             bundle.putString(COURSE_ID, courseId)
             courseSectionAllFragment.arguments = bundle
 
-            courseSectionAllFragment.show(supportFragmentManager,"courseSectionAllFragment")
+            courseSectionAllFragment.show(supportFragmentManager, "courseSectionAllFragment")
         }
     }
 

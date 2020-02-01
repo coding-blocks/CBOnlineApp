@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.COURSE_ID
@@ -25,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_all_section_course.view.closeBtn
 import kotlinx.android.synthetic.main.fragment_search_course.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CourseSectionAllFragment: BottomSheetDialogFragment() {
+class CourseSectionAllFragment : BottomSheetDialogFragment() {
 
     private val viewModel by viewModel<CourseViewModel>()
     private val courseSectionListAllAdapter = CourseSectionListAdapter()
@@ -33,7 +32,7 @@ class CourseSectionAllFragment: BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_all_section_course, container, false)
 
-        val courseId =  arguments?.getString(COURSE_ID)
+        val courseId = arguments?.getString(COURSE_ID)
 
         if (courseId != null) {
             viewModel.id = courseId
@@ -45,19 +44,19 @@ class CourseSectionAllFragment: BottomSheetDialogFragment() {
             dialog?.dismiss()
         }
 
-        viewModel.course.observer(this){course->
-            viewModel.fetchSections(course.runs?.first()?.sections)
+        viewModel.course.observer(this) { course ->
+            viewModel.fetchAllSections(course.runs?.first()?.sections)
         }
 
         viewModel.sections.observe(this) { sections ->
-            if(!sections.isNullOrEmpty()){
+            if (!sections.isNullOrEmpty()) {
                 view.contentShimmer.stopShimmer()
                 view.contentShimmer.isVisible = false
                 courseSectionListAllAdapter.submitList(sections)
             }
         }
 
-        view.courseContentAllRv.setRv(requireContext(),courseSectionListAllAdapter,true)
+        view.courseContentAllRv.setRv(requireContext(), courseSectionListAllAdapter, true)
 
         return view
     }

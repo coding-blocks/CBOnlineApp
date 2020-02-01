@@ -103,23 +103,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_medium"
+        android:id="@+id/tagTitle"
+        android:visibility="gone"
         android:fontFamily="@font/gilroy_medium"
         android:text="@string/what_will_you_learn"
         android:textColor="@color/brown_grey"
         android:textSize="12sp" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/tagsChips"
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_extra_small"
-        app:chipSpacingHorizontal="@dimen/margin_small"
-        app:singleLine="true" />
+        android:scrollbars="none">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/tagsChips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipSpacingHorizontal="@dimen/margin_small"
+            app:singleLine="true" />
+    </HorizontalScrollView>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_large"
+        android:id="@+id/projectTitle"
+        android:visibility="gone"
         android:fontFamily="@font/gilroy_medium"
         android:text="@string/projects_you_will_build"
         android:textColor="@color/brown_grey"
@@ -128,9 +138,9 @@
 
     <HorizontalScrollView
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_extra_small"
-
-        android:layout_height="wrap_content">
+        android:scrollbars="none">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/projectsChips"

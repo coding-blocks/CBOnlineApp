@@ -134,7 +134,7 @@ class OverviewFragment : Fragment(), AnkoLogger {
             axisLeft.setDrawGridLines(true)
             xAxis.setDrawGridLines(true)
             notifyDataSetChanged()
-            xAxis.labelCount = 20
+            xAxis.labelCount = 10
             invalidate()
         }
     }

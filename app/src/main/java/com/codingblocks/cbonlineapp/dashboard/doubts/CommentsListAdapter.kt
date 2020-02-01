@@ -12,8 +12,6 @@ import com.codingblocks.cbonlineapp.dashboard.doubts.CommentsListAdapter.ItemVie
 import com.codingblocks.cbonlineapp.database.models.CommentModel
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
-import io.noties.markwon.Markwon
-import io.noties.markwon.core.CorePlugin
 import kotlinx.android.synthetic.main.item_comment.view.*
 
 class CommentsListAdapter : ListAdapter<CommentModel, ItemViewHolder>(DiffCallback()) {

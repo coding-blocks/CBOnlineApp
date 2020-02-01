@@ -92,6 +92,19 @@ class CourseViewModel(
         val list = arrayListOf<Sections>()
         if (!sectionIdList.isNullOrEmpty()) {
             runIO {
+                sectionIdList.take(5).forEach {
+                    val sectionRes = withContext(Dispatchers.IO) { repo.getSection(it.id) }
+                    sectionRes.body()?.let { it1 -> list.add(it1) }
+                }
+                sections.postValue(list)
+            }
+        }
+    }
+
+    fun fetchAllSections(sectionIdList: ArrayList<Sections>?) {
+        val list = arrayListOf<Sections>()
+        if (!sectionIdList.isNullOrEmpty()) {
+            runIO {
                 sectionIdList.forEach {
                     val sectionRes = withContext(Dispatchers.IO) { repo.getSection(it.id) }
                     sectionRes.body()?.let { it1 -> list.add(it1) }

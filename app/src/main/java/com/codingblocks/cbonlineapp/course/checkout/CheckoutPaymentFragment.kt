@@ -52,6 +52,7 @@ class CheckoutPaymentFragment : Fragment() {
                 creditsTv.text = "- ${getString(R.string.rupee_sign)} $credits"
                 totalTv.text = "${getString(R.string.rupee_sign)} ${json["totalAmount"].asString}"
                 finalPriceTv.text = "${getString(R.string.rupee_sign)} ${json["totalAmount"].asString}"
+                walletBal.text = "${getString(R.string.rupee_sign)} ${json["user"].asJsonObject.get("wallet_balance").asString}"
 
                 payBtn.setOnClickListener {
                     vm.paymentMap["amount"] = json["totalAmount"].asString!!

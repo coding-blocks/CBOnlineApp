@@ -66,7 +66,8 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                 )
             }
             if (type == "TRACKS") {
-                item.projects?.take(3)?.forEach {
+                item.projects?.take(5)?.forEach {
+                    projectTitle.isVisible = true
                     val chip = LayoutInflater.from(context).inflate(R.layout.single_chip_layout, tagsChips, false) as Chip
                     chip.text = it.title
                     projectsChips.addView(chip)
@@ -78,6 +79,7 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                 }
                 ratingBar.rating = item.rating
                 item.tags?.take(5)?.forEach {
+                    tagTitle.isVisible = true
                     val chip = Chip(context)
                     chip.text = it.name
                     val font = Typeface.createFromAsset(context.assets, "fonts/gilroy_medium.ttf")

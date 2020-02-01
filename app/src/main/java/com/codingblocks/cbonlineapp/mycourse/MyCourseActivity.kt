@@ -74,7 +74,6 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
                     myCourseRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, dashboardBottomNav) {
                         viewModel.fetchSections()
                         viewModel.getStats()
-
                     }
                 }
                 ErrorStatus.UNAUTHORIZED -> {
