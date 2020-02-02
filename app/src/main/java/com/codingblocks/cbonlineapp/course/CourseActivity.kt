@@ -39,6 +39,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
+import com.google.android.youtube.player.YouTubePlayerFragment
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import io.noties.markwon.Markwon
 import io.noties.markwon.core.CorePlugin
@@ -71,6 +72,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     private val batchListAdapter = BatchListAdapter()
     private val dialog by lazy { BottomSheetDialog(this) }
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
+    private var youtubePlayer: YouTubePlayer? = null
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -254,6 +256,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 youtubePlayerInstance: YouTubePlayer?,
                 p2: Boolean
             ) {
+                youtubePlayer = youtubePlayerInstance
                 if (!p2) {
                     val url = if (youtubeUrl.split("=").size == 2) youtubeUrl.split("=")[1]
                     else {
@@ -276,6 +279,10 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.share -> {
             share("http://online.codingblocks.com/app/$courseId")
+            true
+        }
+        android.R.id.home -> {
+            onBackPressed()
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -307,6 +314,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     }
 
     override fun onBackPressed() {
+        youtubePlayer?.release()
         super.onBackPressed()
     }
 }
