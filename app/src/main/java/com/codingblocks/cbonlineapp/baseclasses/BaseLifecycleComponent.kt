@@ -6,9 +6,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import com.codingblocks.cbonlineapp.BuildConfig
-import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
-import kotlin.reflect.jvm.jvmName
 
 /**
  * Created by championswimmer on 2020-02-02.
@@ -25,7 +23,7 @@ interface BaseLifecycleComponent : LifecycleObserver {
     val thisLifecycleOwner: LifecycleOwner
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun logOnCreate(lifecycleOwner: LifecycleOwner = thisLifecycleOwner)  {
+    fun logOnCreate(lifecycleOwner: LifecycleOwner = thisLifecycleOwner) {
         log("ON CREATE ${lifecycleOwner::class.simpleName}")
     }
 
@@ -53,6 +51,4 @@ interface BaseLifecycleComponent : LifecycleObserver {
     fun logOnDestroy(lifecycleOwner: LifecycleOwner = thisLifecycleOwner) {
         log("ON DESTROY ${lifecycleOwner::class.simpleName}")
     }
-
-
 }
