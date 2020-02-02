@@ -48,16 +48,17 @@ interface CourseWithInstructorDao {
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
-       WHERE rA.premium = 1 AND rA.`end` > :currentTimeMillis ORDER BY rA.lastAccessedAt DESC
+       WHERE rA.premium = 1 AND rA.`end` > :currenttimeSec
+       ORDER BY rA.lastAccessedAt DESC
     """)
-    fun getActiveRuns(currentTimeMillis: Long): LiveData<List<CourseInstructorPair>>
+    fun getActiveRuns(currenttimeSec: Long): LiveData<List<CourseInstructorPair>>
 
     @Transaction
     @Query("""
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
-       ORDER BY rA.lastAccessedAt DESC LIMIT 3
+       ORDER BY rA.lastAccessedAt DESC LIMIT 5
     """)
     fun getRecentRuns(): LiveData<List<CourseInstructorPair>>
 
@@ -66,9 +67,9 @@ interface CourseWithInstructorDao {
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
-       WHERE rA.`end` < :currentTimeMillis
+       WHERE rA.`end` < :currentTimeSec
     """)
-    fun getExpiredRuns(currentTimeMillis: Long): LiveData<List<CourseInstructorPair>>
+    fun getExpiredRuns(currentTimeSec: Long): LiveData<List<CourseInstructorPair>>
 
     @Transaction
     @Query("""
