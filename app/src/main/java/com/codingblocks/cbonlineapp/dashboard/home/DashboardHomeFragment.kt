@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.LoginActivity
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.util.COURSE_ID
@@ -31,7 +31,7 @@ import org.jetbrains.anko.support.v4.intentFor
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class DashboardHomeFragment : Fragment() {
+class DashboardHomeFragment : BaseCBFragment() {
 
     private val viewModel by sharedViewModel<DashboardViewModel>()
     private val sharedPrefs by inject<PreferenceHelper>()
@@ -59,26 +59,33 @@ class DashboardHomeFragment : Fragment() {
                             activity?.toolbarCourseResumeTv?.apply {
                                 isVisible = true
                                 setOnClickListener {
-                                    startActivity(intentFor<MyCourseActivity>(
-                                        COURSE_ID to course.cid,
-                                        RUN_ID to run.crUid,
-                                        RUN_ATTEMPT_ID to runAttempt.attemptId,
-                                        COURSE_NAME to course.title
-                                    ).singleTop())
+                                    startActivity(
+                                        intentFor<MyCourseActivity>(
+                                            COURSE_ID to course.cid,
+                                            RUN_ID to run.crUid,
+                                            RUN_ATTEMPT_ID to runAttempt.attemptId,
+                                            COURSE_NAME to course.title
+                                        ).singleTop()
+                                    )
                                 }
                             }
 
                             homeCourseLogoImg.loadImage(course.logo)
-                            val progress = if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
+                            val progress =
+                                if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
 
                             homeProgressTv.text = "${progress.toInt()} %"
                             homeProgressView.progress = progress.toFloat()
                             if (progress > 90) {
-                                homeProgressView.highlightView.colorGradientStart = getColor(requireContext(), R.color.kiwigreen)
-                                homeProgressView.highlightView.colorGradientEnd = getColor(requireContext(), R.color.tealgreen)
+                                homeProgressView.highlightView.colorGradientStart =
+                                    getColor(requireContext(), R.color.kiwigreen)
+                                homeProgressView.highlightView.colorGradientEnd =
+                                    getColor(requireContext(), R.color.tealgreen)
                             } else {
-                                homeProgressView.highlightView.colorGradientStart = getColor(requireContext(), R.color.pastel_red)
-                                homeProgressView.highlightView.colorGradientEnd = getColor(requireContext(), R.color.dusty_orange)
+                                homeProgressView.highlightView.colorGradientStart =
+                                    getColor(requireContext(), R.color.pastel_red)
+                                homeProgressView.highlightView.colorGradientEnd =
+                                    getColor(requireContext(), R.color.dusty_orange)
                             }
                         }
                     }
@@ -98,7 +105,10 @@ class DashboardHomeFragment : Fragment() {
         loginBtn.setOnClickListener { startActivity(intentFor<LoginActivity>()) }
     }
 
-    private fun loadData(averageProgress: ArrayList<ProgressItem>, userProgress: ArrayList<ProgressItem>) {
+    private fun loadData(
+        averageProgress: ArrayList<ProgressItem>,
+        userProgress: ArrayList<ProgressItem>
+    ) {
         val values: ArrayList<Entry> = ArrayList()
         averageProgress.forEachIndexed { index, progressItem ->
             values.add(Entry(index.toFloat(), progressItem.progress.toFloat()))

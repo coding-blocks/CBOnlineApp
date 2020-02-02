@@ -25,6 +25,8 @@ import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.auth.LoginActivity
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
+import com.codingblocks.cbonlineapp.baseclasses.BaseLifecycleComponent
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
@@ -82,7 +84,10 @@ import org.jetbrains.anko.toast
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, FragmentChangeListener, FabNavigation.OnTabSelectedListener {
+class DashboardActivity : BaseCBActivity(),
+    NavigationView.OnNavigationItemSelectedListener,
+    FragmentChangeListener,
+    FabNavigation.OnTabSelectedListener {
 
     private val pagerAdapter by lazy { TabLayoutAdapter(supportFragmentManager) }
     private val navigationAdapter: FabNavigationAdapter by lazy { FabNavigationAdapter(this, R.menu.bottom_nav_dashboard) }

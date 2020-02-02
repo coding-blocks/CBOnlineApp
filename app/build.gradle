@@ -25,7 +25,7 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.codingblocks.cbonlineapp"
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 101000001
         // 1 (versioning scheme)

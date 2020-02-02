@@ -7,11 +7,11 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
-import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtsFragment
 import com.codingblocks.cbonlineapp.admin.doubts.DoubtReceiver
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewFragment
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.KeyboardVisibilityUtil
@@ -20,10 +20,9 @@ import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.fabnavigation.FabNavigationAdapter
 import kotlinx.android.synthetic.main.activity_admin.*
-import kotlinx.android.synthetic.main.activity_complete_profile.*
 import org.jetbrains.anko.contentView
 
-class AdminActivity : AppCompatActivity(), FragmentChangeListener {
+class AdminActivity : BaseCBActivity(), FragmentChangeListener {
 
     private lateinit var keyboardVisibilityHelper: KeyboardVisibilityUtil
 

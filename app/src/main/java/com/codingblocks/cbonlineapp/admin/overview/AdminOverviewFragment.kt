@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_admin.*
 import kotlinx.android.synthetic.main.admin_overview_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AdminOverviewFragment : Fragment() {
+class AdminOverviewFragment : BaseCBFragment() {
 
     private val viewModel by viewModel<AdminOverviewViewModel>()
     private val leaderBoardListAdapter = AdminLeaderBoardListAdapter()

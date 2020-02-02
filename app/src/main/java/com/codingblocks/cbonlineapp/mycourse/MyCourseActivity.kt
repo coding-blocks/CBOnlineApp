@@ -2,10 +2,10 @@ package com.codingblocks.cbonlineapp.mycourse
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.content.CourseContentFragment
 import com.codingblocks.cbonlineapp.mycourse.library.CourseLibraryFragment
@@ -36,7 +36,7 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
+class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
 
     private val viewModel by viewModel<MyCourseViewModel>()
     private val pagerAdapter by lazy { TabLayoutAdapter(supportFragmentManager) }
@@ -59,7 +59,12 @@ class MyCourseActivity : AppCompatActivity(), AnkoLogger, SwipeRefreshLayout.OnR
         viewModel.getNextContent().observer(this) { content ->
             courseResumeBtn.setOnClickListener {
                 when (content.contentable) {
-                    LECTURE, VIDEO -> startActivity(intentFor<VideoPlayerActivity>(CONTENT_ID to content.contentId, SECTION_ID to content.sectionId).singleTop())
+                    LECTURE, VIDEO -> startActivity(
+                        intentFor<VideoPlayerActivity>(
+                            CONTENT_ID to content.contentId,
+                            SECTION_ID to content.sectionId
+                        ).singleTop()
+                    )
                 }
                 viewModel.updateProgress(content.contentId)
             }

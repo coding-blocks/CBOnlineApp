@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.doubts.ChatClickListener
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.auth.LoginActivity
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import com.codingblocks.cbonlineapp.commons.SheetAdapter
 import com.codingblocks.cbonlineapp.commons.SheetItem
@@ -45,7 +45,7 @@ import org.jetbrains.anko.support.v4.intentFor
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class DashboardDoubtsFragment : Fragment(), AnkoLogger {
+class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
 
     private lateinit var listener: FragmentChangeListener
 
@@ -76,7 +76,11 @@ class DashboardDoubtsFragment : Fragment(), AnkoLogger {
     private val commentsClickListener: DoubtCommentClickListener by lazy {
         object : DoubtCommentClickListener {
             override fun onClick(doubtId: String) {
-                requireContext().startActivity(requireContext().intentFor<DoubtCommentActivity>(DOUBT_ID to doubtId).singleTop())
+                requireContext().startActivity(
+                    requireContext().intentFor<DoubtCommentActivity>(
+                        DOUBT_ID to doubtId
+                    ).singleTop()
+                )
             }
         }
     }
@@ -84,7 +88,11 @@ class DashboardDoubtsFragment : Fragment(), AnkoLogger {
     private val chatClickListener: ChatClickListener by lazy {
         object : ChatClickListener {
             override fun onClick(convId: String, doubtId: String) {
-                requireContext().startActivity(requireContext().intentFor<ChatActivity>(CONVERSATION_ID to convId).singleTop())
+                requireContext().startActivity(
+                    requireContext().intentFor<ChatActivity>(
+                        CONVERSATION_ID to convId
+                    ).singleTop()
+                )
             }
         }
     }
@@ -155,7 +163,13 @@ class DashboardDoubtsFragment : Fragment(), AnkoLogger {
                 if (it.isNotEmpty()) {
                     viewModel.attemptId.value = it.first().courseRun.runAttempt.attemptId
                     it.forEach {
-                        list.add(SheetItem(it.courseRun.run.crName, image = it.courseRun.course.logo, courseId = it.courseRun.runAttempt.attemptId))
+                        list.add(
+                            SheetItem(
+                                it.courseRun.run.crName,
+                                image = it.courseRun.course.logo,
+                                courseId = it.courseRun.runAttempt.attemptId
+                            )
+                        )
                     }
                     adapter.notifyDataSetChanged()
                 }
@@ -168,7 +182,13 @@ class DashboardDoubtsFragment : Fragment(), AnkoLogger {
 
         viewModel.doubts.observer(viewLifecycleOwner) {
             doubtListAdapter.submitList(it)
-            changeViewState(dashboardDoubtRv, internetll, emptyLl, dashboardDoubtShimmer, it.isEmpty())
+            changeViewState(
+                dashboardDoubtRv,
+                internetll,
+                emptyLl,
+                dashboardDoubtShimmer,
+                it.isEmpty()
+            )
         }
         viewModel.errorLiveData.observer(viewLifecycleOwner) {
             when (it) {
@@ -176,7 +196,11 @@ class DashboardDoubtsFragment : Fragment(), AnkoLogger {
 //                    dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
                 }
                 ErrorStatus.TIMEOUT -> {
-                    dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, dashboardBottomNav) {
+                    dashboardDoubtRoot.showSnackbar(
+                        it,
+                        Snackbar.LENGTH_INDEFINITE,
+                        dashboardBottomNav
+                    ) {
                         viewModel.fetchDoubts()
                     }
                 }

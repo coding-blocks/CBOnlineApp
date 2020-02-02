@@ -1,8 +1,8 @@
 package com.codingblocks.cbonlineapp.purchases
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.dashboard.mycourses.ItemClickListener
 import com.codingblocks.cbonlineapp.dashboard.mycourses.MyCourseListAdapter
@@ -19,7 +19,7 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PurchasesActivity : AppCompatActivity() {
+class PurchasesActivity : BaseCBActivity() {
 
     private val viewModel by viewModel<DashboardViewModel>()
     private val courseListAdapter = MyCourseListAdapter()
@@ -28,12 +28,14 @@ class PurchasesActivity : AppCompatActivity() {
         object : ItemClickListener {
 
             override fun onClick(id: String, runId: String, runAttemptId: String, name: String) {
-                startActivity(intentFor<MyCourseActivity>(
-                    COURSE_ID to id,
-                    RUN_ID to runId,
-                    RUN_ATTEMPT_ID to runAttemptId,
-                    COURSE_NAME to name
-                ).singleTop())
+                startActivity(
+                    intentFor<MyCourseActivity>(
+                        COURSE_ID to id,
+                        RUN_ID to runId,
+                        RUN_ATTEMPT_ID to runAttemptId,
+                        COURSE_NAME to name
+                    ).singleTop()
+                )
             }
         }
     }

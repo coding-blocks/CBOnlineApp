@@ -10,15 +10,15 @@ import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_login_home.*
 
-class LoginHomeFragment : Fragment() {
+class LoginHomeFragment : BaseCBFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +34,11 @@ class LoginHomeFragment : Fragment() {
         setSecondSpan()
 
         mobileBtn.setOnClickListener {
-            replaceFragmentSafely(SignInFragment(), tag = "SignIn", containerViewId = R.id.loginContainer)
+            replaceFragmentSafely(
+                SignInFragment(),
+                tag = "SignIn",
+                containerViewId = R.id.loginContainer
+            )
         }
 
         gmailBtn.setOnClickListener {
@@ -51,8 +55,10 @@ class LoginHomeFragment : Fragment() {
     }
 
     private fun setSecondSpan() {
-        val policySpan = SpannableString("By logging in you agree to Coding Blocks’s\n" +
-            "Privacy Policy & Terms of Service")
+        val policySpan = SpannableString(
+            "By logging in you agree to Coding Blocks’s\n" +
+                "Privacy Policy & Terms of Service"
+        )
         val privacySpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
                 requireContext().openChrome("https://codingblocks.com/privacypolicy.html")

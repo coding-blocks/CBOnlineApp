@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
+import com.codingblocks.cbonlineapp.baseclasses.BaseLifecycleComponent
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
@@ -38,7 +40,7 @@ import org.jetbrains.anko.support.v4.runOnUiThread
 import org.koin.android.ext.android.inject
 import android.text.style.StyleSpan as StyleSpan1
 
-class SignInFragment : Fragment() {
+class SignInFragment : BaseCBFragment() {
 
     val db: AppDatabase by inject()
     var map = HashMap<String, String>()

@@ -2,9 +2,9 @@ package com.codingblocks.cbonlineapp.auth.onboarding
 
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.JWTUtils
@@ -24,7 +24,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.koin.android.ext.android.inject
 
-class CompleteProfileActivity : AppCompatActivity() {
+class CompleteProfileActivity : BaseCBActivity() {
 
     private lateinit var keyboardVisibilityHelper: KeyboardVisibilityUtil
     private val sharedPrefs by inject<PreferenceHelper>()
@@ -38,7 +38,8 @@ class CompleteProfileActivity : AppCompatActivity() {
             startActivity(intentFor<DashboardActivity>())
             finish()
         }
-        val json = FileUtils.loadJsonObjectFromAsset(this, "demographics.json", "obj") as JSONObject?
+        val json =
+            FileUtils.loadJsonObjectFromAsset(this, "demographics.json", "obj") as JSONObject?
         val collegeArray = json?.getJSONArray("colleges")
         val branchArray = json?.getJSONArray("branches")
         val collegeList: MutableList<String> = ArrayList()
@@ -59,7 +60,8 @@ class CompleteProfileActivity : AppCompatActivity() {
         } catch (e: JSONException) {
             e.printStackTrace()
         }
-        val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, collegeList)
+        val arrayAdapter: ArrayAdapter<String> =
+            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, collegeList)
         college.setAdapter(arrayAdapter)
         college.setOnItemClickListener { _, _, position, id ->
             val name = arrayAdapter.getItem(position)
@@ -72,7 +74,8 @@ class CompleteProfileActivity : AppCompatActivity() {
             }
         }
 
-        val arrayAdapter2: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, branchList)
+        val arrayAdapter2: ArrayAdapter<String> =
+            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, branchList)
         branch.setAdapter(arrayAdapter2)
         branch.setOnItemClickListener { _, _, position, id ->
             val name = arrayAdapter2.getItem(position)
@@ -110,7 +113,10 @@ class CompleteProfileActivity : AppCompatActivity() {
                         } else
                             runOnUiThread {
                                 val errRes = response.value.errorBody()?.string()
-                                val error = if (errRes.isNullOrEmpty()) "Please Try Again" else JSONObject(errRes).getString("description")
+                                val error =
+                                    if (errRes.isNullOrEmpty()) "Please Try Again" else JSONObject(
+                                        errRes
+                                    ).getString("description")
                                 completeRoot.showSnackbar(error.capitalize(), Snackbar.LENGTH_SHORT)
                                 proceedBtn.isEnabled = true
                             }

@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +19,7 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.PdfActivity
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.DownloadStarter
 import com.codingblocks.cbonlineapp.commons.SectionListClickListener
 import com.codingblocks.cbonlineapp.database.ListObject
@@ -52,7 +52,7 @@ import org.jetbrains.anko.support.v4.startService
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.concurrent.TimeUnit
 
-class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
+class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
 
     var popupWindowDogs: PopupWindow? = null
     var sectionitem = ArrayList<SectionModel>()
@@ -72,23 +72,28 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         }
     }
 
-    private val sectionListClickListener: SectionListClickListener = object : SectionListClickListener {
-        override fun onClick(pos: Int, adapterPosition: Int) {
-            popupWindowDogs?.dismiss()
-            val position = adapterPosition - 2
-            if (position > 0) {
-                mLayoutManager.scrollToPosition(sectionitem[adapterPosition - 2].pos)
-                smoothScroller.targetPosition = pos
-                mLayoutManager.startSmoothScroll(smoothScroller)
-            } else {
-                mLayoutManager.scrollToPosition(sectionitem[adapterPosition + 2].pos)
-                smoothScroller.targetPosition = pos
-                mLayoutManager.startSmoothScroll(smoothScroller)
+    private val sectionListClickListener: SectionListClickListener =
+        object : SectionListClickListener {
+            override fun onClick(pos: Int, adapterPosition: Int) {
+                popupWindowDogs?.dismiss()
+                val position = adapterPosition - 2
+                if (position > 0) {
+                    mLayoutManager.scrollToPosition(sectionitem[adapterPosition - 2].pos)
+                    smoothScroller.targetPosition = pos
+                    mLayoutManager.startSmoothScroll(smoothScroller)
+                } else {
+                    mLayoutManager.scrollToPosition(sectionitem[adapterPosition + 2].pos)
+                    smoothScroller.targetPosition = pos
+                    mLayoutManager.startSmoothScroll(smoothScroller)
+                }
             }
         }
-    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ):
         View? = inflater.inflate(R.layout.fragment_course_content, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -229,11 +234,13 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
             Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
         else
             Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val videoData = workDataOf(VIDEO_ID to videoId,
+        val videoData = workDataOf(
+            VIDEO_ID to videoId,
             "title" to title,
             SECTION_ID to sectionId,
             RUN_ATTEMPT_ID to attemptId,
-            CONTENT_ID to contentId)
+            CONTENT_ID to contentId
+        )
 
         val request: OneTimeWorkRequest =
             OneTimeWorkRequestBuilder<DownloadWorker>()
@@ -257,7 +264,12 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
         listViewDogs.adapter = sectionListAdapter
         listViewDogs.layoutManager = LinearLayoutManager(requireContext())
         popupWindow.isFocusable = true
-        popupWindow.setBackgroundDrawable(resources.getDrawable(R.drawable.background_custom_radio_buttons_unselected_state, null))
+        popupWindow.setBackgroundDrawable(
+            resources.getDrawable(
+                R.drawable.background_custom_radio_buttons_unselected_state,
+                null
+            )
+        )
         popupWindow.isOutsideTouchable = true
         popupWindow.height = 1000
         popupWindow.contentView = listViewDogs
@@ -285,27 +297,40 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
                                 checkSection(premium)
                         LECTURE ->
                             if (contentLecture.lectureUid.isNotEmpty())
-                                startActivity(intentFor<VideoPlayerActivity>(
-                                    CONTENT_ID to ccid,
-                                    SECTION_ID to sectionId
-                                ))
+                                startActivity(
+                                    intentFor<VideoPlayerActivity>(
+                                        CONTENT_ID to ccid,
+                                        SECTION_ID to sectionId
+                                    )
+                                )
                             else
                                 checkSection(premium)
                         VIDEO ->
                             if (contentVideo.videoUid.isNotEmpty())
-                                startActivity(intentFor<VideoPlayerActivity>(
-                                    CONTENT_ID to ccid,
-                                    SECTION_ID to sectionId
-                                ))
+                                startActivity(
+                                    intentFor<VideoPlayerActivity>(
+                                        CONTENT_ID to ccid,
+                                        SECTION_ID to sectionId
+                                    )
+                                )
                             else
                                 checkSection(premium)
                         QNA ->
                             if (contentQna.qnaUid.isNotEmpty())
-                                startActivity(intentFor<QuizActivity>(CONTENT_ID to ccid, SECTION_ID to sectionId))
+                                startActivity(
+                                    intentFor<QuizActivity>(
+                                        CONTENT_ID to ccid,
+                                        SECTION_ID to sectionId
+                                    )
+                                )
                             else
                                 checkSection(premium)
                         CODE ->
-                            requireContext().showDialog("unavailable", secondaryText = R.string.unavailable, buttonText = R.string.ok)
+                            requireContext().showDialog(
+                                "unavailable",
+                                secondaryText = R.string.unavailable,
+                                buttonText = R.string.ok
+                            )
                     }
                     viewModel.updateProgress(ccid)
                 }
@@ -316,17 +341,29 @@ class CourseContentFragment : Fragment(), AnkoLogger, DownloadStarter {
     private fun checkSection(premium: Boolean) {
         when {
             viewModel.runStartEnd.first < System.currentTimeMillis() -> {
-                requireContext().showDialog("expired", secondaryText = R.string.expired, buttonText = R.string.buy_extension) {
+                requireContext().showDialog(
+                    "expired",
+                    secondaryText = R.string.expired,
+                    buttonText = R.string.buy_extension
+                ) {
                     // Show Extension Dialog
                 }
             }
             premium -> {
-                requireContext().showDialog("purchase", secondaryText = R.string.purchase, buttonText = R.string.buy_now) {
+                requireContext().showDialog(
+                    "purchase",
+                    secondaryText = R.string.purchase,
+                    buttonText = R.string.buy_now
+                ) {
                     // add to cart
                 }
             }
             viewModel.runStartEnd.second > System.currentTimeMillis() -> {
-                requireContext().showDialog("Wait", secondaryText = R.string.wait, buttonText = R.string.ok)
+                requireContext().showDialog(
+                    "Wait",
+                    secondaryText = R.string.wait,
+                    buttonText = R.string.ok
+                )
             }
 
             else -> {

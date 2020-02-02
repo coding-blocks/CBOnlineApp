@@ -10,7 +10,6 @@ import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
 import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
 import androidx.work.BackoffPolicy
@@ -22,6 +21,7 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.library.EditNoteClickListener
@@ -77,7 +77,8 @@ import java.io.File
 import java.util.Objects
 import java.util.concurrent.TimeUnit
 
-class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogger, VdoPlayer.InitializationListener {
+class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
+    VdoPlayer.InitializationListener {
     private var isDownloaded = false
     private val viewModel by viewModel<VideoPlayerViewModel>()
     private val fullscreenToggleListener = object : VdoPlayerControls.FullscreenActionListener {
@@ -114,7 +115,12 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
     }
 
     private val dialog by lazy { BottomSheetDialog(this) }
-    private val sheetDialog: View by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, null) }
+    private val sheetDialog: View by lazy {
+        layoutInflater.inflate(
+            R.layout.bottom_sheet_note,
+            null
+        )
+    }
     private lateinit var playerFragment: VdoPlayerSupportFragment
     private var videoPlayer: VdoPlayer? = null
     private var youtubePlayer: YouTubePlayer? = null
@@ -138,7 +144,10 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
 
         rootLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
         viewModel.currentOrientation = resources.configuration.orientation
         viewModel.content.observeOnce {
 
@@ -152,7 +161,8 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                 viewModel.videoId = it.contentLecture.lectureId
                 youtubePlayerView.view?.visibility = View.GONE
                 videoContainer.visibility = View.VISIBLE
-                playerFragment = supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerSupportFragment
+                playerFragment =
+                    supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerSupportFragment
                 playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
                 showControls(false)
                 if (isDownloaded) {
@@ -223,11 +233,13 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
             Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
         else
             Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val videoData = workDataOf(VIDEO_ID to viewModel.videoId,
+        val videoData = workDataOf(
+            VIDEO_ID to viewModel.videoId,
             TITLE to contentTitle.text.toString(),
             SECTION_ID to viewModel.sectionId,
             RUN_ATTEMPT_ID to viewModel.attemptId.value,
-            CONTENT_ID to viewModel.contentId)
+            CONTENT_ID to viewModel.contentId
+        )
 
         val request: OneTimeWorkRequest =
             OneTimeWorkRequestBuilder<DownloadWorker>()
@@ -278,7 +290,11 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         }
     }
 
-    override fun onInitializationSuccess(playerHost: VdoPlayer.PlayerHost, player: VdoPlayer, wasRestored: Boolean) {
+    override fun onInitializationSuccess(
+        playerHost: VdoPlayer.PlayerHost,
+        player: VdoPlayer,
+        wasRestored: Boolean
+    ) {
         videoPlayer = player
         player.addPlaybackEventListener(playbackListener)
         playerControlView.apply {
@@ -379,8 +395,10 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         }
 
         override fun onLoadError(p0: VdoPlayer.VdoInitParams, p1: ErrorDescription) {
-            Crashlytics.log("Error Message: ${p1.errorMsg}, " +
-                "Error Code: ${p1.errorCode} , ${p1.httpStatusCode}")
+            Crashlytics.log(
+                "Error Message: ${p1.errorMsg}, " +
+                    "Error Code: ${p1.errorCode} , ${p1.httpStatusCode}"
+            )
             if (p1.errorCode == 5110) {
                 rootLayout.snackbar("Seems like your download was corrupted.Please Download Again")
                 deleteFolder(viewModel.videoId)
@@ -393,8 +411,10 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
         }
 
         override fun onError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
-            Crashlytics.log("Error Message: ${p1?.errorMsg}," +
-                " Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}")
+            Crashlytics.log(
+                "Error Message: ${p1?.errorMsg}," +
+                    " Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}"
+            )
         }
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
@@ -606,8 +626,10 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                     }
                     bottomSheetSaveBtn.apply {
                         setOnClickListener {
-                            viewModel.createDoubt(sheetDialog.doubtTitleTv.text.toString(),
-                                sheetDialog.bottoSheetDescTv.text.toString())
+                            viewModel.createDoubt(
+                                sheetDialog.doubtTitleTv.text.toString(),
+                                sheetDialog.bottoSheetDescTv.text.toString()
+                            )
                             dialog.dismiss()
                         }
                         text = "Post"
@@ -619,7 +641,8 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                     bottomSheetTitleTv.text = getString(R.string.add_note)
                     doubtTitleTv.isVisible = false
                     bottoSheetDescTv.setText("")
-                    bottomSheetInfoTv.text = "${contentTitle.text} | ${videoPlayer?.currentTime?.toDouble()?.secToTime()}"
+                    bottomSheetInfoTv.text =
+                        "${contentTitle.text} | ${videoPlayer?.currentTime?.toDouble()?.secToTime()}"
                     bottomSheetCancelBtn.setOnClickListener {
                         dialog.dismiss()
                     }
@@ -634,9 +657,16 @@ class VideoPlayerActivity : AppCompatActivity(), EditNoteClickListener, AnkoLogg
                             else
                                 (videoPlayer?.currentTime?.div(1000))?.toDouble()
                         setOnClickListener {
-                            val note = Note(notePos
-                                ?: 0.0, sheetDialog.bottoSheetDescTv.text.toString(), RunAttempts(viewModel.attemptId.value
-                                ?: ""), LectureContent(viewModel.contentId))
+                            val note = Note(
+                                notePos
+                                    ?: 0.0,
+                                sheetDialog.bottoSheetDescTv.text.toString(),
+                                RunAttempts(
+                                    viewModel.attemptId.value
+                                        ?: ""
+                                ),
+                                LectureContent(viewModel.contentId)
+                            )
                             viewModel.createNote(note)
                             dialog.dismiss()
                         }

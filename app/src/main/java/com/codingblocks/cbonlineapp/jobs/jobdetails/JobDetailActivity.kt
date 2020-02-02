@@ -8,12 +8,12 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.JOB_ID
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.custom_form_dialog.view.*
 import kotlinx.android.synthetic.main.item_job.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class JobDetailActivity : AppCompatActivity() {
+class JobDetailActivity : BaseCBActivity() {
 
     private val viewModel by viewModel<JobDetailViewModel>()
 
@@ -114,7 +114,7 @@ class JobDetailActivity : AppCompatActivity() {
 
         val marginInDp = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, sizeInDP.toFloat(), resources
-            .displayMetrics
+                .displayMetrics
         ).toInt()
         params.setMargins(marginInDp, marginInDp / 2, marginInDp, marginInDp / 2)
         val formView = layoutInflater.inflate(R.layout.custom_form_dialog, null)

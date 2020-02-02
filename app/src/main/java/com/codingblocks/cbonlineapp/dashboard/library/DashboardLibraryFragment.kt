@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.dashboard.mycourses.ItemClickListener
@@ -18,13 +18,11 @@ import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import kotlinx.android.synthetic.main.fragment_dashboard_library.*
-import kotlinx.android.synthetic.main.fragment_dashboard_library.dashboardCoursesRv
-import kotlinx.android.synthetic.main.fragment_dashboard_library.emptyLl
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class DashboardLibraryFragment : Fragment() {
+class DashboardLibraryFragment : BaseCBFragment() {
 
     private lateinit var listener: FragmentChangeListener
     private val viewModel by sharedViewModel<DashboardViewModel>()
@@ -34,10 +32,12 @@ class DashboardLibraryFragment : Fragment() {
         object : ItemClickListener {
 
             override fun onClick(id: String, runId: String, runAttemptId: String, name: String) {
-                startActivity(intentFor<LibraryActivity>(
-                    RUN_ATTEMPT_ID to runAttemptId,
-                    COURSE_NAME to name
-                ).singleTop())
+                startActivity(
+                    intentFor<LibraryActivity>(
+                        RUN_ATTEMPT_ID to runAttemptId,
+                        COURSE_NAME to name
+                    ).singleTop()
+                )
             }
         }
     }

@@ -4,10 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.course.ItemClickListener
 import com.codingblocks.cbonlineapp.course.batches.BatchListAdapter
 import com.codingblocks.cbonlineapp.util.COURSE_ID
@@ -29,7 +29,7 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class LearningTracksActivity : AppCompatActivity() {
+class LearningTracksActivity : BaseCBActivity() {
 
     private val tracksListAdapter = TracksListAdapter("LIST")
     private val vm by viewModel<TrackViewModel>()
@@ -44,10 +44,12 @@ class LearningTracksActivity : AppCompatActivity() {
                 intent.putExtra(COURSE_LOGO, name)
                 intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
 
-                val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    this@LearningTracksActivity,
-                    logo,
-                    ViewCompat.getTransitionName(logo)!!)
+                val options: ActivityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this@LearningTracksActivity,
+                        logo,
+                        ViewCompat.getTransitionName(logo)!!
+                    )
                 startActivity(intent, options.toBundle())
             }
         }

@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import kotlinx.android.synthetic.main.fragment_quiz_info.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class QuizInfoFragment : Fragment() {
+class QuizInfoFragment : BaseCBFragment() {
 
     private val vm by sharedViewModel<QuizViewModel>()
 

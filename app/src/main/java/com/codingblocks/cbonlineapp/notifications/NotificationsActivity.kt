@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.campusapp.router.Router
 import cn.campusapp.router.route.ActivityRoute
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.NotificationClickListener
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
@@ -19,7 +19,7 @@ import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import kotlinx.android.synthetic.main.activity_notifications.*
 import org.koin.android.ext.android.inject
 
-class NotificationsActivity : AppCompatActivity() {
+class NotificationsActivity : BaseCBActivity() {
 
     private val notificationDao: NotificationDao by inject()
     private val notificationAdapter = NotificationsAdapter(NotificationsDiffCallback())
@@ -45,7 +45,8 @@ class NotificationsActivity : AppCompatActivity() {
                 ) {
                     Router.open("activity://courseRun/$url")
                 } else if (url.contains("player", true)) {
-                    val activityRoute = Router.getRoute("activity://courseRun/$url") as ActivityRoute
+                    val activityRoute =
+                        Router.getRoute("activity://courseRun/$url") as ActivityRoute
                     activityRoute
                         .withParams(VIDEO_ID, videoId)
                         .open()

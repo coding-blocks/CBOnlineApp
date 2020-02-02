@@ -7,13 +7,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.InstructorListAdapter
 import com.codingblocks.cbonlineapp.course.batches.BatchListAdapter
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
@@ -23,7 +23,6 @@ import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.getDateForTime
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
@@ -45,15 +44,13 @@ import io.noties.markwon.Markwon
 import io.noties.markwon.core.CorePlugin
 import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.android.synthetic.main.bottom_sheet_batch.view.*
-import kotlinx.android.synthetic.main.item_course_card.view.*
-import kotlinx.android.synthetic.main.item_instructor.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetChangedListener {
+class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChangedListener {
 
     private val courseId by lazy {
         intent.getStringExtra(COURSE_ID)
@@ -83,10 +80,12 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
                 intent.putExtra(COURSE_LOGO, name)
                 intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
 
-                val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    this@CourseActivity,
-                    logo,
-                    ViewCompat.getTransitionName(logo)!!)
+                val options: ActivityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this@CourseActivity,
+                        logo,
+                        ViewCompat.getTransitionName(logo)!!
+                    )
                 startActivity(intent, options.toBundle())
             }
         }
@@ -102,7 +101,12 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         setUpBottomSheet()
 
         courseProjectsRv.setRv(this@CourseActivity, projectAdapter, true)
-        courseSuggestedRv.setRv(this@CourseActivity, courseCardListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
+        courseSuggestedRv.setRv(
+            this@CourseActivity,
+            courseCardListAdapter,
+            orientation = RecyclerView.HORIZONTAL,
+            space = 28f
+        )
         courseInstructorRv.setRv(this@CourseActivity, instructorAdapter)
         courseContentRv.setRv(this@CourseActivity, courseSectionListAdapter, true)
         if (!courseLogoImage.isNullOrEmpty()) {
@@ -131,7 +135,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             title = course.title
             shortTv.text = course.subtitle
             ratingBar.rating = course.rating
-            ratingTv.text = getSpannableSring("${course.rating}/5.0, ", "${course.reviewCount} ratings")
+            ratingTv.text =
+                getSpannableSring("${course.rating}/5.0, ", "${course.reviewCount} ratings")
             if (courseLogoUrl.isNullOrEmpty()) courseLogo.loadImage(course.logo)
             courseBackdrop.loadImage(course.coverImage ?: "")
             setYoutubePlayer(course.promoVideo ?: "")
@@ -141,8 +146,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
             batchListAdapter.submitList(course.activeRuns)
             if (!course.activeRuns.isNullOrEmpty())
                 course.activeRuns?.first()?.let {
-                setRun(it)
-            }
+                    setRun(it)
+                }
         }
 
         viewModel.projects.observer(this) { projects ->
@@ -277,7 +282,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-        val alpha = (appBarLayout.totalScrollRange + verticalOffset).toFloat() / appBarLayout.totalScrollRange
+        val alpha =
+            (appBarLayout.totalScrollRange + verticalOffset).toFloat() / appBarLayout.totalScrollRange
         courseLogo.alpha = alpha
         shortTv.alpha = alpha
         ratingBar.alpha = alpha

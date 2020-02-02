@@ -9,6 +9,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
@@ -19,8 +20,7 @@ import org.koin.android.ext.android.inject
 /**
  * A simple [Fragment] subclass.
  */
-class InboxFragment : Fragment() {
-
+class InboxFragment : BaseCBFragment() {
     private var conversationId: String = ""
     private val prefs by inject<PreferenceHelper>()
     override fun onCreateView(

@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
 import android.widget.SeekBar
-import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.extensions.folderSize
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_settings.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : BaseCBActivity() {
 
     private val viewModel by viewModel<SettingsViewModel>()
 

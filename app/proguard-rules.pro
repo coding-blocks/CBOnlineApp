@@ -21,6 +21,9 @@
 #-renamesourcefileattribute SourceFile
 -ignorewarnings
 
+# ======= Keep Fragment Names =========
+-keepnames class * extends androidx.fragment.app.Fragment
+
 # ======= Models =========
 -keep class com.codingblocks.cbonlineapp.database.models.*** { *; }
 # ======= Models =========

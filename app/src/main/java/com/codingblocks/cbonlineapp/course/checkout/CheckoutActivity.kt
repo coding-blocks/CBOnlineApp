@@ -1,9 +1,9 @@
 package com.codingblocks.cbonlineapp.course.checkout
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
@@ -15,7 +15,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CheckoutActivity : AppCompatActivity(), PaymentResultListener {
+class CheckoutActivity : BaseCBActivity(), PaymentResultListener {
 
     private val vm by viewModel<CheckoutViewModel>()
 
@@ -25,7 +25,10 @@ class CheckoutActivity : AppCompatActivity(), PaymentResultListener {
         setToolbar(checkoutToolbar)
         Checkout.preload(applicationContext)
         vm.getCart()
-        replaceFragmentSafely(CheckoutOrderDetailsFragment(), containerViewId = R.id.checkoutContainer)
+        replaceFragmentSafely(
+            CheckoutOrderDetailsFragment(),
+            containerViewId = R.id.checkoutContainer
+        )
         vm.paymentStart.observer(this) {
             for (fragment in supportFragmentManager.fragments) {
                 supportFragmentManager.beginTransaction().remove(fragment).commit()

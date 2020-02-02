@@ -1,9 +1,9 @@
 package com.codingblocks.cbonlineapp
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.codingblocks.cbonlineapp.auth.onboarding.OnBoardingActivity
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 import org.jetbrains.anko.intentFor
 import org.koin.android.ext.android.inject
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseCBActivity() {
     private val sharedPrefs by inject<PreferenceHelper>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +34,10 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun runMigration(): Boolean {
-        val oldPrefsMap = getSharedPreferences("com.codingblocks.cbonlineapp.prefs", Context.MODE_PRIVATE).all
-        val newPrefsMap = getSharedPreferences("com.codingblocks.cbonline.prefs", Context.MODE_PRIVATE)
+        val oldPrefsMap =
+            getSharedPreferences("com.codingblocks.cbonlineapp.prefs", Context.MODE_PRIVATE).all
+        val newPrefsMap =
+            getSharedPreferences("com.codingblocks.cbonline.prefs", Context.MODE_PRIVATE)
 
         for (entry in oldPrefsMap) {
             val current = entry.value

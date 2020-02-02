@@ -5,8 +5,8 @@ import android.view.MenuItem
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
@@ -14,7 +14,7 @@ import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.activity_chat.*
 import org.koin.android.ext.android.inject
 
-class ChatActivity : AppCompatActivity() {
+class ChatActivity : BaseCBActivity() {
 
     private val conversationId: String by lazy {
         intent.getStringExtra(CONVERSATION_ID) ?: ""
@@ -82,7 +82,10 @@ class ChatActivity : AppCompatActivity() {
             }
 
             webView.webViewClient = object : WebViewClient() {
-                override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                override fun shouldOverrideUrlLoading(
+                    view: WebView?,
+                    request: WebResourceRequest?
+                ): Boolean {
                     return false
                 }
 
@@ -95,6 +98,7 @@ class ChatActivity : AppCompatActivity() {
             webView.loadUrl("file:///android_asset/Chat.html")
         })
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         android.R.id.home -> {
             onBackPressed()

@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
@@ -16,11 +16,15 @@ import kotlinx.android.synthetic.main.fragment_checkout_order_details.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class CheckoutOrderDetailsFragment : Fragment(), AnkoLogger {
+class CheckoutOrderDetailsFragment : BaseCBFragment(), AnkoLogger {
 
     val vm by sharedViewModel<CheckoutViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ):
         View? = inflater.inflate(R.layout.fragment_checkout_order_details, container, false)
 
     @SuppressLint("SetTextI18n")
@@ -53,7 +57,11 @@ class CheckoutOrderDetailsFragment : Fragment(), AnkoLogger {
                 totalTv.text = "${getString(R.string.rupee_sign)} ${price!! - credits!!}"
                 taxesTv.text = "${getString(R.string.rupee_sign)} ${get("tax")?.asDouble?.div(100)}"
                 orderBtn.setOnClickListener {
-                    replaceFragmentSafely(CheckoutPersonalDetailsFragment(), containerViewId = R.id.checkoutContainer, addToStack = true)
+                    replaceFragmentSafely(
+                        CheckoutPersonalDetailsFragment(),
+                        containerViewId = R.id.checkoutContainer,
+                        addToStack = true
+                    )
                 }
             }
         }

@@ -4,12 +4,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import kotlinx.android.synthetic.main.activity_about.*
 import org.jetbrains.anko.email
 
-class AboutActivity : AppCompatActivity() {
+class AboutActivity : BaseCBActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

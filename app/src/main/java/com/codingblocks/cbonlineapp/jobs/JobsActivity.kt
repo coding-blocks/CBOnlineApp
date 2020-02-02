@@ -2,10 +2,10 @@ package com.codingblocks.cbonlineapp.jobs
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.APPLIED
 import com.codingblocks.cbonlineapp.util.ELIGIBLE
@@ -17,14 +17,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_jobs.*
-import kotlinx.android.synthetic.main.activity_jobs.allDoubtBtn
-import kotlinx.android.synthetic.main.activity_jobs.liveDoubtBtn
-import kotlinx.android.synthetic.main.activity_jobs.resolvedDoubtBtn
-import kotlinx.android.synthetic.main.fragment_dashboard_doubts.*
 import org.jetbrains.anko.design.indefiniteSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class JobsActivity : AppCompatActivity() {
+class JobsActivity : BaseCBActivity() {
 
     private val viewModel by viewModel<JobsViewModel>()
     private val jobsAdapter = JobsAdapter()
@@ -150,7 +146,8 @@ class JobsActivity : AppCompatActivity() {
         bottomSheetDialog.setContentView(sheetView)
 
         val bottomSheetBehavior = BottomSheetBehavior.from(sheetView.parent as View)
-        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(p0: View, p1: Float) {
             }
 

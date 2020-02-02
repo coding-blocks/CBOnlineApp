@@ -1,11 +1,11 @@
 package com.codingblocks.cbonlineapp.mycourse.quiz.submissions
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizFragment
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -15,7 +15,7 @@ import com.codingblocks.onlineapi.models.QuizAttempt
 import kotlinx.android.synthetic.main.fragment_quiz_submissions.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class QuizSubmissionsFragment : Fragment() {
+class QuizSubmissionsFragment : BaseCBFragment() {
 
     private val quizSubmissionListAdapter = QuizSubmissionListAdapter()
     private val vm by sharedViewModel<QuizViewModel>()
@@ -31,10 +31,12 @@ class QuizSubmissionsFragment : Fragment() {
                     containerViewId = R.id.quizContainer,
                     enterAnimation = R.animator.slide_in_right,
                     exitAnimation = R.animator.slide_out_left,
-                    addToStack = true)
+                    addToStack = true
+                )
             }
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

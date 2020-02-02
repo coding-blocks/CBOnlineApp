@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -25,7 +26,7 @@ import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class OverviewFragment : Fragment(), AnkoLogger {
+class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
 

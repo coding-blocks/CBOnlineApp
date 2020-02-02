@@ -5,10 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver.OnSmsOTPReceivedListener
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
+import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver.OnSmsOTPReceivedListener
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.Clients
@@ -22,7 +22,7 @@ import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.runOnUiThread
 import org.koin.android.ext.android.inject
 
-class LoginOtpFragment : Fragment(), OnSmsOTPReceivedListener {
+class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
 
     var map = HashMap<String, String>()
     private val sharedPrefs by inject<PreferenceHelper>()

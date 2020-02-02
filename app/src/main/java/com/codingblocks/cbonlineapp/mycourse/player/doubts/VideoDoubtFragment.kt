@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.doubts.ChatClickListener
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.ChatActivity
 import com.codingblocks.cbonlineapp.dashboard.DoubtCommentActivity
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtListAdapter
@@ -24,7 +24,7 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class VideoDoubtFragment : Fragment(), AnkoLogger {
+class VideoDoubtFragment : BaseCBFragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<VideoPlayerViewModel>()
     private val doubtListAdapter = DashboardDoubtListAdapter()
@@ -45,7 +45,11 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
     private val commentsClickListener: DoubtCommentClickListener by lazy {
         object : DoubtCommentClickListener {
             override fun onClick(doubtId: String) {
-                requireContext().startActivity(requireContext().intentFor<DoubtCommentActivity>(DOUBT_ID to doubtId).singleTop())
+                requireContext().startActivity(
+                    requireContext().intentFor<DoubtCommentActivity>(
+                        DOUBT_ID to doubtId
+                    ).singleTop()
+                )
             }
         }
     }
@@ -53,12 +57,20 @@ class VideoDoubtFragment : Fragment(), AnkoLogger {
     private val chatClickListener: ChatClickListener by lazy {
         object : ChatClickListener {
             override fun onClick(convId: String, doubtId: String) {
-                requireContext().startActivity(requireContext().intentFor<ChatActivity>(CONVERSATION_ID to convId).singleTop())
+                requireContext().startActivity(
+                    requireContext().intentFor<ChatActivity>(
+                        CONVERSATION_ID to convId
+                    ).singleTop()
+                )
             }
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ):
         View? = inflater.inflate(R.layout.fragment_video_doubt, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

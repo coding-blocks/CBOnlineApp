@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.auth.LoginActivity
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.SheetAdapter
 import com.codingblocks.cbonlineapp.commons.SheetItem
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
@@ -39,7 +39,7 @@ import org.jetbrains.anko.support.v4.intentFor
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
+class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
 
     private val dialog by lazy { BottomSheetDialog(requireContext()) }
     private val imgs by lazy { resources.obtainTypedArray(R.array.course_type_img) }
@@ -53,12 +53,14 @@ class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
         object : ItemClickListener {
 
             override fun onClick(id: String, runId: String, runAttemptId: String, name: String) {
-                startActivity(intentFor<MyCourseActivity>(
-                    COURSE_ID to id,
-                    RUN_ID to runId,
-                    RUN_ATTEMPT_ID to runAttemptId,
-                    COURSE_NAME to name
-                ).singleTop())
+                startActivity(
+                    intentFor<MyCourseActivity>(
+                        COURSE_ID to id,
+                        RUN_ID to runId,
+                        RUN_ATTEMPT_ID to runAttemptId,
+                        COURSE_NAME to name
+                    ).singleTop()
+                )
             }
         }
     }
@@ -88,7 +90,8 @@ class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
                 requireContext().getDrawable(imgs.getResourceId(lastSelected, 0)),
                 null,
                 requireContext().getDrawable(R.drawable.ic_dropdown),
-                null)
+                null
+            )
 
             setOnClickListener {
                 dialog.show()
@@ -100,7 +103,14 @@ class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
                 //                viewModel.prefs.courseFilter = num
                 text = coursesType[num]
                 viewModel.courseFilter.postValue(coursesType[num])
-                setCompoundDrawablesRelativeWithIntrinsicBounds(requireContext().getDrawable(imgs.getResourceId(num, 0)), null, requireContext().getDrawable(R.drawable.ic_dropdown), null)
+                setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    requireContext().getDrawable(
+                        imgs.getResourceId(
+                            num,
+                            0
+                        )
+                    ), null, requireContext().getDrawable(R.drawable.ic_dropdown), null
+                )
             }
         }
 
@@ -111,7 +121,12 @@ class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
                 viewModel.added.observer(viewLifecycleOwner) {
                     viewModel.courses.observer(viewLifecycleOwner) {
                         courseListAdapter.submitList(it)
-                        changeViewState(dashboardCoursesRv, emptyLl, dashboardCourseShimmer, it.isEmpty())
+                        changeViewState(
+                            dashboardCoursesRv,
+                            emptyLl,
+                            dashboardCourseShimmer,
+                            it.isEmpty()
+                        )
                     }
                 }
             } else {
@@ -126,7 +141,11 @@ class DashboardMyCoursesFragment : Fragment(), AnkoLogger {
 //                    dashboardCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
                 }
                 ErrorStatus.TIMEOUT -> {
-                    dashboardCourseRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, dashboardBottomNav) {
+                    dashboardCourseRoot.showSnackbar(
+                        it,
+                        Snackbar.LENGTH_INDEFINITE,
+                        dashboardBottomNav
+                    ) {
                         viewModel.fetchMyCourses()
                     }
                 }

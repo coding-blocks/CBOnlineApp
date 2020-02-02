@@ -1,13 +1,13 @@
 package com.codingblocks.cbonlineapp.tracks
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.course.CourseActivity
 import com.codingblocks.cbonlineapp.course.CourseListAdapter
 import com.codingblocks.cbonlineapp.course.ItemClickListener
@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.activity_track.courseLogo
 import kotlinx.android.synthetic.main.activity_track.shortTv
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TrackActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
+class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
     private val courseId by lazy {
         intent.getStringExtra(COURSE_ID)
     }
@@ -50,10 +50,12 @@ class TrackActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener 
                 intent.putExtra(COURSE_ID, id)
                 intent.putExtra(COURSE_LOGO, name)
                 intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
-                val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    this@TrackActivity,
-                    logo,
-                    ViewCompat.getTransitionName(logo)!!)
+                val options: ActivityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this@TrackActivity,
+                        logo,
+                        ViewCompat.getTransitionName(logo)!!
+                    )
                 startActivity(intent, options.toBundle())
             }
         }
@@ -66,7 +68,12 @@ class TrackActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener 
         setToolbar(courseToolbar)
         viewModel.id = courseId
         viewModel.fetchCurrentTrack()
-        trackCourseRv.setRv(this@TrackActivity, courseCardListAdapter, setDivider = true, type = "THICK")
+        trackCourseRv.setRv(
+            this@TrackActivity,
+            courseCardListAdapter,
+            setDivider = true,
+            type = "THICK"
+        )
         if (!courseLogoImage.isNullOrEmpty()) {
             courseLogo.transitionName = courseLogoImage
             courseLogo.loadImage(courseLogoUrl) {
@@ -92,7 +99,8 @@ class TrackActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener 
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-        val alpha = (appBarLayout.totalScrollRange + verticalOffset).toFloat() / appBarLayout.totalScrollRange
+        val alpha =
+            (appBarLayout.totalScrollRange + verticalOffset).toFloat() / appBarLayout.totalScrollRange
         courseLogo.alpha = alpha
         shortTv.alpha = alpha
         trackCourseNumTv.alpha = alpha

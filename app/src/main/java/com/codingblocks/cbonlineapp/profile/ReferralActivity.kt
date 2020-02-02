@@ -2,8 +2,8 @@ package com.codingblocks.cbonlineapp.profile
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
@@ -13,7 +13,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.share
 
-class ReferralActivity : AppCompatActivity() {
+class ReferralActivity : BaseCBActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

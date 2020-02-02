@@ -3,9 +3,9 @@ package com.codingblocks.cbonlineapp.auth.onboarding
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.LoginActivity
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.pageChangeCallback
@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_on_boarding.*
 import org.jetbrains.anko.intentFor
 import org.koin.android.ext.android.inject
 
-class OnBoardingActivity : AppCompatActivity() {
+class OnBoardingActivity : BaseCBActivity() {
 
     private val sharedPrefs by inject<PreferenceHelper>()
     private val mAdapter by lazy {

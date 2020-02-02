@@ -3,15 +3,15 @@ package com.codingblocks.cbonlineapp
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.appcompat.app.AppCompatActivity
 import cn.campusapp.router.Router
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.otherwise
 import org.jetbrains.anko.intentFor
 import org.koin.android.ext.android.inject
 
-class URLRouterActivity : AppCompatActivity() {
+class URLRouterActivity : BaseCBActivity() {
 
     private fun fallBack() = startActivity(intentFor<DashboardActivity>())
     private val sharedPrefs by inject<PreferenceHelper>()

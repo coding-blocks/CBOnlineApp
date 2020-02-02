@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AdminDoubtsFragment : Fragment(), TabLayout.OnTabSelectedListener {
+class AdminDoubtsFragment : BaseCBFragment(), TabLayout.OnTabSelectedListener {
 
     private val sharedPrefs by inject<PreferenceHelper>()
 

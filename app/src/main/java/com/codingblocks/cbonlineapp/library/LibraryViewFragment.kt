@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.database.models.BaseModel
 import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.database.models.ContentLecture
@@ -34,7 +34,7 @@ import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.io.File
 
-class LibraryViewFragment : Fragment() {
+class LibraryViewFragment : BaseCBFragment() {
 
     private val vm by sharedViewModel<LibraryViewModel>()
     private lateinit var libraryListAdapter: LibraryListAdapter
@@ -43,8 +43,18 @@ class LibraryViewFragment : Fragment() {
         object : ItemClickListener {
             override fun onClick(item: BaseModel) {
                 when (item) {
-                    is ContentLecture -> startActivity(intentFor<VideoPlayerActivity>(CONTENT_ID to item.lectureContentId, SECTION_ID to item.lectureSectionId).singleTop())
-                    is BookmarkModel -> startActivity(intentFor<VideoPlayerActivity>(CONTENT_ID to item.contentId, SECTION_ID to item.sectionId).singleTop())
+                    is ContentLecture -> startActivity(
+                        intentFor<VideoPlayerActivity>(
+                            CONTENT_ID to item.lectureContentId,
+                            SECTION_ID to item.lectureSectionId
+                        ).singleTop()
+                    )
+                    is BookmarkModel -> startActivity(
+                        intentFor<VideoPlayerActivity>(
+                            CONTENT_ID to item.contentId,
+                            SECTION_ID to item.sectionId
+                        ).singleTop()
+                    )
 //                    is NotesModel -> startActivity(intentFor<VideoPlayerActivity>(CONTENT_ID to item.contentId, SECTION_ID to item.sectionId).singleTop())
                 }
             }
@@ -54,7 +64,11 @@ class LibraryViewFragment : Fragment() {
         ProgressDialog.progressDialog(requireContext())
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ):
         View? = inflater.inflate(R.layout.fragment_library_view, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -126,7 +140,13 @@ class LibraryViewFragment : Fragment() {
         }
 
         deleteAction.setOnClickListener {
-            requireContext().showDialog("DELETE", true, R.drawable.ic_delete, secondaryText = R.string.delete_confrim, buttonText = R.string.confirm) {
+            requireContext().showDialog(
+                "DELETE",
+                true,
+                R.drawable.ic_delete,
+                secondaryText = R.string.delete_confrim,
+                buttonText = R.string.confirm
+            ) {
 
                 when (vm.type) {
                     getString(R.string.notes) -> {
@@ -155,7 +175,10 @@ class LibraryViewFragment : Fragment() {
     }
 
     private fun deleteFolder(lectureId: String) {
-        val dir = File(requireContext().getExternalFilesDir(Environment.getDataDirectory().absolutePath), lectureId)
+        val dir = File(
+            requireContext().getExternalFilesDir(Environment.getDataDirectory().absolutePath),
+            lectureId
+        )
         GlobalScope.launch(Dispatchers.Main) {
             progressDialog.show()
             withContext(Dispatchers.IO) { MediaUtils.deleteRecursive(dir) }
