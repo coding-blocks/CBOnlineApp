@@ -41,7 +41,6 @@ interface SectionWithContentsDao {
         """)
     fun resumeCourse(attemptId: String): LiveData<SectionContentHolder.NextContent>
 //
-    @Transaction
     @Query("""
         SELECT s.* FROM SectionModel s,ContentModel c 
 	    WHERE s.attemptId = :attemptId AND progress = "UNDONE"
@@ -49,7 +48,6 @@ interface SectionWithContentsDao {
         """)
     fun getNextContent(attemptId: String): LiveData<SectionContentHolder.SectionContentPair>
 
-    @Transaction
     @Query("""
         SELECT s.* FROM SectionModel s
 	    WHERE s.attemptId = :attemptId
@@ -57,7 +55,6 @@ interface SectionWithContentsDao {
         """)
     fun getSectionWithContent(attemptId: String): LiveData<List<SectionContentHolder.SectionContentPair>>
 
-    @Transaction
     @Query("""
         SELECT s.* FROM SectionModel s
 	    WHERE s.attemptId = :attemptId

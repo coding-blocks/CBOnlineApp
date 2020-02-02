@@ -13,6 +13,7 @@ import com.codingblocks.cbonlineapp.database.models.CourseWithInstructor
 @Dao
 interface CourseWithInstructorDao {
 
+    @Transaction
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(join: CourseWithInstructor)
 
@@ -25,7 +26,6 @@ interface CourseWithInstructorDao {
 //    """)
 //    fun getJobCourses(courses: ArrayList<String>): LiveData<List<CourseInstructorPair>>
 
-    @Transaction
     @Query("""
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
@@ -34,7 +34,6 @@ interface CourseWithInstructorDao {
     """)
     fun getMyRuns(): LiveData<List<CourseInstructorPair>>
 
-    @Transaction
     @Query("""
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
@@ -43,7 +42,6 @@ interface CourseWithInstructorDao {
     """)
     fun getPurchasesRuns(): LiveData<List<CourseInstructorPair>>
 
-    @Transaction
     @Query("""
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
@@ -53,7 +51,6 @@ interface CourseWithInstructorDao {
     """)
     fun getActiveRuns(currenttimeSec: Long): LiveData<List<CourseInstructorPair>>
 
-    @Transaction
     @Query("""
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
@@ -62,7 +59,6 @@ interface CourseWithInstructorDao {
     """)
     fun getRecentRuns(): LiveData<List<CourseInstructorPair>>
 
-    @Transaction
     @Query("""
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
@@ -71,7 +67,6 @@ interface CourseWithInstructorDao {
     """)
     fun getExpiredRuns(currentTimeSec: Long): LiveData<List<CourseInstructorPair>>
 
-    @Transaction
     @Query("""
    SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
@@ -80,7 +75,6 @@ interface CourseWithInstructorDao {
     """)
     fun getTopRun(): LiveData<CourseRunPair>
 
-    @Transaction
     @Query("""
    SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId

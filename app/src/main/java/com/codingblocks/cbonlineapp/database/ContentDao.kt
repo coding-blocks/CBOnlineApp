@@ -15,9 +15,11 @@ interface ContentDao : BaseDao<ContentModel> {
     @Query("SElECT * FROM ContentModel where isDownloaded = :isDownloaded ORDER BY date")
     suspend fun getDownloads(isDownloaded: Boolean): List<ContentModel>
 
+    @Transaction
     @Query("UPDATE ContentModel SET isDownloaded = :status WHERE ccid = :contentId")
     suspend fun updateContent(contentId: String, status: Int)
 
+    @Transaction
     @Query("UPDATE ContentModel SET isDownloaded = :status WHERE lectureId = :videoId")
     suspend fun updateContentWithVideoId(videoId: String, status: Int)
 
@@ -33,6 +35,7 @@ interface ContentDao : BaseDao<ContentModel> {
     @Query("UPDATE ContentModel SET progress = :status WHERE ccid = :id AND attempt_id = :attemptId")
     suspend fun updateProgress(id: String, attemptId: String, status: String)
 
+    @Transaction
     @Query("SElECT * FROM ContentModel where  ccid = :id")
     fun getContent(id: String): ContentModel
 

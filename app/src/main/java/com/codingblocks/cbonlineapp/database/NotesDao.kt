@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.database
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 
 @Dao
@@ -24,6 +25,7 @@ interface NotesDao : BaseDao<NotesModel> {
     @Query("SElECT * FROM NotesModel where nttUid = :uid")
     abstract fun getNoteById(uid: String): LiveData<NotesModel>
 
+    @Transaction
     @Query("DELETE FROM NotesModel where nttUid = :uid")
     abstract fun deleteNoteByID(uid: String)
 }
