@@ -133,6 +133,7 @@ class DashboardActivity : BaseCBActivity(),
     private fun fetchToken(data: Uri) {
         val grantCode = data.getQueryParameter("code") as String
         viewModel.fetchToken(grantCode)
+        viewModel.isLoggedIn.value = true
         initializeUI(true)
     }
 
