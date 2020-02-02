@@ -104,7 +104,6 @@ class DashboardActivity : BaseCBActivity(),
         viewModel.isLoggedIn.postValue(prefs.SP_JWT_TOKEN_KEY.isNotEmpty())
         viewModel.isLoggedIn.observe(this) {
             initializeUI(it)
-            if (progressDialog.isShowing) progressDialog.dismiss()
         }
     }
 
@@ -133,12 +132,8 @@ class DashboardActivity : BaseCBActivity(),
         }
     }
 
-    val progressDialog by lazy {
-        ProgressDialog.progressDialog(this, "Loading")
-    }
 
     private fun fetchToken(data: Uri) {
-        progressDialog.show()
         val grantCode = data.getQueryParameter("code") as String
         viewModel.fetchToken(grantCode)
     }

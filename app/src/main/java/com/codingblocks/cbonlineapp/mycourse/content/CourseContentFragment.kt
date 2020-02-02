@@ -329,7 +329,8 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                             requireContext().showDialog(
                                 "unavailable",
                                 secondaryText = R.string.unavailable,
-                                buttonText = R.string.ok
+                                buttonText = R.string.ok,
+                                cancelable = true
                             )
                     }
                     viewModel.updateProgress(ccid)
@@ -344,7 +345,8 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 requireContext().showDialog(
                     "expired",
                     secondaryText = R.string.expired,
-                    buttonText = R.string.buy_extension
+                    buttonText = R.string.buy_extension,
+                    cancelable = true
                 ) {
                     // Show Extension Dialog
                 }
@@ -353,7 +355,8 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 requireContext().showDialog(
                     "purchase",
                     secondaryText = R.string.purchase,
-                    buttonText = R.string.buy_now
+                    buttonText = R.string.buy_now,
+                    cancelable = true
                 ) {
                     // add to cart
                 }
@@ -362,7 +365,8 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 requireContext().showDialog(
                     "Wait",
                     secondaryText = R.string.wait,
-                    buttonText = R.string.ok
+                    buttonText = R.string.ok,
+                    cancelable = true
                 )
             }
 
