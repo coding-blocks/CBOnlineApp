@@ -222,7 +222,10 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
             onCommentClick = commentsClickListener
             onChatClick = chatClickListener
         }
-        loginBtn.setOnClickListener { startActivity(intentFor<LoginActivity>()) }
+        loginBtn.setOnClickListener {
+            startActivity(intentFor<LoginActivity>())
+            requireActivity().finish()
+        }
     }
 
     private fun setUpBottomSheet() {

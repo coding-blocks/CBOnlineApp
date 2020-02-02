@@ -19,6 +19,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.observe
 import com.caverock.androidsvg.SVG
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
@@ -56,6 +57,7 @@ import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.extensions.slideDown
 import com.codingblocks.cbonlineapp.util.extensions.slideUp
+import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
 import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.fabnavigation.FabNavigationAdapter
 import com.codingblocks.onlineapi.Clients
@@ -100,7 +102,10 @@ class DashboardActivity : BaseCBActivity(),
         Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
         Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
         viewModel.isLoggedIn.postValue(prefs.SP_JWT_TOKEN_KEY.isNotEmpty())
-        initializeUI(prefs.SP_JWT_TOKEN_KEY.isNotEmpty())
+        viewModel.isLoggedIn.observe(this) {
+            initializeUI(it)
+            if (progressDialog.isShowing) progressDialog.dismiss()
+        }
     }
 
     private fun setUser() {
@@ -128,11 +133,14 @@ class DashboardActivity : BaseCBActivity(),
         }
     }
 
+    val progressDialog by lazy {
+        ProgressDialog.progressDialog(this, "Loading")
+    }
+
     private fun fetchToken(data: Uri) {
+        progressDialog.show()
         val grantCode = data.getQueryParameter("code") as String
         viewModel.fetchToken(grantCode)
-        viewModel.isLoggedIn.value = true
-        initializeUI(true)
     }
 
     private fun initializeUI(loggedIn: Boolean) {
@@ -199,7 +207,7 @@ class DashboardActivity : BaseCBActivity(),
                         with(SVG.getFromInputStream(it.byteStream())) {
                             val picDrawable = PictureDrawable(
                                 this.renderToPicture(
-                                    400, 400
+                                    40, 40
                                 )
                             )
                             val bitmap = MediaUtils.getBitmapFromPictureDrawable(picDrawable)
@@ -412,6 +420,7 @@ class DashboardActivity : BaseCBActivity(),
     fun openProfile(view: View) {
         if (prefs.SP_JWT_TOKEN_KEY.isEmpty()) {
             startActivity<LoginActivity>()
+            finish()
         }
     }
 

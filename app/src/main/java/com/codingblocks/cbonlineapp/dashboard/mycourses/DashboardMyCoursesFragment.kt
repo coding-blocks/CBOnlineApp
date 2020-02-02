@@ -162,7 +162,10 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
                 showEmptyView(emptyView = emptyLl, shimmerView = dashboardCourseShimmer)
         }
         courseListAdapter.onItemClick = itemClickListener
-        loginBtn.setOnClickListener { startActivity(intentFor<LoginActivity>()) }
+        loginBtn.setOnClickListener {
+            startActivity(intentFor<LoginActivity>())
+            requireActivity().finish()
+        }
     }
 
     private fun setUpBottomSheet() {

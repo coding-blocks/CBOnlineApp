@@ -102,7 +102,10 @@ class DashboardHomeFragment : BaseCBFragment() {
         }
         exploreBtn.setOnClickListener { requireActivity().dashboardBottomNav.setCurrentItem(0) }
         exploreBtn2.setOnClickListener { requireActivity().dashboardBottomNav.setCurrentItem(0) }
-        loginBtn.setOnClickListener { startActivity(intentFor<LoginActivity>()) }
+        loginBtn.setOnClickListener {
+            startActivity(intentFor<LoginActivity>())
+            requireActivity().finish()
+        }
     }
 
     private fun loadData(
