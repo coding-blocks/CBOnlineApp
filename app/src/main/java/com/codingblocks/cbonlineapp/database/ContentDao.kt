@@ -13,7 +13,7 @@ interface ContentDao : BaseDao<ContentModel> {
     fun getContentWithId(attempt_id: String, id: String): ContentModel
 
     @Query("SElECT * FROM ContentModel where isDownloaded = :progress ORDER BY date")
-    fun getDownloads(progress: String): List<ContentModel>
+    suspend fun getDownloads(progress: String): List<ContentModel>
 
     @Query("UPDATE ContentModel SET isDownloaded = :status WHERE ccid = :contentId")
     suspend fun updateContent(contentId: String, status: Int)

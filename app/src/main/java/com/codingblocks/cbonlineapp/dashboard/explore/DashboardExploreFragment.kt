@@ -121,7 +121,8 @@ class DashboardExploreFragment : BaseCBFragment() {
             vm.fetchTracks()
             GlobalScope.launch(Dispatchers.Main) {
                 delay(5000)
-                swipeToRefresh.isRefreshing = false
+                if (swipeToRefresh != null)
+                    swipeToRefresh.isRefreshing = false
             }
         }
     }

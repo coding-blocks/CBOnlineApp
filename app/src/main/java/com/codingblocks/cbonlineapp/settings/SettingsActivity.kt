@@ -12,6 +12,10 @@ import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.readableFileSize
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import kotlinx.android.synthetic.main.activity_settings.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
@@ -47,15 +51,13 @@ class SettingsActivity : BaseCBActivity() {
         })
 
         deleteAllTv.setOnClickListener {
-            viewModel.getDownloads().let { list ->
-                list.forEach { content ->
+            GlobalScope.launch {
+                val files = withContext(Dispatchers.IO) { viewModel.getDownloads() }
+                files.forEach { content ->
+
                     val folderFile = File(file, "/${content.contentLecture.lectureId}")
+
                     MediaUtils.deleteRecursive(folderFile)
-//                    viewModel.updateContent(
-//                        content.section_id,
-//                        content.contentLecture.lectureContentId,
-//                        "false"
-//                    )
                 }
             }
         }

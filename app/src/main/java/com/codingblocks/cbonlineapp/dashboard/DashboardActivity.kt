@@ -57,7 +57,6 @@ import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.extensions.slideDown
 import com.codingblocks.cbonlineapp.util.extensions.slideUp
-import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
 import com.codingblocks.fabnavigation.FabNavigation
 import com.codingblocks.fabnavigation.FabNavigationAdapter
 import com.codingblocks.onlineapi.Clients
@@ -132,7 +131,6 @@ class DashboardActivity : BaseCBActivity(),
         }
     }
 
-
     private fun fetchToken(data: Uri) {
         val grantCode = data.getQueryParameter("code") as String
         viewModel.fetchToken(grantCode)
@@ -162,7 +160,9 @@ class DashboardActivity : BaseCBActivity(),
         }
         if (loggedIn) {
             setUser()
-            createShortcut()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                createShortcut()
+            }
             dashboardBottomNav.setCurrentItem(1)
         } else {
             dashboardNavigation.getHeaderView(0).apply {

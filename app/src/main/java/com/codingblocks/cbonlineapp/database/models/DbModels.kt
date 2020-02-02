@@ -72,13 +72,13 @@ data class ContentCsvModel(
 )
 
 @Entity(
-    indices = [Index("contentId")],
-    foreignKeys = [(ForeignKey(
-        entity = ContentModel::class,
-        parentColumns = ["ccid"],
-        childColumns = ["contentId"],
-        onDelete = ForeignKey.CASCADE
-    ))]
+//    indices = [Index("contentId")],
+//    foreignKeys = [(ForeignKey(
+//        entity = ContentModel::class,
+//        parentColumns = ["ccid"],
+//        childColumns = ["contentId"],
+//        onDelete = ForeignKey.CASCADE
+//    ))]
 )
 data class NotesModel(
     @PrimaryKey
