@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
 import android.widget.SeekBar
+import androidx.lifecycle.lifecycleScope
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.MediaUtils
@@ -42,22 +43,18 @@ class SettingsActivity : BaseCBActivity() {
         wifiSwitch.setOnClickListener {
             getPrefs().SP_WIFI = wifiSwitch.isChecked
         }
-        val bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
-        spaceFreeTv.text = String.format("%s free", bytesAvailable.readableFileSize())
-        spaceUsedTv.text = String.format("%s used", file?.let {
-            folderSize(
-                it
-            ).readableFileSize()
-        })
-
+        updateSpaceStats()
         deleteAllTv.setOnClickListener {
-            GlobalScope.launch {
-                val files = withContext(Dispatchers.IO) { viewModel.getDownloads() }
+            lifecycleScope.launch {
+                val files = viewModel.getDownloads()
                 files.forEach { content ->
 
                     val folderFile = File(file, "/${content.contentLecture.lectureId}")
 
-                    MediaUtils.deleteRecursive(folderFile)
+                    withContext(Dispatchers.IO) {
+                        MediaUtils.deleteRecursive(folderFile)
+                    }
+                    runOnUiThread { updateSpaceStats() }
                 }
             }
         }
@@ -82,6 +79,16 @@ class SettingsActivity : BaseCBActivity() {
         pipSwitch.setOnClickListener {
             getPrefs().SP_PIP = pipSwitch.isChecked
         }
+    }
+
+    private fun updateSpaceStats () {
+        val bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
+        spaceFreeTv.text = String.format("%s free", bytesAvailable.readableFileSize())
+        spaceUsedTv.text = String.format("%s used", file?.let {
+            folderSize(
+                it
+            ).readableFileSize()
+        })
     }
 
     private fun setSeekbarProgress(progress: Int) {

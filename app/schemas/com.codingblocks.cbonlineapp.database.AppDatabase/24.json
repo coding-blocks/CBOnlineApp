@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "d6fd29b6ed09364fb1947e9c87ab9c82",
+    "identityHash": "422be1c0b391fe4be6028293b0ecccf1",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -671,7 +671,7 @@
       },
       {
         "tableName": "NotesModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`nttUid` TEXT NOT NULL, `duration` REAL NOT NULL, `text` TEXT NOT NULL, `contentId` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `deletedAt` TEXT, `contentTitle` TEXT NOT NULL, PRIMARY KEY(`nttUid`), FOREIGN KEY(`contentId`) REFERENCES `ContentModel`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`nttUid` TEXT NOT NULL, `duration` REAL NOT NULL, `text` TEXT NOT NULL, `contentId` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `deletedAt` TEXT, `contentTitle` TEXT NOT NULL, PRIMARY KEY(`nttUid`))",
         "fields": [
           {
             "fieldPath": "nttUid",
@@ -728,29 +728,8 @@
           ],
           "autoGenerate": false
         },
-        "indices": [
-          {
-            "name": "index_NotesModel_contentId",
-            "unique": false,
-            "columnNames": [
-              "contentId"
-            ],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_NotesModel_contentId` ON `${TABLE_NAME}` (`contentId`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "ContentModel",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "contentId"
-            ],
-            "referencedColumns": [
-              "ccid"
-            ]
-          }
-        ]
+        "indices": [],
+        "foreignKeys": []
       },
       {
         "tableName": "RunModel",
@@ -1313,7 +1292,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd6fd29b6ed09364fb1947e9c87ab9c82')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '422be1c0b391fe4be6028293b0ecccf1')"
     ]
   }
 }

@@ -12,8 +12,8 @@ interface ContentDao : BaseDao<ContentModel> {
     @Query("SElECT * FROM ContentModel where attempt_id = :attempt_id AND ccid = :id")
     fun getContentWithId(attempt_id: String, id: String): ContentModel
 
-    @Query("SElECT * FROM ContentModel where isDownloaded = :progress ORDER BY date")
-    suspend fun getDownloads(progress: String): List<ContentModel>
+    @Query("SElECT * FROM ContentModel where isDownloaded = :isDownloaded ORDER BY date")
+    suspend fun getDownloads(isDownloaded: Boolean): List<ContentModel>
 
     @Query("UPDATE ContentModel SET isDownloaded = :status WHERE ccid = :contentId")
     suspend fun updateContent(contentId: String, status: Int)
