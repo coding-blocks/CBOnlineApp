@@ -201,10 +201,6 @@
                 tools:itemCount="4"
                 tools:listitem="@layout/item_track_card" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/dividerthick" />
         </LinearLayout>
 
     </ScrollView>

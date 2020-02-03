@@ -44,6 +44,7 @@ import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
 import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
+import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
@@ -130,6 +131,8 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_player)
+        Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
+        Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
 
         viewModel.contentId = intent.getStringExtra(CONTENT_ID) ?: ""
         viewModel.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
