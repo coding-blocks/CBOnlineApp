@@ -83,11 +83,10 @@ class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
 
         viewModel.currentTrack.observer(this) { track ->
             title = track.name
-//            shortTv.text = course.subtitle
-
             if (courseLogoUrl.isNullOrEmpty()) courseLogo.loadImage(track.logo)
             courseBackdrop.loadImage(track.background)
             shortTv.text = track.description
+            certifiedTv.append(track.name)
             trackCourseNumTv.text = "${track.courses?.size} Courses"
         }
 

@@ -49,6 +49,7 @@ class TracksListAdapter(val type: String = "") : ListAdapter<CareerTracks, Track
 
             trackCourseNumTv.text = "${item.courses?.size} Courses"
             if (type == "LIST") {
+                ratingTv.text = item.status ?: "Trending Now"
                 trackCover.loadImage(item.background)
                 val profession = item.professions?.takeIf { it.isNotEmpty() }?.first()
                 val chip = LayoutInflater.from(context).inflate(R.layout.single_chip_layout, trackChips, false) as Chip
