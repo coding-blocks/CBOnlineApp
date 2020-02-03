@@ -81,18 +81,18 @@
 
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/trackBtn"
                 style="@style/CustomOutlinedButton"
                 android:layout_width="0dp"
-                android:id="@+id/trackBtn"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:drawableEnd="@drawable/ic_dropdown_small"
+                android:lines="1"
                 android:paddingStart="13dp"
                 android:paddingTop="7dp"
                 android:paddingEnd="13dp"
-                android:lines="1"
                 android:paddingBottom="7dp"
                 android:text="@string/choose_track"
                 android:textSize="14sp"
@@ -109,18 +109,18 @@
             android:layout_marginEnd="@dimen/margin_large">
 
             <TextView
+                android:id="@+id/needHelp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
                 android:drawableStart="@drawable/ic_help_fill"
                 android:drawablePadding="10dp"
+                android:focusable="true"
                 android:fontFamily="@font/gilroy_medium"
                 android:gravity="center_vertical"
                 android:text="Need Help?"
-                android:id="@+id/needHelp"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
                 android:textColor="@color/orangish"
                 android:textSize="16sp" />
 
@@ -138,58 +138,75 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_large"
-        android:layout_marginTop="@dimen/margin_large"
-        android:layout_marginEnd="@dimen/margin_large"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_tracks"
-            android:tint="@color/orangish" />
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_small"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/gilroy_bold"
-                android:text="@string/learning_tracks"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_tracks"
+                    android:tint="@color/orangish" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:text="@string/learning_tracks"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:drawablePadding="10dp"
+                        android:fontFamily="@font/gilroy_medium"
+                        android:gravity="center"
+                        android:text="@string/track_desc"
+                        android:textColor="@color/brownish_grey"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tracksRv"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:drawablePadding="10dp"
-                android:fontFamily="@font/gilroy_medium"
-                android:gravity="center"
-                android:text="@string/track_desc"
-                android:textColor="@color/brownish_grey"
-                android:textSize="13sp" />
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_medium"
+                android:orientation="horizontal"
+                tools:itemCount="4"
+                tools:listitem="@layout/item_track_card" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dividerthick" />
         </LinearLayout>
-    </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tracksRv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_medium"
-        android:layout_marginTop="@dimen/margin_small"
-        android:layout_marginEnd="@dimen/margin_medium"
-        android:orientation="horizontal"
-        tools:itemCount="4"
-        tools:listitem="@layout/item_track_card" />
+    </ScrollView>
 
 </LinearLayout>

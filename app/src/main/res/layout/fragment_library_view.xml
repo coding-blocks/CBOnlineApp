@@ -126,12 +126,26 @@
             android:text="@string/go_to_classroom" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/downloadTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:drawableStart="@drawable/ic_info"
+        android:drawablePadding="@dimen/margin_medium"
+        android:fontFamily="@font/gilroy_medium"
+        android:text="@string/note_your_downloads_will_be_deleted_automatically_after_15_days_of_download"
+        android:textColor="@color/orangish"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/libraryRv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         tools:itemCount="4"
         tools:listitem="@layout/item_note" />
 </LinearLayout>

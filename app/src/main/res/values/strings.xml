@@ -261,6 +261,7 @@
     <string name="onlineTracksUrl">http://online.codingblocks.com/app/tracks/</string>
     <string name="have_any_doubts">Have any doubts?</string>
     <string name="just_fill_in_your_details_and_our_edu_counsellor_will_get_back_to_you">Just fill in your details and our edu. counsellor will get back to you!</string>
+    <string name="note_your_downloads_will_be_deleted_automatically_after_15_days_of_download">Note: Your downloads will be deleted automatically after 15 days of download.</string>
 
 
 </resources>

@@ -286,14 +286,15 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 is ContentModel -> with(it) {
                     when (contentable) {
                         DOCUMENT ->
-                            if (contentDocument.documentUid.isNotEmpty())
+                            if (contentDocument.documentUid.isNotEmpty()) {
+                                viewModel.updateProgress(ccid)
                                 startActivity(
                                     intentFor<PdfActivity>(
                                         "fileUrl" to contentDocument.documentPdfLink,
                                         "fileName" to contentDocument.documentName + ".pdf"
                                     )
                                 )
-                            else
+                            } else
                                 checkSection(premium)
                         LECTURE ->
                             if (contentLecture.lectureUid.isNotEmpty())
@@ -306,24 +307,26 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                             else
                                 checkSection(premium)
                         VIDEO ->
-                            if (contentVideo.videoUid.isNotEmpty())
+                            if (contentVideo.videoUid.isNotEmpty()) {
+                                viewModel.updateProgress(ccid)
                                 startActivity(
                                     intentFor<VideoPlayerActivity>(
                                         CONTENT_ID to ccid,
                                         SECTION_ID to sectionId
                                     )
                                 )
-                            else
+                            } else
                                 checkSection(premium)
                         QNA ->
-                            if (contentQna.qnaUid.isNotEmpty())
+                            if (contentQna.qnaUid.isNotEmpty()) {
+                                viewModel.updateProgress(ccid)
                                 startActivity(
                                     intentFor<QuizActivity>(
                                         CONTENT_ID to ccid,
                                         SECTION_ID to sectionId
                                     )
                                 )
-                            else
+                            } else
                                 checkSection(premium)
                         CODE ->
                             requireContext().showDialog(
@@ -333,7 +336,6 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                                 cancelable = true
                             )
                     }
-                    viewModel.updateProgress(ccid)
                 }
             }
         }

@@ -92,7 +92,7 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
 
         private fun showOrHide(ll: View, title: TextView) {
             if (ll.visibility == View.GONE) {
-                title.setTextColor(ll.context.getColor(R.color.orangish))
+                title.setTextColor(ll.context.resources.getColor(R.color.orangish))
                 ll.visibility = View.VISIBLE
                 arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                     0.5f)
@@ -101,7 +101,7 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
 
                 itemView.arrow.startAnimation(arrowAnimation)
             } else {
-                title.setTextColor(ll.context.getColor(R.color.black))
+                title.setTextColor(ll.context.resources.getColor(R.color.black))
                 ll.visibility = View.GONE
                 arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                     0.5f)

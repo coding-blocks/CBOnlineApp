@@ -84,7 +84,11 @@ class AdminActivity : BaseCBActivity(), FragmentChangeListener {
     }
 
     private fun initializeUI() {
-        bottomNavAdmin.defaultBackgroundColor = getColor(R.color.dark)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            bottomNavAdmin.defaultBackgroundColor = getColor(R.color.dark)
+        } else {
+            bottomNavAdmin.defaultBackgroundColor = resources.getColor(R.color.dark)
+        }
         bottomNavAdmin.setOnTabSelectedListener(object : FabNavigation.OnTabSelectedListener {
             override fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
                 when (position) {

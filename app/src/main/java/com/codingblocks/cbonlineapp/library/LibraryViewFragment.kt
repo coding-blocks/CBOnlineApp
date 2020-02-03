@@ -106,6 +106,7 @@ class LibraryViewFragment : BaseCBFragment() {
                     } else {
                         libraryListAdapter.submitList(it)
                     }
+                    downloadTv.isVisible = it.isNotEmpty()
                     hideRecyclerView(it.isNotEmpty())
                 }
             }

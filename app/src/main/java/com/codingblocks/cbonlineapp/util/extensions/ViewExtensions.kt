@@ -10,6 +10,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewAnimationUtils
@@ -247,11 +248,19 @@ fun Context.showDialog(
 }
 
 fun Context.openChrome(url: String, newTask: Boolean = false) {
-    val builder = CustomTabsIntent.Builder()
-        .enableUrlBarHiding()
-        .setToolbarColor(getColor(R.color.colorPrimaryDark))
-        .setShowTitle(true)
-        .setSecondaryToolbarColor(getColor(R.color.colorPrimary))
+    val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        CustomTabsIntent.Builder()
+            .enableUrlBarHiding()
+            .setToolbarColor(getColor(R.color.colorPrimaryDark))
+            .setShowTitle(true)
+            .setSecondaryToolbarColor(getColor(R.color.colorPrimary))
+    } else {
+        CustomTabsIntent.Builder()
+            .enableUrlBarHiding()
+            .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+            .setShowTitle(true)
+            .setSecondaryToolbarColor(resources.getColor(R.color.colorPrimary))
+    }
     val customTabsIntent = builder.build()
     if (newTask) {
         customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK

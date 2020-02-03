@@ -66,7 +66,6 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
                         ).singleTop()
                     )
                 }
-                viewModel.updateProgress(content.contentId)
             }
         }
 

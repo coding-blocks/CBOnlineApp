@@ -70,6 +70,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
+import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -150,7 +151,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         )
         viewModel.currentOrientation = resources.configuration.orientation
         viewModel.content.observeOnce {
-
+            viewModel.contentLength = it.contentLecture.lectureDuration
             viewModel.attemptId.value = it.attempt_id
             sectionTitle.text = "Section ${it.sectionTitle}"
             contentTitle.text = it.title
@@ -387,7 +388,11 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         override fun onBufferUpdate(p0: Long) {
         }
 
-        override fun onProgress(p0: Long) {
+        override fun onProgress(progress: Long) {
+            val per = (viewModel.contentLength / 100) * 90
+            if (progress > per) {
+                viewModel.updateProgress()
+            }
         }
 
         override fun onPlaybackSpeedChanged(speed: Float) {
@@ -395,6 +400,8 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
 
         override fun onLoadError(p0: VdoPlayer.VdoInitParams, p1: ErrorDescription) {
+            info { p0 }
+            info { p1 }
             Crashlytics.log(
                 "Error Message: ${p1.errorMsg}, " +
                     "Error Code: ${p1.errorCode} , ${p1.httpStatusCode}"
@@ -411,6 +418,8 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
 
         override fun onError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
+            info { p0 }
+            info { p1 }
             Crashlytics.log(
                 "Error Message: ${p1?.errorMsg}," +
                     " Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}"

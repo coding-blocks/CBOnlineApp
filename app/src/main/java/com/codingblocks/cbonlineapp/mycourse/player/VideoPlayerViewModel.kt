@@ -15,7 +15,10 @@ import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.mycourse.player.notes.NotesWorker
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.LIVE
+import com.codingblocks.cbonlineapp.util.ProgressWorker
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
@@ -31,6 +34,7 @@ class VideoPlayerViewModel(
     private val repo: VideoPlayerRepository,
     private val repoDoubts: DashboardDoubtsRepository
 ) : ViewModel() {
+    var contentLength: Long = 0L
     var playWhenReady = false
     var currentOrientation: Int = 0
     var mOtp: String? = null
@@ -260,5 +264,19 @@ class VideoPlayerViewModel(
                 }
             }
         }
+    }
+
+    fun updateProgress() {
+        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val progressData: Data = workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to attemptId.value)
+        val request: OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<ProgressWorker>()
+                .setConstraints(constraints)
+                .setInputData(progressData)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                .build()
+
+        WorkManager.getInstance()
+            .enqueue(request)
     }
 }
