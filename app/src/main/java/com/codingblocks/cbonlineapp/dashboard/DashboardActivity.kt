@@ -202,7 +202,7 @@ class DashboardActivity : BaseCBActivity(),
                         with(SVG.getFromInputStream(it.byteStream())) {
                             val picDrawable = PictureDrawable(
                                 this.renderToPicture(
-                                    40, 40
+                                    80, 80
                                 )
                             )
                             val bitmap = MediaUtils.getBitmapFromPictureDrawable(picDrawable)
