@@ -28,6 +28,7 @@ import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.Sections
+import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
 class VideoPlayerViewModel(
@@ -249,7 +250,7 @@ class VideoPlayerViewModel(
         }
     }
 
-    fun createDoubt(title: String, body: String) {
+    fun createDoubt(title: String, body: String, function: (message: String) -> Unit) {
         val doubt = Doubts(null, title, body, RunAttempts(attemptId.value ?: ""), LectureContent(contentId))
         runIO {
             when (val response = repo.addDoubt(doubt)) {
@@ -257,9 +258,17 @@ class VideoPlayerViewModel(
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         offlineSnackbar.postValue(("Doubt Created Successfully !"))
+                        function("")
                         fetchDoubts()
                     } else {
-                        setError(fetchError(response.value.code()))
+                        try {
+                            val jObjError = JSONObject(response.value.errorBody()?.string())
+                            val msg = (jObjError.getJSONArray("errors")[0] as JSONObject).getString("detail")
+                            function(msg)
+                        } catch (e: Exception) {
+                        } finally {
+                            setError(fetchError(response.value.code()))
+                        }
                     }
                 }
             }

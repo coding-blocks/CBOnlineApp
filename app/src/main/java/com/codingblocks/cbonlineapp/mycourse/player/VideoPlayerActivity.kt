@@ -638,11 +638,14 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                     }
                     bottomSheetSaveBtn.apply {
                         setOnClickListener {
-                            viewModel.createDoubt(
-                                sheetDialog.doubtTitleTv.text.toString(),
-                                sheetDialog.bottoSheetDescTv.text.toString()
-                            )
-                            dialog.dismiss()
+                            viewModel.createDoubt(sheetDialog.doubtTitleTv.text.toString(), sheetDialog.bottoSheetDescTv.text.toString()) {
+                                runOnUiThread {
+                                    if (it.isEmpty())
+                                        dialog.dismiss()
+                                    else
+                                        toast(it)
+                                }
+                            }
                         }
                         text = "Post"
                     }
