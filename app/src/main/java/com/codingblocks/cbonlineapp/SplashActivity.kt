@@ -20,9 +20,9 @@ class SplashActivity : BaseCBActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         GlobalScope.launch {
-            if (sharedPrefs.SP_ROLE_ID != 0) {
-                withContext(Dispatchers.IO) { runMigration() }
-            }
+            //            if (sharedPrefs.SP_ROLE_ID != 0) {
+//                withContext(Dispatchers.IO) { runMigration() }
+//            }
             val key = sharedPrefs.SP_JWT_TOKEN_KEY
             if (key.isNotEmpty() && !JWTUtils.isExpired(key)) {
                 startActivity(intentFor<DashboardActivity>())
