@@ -12,7 +12,7 @@ import com.codingblocks.onlineapi.models.User
  */
 class ProfileViewModel(private val repo: ProfileRepository) : BaseCBViewModel() {
 
-    private fun fetchUser(): MutableLiveData<User> {
+    fun fetchUser(): MutableLiveData<User> {
         val user = MutableLiveData<User>()
         runIO {
             when (val response = repo.fetchUser()) {

@@ -28,6 +28,8 @@ import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizRepository
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
 import com.codingblocks.cbonlineapp.notifications.NotificationViewModel
+import com.codingblocks.cbonlineapp.profile.ProfileRepository
+import com.codingblocks.cbonlineapp.profile.ProfileViewModel
 import com.codingblocks.cbonlineapp.settings.SettingsViewModel
 import com.codingblocks.cbonlineapp.tracks.TrackViewModel
 import com.codingblocks.cbonlineapp.tracks.TracksRepository
@@ -57,6 +59,7 @@ val viewModelModule = module {
     viewModel { QuizViewModel(get()) }
     viewModel { CheckoutViewModel() }
     viewModel { TrackViewModel(get()) }
+    viewModel { ProfileViewModel(get()) }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
@@ -70,6 +73,7 @@ val viewModelModule = module {
     single { JobRepository(get()) }
     single { MyCourseRepository(get(), get(), get(), get(), get(), get()) }
     single { TracksRepository() }
+    single { ProfileRepository(get()) }
 }
 val preferencesModule = module {
     single { provideSettingsPreferences(androidApplication()) }
