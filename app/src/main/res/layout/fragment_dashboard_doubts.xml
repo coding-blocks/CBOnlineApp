@@ -1,0 +1,231 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dashboardDoubtRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dashboard_toolbar_comp"
+    android:paddingBottom="@dimen/margin_9xl"
+    tools:context="com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsFragment">
+
+    <LinearLayout
+        android:id="@+id/dashboardDoubts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:paddingTop="@dimen/margin_medium"
+            android:paddingBottom="@dimen/margin_medium">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/liveDoubtBtn"
+                style="@style/ButtonStyleChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:drawableEnd="@drawable/ic_circle_white_small"
+                android:drawablePadding="4dp"
+                android:text="@string/live_doubts" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/resolvedDoubtBtn"
+                style="@style/ButtonStyleChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:text="@string/resolved" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/allDoubtBtn"
+                style="@style/ButtonStyleChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:text="@string/all" />
+
+            <TextView
+                android:id="@+id/filterTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:drawableEnd="@drawable/ic_filter"
+                android:drawablePadding="8dp"
+                android:focusable="true"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="@string/filter"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/veryLightPink" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dashboardDoubtRv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:visibility="gone"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_doubts" />
+
+        <LinearLayout
+            android:id="@+id/emptyLl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="150dp"
+            android:paddingBottom="20dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_comment" />
+
+            <TextView
+                android:id="@+id/emptyMessageTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="@string/no_doubts"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_extra_small"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="@string/doubts_that_you_ask_appear_here"
+                android:textAlignment="center"
+                android:textColor="@color/brownish_grey"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/doubtEmptyBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:paddingStart="20dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="10dp"
+                android:text="@string/go_to_classroom" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/internetll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="150dp"
+                android:src="@drawable/ic_no_connection"
+                android:tint="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="150dp"
+                android:text="@string/no_internet"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/dashboardDoubtShimmer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:background="@color/dark_white"
+            android:visibility="visible">
+
+            <include layout="@layout/item_skeleton_content" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dashboardDoubtsLoggedOut"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/margin_9xl"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_comment" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/doubts"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium_small"
+            android:fontFamily="@font/gilroy_medium"
+            android:text="@string/my_doubts_logged_out"
+            android:textAlignment="center"
+            android:textColor="@color/brownish_grey" />
+
+        <View
+            android:layout_width="200dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:background="@drawable/divider" />
+
+        <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:drawableEnd="@drawable/ic_dropright"
+            android:drawablePadding="10dp"
+            android:id="@+id/loginBtn"
+            android:drawableTint="@color/orangish"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/login_now"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
+

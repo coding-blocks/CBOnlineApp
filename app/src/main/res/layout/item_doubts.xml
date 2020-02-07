@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/margin_large"
+    android:layout_marginTop="@dimen/margin_large"
+    android:layout_marginEnd="@dimen/margin_large"
+    android:layout_marginBottom="@dimen/margin_large"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/doubtTitleTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:lines="1"
+            android:fontFamily="@font/gilroy_bold"
+            android:textSize="16sp"
+            tools:text="This is the title of the doubt " />
+
+        <TextView
+            android:id="@+id/doubtTimeTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/margin_extra_small"
+            android:layout_marginEnd="4dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:textColor="@color/brownish_grey"
+            android:textSize="12sp"
+            tools:text="4 hours ago" />
+    </LinearLayout>
+
+    <com.codingblocks.cbonlineapp.util.widgets.ExpandableTextView
+        android:id="@+id/doubtDescriptionTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:textSize="16sp"
+        app:trimLength="100"
+        tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the best standard dummy text... more" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:visibility="gone"
+        android:fontFamily="@font/gilroy_medium"
+        android:textColor="@color/brownish_grey"
+        android:textSize="14sp"
+        tools:text="View 23 comments" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:id="@+id/buttonsContainer"
+        android:gravity="center">
+
+        <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+            android:id="@+id/commentTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawableEnd="@drawable/ic_comment_small"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:gravity="start"
+            android:text="@string/comment" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+            android:id="@+id/chatTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_chat"
+            android:drawablePadding="8dp"
+
+            android:fontFamily="@font/gilroy_medium"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/chat_with_ta"
+            android:visibility="visible" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/markResolvedTv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawableEnd="@drawable/ic_resolve"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:text="@string/mark_resolved"
+            android:textColor="@color/freshGreen" />
+    </LinearLayout>
+
+</LinearLayout>

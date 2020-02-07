@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/margin_large"
+    android:paddingTop="@dimen/margin_large"
+    android:paddingEnd="@dimen/margin_large"
+    android:paddingBottom="@dimen/margin_large"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/courseLogoImg"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:src="@drawable/ic_course_logo" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/courseTitleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_bold"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:ellipsize="end"
+            android:lines="1"
+            tools:text="Competitive Programming" />
+
+        <TextView
+            android:id="@+id/courseInstructorTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:ellipsize="end"
+            android:lines="1"
+            tools:text="Mentor: Arnav Gupta" />
+
+        <LinearLayout
+            android:id="@+id/progressContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <com.skydoves.progressview.ProgressView
+                android:id="@+id/progressView1"
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_weight="1"
+
+                app:progressView_autoAnimate="true"
+                app:progressView_colorBackground="@color/veryLightPink"
+                app:progressView_colorGradientEnd="@color/dusty_orange"
+                app:progressView_colorGradientStart="@color/pastel_red"
+                app:progressView_max="100"
+                app:progressView_progress="40"
+                app:progressView_radius="10dp" />
+
+            <TextView
+                android:id="@+id/progressTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/gilroy_bold"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                tools:text="100%" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/extensionTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="16dp"
+            android:drawableEnd="@drawable/ic_dropright"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/orangish"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/buy_extension"
+            android:textColor="@color/orangish"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/openBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:src="@drawable/ic_dropright_big"
+        android:visibility="visible" />
+</LinearLayout>

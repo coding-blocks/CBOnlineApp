@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:gravity="center"
+    android:padding="13dp">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="7dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/neon_red"
+        android:indeterminateTintMode="src_in" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="7dp"
+        android:id="@+id/progressTitle"
+        android:layout_toEndOf="@+id/progressBar"
+        android:fontFamily="@font/gilroy_bold"
+        android:text="Deleting Files..."
+        android:textColor="@color/black"
+        android:textSize="22sp" />
+</RelativeLayout>

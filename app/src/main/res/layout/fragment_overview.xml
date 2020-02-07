@@ -4,533 +4,310 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="24dp"
-    android:fillViewport="true"
-    android:overScrollMode="never"
-    tools:context=".fragments.OverviewFragment">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".mycourse.overview.OverviewFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="24dp"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <RelativeLayout
+            <LinearLayout
+                android:id="@+id/progressContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/course_progress"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/homeProgressTv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:textColor="@color/orangish"
+                    android:textSize="20sp"
+                    tools:text="100%" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/reset"
+                    android:id="@+id/confirmReset"
+                    android:textAlignment="viewEnd"
+                    android:textColor="#ff6666"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <com.skydoves.progressview.ProgressView
+                android:id="@+id/homeProgressView"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="@dimen/margin_medium_small"
+                app:progressView_autoAnimate="true"
+                app:progressView_colorBackground="@color/veryLightPink"
+                app:progressView_colorGradientEnd="@color/dusty_orange"
+                app:progressView_colorGradientStart="@color/pastel_red"
+                app:progressView_max="100"
+                app:progressView_radius="10dp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/your_performance"
+            android:textSize="18sp" />
+
+        <include layout="@layout/item_performance" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/performance_graph"
+            android:textSize="18sp" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart1"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large" />
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="@dimen/margin_large"
+                android:background="@drawable/dividerthick" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/certificateImgView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="10dp"
-                    android:src="@drawable/ic_certification_i" />
+                    android:contentDescription="@string/course_leaderboard"
+                    android:src="@drawable/ic_leaderboard_gradient" />
 
-                <TextView
-                    android:id="@+id/unlocktitletv"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/certificateImgView"
-                    android:layout_centerHorizontal="true"
-                    android:fontFamily="@font/nunitosans_bold"
-                    android:text="Unlock Certificate"
-                    android:textColor="@color/black"
-                    android:textSize="24sp" />
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/unlockdesciptiontv"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:text="@string/course_leaderboard"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:drawablePadding="10dp"
+                        android:fontFamily="@font/gilroy_medium"
+                        android:gravity="center"
+                        android:text="@string/leaderboard_desc"
+                        android:textColor="@color/brownish_grey"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/courseSuggestedRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:orientation="horizontal"
+                android:overScrollMode="never"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="4"
+                tools:listitem="@layout/item_course_card" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginTop="@dimen/margin_large"
+            android:background="@drawable/dividerthick" />
+
+        <include
+            layout="@layout/item_certificate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large" />
+
+        <HorizontalScrollView
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingStart="@dimen/margin_large"
+                android:paddingTop="@dimen/margin_medium_small"
+                android:paddingEnd="@dimen/margin_large"
+                android:paddingBottom="@dimen/margin_medium_small">
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_width="210dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/unlocktitletv"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="16dp"
-                    android:fontFamily="@font/nunitosans_italic"
-                    android:text="Complete 90% of  your course to unlock and generate the certificate"
-                    android:textAlignment="center"
-                    android:textColor="#666666"
-                    android:textSize="18sp" />
-            </RelativeLayout>
+                    android:background="@drawable/background_purple"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/margin_medium_small"
+                    android:paddingTop="@dimen/margin_large"
+                    android:paddingEnd="@dimen/margin_medium"
+                    android:paddingBottom="@dimen/margin_large">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/claim_goodies"
+                        android:src="@drawable/ic_goodie" />
+
+                    <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_medium_small"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:text="@string/claim_goodies"
+                        android:textSize="18sp"
+                        app:endColor="#f7c332"
+                        app:startColor="#fa8733" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_medium_small"
+                        android:fontFamily="@font/gilroy_medium"
+                        android:text="@string/goodie_desc"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_medium"
+                        android:drawableEnd="@drawable/ic_dropright"
+                        android:drawablePadding="10dp"
+                        android:text="@string/request_now"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/whatsappContainer"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_width="210dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:background="@drawable/background_green"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/margin_medium_small"
+                    android:paddingTop="@dimen/margin_large"
+                    android:paddingEnd="@dimen/margin_medium"
+                    android:paddingBottom="@dimen/margin_large">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/whatsapp"
+                        android:src="@drawable/ic_whatsapp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_medium_small"
+                        android:text="@string/join_group"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_medium_small"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gilroy_medium"
+                        android:text="@string/whatsapp_desc"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_medium"
+                        android:drawableEnd="@drawable/ic_dropright"
+                        android:drawablePadding="10dp"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:text="@string/join_now"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
 
 
-        </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
 
-        <TextView
-            android:id="@+id/leaderBoardTv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_bold"
-            android:text="Leaderboard"
-            android:textColor="@android:color/black"
-            android:textSize="22sp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
-
-        <View
-            android:id="@+id/view1"
-            android:layout_width="0dp"
-            android:layout_height="2dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="80dp"
-            android:background="@color/black"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/leaderBoardTv" />
-
-        <ListView
-            android:id="@+id/leaderboardLv"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="12dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view1"
-            tools:listitem="@layout/quiz_attempt_list" />
-
-        <TextView
-            android:id="@+id/faqTv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_bold"
-            android:text="Frequently Asked Questions"
-            android:textColor="@android:color/black"
-            android:textSize="22sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/leaderboardLv" />
-
-        <View
-            android:id="@+id/view6"
-            android:layout_width="0dp"
-            android:layout_height="2dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="80dp"
-            android:background="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/faqTv" />
-
-        <TextView
-            android:id="@+id/faqassignmentTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_semibold"
-            android:text="When do I complete an Assignment?"
-            android:textColor="@android:color/black"
-            android:textSize="17.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view6" />
-
-        <TextView
-            android:id="@+id/faqassignmentDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_italic"
-            android:text="You complete an assignment when you have attempted at least 80% of MCQ problems and you score an average of at least 80% in code problems, within an assignment."
-            android:textColor="#666666"
-            android:textSize="15.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/faqassignmentTitle" />
-
-        <TextView
-            android:id="@+id/faqLectureTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_semibold"
-            android:text="When do I complete a Lecture?"
-            android:textColor="@android:color/black"
-            android:textSize="17.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/faqassignmentDescription" />
-
-        <TextView
-            android:id="@+id/faqLectureDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_italic"
-            android:text="You complete a lecture when you have attempted at least 80% of objective problems, have scored at least 80% in each code problems, and have seen at least 80% of the total videos, within a lecture."
-            android:textColor="#666666"
-            android:textSize="15.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/faqLectureTitle" />
-
-        <TextView
-            android:id="@+id/faqTestTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_semibold"
-            android:text="When do I complete a Test?"
-            android:textColor="@android:color/black"
-            android:textSize="17.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/faqLectureDescription" />
-
-        <TextView
-            android:id="@+id/faqTestDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_italic"
-            android:text="You complete a test when you have submitted the test."
-            android:textColor="#666666"
-            android:textSize="15.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/faqTestTitle" />
-
-        <TextView
-            android:id="@+id/courseIntroTv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_bold"
-            android:text="Course Introduction"
-            android:textColor="@android:color/black"
-            android:textSize="22sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/faqTestDescription" />
-
-        <View
-            android:id="@+id/view2"
-            android:layout_width="0dp"
-            android:layout_height="2dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="80dp"
-            android:background="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/courseIntroTv" />
-
-        <TextView
-            android:id="@+id/introLecturesTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_semibold"
-            android:text="@string/lectures"
-            android:textColor="@android:color/black"
-            android:textSize="17.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view2" />
-
-        <TextView
-            android:id="@+id/introLecturesDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_italic"
-            android:text="@string/introlecturedescription"
-            android:textColor="#666666"
-            android:textSize="15.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introLecturesTitle" />
-
-        <TextView
-            android:id="@+id/introAssignmentTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_semibold"
-            android:text="@string/assignmentstitle"
-            android:textColor="@android:color/black"
-            android:textSize="17.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introLecturesDescription" />
-
-        <TextView
-            android:id="@+id/introAssignmentDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_italic"
-            android:text="@string/introassignmentdecription"
-            android:textColor="#666666"
-            android:textSize="15.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introAssignmentTitle" />
-
-        <TextView
-            android:id="@+id/introDoubtsTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_semibold"
-            android:text="@string/doubtstitle"
-            android:textColor="@android:color/black"
-            android:textSize="17.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introAssignmentDescription" />
-
-        <TextView
-            android:id="@+id/introDoubtsDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_italic"
-            android:text="@string/introdoubtsdescription"
-            android:textColor="#666666"
-            android:textSize="15.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introDoubtsTitle" />
-
-        <TextView
-            android:id="@+id/introSolutionsTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_semibold"
-            android:text="@string/solutionstitle"
-            android:textColor="@android:color/black"
-            android:textSize="17.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introDoubtsDescription" />
-
-        <TextView
-            android:id="@+id/introSolutionsDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_italic"
-            android:text="@string/introsolutiondescription"
-            android:textColor="#666666"
-            android:textSize="15.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introSolutionsTitle" />
-
-        <TextView
-            android:id="@+id/introPenaltyTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_semibold"
-            android:text="@string/penaltytitle"
-            android:textColor="@android:color/black"
-            android:textSize="17.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introSolutionsDescription" />
-
-        <TextView
-            android:id="@+id/introPenaltyDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_italic"
-            android:text="@string/intropenaltydescription"
-            android:textColor="#666666"
-            android:textSize="15.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introPenaltyTitle" />
-
-        <TextView
-            android:id="@+id/introAvailabilityTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_semibold"
-            android:text="@string/availabilitytitle"
-            android:textColor="@android:color/black"
-            android:textSize="17.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introPenaltyDescription" />
-
-        <TextView
-            android:id="@+id/introAvailabilityDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_italic"
-            android:text="@string/introavailablitydescription"
-            android:textColor="#666666"
-            android:textSize="15.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introAvailabilityTitle" />
-
-        <TextView
-            android:id="@+id/introLeaderboardTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_semibold"
-            android:text="@string/leaderboardtitle"
-            android:textColor="@android:color/black"
-            android:textSize="17.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introAvailabilityDescription" />
-
-        <TextView
-            android:id="@+id/introLeaderboardDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_italic"
-            android:text="@string/introleadeboaddescription"
-            android:textColor="#666666"
-            android:textSize="15.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introLeaderboardTitle" />
-
-        <TextView
-            android:id="@+id/introCertificateTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_semibold"
-            android:text="@string/certificate"
-            android:textColor="@android:color/black"
-            android:textSize="17.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introLeaderboardDescription" />
-
-        <TextView
-            android:id="@+id/introCertificateDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_italic"
-            android:text="@string/introcertificatedescription"
-            android:textColor="#666666"
-            android:textSize="15.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introCertificateTitle" />
-
-        <TextView
-            android:id="@+id/introEndnoteTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/nunitosans_semibold"
-            android:text="@string/endnote"
-            android:textColor="@android:color/black"
-            android:textSize="17.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introCertificateDescription" />
-
-        <TextView
-            android:id="@+id/introEndnoteDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="@font/nunitosans_italic"
-            android:text="@string/introendnotedescription"
-            android:textColor="#666666"
-            android:textSize="15.5sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/introEndnoteTitle" />
+        </HorizontalScrollView>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </androidx.core.widget.NestedScrollView>

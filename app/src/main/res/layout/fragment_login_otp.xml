@@ -1,0 +1,88 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="@dimen/margin_large"
+    android:paddingEnd="@dimen/margin_large"
+    android:id="@+id/otpRoot"
+    tools:context="com.codingblocks.cbonlineapp.auth.onboarding.LoginOtpFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="Please wait"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/margin_xxl"
+            android:id="@+id/numberTv"
+            android:fontFamily="@font/gilroy_medium"
+            android:text="We will auto verify the OTP sent to "
+            android:textColor="@color/brownish_grey"
+            android:textSize="14sp"
+            android:visibility="visible" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="65dp">
+
+            <TextView
+                android:id="@+id/errorDrawableTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/numberLayout"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end|top"
+                android:layout_marginBottom="28dp"
+                android:elevation="1dp"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="@string/use_email"
+                android:textColor="@color/orangish"
+                android:visibility="gone" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/numberLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/white"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:inputType="phone"
+                    android:letterSpacing="1.5"
+                    android:paddingStart="0dp"
+                    android:textColorHighlight="@color/orangish"
+                    android:textColorHint="@color/black"
+                    android:textSize="16sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/verifyOtpBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/margin_xl"
+        android:text="Verify"
+        android:textSize="20sp" />
+
+</FrameLayout>

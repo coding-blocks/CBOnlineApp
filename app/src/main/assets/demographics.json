@@ -1,0 +1,822 @@
+{
+  "colleges": [
+    {
+      "id": 1,
+      "name": "0---OTHER / NOT LISTED / NO COLLEGE ---0",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 2,
+      "name": "Amity School Of Engineering & Technology (Noida)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 3,
+      "name": "Army Institute Of Technology (Pune)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 4,
+      "name": "Asia Pacific Institute of Information Technology (APIIT SD) (Panipat)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 5,
+      "name": "B.I.T. Sindri (Dhanbad)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 6,
+      "name": "BMS College Of Engineering (Bangalore)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 7,
+      "name": "BMS Institute Of Technology & Management (Bangalore)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 8,
+      "name": "BRACT'S Vishwakarma Institute of Information Technology (Pune)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 9,
+      "name": "Bannari Amman Institute Of Technology (Erode)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 10,
+      "name": "Bharati Vidyapeeth University College Of Engineering (Pune)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 11,
+      "name": "Birla Institute Of Technology & Science (Pilani)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 12,
+      "name": "Birla Institute Of Technology (Ranchi)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 13,
+      "name": "CVR College Of Engineering (Hyderabad)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 14,
+      "name": "Chaitanya Bharathi Institute Of Technology (Hyderabad)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 15,
+      "name": "College Of Engineering, Guindy (Chennai)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 16,
+      "name": "College Of Engineering, Pune (Pune)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 17,
+      "name": "Cummins College of Engineering for Women (Pune)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 18,
+      "name": "Delhi Technological University (New-Delhi)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 19,
+      "name": "Dwarkadas J. Sanghvi College Of Engineering (Mumbai)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 20,
+      "name": "Faculty Of Engineering, DIT University (Dehradun)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 21,
+      "name": "Galgotias College Of Engineering And Technology (Noida)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 22,
+      "name": "Ganeshi Lal Bajaj Institute Of Technology & Management (Noida)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 23,
+      "name": "Government College Of Engineering (Amravati)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 24,
+      "name": "Government College Of Engineering (Karad)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 25,
+      "name": "Govt. Model Engineering College (Cochin)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 26,
+      "name": "Guru Nanak Dev Engineering College (Ludhiana)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 27,
+      "name": "IES College Of Technology (Bhopal)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 28,
+      "name": "IIIT, Allahabad (Allahabad)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 29,
+      "name": "IIIT, Hyderabad (Hyderabad)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 30,
+      "name": "IIT, Bombay (Mumbai)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 31,
+      "name": "IIT, Delhi (Delhi)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 32,
+      "name": "IIT, Kanpur (Kanpur)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 33,
+      "name": "IIT, Kharagpur (Kharagpur)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 34,
+      "name": "IMS Engineering College (Ghaziabad)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 35,
+      "name": "Indian Institute Of Technology (Indian School Of Mines), Dhanbad (Dhanbad)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 36,
+      "name": "Indraprastha Institute Of Information Technology Delhi (New Delhi)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 37,
+      "name": "Institute Of Engineering & Technology, J.K.Lakshmipat University (Jaipur)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 38,
+      "name": "Institute Of Technology (Ahmedabad)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 39,
+      "name": "J.B. Institute Of Technology (Dehradun)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 40,
+      "name": "JIS College Of Engineering (Kalyani, West Bengal)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 41,
+      "name": "JSS Academy Of Technical Education (Bangalore)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 42,
+      "name": "Jaipur Engineering College And Research Center (Jaipur)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 43,
+      "name": "Jawaharlal Nehru National College Of Engineering (Shimoga)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 44,
+      "name": "K L University (Guntur)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 45,
+      "name": "K.S.R. College Of Enginnering (Thiruchengode)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 46,
+      "name": "KIET Group Of Institutions (Ghaziabad)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 47,
+      "name": "KLE Dr M.S Sheshgiri College Of Engineering And Technology (Belgaum)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 48,
+      "name": "KLS Gogte Institute Of Technology (Belagavi)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 49,
+      "name": "Kongu Engineering College (Erode)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 50,
+      "name": "Kuppam Engineering College (Kuppam)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 51,
+      "name": "Lakshmi Narain College Of Technology (Bhopal)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 52,
+      "name": "Lovely Professional University (Phagwara)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 53,
+      "name": "M V J College Of Engineering (Bangalore)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 54,
+      "name": "M.S. Engineering College (Bangalore)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 55,
+      "name": "M.S. Ramaiah Institute Of Technology (Bangalore)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 56,
+      "name": "MIT College Of Engineering (Pune)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 57,
+      "name": "Madhav Institute of Technology & Science (Gwalior)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 58,
+      "name": "Maharashtra Institute Of Technology (Aurangabad)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 59,
+      "name": "Malla Reddy College of Engineering & Technology (Secunderabd)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 60,
+      "name": "Manipal Institue Of Technology (Manipal)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 61,
+      "name": "Mepco Schlenk Engineering College (Sivakasi)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 62,
+      "name": "Muffakham Jah College Of Engineering And Technology (Hyderabad)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 63,
+      "name": "NIT, Karnataka (Mangalore)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 64,
+      "name": "National Institute Of Science & Technology (Berhampur)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 65,
+      "name": "Netaji Subhas Institute Of Technology (New Delhi)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 66,
+      "name": "P.E.S. College Of Engineering (Mandya)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 67,
+      "name": "PES University (Bangalore)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 68,
+      "name": "PSG College of Technology (Coimbatore)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 69,
+      "name": "Pimpri Chinchwad College Of Engineering (Pune)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 70,
+      "name": "R.M.D. Engineering College (Thiruvallur)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 71,
+      "name": "R.M.K. Engineering College (Kavaripettai)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 72,
+      "name": "Rajagiri School Of Engineering & Technology (Ernakulam)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 73,
+      "name": "Rajarambapu Institute Of Technology (Sangli)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 74,
+      "name": "Rungta College Of Engineering And Technology (Bhilai)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 75,
+      "name": "S.A. Engineering College (Chennai)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 76,
+      "name": "SCMS School Of Engineering & Technology (Ernakulam)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 77,
+      "name": "SDM College Of Engineering & Technology (Dharwad)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 78,
+      "name": "SRM Engineering College (Chennai)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 79,
+      "name": "SVKM's NMIMS-Mukesh Patel School Of Technology Management & Engineering (Mumbai)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 80,
+      "name": "Sanjivani Rural Education Society's College Of Engineering (Ahmednagar)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 81,
+      "name": "Shri Ramdeobaba College Of Engineering And Management (Nagpur)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 82,
+      "name": "Shri Shankaracharya Technical Campus Bhilai (Bhilai)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 83,
+      "name": "Shri Vishnu Engineering College For Women (Bhimavaram)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 84,
+      "name": "Sikkim Manipal Institute Of Technology (Sikkim)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 85,
+      "name": "Sir M Visvesvaraya Institute Of Technology (Bangalore)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 86,
+      "name": "Sri Sairam College of Engineering (Bangalore)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 87,
+      "name": "Sri Sairam Engineering College (Chennai)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 88,
+      "name": "Sri Sivasubramaniya Nadar College of Engineering (Kalavakkam)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 89,
+      "name": "Symbiosis Institute Of Technology (Pune)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 90,
+      "name": "Thapar University (Patiala)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 91,
+      "name": "The National Institute Of Engineering (Mysore)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 92,
+      "name": "The Northcap University (Gurgaon)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 93,
+      "name": "Thiagarajar College Of Engineering (Madurai)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 94,
+      "name": "University College Of Engineering (Hyderabad)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 95,
+      "name": "University Institute Of Engineering & Technology, Panjab University (Chandigarh)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 96,
+      "name": "University Institute Of Engineering, Chandigarh University (Chandigarh)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 97,
+      "name": "VIT University (Vellore)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 98,
+      "name": "Veltech High Tech Dr. Rangarajan Dr. Sakunthala Engineering College (Chennai)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 99,
+      "name": "Vishwakarma Institute of Technology (Pune)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 100,
+      "name": "Visvesvaraya National Institute Of Technology (Nagpur)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    },
+    {
+      "id": 101,
+      "name": "Zakir Husain College Of Engineering & Technology, Aligarh (Aligarh)",
+      "createdAt": "2019-09-24T16:17:14.066Z",
+      "updatedAt": "2019-09-24T16:17:14.066Z"
+    }
+  ],
+  "branches": [
+    {
+      "id": 1,
+      "code": "OTHER",
+      "name": "0---OTHER / NOT LISTED ---0",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 2,
+      "code": "BT_CS",
+      "name": "(B.Tech/BE) Computers / IT / Software",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 3,
+      "code": "BT_EL",
+      "name": "(B.Tech/BE) Electrical / Electronics",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 4,
+      "code": "BT_ME",
+      "name": "(B.Tech/BE) Mechanical / Automobile / Aeronautical",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 5,
+      "code": "BT_PR",
+      "name": "(B.Tech/BE) Production / Manufacturing",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 6,
+      "code": "BT_CI",
+      "name": "(B.Tech/BE) Civil",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 7,
+      "code": "BT_CH",
+      "name": "(B.Tech/BE) Chemical / Petroleum / Textile",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 8,
+      "code": "BT_BT",
+      "name": "(B.Tech/BE) BioTech / Environmental",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 9,
+      "code": "BT_OT",
+      "name": "(B.Tech/BE) Others",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 10,
+      "code": "MT_CS",
+      "name": "(M.Tech/ME) Computers / IT / Software",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 11,
+      "code": "MT_EL",
+      "name": "(M.Tech/ME) Electrical / Electronics",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 12,
+      "code": "MT_ME",
+      "name": "(M.Tech/ME) Mechanical / Automobile / Aeronautical",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 13,
+      "code": "MT_PR",
+      "name": "(M.Tech/ME) Production / Manufacturing",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 14,
+      "code": "MT_CI",
+      "name": "(M.Tech/ME) Civil",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 15,
+      "code": "MT_CH",
+      "name": "(M.Tech/ME) Chemical / Petroleum / Textile",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 16,
+      "code": "MT_BT",
+      "name": "(M.Tech/ME) BioTech / Environmental",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 17,
+      "code": "MT_OT",
+      "name": "(M.Tech/ME) Others",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 18,
+      "code": "BCA",
+      "name": "(BCA)",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 19,
+      "code": "MCA",
+      "name": "(MCA)",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 20,
+      "code": "BS_PH",
+      "name": "(B.Sc/BS) Physics or related",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 21,
+      "code": "BS_CH",
+      "name": "(B.Sc/BS) Chemistry or related",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 22,
+      "code": "BS_MA",
+      "name": "(B.Sc/BS) Maths or related",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 23,
+      "code": "MS_PH",
+      "name": "(M.Sc/MS) Physics or related",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 24,
+      "code": "MS_CH",
+      "name": "(M.Sc/MS) Chemistry or related",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 25,
+      "code": "MS_MA",
+      "name": "(M.Sc/MS) Maths or related",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 26,
+      "code": "BCOM",
+      "name": "(B.Com/B.Sc) Economics / Finance",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 27,
+      "code": "MCOM",
+      "name": "(M.Com/M.Sc) Economics / Finance",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 28,
+      "code": "BA",
+      "name": "(BA)",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 29,
+      "code": "MA",
+      "name": "(MA)",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    },
+    {
+      "id": 30,
+      "code": "PHD",
+      "name": "(Ph.D / M.Phil / Research)",
+      "createdAt": "2019-09-24T16:17:19.537Z",
+      "updatedAt": "2019-09-24T16:17:19.537Z"
+    }
+  ]
+}

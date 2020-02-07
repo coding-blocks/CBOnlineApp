@@ -21,6 +21,9 @@
 #-renamesourcefileattribute SourceFile
 -ignorewarnings
 
+# ======= Keep Fragment Names =========
+-keepnames class * extends androidx.fragment.app.Fragment
+
 # ======= Models =========
 -keep class com.codingblocks.cbonlineapp.database.models.*** { *; }
 # ======= Models =========
@@ -52,11 +55,11 @@
 -keepclassmembers class * {
      @com.fasterxml.jackson.annotation.* *;
 }
-
 # ====== Jackson =========
 
 #  ==== JSONAPI Converter ====
 # Keep jsonapi-converter relative fields
+-keep class com.github.jasminb.** { *; }
 -keepclassmembers class * {
     @com.github.jasminb.jsonapi.annotations.Id <fields>;
     @com.github.jasminb.jsonapi.annotations.Meta <fields>;
@@ -84,6 +87,30 @@
 
 # ===== VIDEO CIPHER =====
 -keep class com.vdocipher.aegis.* { *; }
+
+# for prettytime
+-keep class com.ocpsoft.pretty.time.i18n.**
+-keep class org.ocpsoft.prettytime.i18n.**
+-keepnames class ** implements org.ocpsoft.prettytime.TimeUnit
+
+# ==== RAZORPAY ====
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
+
+-keepattributes JavascriptInterface
+-keepattributes *Annotation*
+
+-dontwarn com.razorpay.**
+-keep class com.razorpay.** {*;}
+
+-optimizations !method/inlining/*
+
+-keepclasseswithmembers class * {
+  public void onPayment*(...);
+}
+
+
 
 
 

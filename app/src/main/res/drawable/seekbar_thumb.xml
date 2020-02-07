@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false">
+        <shape
+            android:dither="true"
+            android:innerRadius="3.0dip"
+            android:shape="ring"
+            android:thickness="2.0dip"
+            android:useLevel="false"
+            android:visible="true">
+            <solid android:color="#598e8e8e" />
+            <size
+                android:width="16.0dip"
+                android:height="16.0dip" />
+        </shape>
+    </item>
+    <item
+        android:id="@*android:id/pressed"
+        android:state_pressed="true">
+        <shape
+            android:dither="true"
+            android:shape="oval"
+            android:useLevel="false"
+            android:visible="true">
+            <solid android:color="@*android:color/white" />
+            <size
+                android:width="16.0dip"
+                android:height="16.0dip" />
+        </shape>
+    </item>
+    <item android:id="@*android:id/unpressed">
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="30dp" />
+                    <size
+                        android:width="16.0dip"
+                        android:height="16.0dip" />
+                    <solid android:color="#598e8e8e" />
+                </shape>
+            </item>
+            <item>
+                <shape
+                    android:dither="true"
+                    android:innerRadius="0.0dip"
+                    android:shape="ring"
+                    android:thickness="5.0dip"
+                    android:useLevel="false"
+                    android:visible="true">
+                    <solid android:color="@*android:color/white" />
+                    <size
+                        android:width="16.0dip"
+                        android:height="16.0dip" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+</animated-selector>

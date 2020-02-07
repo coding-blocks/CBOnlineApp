@@ -1,0 +1,82 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dashboardCourseRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dashboard_toolbar_comp"
+    tools:context="com.codingblocks.cbonlineapp.dashboard.library.DashboardLibraryFragment">
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/dashboardCoursesRv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:visibility="gone"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_courses" />
+
+    <LinearLayout
+        android:id="@+id/emptyLl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="150dp"
+        android:paddingBottom="@dimen/margin_medium"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_library_big" />
+
+        <TextView
+            android:id="@+id/emptyMessageTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/nothing_to_show"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_extra_large"
+            android:layout_marginTop="@dimen/margin_extra_small"
+            android:layout_marginEnd="@dimen/margin_extra_large"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/empty_library"
+            android:textAlignment="center"
+            android:textColor="@color/brownish_grey"
+            android:textSize="16sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dashboardLibraryEmptyBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="10dp"
+            android:text="@string/explore_courses" />
+    </LinearLayout>
+
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/dashboardCourseShimmer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:background="@color/dark_white"
+        android:visibility="gone">
+
+        <include layout="@layout/item_skeleton_content" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+</LinearLayout>
+

@@ -1,81 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
-    app:cardCornerRadius="8dp">
+    android:layout_marginTop="18dp"
+    android:layout_marginBottom="18dp"
+    android:gravity="center_vertical"
+    android:paddingStart="@dimen/margin_large"
+    android:paddingEnd="@dimen/margin_large">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/sectionRoot"
+    <View
+        android:id="@+id/dividerTop"
         android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/veryLightPink" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_below="@id/dividerTop"
+        android:layout_marginTop="18dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_alignParentStart="true"
+        android:fontFamily="@font/gilroy_bold"
+        android:layout_toStartOf="@id/downloadSectionBtn"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        tools:text="1.Introduction to Android Development" />
 
-        <RelativeLayout
-            android:id="@+id/header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:minHeight="60dp">
+    <TextView
+        android:id="@+id/lectureTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_toEndOf="@id/lectures"
+        android:maxLines="1"
+        android:fontFamily="@font/gilroy_medium"
+        android:textColor="@color/brownish_grey"
+        android:textSize="14sp"
+        tools:text="30 Mins" />
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:layout_toStartOf="@id/arrow"
-                android:fontFamily="@font/nunitosans_semibold"
-                android:textColor="@android:color/primary_text_light"
-                android:textSize="16sp"
-                tools:text="Introduction And Logistics" />
+    <TextView
+        android:id="@+id/lectures"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginTop="4dp"
+        android:layout_alignParentStart="true"
+        android:fontFamily="@font/gilroy_medium"
+        android:maxLines="1"
+        android:textColor="@color/brownish_grey"
+        android:textSize="14sp"
+        tools:text="3 Lectures" />
 
-            <ImageButton
-                android:id="@+id/arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="20dp"
-                android:background="?selectableItemBackgroundBorderless"
-                android:src="@drawable/plus" />
+    <ImageView
+        android:id="@+id/downloadSectionBtn"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="8dp"
+        android:src="@android:drawable/stat_sys_download"
+        android:tint="@color/colorPrimary"
+        android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/lectures"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/title"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="10dp"
-                android:fontFamily="@font/nunitosans_semibold"
-                android:maxLines="1"
-                android:textColor="@android:color/primary_text_light"
-                android:textSize="13sp"
-                tools:text="3 Lectures" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/lectureTime"
+        android:layout_marginTop="18dp"
+        android:background="@color/veryLightPink" />
 
-            <TextView
-                android:id="@+id/lectureTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/title"
-                android:layout_marginStart="10dp"
-                android:layout_marginBottom="8dp"
-                android:layout_toEndOf="@id/lectures"
-                android:fontFamily="@font/nunitosans_semibold"
-                android:maxLines="1"
-                android:textColor="@android:color/primary_text_light"
-                android:textSize="13sp"
-                tools:text="30 Mins" />
-        </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/sectionContents"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone" />
-    </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+</RelativeLayout>

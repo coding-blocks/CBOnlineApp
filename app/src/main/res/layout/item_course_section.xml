@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="18dp"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/gilroy_semibold"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+
+        tools:text="Networks, Protocols and Hardware" />
+
+    <TextView
+        android:id="@+id/lectures"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginTop="3dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:maxLines="1"
+        android:textColor="@color/brownish_grey"
+        android:textSize="14sp"
+        tools:text="15 Items" />
+
+    <TextView
+        android:id="@+id/lectureTime"
+        android:layout_marginBottom="@dimen/margin_medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="3dp"
+        android:layout_toEndOf="@id/lectures"
+        android:fontFamily="@font/gilroy_medium"
+        android:maxLines="1"
+        android:textColor="@color/brownish_grey"
+        android:textSize="14sp"
+        tools:text="Duration : 30 minutes" />
+
+
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="15dp"
+        android:layout_height="11dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/ic_dropdown"
+        android:visibility="visible" />
+
+
+    <LinearLayout
+        android:id="@+id/sectionContents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lectureTime"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="?android:attr/listDivider" />
+    </LinearLayout>
+
+
+</RelativeLayout>

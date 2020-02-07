@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_medium"
+    android:layout_marginBottom="@dimen/margin_medium">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/instructorImg"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/defaultavatar" />
+
+    <TextView
+        android:id="@+id/instructorNameTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/instructorImg"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:layout_toEndOf="@id/instructorImg"
+        android:fontFamily="@font/gilroy_bold"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        tools:text="Arnav Gupta" />
+
+    <TextView
+        android:id="@+id/instructorEmailTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/instructorNameTv"
+        android:layout_alignStart="@id/instructorNameTv"
+        android:fontFamily="@font/gilroy_medium"
+        android:textColor="@color/brownish_grey"
+        android:textSize="14sp"
+        tools:text="arnav@cb.lk" />
+
+    <com.codingblocks.cbonlineapp.util.widgets.ExpandableTextView
+        android:id="@+id/instructorDescTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="4dp"
+        android:layout_below="@id/instructorImg"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:fontFamily="@font/gilroy_medium"
+        android:textColor="@color/black"
+        tools:text="Arnav Gupta, also popular as ChampionSwimmer, is an acclaimed Android developer and two timer GSoC-er. He has presented at large conferences like... more" />
+
+</RelativeLayout>

@@ -4,35 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@color/grey850"
     android:fitsSystemWindows="true"
-    tools:context=".fragments.VideoDoubtFragment">
+    tools:context=".mycourse.player.doubts.VideoDoubtFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/doubtsRv"
+        android:id="@+id/playerDoubtRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        tools:listitem="@layout/item_doubt" />
-
-    <TextView
-        android:id="@+id/emptyTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/empty_doubts_text"
-        android:textColor="@color/salmon"
-        android:textSize="20sp"
-        android:visibility="gone" />
-
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/doubtFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
-        android:layout_margin="16dp"
-        android:src="@android:drawable/ic_input_add"
-        android:visibility="gone" />
+        android:overScrollMode="never"
+        android:visibility="visible"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_doubts" />
 
 </FrameLayout>

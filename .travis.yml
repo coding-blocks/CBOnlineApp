@@ -1,5 +1,4 @@
 language: android
-sudo: required
 group: stable
 dist: precise
 jdk: oraclejdk8
@@ -43,8 +42,18 @@ cache:
   - $HOME/.android/build-cache
   - "${TRAVIS_BUILD_DIR}/android/gradle/caches/"
   - "${TRAVIS_BUILD_DIR}/android/gradle/wrapper/dists/"
+before_script:
+- echo $RELEASE_KEYSTORE_B64 | base64 --decode > keystores/release.keystore
 script:
-- ./gradlew build
-- ./gradlew test
-- ./gradlew spotlessCheck
-
+- "./gradlew build"
+- "./gradlew test"
+- "./gradlew spotlessCheck"
+deploy:
+  provider: releases
+  api_key:
+    secure: dIO/7ktSh+BZUaqa2Yl5u/hhZcY+9vvgW+qWyGSw8u+kV1A6tsHFp4yN5NprpvDz8auUS3CqUGoOOxI0A63ad4qtp9CQ5RrUNTeWLyImMCODiLkVXSTMHf1qmVhzkZ9DTZYzs18Yxc1k83vtYS0HKVJvDPNTEruMD9tITvpdyYMDWKbUZPGf7YC0NG3ihPEK4zVgkWQQ8WlQ+QbTbGw0Z+ZbUqgwzpxyFAv0OgWtRVnnaC4hMKeFUGxKf0LY0MS+SETEIpBEuin9Snl0kBqUgytOpfs3PiXQEHc+PCkw8IC1AJdWWa1NABXuDENbOCUgXtbT5Q1RjWlZ2Zc1AZBBkyQhAmXgsks1zjhLhk79np2NyG6ffZ53sEABuZyBuweSzxV/XtAASaD4mpUeTnJX37gRWoB+tGV6zbrRvmDdMPt3dMsiDKKxbHo14Atp3XXow4Arx+Tenn7ymC0DfNODmcD0Z/+d5/W4G0mWUZUkMukCU63OS8yvq5mXWOSlXGeejiaHfNwbnC1sf9eVCW2UFrxw+cYnMJx9cY1pMl0/b8ilaiFFEHcnQ67+rFNNkyiMbIwlJwCfHdDNkt6mZKdGQgYwlwxEnF5NoNhw1WMNMzBr9j3dwjHankBAgL+Sac/fnz4Qa1J3P92amee9PDjR/Ww9BzZUJ36sAyf35fYCI2U=
+  file: app/build/outputs/apk/release/app-release.apk
+  on:
+    tags: true
+    repo: coding-blocks/CBOnlineApp
+    branch: development

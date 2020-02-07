@@ -3,20 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="none">
         <item
-            android:id="@+id/nav_home"
-            android:checked="true"
-            android:icon="@drawable/ic_home_black_24dp"
-            android:title="Home" />
+            android:id="@+id/nav_hiring"
+            android:visible="false"
+            android:icon="@drawable/ic_hiring"
+            android:title="@string/hiring_blocks" />
         <item
-            android:id="@+id/nav_all_courses"
-            android:icon="@drawable/ic_school_black_24dp"
-            android:title="All Courses" />
+            android:id="@+id/nav_purchases"
+            android:icon="@drawable/ic_purchase"
+            android:title="@string/my_purchases" />
         <item
-            android:id="@+id/nav_my_courses"
-            android:icon="@drawable/ic_library_books_black_24dp"
-            android:title="My Courses"
+            android:id="@+id/nav_tracks"
+            android:icon="@drawable/ic_tracks"
+            android:title="@string/learning_tracks"
+            android:visible="true" />
+
+        <item
+            android:id="@+id/nav_inbox"
+            android:icon="@drawable/ic_chat"
+            android:title="@string/inbox"
             android:visible="false" />
 
     </group>
@@ -25,19 +31,31 @@
         android:id="@+id/features"
         android:checkableBehavior="none"
         android:menuCategory="system">
-        <item
-            android:id="@+id/nav_preferences"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="@string/title_activity_settings" />
 
         <item
-            android:id="@+id/nav_contactUs"
-            android:icon="@drawable/ic_contact_mail_black_24dp"
-            android:title="Contact Us" />
-        <item
-            android:id="@+id/nav_whatsapp"
-            android:icon="@drawable/whatsapp_icon_color"
-            android:title="Chat on Whatsapp" />
-
+            android:id="@+id/nav_admin"
+            android:icon="@drawable/ic_chat"
+            android:title="@string/admin_panel"
+            android:visible="false" />
     </group>
+    <group
+        android:id="@+id/communication"
+        android:checkableBehavior="none"
+        android:menuCategory="system">
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/settings" />
+
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_help"
+            android:title="@string/help_amp_feedback" />
+        <item
+            android:id="@+id/nav_contatus"
+            android:icon="@drawable/ic_comment_small"
+            android:title="@string/contact_us" />
+    </group>
+
 </menu>

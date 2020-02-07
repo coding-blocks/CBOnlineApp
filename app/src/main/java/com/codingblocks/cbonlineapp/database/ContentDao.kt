@@ -2,47 +2,46 @@ package com.codingblocks.cbonlineapp.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.codingblocks.cbonlineapp.database.models.CourseContent
+import androidx.room.Transaction
+import com.codingblocks.cbonlineapp.database.models.ContentModel
 
 @Dao
-abstract class ContentDao : BaseDao<CourseContent> {
+interface ContentDao : BaseDao<ContentModel> {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract override fun insert(obj: CourseContent)
+    @Query("SElECT * FROM ContentModel where attempt_id = :attempt_id AND ccid = :id")
+    fun getContentWithId(attempt_id: String, id: String): ContentModel
 
-    @Query("SElECT * FROM CourseContent ")
-    abstract fun getContent(): LiveData<List<CourseContent>>
+    @Query("SElECT * FROM ContentModel where isDownloaded = :isDownloaded ORDER BY date")
+    suspend fun getDownloads(isDownloaded: Boolean): List<ContentModel>
 
-    @Query("SElECT * FROM CourseContent where attempt_id = :attempt_id ")
-    abstract fun getCourseContents(attempt_id: String): LiveData<List<CourseContent>>
+    @Transaction
+    @Query("UPDATE ContentModel SET isDownloaded = :status WHERE ccid = :contentId")
+    suspend fun updateContent(contentId: String, status: Int)
 
-    @Query("SElECT * FROM CourseContent where attempt_id = :attempt_id AND uid = :id")
-    abstract fun getContentWithId(attempt_id: String, id: String): CourseContent
+    @Transaction
+    @Query("UPDATE ContentModel SET isDownloaded = :status WHERE lectureId = :videoId")
+    suspend fun updateContentWithVideoId(videoId: String, status: Int)
 
-    @Query("SElECT * FROM CourseContent where isDownloaded = :progress ORDER BY date")
-    abstract fun getDownloads(progress: String): List<CourseContent>
+    @Transaction
+    suspend fun update(id: String, attemptId: String, progressId: String, status: String) {
+        updateProgress(id, attemptId, status)
+        updateProgressID(id, attemptId, progressId)
+    }
 
-    @Query("SElECT * FROM CourseContent where attempt_id = :attempt AND section_id = :section")
-    abstract fun getCourseSectionContents(attempt: String, section: String): LiveData<List<CourseContent>>
+    @Query("UPDATE ContentModel SET progressId = :progressId WHERE ccid = :id AND attempt_id = :attemptId")
+    suspend fun updateProgressID(id: String, attemptId: String, progressId: String)
 
-    @Query("UPDATE CourseContent SET isDownloaded = :downloadprogress WHERE lectureContentId = :contentid AND section_id = :section")
-    abstract fun updateContent(section: String, contentid: String, downloadprogress: String)
+    @Query("UPDATE ContentModel SET progress = :status WHERE ccid = :id AND attempt_id = :attemptId")
+    suspend fun updateProgress(id: String, attemptId: String, status: String)
 
-    //TODO use case with when instead of making 4 functions
-    //Dynamic paramters not working
+    @Transaction
+    @Query("SElECT * FROM ContentModel where  ccid = :id")
+    fun getContent(id: String): ContentModel
 
-    @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE lectureContentId = :contentid AND section_id = :section")
-    abstract fun updateProgressLecture(section: String, contentid: String, progress: String, progressId: String)
+    @Query("SElECT * FROM ContentModel where  ccid = :id")
+    fun getContentLive(id: String): LiveData<ContentModel>
 
-    @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE documentContentId = :contentid AND section_id = :section")
-    abstract fun updateProgressDocuemnt(section: String, contentid: String, progress: String, progressId: String)
-
-    @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE videoContentId = :contentid AND section_id = :section")
-    abstract fun updateProgressVideo(section: String, contentid: String, progress: String, progressId: String)
-
-    @Query("UPDATE CourseContent SET progress = :progress AND progressId = :progressId WHERE qnaContentId = :contentid AND section_id = :section")
-    abstract fun updateProgressQna(section: String, contentid: String, progress: String, progressId: String)
+    @Query("SElECT progressId FROM ContentModel where  ccid = :id")
+    suspend fun getProgressId(id: String): String
 }

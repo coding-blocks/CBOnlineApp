@@ -1,0 +1,364 @@
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:overScrollMode="never"
+    android:animateLayoutChanges="true"
+    android:paddingTop="@dimen/dashboard_toolbar_comp"
+    tools:context="com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/margin_large"
+        android:layout_marginBottom="@dimen/margin_9xl"
+        android:paddingBottom="@dimen/margin_large">
+
+        <LinearLayout
+            android:id="@+id/dashboardHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <RelativeLayout
+                android:id="@+id/dashboardProgressContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/homeCourseLogoImg"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:src="@drawable/ic_course_logo" />
+
+
+                <TextView
+                    android:id="@+id/homeProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_toEndOf="@id/homeCourseLogoImg"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/course_progress"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/homeProgressTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/homeProgress"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@id/homeProgress"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:textColor="@color/orangish"
+                    android:textSize="20sp"
+                    tools:text="100%" />
+
+
+                <com.skydoves.progressview.ProgressView
+                    android:id="@+id/homeProgressView"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_below="@id/homeProgressTv"
+                    android:layout_marginTop="@dimen/margin_extra_small"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:layout_toEndOf="@id/homeCourseLogoImg"
+                    app:progressView_autoAnimate="true"
+                    app:progressView_colorBackground="@color/veryLightPink"
+                    app:progressView_colorGradientEnd="@color/dusty_orange"
+                    app:progressView_colorGradientStart="@color/pastel_red"
+                    app:progressView_max="100"
+                    app:progressView_radius="10dp" />
+
+                <TextView
+                    android:id="@+id/performance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/homeCourseLogoImg"
+                    android:layout_alignStart="@id/homeCourseLogoImg"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/your_performance"
+                    android:textSize="18sp" />
+
+                <include
+                    android:id="@+id/cards"
+                    layout="@layout/item_performance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/performance" />
+
+                <TextView
+                    android:id="@+id/graph"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/cards"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/performance_graph"
+                    android:textSize="18sp" />
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart1"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:layout_below="@id/graph"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/dashboardEmptyProgress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_large"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_performance" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/dashboard"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium_small"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:text="@string/dashboard_empty_progress"
+                    android:textAlignment="center"
+                    android:textColor="@color/brownish_grey" />
+
+                <View
+                    android:layout_width="200dp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:background="@drawable/divider" />
+
+                <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+                    android:id="@+id/exploreBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_dropright"
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/orangish"
+                    android:focusable="true"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/explore_courses"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="@dimen/margin_large"
+                android:background="@drawable/dividerthick" />
+
+            <RelativeLayout
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/wishImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_extra_small"
+                    android:src="@drawable/ic_like_gradient" />
+
+                <TextView
+                    android:id="@+id/wishTitleTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_toEndOf="@id/wishImg"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/my_wishlist"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/wishSubTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/wishTitleTv"
+                    android:layout_alignStart="@id/wishTitleTv"
+                    android:layout_marginTop="4dp"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:gravity="center"
+                    android:text="@string/wishlisted_desc"
+                    android:textColor="@color/brownish_grey"
+                    android:textSize="13sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/wishImg"
+                    android:layout_alignBottom="@+id/wishImg"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_dropright"
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/orangish"
+                    android:focusable="true"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:text="@string/view_all"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/orangish" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/wishSubTv"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_marginBottom="@dimen/margin_9xl"
+                    android:orientation="horizontal"
+                    android:overScrollMode="never"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="4"
+                    tools:listitem="@layout/item_course_card_secondary" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_xl"
+                android:layout_marginBottom="@dimen/margin_large"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/ic_like_gradient" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/my_wishlist"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium_small"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:text="@string/dashboard_empty_wish"
+                    android:textAlignment="center"
+                    android:textColor="@color/brownish_grey" />
+
+                <View
+                    android:layout_width="200dp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:background="@drawable/divider" />
+
+                <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:id="@+id/exploreBtn2"
+                    android:drawableEnd="@drawable/ic_dropright"
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/orangish"
+                    android:focusable="true"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/explore_courses"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dashboardHomeLoggedOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:layout_marginBottom="@dimen/margin_9xl"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_dashboar_empty" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="@string/dashboard"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium_small"
+                android:fontFamily="@font/gilroy_medium"
+                android:text="@string/my_dashboard_logged_out"
+                android:textAlignment="center"
+                android:textColor="@color/brownish_grey" />
+
+            <View
+                android:layout_width="200dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:background="@drawable/divider" />
+
+            <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:id="@+id/loginBtn"
+                android:drawableEnd="@drawable/ic_dropright"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/orangish"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="@string/login_now"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

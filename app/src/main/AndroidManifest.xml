@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.codingblocks.cbonlineapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -8,6 +9,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".CBOnlineApp"
@@ -15,42 +17,52 @@
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:theme="@style/NewAppTheme"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="q">
         <activity
-            android:name=".activities.SplashActivity"
+            android:name=".tracks.TrackActivity"
+            android:parentActivityName=".tracks.LearningTracksActivity" />
+        <activity
+            android:name=".purchases.PurchasesActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity android:name=".profile.ReferralActivity" />
+        <activity
+            android:name=".tracks.LearningTracksActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity android:name=".profile.ProfileActivity" />
+        <activity
+            android:name=".course.SearchCourseActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity
+            android:name=".auth.onboarding.CompleteProfileActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".library.LibraryActivity"
+            android:parentActivityName=".mycourse.MyCourseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".auth.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="app.codingblocks.com"
-                    android:scheme="https" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcut" />
-        </activity>
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".auth.onboarding.OnBoardingActivity" />
         <activity
-            android:name=".activities.LoginActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:name=".dashboard.ChatActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
-            android:name=".activities.HomeActivity"
-            android:label="@string/title_activity_home"
+            android:name=".dashboard.DoubtCommentActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity
+            android:name=".dashboard.DashboardActivity"
             android:launchMode="singleTop"
-            android:theme="@style/myTheme">
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
+
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -61,21 +73,62 @@
                     android:scheme="app" />
             </intent-filter>
         </activity>
-
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
-
         <activity
-            android:name=".activities.CourseActivity"
-            android:parentActivityName=".activities.HomeActivity"
-            android:theme="@style/myTheme" />
+            android:name=".admin.AdminActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
-            android:name=".activities.MyCourseActivity"
+            android:name=".course.checkout.CheckoutActivity"
+            android:parentActivityName=".dashboard.DashboardActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".URLRouterActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="online.codingblocks.com" />
+                <data android:pathPrefix="/classroom" />
+                <data android:pathPrefix="/app" />
+                <data android:pathPrefix="/courses" />
+                <data android:pathPrefix="/player" />
+                <data android:pathPrefix="/tracks" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="app.codingblocks.com"
+                    android:scheme="https" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".course.CourseActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity
+            android:name=".mycourse.MyCourseActivity"
             android:label="@string/title_activity_my_course"
             android:launchMode="singleTop"
-            android:parentActivityName=".activities.HomeActivity"
-            android:theme="@style/myTheme">
+            android:parentActivityName=".dashboard.DashboardActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.coddinblocks.appshortcuts.OPEN_DYNAMIC_SHORTCUT" />
 
@@ -84,15 +137,41 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.codingblocks.cbonlineapp.activities.HomeActivity" />
+                android:value="com.codingblocks.cbonlineapp.dashboard.DashboardActivity" />
         </activity>
         <activity
-            android:name=".activities.VideoPlayerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".notifications.NotificationsActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
-            android:name=".activities.PdfActivity"
+            android:name=".jobs.JobsActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity
+            android:name=".jobs.jobdetails.JobDetailActivity"
+            android:parentActivityName=".jobs.JobsActivity"
+            android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity
+            android:name=".settings.AboutActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity
+            android:name=".mycourse.player.VideoPlayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:supportsPictureInPicture="true"
+            android:theme="@style/NewAppTheme.Dark" />
+        <activity
+            android:name=".PdfActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".mycourse.quiz.QuizActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".mycourse.MyCourseActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NewAppTheme.Dark" />
 
         <receiver android:name=".util.DownloadBroadcastReceiver">
             <intent-filter>
@@ -101,26 +180,34 @@
         </receiver>
 
         <service
-            android:name=".services.DownloadService"
+            android:name=".util.DownloadService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".util.SectionDownloadService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity
-            android:name=".activities.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.HomeActivity"
-            android:theme="@style/myTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.codingblocks.cbonlineapp.activities.HomeActivity" />
-        </activity>
-        <activity
-            android:name=".activities.AboutActivity"
-            android:theme="@style/myTheme" />
-        <activity
-            android:name=".activities.QuizActivity"
-            android:parentActivityName=".activities.MyCourseActivity"
-            android:theme="@style/myTheme" />
+        <meta-data
+            android:name="com.onesignal.NotificationOpened.DEFAULT"
+            android:value="DISABLE" />
+        <meta-data
+            android:name="com.onesignal.NotificationAccentColor.DEFAULT"
+            android:value="FF6666" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/cblogo" />
+        <meta-data
+            android:name="android.app.shortcuts"
+            android:resource="@xml/shortcut" />
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_live_I5IJibPxZuZfWT" />
+
+        <receiver
+            android:name=".admin.doubts.DoubtReceiver"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

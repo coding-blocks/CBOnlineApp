@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingStart="@dimen/margin_large"
+    android:paddingTop="@dimen/margin_large"
+    android:paddingEnd="@dimen/margin_large"
+    android:paddingBottom="@dimen/margin_large">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/courseLogo"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:src="@drawable/ic_course_logo" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/courseCardTitleTv"
+                android:layout_width="0dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/gilroy_bold"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                tools:text="Web Development" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/chip"
+                style="@style/ButtonStyleChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bck_rounded"
+                android:drawablePadding="0dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:textColor="@color/brownish_grey"
+                android:textSize="12sp"
+                app:cornerRadius="20dp"
+                tools:text="Beginner" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/courseCardInstructorsTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            tools:text="Mentor: Arnav Gupta" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_extra_small">
+
+            <TextView
+                android:id="@+id/ratingTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/gilroy_medium"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:drawableStart="@drawable/ic_start_black"
+                android:drawablePadding="5dp"
+                tools:text="4/5, 435 ratings" />
+
+            <TextView
+                android:id="@+id/courseCardPriceTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_bold"
+                android:textColor="@color/orangish"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="9499" />
+
+            <TextView
+                android:id="@+id/courseCardMrpTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/gilroy_bold"
+                android:gravity="bottom"
+                android:textColor="@color/brownish_grey"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="12999" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

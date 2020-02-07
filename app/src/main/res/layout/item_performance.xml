@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/margin_large"
+        android:paddingTop="@dimen/margin_medium_small"
+        android:paddingEnd="@dimen/margin_large"
+        android:paddingBottom="@dimen/margin_medium_small">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/veryLightPink"
+            app:strokeWidth="1dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp">
+
+            <RelativeLayout
+                android:layout_width="165dp"
+                android:layout_height="120dp"
+                android:padding="@dimen/margin_medium">
+
+                <ImageView
+                    android:id="@+id/performanceImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_performance" />
+
+                <TextView
+                    android:id="@+id/homePerformanceTv"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/performanceImg"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:textSize="16sp"
+                    tools:text="Average" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/homePerformanceTv"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:text="@string/your_performance"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="0dp"
+            android:layout_marginStart="@dimen/margin_medium"
+            app:strokeColor="@color/veryLightPink"
+            app:strokeWidth="1dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp">
+
+            <RelativeLayout
+                android:layout_width="165dp"
+                android:layout_height="120dp"
+                android:padding="@dimen/margin_medium">
+
+                <ImageView
+                    android:id="@+id/leaderboardImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_leaderboard" />
+
+                <TextView
+                    android:id="@+id/homePercentileTv"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/leaderboardImg"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:textSize="16sp"
+                    tools:text="233/450" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/homePercentileTv"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:text="@string/percentile"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <!--            <com.google.android.material.card.MaterialCardView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginStart="@dimen/margin_medium"-->
+        <!--                app:cardBackgroundColor="@color/white"-->
+        <!--                app:cardCornerRadius="10dp">-->
+
+        <!--                <RelativeLayout-->
+        <!--                    android:layout_width="160dp"-->
+        <!--                    android:layout_height="wrap_content"-->
+        <!--                    android:padding="@dimen/margin_medium">-->
+
+        <!--                    <ImageView-->
+        <!--                        android:id="@+id/performanceImg"-->
+        <!--                        android:layout_width="wrap_content"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:layout_alignParentEnd="true"-->
+        <!--                        android:src="@drawable/ic_performance" />-->
+
+        <!--                    <TextView-->
+        <!--                        android:id="@+id/homePerformanceTv"-->
+        <!--                        android:layout_width="wrap_content"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:layout_below="@+id/performanceImg"-->
+        <!--                        android:fontFamily="@font/gilroy_bold"-->
+        <!--                        android:text="Average"-->
+        <!--                        android:textSize="16sp" />-->
+
+        <!--                    <TextView-->
+        <!--                        android:layout_width="wrap_content"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:layout_below="@+id/homePerformanceTv"-->
+        <!--                        android:layout_marginTop="4dp"-->
+        <!--                        android:fontFamily="@font/gilroy_medium"-->
+        <!--                        android:text="@string/your_performance"-->
+        <!--                        android:textSize="14sp" />-->
+
+        <!--                </RelativeLayout>-->
+        <!--            </com.google.android.material.card.MaterialCardView>-->
+
+
+    </LinearLayout>
+
+
+</HorizontalScrollView>
+

@@ -5,10 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_grey"
-    tools:context=".activities.LoginActivity">
+    tools:context=".LoginActivity">
 
     <ImageView
-        android:id="@+id/logoIv"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="@dimen/margin_large"
@@ -21,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/loginBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -43,7 +42,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_large"
-        android:fontFamily="@font/nunitosans_bold"
         android:text="@string/skip"
         android:textAllCaps="true"
         android:textColor="@color/salmon"

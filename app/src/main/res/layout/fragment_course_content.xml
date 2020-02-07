@@ -1,32 +1,128 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swiperefresh"
+<?xml version="1.0" encoding="utf-8"?><!--<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:id="@+id/swiperefresh"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+
+    <!--            android:layout_marginStart="@dimen/margin_small"-->
+    <!--            android:layout_marginTop="@dimen/margin_medium"-->
+    <!--            android:layout_marginEnd="@dimen/margin_small"-->
+    <!--            android:gravity="center">-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/aboutTv"-->
+    <!--                fontPath="fonts/nunitosans_semibold.ttf"-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:text="@string/course_curriculum"-->
+    <!--                android:textColor="@android:color/black"-->
+    <!--                android:textSize="22sp"-->
+    <!--                tools:ignore="MissingPrefix" />-->
+
+    <!--            <Switch-->
+    <!--                android:id="@+id/completeSwitch"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:text="Show Completed "-->
+    <!--                app:theme="@style/ColorSwitchStyle" />-->
+
+    <!--        </LinearLayout>-->
+
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".fragments.CourseContentFragment">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:scrollbars="none">
 
-        <androidx.core.widget.ContentLoadingProgressBar
-            android:id="@+id/sectionProgressBar"
-            style="?android:attr/progressBarStyleLarge"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/typeChipGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:theme="@style/AppTheme.SalmonAccent"
-            android:visibility="visible" />
+            android:padding="@dimen/margin_medium_small"
+            app:chipSpacingHorizontal="15dp"
+            app:singleLine="true"
+            app:singleSelection="true">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvExpendableView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="8dp" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/webinarChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Webinars"
+                android:textAppearance="@style/ChipTextAppearance" />
 
-    </FrameLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/lectureChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lectures"
+                android:textAppearance="@style/ChipTextAppearance" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/quizChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quizzes"
+                android:textAppearance="@style/ChipTextAppearance" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/documentChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Documents"
+                android:textAppearance="@style/ChipTextAppearance" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/codeChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Code Challenge"
+                android:textAppearance="@style/ChipTextAppearance" />
+
+
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/veryLightPink" />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/contentShimmer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:visibility="gone">
+
+        <include layout="@layout/item_skeleton_content" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvExpendableView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_extra_small"
+        android:overScrollMode="never"
+        tools:listitem="@layout/item_section" />
+</LinearLayout>
+
+    <!--</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->

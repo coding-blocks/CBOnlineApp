@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!--    Linear Gradient needs to be a Multiple of 45-->
+    <gradient
+        android:angle="225"
+        android:centerColor="#0467f6"
+        android:endColor="#0467f6"
+        android:startColor="#0800a3" />
+    <corners android:radius="@dimen/corner_radius" />
+</shape>

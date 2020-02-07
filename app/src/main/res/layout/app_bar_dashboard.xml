@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:animateLayoutChanges="true"
+    android:animationCache="true"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/dashboardAppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/dashboardToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="4dp"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:title="Dashboard" />
+
+            <LinearLayout
+                android:id="@+id/dashboardToolbarSecondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/toolbar_bg_colored"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/toolbarCourseTitleTv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:ellipsize="end"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:paddingTop="@dimen/margin_xxl"
+                    android:paddingBottom="@dimen/margin_medium"
+                    android:lines="1"
+                    android:visibility="gone"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:text="Android App Development" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/toolbarCourseResumeTv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:layout_weight="1.1"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawablePadding="5dp"
+                    android:drawableEnd="@drawable/ic_dropright"
+                    android:lines="1"
+                    android:focusable="true"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:paddingTop="@dimen/margin_xxl"
+                    android:paddingBottom="@dimen/margin_medium"
+                    android:textAlignment="viewEnd"
+                    android:text="@string/continue_learning"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/dashboardToolbarSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/toolbar_bg_dark"
+                    android:elevation="2dp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:id="@+id/searchBtn"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:elevation="4dp"
+                    android:text="@string/what_do_you_want_to_become" />
+            </FrameLayout>
+        </FrameLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <com.codingblocks.fabnavigation.FabNavigationViewPager
+        android:id="@+id/dashboardPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dashboard_toolbar_neg"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+    <com.codingblocks.fabnavigation.FabNavigation
+        android:id="@+id/dashboardBottomNav"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:layout_anchorGravity="center"
+        android:layout_gravity="bottom" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

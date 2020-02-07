@@ -1,65 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/gradient_theme_left_to_right"
-    android:fitsSystemWindows="true"
-    tools:context=".activities.MyCourseActivity">
+    android:id="@+id/myCourseRoot"
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/gradient_theme_left_to_right"
-        android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_mycourse"
+            style="@style/ToolBarStyleDark"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:titleEnabled="false"
-            app:toolbarId="@+id/toolbar">
+            android:layout_height="60dp">
 
-            <fragment
-                android:id="@+id/displayYoutubeVideo"
-                android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/courseResumeBtn"
+                style="@style/ButtonStyleChip"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="80dp"
-                android:layout_marginBottom="50dp"
-                android:fitsSystemWindows="true"
-                app:layout_collapseMode="parallax" />
+                android:layout_gravity="end"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textColor="@color/white"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:background="@drawable/button_background"
+                android:drawableEnd="@drawable/ic_dropright"
+                android:text="@string/resume" />
+        </androidx.appcompat.widget.Toolbar>
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/gradient_theme_left_to_right"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/myCourseTabs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/margin_extra_small"
+            android:paddingStart="@dimen/margin_medium"
+            android:paddingEnd="@dimen/margin_medium"
+            app:tabIndicatorColor="@color/black"
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@color/dark"
+            app:tabTextAppearance="@style/AppTabTextAppearance">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/htab_tabs"
-                android:layout_width="match_parent"
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@drawable/gradient_theme_left_to_right"
-                app:tabIndicatorColor="@android:color/white"
-                app:tabSelectedTextColor="@color/white"
-                app:tabTextColor="#80ffffff" />
+                android:text="@string/dashboard" />
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/curriculum" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/library" />
+        </com.google.android.material.tabs.TabLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/htab_viewpager"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/veryLightPink"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <com.codingblocks.fabnavigation.FabNavigationViewPager
+        android:id="@+id/course_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/fab"
+        style="@style/ButtonStyleChip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="32dp"
+        android:visibility="gone"
+        android:paddingEnd="20dp"
+        android:background="@drawable/button_background"
+        android:drawableStart="@drawable/ic_menu"
+        android:fontFamily="@font/gilroy_bold"
+        android:text="@string/contents"
+        android:textColor="@color/white" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,16 +1,13 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="nav_header_vertical_spacing">8dp</dimen>
-    <dimen name="nav_header_height">176dp</dimen>
-    <dimen name="bottom_sheet_corner_radius">16dp</dimen>
-    <dimen name="circle_image_border">2dp</dimen>
+    <dimen name="nav_header_height">145dp</dimen>
 
     <!-- margin specifics -->
-    <dimen name="margin_large">24dp</dimen>
     <dimen name="margin_xxl">44dp</dimen>
     <dimen name="margin_xxxl">48dp</dimen>
+    <dimen name="margin_9xl">72dp</dimen>
 
     <!-- text size -->
     <dimen name="text_size_moderate">18sp</dimen>
@@ -22,5 +19,26 @@
     <dimen name="centre_head_name">18sp</dimen>
     <dimen name="centre_container_s_vertical">8dp</dimen>
     <dimen name="centre_container_xs_vertical">4dp</dimen>
+    <dimen name="corner_radius">10dp</dimen>
+
+
+    <!-- New Margins and Padding-->
+    <dimen name="button_corner_radius">25dp</dimen>
+    <dimen name="margin_extra_large">32dp</dimen>
+    <dimen name="margin_large">28dp</dimen>
+    <dimen name="margin_small">12dp</dimen>
+    <dimen name="margin_extra_small">10dp</dimen>
+    <dimen name="margin_medium">20dp</dimen>
+    <dimen name="padding_medium">20dp</dimen>
+    <dimen name="button_padding_small">6dp</dimen>
+    <dimen name="button_padding_medium">14dp</dimen>
+    <dimen name="heading_text_size">18sp</dimen>
+    <dimen name="card_corner_radius">10dp</dimen>
+    <dimen name="margin_medium_small">14dp</dimen>
+    <dimen name="margin_xl">42dp</dimen>
+    <dimen name="dashboard_toolbar_neg">-40dp</dimen>
+    <dimen name="dashboard_toolbar_comp">40dp</dimen>
+    <dimen name="design_navigation_separator_vertical_padding" tools:override="true">20dp</dimen>
+
 
 </resources>

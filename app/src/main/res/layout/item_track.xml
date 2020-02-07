@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="100dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/margin_large"
+    android:layout_marginTop="@dimen/margin_small"
+    android:layout_marginBottom="@dimen/margin_small"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/trackLogo"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/ic_course_logo" />
+
+
+    <TextView
+        android:id="@+id/trackTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_medium_small"
+        android:fontFamily="@font/gilroy_bold"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textAlignment="center"
+        tools:text="Master C++ Master C++ Master C++" />
+
+    <TextView
+        android:id="@+id/trackCourseNumTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:textColor="@color/brownish_grey"
+        android:textSize="12sp"
+        tools:text="4 Courses" />
+
+
+</LinearLayout>

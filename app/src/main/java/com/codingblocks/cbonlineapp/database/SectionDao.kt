@@ -3,17 +3,20 @@ package com.codingblocks.cbonlineapp.database
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
-import com.codingblocks.cbonlineapp.database.models.CourseSection
+import com.codingblocks.cbonlineapp.database.models.SectionModel
 
 @Dao
-abstract class SectionDao : BaseDao<CourseSection> {
+interface SectionDao : BaseDao<SectionModel> {
 
-    @Query("SElECT * FROM CourseSection ")
-    abstract fun getSections(): LiveData<List<CourseSection>>
+    @Query("SElECT * FROM SectionModel ")
+    fun getSections(): LiveData<List<SectionModel>>
 
-    @Query("SElECT * FROM CourseSection where uid = :id")
-    abstract fun getSectionWithId(id:String): CourseSection
+    @Query("SElECT * FROM SectionModel where csid = :id")
+    abstract fun getSectionWithId(id: String): SectionModel
 
-    @Query("SElECT * FROM CourseSection where attempt_id = :courseId ORDER BY `order`")
-    abstract fun getCourseSection(courseId: String): LiveData<List<CourseSection>>
+    @Query("SElECT * FROM SectionModel where attemptId = :courseId ORDER BY `sectionOrder`")
+    fun getCourseSection(courseId: String): LiveData<List<SectionModel>>
+
+    @Query("SElECT name FROM SectionModel where  csid = :id")
+    suspend fun getSectionTitle(id: String): String
 }

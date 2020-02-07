@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingStart="@dimen/margin_large"
+    android:paddingTop="@dimen/margin_large"
+    android:paddingBottom="@dimen/margin_large"
+    android:paddingEnd="@dimen/margin_large"
+    android:visibility="visible">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/companyLogo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:src="@drawable/ic_course_logo" />
+
+
+    <TextView
+        android:id="@+id/jobTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/arrowBtn"
+        android:layout_alignTop="@id/companyLogo"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:layout_toEndOf="@id/companyLogo"
+        android:fontFamily="@font/gilroy_bold"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        tools:text="Full Stack Developer" />
+
+
+    <TextView
+        android:id="@+id/companyTv"
+        android:layout_toStartOf="@id/arrowBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/jobTitleTv"
+        android:layout_alignStart="@id/jobTitleTv"
+        android:layout_marginTop="4dp"
+        android:layout_toEndOf="@id/companyLogo"
+        android:fontFamily="@font/gilroy_medium"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        tools:text="Amazon • Posted 2 months ago" />
+
+    <ImageView
+        android:id="@+id/arrowBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/companyLogo"
+        android:layout_alignBottom="@id/companyLogo"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:src="@drawable/ic_dropright_big"
+        android:visibility="visible" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/companyTv"
+        android:layout_marginTop="@dimen/margin_large"
+        android:background="@drawable/divider" />
+
+    <LinearLayout
+        android:id="@+id/ll1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider"
+        android:layout_marginTop="@dimen/margin_medium">
+
+        <TextView
+            android:id="@+id/locationTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/gilroy_medium"
+            android:textColor="@color/brownish_grey"
+            android:textSize="14sp"
+            tools:text="Experience: 2-3 Years" />
+
+        <TextView
+            android:id="@+id/experienceTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_extra_small"
+            android:layout_weight="1"
+            android:fontFamily="@font/gilroy_medium"
+            android:textColor="@color/brownish_grey"
+            android:textSize="14sp"
+            tools:text="Type: Full Time" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll1"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/typeTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/gilroy_medium"
+            android:textColor="@color/brownish_grey"
+            android:textSize="14sp"
+            tools:text="CTC: 10lpa" />
+
+        <TextView
+            android:id="@+id/ctcTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_extra_small"
+            android:layout_weight="1"
+            android:fontFamily="@font/gilroy_medium"
+            android:textColor="@color/brownish_grey"
+            android:textSize="14sp"
+            tools:text="Location: Gurgaon" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

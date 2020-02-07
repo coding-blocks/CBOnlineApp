@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rounded_dialog"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/closeBtn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginTop="@dimen/margin_large"
+        android:src="@drawable/ic_close"
+        android:tint="@color/black" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginTop="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:drawableStart="@drawable/ic_courses"
+        android:drawablePadding="10dp"
+        android:drawableTint="@color/orangish"
+        android:fontFamily="@font/gilroy_bold"
+        android:text="@string/course_content"
+        android:textColor="#333333"
+        android:textSize="20sp" />
+
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/contentShimmer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp"
+        android:visibility="visible">
+
+        <include layout="@layout/item_skeleton_content" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/courseContentAllRv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:overScrollMode="never"
+        tools:itemCount="1"
+        tools:listitem="@layout/item_course_section" />
+
+</LinearLayout>

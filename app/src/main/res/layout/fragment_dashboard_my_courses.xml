@@ -1,0 +1,162 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dashboardCourseRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:animateLayoutChanges="true"
+    android:paddingTop="@dimen/dashboard_toolbar_comp"
+    tools:context="com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsFragment">
+
+
+    <LinearLayout
+        android:id="@+id/dashboardMyCourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/courseTypeTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableEnd="@drawable/ic_dropdown"
+            android:drawablePadding="12dp"
+            android:drawableTint="@color/orangish"
+            android:focusable="true"
+            android:fontFamily="@font/gilroy_bold"
+            android:paddingStart="@dimen/margin_large"
+            android:paddingTop="14dp"
+            android:paddingEnd="@dimen/margin_large"
+            android:paddingBottom="14dp"
+            android:text="@string/filters"
+            android:textColor="@color/orangish"
+            android:textSize="18sp" />
+
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/veryLightPink" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dashboardCoursesRv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:visibility="gone"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_courses" />
+
+        <LinearLayout
+            android:id="@+id/emptyLl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_courses"
+                android:tint="@color/orangish" />
+
+            <TextView
+                android:id="@+id/emptyMessageTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="@string/my_courses"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_extra_small"
+                android:fontFamily="@font/gilroy_medium"
+                android:text="@string/your_courses_will_start_showing_once_you_enroll_nin_any_course"
+                android:textAlignment="center"
+                android:textColor="@color/brownish_grey"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:text="@string/explore_courses" />
+        </LinearLayout>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/dashboardCourseShimmer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:background="@color/dark_white"
+            android:visibility="visible">
+
+            <include layout="@layout/item_skeleten_course_list" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dashboardMyCourseLoggedOut"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/margin_9xl"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_courses_gradient" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/my_courses"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium_small"
+            android:fontFamily="@font/gilroy_medium"
+            android:text="@string/my_couurse_logged_out"
+            android:textAlignment="center"
+            android:textColor="@color/brownish_grey" />
+
+        <View
+            android:layout_width="200dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:background="@drawable/divider" />
+
+        <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+            android:id="@+id/loginBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:drawableEnd="@drawable/ic_dropright"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/orangish"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/login_now"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
+

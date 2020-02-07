@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="280dp"
+    android:layout_height="130dp"
+    android:layout_marginStart="@dimen/margin_large"
+    android:layout_marginTop="@dimen/margin_small"
+    android:layout_marginBottom="@dimen/margin_small"
+    android:background="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/card_corner_radius">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/courseLogo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="@dimen/margin_medium_small"
+            android:layout_marginBottom="@dimen/margin_medium_small"
+            android:elevation="1dp"
+            android:src="@drawable/ic_course_logo"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp" />
+
+        <ImageView
+            android:id="@+id/courseCover"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/backdrop" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/chip"
+            style="@style/ButtonStyleChipSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_medium"
+            android:layout_marginTop="@dimen/margin_medium_small"
+            android:text="Beginner" />
+
+
+        <ImageButton
+            android:id="@+id/course_card_share"
+            android:layout_width="20dp"
+            android:layout_height="21dp"
+            android:layout_alignTop="@id/course_card_like"
+            android:layout_marginStart="@dimen/margin_medium_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_toEndOf="@id/chip"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            android:contentDescription="@string/share"
+            android:focusable="true"
+            android:src="@drawable/ic_share" />
+
+        <ImageButton
+            android:id="@+id/course_card_like"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:layout_marginTop="@dimen/margin_medium_small"
+            android:layout_marginEnd="@dimen/padding_medium"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:layout_toEndOf="@id/course_card_share"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:contentDescription="@string/like"
+            android:focusable="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_like" />
+
+        <TextView
+            android:ellipsize="end"
+            android:lines="1"
+            android:id="@+id/courseCardTitleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/chip"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="@dimen/padding_medium"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_toStartOf="@id/courseLogo"
+            android:fontFamily="@font/gilroy_bold"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            tools:text="Web Development(NodeJS) Online" />
+
+        <TextView
+            android:id="@+id/ratingTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/courseCardTitleTv"
+            android:layout_marginStart="@dimen/padding_medium"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="@dimen/margin_medium_small"
+            android:fontFamily="@font/gilroy_medium"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            tools:text="4/5, 435 ratings" />
+
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

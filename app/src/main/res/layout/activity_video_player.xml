@@ -1,73 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rootLayout"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:background="@color/dark">
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/rootLayout"
         android:layout_width="match_parent"
-        android:id="@+id/videoContainer"
-        android:visibility="gone"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/videoContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <fragment
+                android:id="@+id/videoView"
+                android:name="com.vdocipher.aegis.player.VdoPlayerSupportFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:keepScreenOn="true" />
+
+            <com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
+                android:id="@+id/playerControlView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/videoView"
+                android:layout_alignTop="@id/videoView"
+                android:layout_alignEnd="@id/videoView"
+                android:layout_alignBottom="@id/videoView" />
+        </RelativeLayout>
+
         <fragment
-            android:id="@+id/videoView"
-            android:name="com.vdocipher.aegis.player.VdoPlayerFragment"
+            android:id="@+id/youtubePlayerView"
+            android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/videoContentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:keepScreenOn="true"/>
-        <com.codingblocks.cbonlineapp.util.VdoPlayerControlView
-            android:id="@+id/player_control_view"
-            android:layout_alignTop="@id/videoView"
-            android:layout_alignBottom="@id/videoView"
-            android:layout_alignStart="@id/videoView"
-            android:layout_alignEnd="@id/videoView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/margin_large"
+                android:paddingTop="@dimen/margin_medium"
+                android:paddingEnd="@dimen/margin_large"
+                android:paddingBottom="@dimen/margin_small">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
 
-    <fragment
-        android:id="@+id/displayYoutubeVideo"
-        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:visibility="gone" />
+                    <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+                        android:id="@+id/sectionTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:text="Section "
+                        android:textSize="16sp"
+                        tools:text="Section 1.4 - Catalan Number" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/player_tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/gradient_theme_left_to_right"
-        app:tabIndicatorColor="@android:color/white"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="#80ffffff" />
+                    <TextView
+                        android:id="@+id/contentTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/gilroy_medium"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        tools:text="Introduction to Python" />
+                </LinearLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:id="@+id/pagerFrame"
-        android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/bookmarkBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="4dp"
+                    android:src="@drawable/bookmark_state" />
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/player_viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#fff" />
+                <ImageView
+                    android:id="@+id/downloadBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/download_states" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/videoFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|bottom"
-            android:layout_margin="16dp"
-            android:elevation="10dp"
-            android:src="@drawable/ic_add"
-            app:backgroundTint="@color/colorPrimary" />
-    </FrameLayout>
+            </LinearLayout>
 
 
-</LinearLayout>
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/playerTabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/dark"
+                android:paddingStart="@dimen/margin_large"
+                android:paddingEnd="@dimen/margin_large"
+                app:tabIndicatorColor="@color/white"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="@color/white"
+                app:tabTextAppearance="@style/AppTabTextAppearance"
+                app:tabTextColor="@color/brownish_grey" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:background="@color/divider" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/playerViewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/dark" />
+
+
+            </FrameLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <include layout="@layout/my_fab_menu" />
+
+</FrameLayout>

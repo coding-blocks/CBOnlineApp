@@ -4,13 +4,12 @@
     android:layout_height="match_parent">
 
     <item>
-        <color android:color="#222222" />
+        <color android:color="@color/dark" />
     </item>
     <item
-        android:id="@+id/splash_logo"
-        android:width="50dp"
-        android:height="50dp"
-        android:drawable="@drawable/cblogo"
+        android:width="300dp"
+        android:height="300dp"
+        android:drawable="@drawable/splash"
         android:gravity="center" />
 
 </layer-list>

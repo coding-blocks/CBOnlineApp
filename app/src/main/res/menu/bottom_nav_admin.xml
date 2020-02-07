@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:icon="@drawable/ic_chart_line"
+        android:title="Overview" />
+
+
+    <item
+        android:icon="@drawable/ic_conversation"
+        android:title="Doubts" />
+
+    <item
+        android:icon="@drawable/ic_speech"
+        android:title="Inbox" />
+
+</menu>

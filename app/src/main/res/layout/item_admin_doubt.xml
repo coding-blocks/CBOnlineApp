@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/titleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="don't understand when to take (head != NULL) or (head->next != NULL)" />
+
+        <com.codingblocks.cbonlineapp.util.widgets.ExpandableTextView
+            android:id="@+id/descriptionTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="14sp"
+            app:trimLength="100"
+            tools:text="pls explain meaning of head!=NULL and head->next!=NULL and the difference." />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Acknowledge"
+            android:textAllCaps="false"
+            app:cornerRadius="15dp" />
+
+        <LinearLayout
+            android:id="@+id/ackll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/chatBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Request Chat"
+                android:textAllCaps="false"
+                app:cornerRadius="15dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/discussBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="View On Discuss"
+                android:textAllCaps="false"
+                app:cornerRadius="15dp" />
+        </LinearLayout>
+
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/contentChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Content: Broken Calculator" />
+
+        <Spinner
+            android:id="@+id/doubtSv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/doubt_options"
+            android:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/resolvBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Take Action"
+            android:textAllCaps="false"
+            android:visibility="gone"
+            app:cornerRadius="15dp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/timeTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+
+            android:text="Asked : 12 hours ago"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

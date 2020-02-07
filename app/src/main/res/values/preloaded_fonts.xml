@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="preloaded_fonts" translatable="false">
-        <item>@font/nunitosans_regular</item>
-        <item>@font/nunitosans_semibold</item>
-        <item>@font/nunitosans_bold</item>
+
+    <array name="doubt_options">
+        <item></item>
+        <item>Mark as Resolved</item>
+        <item>Mark as Triage</item>
+        <item>Mark as Mentor Attention Required</item>
+        <item>Mark as Ignored</item>
     </array>
 </resources>

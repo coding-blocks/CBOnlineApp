@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/margin_large"
+    android:paddingEnd="@dimen/margin_large"
+    tools:context="com.codingblocks.cbonlineapp.mycourse.quiz.submissions.QuizSubmissionsFragment">
+
+    <include
+        layout="@layout/quiz_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:layout_marginBottom="@dimen/margin_medium_small" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/quizAttemptRv"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/margin_xl"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_quiz_attempt" />
+
+
+</LinearLayout>

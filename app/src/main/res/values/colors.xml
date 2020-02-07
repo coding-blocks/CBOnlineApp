@@ -1,16 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryDark">#cc4444</color>
-    <color name="colorPrimary">#ff6666</color>
-    <color name="colorAccent">#666666</color>
-    <color name="black">#000</color>
+    <color name="colorPrimaryDark">#f2734c</color>
+    <color name="colorPrimary">@color/orangish</color>
+    <color name="colorAccent">@color/veryLightPink</color>
+    <color name="black">#333333</color>
     <color name="grey850">#343434</color>
     <color name="salmon">#ff6666</color>
     <color name="white_transparency">#b9ffffff</color>
+    <color name="white_transparent">#00ffffff</color>
     <color name="white">#ffffff</color>
     <color name="dark_white">#E8E8E8</color>
     <color name="battleship_gray">#64707b</color>
     <color name="green">#8dbf75</color>
+    <color name="algae_green">#25d366</color>
 
     <color name="dark_grey">#222222</color>
+    <color name="neon_red">#ff003a</color>
+    <color name="light_transparent">#16000000</color>
+
+    <!--    New Colors-->
+    <color name="pastel_red">#e74e4b</color>
+    <color name="dusty_orange">#fb8133</color>
+    <color name="orangish">#f2734c</color>
+    <color name="brownish_grey">#666666</color>
+    <color name="brown_grey">#999999</color>
+    <color name="freshGreen">#6ecf4a</color>
+    <color name="veryLightPink">#f3f3f3</color>
+    <color name="dark">#1b1e26</color>
+    <color name="darkTwo">#2a2f3a</color>
+    <color name="kiwigreen">#83db3b</color>
+    <color name="tealgreen">#26a87c</color>
+    <color name="navy_blue">#00205b</color>
+    <color name="warm_purple">#84358e</color>
+    <color name="divider">#2A2F3A</color>
+    <color name="fb">#3B5998</color>
+    <color name="gmail">#D44638</color>
+    <color name="black_95">#f3333333</color>
+    <color name="bottomNavSelected">#F2734C</color>
+
+
 </resources>

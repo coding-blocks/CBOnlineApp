@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_medium"
+    android:layout_marginBottom="@dimen/margin_medium"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/projectTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/orangish"
+        android:textSize="@dimen/heading_text_size"
+        android:fontFamily="@font/gilroy_semibold"
+        tools:text="TodoList App" />
+
+    <TextView
+        android:id="@+id/projectDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="4dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/black"
+        tools:text="A task manager with features like 'mark as done', 'cear done tasks' and sorting tasks by their status." />
+</LinearLayout>

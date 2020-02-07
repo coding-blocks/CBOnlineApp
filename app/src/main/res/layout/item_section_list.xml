@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="230dp"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingStart="16dp"
+    android:paddingTop="@dimen/margin_medium_small"
+    android:paddingEnd="16dp"
+    android:paddingBottom="@dimen/margin_extra_small">
+
+    <TextView
+        android:id="@+id/sectionTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:fontFamily="@font/gilroy_medium"
+        android:textSize="16sp"
+        tools:text="Space time Complexity Analysis Object" />
+
+    <TextView
+        android:id="@+id/sectionCount"
+        android:fontFamily="@font/gilroy_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        tools:text="20" />
+
+</LinearLayout>

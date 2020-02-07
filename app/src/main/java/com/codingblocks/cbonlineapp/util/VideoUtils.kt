@@ -1,13 +1,12 @@
 package com.codingblocks.cbonlineapp.util
 
-
 import com.vdocipher.aegis.player.VdoPlayer
 
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 object VideoUtils {
-     fun digitalClockTime(timeInMilliSeconds: Int): String {
+    fun digitalClockTime(timeInMilliSeconds: Int): String {
         val totalSeconds = timeInMilliSeconds / 1000
         val hours = totalSeconds / (60 * 60)
         val minutes = (totalSeconds - hours * 60 * 60) / 60
@@ -15,20 +14,20 @@ object VideoUtils {
 
         var timeThumb = ""
         if (hours > 0) {
-            if (hours < 10) {
-                timeThumb += "0$hours:"
+            timeThumb += if (hours < 10) {
+                "0$hours:"
             } else {
-                timeThumb += "$hours:"
+                "$hours:"
             }
         }
-        if (minutes > 0) {
+        timeThumb += if (minutes > 0) {
             if (minutes < 10) {
-                timeThumb += "0$minutes:"
+                "0$minutes:"
             } else {
-                timeThumb += "$minutes:"
+                "$minutes:"
             }
         } else {
-            timeThumb += "00" + ":"
+            "00" + ":"
         }
         if (seconds < 10) {
             timeThumb += "0$seconds"
