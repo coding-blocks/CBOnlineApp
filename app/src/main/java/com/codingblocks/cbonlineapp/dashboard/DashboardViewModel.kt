@@ -2,7 +2,7 @@ package com.codingblocks.cbonlineapp.dashboard
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
@@ -21,7 +21,7 @@ class DashboardViewModel(
     private val homeRepo: DashboardHomeRepository,
     private val exploreRepo: CourseRepository,
     private val myCourseRepo: DashboardMyCoursesRepository
-) : ViewModel() {
+) : BaseCBViewModel() {
     var courseFilter = MutableLiveData<String>()
     var isLoggedIn: MutableLiveData<Boolean> = MutableLiveData()
     var suggestedCourses = MutableLiveData<List<Course>>()
@@ -48,7 +48,6 @@ class DashboardViewModel(
     val purchasedRuns by lazy {
         myCourseRepo.getPurchasedRuns()
     }
-    var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
     val user by lazy {
         Transformations.switchMap(isLoggedIn) {
@@ -174,9 +173,5 @@ class DashboardViewModel(
                 }
             }
         }
-    }
-
-    private fun setError(error: String) {
-        errorLiveData.postValue(error)
     }
 }

@@ -1,7 +1,7 @@
 package com.codingblocks.cbonlineapp.mycourse.quiz
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.database.models.ContentQnaModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
@@ -11,7 +11,7 @@ import com.codingblocks.onlineapi.models.QuizAttempt
 import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.RunAttempts
 
-class QuizViewModel(private val repo: QuizRepository) : ViewModel() {
+class QuizViewModel(private val repo: QuizRepository) : BaseCBViewModel() {
 
     var attemptId: String = ""
     var sectionId: String = ""
@@ -105,9 +105,6 @@ class QuizViewModel(private val repo: QuizRepository) : ViewModel() {
                 }
             }
         }
-    }
-
-    private fun setError(error: String) {
     }
 
     fun getContentModel(contentId: String) {

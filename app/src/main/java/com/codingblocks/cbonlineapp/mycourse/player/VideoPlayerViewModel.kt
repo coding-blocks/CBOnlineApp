@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.mycourse.player
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.Data
@@ -11,6 +10,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit
 class VideoPlayerViewModel(
     private val repo: VideoPlayerRepository,
     private val repoDoubts: DashboardDoubtsRepository
-) : ViewModel() {
+) : BaseCBViewModel() {
     var contentLength: Long = 0L
     var playWhenReady = false
     var currentOrientation: Int = 0
@@ -130,10 +130,6 @@ class VideoPlayerViewModel(
                 }
             }
         }
-    }
-
-    private fun setError(error: String) {
-//        errorLiveData.postValue(error)
     }
 
     fun deleteNote(noteId: String) {

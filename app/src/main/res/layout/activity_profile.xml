@@ -67,8 +67,9 @@
         android:layout_marginStart="@dimen/margin_large"
         android:layout_marginTop="@dimen/margin_large"
         android:layout_marginEnd="@dimen/margin_large"
+        app:endIconMode="none"
         app:endIconDrawable="@drawable/ic_tick"
-        app:endIconMode="custom"
+        app:endIconTint="@color/kiwigreen"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -93,10 +94,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_large"
         android:layout_marginTop="@dimen/margin_medium"
+        app:endIconDrawable="@drawable/ic_tick"
+        app:endIconMode="none"
+        app:endIconTint="@color/kiwigreen"
         android:layout_marginEnd="@dimen/margin_large">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/mobile"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:backgroundTint="@color/white"

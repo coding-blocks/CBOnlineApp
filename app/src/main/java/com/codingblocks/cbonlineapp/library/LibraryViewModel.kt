@@ -1,8 +1,6 @@
 package com.codingblocks.cbonlineapp.library
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.Data
@@ -11,6 +9,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.mycourse.player.notes.NotesWorker
@@ -25,11 +24,10 @@ import java.util.concurrent.TimeUnit
 class LibraryViewModel(
     private val repo: LibraryRepository,
     private val courseRepo: MyCourseRepository
-) : ViewModel() {
+) : BaseCBViewModel() {
     var attemptId: String = ""
     var type: String = ""
     var name: String = ""
-    var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
     fun fetchNotes(): LiveData<List<NotesModel>> {
         val notes = repo.getNotes(attemptId)
@@ -107,10 +105,6 @@ class LibraryViewModel(
 
         WorkManager.getInstance()
             .enqueue(request)
-    }
-
-    private fun setError(error: String) {
-        errorLiveData.postValue(error)
     }
 
     fun fetchBookmarks() = repo.getBookmarks(attemptId)

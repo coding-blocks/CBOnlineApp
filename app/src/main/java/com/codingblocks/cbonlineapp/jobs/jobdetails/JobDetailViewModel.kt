@@ -2,10 +2,10 @@ package com.codingblocks.cbonlineapp.jobs.jobdetails
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.JobsDao
 import com.codingblocks.cbonlineapp.database.models.Companies
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 class JobDetailViewModel(
     private val jobsDao: JobsDao,
     private val courseWithInstructorDao: CourseWithInstructorDao
-) : ViewModel() {
+) : BaseCBViewModel() {
 
     val eligibleLiveData: MutableLiveData<String> = MutableLiveData()
     private val inactiveLiveData: MutableLiveData<Boolean> = MutableLiveData()
