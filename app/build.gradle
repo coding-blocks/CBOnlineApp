@@ -124,7 +124,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
     implementation "androidx.paging:paging-runtime-ktx:2.1.1"
     implementation "android.arch.work:work-runtime-ktx:1.0.1"
-    implementation "androidx.fragment:fragment-ktx:1.2.0"
+    implementation "androidx.fragment:fragment-ktx:1.2.1"
     implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:17.3.0'
