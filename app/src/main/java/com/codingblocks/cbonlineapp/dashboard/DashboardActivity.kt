@@ -37,6 +37,7 @@ import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesFragme
 import com.codingblocks.cbonlineapp.jobs.JobsActivity
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
+import com.codingblocks.cbonlineapp.profile.ProfileActivity
 import com.codingblocks.cbonlineapp.profile.ReferralActivity
 import com.codingblocks.cbonlineapp.purchases.PurchasesActivity
 import com.codingblocks.cbonlineapp.settings.AboutActivity
@@ -202,7 +203,7 @@ class DashboardActivity : BaseCBActivity(),
                         with(SVG.getFromInputStream(it.byteStream())) {
                             val picDrawable = PictureDrawable(
                                 this.renderToPicture(
-                                    40, 40
+                                    80, 80
                                 )
                             )
                             val bitmap = MediaUtils.getBitmapFromPictureDrawable(picDrawable)
@@ -416,6 +417,8 @@ class DashboardActivity : BaseCBActivity(),
         if (prefs.SP_JWT_TOKEN_KEY.isEmpty()) {
             startActivity<LoginActivity>()
             finish()
+        } else {
+            startActivity<ProfileActivity>()
         }
     }
 

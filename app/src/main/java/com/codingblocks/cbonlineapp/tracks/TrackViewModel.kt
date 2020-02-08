@@ -2,7 +2,7 @@ package com.codingblocks.cbonlineapp.tracks
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.STUDENT
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
@@ -14,11 +14,10 @@ import com.codingblocks.onlineapi.models.Professions
 /**
  * @author aggarwalpulkit596
  */
-class TrackViewModel(private val repo: TracksRepository) : ViewModel() {
+class TrackViewModel(private val repo: TracksRepository) : BaseCBViewModel() {
 
     var type: MutableLiveData<String> = MutableLiveData(STUDENT)
     lateinit var id: String
-    var errorLiveData: MutableLiveData<String> = MutableLiveData()
     var currentTrack = MutableLiveData<CareerTracks>()
     var courses = MutableLiveData<List<Course>>()
 
@@ -88,10 +87,6 @@ class TrackViewModel(private val repo: TracksRepository) : ViewModel() {
             }
         }
         return professions
-    }
-
-    private fun setError(error: String) {
-        errorLiveData.postValue(error)
     }
 
     fun getRecommendedTrack(id: String): LiveData<CareerTracks> {
