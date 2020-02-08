@@ -12,4 +12,6 @@ class ProfileRepository(
 ) {
 
     suspend fun fetchUser() = safeApiCall { Clients.onlineV2JsonApi.getMe() }
+
+    suspend fun updateUser(id: String, map: Map<String, String>) = safeApiCall { Clients.api.updateUser(id, map) }
 }

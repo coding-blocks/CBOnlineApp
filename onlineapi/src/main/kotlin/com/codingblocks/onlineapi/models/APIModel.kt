@@ -307,7 +307,8 @@ data class User(
     val roleId: Int = 0,
     val graduationyear: String = "",
     val college: String = "",
-    val mobile: String = ""
+    val mobile: String = "",
+    val branch: String? = ""
 ) : BaseModel()
 
 

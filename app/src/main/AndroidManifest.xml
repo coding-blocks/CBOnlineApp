@@ -34,7 +34,9 @@
         <activity
             android:name=".tracks.LearningTracksActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
-        <activity android:name=".profile.ProfileActivity" />
+        <activity
+            android:name=".profile.ProfileActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".course.SearchCourseActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
