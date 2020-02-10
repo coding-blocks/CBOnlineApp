@@ -68,7 +68,7 @@ val viewModelModule = module {
     single { DashboardMyCoursesRepository(get(), get(), get(), get(), get()) }
     single { LibraryRepository(get(), get(), get(), get()) }
     single { DashboardHomeRepository(get(), get(), get()) }
-    single { VideoPlayerRepository(get(), get(), get()) }
+    single { VideoPlayerRepository(get(), get(), get(), get()) }
     single { QuizRepository(get()) }
     single { JobRepository(get()) }
     single { MyCourseRepository(get(), get(), get(), get(), get(), get()) }

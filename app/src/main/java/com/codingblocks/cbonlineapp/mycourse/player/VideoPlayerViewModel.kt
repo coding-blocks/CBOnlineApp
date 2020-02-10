@@ -62,6 +62,10 @@ class VideoPlayerViewModel(
     val bookmark by lazy {
         repo.getBookmark(contentId)
     }
+
+    val contentList = Transformations.switchMap(attemptId) {
+        repo.getContents(it, sectionId)
+    }
     val offlineSnackbar = MutableLiveData<String>()
 
     fun resolveDoubt(doubt: DoubtsModel) {

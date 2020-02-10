@@ -39,13 +39,13 @@ interface SectionWithContentsDao {
         ORDER BY s."sectionOrder", sc."order" LIMIT 1;
         """)
     fun resumeCourse(attemptId: String): LiveData<SectionContentHolder.NextContent>
-//
+
     @Query("""
         SELECT s.* FROM SectionModel s,ContentModel c 
-	    WHERE s.attemptId = :attemptId AND progress = "UNDONE"
+	    WHERE s.attemptId = :attemptId AND s.csid = :sectionId
         ORDER BY s."sectionOrder" LIMIT 1
         """)
-    fun getNextContent(attemptId: String): LiveData<SectionContentHolder.SectionContentPair>
+    fun getNextContent(attemptId: String, sectionId: String): LiveData<SectionContentHolder.SectionContentPair>
 
     @Query("""
         SELECT s.* FROM SectionModel s

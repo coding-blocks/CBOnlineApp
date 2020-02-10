@@ -25,6 +25,7 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.library.EditNoteClickListener
+import com.codingblocks.cbonlineapp.mycourse.content.SectionItemsAdapter
 import com.codingblocks.cbonlineapp.mycourse.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.player.notes.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
@@ -41,6 +42,7 @@ import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
+import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
 import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
@@ -116,6 +118,9 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_anticlock)
     }
 
+    private val sectionItemsAdapter = SectionItemsAdapter()
+
+
     private val dialog by lazy { BottomSheetDialog(this) }
     private val sheetDialog: View by lazy {
         layoutInflater.inflate(
@@ -140,6 +145,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         setupUI()
         viewModel.offlineSnackbar.observer(this) {
             rootLayout.showSnackbar(it, Snackbar.LENGTH_SHORT, action = false)
+        }
+        contentRv.setRv(this, sectionItemsAdapter)
+        viewModel.contentList.observer(this) {
+            sectionItemsAdapter.submitList(it.contents)
         }
     }
 
@@ -227,6 +236,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                 deleteFolder(viewModel.videoId)
             else
                 startDownloadWorker()
+        }
+        contentListContainer.setOnClickListener {
+            contentListView.isVisible = !contentListView.isVisible
+            videoFab.isVisible = !contentListView.isVisible
         }
 
         setupViewPager()

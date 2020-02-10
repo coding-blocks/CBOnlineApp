@@ -4,6 +4,7 @@ import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.NotesDao
+import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.onlineapi.Clients
@@ -15,7 +16,8 @@ import com.codingblocks.onlineapi.safeApiCall
 class VideoPlayerRepository(
     private val notesDao: NotesDao,
     private val contentDao: ContentDao,
-    private val bookmarkDao: BookmarkDao
+    private val bookmarkDao: BookmarkDao,
+    private val sectionDao: SectionWithContentsDao
 ) {
     suspend fun fetchCourseNotes(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.getNotesByAttemptId(attemptId) }
 
@@ -81,6 +83,8 @@ class VideoPlayerRepository(
             bookmark.section?.id ?: "",
             bookmark.createdAt ?: ""))
     }
+
+    fun getContents(attemptId: String, sectionId: String) = sectionDao.getNextContent(attemptId, sectionId).distinctUntilChanged()
 
     suspend fun removeBookmark(bookmarkUid: String) = safeApiCall { Clients.onlineV2JsonApi.deleteBookmark(bookmarkUid) }
 
