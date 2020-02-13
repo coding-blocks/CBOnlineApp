@@ -154,10 +154,19 @@ class DashboardActivity : BaseCBActivity(),
 
         dashboardBottomNav.apply {
             setTitleTypeface(Typeface.createFromAsset(assets, "fonts/gilroy_medium.ttf"))
-            defaultBackgroundColor = getColor(R.color.dark)
+            defaultBackgroundColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getColor(R.color.dark)
+            }else{
+                resources.getColor(R.color.dark)
+            }
             titleState = (FabNavigation.TitleState.ALWAYS_SHOW)
             setOnTabSelectedListener(this@DashboardActivity)
-            accentColor = getColor(R.color.bottomNavSelected)
+            accentColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getColor(R.color.bottomNavSelected)
+            }else{
+                resources.getColor(R.color.bottomNavSelected)
+
+            }
         }
         if (loggedIn) {
             setUser()
@@ -323,10 +332,6 @@ class DashboardActivity : BaseCBActivity(),
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        checkForUpdates()
-    }
 
     private fun checkForUpdates() {
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
@@ -380,7 +385,12 @@ class DashboardActivity : BaseCBActivity(),
                 searchBtn.setOnClickListener {
                     startActivity(intentFor<LearningTracksActivity>().singleTop())
                 }
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+                }
+                else{
+                    dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, resources.getColor(R.color.white))
+                }
                 dashboardToolbarSecondary.post {
                     dashboardToolbarSearch.slideDown()
                     dashboardToolbarSecondary.slideUp()
@@ -388,7 +398,11 @@ class DashboardActivity : BaseCBActivity(),
             }
             2 -> {
                 supportActionBar?.title = getString(R.string.dashboard)
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+                }else{
+                    dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, resources.getColor(R.color.white))
+                }
 
                 if (viewModel.isLoggedIn.value == true) {
                     dashboardToolbarSearch.slideUp()
@@ -402,7 +416,11 @@ class DashboardActivity : BaseCBActivity(),
                     1 -> supportActionBar?.title = getString(R.string.my_courses)
                     else -> supportActionBar?.title = getString(R.string.my_library)
                 }
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
+                }else{
+                    dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, resources.getColor(R.color.black))
+                }
                 dashboardToolbarSecondary.post {
                     dashboardToolbarSearch.slideUp()
                     dashboardToolbarSecondary.slideUp()

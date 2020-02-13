@@ -16,6 +16,7 @@ import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.safeApiCall
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_login_otp.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.support.v4.intentFor
@@ -53,9 +54,9 @@ class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
         }
     }
 
-    fun verifyWithOtp() {
+    private fun verifyWithOtp() {
         verifyOtpBtn.isEnabled = false
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.Main) {
             when (val response = safeApiCall { Clients.api.getJwt(map) }) {
                 is ResultWrapper.GenericError -> {
                     verifyOtpBtn.isEnabled = true
