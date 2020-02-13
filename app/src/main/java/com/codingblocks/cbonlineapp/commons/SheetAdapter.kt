@@ -23,21 +23,21 @@ class SheetAdapter(val items: ArrayList<SheetItem>, initialSelectedItem: Int = 0
                 text = sheetItem.name
                 setTextColor(resources.getColor(R.color.orangish))
 //                compoundDrawableTintMode
-                var drawable = context.getDrawable(sheetItem.icon)!!
-                drawable = DrawableCompat.wrap(drawable)
-                DrawableCompat.setTint(drawable, resources.getColor(R.color.orangish))
-                DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_IN)
-                setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+////                var drawable = context.getDrawable(sheetItem.icon)!!
+//                drawable = DrawableCompat.wrap(drawable)
+//                DrawableCompat.setTint(drawable, resources.getColor(R.color.orangish))
+//                DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_IN)
+//                setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
             }
         } else {
             view.textView.apply {
                 text = sheetItem.name
                 setTextColor(resources.getColor(R.color.black))
-                var drawable = context.getDrawable(sheetItem.icon)!!
-                drawable = DrawableCompat.wrap(drawable)
-                DrawableCompat.setTint(drawable, resources.getColor(R.color.black))
-                DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_IN)
-                setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+//                var drawable = context.getDrawable(sheetItem.icon)!!
+//                drawable = DrawableCompat.wrap(drawable)
+//                DrawableCompat.setTint(drawable, resources.getColor(R.color.black))
+//                DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_IN)
+//                setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
             }
         }
         return view

@@ -80,7 +80,7 @@ class DashboardDoubtsRepository(
 
     fun getDoubtById(id: String) = doubtsDao.getDoubtById(id)
     fun getCommentsById(id: String) = commentsDao.getComments(id)
-    fun getRuns() = runDao.getMyRuns().distinctUntilChanged()
+    fun getRuns() = runDao.getActiveRuns(System.currentTimeMillis() / 1000).distinctUntilChanged()
     suspend fun createComment(comment: Comment) = safeApiCall { Clients.onlineV2JsonApi.createComment(comment) }
     suspend fun insertComment(it: Comment) {
         commentsDao.insert(CommentModel(

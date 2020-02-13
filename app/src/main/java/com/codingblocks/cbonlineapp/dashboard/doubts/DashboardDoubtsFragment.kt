@@ -112,9 +112,7 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpBottomSheet()
-        viewLifecycleOwnerLiveData.observer(viewLifecycleOwner) {
-            info { it.lifecycle.currentState.name }
-        }
+
         doubtEmptyBtn.setOnClickListener { requireActivity().dashboardBottomNav.setCurrentItem(1) }
         liveDoubtBtn.setOnClickListener {
             viewModel.type.value = LIVE
@@ -129,7 +127,8 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
         }
 
         filterTv.setOnClickListener {
-            //            dialog.show()
+            adapter.notifyDataSetChanged()
+            dialog.show()
         }
 
         viewModel.type.observer(viewLifecycleOwner) {
@@ -162,6 +161,7 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
             viewModel.getRuns().observer(viewLifecycleOwner) {
                 if (it.isNotEmpty()) {
                     viewModel.attemptId.value = it.first().courseRun.runAttempt.attemptId
+                    list.clear()
                     it.forEach {
                         list.add(
                             SheetItem(
@@ -171,7 +171,6 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
                             )
                         )
                     }
-                    adapter.notifyDataSetChanged()
                 }
             }
         } else {
