@@ -23,7 +23,6 @@ import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.fragment_search_course.*
 import kotlinx.android.synthetic.main.fragment_search_course.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

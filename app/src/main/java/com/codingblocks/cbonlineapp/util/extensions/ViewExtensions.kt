@@ -49,7 +49,8 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.dialog.view.*
 import kotlinx.android.synthetic.main.dialog.view.primaryBtn
-import kotlinx.android.synthetic.main.dialog_help.view.*
+import kotlinx.android.synthetic.main.dialog_help.view.mobile
+import kotlinx.android.synthetic.main.dialog_help.view.nameLayout
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.layoutInflater
 import kotlin.math.hypot

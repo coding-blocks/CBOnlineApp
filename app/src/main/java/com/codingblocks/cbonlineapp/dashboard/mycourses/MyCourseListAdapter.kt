@@ -96,11 +96,11 @@ class DefaultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             progressView1.highlightView.colorGradientEnd = context.getColor(R.color.dusty_orange)
         }
         setOnClickListener {
-                itemClickListener?.onClick(
-                    item.courseRun.course.cid,
-                    item.courseRun.run.crUid,
-                    item.courseRun.runAttempt.attemptId,
-                    item.courseRun.course.title)
+            itemClickListener?.onClick(
+                item.courseRun.course.cid,
+                item.courseRun.run.crUid,
+                item.courseRun.runAttempt.attemptId,
+                item.courseRun.course.title)
         }
     }
 }

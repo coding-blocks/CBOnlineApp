@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.mycourse.player
 import android.animation.LayoutTransition
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
@@ -206,12 +207,20 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                     doubtFab.startAnimation(fab_close)
                     noteFab.startAnimation(fab_close)
                     videoFab.startAnimation(fab_anticlock)
-                    fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
+                    } else {
+                        fabMenu.setBackgroundColor(resources.getColor(R.color.white_transparent))
+                    }
                 } else {
                     doubtFab.startAnimation(fab_open)
                     noteFab.startAnimation(fab_open)
                     videoFab.startAnimation(fab_clock)
-                    fabMenu.setBackgroundColor(getColor(R.color.black_95))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        fabMenu.setBackgroundColor(getColor(R.color.black_95))
+                    } else {
+                        fabMenu.setBackgroundColor(resources.getColor(R.color.black_95))
+                    }
                 }
             }
         }

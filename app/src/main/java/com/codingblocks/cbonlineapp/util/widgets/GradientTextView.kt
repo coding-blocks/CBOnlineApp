@@ -13,6 +13,7 @@ class GradientTextView : androidx.appcompat.widget.AppCompatTextView {
 
     var startColor = R.color.pastel_red
     var endColor = R.color.dusty_orange
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)

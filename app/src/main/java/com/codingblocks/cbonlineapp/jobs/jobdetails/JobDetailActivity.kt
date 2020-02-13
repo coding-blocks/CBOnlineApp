@@ -114,7 +114,7 @@ class JobDetailActivity : BaseCBActivity() {
 
         val marginInDp = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, sizeInDP.toFloat(), resources
-                .displayMetrics
+            .displayMetrics
         ).toInt()
         params.setMargins(marginInDp, marginInDp / 2, marginInDp, marginInDp / 2)
         val formView = layoutInflater.inflate(R.layout.custom_form_dialog, null)

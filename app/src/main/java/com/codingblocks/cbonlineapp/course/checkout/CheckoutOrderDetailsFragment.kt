@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.fragment_checkout_order_details.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.lang.Exception
 
 class CheckoutOrderDetailsFragment : BaseCBFragment(), AnkoLogger {
 
@@ -44,7 +43,7 @@ class CheckoutOrderDetailsFragment : BaseCBFragment(), AnkoLogger {
                 vm.paymentMap["txnId"] = get("txnId")?.asString ?: ""
                 try {
                     vm.paymentMap["razorpay_order_id"] = get("razorpay_order_id")?.asString ?: ""
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     toast("There was some error.")
                     requireActivity().finish()
                 }

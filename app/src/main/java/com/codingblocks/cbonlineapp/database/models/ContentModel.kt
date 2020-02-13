@@ -40,6 +40,7 @@ data class ContentModel(
 ) : ListObject() {
     @Ignore
     override fun getType(): Int = TYPE_CONTENT
+
     @Ignore
     var sectionId: String = ""
     @Ignore

@@ -25,7 +25,12 @@ import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import kotlinx.android.synthetic.main.activity_course.courseSuggestedRv
-import kotlinx.android.synthetic.main.fragment_dashboard_explore.*
+import kotlinx.android.synthetic.main.fragment_dashboard_explore.allCourseCard
+import kotlinx.android.synthetic.main.fragment_dashboard_explore.allCourseCardTv
+import kotlinx.android.synthetic.main.fragment_dashboard_explore.allTracksTv
+import kotlinx.android.synthetic.main.fragment_dashboard_explore.dashboardPopularRv
+import kotlinx.android.synthetic.main.fragment_dashboard_explore.dashboardTracksRv
+import kotlinx.android.synthetic.main.fragment_dashboard_explore.swipeToRefresh
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay

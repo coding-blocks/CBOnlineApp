@@ -71,7 +71,8 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.dialog.view.primaryBtn
-import kotlinx.android.synthetic.main.dialog_help.view.*
+import kotlinx.android.synthetic.main.dialog_help.view.mobile
+import kotlinx.android.synthetic.main.dialog_help.view.nameLayout
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -156,16 +157,15 @@ class DashboardActivity : BaseCBActivity(),
             setTitleTypeface(Typeface.createFromAsset(assets, "fonts/gilroy_medium.ttf"))
             defaultBackgroundColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 getColor(R.color.dark)
-            }else{
+            } else {
                 resources.getColor(R.color.dark)
             }
             titleState = (FabNavigation.TitleState.ALWAYS_SHOW)
             setOnTabSelectedListener(this@DashboardActivity)
             accentColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 getColor(R.color.bottomNavSelected)
-            }else{
+            } else {
                 resources.getColor(R.color.bottomNavSelected)
-
             }
         }
         if (loggedIn) {
@@ -332,7 +332,6 @@ class DashboardActivity : BaseCBActivity(),
         }
     }
 
-
     private fun checkForUpdates() {
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
 
@@ -387,8 +386,7 @@ class DashboardActivity : BaseCBActivity(),
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
-                }
-                else{
+                } else {
                     dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, resources.getColor(R.color.white))
                 }
                 dashboardToolbarSecondary.post {
@@ -400,7 +398,7 @@ class DashboardActivity : BaseCBActivity(),
                 supportActionBar?.title = getString(R.string.dashboard)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
-                }else{
+                } else {
                     dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, resources.getColor(R.color.white))
                 }
 
@@ -418,7 +416,7 @@ class DashboardActivity : BaseCBActivity(),
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
-                }else{
+                } else {
                     dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, resources.getColor(R.color.black))
                 }
                 dashboardToolbarSecondary.post {

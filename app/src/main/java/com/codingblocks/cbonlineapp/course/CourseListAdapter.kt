@@ -24,7 +24,11 @@ import kotlinx.android.synthetic.main.item_course_card.view.courseCardInstructor
 import kotlinx.android.synthetic.main.item_course_card.view.courseCardTitleTv
 import kotlinx.android.synthetic.main.item_course_card.view.courseLogo
 import kotlinx.android.synthetic.main.item_course_card.view.ratingTv
-import kotlinx.android.synthetic.main.item_track_course.view.*
+import kotlinx.android.synthetic.main.item_track_course.view.projectTitle
+import kotlinx.android.synthetic.main.item_track_course.view.projectsChips
+import kotlinx.android.synthetic.main.item_track_course.view.ratingBar
+import kotlinx.android.synthetic.main.item_track_course.view.tagTitle
+import kotlinx.android.synthetic.main.item_track_course.view.tagsChips
 import org.jetbrains.anko.share
 
 class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListAdapter.ItemViewHolder>(DiffCallback()) {

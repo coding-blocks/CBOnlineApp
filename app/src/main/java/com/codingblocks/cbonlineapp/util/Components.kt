@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.custom_dialog.view.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.singleTop
-import java.lang.Exception
 
 object Components {
     fun showConfirmation(context: Context, type: String, callback: (state: Boolean) -> Unit = { status: Boolean -> }) {
@@ -108,6 +107,9 @@ object Components {
         confirmDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         confirmDialog.setView(updateView)
         confirmDialog.setCancelable(false)
-        try { confirmDialog.show() } catch (e: Exception) { }
+        try {
+            confirmDialog.show()
+        } catch (e: Exception) {
+        }
     }
 }

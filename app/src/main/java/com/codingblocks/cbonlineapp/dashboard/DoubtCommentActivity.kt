@@ -8,7 +8,12 @@ import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.doubts.CommentsListAdapter
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsViewModel
-import com.codingblocks.cbonlineapp.util.*
+import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
+import com.codingblocks.cbonlineapp.util.DOUBT_ID
+import com.codingblocks.cbonlineapp.util.PENDING
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
+import com.codingblocks.cbonlineapp.util.REOPENED
+import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
@@ -18,12 +23,8 @@ import com.codingblocks.cbonlineapp.util.extensions.timeAgo
 import com.google.android.material.snackbar.Snackbar
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.activity_doubt_comment.*
-import kotlinx.android.synthetic.main.activity_doubt_comment.chatTv
-import kotlinx.android.synthetic.main.activity_doubt_comment.markResolvedTv
-import kotlinx.android.synthetic.main.item_doubts.view.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
-import org.jetbrains.anko.textColor
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -57,7 +58,7 @@ class DoubtCommentActivity : BaseCBActivity() {
             }
 
             markResolvedTv.apply {
-                text = when(it.status){
+                text = when (it.status) {
                     RESOLVED -> {
                         setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, context.getDrawable(R.drawable.ic_reopen_small), null)
                         setTextColor(resources.getColor(R.color.neon_red))
@@ -83,10 +84,8 @@ class DoubtCommentActivity : BaseCBActivity() {
                             }
                         }
                         context.getString(R.string.mark_resolved)
-
                     }
                 }
-
             }
         }
 

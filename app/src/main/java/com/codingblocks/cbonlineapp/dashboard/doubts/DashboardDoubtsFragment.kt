@@ -38,7 +38,6 @@ import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard_doubts.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
@@ -165,7 +164,7 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
                     it.forEach {
                         list.add(
                             SheetItem(
-                                it.courseRun.run.crName,
+                                it.courseRun.course.title,
                                 image = it.courseRun.course.logo,
                                 courseId = it.courseRun.runAttempt.attemptId
                             )
