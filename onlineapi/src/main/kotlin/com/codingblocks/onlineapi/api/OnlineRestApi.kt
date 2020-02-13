@@ -83,7 +83,7 @@ interface OnlineRestApi {
 
     @POST("jwt/refresh/?android=true")
     @FormUrlEncoded
-    fun refreshToken(@Field("refresh_token") refresh_token: String): Call<JsonObject>
+    suspend fun refreshToken(@Field("refresh_token") refresh_token: String): Response<JsonObject>
 
     @POST("v2/progresses/reset")
     suspend fun resetProgress(@Body runAttemptId: ResetRunAttempt): Response<ResponseBody>

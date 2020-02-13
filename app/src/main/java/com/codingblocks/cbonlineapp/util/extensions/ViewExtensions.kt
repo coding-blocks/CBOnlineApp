@@ -248,7 +248,7 @@ fun Context.showDialog(
     }
 }
 
-fun Context.openChrome(url: String, newTask: Boolean = false) {
+fun Context.openChrome(url: String, newTask: Boolean = false, uri: Uri = Uri.EMPTY) {
     val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         CustomTabsIntent.Builder()
             .enableUrlBarHiding()
@@ -266,7 +266,11 @@ fun Context.openChrome(url: String, newTask: Boolean = false) {
     if (newTask) {
         customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
     }
-    customTabsIntent.launchUrl(this, Uri.parse(url))
+    if (uri.pathSegments.size > 0) {
+        customTabsIntent.launchUrl(this, uri)
+    } else {
+        customTabsIntent.launchUrl(this, Uri.parse(url))
+    }
 }
 
 fun View.animateVisibility(visible: Int) {

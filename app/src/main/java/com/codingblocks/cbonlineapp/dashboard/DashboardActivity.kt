@@ -45,6 +45,7 @@ import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.NetworkUtils.okHttpClient
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
@@ -110,6 +111,8 @@ class DashboardActivity : BaseCBActivity(),
 
     private fun setUser() {
         referralContainer.isVisible = true
+        if (JWTUtils.isExpired(prefs.SP_JWT_TOKEN_KEY))
+            viewModel.refreshToken()
         viewModel.user.observer(this) {
             val navMenu = dashboardNavigation.menu
             navMenu.findItem(R.id.nav_inbox).isVisible = true

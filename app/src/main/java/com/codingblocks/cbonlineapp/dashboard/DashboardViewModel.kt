@@ -75,6 +75,26 @@ class DashboardViewModel(
         }
     }
 
+    fun refreshToken() {
+        runIO {
+            when (val response = homeRepo.refreshToken()) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let {
+                            val jwt = it.asJsonObject.get("jwt").asString
+                            val rt = it.asJsonObject.get("refresh_token").asString
+                            homeRepo.prefs.SP_JWT_TOKEN_KEY = jwt
+                            homeRepo.prefs.SP_JWT_REFRESH_TOKEN = rt
+                            Clients.authJwt = jwt
+                            Clients.refreshToken = rt
+                            isLoggedIn.postValue(true)
+                        }
+                }
+            }
+        }
+    }
+
     private fun fetchUser(): MutableLiveData<User> {
         val user = MutableLiveData<User>()
         runIO {
