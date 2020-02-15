@@ -1,16 +1,21 @@
 package com.codingblocks.cbonlineapp.course.checkout
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
+import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.razorpay.Checkout
 import com.razorpay.PaymentResultListener
 import kotlinx.android.synthetic.main.activity_checkout.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CheckoutActivity : AppCompatActivity(), PaymentResultListener {
+class CheckoutActivity : BaseCBActivity(), PaymentResultListener {
 
     private val vm by viewModel<CheckoutViewModel>()
 
@@ -19,17 +24,34 @@ class CheckoutActivity : AppCompatActivity(), PaymentResultListener {
         setContentView(R.layout.activity_checkout)
         setToolbar(checkoutToolbar)
         Checkout.preload(applicationContext)
-
-        replaceFragmentSafely(CheckoutOrderDetailsFragment(), containerViewId = R.id.checkoutContainer)
+        vm.getCart()
+        replaceFragmentSafely(
+            CheckoutOrderDetailsFragment(),
+            containerViewId = R.id.checkoutContainer
+        )
+        vm.paymentStart.observer(this) {
+            for (fragment in supportFragmentManager.fragments) {
+                supportFragmentManager.beginTransaction().remove(fragment).commit()
+            }
+            payment.apply {
+                isVisible = true
+                playAnimation()
+            }
+        }
     }
 
     override fun onPaymentError(p0: Int, p1: String?) {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onPaymentSuccess(paymentId: String?) {
-        vm.capturePayment()
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        vm.paymentMap["razorpay_payment_id"] = (paymentId)!!
+        vm.capturePayment {
+            GlobalScope.launch {
+                delay(3000)
+                finish()
+            }
+        }
+        // To change body of created functions use File | Settings | File Templates.
         /** Make Network call to capture payment.
          *  Body : {
          *

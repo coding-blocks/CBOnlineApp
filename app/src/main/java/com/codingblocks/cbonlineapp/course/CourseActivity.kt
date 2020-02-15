@@ -7,12 +7,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.InstructorListAdapter
 import com.codingblocks.cbonlineapp.course.batches.BatchListAdapter
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
@@ -21,11 +22,11 @@ import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
-import com.codingblocks.cbonlineapp.util.MediaUtils.getYotubeVideoId
+import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.getDateForTime
+import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.loadSvg
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
@@ -36,15 +37,20 @@ import com.codingblocks.onlineapi.models.Tags
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.google.android.youtube.player.YouTubeInitializationResult
+import com.google.android.youtube.player.YouTubePlayer
+import com.google.android.youtube.player.YouTubePlayerSupportFragment
+import io.noties.markwon.Markwon
+import io.noties.markwon.core.CorePlugin
 import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.android.synthetic.main.bottom_sheet_batch.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetChangedListener {
+class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChangedListener {
 
     private val courseId by lazy {
         intent.getStringExtra(COURSE_ID)
@@ -64,6 +70,8 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
     private val courseCardListAdapter = CourseListAdapter()
     private val batchListAdapter = BatchListAdapter()
     private val dialog by lazy { BottomSheetDialog(this) }
+    private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
+    private var youtubePlayer: YouTubePlayer? = null
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -73,10 +81,12 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
                 intent.putExtra(COURSE_LOGO, name)
                 intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
 
-                val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    this@CourseActivity,
-                    logo,
-                    ViewCompat.getTransitionName(logo)!!)
+                val options: ActivityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this@CourseActivity,
+                        logo,
+                        ViewCompat.getTransitionName(logo)!!
+                    )
                 startActivity(intent, options.toBundle())
             }
         }
@@ -89,37 +99,56 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         setToolbar(courseToolbar)
         viewModel.id = courseId
         viewModel.fetchCourse()
-        lifecycle.addObserver(youtubePlayerView)
         setUpBottomSheet()
 
         courseProjectsRv.setRv(this@CourseActivity, projectAdapter, true)
-        courseSuggestedRv.setRv(this@CourseActivity, courseCardListAdapter, orientation = RecyclerView.HORIZONTAL)
+        courseSuggestedRv.setRv(
+            this@CourseActivity,
+            courseCardListAdapter,
+            orientation = RecyclerView.HORIZONTAL,
+            space = 28f
+        )
         courseInstructorRv.setRv(this@CourseActivity, instructorAdapter)
         courseContentRv.setRv(this@CourseActivity, courseSectionListAdapter, true)
         if (!courseLogoImage.isNullOrEmpty()) {
             courseLogo.transitionName = courseLogoImage
-            courseLogo.loadSvg(courseLogoUrl) {
-                supportStartPostponedEnterTransition()
+            courseLogo.loadImage(courseLogoUrl) {
+                if (it)
+                    supportStartPostponedEnterTransition()
+                else {
+                    toast("No Internet Connection Available")
+                    onBackPressed()
+                }
             }
         }
 
         viewModel.course.observer(this) { course ->
             showTags(course.tags)
-            courseSummaryTv.text = course.summary
+            val markWon = Markwon.builder(this)
+                .usePlugin(CorePlugin.create())
+                .build()
+            markWon.setMarkdown(courseSummaryTv, course.summary)
+            course.faq?.let {
+                faqTv.isVisible = true
+                courseFaqTv.isVisible = true
+                markWon.setMarkdown(courseFaqTv, it)
+            }
             title = course.title
             shortTv.text = course.subtitle
-            ratingBar.progress = course.rating.toInt()
-            ratingTv.text = "${course.rating}/5, ${course.reviewCount} ratings"
+            ratingBar.rating = course.rating
+            ratingTv.text =
+                getSpannableSring("${course.rating}/5.0, ", "${course.reviewCount} ratings")
             if (courseLogoUrl.isNullOrEmpty()) courseLogo.loadImage(course.logo)
-            courseBackdrop.loadImage(course.coverImage)
-            setYoutubePlayer(course.promoVideo)
+            courseBackdrop.loadImage(course.coverImage ?: "")
+            setYoutubePlayer(course.promoVideo ?: "")
             viewModel.fetchProjects(course.projects)
-            viewModel.fetchSections(course.runs?.first()?.sections)
+            if (!course.runs.isNullOrEmpty()) viewModel.fetchSections(course.runs?.first()?.sections)
             instructorAdapter.submitList(course.instructors)
             batchListAdapter.submitList(course.activeRuns)
-            course.activeRuns?.first()?.let {
-                setRun(it)
-            }
+            if (!course.activeRuns.isNullOrEmpty())
+                course.activeRuns?.first()?.let {
+                    setRun(it)
+                }
         }
 
         viewModel.projects.observer(this) { projects ->
@@ -158,27 +187,41 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         appbar.addOnOffsetChangedListener(this)
 
         courseCardListAdapter.onItemClick = itemClickListener
-        batchBtn.setOnClickListener {
-            dialog.show()
-        }
+
         viewModel.addedToCartProgress.observeOnce {
+            buyBtn.isEnabled = true
             startActivity<CheckoutActivity>()
         }
         viewModel.enrollTrialProgress.observeOnce {
             startActivity<DashboardActivity>()
             finish()
         }
+
+        viewAllTv.setOnClickListener {
+            // Bottom Sheet
+            val courseSectionAllFragment = CourseSectionAllFragment()
+            val bundle = Bundle()
+            bundle.putString(COURSE_ID, courseId)
+            courseSectionAllFragment.arguments = bundle
+
+            courseSectionAllFragment.show(supportFragmentManager, "courseSectionAllFragment")
+        }
     }
 
     private fun setRun(it: Runs) {
-        priceTv.text = "${getString(R.string.rupee_sign)}${it.price}"
+        val price = it.price
+        priceTv.text = if (price == "0") "FREE" else "${getString(R.string.rupee_sign)} $price"
+        if (price == "0") {
+            goodiesImg.isVisible = false
+        }
         mrpTv.text = "₹ ${it.mrp}"
         batchBtn.text = it.name
-        deadlineTv.text = "Enrollment Ends ${it.enrollmentEnd?.let { it1 -> getDateForTime(it1) }}"
+        deadlineTv.text = "Enrollment Ends ${it.enrollmentEnd.let { it1 -> getDateForTime(it1) }}"
         mrpTv.paintFlags = mrpTv.paintFlags or
             Paint.STRIKE_THRU_TEXT_FLAG
         buyBtn.setOnClickListener { _ ->
-            viewModel.addToCart(it.id)
+            buyBtn.isEnabled = false
+            viewModel.clearCart(it.id)
         }
         trialBtn.setOnClickListener { _ ->
             viewModel.enrollTrial(it.id)
@@ -199,12 +242,32 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
         }
     }
 
-    private fun setYoutubePlayer(promoVideo: String) {
-        youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-            override fun onReady(youTubePlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer) {
-                youTubePlayer.cueVideo(getYotubeVideoId(promoVideo), 0F)
+    private fun setYoutubePlayer(youtubeUrl: String) {
+        youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
+            override fun onInitializationFailure(
+                p0: YouTubePlayer.Provider?,
+                p1: YouTubeInitializationResult?
+            ) {
             }
-        })
+
+            override fun onInitializationSuccess(
+                p0: YouTubePlayer.Provider?,
+                youtubePlayerInstance: YouTubePlayer?,
+                p2: Boolean
+            ) {
+                youtubePlayer = youtubePlayerInstance
+                if (!p2) {
+                    val url = if (youtubeUrl.split("=").size == 2) youtubeUrl.split("=")[1]
+                    else {
+                        MediaUtils.getYotubeVideoId(youtubeUrl)
+                    }
+                    youtubePlayerInstance?.cueVideo(url)
+                }
+            }
+        }
+        val youTubePlayerSupportFragment =
+            supportFragmentManager.findFragmentById(R.id.youtubePlayerView) as YouTubePlayerSupportFragment?
+        youTubePlayerSupportFragment?.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -214,25 +277,35 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.share -> {
-            share("New Course")
+            share("http://online.codingblocks.com/app/$courseId")
+            true
+        }
+        android.R.id.home -> {
+            onBackPressed()
             true
         }
         else -> super.onOptionsItemSelected(item)
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-        val alpha = (appBarLayout.totalScrollRange + verticalOffset).toFloat() / appBarLayout.totalScrollRange
+        val alpha =
+            (appBarLayout.totalScrollRange + verticalOffset).toFloat() / appBarLayout.totalScrollRange
         courseLogo.alpha = alpha
         shortTv.alpha = alpha
+        ratingBar.alpha = alpha
+        ratingTv.alpha = alpha
     }
 
     private fun setUpBottomSheet() {
+        batchBtn.setOnClickListener {
+            dialog.show()
+        }
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_batch, null)
         sheetDialog.run {
             batchRv.setRv(this@CourseActivity, batchListAdapter)
         }
         batchListAdapter.onItemClick = {
-            setRun(it)
+            setRun(it as Runs)
             dialog.dismiss()
         }
         dialog.dismissWithAnimation = true
@@ -240,8 +313,7 @@ class CourseActivity : AppCompatActivity(), AnkoLogger, AppBarLayout.OnOffsetCha
     }
 
     override fun onBackPressed() {
-        youtubePlayerView.release()
-//        supportFinishAfterTransition()
+        youtubePlayer?.release()
         super.onBackPressed()
     }
 }

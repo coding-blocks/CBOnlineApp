@@ -10,14 +10,15 @@ import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
+import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_login_home.*
 
-class LoginHomeFragment : Fragment() {
+class LoginHomeFragment : BaseCBFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +34,11 @@ class LoginHomeFragment : Fragment() {
         setSecondSpan()
 
         mobileBtn.setOnClickListener {
-            replaceFragmentSafely(SignInFragment(), "SignIn", containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
+            replaceFragmentSafely(
+                SignInFragment(),
+                tag = "SignIn",
+                containerViewId = R.id.loginContainer
+            )
         }
 
         gmailBtn.setOnClickListener {
@@ -50,8 +55,10 @@ class LoginHomeFragment : Fragment() {
     }
 
     private fun setSecondSpan() {
-        val policySpan = SpannableString("By loggin in you agree to Coding Blocks’s\n" +
-            "Privacy Policy & Terms of Service")
+        val policySpan = SpannableString(
+            "By logging in you agree to Coding Blocks’s\n" +
+                "Privacy Policy & Terms of Service"
+        )
         val privacySpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
                 requireContext().openChrome("https://codingblocks.com/privacypolicy.html")
@@ -85,10 +92,10 @@ class LoginHomeFragment : Fragment() {
     }
 
     private fun setfirstSpan() {
-        val wordToSpan = SpannableString("New here? Create an account")
+        val wordToSpan = getSpannableStringSecondBold("New here? ", "Create an account")
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
-                replaceFragmentSafely(SignInFragment.newInstance("NEW"), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left)
+                replaceFragmentSafely(SignUpFragment(), containerViewId = R.id.loginContainer)
             }
 
             override fun updateDrawState(ds: TextPaint) {

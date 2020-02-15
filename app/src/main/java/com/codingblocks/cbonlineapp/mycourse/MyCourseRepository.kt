@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.mycourse
 
+import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
@@ -21,6 +22,7 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.PerformanceResponse
+import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.safeApiCall
 
@@ -29,12 +31,13 @@ class MyCourseRepository(
     private val contentsDao: ContentDao,
     private val sectionDao: SectionDao,
     private val courseWithInstructorDao: CourseWithInstructorDao,
-    private val runPerformanceDao: RunPerformanceDao
+    private val runPerformanceDao: RunPerformanceDao,
+    private val bookmarkDao: BookmarkDao
 ) {
 
     fun getSectionWithContent(attemptId: String) = sectionWithContentsDao.getSectionWithContent(attemptId)
 
-    fun resumeCourse(attemptId: String) = sectionWithContentsDao.resumeCourse(attemptId)
+    suspend fun getSectionWithContentNonLive(attemptId: String) = sectionWithContentsDao.getSectionWithContentNonLive(attemptId)
 
     suspend fun insertSections(runAttempt: RunAttempts) {
         runAttempt.run?.sections?.forEach { courseSection ->
@@ -206,9 +209,9 @@ class MyCourseRepository(
                     contentVideo,
                     contentQna,
                     contentCodeChallenge,
-                    contentCsv,
-                    bookmark
+                    contentCsv
                 )
+
             val oldModel: ContentModel? = contentsDao.getContent(content.id)
             if (oldModel != null && !oldModel.sameAndEqual(newContent)) {
                 contentsDao.update(newContent)
@@ -217,6 +220,8 @@ class MyCourseRepository(
                     newContent
                 )
             }
+            if (bookmark.bookmarkUid != "")
+                bookmarkDao.insert(bookmark)
 
             sectionWithContentsDao.insert(
                 SectionContentHolder.SectionWithContent(
@@ -247,4 +252,8 @@ class MyCourseRepository(
             )
         )
     }
+
+    fun getNextContent(attemptId: String) = sectionWithContentsDao.resumeCourse(attemptId)
+
+    suspend fun resetProgress(attemptId: ResetRunAttempt) = safeApiCall { Clients.api.resetProgress(attemptId) }
 }

@@ -11,7 +11,11 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.getMeta
+import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.Course
+import com.codingblocks.onlineapi.models.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class DashboardViewModel(
     private val homeRepo: DashboardHomeRepository,
@@ -19,10 +23,11 @@ class DashboardViewModel(
     private val myCourseRepo: DashboardMyCoursesRepository
 ) : ViewModel() {
     var courseFilter = MutableLiveData<String>()
-    var isAdmin: MutableLiveData<Boolean> = MutableLiveData()
     var isLoggedIn: MutableLiveData<Boolean> = MutableLiveData()
     var suggestedCourses = MutableLiveData<List<Course>>()
     var trendingCourses = MutableLiveData<List<Course>>()
+    var tracks = MutableLiveData<List<CareerTracks>>()
+    val added = MutableLiveData<Boolean>()
 
     val courses by lazy {
         Transformations.switchMap(courseFilter) { query ->
@@ -38,12 +43,17 @@ class DashboardViewModel(
         homeRepo.getRunStats(query)
     }
     val allRuns by lazy {
-        myCourseRepo.getMyRuns("")
+        myCourseRepo.getActiveRuns()
+    }
+    val purchasedRuns by lazy {
+        myCourseRepo.getPurchasedRuns()
     }
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
-    init {
-        fetchUser()
+    val user by lazy {
+        Transformations.switchMap(isLoggedIn) {
+            fetchUser()
+        }
     }
 
     fun fetchToken(grantCode: String) {
@@ -55,25 +65,27 @@ class DashboardViewModel(
                         response.value.body()?.let {
                             val jwt = it.asJsonObject.get("jwt").asString
                             val rt = it.asJsonObject.get("refresh_token").asString
+                            homeRepo.prefs.SP_JWT_TOKEN_KEY = jwt
+                            homeRepo.prefs.SP_JWT_REFRESH_TOKEN = rt
                             Clients.authJwt = jwt
                             Clients.refreshToken = rt
+                            isLoggedIn.postValue(true)
                         }
                 }
             }
         }
     }
 
-    private fun fetchUser() {
+    private fun fetchUser(): MutableLiveData<User> {
+        val user = MutableLiveData<User>()
         runIO {
             when (val response = homeRepo.fetchUser()) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
+                            user.postValue(it)
                             homeRepo.insertUser(it)
-                            if (it.roleId == 1 || it.roleId == 3) {
-                                isAdmin.postValue(true)
-                            }
                         }
                     else {
                         setError(fetchError(response.value.code()))
@@ -81,6 +93,7 @@ class DashboardViewModel(
                 }
             }
         }
+        return user
     }
 
     fun fetchRecommendedCourses(offset: Int, page: Int) {
@@ -101,20 +114,40 @@ class DashboardViewModel(
         }
     }
 
+    fun fetchTracks() {
+        runIO {
+            when (val response = exploreRepo.getTracks()) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        tracks.postValue(body())
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
+
     fun fetchMyCourses(offset: String = "0") {
         runIO {
             when (val response = myCourseRepo.fetchMyCourses(offset)) {
-                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.GenericError -> {
+                    added.postValue(true)
+                    setError(response.error)
+                }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
-                            myCourseRepo.insertCourses(it.get() ?: emptyList())
+                            withContext(Dispatchers.Default) {
+                                myCourseRepo.insertCourses(it.get() ?: emptyList())
+                            }
                             val currentOffSet = getMeta(it.meta, "currentOffset").toString()
                             val nextOffSet = getMeta(it.meta, "nextOffset").toString()
                             if (currentOffSet != nextOffSet && nextOffSet != "null") {
                                 fetchMyCourses(nextOffSet)
-                                if (it.get()?.isEmpty() == true)
-                                    courseFilter.postValue("")
+                            } else {
+                                added.postValue(true)
                             }
                         }
                     else {

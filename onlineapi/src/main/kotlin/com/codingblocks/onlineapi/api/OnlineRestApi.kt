@@ -75,18 +75,18 @@ interface OnlineRestApi {
     @GET("v2/runs/cart")
     suspend fun getCart(): Response<JsonObject>
 
-    @PATCH("v2/runs/cart")
-    suspend fun updateCart(@FieldMap params: Map<String, String>): Response<JsonObject>
+    @PATCH("v2/runs/purchase")
+    suspend fun updateCart(@Body body: HashMap<String, Any>): Response<JsonObject>
 
     @GET("v2/runs/clear_cart")
-    fun clearCart(): Call<JsonObject>
+    suspend fun clearCart(): Response<JsonObject>
 
     @POST("jwt/refresh/?android=true")
     @FormUrlEncoded
     fun refreshToken(@Field("refresh_token") refresh_token: String): Call<JsonObject>
 
     @POST("v2/progresses/reset")
-    fun resetProgress(@Body runAttemptId: ResetRunAttempt): Call<ResponseBody>
+    suspend fun resetProgress(@Body runAttemptId: ResetRunAttempt): Response<ResponseBody>
 
     @GET("v2/run_attempts/{runAttemptId}/requestApproval")
     fun requestApproval(@Path("runAttemptId") id: String): Call<ResponseBody>
@@ -114,6 +114,19 @@ interface OnlineRestApi {
     @FormUrlEncoded
     suspend fun getJwt(@FieldMap params: Map<String, String>): Response<JsonObject>
 
+    @POST("users")
+    @FormUrlEncoded
+    suspend fun createUser(
+        @FieldMap params: Map<String, String>
+    ): Response<JsonObject>
+
+    @PATCH("users/{id}")
+    @FormUrlEncoded
+    suspend fun updateUser(
+        @Path("id") id: String,
+        @FieldMap params: Map<String, String>
+    ): Response<JsonObject>
+
     @POST("jwt/login")
     @FormUrlEncoded
     suspend fun getJwtWithEmail(@FieldMap params: Map<String, String>): Response<JsonObject>
@@ -122,5 +135,7 @@ interface OnlineRestApi {
     @FormUrlEncoded
     suspend fun capturePayment(@FieldMap params: Map<String, String>): Response<JsonObject>
 
+    @POST("v2/hubspot/lead")
+    suspend fun generateLead(@Body body: HashMap<String, Any>): Response<JsonObject>
 
 }

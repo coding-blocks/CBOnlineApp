@@ -2,6 +2,7 @@ package com.codingblocks.onlineapi.api
 
 import com.codingblocks.onlineapi.models.Applications
 import com.codingblocks.onlineapi.models.Bookmark
+import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Company
@@ -14,6 +15,7 @@ import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.Player
+import com.codingblocks.onlineapi.models.Professions
 import com.codingblocks.onlineapi.models.Project
 import com.codingblocks.onlineapi.models.Question
 import com.codingblocks.onlineapi.models.QuizAttempt
@@ -28,6 +30,8 @@ import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.FieldMap
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -116,6 +120,14 @@ interface OnlineJsonApi {
         @Query("include") include: String = "instructors,runs",
         @Query("sort") sort: String = "difficulty"
     ): Response<List<Course>>
+
+    @GET("courses")
+    suspend fun findCourses(
+        @Query("exclude") exclude: String = "ratings,instructors.*",
+        @Query("filter[title][\$iLike]") query: String,
+        @Query("filter[unlisted]") unlisted: String = "false",
+        @Query("page[limit]") page: Int = 100,
+        @Query("include") include: String = "instructors,runs"): Response<List<Course>>
 
     @GET("run_attempts/{runid}")
     suspend fun enrolledCourseById(
@@ -234,7 +246,7 @@ interface OnlineJsonApi {
     fun setPlayerId(@Body params: Player): Call<ResponseBody>
 
     @GET("jobs")
-    fun getJobs(
+    suspend fun getJobs(
         @Query("filter[deadline][\$gt]") deadline: String,
         @Query("filter[postedOn][\$lte]") postedOn: String,
         @Query("filter[location][\$ilike][\$any][]") filterLoc: List<String>? = null,
@@ -242,12 +254,12 @@ interface OnlineJsonApi {
         @Query("page[offset]") pageOffSet: String = "0",
         @Query("page[limit]") pageLimit: String = "12",
         @Query("sort") sort: String = "-postedOn"
-    ): Call<ArrayList<Jobs>>
+    ): Response<JSONAPIDocument<List<Jobs>>>
 
     @GET("companies/{id}")
-    fun getCompany(
+    suspend fun getCompany(
         @Path("id") id: String
-    ): Call<Company>
+    ): Response<Company>
 
     @GET("jobs/{id}")
     fun getJobById(
@@ -260,6 +272,31 @@ interface OnlineJsonApi {
     @GET("users/me")
     suspend fun getMe(): Response<User>
 
+    @GET("career_tracks")
+    suspend fun getTracks(
+        @Query("page[limit]") pageLimit: String = "5",
+        @Query("include") include: String = "professions"
+    ): Response<List<CareerTracks>>
+
+    @GET("{id}")
+    suspend fun getTrackCourses(
+        @Path("id") path: String
+    ): Response<List<Course>>
+
+    @GET("career_tracks/{id}")
+    suspend fun getTrack(
+        @Path("id") id: String
+    ): Response<CareerTracks>
+
+    @GET("professions")
+    suspend fun getProfessions(
+    ): Response<List<Professions>>
+
+    @POST("career_tracks/recommend")
+    @FormUrlEncoded
+    suspend fun getRecommendedTrack(
+        @FieldMap params: HashMap<String, String>
+    ): Response<CareerTracks>
 
     /**
      * Admin Side API"s

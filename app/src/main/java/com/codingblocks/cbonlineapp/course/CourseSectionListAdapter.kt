@@ -8,6 +8,8 @@ import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +17,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.Sections
 import kotlinx.android.synthetic.main.item_course_section.view.*
+import kotlinx.android.synthetic.main.item_section_content_info.view.*
 
 class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.ItemViewHolder>(DiffCallback()) {
 
@@ -35,7 +38,7 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
 
         fun bind(item: Sections) = with(itemView) {
             title.text = item.name
-            lectures.text = " ${item.contents?.size ?: 0} Items"
+            lectures.text = " ${item.contents?.size ?: 0} Items |"
             var duration: Long = 0
             for (subItems in item.contents!!) {
                 if (subItems.contentable == "lecture" || subItems.contentable == "video")
@@ -59,6 +62,7 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
                 val inflatedView = factory.inflate(R.layout.item_section_content_info, ll, false)
                 val subTitle = inflatedView.findViewById(R.id.textView15) as TextView
                 val contentImg = inflatedView.findViewById(R.id.imageView3) as ImageView
+                val premiumImg = inflatedView.premiumImg
                 if (i.contentable == "lecture" || i.contentable == "video") {
                     contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_play_lock))
                 } else if (i.contentable == "document") {
@@ -66,22 +70,29 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
                 } else if (i.contentable == "code-challenge") {
                     contentImg.setImageDrawable(context.getDrawable(R.drawable.ic_play_lock))
                 }
+                if (!item.premium) {
+                    subTitle.setTextColor(getColor(context, R.color.orangish))
+                    premiumImg.isVisible = false
+                } else {
+                    subTitle.setTextColor(getColor(context, R.color.black))
+                    premiumImg.isVisible = true
+                }
                 subTitle.text = i.title
-
                 ll.addView(inflatedView)
             }
 
             setOnClickListener {
-                showOrHide(ll)
+                showOrHide(ll, title)
             }
 
             arrow.setOnClickListener {
-                showOrHide(ll)
+                showOrHide(ll, title)
             }
         }
 
-        private fun showOrHide(ll: View) {
+        private fun showOrHide(ll: View, title: TextView) {
             if (ll.visibility == View.GONE) {
+                title.setTextColor(ll.context.resources.getColor(R.color.orangish))
                 ll.visibility = View.VISIBLE
                 arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                     0.5f)
@@ -90,6 +101,7 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
 
                 itemView.arrow.startAnimation(arrowAnimation)
             } else {
+                title.setTextColor(ll.context.resources.getColor(R.color.black))
                 ll.visibility = View.GONE
                 arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                     0.5f)

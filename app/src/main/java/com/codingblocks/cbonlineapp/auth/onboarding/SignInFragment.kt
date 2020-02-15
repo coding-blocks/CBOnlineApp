@@ -6,43 +6,44 @@ import android.os.Bundle
 import android.text.InputType
 import android.text.Spannable
 import android.text.SpannableString
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
-import com.codingblocks.cbonlineapp.util.JWT_TOKEN
-import com.codingblocks.cbonlineapp.util.REFRESH_TOKEN
-import com.codingblocks.cbonlineapp.util.RESOLVEHINT
-import com.codingblocks.cbonlineapp.util.extensions.getSharedPrefs
+import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
+import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
-import com.codingblocks.cbonlineapp.util.extensions.save
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.safeApiCall
-import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.credentials.Credential
+import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
-import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_sign_in.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.runOnUiThread
+import org.koin.android.ext.android.inject
 import android.text.style.StyleSpan as StyleSpan1
 
-class SignInFragment : Fragment() {
+class SignInFragment : BaseCBFragment() {
 
-    var type: String = ""
+    val db: AppDatabase by inject()
     var map = HashMap<String, String>()
-    lateinit var apiClient: GoogleApiClient
-    lateinit var hintRequest: HintRequest
-    private val sharedPrefs by lazy { getSharedPrefs() }
+
+    private val sharedPrefs by inject<PreferenceHelper>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,21 +51,8 @@ class SignInFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_sign_in, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.let {
-            type = it.getString("type") ?: ""
-        }
-        if (type.isNotEmpty())
-            if (type.equals("new", true)) {
-                errorDrawableTv.isVisible = true
-                numberTitle.text = getString(R.string.welcome)
-                numberDesc.text = getString(R.string.welcome_desc)
-            }
 
         errorDrawableTv.setOnClickListener {
             if (errorDrawableTv.text == getString(R.string.use_email)) {
@@ -72,8 +60,11 @@ class SignInFragment : Fragment() {
                 numberTitle.text = getString(R.string.email_title)
                 numberDesc.text = getString(R.string.email_desc)
                 numberLayout.hint = "Email ID"
-                numberLayout.editText?.inputType = InputType.TYPE_CLASS_TEXT or
-                    InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+                numberLayout.editText?.apply {
+                    inputType = InputType.TYPE_CLASS_TEXT or
+                        InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+                    setText("")
+                }
                 passwordLayout.isVisible = !passwordLayout.isVisible
             } else {
                 errorDrawableTv.text = getString(R.string.use_email)
@@ -91,24 +82,47 @@ class SignInFragment : Fragment() {
 
         requestHint()
         proceedBtn.setOnClickListener {
-            if (type.equals("new", true)) {
+            if (passwordLayout.isVisible) {
                 validateEmailPassWord()
             } else {
-                map["phone"] = "+91-${numberLayout.editText?.text?.substring(3)}"
-                proceedBtn.isEnabled = false
-                GlobalScope.launch {
-                    when (val response = safeApiCall { Clients.api.getOtp(map) }) {
-                        is ResultWrapper.GenericError -> {
+                loginWithNumber()
+            }
+        }
+    }
+
+    private fun loginWithNumber() {
+        val numberEditText = numberLayout.editText?.text
+        if (numberEditText.isNullOrEmpty() || numberEditText.length < 10) {
+            signInRoot.showSnackbar("Number is too short", Snackbar.LENGTH_SHORT)
+        } else {
+            val number = if (numberEditText.length > 10) "+91-${numberEditText.takeLast(10)}" else "+91-$numberEditText"
+            map["phone"] = number
+            proceedBtn.isEnabled = false
+            GlobalScope.launch {
+                when (val response = safeApiCall { Clients.api.getOtp(map) }) {
+                    is ResultWrapper.GenericError -> {
+                        runOnUiThread {
+                            proceedBtn.isEnabled = true
                             signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
                         }
-                        is ResultWrapper.Success -> {
-                            if (response.value.isSuccessful)
-                                replaceFragmentSafely(LoginOtpFragment.newInstance(map["phone"]
-                                    ?: ""), containerViewId = R.id.loginContainer, enterAnimation = R.animator.slide_in_right, exitAnimation = R.animator.slide_out_left, addToStack = true)
-                            else
-                                runOnUiThread {
-                                    proceedBtn.isEnabled = true
-                                }
+                    }
+                    is ResultWrapper.Success -> {
+                        if (response.value.isSuccessful) {
+                            activity?.let {
+                                val otpFragment = LoginOtpFragment.newInstance(map["phone"] ?: "")
+                                SmsRetriever.getClient(it).startSmsRetriever() // start retriever
+                                replaceFragmentSafely(
+                                    otpFragment,
+                                    containerViewId = R.id.loginContainer
+                                )
+                                MySMSBroadcastReceiver.register(it, otpFragment) // the new fragment will listen for otp
+                            }
+                        } else {
+                            runOnUiThread {
+                                errorDrawableTv.isVisible = true
+                                signInRoot.showSnackbar("Number Not Verified.Please Try Again !!", Snackbar.LENGTH_SHORT)
+                                proceedBtn.isEnabled = true
+                            }
                         }
                     }
                 }
@@ -129,19 +143,18 @@ class SignInFragment : Fragment() {
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         response.value.body()?.let {
-                            with(it["jwt"].asString) {
-                                Clients.authJwt = this
-                                sharedPrefs.save(JWT_TOKEN, this)
-                            }
-                            with(it["refresh_token"].asString) {
-                                Clients.refreshToken = this
-                                sharedPrefs.save(REFRESH_TOKEN, this)
+                            if (sharedPrefs.SP_JWT_TOKEN_KEY.isNotEmpty() && sharedPrefs.SP_JWT_TOKEN_KEY != it["jwt"].asString) {
+                                withContext(Dispatchers.IO) { db.clearAllTables() }
+                                saveKeys(it)
+                            } else {
+                                saveKeys(it)
                             }
                         }
                         startActivity(intentFor<DashboardActivity>())
                         requireActivity().finish()
                     } else
                         runOnUiThread {
+                            signInRoot.showSnackbar("Invalid Username or Password.Please Try Again", Snackbar.LENGTH_SHORT)
                             proceedBtn.isEnabled = true
                         }
                 }
@@ -149,26 +162,33 @@ class SignInFragment : Fragment() {
         }
     }
 
+    private fun saveKeys(it: JsonObject) {
+        with(it["jwt"].asString) {
+            Clients.authJwt = this
+            sharedPrefs.SP_JWT_TOKEN_KEY = this
+        }
+        with(it["refresh_token"].asString) {
+            Clients.refreshToken = this
+            sharedPrefs.SP_JWT_REFRESH_TOKEN = this
+        }
+    }
+
     private fun requestHint() {
-        hintRequest = HintRequest.Builder()
+        val hintRequest = HintRequest.Builder()
             .setPhoneNumberIdentifierSupported(true)
             .build()
-
-        apiClient = GoogleApiClient.Builder(requireContext())
-            .addApi(Auth.CREDENTIALS_API)
-            .enableAutoManage(requireActivity()) {
-                Log.i("TAG", "Mobile Number: ${it.errorMessage}")
-            }.build()
-
-        val intent = Auth.CredentialsApi.getHintPickerIntent(apiClient, hintRequest)
+        val credentialsClient = Credentials.getClient(requireActivity())
+        val intent = credentialsClient.getHintPickerIntent(hintRequest)
         startIntentSenderForResult(
             intent.intentSender,
-            RESOLVEHINT, null, 0, 0, 0, null)
+            CREDENTIAL_PICKER_REQUEST,
+            null, 0, 0, 0, null
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data != null) {
-            val cred: Credential? = data?.getParcelableExtra(Credential.EXTRA_KEY)
+            val cred: Credential? = data.getParcelableExtra(Credential.EXTRA_KEY)
             if (cred != null) {
                 val unformattedPhone = cred.id
                 val formatNumber = SpannableString(unformattedPhone)
@@ -177,15 +197,5 @@ class SignInFragment : Fragment() {
                 numberLayout.editText?.setText(formatNumber)
             }
         }
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(type: String) =
-            SignInFragment().apply {
-                arguments = Bundle().apply {
-                    putString("type", type)
-                }
-            }
     }
 }

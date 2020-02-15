@@ -2,27 +2,24 @@ package com.codingblocks.cbonlineapp.jobs.jobdetails
 
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.JOB_ID
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
-import com.codingblocks.cbonlineapp.util.extensions.isotomillisecond
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.nonNull
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.codingblocks.cbonlineapp.util.extensions.timeAgo
 import com.codingblocks.onlineapi.models.Applications
 import com.codingblocks.onlineapi.models.Form
 import com.codingblocks.onlineapi.models.JobId
@@ -34,7 +31,7 @@ import kotlinx.android.synthetic.main.custom_form_dialog.view.*
 import kotlinx.android.synthetic.main.item_job.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class JobDetailActivity : AppCompatActivity() {
+class JobDetailActivity : BaseCBActivity() {
 
     private val viewModel by viewModel<JobDetailViewModel>()
 
@@ -54,7 +51,7 @@ class JobDetailActivity : AppCompatActivity() {
 
         jobId = intent.getStringExtra(JOB_ID)
 
-        deadlinell.visibility = View.GONE
+//        deadlinell.visibility = View.GONE
 
         viewModel.fetchJob(jobId)
 
@@ -76,7 +73,7 @@ class JobDetailActivity : AppCompatActivity() {
                 jobTitleTv.text = title
                 supportActionBar?.title = title
                 companyTv.text = company.name
-                postedAgoTv.text = timeAgo(postedOn.isotomillisecond())
+//                postedAgoTv.text = timeAgo(postedOn.isotomillisecond())
                 locationTv.text = getSpannableSring("Job Location: ", location)
                 experienceTv.text = getSpannableSring("Experience: ", experience)
                 typeTv.text = getSpannableSring("Job Type: ", type)
@@ -117,7 +114,7 @@ class JobDetailActivity : AppCompatActivity() {
 
         val marginInDp = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, sizeInDP.toFloat(), resources
-            .displayMetrics
+                .displayMetrics
         ).toInt()
         params.setMargins(marginInDp, marginInDp / 2, marginInDp, marginInDp / 2)
         val formView = layoutInflater.inflate(R.layout.custom_form_dialog, null)

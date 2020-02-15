@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
+import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
@@ -16,7 +17,7 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
 
     var errorLiveData: MutableLiveData<String> = MutableLiveData()
     var barMessage: MutableLiveData<String> = MutableLiveData()
-    var type: MutableLiveData<String> = MutableLiveData()
+    var type: MutableLiveData<String> = MutableLiveData(ALL)
     var attemptId: MutableLiveData<String> = MutableLiveData()
 
     val doubts by lazy {
@@ -28,18 +29,19 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Vi
 
     fun fetchDoubts() {
         runIO {
-            when (val response = repo.fetchDoubtsByCourseRun(attemptId.value ?: "")) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful)
-                        response.value.body()?.let {
-                            repo.insertDoubts(it)
+            if (!attemptId.value.isNullOrEmpty())
+                when (val response = repo.fetchDoubtsByCourseRun(attemptId.value ?: "")) {
+                    is ResultWrapper.GenericError -> setError(response.error)
+                    is ResultWrapper.Success -> {
+                        if (response.value.isSuccessful)
+                            response.value.body()?.let {
+                                repo.insertDoubts(it)
+                            }
+                        else {
+                            setError(fetchError(response.value.code()))
                         }
-                    else {
-                        setError(fetchError(response.value.code()))
                     }
                 }
-            }
         }
     }
 

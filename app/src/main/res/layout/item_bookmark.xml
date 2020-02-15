@@ -6,9 +6,9 @@
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingStart="@dimen/margin_large"
-    android:paddingTop="@dimen/margin_medium_small"
+    android:paddingTop="@dimen/margin_large"
     android:paddingEnd="@dimen/margin_large"
-    android:paddingBottom="@dimen/margin_medium_small">
+    android:paddingBottom="@dimen/margin_large">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -30,7 +30,7 @@
             android:id="@+id/bookmarkSubtitleTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/margin_extra_small"
             android:fontFamily="@font/gilroy_medium"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -51,14 +51,13 @@
         android:textSize="12sp"
         tools:text="4 hours ago" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/bookmarkSelectionImg"
+    <ImageView
+        android:id="@+id/selectionImg"
         android:layout_width="21dp"
         android:layout_height="21dp"
-        android:background="@color/veryLightPink"
+        android:background="@drawable/ic_circle_pink"
         android:padding="6dp"
         android:src="@drawable/ic_selected" />
-
     <!--    <View-->
     <!--        android:id="@+id/divider3"-->
     <!--        android:layout_width="match_parent"-->

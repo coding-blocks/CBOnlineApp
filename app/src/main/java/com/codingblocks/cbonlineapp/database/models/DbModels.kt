@@ -16,21 +16,11 @@ data class ContentLecture(
     var lectureName: String = "",
     var lectureDuration: Long = 0L,
     var lectureId: String = "",
-    var lectureContentId: String = "",
+    var lectureSectionId: String = "",
     var lectureUpdatedAt: String = "",
-    var isDownloaded: Boolean = FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, lectureId),
-    var date: Date = Date(0L)
-)
-
-@Entity
-data class BookmarkModel(
-    var bookmarkUid: String = "",
-    var runAttemptId: String = "",
-    var contentId: String = "",
-    var sectionId: String = "",
-    var createdAt: String = "",
-    var sectionName: String = "",
-    var contentName: String = ""
+    var isDownloaded: Boolean = if (lectureId.isEmpty()) false else FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, lectureId),
+    var date: Date = Date(0L),
+    var lectureContentId: String = ""
 ) : BaseModel()
 
 @Entity
@@ -82,13 +72,13 @@ data class ContentCsvModel(
 )
 
 @Entity(
-    indices = [Index("contentId")],
-    foreignKeys = [(ForeignKey(
-        entity = ContentModel::class,
-        parentColumns = ["ccid"],
-        childColumns = ["contentId"],
-        onDelete = ForeignKey.CASCADE
-    ))]
+//    indices = [Index("contentId")],
+//    foreignKeys = [(ForeignKey(
+//        entity = ContentModel::class,
+//        parentColumns = ["ccid"],
+//        childColumns = ["contentId"],
+//        onDelete = ForeignKey.CASCADE
+//    ))]
 )
 data class NotesModel(
     @PrimaryKey
@@ -112,6 +102,26 @@ data class Notification(
     val seen: Boolean = false,
     val videoId: String = ""
 )
+
+@Entity(
+    indices = [Index("contentId")],
+    foreignKeys = [(ForeignKey(
+        entity = ContentModel::class,
+        parentColumns = ["ccid"],
+        childColumns = ["contentId"],
+        onDelete = ForeignKey.CASCADE
+    ))]
+)
+data class BookmarkModel(
+    @PrimaryKey
+    var bookmarkUid: String = "",
+    var runAttemptId: String = "",
+    var contentId: String = "",
+    var sectionId: String = "",
+    var createdAt: String = "",
+    var sectionName: String = "",
+    var contentName: String = ""
+) : BaseModel()
 
 @Entity
 data class JobsModel(
@@ -151,5 +161,5 @@ data class Companies(
 open class BaseModel()
 
 enum class LibraryTypes {
-    NOTE, NOTESVIDEO, BOOKMARK
+    NOTE, NOTESVIDEO, BOOKMARK, DOWNLOADS
 }

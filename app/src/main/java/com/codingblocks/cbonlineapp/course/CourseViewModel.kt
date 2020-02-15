@@ -2,15 +2,12 @@ package com.codingblocks.cbonlineapp.course
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.extensions.runIO
-import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Project
 import com.codingblocks.onlineapi.models.Sections
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -20,15 +17,14 @@ class CourseViewModel(
     lateinit var id: String
     var course = MutableLiveData<Course>()
     var suggestedCourses = MutableLiveData<List<Course>>()
+    val findCourses = MutableLiveData<List<Course>>()
     val projects = MutableLiveData<List<Project>>()
     val sections = MutableLiveData<List<Sections>>()
     var errorLiveData = MutableLiveData<String>()
 
-    var sheetBehavior: BottomSheetBehavior<*>? = null
     var image: MutableLiveData<String> = MutableLiveData()
     var name: MutableLiveData<String> = MutableLiveData()
     var addedToCartProgress: MutableLiveData<Boolean> = MutableLiveData()
-    var clearCartProgress: MutableLiveData<Boolean> = MutableLiveData()
     var enrollTrialProgress: MutableLiveData<Boolean> = MutableLiveData()
 
     fun fetchCourse() {
@@ -54,6 +50,21 @@ class CourseViewModel(
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
                         suggestedCourses.postValue(body())
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun searchCourses(query: String) {
+        runIO {
+            when (val response = repo.findCourses(query)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        findCourses.postValue(body())
                     } else {
                         setError(fetchError(code()))
                     }
@@ -90,6 +101,19 @@ class CourseViewModel(
         }
     }
 
+    fun fetchAllSections(sectionIdList: ArrayList<Sections>?) {
+        val list = arrayListOf<Sections>()
+        if (!sectionIdList.isNullOrEmpty()) {
+            runIO {
+                sectionIdList.forEach {
+                    val sectionRes = withContext(Dispatchers.IO) { repo.getSection(it.id) }
+                    sectionRes.body()?.let { it1 -> list.add(it1) }
+                }
+                sections.postValue(list)
+            }
+        }
+    }
+
     private fun setError(error: String) {
         errorLiveData.postValue(error)
     }
@@ -106,10 +130,15 @@ class CourseViewModel(
 //        })
 //    }
 
-    fun clearCart() {
-        Clients.api.clearCart().enqueue(retrofitCallback { _, response ->
-            clearCartProgress.value = (response?.isSuccessful == true)
-        })
+    fun clearCart(id: String) {
+        runIO {
+            when (val response = repo.clearCart()) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    addToCart(id)
+                }
+            }
+        }
     }
 
     fun enrollTrial(id: String) {

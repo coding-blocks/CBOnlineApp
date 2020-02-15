@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.util.extensions
 
 import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -9,9 +10,13 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
+import android.util.TypedValue
 import android.view.View
+import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
+import android.view.animation.TranslateAnimation
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.annotation.AnimRes
@@ -19,6 +24,7 @@ import androidx.annotation.AnimatorRes
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -33,6 +39,7 @@ import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.DividerItemDecorator
 import com.codingblocks.cbonlineapp.util.REOPENED
@@ -41,7 +48,11 @@ import com.codingblocks.fabnavigation.FabNavigation
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.dialog.view.*
+import kotlinx.android.synthetic.main.dialog.view.primaryBtn
+import kotlinx.android.synthetic.main.dialog_help.view.*
+import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.layoutInflater
+import kotlin.math.hypot
 
 fun View.applyDim(dimAmount: Float) {
     val dim = ColorDrawable(Color.BLACK)
@@ -127,11 +138,11 @@ fun <F : Fragment> F.replaceFragmentSafely(
     tag: String = "",
     allowStateLoss: Boolean = false,
     @IdRes containerViewId: Int,
-    @AnimatorRes enterAnimation: Int = 0,
-    @AnimatorRes exitAnimation: Int = 0,
+    @AnimatorRes enterAnimation: Int = R.animator.slide_in_right,
+    @AnimatorRes exitAnimation: Int = R.animator.slide_out_left,
     @AnimRes popEnterAnimation: Int = 0,
     @AnimRes popExitAnimation: Int = 0,
-    addToStack: Boolean = false
+    addToStack: Boolean = true
 ) {
     val ft = fragmentManager!!
         .beginTransaction()
@@ -147,14 +158,20 @@ fun <F : Fragment> F.replaceFragmentSafely(
     }
 }
 
-fun RecyclerView.setRv(activity: Context, listAdapter: ListAdapter<out Any, out RecyclerView.ViewHolder>, setDivider: Boolean = false, type: String = "", orientation: Int = RecyclerView.VERTICAL) {
+fun RecyclerView.setRv(activity: Context, listAdapter: ListAdapter<out Any, out RecyclerView.ViewHolder>, setDivider: Boolean = false, type: String = "", orientation: Int = RecyclerView.VERTICAL, space: Float = 0f) {
     val dividerItemDecoration = if (type == "thick")
         DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.dividerthick)!!)
     else DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.divider)!!)
-
+    if (space != 0f) {
+        addItemDecoration(SpacesItemDecoration(space.toDp()))
+    }
     layoutManager = LinearLayoutManager(activity, orientation, false)
     if (setDivider) addItemDecoration(dividerItemDecoration)
     adapter = listAdapter
+}
+
+private fun Float.toDp(): Float {
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, CBOnlineApp.appContext?.displayMetrics)
 }
 
 fun View.showSnackbar(message: String, length: Int, anchorView: FabNavigation? = null, action: Boolean = true, actionText: String = "Retry", callback: () -> Unit = { }): Snackbar {
@@ -178,7 +195,15 @@ fun View.showSnackbar(message: String, length: Int, anchorView: FabNavigation? =
     return snackBarView
 }
 
-fun Context.showDialog(type: String, cancelable: Boolean = false, callback: (state: Boolean) -> Unit = { status: Boolean -> }) {
+fun Context.showDialog(
+    type: String,
+    cancelable: Boolean = false,
+    @DrawableRes image: Int = R.drawable.ic_lock,
+    @StringRes primaryText: Int = R.string.confirm,
+    @StringRes secondaryText: Int = R.string.unavailable,
+    @StringRes buttonText: Int = R.string.ok,
+    callback: (state: Boolean) -> Unit = { }
+) {
 
     val dialog = AlertDialog.Builder(this).create()
     val view = layoutInflater.inflate(R.layout.dialog, null)
@@ -201,6 +226,14 @@ fun Context.showDialog(type: String, cancelable: Boolean = false, callback: (sta
                 primaryBtn.text = context.getString(R.string.view_live_doubts)
             }
         }
+        else -> {
+            view.run {
+                dialogImg.setImageResource(image)
+                dialogTitle.text = context.getString(primaryText)
+                dialogDesc.text = context.getString(secondaryText)
+                primaryBtn.text = context.getString(buttonText)
+            }
+        }
     }
     view.primaryBtn.setOnClickListener {
         callback(true)
@@ -215,11 +248,19 @@ fun Context.showDialog(type: String, cancelable: Boolean = false, callback: (sta
 }
 
 fun Context.openChrome(url: String, newTask: Boolean = false) {
-    val builder = CustomTabsIntent.Builder()
-        .enableUrlBarHiding()
-        .setToolbarColor(getColor(R.color.colorPrimaryDark))
-        .setShowTitle(true)
-        .setSecondaryToolbarColor(getColor(R.color.colorPrimary))
+    val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        CustomTabsIntent.Builder()
+            .enableUrlBarHiding()
+            .setToolbarColor(getColor(R.color.colorPrimaryDark))
+            .setShowTitle(true)
+            .setSecondaryToolbarColor(getColor(R.color.colorPrimary))
+    } else {
+        CustomTabsIntent.Builder()
+            .enableUrlBarHiding()
+            .setToolbarColor(resources.getColor(R.color.colorPrimaryDark))
+            .setShowTitle(true)
+            .setSecondaryToolbarColor(resources.getColor(R.color.colorPrimary))
+    }
     val customTabsIntent = builder.build()
     if (newTask) {
         customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -323,10 +364,6 @@ fun <T : RecyclerView.ViewHolder> T.onClick(event: (view: View, position: Int, t
     return this
 }
 
-fun Fragment.getSharedPrefs(): SharedPreferences = requireActivity().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-
-fun AppCompatActivity.getSharedPrefs(): SharedPreferences = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-
 fun SharedPreferences.save(key: String, value: Any) {
     with(this.edit()) {
         when (value) {
@@ -344,4 +381,109 @@ fun <T : RecyclerView.ViewHolder> T.listen(event: (position: Int, type: Int) -> 
         event.invoke(adapterPosition, itemViewType)
     }
     return this
+}
+
+fun Context.showHelpDialog(
+    type: String,
+    cancelable: Boolean = true,
+    callback: (state: Boolean, name: String, number: String) -> Unit = { b: Boolean, s: String, s1: String -> }
+) {
+
+    val dialog = AlertDialog.Builder(this).create()
+    val view = layoutInflater.inflate(R.layout.dialog_help, null)
+    view.primaryBtn.setOnClickListener {
+
+        if (view.nameLayout.editText?.text.isNullOrEmpty()) {
+            view.nameLayout.error = "Name Cannot Be Empty"
+            return@setOnClickListener
+        } else if (view.mobile.editText?.text.isNullOrEmpty() && view.mobile.editText?.text?.length!! < 10) {
+            view.mobile.error = "Number Cannot Be Empty"
+            return@setOnClickListener
+        } else {
+            callback(true, view.nameLayout.editText?.text.toString(), view.mobile.editText?.text.toString())
+            dialog.dismiss()
+        }
+    }
+    dialog.apply {
+        window?.setBackgroundDrawableResource(android.R.color.transparent)
+        setView(view)
+        setCancelable(cancelable)
+        show()
+    }
+}
+
+fun View.crossfade(view: View, otherView: View?, type: Int = View.INVISIBLE) {
+    this.apply {
+        // Set the content view to 0% opacity but visible, so that it is visible
+        // (but fully transparent) during the animation.
+        if (otherView == null && !isVisible) {
+            val cx = this.width / 2
+            val cy = this.height / 2
+
+            // get the final radius for the clipping circle
+            val finalRadius = hypot(cx.toDouble(), cy.toDouble()).toFloat()
+
+            // create the animator for this view (the start radius is zero)
+            val anim = ViewAnimationUtils.createCircularReveal(this, cx, cy, 0f, finalRadius)
+            // make the view visible and start the animation
+            this.visibility = View.VISIBLE
+            anim.start()
+        }
+    }
+
+    var cx = view.width / 2
+    var cy = view.height / 2
+    var initialRadius = hypot(cx.toDouble(), cy.toDouble()).toFloat()
+    var anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, initialRadius, 0f)
+    anim.addListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator) {
+            super.onAnimationEnd(animation)
+            view.visibility = type
+        }
+    })
+    anim.start()
+
+    otherView?.let {
+        cx = it.width / 2
+        cy = it.height / 2
+        initialRadius = hypot(cx.toDouble(), cy.toDouble()).toFloat()
+        anim = ViewAnimationUtils.createCircularReveal(it, cx, cy, initialRadius, 0f)
+        anim.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                it.visibility = type
+            }
+        })
+        anim.start()
+    }
+}
+
+fun View.slideUp() {
+    let {
+        val cx = it.width / 2
+        val cy = it.height / 2
+        val initialRadius = hypot(cx.toDouble(), cy.toDouble()).toFloat()
+        val anim = ViewAnimationUtils.createCircularReveal(it, cx, cy, initialRadius, 0f)
+        anim.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                it.visibility = View.GONE
+            }
+        })
+        anim.start()
+    }
+}
+
+// slide the view from its current position to below itself
+fun View.slideDown() {
+    if (!isVisible) {
+        visibility = View.VISIBLE
+        val animate = TranslateAnimation(
+            0f, // fromXDelta
+            0f, // toXDelta
+            -height.toFloat(), // fromYDelta
+            0f) // toYDelta
+        animate.duration = 500
+        startAnimation(animate)
+    }
 }

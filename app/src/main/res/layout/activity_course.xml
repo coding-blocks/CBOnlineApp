@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -21,7 +22,6 @@
             app:toolbarId="@+id/toolbar">
 
             <RelativeLayout
-                android:id="@+id/collapseContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/toolbar_bg_borderless"
@@ -45,11 +45,12 @@
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="68dp"
                     android:layout_marginEnd="@dimen/margin_large"
-                    android:layout_marginBottom="@dimen/margin_extra_small"
+                    android:layout_marginBottom="@dimen/margin_medium"
                     android:layout_toStartOf="@id/courseLogo"
                     android:fontFamily="@font/gilroy_medium"
+                    android:lineSpacingExtra="4dp"
                     android:textColor="@color/white"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     tools:text="Learn full-stack web development using JavaScript and NodeJS" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -59,19 +60,21 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="68dp"
                     android:layout_marginEnd="@dimen/margin_large"
-                    android:layout_marginBottom="@dimen/margin_large"
+                    android:layout_marginBottom="@dimen/margin_xl"
                     app:civ_border_color="@color/white"
                     app:civ_border_width="2dp" />
 
-                <RatingBar
+                <com.codingblocks.cbonlineapp.util.widgets.SvgRatingBar
                     android:id="@+id/ratingBar"
-                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    style="@style/CustomRatingBar"
                     android:layout_width="wrap_content"
-                    android:numStars="5"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/ratingTv"
                     android:layout_alignBottom="@id/ratingTv"
-                    android:layout_marginStart="@dimen/margin_large" />
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:stepSize="0.01" />
 
                 <TextView
                     android:id="@+id/ratingTv"
@@ -112,18 +115,20 @@
             android:paddingEnd="@dimen/margin_large">
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/batchBtn"
                 style="@style/CustomOutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/batchBtn"
                 android:layout_marginTop="@dimen/margin_medium"
-                android:textColor="@color/black"
                 android:drawableEnd="@drawable/ic_dropdown"
-                android:text="@string/choose_batch" />
+                android:text="@string/choose_batch"
+                android:textColor="@color/black"
+                app:strokeWidth="0dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp">
 
                 <TextView
                     android:id="@+id/priceTv"
@@ -131,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/gilroy_bold"
                     android:textColor="@color/orangish"
-                    android:textSize="18sp"
+                    android:textSize="19sp"
                     tools:text="9499" />
 
                 <TextView
@@ -142,6 +147,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/gilroy_bold"
                     android:textColor="@color/brownish_grey"
+                    android:textSize="15sp"
                     tools:text="9499" />
 
                 <TextView
@@ -152,7 +158,7 @@
                     android:drawablePadding="5dp"
                     android:fontFamily="@font/gilroy_medium"
                     android:textColor="@color/brownish_grey"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     tools:text="Enrollment Ends 2nd Nov 2019" />
             </LinearLayout>
 
@@ -160,22 +166,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingTop="@dimen/margin_medium_small"
-                android:paddingBottom="@dimen/margin_medium_small">
+                android:paddingTop="@dimen/margin_large"
+                android:paddingBottom="@dimen/margin_large">
 
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/trialBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_extra_small"
+                    android:layout_marginEnd="@dimen/margin_medium"
                     android:background="@drawable/button_background_outline"
                     android:fontFamily="@font/gilroy_medium"
                     android:minHeight="0dp"
                     android:paddingStart="14dp"
-                    android:paddingTop="7dp"
+                    android:paddingTop="12dp"
                     android:paddingEnd="14dp"
-                    android:paddingBottom="7dp"
+                    android:paddingBottom="12dp"
                     android:text="@string/try_it_for_free"
                     android:textColor="@color/pastel_red"
                     android:textSize="16sp" />
@@ -190,9 +196,9 @@
                     android:fontFamily="@font/gilroy_bold"
                     android:minHeight="0dp"
                     android:paddingStart="14dp"
-                    android:paddingTop="7dp"
+                    android:paddingTop="12dp"
                     android:paddingEnd="14dp"
-                    android:paddingBottom="7dp"
+                    android:paddingBottom="12dp"
                     android:text="@string/buy_now"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -209,17 +215,15 @@
                 android:orientation="vertical"
                 tools:context="com.codingblocks.cbonlineapp.auth.LoginActivity">
 
-                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-                    android:id="@+id/youtubePlayerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+
+                <fragment
                     android:layout_marginStart="@dimen/margin_large"
-                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_large"
                     android:layout_marginEnd="@dimen/margin_large"
-                    app:autoPlay="false"
-                    app:showFullScreenButton="true"
-                    app:showYouTubeButton="false"
-                    app:useWebUi="false" />
+                    android:id="@+id/youtubePlayerView"
+                    android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -229,7 +233,7 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/summary"
-                    android:textColor="#333333"
+                    android:textColor="@color/black"
                     android:textSize="20sp" />
 
                 <com.codingblocks.cbonlineapp.util.widgets.ExpandableTextView
@@ -240,6 +244,7 @@
                     android:layout_marginTop="@dimen/margin_medium"
                     android:layout_marginEnd="@dimen/margin_large"
                     android:fontFamily="@font/gilroy_medium"
+                    android:lineSpacingExtra="4dp"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     app:trimLength="200" />
@@ -265,16 +270,49 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     app:lineSpacing="10dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <View
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="@dimen/margin_medium"
+                    android:background="@drawable/dividerthick" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_width="match_parent"
                     android:layout_marginEnd="@dimen/margin_large"
-                    android:fontFamily="@font/gilroy_bold"
-                    android:text="@string/course_content"
-                    android:textColor="#333333"
-                    android:textSize="20sp" />
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        android:drawableStart="@drawable/ic_courses"
+                        android:drawablePadding="10dp"
+                        android:drawableTint="@color/orangish"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:text="@string/course_content"
+                        android:textColor="#333333"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:drawableEnd="@drawable/ic_dropright"
+                        android:drawablePadding="10dp"
+                        android:drawableTint="@color/orangish"
+                        android:focusable="true"
+                        android:fontFamily="@font/gilroy_medium"
+                        android:text="@string/view_all"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/orangish"
+                        android:id="@+id/viewAllTv" />
+
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/courseContentRv"
@@ -286,12 +324,19 @@
                     tools:itemCount="1"
                     tools:listitem="@layout/item_course_section" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:background="@drawable/dividerthick" />
+
+
                 <TextView
                     android:id="@+id/projectsTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_large"
-                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_large"
                     android:layout_marginEnd="@dimen/margin_large"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/projects"
@@ -304,8 +349,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginEnd="@dimen/margin_large"
+                    android:layout_marginBottom="10dp"
                     android:overScrollMode="never"
-                    tools:itemCount="5"
+                    tools:itemCount="1"
                     tools:listitem="@layout/item_project" />
 
                 <LinearLayout
@@ -318,7 +364,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_large"
-                        android:layout_marginTop="@dimen/margin_medium"
+                        android:layout_marginTop="@dimen/margin_large"
                         android:layout_marginEnd="@dimen/margin_large"
                         android:fontFamily="@font/gilroy_bold"
                         android:text="@string/about_mentors"
@@ -343,9 +389,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="@dimen/margin_large"
+                    android:id="@+id/goodiesImg"
                     android:layout_marginEnd="@dimen/margin_large"
                     android:adjustViewBounds="true"
                     android:src="@drawable/wildcraft" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/course_includes"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
 
 
                 <LinearLayout
@@ -357,38 +415,34 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/lectureImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_lecture" />
 
                     <TextView
-                        android:id="@+id/lectureText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_medium"
                         android:layout_weight="1"
-                        android:fontFamily="@font/gilroy_bold"
-                        android:gravity="center"
+                        android:fontFamily="@font/gilroy_medium"
                         android:text="@string/lectures_text"
+                        android:textAlignment="viewStart"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
                     <ImageView
-                        android:id="@+id/mentorImg"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:src="@drawable/ic_mentor" />
 
                     <TextView
-                        android:id="@+id/mentorText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/gilroy_bold"
-                        android:gravity="center"
+                        android:fontFamily="@font/gilroy_medium"
                         android:text="@string/mentor_support"
+                        android:textAlignment="viewStart"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -404,43 +458,67 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/reviseImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_revise" />
 
                     <TextView
-                        android:id="@+id/reviseText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_medium"
                         android:layout_weight="1"
-                        android:fontFamily="@font/gilroy_bold"
-                        android:gravity="center"
+                        android:fontFamily="@font/gilroy_medium"
                         android:text="@string/revise"
+                        android:textAlignment="viewStart"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
                     <ImageView
-                        android:id="@+id/certificateImg"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:src="@drawable/ic_certificate" />
 
                     <TextView
-                        android:id="@+id/certificateText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/gilroy_bold"
-                        android:gravity="center"
+                        android:fontFamily="@font/gilroy_medium"
                         android:text="@string/completion_certificate"
+                        android:textAlignment="viewStart"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
 
                 </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/faqTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/frequently_asked_questions"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:visibility="gone" />
+
+                <com.codingblocks.cbonlineapp.util.widgets.ExpandableTextView
+                    android:id="@+id/courseFaqTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:lineSpacingExtra="4dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    app:trimLength="200" />
 
 
                 <View
@@ -464,7 +542,6 @@
                     android:id="@+id/courseSuggestedRv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:layout_marginTop="@dimen/margin_small"
                     android:layout_marginBottom="@dimen/margin_large"
                     android:orientation="horizontal"

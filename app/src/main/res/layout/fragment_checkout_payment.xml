@@ -1,8 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingStart="@dimen/margin_large"
     android:paddingEnd="@dimen/margin_large"
@@ -44,7 +44,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/wallerTv"
+            android:id="@+id/walletBal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -79,14 +79,13 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/totalItemsTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:fontFamily="@font/gilroy_bold"
+            android:text="01"
             android:textColor="@color/black"
-            android:textSize="18sp"
-            android:text="01" />
+            android:textSize="18sp" />
 
     </LinearLayout>
 
@@ -122,21 +121,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_medium"
-        android:id="@+id/walletContainer"
         android:orientation="horizontal"
         android:visibility="visible">
 
         <TextView
+            android:id="@+id/useBalance"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableEnd="@drawable/ic_selected"
+            android:focusable="true"
             android:fontFamily="@font/gilroy_medium"
             android:text="Use Wallet Balance"
             android:textColor="@color/brownish_grey"
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/walletTv"
+            android:id="@+id/creditsTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -151,12 +154,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_xl"
+        android:visibility="gone"
         android:fontFamily="@font/gilroy_bold"
         android:text="Do you have any coupon?"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
     <RelativeLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_medium">
@@ -179,17 +184,23 @@
             android:id="@+id/numberLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true">
+            android:clickable="true"
+            android:focusable="true"
+            app:endIconCheckable="true"
+            app:endIconDrawable="@drawable/ic_selected"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:errorIconDrawable="@drawable/ic_selected">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:backgroundTint="@color/white"
                 android:fontFamily="@font/gilroy_medium"
-                android:hint="Coupon Code"
-                android:inputType="phone"
-                android:letterSpacing="1.5"
+                android:hint="@string/coupon_code"
+                android:lines="1"
                 android:paddingStart="0dp"
+                android:paddingEnd="0dp"
                 android:textColorHighlight="@color/orangish"
                 android:textColorHint="@color/black"
                 android:textSize="16sp" />
@@ -200,11 +211,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/couponContainer"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_medium"
         android:orientation="horizontal"
-        android:layout_height="wrap_content"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <TextView
             android:layout_width="0dp"
@@ -216,7 +226,6 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/couponTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -240,42 +249,44 @@
         android:background="@drawable/divider" />
 
     <LinearLayout
-        android:gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_large"
-        android:paddingBottom="@dimen/margin_large">
+        android:layout_marginTop="@dimen/margin_xl"
+        android:gravity="bottom">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gilroy_medium"
-            android:text="Amount to Pay"
+            android:text="Final Amount"
             android:textColor="@color/orangish"
             android:textSize="16sp" />
 
         <TextView
-            android:layout_weight="1"
             android:id="@+id/finalPriceTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_medium_small"
+            android:layout_weight="1"
             android:fontFamily="@font/gilroy_bold"
+            android:textAlignment="viewEnd"
             android:textColor="@color/orangish"
-            android:textSize="16sp"
+            android:textSize="18sp"
             tools:text="9499 " />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_dropright"
-            android:drawablePadding="10dp"
-            android:enabled="true"
-            android:minHeight="0dp"
-            android:id="@+id/payBtn"
-            android:text="Procees to Pay" />
-
 
     </LinearLayout>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/payBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_medium_small"
+        android:layout_marginBottom="@dimen/margin_large"
+        android:drawableEnd="@drawable/ic_dropright"
+        android:drawablePadding="10dp"
+        android:enabled="true"
+        android:minHeight="0dp"
+        android:text="@string/proceed_to_pay" />
 </LinearLayout>
+
+

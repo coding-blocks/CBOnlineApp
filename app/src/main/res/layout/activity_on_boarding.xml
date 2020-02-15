@@ -10,12 +10,21 @@
     <com.codingblocks.cbonlineapp.util.widgets.ViewPagerCustomDuration
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:id="@+id/viewPager"
+        android:overScrollMode="never"
         android:layout_weight=".5">
 
     </com.codingblocks.cbonlineapp.util.widgets.ViewPagerCustomDuration>
 
+    <LinearLayout
+        android:id="@+id/viewPagerCountDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/margin_xl"
+        android:orientation="horizontal" />
+
     <View
-        android:id="@+id/divider5"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginStart="@dimen/margin_large"
@@ -27,9 +36,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingStart="@dimen/margin_large"
+        android:paddingStart="@dimen/margin_medium"
         android:paddingTop="@dimen/margin_xl"
-        android:paddingEnd="@dimen/margin_large"
+        android:paddingEnd="@dimen/margin_medium"
         android:paddingBottom="@dimen/margin_xl">
 
         <androidx.appcompat.widget.AppCompatButton
@@ -37,14 +46,14 @@
             style="@style/SecondaryButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_extra_small"
             android:text="@string/browse_courses" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/loginBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginStart="@dimen/margin_extra_small"
             android:layout_weight="1"
             android:padding="10dp"
             android:text="@string/login_signup" />

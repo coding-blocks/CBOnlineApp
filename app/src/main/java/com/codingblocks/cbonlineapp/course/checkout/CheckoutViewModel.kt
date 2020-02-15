@@ -14,9 +14,11 @@ import com.google.gson.JsonObject
  */
 class CheckoutViewModel : ViewModel() {
 
+    val paymentStart = MutableLiveData<Boolean>()
     var errorLiveData = MutableLiveData<String>()
     var cart = MutableLiveData<JsonObject>()
-    var map = hashMapOf<String, String>()
+    var map = hashMapOf<String, Any>()
+    var paymentMap = hashMapOf<String, String>()
 
     fun getCart() {
         runIO {
@@ -48,21 +50,21 @@ class CheckoutViewModel : ViewModel() {
         }
     }
 
-
-
     private fun setError(error: String) {
         errorLiveData.postValue(error)
     }
 
-    fun capturePayment() {
+    fun capturePayment(function: (status: Boolean) -> Unit) {
         runIO {
-            when (val response = safeApiCall { Clients.api.capturePayment(mapOf()) }) {
+            when (val response = safeApiCall { Clients.api.capturePayment(paymentMap) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
                         cart.postValue(body())
+                        function(true)
                     } else {
                         setError(fetchError(code()))
+                        function(false)
                     }
                 }
             }

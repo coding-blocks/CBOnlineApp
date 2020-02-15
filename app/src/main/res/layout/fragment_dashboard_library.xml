@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingTop="@dimen/dashboard_toolbar_comp"
     tools:context="com.codingblocks.cbonlineapp.dashboard.library.DashboardLibraryFragment">
 
 
@@ -12,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
-        android:visibility="visible"
+        android:visibility="gone"
         tools:itemCount="4"
         tools:listitem="@layout/item_courses" />
 
@@ -42,7 +43,6 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/emptyDescriptionTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_extra_large"

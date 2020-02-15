@@ -6,7 +6,6 @@
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:card_view="http://schemas.android.com/tools"
-        android:id="@+id/cardBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -31,8 +30,9 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="8dp"
                 android:text="Confirmation"
-                android:textColor="@color/battleship_gray"
-                android:textSize="14sp" />
+                android:fontFamily="@font/gilroy_bold"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/description"
@@ -41,9 +41,10 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="18dp"
                 android:layout_marginEnd="24dp"
+                android:fontFamily="@font/gilroy_bold"
                 android:lineSpacingExtra="2sp"
                 android:textAlignment="center"
-                android:textColor="@color/black"
+                android:textColor="@color/brownish_grey"
                 android:textSize="16sp" />
 
             <LinearLayout
@@ -79,17 +80,8 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
                     android:layout_weight="1"
-                    android:background="@drawable/button_background"
                     android:fontFamily="@font/gilroy_bold"
-                    android:paddingStart="8dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingBottom="8dp"
-                    android:shadowColor="#664cceff"
-                    android:text="Primary Option"
-                    android:textAllCaps="false"
-                    android:textColor="#fff"
-                    android:textSize="16sp" />
+                    android:text="Primary Option" />
             </LinearLayout>
         </LinearLayout>
 

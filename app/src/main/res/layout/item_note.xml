@@ -6,9 +6,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingStart="@dimen/margin_large"
-    android:paddingTop="@dimen/margin_medium_small"
+    android:paddingTop="@dimen/margin_large"
     android:paddingEnd="@dimen/margin_large"
-    android:paddingBottom="@dimen/margin_medium_small">
+    android:paddingBottom="@dimen/margin_large">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,11 +37,11 @@
             android:textSize="12sp"
             tools:text="4 hours ago" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/selectionImg"
             android:layout_width="21dp"
             android:layout_height="21dp"
-            android:background="@color/veryLightPink"
+            android:background="@drawable/ic_circle_pink"
             android:padding="6dp"
             android:src="@drawable/ic_selected" />
     </LinearLayout>
@@ -58,12 +58,12 @@
         tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the best standard dummy text... more" />
 
 
-    <View
-        android:id="@+id/divider3"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="@dimen/margin_small"
-        android:background="?android:attr/listDivider" />
+    <!--    <View-->
+    <!--        android:id="@+id/divider3"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="1dp"-->
+    <!--        android:layout_marginTop="@dimen/margin_small"-->
+    <!--        android:background="?android:attr/listDivider" />-->
 
 
 </LinearLayout>

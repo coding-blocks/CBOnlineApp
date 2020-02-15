@@ -1,33 +1,12 @@
 <resources>
     <string name="app_name">Coding Blocks Online</string>
-    <string name="toolbar_title">Coding Blocks</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="learn_to_code_interactively"><![CDATA[<Learn to code interactively/>]]></string>
     <string name="recommended_courses">Recommended Courses</string>
-    <string name="student_feedback">Student Feedback</string>
-    <string name="topics_covered">Major Topics Covered</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="title_activity_my_course">MyCourseActivity</string>
     <string name="course_progress">Course Progress : </string>
-    <string name="trial_text">Start Free Trial</string>
-    <string name="buy_text">Buy Now</string>
-    <string name="join_whatsapp">Join WhatsApp Group</string>
-    <string name="introlecturedescription">We are providing access of complete contents on course starting date. If there are any topics which needs to be discussed then we\'ll add more lectures to the course accordingly.
-        \nThere are In-Class Quizzes, Assignments, Notes along with Lecture Videos in a lecture. You should attempt them all to master each section that you study.
-        \nYou should complete the lectures within the specified deadlines.</string>
-    <string name="introassignmentdecription">After almost every lecture there will be one assignment. \nAssignments will have deadlines. Submissions after deadline will be subject to penalty (Penalty procedure is explained separately).\nApart from assignments there will be frequent tests analysing your concepts and understanding.</string>
-    <string name="introdoubtsdescription">Apart from instructors taking the course, there are teaching assistants in the course who will be taking your doubts. \nYou can ask doubt on any content that you are facing problem at, be it a video or a question. There is an “Ask Doubt” button on the top right corner to raise your doubt.\nThe doubt support period is valid for 6 months from the start of course date. This is kept after considering the section deadlines and the content that is available for the students to learn.</string>
-    <string name="certificate">Certificate</string>
-    <string name="leaderboardtitle">Grading and Leaderboard</string>
-    <string name="availabilitytitle">Content Availability</string>
-    <string name="penaltytitle">Deadlines and Penalty Scheme</string>
-    <string name="solutionstitle">Hint Videos and Video Solutions</string>
-    <string name="doubtstitle">Teaching Assistants and Doubts Resolution</string>
-    <string name="assignmentstitle">Assignments and Tests</string>
-    <string name="lectures">Lectures</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
@@ -38,24 +17,15 @@
 
     <!-- Example settings for Notifications -->
 
-    <string name="hint_description">Description</string>
-    <string name="hint_title">Title</string>
-    <string name="doubt_title">Ask A Doubt</string>
-    <string name="doubt_btn">Post Doubt</string>
-    <string name="cannot_create_doubt">Doubts cannot be created in Trials!</string>
-    <string name="showComments">Show Comments</string>
-    <string name="hideComments">Hide Comments</string>
-    <string name="empty_doubts_text">No doubts yet. Ask one?</string>
-    <string name="empty_notes_text">No notes yet. Write one?</string>
+    <string name="empty_notes_title">No Notes</string>
+    <string name="empty_notes_text">Take important notes while accessing the content</string>
+    <string name="empty_bookmark_title">No Bookmarks</string>
+    <string name="empty_bookmark_text">You do not have any bookmarks. Start \nbookmarking important sections.</string>
+    <string name="empty_download_title">No Downloads</string>
+    <string name="empty_download_text">Video lectures that you download appear here</string>
     <string name="verify_desc">You need to verify your account first before continuing</string>
     <string name="verify_title">Verify Now</string>
     <string name="enroll_desc">You have been successfully enrolled into this course</string>
-    <string name="cart_description">Your cart contains other items. Do you want to discard previous items from your cart and continue buying new one?</string>
-    <string name="cart_title">Replace Cart Items?</string>
-    <string name="yes_continue">Yes,Continue</string>
-    <string name="checkout">Checkout with Existing</string>
-    <string name="doubt_description_error">Description length must be atleast 20 characters.</string>
-    <string name="doubt_title_error">Title length must be atleast 15 characters.</string>
     <!--Strings For Layouts !-->
     <string name="login_now">Login Now</string>
     <string name="tollfree_number">+1800 274 4504</string>
@@ -72,46 +42,26 @@
     <string name="phone3_1">8588801217</string>
     <string name="phone3_2">9811228053</string>
     <string name="email3_1">rajesh@codingblocks.com</string>
-    <string name="dehradun_address">Second Floor, Suvidha Supermarket, 220/105, Saharanpur Road, Patel Nagar, Dehradun - 248001</string>
-    <string name="phone4_1">7830031872</string>
-    <string name="phone4_2">9540613790</string>
-    <string name="email4_1">raj.saini@codingblocks.com</string>
-    <string name="dehradun_head">Mr. Raj Kumar Saini</string>
     <string name="dwarka_head">Mr. Rajesh Sachdev</string>
     <string name="noida_head">Varun Kohli</string>
     <string name="pitampura_head">Mrs. Priyanka Dagar</string>
     <string name="pitampura">Pitampura\n(Corporate Office)</string>
     <string name="noida_center">NOIDA CENTER</string>
     <string name="dwarka_center">DWARKA CENTER</string>
-    <string name="dehradun_center">DEHRADUN CENTER</string>
     <string name="our_centres">OUR CENTRES</string>
     <string name="contact">Contact</string>
-    <string name="mcq">MCQ</string>
     <string name="notifications">Notifications</string>
-    <string name="search_courses">Search Courses</string>
-    <string name="logout">Logout</string>
-    <string name="create_a_note">Create a Note</string>
-    <string name="create_note">Create Note</string>
-    <string name="leaderboard_emptyView">Leaderboard not available for this course!!</string>
     <string name="clean_dialog_title">You have reached your data limit!</string>
     <string name="clean_dialog_description">If you want to continue with the download, Please clear the oldest download.</string>
     <string name="clean_dialog_okBtn">Clear Oldest Download</string>
     <string name="clean_dialog_cancelBtn">Cancel Current Download</string>
-    <string name="get_hired">Get Hired</string>
     <string name="recommended_courses_description">Based on the industry trends, you should complete these courses</string>
     <string name="applied">Applied</string>
     <string name="job_eligible">Status:  Eligible</string>
     <string name="job_not_eligible">Status:  Not Eligible</string>
     <string name="job_applied">You\'ve already applied for the job</string>
-    <string name="faqs">Frequently Asked Questions</string>
-    <string name="reset_progress">Reset Progress</string>
-    <string name="contents_completed">Contents Completed</string>
-    <string name="extension_desc">Buy extension for this course</string>
-    <string name="extension_title">Your course will expire soon!</string>
     <string name="filter_location">Location</string>
     <string name="filter_job_type">Job Type</string>
-    <string name="offline_message">Progress will be updated when your device goes online.</string>
-    <string name="course_curriculum">Course Curriculum</string>
 
 
     <!-- New Strings -->
@@ -128,7 +78,6 @@
     <string name="course_content">Course Content</string>
     <string name="projects">Projects</string>
     <string name="about_mentors">About Mentors</string>
-    <string name="you_may_also_like">You may also like</string>
     <string name="instructors">Instructors</string>
     <string name="mark_resolved">Mark Resolved</string>
     <string name="chat_with_ta">Chat with TA</string>
@@ -138,13 +87,12 @@
     <string name="explore">Explore</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_doubts">No Doubts</string>
     <string name="go_to_classroom">Go to Classroom</string>
     <string name="doubts_that_you_ask_appear_here">Doubts that you ask appear here</string>
     <string name="reopen_doubt">Reopen Doubt</string>
     <string name="filter">Filter</string>
-    <string name="live_doubts">Live Doubts</string>
+    <string name="live_doubts">Live</string>
     <string name="resolved">Resolved</string>
     <string name="all">All</string>
     <string name="recently_accessed">Recently Accessed</string>
@@ -162,7 +110,6 @@
     <string name="view_profile">View Profile</string>
     <string name="help_amp_feedback"><![CDATA[Help & Feedback]]></string>
     <string name="contact_us">Contact Us</string>
-    <string name="report_a_bug">Report A Bug</string>
     <string name="admin_panel">Admin Panel</string>
     <string name="settings">Settings</string>
     <string name="my_purchases">My Purchases</string>
@@ -171,7 +118,6 @@
     <string name="browse_courses">Browse Courses</string>
     <string name="filters">Filters</string>
     <string name="resume">Resume</string>
-    <string name="sections">Sections</string>
     <string name="contents">Contents</string>
     <string name="library">Library</string>
     <string name="curriculum">Curriculum</string>
@@ -210,10 +156,8 @@
     <string name="password">Password</string>
     <string name="number_desc">Use your number to login to your account</string>
     <string name="welcome">Welcome to Coding Blocks</string>
-    <string name="welcome_desc">Use your number to get registered with us</string>
     <string name="email_title">Enter Email Address for verification</string>
     <string name="email_desc">Use your email ID to login to your account</string>
-    <string name="leaderboard_rank">Leaderboard Rank</string>
     <string name="noted_del_msg">Note has been Deleted</string>
     <string name="edit_note">Edit Note</string>
     <string name="add_note">Add a Note</string>
@@ -238,7 +182,7 @@
     <string name="trending_desc">Industry trending tech courses for you!</string>
     <string name="what_do_you_want_to_learn">What do you want to learn ?</string>
     <string name="recommended_for_you">Recommended for you</string>
-    <string name="revise"><![CDATA[Revise & Revisit \nAnytime]]></string>
+    <string name="revise"><![CDATA[Revise & Revisit]]></string>
     <string name="lectures_text">200+ Live \nLectures</string>
     <string name="mentor_support">24*7 Mentor \nSupport</string>
     <string name="completion_certificate">Completion \nCertificate</string>
@@ -274,5 +218,52 @@
     <string name="share_via_whatsapp">Share via Whatsapp</string>
     <string name="more">More</string>
     <string name="rupee_sign">₹ </string>
+    <string name="dashboard_empty_progress">You need to enroll in atleast one course.\nYour course metrics and performance graph \nwill appear here.</string>
+    <string name="all_jobs">All Jobs</string>
+    <string name="eligible_jobs">Eligible Jobs</string>
+    <string name="dashboard_empty_wish">You have not wishlisted any course! \nStart exploring courses now!</string>
+    <string name="course_includes">Course Includes</string>
+    <string name="inbox">Inbox</string>
+    <string name="career_options">Career Options</string>
+    <string name="projects_you_will_build">Projects you will build</string>
+    <string name="what_will_you_learn">What will you learn</string>
+    <string name="my_library">My Library</string>
+    <string name="my_doubs">My Doubts</string>
+    <string name="nothing_here">There’s nothing in here!</string>
+    <string name="empty_cart_desc">Your cart is empty.\n Choose from our list of courses</string>
+    <string name="earn_upto_2000_wallet_credits">Earn upto 2000 wallet credits</string>
+
+    <string name="signup_desc">Let’s get you onboard</string>
+    <string name="username">Username</string>
+    <string name="back">Back</string>
+    <string name="your_courses_will_start_showing_once_you_enroll_nin_any_course">Your Courses will start showing once you enroll\nin any course</string>
+    <string name="frequently_asked_questions">Frequently Asked Questions</string>
+    <string name="student">Student</string>
+    <string name="professional">Professional</string>
+    <string name="i_am_a">I am a</string>
+    <string name="i_want_to_become">I want to become</string>
+    <string name="choose_track">Choose Track</string>
+    <string name="purchase">"You need to buy this course to access this content"</string>
+    <string name="ok">Ok</string>
+    <string name="wait">"Your course will start on "</string>
+    <string name="expired">This section is unavailable as your course has been expired.Please buy an extension to watch your videos</string>
+    <string name="unavailable">This section is unavailable on mobile, please view it on the browser instead!</string>
+    <string name="confirm">Confirmation</string>
+    <string name="country">Country</string>
+    <string name="state">State</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="delete_confrim">Are your sure you want to delete selected items.</string>
+    <string name="proceed_to_pay">Proceed to Pay</string>
+    <string name="coupon_code">Coupon Code</string>
+    <string name="onlineUrl">online.codingblocks.com/app/courses/</string>
+    <string name="onlineTracksUrl">http://online.codingblocks.com/app/tracks/</string>
+    <string name="have_any_doubts">Have any doubts?</string>
+    <string name="just_fill_in_your_details_and_our_edu_counsellor_will_get_back_to_you">Just fill in your details and our edu. counsellor will get back to you!</string>
+    <string name="note_your_downloads_will_be_deleted_automatically_after_15_days_of_download">Note: Your downloads will be deleted automatically after 15 days of download.</string>
+    <string name="certified">"Certified in "</string>
+    <string name="certified_desc">At the end of the track, you will be job ready and can start applying for jobs!</string>
+
 
 </resources>

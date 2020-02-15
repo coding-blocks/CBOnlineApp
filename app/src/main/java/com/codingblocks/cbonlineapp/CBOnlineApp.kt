@@ -10,17 +10,18 @@ import cn.campusapp.router.router.IActivityRouteTableInitializer
 import com.codingblocks.cbonlineapp.course.CourseActivity
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.tracks.TrackActivity
 import com.codingblocks.cbonlineapp.util.ADMIN_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.AppSignatureHelper
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_ID
-import com.codingblocks.cbonlineapp.util.COURSE_TAB
 import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.NotificationOpenedHandler
 import com.codingblocks.cbonlineapp.util.NotificationReceivedHandler
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.onlineapi.Clients
 import com.crashlytics.android.Crashlytics
 import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
@@ -46,6 +47,7 @@ class CBOnlineApp : Application() {
             AppSignatureHelper(this).appSignatures.forEach {
                 Log.d("APPSIG", it)
             }
+            Clients.setHttpLogging(true)
         }
 
         // Create Notification Channel
@@ -68,7 +70,7 @@ class CBOnlineApp : Application() {
         startKoin {
             androidContext(this@CBOnlineApp)
             modules(listOf(viewModelModule,
-                databaseModule))
+                databaseModule, preferencesModule))
         }
 
         Picasso.setSingletonInstance(Picasso.Builder(this).build())
@@ -84,12 +86,16 @@ class CBOnlineApp : Application() {
         // Configure Routers
         try {
             Router.initActivityRouter(applicationContext, IActivityRouteTableInitializer { router ->
-                router["activity://courseRun/https://online.codingblocks.com/classroom/courseRun/:s{$COURSE_ID}/run/:s{$RUN_ID}/:s{$COURSE_TAB}"] =
+                router["activity://courseRun/https://online.codingblocks.com/app/classroom/course/:s{$COURSE_ID}/run/:s{$RUN_ID}"] =
                     MyCourseActivity::class.java
-                router["activity://courseRun/https://online.codingblocks.com/courses/:s{courseId}"] =
+                router["activity://courseRun/https://online.codingblocks.com/app/courses/:s{courseId}"] =
                     CourseActivity::class.java
-                router["activity://courseRun/https://online.codingblocks.com/player/:s{$RUN_ATTEMPT_ID}/content/:s{$SECTION_ID}/:s{$CONTENT_ID}"] =
+                router["activity://courseRun/https://online.codingblocks.com/app/player/:s{$RUN_ATTEMPT_ID}/content/:s{$SECTION_ID}/:s{$CONTENT_ID}"] =
                     VideoPlayerActivity::class.java
+                router["activity://courseRun/https://online.codingblocks.com/app/tracks/:s{courseId}"] =
+                    TrackActivity::class.java
+                router["activity://courseRun/https://online.codingblocks.com/app/career_tracks/:s{courseId}"] =
+                    TrackActivity::class.java
             })
         } catch (e: ConcurrentModificationException) {
             Crashlytics.log("Router not working : ${e.localizedMessage}")

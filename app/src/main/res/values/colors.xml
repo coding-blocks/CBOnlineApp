@@ -3,7 +3,6 @@
     <color name="colorPrimaryDark">#f2734c</color>
     <color name="colorPrimary">@color/orangish</color>
     <color name="colorAccent">@color/veryLightPink</color>
-    <color name="grey_transparent">#80878787</color>
     <color name="black">#333333</color>
     <color name="grey850">#343434</color>
     <color name="salmon">#ff6666</color>
@@ -16,9 +15,7 @@
     <color name="algae_green">#25d366</color>
 
     <color name="dark_grey">#222222</color>
-    <color name="indigo_blue">#381184</color>
     <color name="neon_red">#ff003a</color>
-    <color name="shimmer_color">#a2878787</color>
     <color name="light_transparent">#16000000</color>
 
     <!--    New Colors-->
@@ -26,6 +23,7 @@
     <color name="dusty_orange">#fb8133</color>
     <color name="orangish">#f2734c</color>
     <color name="brownish_grey">#666666</color>
+    <color name="brown_grey">#999999</color>
     <color name="freshGreen">#6ecf4a</color>
     <color name="veryLightPink">#f3f3f3</color>
     <color name="dark">#1b1e26</color>
@@ -37,6 +35,8 @@
     <color name="divider">#2A2F3A</color>
     <color name="fb">#3B5998</color>
     <color name="gmail">#D44638</color>
+    <color name="black_95">#f3333333</color>
+    <color name="bottomNavSelected">#F2734C</color>
 
 
 </resources>

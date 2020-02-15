@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ListAdapter
@@ -14,6 +13,8 @@ import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
+import com.airbnb.lottie.LottieAnimationView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.VideoUtils.digitalClockTime
 import com.codingblocks.cbonlineapp.util.VideoUtils.getClosestFloatIndex
@@ -61,14 +62,15 @@ class VdoPlayerControls @JvmOverloads constructor(
 
     private val playButton: View
     private val pauseButton: View
-    private val fastForwardButton: View
-    private val rewindButton: View
+    private val fastForwardButton: LottieAnimationView
+    private val rewindButton: LottieAnimationView
     private val durationView: TextView
     private val positionView: TextView
     private val seekBar: SeekBar
-    private val speedControlButton: Button
-    private val captionsButton: ImageButton
-    private val qualityButton: ImageButton
+    private val speedControlButton: ImageButton
+    private val backButton: ImageButton
+    //    private val captionsButton: ImageButton
+//    private val qualityButton: ImageButton
     private val enterFullscreenButton: ImageButton
     private val exitFullscreenButton: ImageButton
     private val loaderView: ProgressBar
@@ -117,10 +119,10 @@ class VdoPlayerControls @JvmOverloads constructor(
         seekBar.setOnSeekBarChangeListener(uiListener)
         speedControlButton = findViewById(R.id.vdo_speed)
         speedControlButton.setOnClickListener(uiListener)
-        captionsButton = findViewById(R.id.vdo_captions)
-        captionsButton.setOnClickListener(uiListener)
-        qualityButton = findViewById(R.id.vdo_quality)
-        qualityButton.setOnClickListener(uiListener)
+        backButton = findViewById(R.id.vdo_back)
+//        captionsButton.setOnClickListener(uiListener)
+//        qualityButton = findViewById(R.id.vdo_quality)
+//        qualityButton.setOnClickListener(uiListener)
         enterFullscreenButton = findViewById(R.id.vdo_enter_fullscreen)
         enterFullscreenButton.setOnClickListener(uiListener)
         exitFullscreenButton = findViewById(R.id.vdo_exit_fullscreen)
@@ -220,18 +222,21 @@ class VdoPlayerControls @JvmOverloads constructor(
 
     private fun rewind() {
         if (rewindMs > 0) {
+            rewindButton.playAnimation()
             player?.seekTo(max(0, player!!.currentTime - rewindMs))
         }
     }
 
     private fun fastForward() {
         if (ffwdMs > 0) {
+            fastForwardButton.playAnimation()
             player?.seekTo(min(player!!.duration, player!!.currentTime + ffwdMs))
         }
     }
 
     private fun updateLoader(loading: Boolean) {
         loaderView.visibility = if (loading) VISIBLE else GONE
+        controlPanel.isVisible = !loading
     }
 
     private fun updateSpeedControlButton() {
@@ -244,7 +249,7 @@ class VdoPlayerControls @JvmOverloads constructor(
                 speedControlButton.visibility = VISIBLE
                 val speed = it.playbackSpeed
                 chosenSpeedIndex = getClosestFloatIndex(allowedSpeedList, speed)
-                speedControlButton.text = allowedSpeedStrList[chosenSpeedIndex]
+//                speedControlButton.text = allowedSpeedStrList[chosenSpeedIndex]
             } else {
                 speedControlButton.visibility = GONE
             }
@@ -404,12 +409,13 @@ class VdoPlayerControls @JvmOverloads constructor(
             } else if (v === speedControlButton) {
                 hideAfterTimeout = false
                 showSpeedControlDialog()
-            } else if (v === captionsButton) {
-                hideAfterTimeout = false
-                showTrackSelectionDialog(Track.TYPE_CAPTIONS)
-            } else if (v === qualityButton) {
-                hideAfterTimeout = false
-                showTrackSelectionDialog(Track.TYPE_VIDEO)
+//            } else if (v === captionsButton) {
+//                hideAfterTimeout = false
+//                showTrackSelectionDialog(Track.TYPE_CAPTIONS)
+//            } else if (v === qualityButton) {
+//                hideAfterTimeout = false
+//                showTrackSelectionDialog(Track.TYPE_VIDEO)
+//            }
             } else if (v === enterFullscreenButton || v === exitFullscreenButton) {
                 toggleFullscreen()
             } else if (v === errorView || v === errorTextView) {
@@ -449,7 +455,7 @@ class VdoPlayerControls @JvmOverloads constructor(
 
         override fun onLoaded(vdoInitParams: VdoPlayer.VdoInitParams) {
             player?.let {
-                durationView.text = digitalClockTime(it.duration.toInt())
+                durationView.text = "/${digitalClockTime(it.duration.toInt())}"
                 seekBar.max = it.duration.toInt()
                 updateSpeedControlButton()
             }

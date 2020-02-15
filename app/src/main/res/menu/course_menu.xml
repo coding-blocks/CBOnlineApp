@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/like"
         android:icon="@drawable/ic_like"
         android:title="@string/like"
         app:showAsAction="always" />

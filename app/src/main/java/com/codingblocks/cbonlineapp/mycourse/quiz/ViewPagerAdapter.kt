@@ -45,7 +45,7 @@ class ViewPagerAdapter(private var mContext: Context, private var quizId: String
                     view.questionDescription.visibility = View.GONE
                 } else {
                     question?.description?.let {
-                        view.questionDescription.loadMarkdown(it)
+                        view.questionDescription.text = (it)
                     } ?: run {
                         view.questionDescription.visibility = View.GONE
                     }

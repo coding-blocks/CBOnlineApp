@@ -9,19 +9,20 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_inbox.*
+import org.koin.android.ext.android.inject
 
 /**
  * A simple [Fragment] subclass.
  */
-class InboxFragment : Fragment() {
-
+class InboxFragment : BaseCBFragment() {
     private var conversationId: String = ""
-
+    private val prefs by inject<PreferenceHelper>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,9 +56,9 @@ class InboxFragment : Fragment() {
         }
         Clients.api.getSignature().enqueue(retrofitCallback { _, response ->
             val signature = response?.body()?.get("signature")
-            val userId = getPrefs()?.SP_USER_ID
-            val userName = getPrefs()?.SP_USER_NAME
-            val email = getPrefs()?.SP_EMAIL_ID
+            val userId = prefs.SP_USER_ID
+            val userName = prefs.SP_USER_NAME
+            val email = prefs.SP_EMAIL_ID
             val script: String
             if (conversationId.isEmpty()) {
                 script = """

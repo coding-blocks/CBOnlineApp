@@ -5,6 +5,7 @@ import android.text.SpannableStringBuilder
 import android.util.AttributeSet
 import android.widget.TextView
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.util.extensions.getSpannableString
 
 class ExpandableTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : androidx.appcompat.widget.AppCompatTextView(context, attrs) {
 
@@ -61,7 +62,7 @@ class ExpandableTextView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     companion object {
-        private val DEFAULT_TRIM_LENGTH = 200
-        private val ELLIPSIS = "..... View More"
+        private const val DEFAULT_TRIM_LENGTH = 200
+        private val ELLIPSIS = getSpannableString("...more")
     }
 }

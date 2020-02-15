@@ -13,7 +13,7 @@ import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 class SectionItemsAdapter : ListAdapter<ListObject, RecyclerView.ViewHolder>(diffCallback) {
 
     var starter: DownloadStarter? = null
-    var expired: Boolean = false
+    var onItemClick: ((ListObject) -> Unit)? = null
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
@@ -25,7 +25,7 @@ class SectionItemsAdapter : ListAdapter<ListObject, RecyclerView.ViewHolder>(dif
             ListObject.TYPE_CONTENT -> {
                 val content = getItem(position) as ContentModel
                 val contentViewHolder = holder as ContentViewHolder
-                contentViewHolder.bindTo(content, expired)
+                contentViewHolder.bindTo(content, onItemClick)
                 contentViewHolder.starterListener = starter
             }
         }
@@ -40,10 +40,6 @@ class SectionItemsAdapter : ListAdapter<ListObject, RecyclerView.ViewHolder>(dif
 
     override fun getItemViewType(position: Int): Int {
         return getItem(position).getType()
-    }
-
-    fun setExpiry(it: Boolean) {
-        expired = it
     }
 
     companion object {

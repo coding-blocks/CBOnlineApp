@@ -14,6 +14,7 @@ import com.codingblocks.cbonlineapp.util.PENDING
 import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
+import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.item_doubts.view.*
 
 class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAdapter.ItemViewHolder>(DiffCallback()) {
@@ -47,7 +48,8 @@ class DashboardDoubtListAdapter : ListAdapter<DoubtsModel, DashboardDoubtListAda
 
         fun bind(item: DoubtsModel) = with(itemView) {
             doubtTitleTv.text = item.title
-            doubtDescriptionTv.text = item.body
+            val markWon = Markwon.create(context)
+            markWon.setMarkdown(doubtDescriptionTv, item.body)
             doubtTimeTv.text = item.createdAt.timeAgo()
             chatTv.isVisible = !item.conversationId.isNullOrEmpty()
             when (item.status) {

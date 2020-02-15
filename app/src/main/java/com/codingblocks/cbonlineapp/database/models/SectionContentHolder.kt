@@ -35,4 +35,10 @@ class SectionContentHolder {
             )
         ) var contents: List<ContentModel>
     )
+
+    data class NextContent(
+        var sectionId: String,
+        var contentId: String,
+        var contentable: String
+    )
 }

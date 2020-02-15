@@ -8,7 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.widget.LinearLayout
-import androidx.appcompat.app.AppCompatActivity
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.DownloadBroadcastReceiver
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.crashlytics.android.Crashlytics
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_pdf.*
 import org.jetbrains.anko.AnkoLogger
 import java.io.File
 
-class PdfActivity : AppCompatActivity(), AnkoLogger {
+class PdfActivity : BaseCBActivity(), AnkoLogger {
     lateinit var pdfViewPager: PDFViewPager
     lateinit var url: String
     lateinit var fileName: String

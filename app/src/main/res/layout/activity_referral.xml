@@ -8,7 +8,6 @@
     tools:context="com.codingblocks.cbonlineapp.library.LibraryActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/libraryAppbar"
         style="@style/ToolBarStyleDark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -18,7 +17,7 @@
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/libraryToolbar"
+                android:id="@+id/referralToolbar"
                 style="@style/ToolBarStyleDark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -26,7 +25,6 @@
                 app:title="@string/invite_earn" />
 
             <LinearLayout
-                android:id="@+id/referralToolbarSecondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
@@ -102,7 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/margin_medium">
+                android:padding="@dimen/margin_medium_small">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -115,7 +113,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_medium_small"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="500 CB Credits"
                     android:textColor="@color/black"
@@ -145,10 +143,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/margin_medium">
+                android:padding="@dimen/margin_medium_small">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -161,7 +158,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_medium_small"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="500 CB Credits"
                     android:textColor="@color/black"
@@ -197,11 +194,11 @@
             android:layout_weight="1"
             android:backgroundTint="@color/algae_green"
             android:drawableStart="@drawable/ic_whatsapp"
-            android:drawablePadding="10dp"
+            android:drawablePadding="5dp"
+            android:id="@+id/shareWhatsapp"
             android:fontFamily="@font/gilroy_bold"
-            android:id="@+id/shareReferralWA"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:text="@string/share_via_whatsapp"
             app:cornerRadius="30dp" />
 
@@ -218,7 +215,7 @@
             android:id="@+id/shareReferral"
             android:text="@string/more"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:icon="@drawable/ic_share"
             app:iconPadding="10dp"
             app:iconTint="@color/black"

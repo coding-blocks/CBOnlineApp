@@ -1,6 +1,7 @@
 package com.codingblocks.onlineapi.models
 
 import com.github.jasminb.jsonapi.Links
+import com.github.jasminb.jsonapi.RelType
 import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.RelationshipLinks
@@ -31,17 +32,17 @@ data class Project(
 
 @Type("courses", "course")
 data class Course(
-    val title: String,
-    val subtitle: String,
-    val logo: String,
-    val summary: String,
-    val categoryId: Int,
-    val promoVideo: String,
-    val reviewCount: Int,
-    val difficulty: String,
-    val rating: Float,
-    val slug: String?,
-    val coverImage: String,
+    val title: String = "",
+    val subtitle: String = "",
+    val logo: String = "",
+    val summary: String = "",
+    val categoryId: Int?,
+    val promoVideo: String? = "",
+    val reviewCount: Int = 0,
+    val difficulty: String = "",
+    val rating: Float = 0f,
+    val slug: String? = "",
+    val coverImage: String? = "",
     val faq: String?,
     val coursefeatures: ArrayList<CourseFeatures>?,
     @Relationship("instructors")
@@ -49,24 +50,23 @@ data class Course(
     @Relationship("runs")
     val runs: ArrayList<Runs>?,
     @Relationship("active-runs", "active_runs")
-    val activeRuns: ArrayList<Runs>?,
+    val activeRuns: List<Runs>?,
     @Relationship("projects", resolve = true)
     var projects: ArrayList<Project>?,
     @Relationship("tags")
-    val tags: ArrayList<Tags>?
-) : BaseModel()
+    val tags: ArrayList<Tags>?) : BaseModel()
 
 @Type("runs", "run")
 data class Runs(
-    val name: String?,
-    val description: String?,
-    val start: String?,
-    val end: String?,
-    val price: String?,
-    val mrp: String?,
+    val name: String = "",
+    val description: String = "",
+    val start: String = "",
+    val end: String = "",
+    val price: String = "",
+    val mrp: String? = "",
     val unlisted: Boolean,
-    val enrollmentStart: String?,
-    val enrollmentEnd: String?,
+    val enrollmentStart: String = "",
+    val enrollmentEnd: String = "",
     @Relationship("sections")
     val sections: ArrayList<Sections>?,
     @Relationship("run-attempts", "run_attempts")
@@ -158,10 +158,10 @@ data class Comment(
 @Type("sections")
 data class Sections(
     var name: String? = null,
-    var premium: Boolean? = false,
+    var premium: Boolean = false,
     var status: String? = null,
     var order: Int? = 0,
-    @Relationship("contents")
+    @Relationship("contents", relType = RelType.RELATED)
     var contents: ArrayList<LectureContent>? = null,
     val runId: String? = "",
     @RelationshipLinks("contents")
@@ -293,7 +293,7 @@ data class Note(
     }
 }
 
-@Type("users")
+@Type("users", "user")
 data class User(
     val email: String?,
     val firstname: String,
@@ -303,6 +303,7 @@ data class User(
     val photo: String?,
     val verifiedemail: String?,
     val verifiedmobile: String?,
+    val username: String = "",
     val roleId: Int = 0
 ) : BaseModel()
 
@@ -503,6 +504,29 @@ class CarouselCards(
     var buttonLink: String
 ) : BaseModel()
 
+@Type("career_tracks")
+data class CareerTracks(
+    var name: String = "",
+    var slug: String = "",
+    var description: String? = "",
+    var unlisted: Boolean,
+    var logo: String = "",
+    var background: String = "",
+    var status: String? = "",
+    val languages: List<String>,
+    @Relationship("courses", relType = RelType.RELATED)
+    var courses: List<Course>?,
+    @Relationship("professions")
+    var professions: List<Professions>?,
+    @RelationshipLinks("courses")
+    val coursesLinks: Links? = null
+) : BaseModel()
+
+@Type("professions")
+class Professions(
+    val title: String = ""
+) : BaseModel()
+
 @Type("player")
 class Player(
     var playerId: String? = null
@@ -535,26 +559,26 @@ class Jobs(
 class Form(
     val name: String,
     val required: Boolean,
-    val title: String,
-    val type: String,
-    val options: String?
+    val title: String = "",
+    val type: String = "",
+    val options: String = ""
 
 )
 
 @Type("companies")
 class Company(
-    val name: String?,
-    val logo: String?,
-    val description: String?,
-    val website: String?,
+    val name: String = "",
+    val logo: String = "",
+    val description: String = "",
+    val website: String = "",
     val inactive: Boolean = false,
     val contacts: ArrayList<Contact>?
 ) : BaseModel()
 
 data class Contact(
-    val email: String,
-    val name: String,
-    val phone: String
+    val email: String = "",
+    val name: String = "",
+    val phone: String = ""
 )
 
 @Type("applications")

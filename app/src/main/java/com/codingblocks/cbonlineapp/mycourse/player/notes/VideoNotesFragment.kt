@@ -5,8 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
+import com.codingblocks.cbonlineapp.database.models.BaseModel
 import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.library.DeleteNoteClickListener
@@ -22,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_notes.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class VideoNotesFragment : Fragment(), AnkoLogger {
+class VideoNotesFragment : BaseCBFragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<VideoPlayerViewModel>()
     private val notesListAdapter = LibraryListAdapter(LibraryTypes.NOTESVIDEO)
@@ -31,7 +32,12 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
         object : DeleteNoteClickListener {
             override fun onClick(noteId: String, position: Int, view: View) {
                 view.isVisible = false
-                videoNotesRoot.showSnackbar(getString(R.string.noted_del_msg), Snackbar.LENGTH_SHORT, action = true, actionText = "UNDO") {
+                videoNotesRoot.showSnackbar(
+                    getString(R.string.noted_del_msg),
+                    Snackbar.LENGTH_SHORT,
+                    action = true,
+                    actionText = "UNDO"
+                ) {
                     view.isVisible = true
                 }.addCallback(object : Snackbar.Callback() {
                     override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
@@ -54,7 +60,7 @@ class VideoNotesFragment : Fragment(), AnkoLogger {
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
-            override fun onClick(note: NotesModel) {
+            override fun onClick(model: BaseModel) {
             }
         }
     }

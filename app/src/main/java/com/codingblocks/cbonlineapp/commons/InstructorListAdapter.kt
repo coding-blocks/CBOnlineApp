@@ -10,6 +10,8 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.Instructor
 import com.squareup.picasso.Picasso
+import io.noties.markwon.Markwon
+import io.noties.markwon.core.CorePlugin
 import kotlinx.android.synthetic.main.item_instructor.view.*
 import org.jetbrains.anko.email
 
@@ -29,7 +31,12 @@ class InstructorListAdapter : ListAdapter<Instructor, InstructorListAdapter.Item
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(instructor: Instructor) = with(itemView) {
             instructorNameTv.text = instructor.name
-            instructorDescTv.text = instructor.description
+            val markdown = instructor.description ?: ""
+
+            val markWon = Markwon.builder(context)
+                .usePlugin(CorePlugin.create())
+                .build()
+            markWon.setMarkdown(instructorDescTv, markdown)
 //            instructorTextView.text = "${instructor.sub}, Coding Blocks"
             instructorEmailTv.text = instructor.email
             Picasso.get().load(instructor.photo).placeholder(R.drawable.defaultavatar).fit().into(instructorImg)

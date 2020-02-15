@@ -27,7 +27,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jetbrains.anko.doAsync
 import org.koin.android.ext.android.inject
 import retrofit2.Response
 import java.io.File
@@ -74,6 +73,8 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
                         val mPlaybackInfo = it.get("playbackInfo").asString
                         initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
                     }
+                } else {
+                    notificationManager.cancel(downloadData.notificationId)
                 }
             }
         }
@@ -179,8 +180,8 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
         if (videoId != null) {
             val data = findDataWithId(videoId)
             if (data != null) {
-                doAsync {
-                    //                    contentDao.updateContent(data.sectionId, data.lectureContentId, "true")
+                GlobalScope.launch {
+                    contentDao.updateContent(data.contentId, 1)
                 }
                 val intent = Intent(this, VideoPlayerActivity::class.java)
                 intent.putExtra(VIDEO_ID, data.videoId)

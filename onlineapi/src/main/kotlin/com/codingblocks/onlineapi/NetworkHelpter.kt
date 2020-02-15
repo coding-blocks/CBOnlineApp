@@ -15,7 +15,7 @@ suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, ap
             ResultWrapper.Success(apiCall.invoke())
         } catch (throwable: Throwable) {
             when (throwable) {
-                is IOException -> ResultWrapper.GenericError(103, "IOException")
+                is IOException -> ResultWrapper.GenericError(103, "Not Connected To Internet")
                 is UnknownHostException -> ResultWrapper.GenericError(101, ErrorStatus.NO_CONNECTION)
                 is SocketTimeoutException -> ResultWrapper.GenericError(102, ErrorStatus.TIMEOUT)
                 is HttpException -> ResultWrapper.GenericError(throwable.code(), "HttpException")

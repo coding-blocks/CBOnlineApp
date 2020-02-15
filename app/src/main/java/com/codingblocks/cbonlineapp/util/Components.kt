@@ -5,14 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
-import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import kotlinx.android.synthetic.main.custom_dialog.view.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.singleTop
+import java.lang.Exception
 
 object Components {
     fun showConfirmation(context: Context, type: String, callback: (state: Boolean) -> Unit = { status: Boolean -> }) {
@@ -39,7 +40,7 @@ object Components {
             "unavailable" -> {
                 updateView.okBtn.text = "Ok"
                 updateView.description.text =
-                    "This section is unavailable on mobile, please view it on the browser instead!"
+                    context.getString(R.string.unavailable)
             }
             "expired" -> {
                 updateView.okBtn.text = "Ok"
@@ -54,7 +55,7 @@ object Components {
             "reset" -> {
                 updateView.okBtn.text = "Yes"
                 updateView.cancelBtn.text = "No"
-                updateView.description.text = "Are you sure you want to reset progress?"
+                updateView.description.text = "You will lose all your course progress.\nAre you sure you want to reset ?"
             }
             "quiz" -> {
                 updateView.okBtn.text = "Yes"
@@ -89,10 +90,7 @@ object Components {
                     context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
                 }
                 UNAUTHORIZED -> {
-
-                    context.openChrome(
-                        "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
-                    )
+                    context.startActivity(context.intentFor<LoginActivity>())
                 }
                 else -> {
                     callback(true)
@@ -110,6 +108,6 @@ object Components {
         confirmDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         confirmDialog.setView(updateView)
         confirmDialog.setCancelable(false)
-        confirmDialog.show()
+        try { confirmDialog.show() } catch (e: Exception) { }
     }
 }

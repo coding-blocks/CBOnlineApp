@@ -1,9 +1,9 @@
 package com.codingblocks.cbonlineapp.profile
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileActivity : BaseCBActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

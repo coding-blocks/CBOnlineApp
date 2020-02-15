@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root_course"
     android:layout_width="match_parent"
+    android:id="@+id/myCourseRoot"
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -13,7 +13,7 @@
             android:id="@+id/toolbar_mycourse"
             style="@style/ToolBarStyleDark"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="60dp">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/courseResumeBtn"
@@ -21,6 +21,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textColor="@color/white"
                 android:layout_marginEnd="@dimen/margin_large"
                 android:background="@drawable/button_background"
                 android:drawableEnd="@drawable/ic_dropright"
@@ -31,6 +34,7 @@
             android:id="@+id/myCourseTabs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="@dimen/margin_extra_small"
             android:paddingStart="@dimen/margin_medium"
             android:paddingEnd="@dimen/margin_medium"
             app:tabIndicatorColor="@color/black"
@@ -55,6 +59,12 @@
         </com.google.android.material.tabs.TabLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/veryLightPink"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
     <com.codingblocks.fabnavigation.FabNavigationViewPager
         android:id="@+id/course_pager"
         android:layout_width="match_parent"
@@ -69,6 +79,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="32dp"
         android:visibility="gone"
+        android:paddingEnd="20dp"
         android:background="@drawable/button_background"
         android:drawableStart="@drawable/ic_menu"
         android:fontFamily="@font/gilroy_bold"

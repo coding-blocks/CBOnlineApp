@@ -1,8 +1,8 @@
 package com.codingblocks.cbonlineapp.library
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.TYPE
@@ -11,7 +11,7 @@ import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import kotlinx.android.synthetic.main.activity_library.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class LibraryActivity : AppCompatActivity() {
+class LibraryActivity : BaseCBActivity() {
 
     val vm by viewModel<LibraryViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {

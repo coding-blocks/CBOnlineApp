@@ -10,10 +10,10 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat.getColor
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.viewpager.widget.ViewPager
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
@@ -24,7 +24,8 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.textColor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, View.OnClickListener, ViewPagerAdapter.QuizInteractor {
+class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListener,
+    View.OnClickListener, ViewPagerAdapter.QuizInteractor {
 
     private var isSubmitted: Boolean = false
 
@@ -34,7 +35,11 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
 
     private val vm by sharedViewModel<QuizViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ):
         View? = inflater.inflate(R.layout.fragment_quiz, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,7 +64,16 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
         }
 
         vm.quizAttempt.observer(viewLifecycleOwner) {
-            mAdapter = ViewPagerAdapter(requireContext(), vm.quiz.qnaUid, vm.quizAttemptId, questionList, it?.submission, it?.result, this, vm)
+            mAdapter = ViewPagerAdapter(
+                requireContext(),
+                vm.quiz.qnaUid,
+                vm.quizAttemptId,
+                questionList,
+                it?.submission,
+                it?.result,
+                this,
+                vm
+            )
             quizViewPager.adapter = mAdapter
             quizViewPager.currentItem = 0
             quizViewPager.offscreenPageLimit = questionList.size()
@@ -78,7 +92,10 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
     private fun setUpQuestionBottomSheet(size: Int) {
         var count = 0
         var rowLayout = LinearLayout(context)
-        rowLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        rowLayout.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
         rowLayout.orientation = LinearLayout.HORIZONTAL
         numberLayout.addView(rowLayout)
         for (i in 0 until size) {
@@ -86,14 +103,22 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                 count = 0
                 rowLayout = LinearLayout(context)
                 rowLayout.orientation = LinearLayout.HORIZONTAL
-                rowLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                rowLayout.layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
                 numberLayout.addView(rowLayout)
             }
 
-            val numberBtn: AppCompatButton = LayoutInflater.from(context).inflate(R.layout.button_quiz_small, rowLayout, false) as AppCompatButton
+            val numberBtn: AppCompatButton = LayoutInflater.from(context).inflate(
+                R.layout.button_quiz_small,
+                rowLayout,
+                false
+            ) as AppCompatButton
 
             vm.bottomSheetQuizData.value?.get(i)?.observer(viewLifecycleOwner) {
-                numberBtn.backgroundTintList = ColorStateList.valueOf(getColor(requireContext(), R.color.freshGreen))
+                numberBtn.backgroundTintList =
+                    ColorStateList.valueOf(getColor(requireContext(), R.color.freshGreen))
                 numberBtn.textColor = getColor(requireContext(), R.color.freshGreen)
             }
 
@@ -147,7 +172,8 @@ class QuizFragment : Fragment(), AnkoLogger, ViewPager.OnPageChangeListener, Vie
                 containerViewId = R.id.quizContainer,
                 enterAnimation = R.animator.slide_in_right,
                 exitAnimation = R.animator.slide_out_left,
-                addToStack = true)
+                addToStack = true
+            )
         }
     }
 

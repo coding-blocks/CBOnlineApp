@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/margin_medium"
+    android:background="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/veryLightPink"
+    app:strokeWidth="1dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/trackLogo"
+            android:layout_centerInParent="true"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="@dimen/margin_large"
+            android:elevation="2dp"
+            android:src="@drawable/ic_course_logo"
+            android:visibility="visible"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="110dp">
+
+                <ImageView
+                    android:id="@+id/trackCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_cpp" />
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/trackCourseNumTv"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/trackTitleTv"
+                    android:layout_alignStart="@id/trackTitleTv"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="14dp"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="1dp" />
+
+                <ImageButton
+                    android:id="@+id/course_card_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/course_card_like"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/margin_medium_small"
+                    android:layout_toStartOf="@id/course_card_like"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:layout_marginEnd="@dimen/padding_medium"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/share"
+                    android:focusable="true"
+                    android:src="@drawable/ic_share" />
+
+                <ImageButton
+                    android:layout_width="14dp"
+                    android:id="@+id/course_card_like"
+                    android:layout_height="15dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/margin_medium_small"
+                    android:layout_marginEnd="@dimen/padding_medium"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:contentDescription="@string/like"
+                    android:focusable="true"
+                    android:src="@drawable/ic_like" />
+
+                <TextView
+                    android:id="@+id/trackTitleTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/course_card_share"
+                    android:layout_marginStart="110dp"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:layout_marginTop="7dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    tools:text="Android App Development Online" />
+
+                <TextView
+                    android:id="@+id/ratingTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/trackTitleTv"
+                    android:layout_alignStart="@id/trackTitleTv"
+                    android:layout_marginTop="@dimen/margin_medium_small"
+                    android:drawableLeft="@drawable/ic_trending"
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/white"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:text="@string/trending_now"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:background="@color/white"
+                android:paddingStart="@dimen/padding_medium"
+                tools:ignore="RtlSymmetry">
+
+                <TextView
+
+                    android:id="@+id/optionTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/career_options"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/trackChips"
+
+                    android:layout_marginBottom="@dimen/margin_medium"
+                    app:singleLine="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_toEndOf="@id/optionTv"
+                    app:chipSpacingHorizontal="5dp"
+                    app:chipSpacingVertical="@dimen/margin_small" />
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

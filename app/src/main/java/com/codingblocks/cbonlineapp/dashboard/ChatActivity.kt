@@ -1,22 +1,25 @@
 package com.codingblocks.cbonlineapp.dashboard
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.activity_chat.*
+import org.koin.android.ext.android.inject
 
-class ChatActivity : AppCompatActivity() {
+class ChatActivity : BaseCBActivity() {
 
     private val conversationId: String by lazy {
-        intent.getStringExtra(CONVERSATION_ID)
+        intent.getStringExtra(CONVERSATION_ID) ?: ""
     }
+    private val prefs by inject<PreferenceHelper>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,18 +29,19 @@ class ChatActivity : AppCompatActivity() {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val webView = WebView(this)
+        WebView.setWebContentsDebuggingEnabled(true)
+
         webView.settings.apply {
             javaScriptEnabled = true
-            webView.settings.javaScriptCanOpenWindowsAutomatically = true
-            webView.settings.allowFileAccess = true
-            webView.settings.allowFileAccessFromFileURLs = true
+            javaScriptCanOpenWindowsAutomatically = true
+            allowFileAccess = true
+            allowFileAccessFromFileURLs = true
         }
         Clients.api.getSignature().enqueue(retrofitCallback { _, response ->
             val signature = response?.body()?.get("signature")
-            val userId = getPrefs().SP_USER_ID
-            val userName = getPrefs().SP_USER_NAME
-            val email = getPrefs().SP_EMAIL_ID
+            val userId = prefs.SP_USER_ID
+            val userName = prefs.SP_USER_NAME
+            val email = prefs.SP_EMAIL_ID
             val script: String
             if (conversationId.isEmpty()) {
                 script = """
@@ -78,7 +82,10 @@ class ChatActivity : AppCompatActivity() {
             }
 
             webView.webViewClient = object : WebViewClient() {
-                override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                override fun shouldOverrideUrlLoading(
+                    view: WebView?,
+                    request: WebResourceRequest?
+                ): Boolean {
                     return false
                 }
 
@@ -90,7 +97,13 @@ class ChatActivity : AppCompatActivity() {
 
             webView.loadUrl("file:///android_asset/Chat.html")
         })
-        if (chatRoot != null)
-            chatRoot.addView(webView)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        android.R.id.home -> {
+            onBackPressed()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 }

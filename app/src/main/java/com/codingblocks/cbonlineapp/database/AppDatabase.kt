@@ -6,6 +6,7 @@ import androidx.room.TypeConverters
 import com.codingblocks.cbonlineapp.database.converters.CourseIdList
 import com.codingblocks.cbonlineapp.database.converters.ProgressItemConverter
 import com.codingblocks.cbonlineapp.database.converters.TimestampConverter
+import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.database.models.CommentModel
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.CourseModel
@@ -24,9 +25,9 @@ import com.codingblocks.cbonlineapp.database.models.SectionModel
 @Database(
     entities = [CourseModel::class, SectionModel::class, ContentModel::class, InstructorModel::class, Notification::class,
         CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, RunModel::class,
-        JobsModel::class, SectionContentHolder.SectionWithContent::class,
+        JobsModel::class, SectionContentHolder.SectionWithContent::class, BookmarkModel::class,
         CommentModel::class, RunAttemptModel::class, RunPerformance::class
-    ], exportSchema = true, version = 24
+    ], exportSchema = true, version = 25
 )
 @TypeConverters(TimestampConverter::class, CourseIdList::class, ProgressItemConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -62,4 +63,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun runPerformanceDao(): RunPerformanceDao
 
     abstract fun libraryDao(): LibraryDao
+
+    abstract fun bookmarkDao(): BookmarkDao
 }

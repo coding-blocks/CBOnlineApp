@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.library.LibraryActivity
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
@@ -16,11 +16,15 @@ import kotlinx.android.synthetic.main.fragment_course_library.*
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class CourseLibraryFragment : Fragment(), View.OnClickListener {
+class CourseLibraryFragment : BaseCBFragment(), View.OnClickListener {
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ):
         View? = inflater.inflate(R.layout.fragment_course_library, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,8 +50,8 @@ class CourseLibraryFragment : Fragment(), View.OnClickListener {
                 startActivity(intent)
             }
             R.id.downloadBtn -> {
-                toast("Will be added Soon!")
                 intent.putExtra(TYPE, getString(R.string.downloads))
+                startActivity(intent)
             }
 
             R.id.announcementsBtn -> {

@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.mycourse.quiz
 
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,13 +47,11 @@ class QuizChoiceAdapter(
                 } ?: run {
                     if (choice.marked) {
                         // If this is marked
-                        optionTitle.textColor = getColor(context, R.color.freshGreen)
-                        markedImgView.backgroundTintList =
-                            ColorStateList.valueOf(getColor(context, R.color.freshGreen))
+                        optionTitle.textColor = getColor(context, R.color.white)
+                        markedImgView.background = getDrawable(context, R.drawable.ic_incorrect)
                     } else {
                         optionTitle.textColor = getColor(context, R.color.white)
-                        markedImgView.backgroundTintList =
-                            ColorStateList.valueOf(getColor(context, R.color.darkTwo))
+                        markedImgView.background = getDrawable(context, R.drawable.ic_circle)
                     }
                 }
 

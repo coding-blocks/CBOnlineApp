@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.codingblocks.cbonlineapp.course.SearchCourseActivity">
 
@@ -16,10 +17,13 @@
 
     <com.google.android.material.button.MaterialButton
         style="@style/CustomOutlinedButton"
+        app:strokeWidth="0dp"
+        android:id="@+id/searchBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_large"
         android:layout_marginTop="@dimen/margin_medium"
+
         android:layout_marginEnd="@dimen/margin_large"
         android:drawableEnd="@drawable/ic_search"
         android:text="@string/what_do_you_want_to_learn" />

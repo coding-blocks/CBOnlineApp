@@ -1,16 +1,16 @@
 package com.codingblocks.cbonlineapp.mycourse.quiz.submissions
 
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.formatDate
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.models.QuizAttempt
-import kotlinx.android.synthetic.main.quiz_attempt_list.view.*
+import kotlinx.android.synthetic.main.item_quiz_attempt.view.*
 
 class QuizSubmissionListAdapter : ListAdapter<QuizAttempt, QuizSubmissionListAdapter.ItemViewHolder>(DiffCallback()) {
     var onItemClick: ItemClickListener? = null

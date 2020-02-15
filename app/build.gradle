@@ -9,10 +9,13 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.firebase-perf'
+
 
 def YOUTUBE_KEY = System.getenv('YOUTUBE_KEY') ?: "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
 def CLIENT_ID = System.getenv('CLIENT_ID') ?: "5633768694"
 def REDIRECT_URI = System.getenv('REDIRECT_URI') ?: "app://online.codingblocks.com"
+def DEBUG_REDIRECT_URI = System.getenv('REDIRECT_URI') ?: "app://online.codingblocks.xyz"
 def OAUTH_URL = System.getenv('OAUTH_URL') ?: "https://account.codingblocks.com/oauth/authorize"
 
 // Include signing configs
@@ -22,15 +25,15 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.codingblocks.cbonlineapp"
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion 29
-        versionCode 100006052
+        versionCode 101000005
         // 1 (versioning scheme)
         // 00 (major version)
-        // 06 (minor version)
-        // 03 (patch version)
-        // 04 spare for betas/RCs
-        versionName "1.0.0-internal"
+        // 00 (minor version)
+        // 00 (patch version)
+        // 02 spare for betas/RCs
+        versionName "1.0.0-rc05"
         signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false
@@ -40,8 +43,9 @@ android {
         ]
         buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'
         buildConfigField "String", "CLIENT_ID", '"' + CLIENT_ID + '"'
-        buildConfigField "String", "REDIRECT_URI", '"' + REDIRECT_URI + '"'
         buildConfigField "String", "OAUTH_URL", '"' + OAUTH_URL + '"'
+        buildConfigField "String", "REDIRECT_URI", '"' + REDIRECT_URI + '"'
+
         kapt {
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas".toString())
@@ -57,6 +61,7 @@ android {
             minifyEnabled false
             versionNameSuffix '-debug-version'
             applicationIdSuffix = '.debug'
+
         }
         release {
             signingConfig signingConfigs.release
@@ -83,7 +88,7 @@ ext {
     ankoVersion = '0.10.6'
     room_version = "2.2.3"
     koin_version = "2.0.1"
-    markwon_version = "4.2.0"
+    markwon_version = "4.2.1"
     ankoLibs = [
             // commons
             'commons',
@@ -113,16 +118,18 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3'
     implementation 'androidx.browser:browser:1.2.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'com.google.android.play:core:1.6.4'
-    implementation 'androidx.core:core-ktx:1.1.0'
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-rc03"
+    implementation 'androidx.core:core-ktx:1.2.0'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
     implementation "androidx.paging:paging-runtime-ktx:2.1.1"
     implementation "android.arch.work:work-runtime-ktx:1.0.1"
-    implementation "androidx.fragment:fragment-ktx:1.1.0"
+    implementation "androidx.fragment:fragment-ktx:1.2.1"
     implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:17.3.0'
+    implementation "androidx.drawerlayout:drawerlayout:1.1.0-alpha03"
+
 
     //Koin Does Not Support This
 //    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-rc03'
@@ -130,30 +137,37 @@ dependencies {
 
     // 3rd party libs
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
-    implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
-    implementation 'com.onesignal:OneSignal:3.12.4'
+    implementation 'com.onesignal:OneSignal:3.12.6'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'com.github.aggarwalpulkit596:FabNavigation:1.0'
-    implementation 'org.ocpsoft.prettytime:prettytime:4.0.2.Final'
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.3.Final'
     implementation "com.github.skydoves:progressview:1.0.5"
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    implementation 'com.razorpay:checkout:1.5.13'
+    implementation 'com.razorpay:checkout:1.5.15'
+    implementation "io.noties.markwon:core:$markwon_version"
+    implementation "io.noties.markwon:editor:$markwon_version"
+    implementation "io.noties.markwon:ext-strikethrough:$markwon_version"
+    implementation "io.noties.markwon:html:$markwon_version"
+    implementation "io.noties.markwon:linkify:$markwon_version"
+    implementation 'com.github.AppIntro:AppIntro:5.1.0'
+    implementation 'com.airbnb.android:lottie:3.3.1'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
 
     // Image view libraries
-    implementation 'de.hdodenhof:circleimageview:3.0.1'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.caverock:androidsvg-aar:1.4'
 
     //database
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     kapt "androidx.room:room-compiler:$room_version"
 
 
     //VideoCipher library
-    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
-    implementation 'com.vdocipher.aegis:vdocipher-android:1.3.1'
+    implementation 'com.vdocipher.aegis:vdocipher-android:1.3.3'
 
 
     // Koin
@@ -170,14 +184,17 @@ dependencies {
         implementation "org.jetbrains.anko:anko-$name:$ankoVersion"
     }
     //Firebase
-    implementation 'com.google.firebase:firebase-core:17.2.1'
+    implementation 'com.google.firebase:firebase-core:17.2.2'
     implementation 'com.google.firebase:firebase-messaging:20.1.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
-    implementation 'com.google.firebase:firebase-firestore-ktx:21.3.1'
-    implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.2'
+    implementation 'com.google.firebase:firebase-firestore-ktx:21.4.0'
+    implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.3'
+    implementation 'com.google.firebase:firebase-perf:19.0.5'
+
 
 
     implementation project(':onlineapi')
+    implementation files('libs/YouTubeAndroidPlayerApi.jar')
 
     // Test Dependencies
     testImplementation 'junit:junit:4.12'

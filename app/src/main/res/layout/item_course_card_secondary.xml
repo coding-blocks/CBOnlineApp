@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="280dp"
     android:layout_height="130dp"
-    android:layout_margin="@dimen/margin_small"
+    android:layout_marginStart="@dimen/margin_large"
+    android:layout_marginTop="@dimen/margin_small"
+    android:layout_marginBottom="@dimen/margin_small"
     android:background="?attr/selectableItemBackground"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="@dimen/card_corner_radius">
@@ -29,47 +31,40 @@
 
         <ImageView
             android:id="@+id/courseCover"
+            android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:scaleType="centerCrop"
-            android:src="@drawable/placeholder_course_cover" />
+            android:src="@drawable/backdrop" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/chip"
-            style="@style/ButtonStyleChip"
+            style="@style/ButtonStyleChipSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_medium"
             android:layout_marginTop="@dimen/margin_medium_small"
-            android:background="@drawable/bck_rounded"
-            android:drawablePadding="0dp"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:text="Beginner"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            app:cornerRadius="20dp" />
+            android:text="Beginner" />
 
 
         <ImageButton
             android:id="@+id/course_card_share"
             android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_height="21dp"
             android:layout_alignTop="@id/course_card_like"
             android:layout_marginStart="@dimen/margin_medium_small"
             android:layout_marginEnd="@dimen/margin_small"
             android:layout_toEndOf="@id/chip"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
+            android:scaleType="fitXY"
             android:contentDescription="@string/share"
             android:focusable="true"
-            android:scaleType="centerCrop"
             android:src="@drawable/ic_share" />
 
         <ImageButton
             android:id="@+id/course_card_like"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
             android:layout_marginTop="@dimen/margin_medium_small"
             android:layout_marginEnd="@dimen/padding_medium"
             android:layout_marginBottom="@dimen/margin_large"
@@ -82,6 +77,8 @@
             android:src="@drawable/ic_like" />
 
         <TextView
+            android:ellipsize="end"
+            android:lines="1"
             android:id="@+id/courseCardTitleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -94,8 +91,7 @@
             android:fontFamily="@font/gilroy_bold"
             android:textColor="@color/white"
             android:textSize="16sp"
-            tools:text="
-Web Development(NodeJS) Online" />
+            tools:text="Web Development(NodeJS) Online" />
 
         <TextView
             android:id="@+id/ratingTv"

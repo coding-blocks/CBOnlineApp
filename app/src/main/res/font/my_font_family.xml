@@ -1,0 +1,8 @@
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <font
+        app:font="@font/gilroy_medium"
+        app:fontStyle="normal"
+        app:fontWeight="400" />
+
+</font-family>

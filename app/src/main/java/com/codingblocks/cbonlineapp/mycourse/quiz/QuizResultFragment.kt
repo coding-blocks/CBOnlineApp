@@ -7,13 +7,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import kotlinx.android.synthetic.main.fragment_quiz_result.*
 
-class QuizResultFragment : Fragment() {
+class QuizResultFragment : BaseCBFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ):
         View? = inflater.inflate(R.layout.fragment_quiz_result, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -43,9 +47,14 @@ class QuizResultFragment : Fragment() {
         quizResultGoBackBtn.setOnClickListener {
             val fragmentManager = fragmentManager!!
             val fragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left)
-            fragmentTransaction.replace(R.id.quizContainer,
-                QuizFragment())
+            fragmentTransaction.setCustomAnimations(
+                R.animator.slide_in_right,
+                R.animator.slide_out_left
+            )
+            fragmentTransaction.replace(
+                R.id.quizContainer,
+                QuizFragment()
+            )
             fragmentTransaction.commit()
         }
     }

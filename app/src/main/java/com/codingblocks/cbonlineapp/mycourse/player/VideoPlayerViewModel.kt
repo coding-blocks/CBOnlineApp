@@ -15,7 +15,10 @@ import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.mycourse.player.notes.NotesWorker
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.LIVE
+import com.codingblocks.cbonlineapp.util.ProgressWorker
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
@@ -25,12 +28,14 @@ import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.Sections
+import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
 class VideoPlayerViewModel(
     private val repo: VideoPlayerRepository,
     private val repoDoubts: DashboardDoubtsRepository
 ) : ViewModel() {
+    var contentLength: Long = 0L
     var playWhenReady = false
     var currentOrientation: Int = 0
     var mOtp: String? = null
@@ -52,6 +57,10 @@ class VideoPlayerViewModel(
     val notes = Transformations.switchMap(attemptId) {
         fetchNotes()
         repo.getNotes(it)
+    }
+
+    val bookmark by lazy {
+        repo.getBookmark(contentId)
     }
     val offlineSnackbar = MutableLiveData<String>()
 
@@ -114,7 +123,7 @@ class VideoPlayerViewModel(
                     if (response.value.isSuccessful)
                         response.value.body()?.let { bookmark ->
                             offlineSnackbar.postValue(("Bookmark Added Successfully !"))
-                            repo.updateBookmark(contentId, bookmark)
+                            repo.updateBookmark(bookmark)
                         }
                     else {
                         setError(fetchError(response.value.code()))
@@ -225,14 +234,14 @@ class VideoPlayerViewModel(
         }
     }
 
-    fun removeBookmark(bookmarkUid: String) {
+    fun removeBookmark() {
         runIO {
-            when (val response = repo.removeBookmark(bookmarkUid)) {
+            when (val response = bookmark.value?.bookmarkUid?.let { repo.removeBookmark(it) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.code() == 204) {
                         offlineSnackbar.postValue(("Removed Bookmark Successfully !"))
-                        repo.deleteBookmark(contentId)
+                        bookmark.value?.bookmarkUid?.let { repo.deleteBookmark(it) }
                     } else {
                         setError(fetchError(response.value.code()))
                     }
@@ -241,7 +250,7 @@ class VideoPlayerViewModel(
         }
     }
 
-    fun createDoubt(title: String, body: String) {
+    fun createDoubt(title: String, body: String, function: (message: String) -> Unit) {
         val doubt = Doubts(null, title, body, RunAttempts(attemptId.value ?: ""), LectureContent(contentId))
         runIO {
             when (val response = repo.addDoubt(doubt)) {
@@ -249,12 +258,34 @@ class VideoPlayerViewModel(
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         offlineSnackbar.postValue(("Doubt Created Successfully !"))
+                        function("")
                         fetchDoubts()
                     } else {
-                        setError(fetchError(response.value.code()))
+                        try {
+                            val jObjError = JSONObject(response.value.errorBody()?.string())
+                            val msg = (jObjError.getJSONArray("errors")[0] as JSONObject).getString("detail")
+                            function(msg)
+                        } catch (e: Exception) {
+                        } finally {
+                            setError(fetchError(response.value.code()))
+                        }
                     }
                 }
             }
         }
+    }
+
+    fun updateProgress() {
+        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val progressData: Data = workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to attemptId.value)
+        val request: OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<ProgressWorker>()
+                .setConstraints(constraints)
+                .setInputData(progressData)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                .build()
+
+        WorkManager.getInstance()
+            .enqueue(request)
     }
 }

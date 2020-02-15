@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.dashboard.doubts
 
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,14 @@ class CommentsListAdapter : ListAdapter<CommentModel, ItemViewHolder>(DiffCallba
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: CommentModel) = with(itemView) {
             commentUserTv.text = item.username
-            commentBodyTv.text = item.body
+//            val markdown = instructor.description ?: ""
+//
+//            val markWon = Markwon.builder(context)
+//                .usePlugin(CorePlugin.create())
+//                .build()
+//            markWon.setMarkdown(instructorDescTv, markdown)
+            val string = Html.fromHtml(item.body)
+            commentBodyTv.text = string
             commentTimeTv.text = item.updatedAt.timeAgo()
         }
     }

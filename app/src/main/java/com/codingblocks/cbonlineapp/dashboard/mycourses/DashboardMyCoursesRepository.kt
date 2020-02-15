@@ -41,13 +41,13 @@ class DashboardMyCoursesRepository(
                     val myAttempt = runAttempts!!.first()
                     val runModel = RunModel(
                         id,
-                        name ?: "",
-                        description ?: "",
-                        enrollmentStart ?: "",
-                        enrollmentEnd ?: "",
-                        start ?: "",
-                        end ?: "",
-                        price ?: "",
+                        name,
+                        description,
+                        enrollmentStart,
+                        enrollmentEnd,
+                        start,
+                        end,
+                        price,
                         mrp ?: "",
                         updatedAt,
                         whatsappLink,
@@ -92,13 +92,13 @@ class DashboardMyCoursesRepository(
                     subtitle,
                     logo,
                     summary,
-                    promoVideo,
+                    promoVideo ?: "",
                     difficulty,
                     reviewCount,
                     rating,
                     slug,
-                    coverImage,
-                    categoryId
+                    coverImage ?: "",
+                    categoryId ?: 0
                 ))
             } else if (!refresh)
             return -2L
@@ -134,4 +134,7 @@ class DashboardMyCoursesRepository(
             else -> courseWithInstructorDao.getMyRuns()
         }
     }
+
+    fun getPurchasedRuns() = courseWithInstructorDao.getPurchasesRuns()
+    fun getActiveRuns() = courseWithInstructorDao.getActiveRuns(System.currentTimeMillis() / 1000)
 }

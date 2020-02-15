@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.dashboard.doubts
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.database.CommentsDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.DoubtsDao
@@ -73,13 +74,13 @@ class DashboardDoubtsRepository(
         return when (type) {
             LIVE -> doubtsDao.getLiveDoubts(attemptId)
             RESOLVED -> doubtsDao.getResolveDoubts(attemptId)
-            else -> doubtsDao.getDoubts(attemptId)
+            else -> doubtsDao.getDoubts(attemptId).distinctUntilChanged()
         }
     }
 
     fun getDoubtById(id: String) = doubtsDao.getDoubtById(id)
     fun getCommentsById(id: String) = commentsDao.getComments(id)
-    fun getRuns() = runDao.getMyRuns()
+    fun getRuns() = runDao.getMyRuns().distinctUntilChanged()
     suspend fun createComment(comment: Comment) = safeApiCall { Clients.onlineV2JsonApi.createComment(comment) }
     suspend fun insertComment(it: Comment) {
         commentsDao.insert(CommentModel(

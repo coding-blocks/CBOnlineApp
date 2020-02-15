@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.quiz.info.QuizInfoFragment
 import com.codingblocks.cbonlineapp.mycourse.quiz.submissions.QuizSubmissionsFragment
@@ -16,7 +16,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.runOnUiThread
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class AboutQuizFragment : Fragment(), AnkoLogger {
+class AboutQuizFragment : BaseCBFragment(), AnkoLogger {
 
     private val vm by sharedViewModel<QuizViewModel>()
 
@@ -35,6 +35,7 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
         super.onActivityCreated(savedInstanceState)
         vm.content.observer(this) {
             vm.quiz = it.contentQna
+            vm.attemptId = it.attempt_id
             vm.fetchQuiz()
         }
 
@@ -49,7 +50,8 @@ class AboutQuizFragment : Fragment(), AnkoLogger {
                         containerViewId = R.id.quizContainer,
                         enterAnimation = R.animator.slide_in_right,
                         exitAnimation = R.animator.slide_out_left,
-                        addToStack = true)
+                        addToStack = true
+                    )
                 }
             }
         }

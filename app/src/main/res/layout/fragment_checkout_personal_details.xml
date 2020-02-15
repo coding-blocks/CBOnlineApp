@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingStart="@dimen/margin_large"
     android:paddingEnd="@dimen/margin_large"
@@ -22,28 +23,54 @@
         android:layout_marginTop="@dimen/margin_medium_small"
         android:background="@drawable/divider" />
 
-    <EditText
-        android:layout_marginTop="@dimen/margin_xl"
-        android:drawableEnd="@drawable/ic_dropdown"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:fontFamily="@font/gilroy_medium"
-        android:clickable="false"
-        android:textSize="18sp"
-        android:focusable="false"
-        android:text="India"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_large"
+        app:errorEnabled="true">
 
-    <AutoCompleteTextView
-        android:fontFamily="@font/gilroy_medium"
-        android:id="@+id/spinner"
-        android:completionThreshold="1"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:hint="Select State"
-        android:textColorHint="@color/black"
-        android:textSize="18sp"
-        android:drawableEnd="@drawable/ic_dropdown"
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/country"
+            style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/white"
+            android:clickable="false"
+            android:completionThreshold="1"
+            android:focusable="false"
+            android:fontFamily="@font/gilroy_medium"
+            android:hint="@string/country"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            android:text="India"
+            android:textColorHighlight="@color/orangish"
+            android:textColorHint="@color/black"
+            android:textSize="16sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_medium"
+        app:errorEnabled="true">
+
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/state"
+            style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/white"
+            android:completionThreshold="1"
+            android:fontFamily="@font/gilroy_medium"
+            android:hint="@string/state"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            android:textColorHighlight="@color/orangish"
+            android:textColorHint="@color/black"
+            android:textSize="16sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <View
         android:layout_width="match_parent"

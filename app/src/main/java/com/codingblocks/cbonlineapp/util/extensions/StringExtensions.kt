@@ -2,6 +2,8 @@ package com.codingblocks.cbonlineapp.util.extensions
 
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
+import androidx.core.text.color
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.onlineapi.models.Note
 import com.google.gson.Gson
 import org.ocpsoft.prettytime.PrettyTime
@@ -130,7 +132,17 @@ fun getDate(): String {
     return dateFormat.format(calendar.time)
 }
 
-fun getSpannableSring(normalText: String, boldText: String): SpannableStringBuilder =
+fun getSpannableSring(boldText: String, normalText: String): SpannableStringBuilder =
+    SpannableStringBuilder()
+        .bold { append(boldText) }
+        .append(normalText)
+
+fun getSpannableString(text: String): SpannableStringBuilder =
+    SpannableStringBuilder()
+        .color(R.color.brownish_grey) {}
+        .append(text)
+
+fun getSpannableStringSecondBold(normalText: String, boldText: String): SpannableStringBuilder =
     SpannableStringBuilder()
         .append(normalText)
         .bold { append(boldText) }

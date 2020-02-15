@@ -33,6 +33,8 @@
             android:fontFamily="@font/gilroy_bold"
             android:textColor="@color/black"
             android:textSize="18sp"
+            android:ellipsize="end"
+            android:lines="1"
             tools:text="Competitive Programming" />
 
         <TextView
@@ -43,6 +45,8 @@
             android:fontFamily="@font/gilroy_medium"
             android:textColor="@color/black"
             android:textSize="14sp"
+            android:ellipsize="end"
+            android:lines="1"
             tools:text="Mentor: Arnav Gupta" />
 
         <LinearLayout
@@ -59,6 +63,7 @@
                 android:layout_width="0dp"
                 android:layout_height="8dp"
                 android:layout_weight="1"
+
                 app:progressView_autoAnimate="true"
                 app:progressView_colorBackground="@color/veryLightPink"
                 app:progressView_colorGradientEnd="@color/dusty_orange"
@@ -85,7 +90,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="16dp"
-            android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/ic_dropright"
             android:drawablePadding="10dp"
             android:drawableTint="@color/orangish"
@@ -103,7 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="47dp"
+        android:layout_marginStart="@dimen/margin_medium"
         android:src="@drawable/ic_dropright_big"
         android:visibility="visible" />
 </LinearLayout>

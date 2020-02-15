@@ -3,20 +3,23 @@ package com.codingblocks.cbonlineapp
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.appcompat.app.AppCompatActivity
 import cn.campusapp.router.Router
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.otherwise
 import org.jetbrains.anko.intentFor
+import org.koin.android.ext.android.inject
 
-class URLRouterActivity : AppCompatActivity() {
+class URLRouterActivity : BaseCBActivity() {
 
     private fun fallBack() = startActivity(intentFor<DashboardActivity>())
+    private val sharedPrefs by inject<PreferenceHelper>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (getPrefs().SP_JWT_TOKEN_KEY != "jwt_token") {
+        if (sharedPrefs.SP_JWT_TOKEN_KEY.isNotEmpty()) {
+
             intent?.data?.let { uri ->
 
                 if (TextUtils.isEmpty(uri.host)) fallBack()
@@ -25,10 +28,11 @@ class URLRouterActivity : AppCompatActivity() {
                 val pathSegments = uri.pathSegments
                 if (pathSegments.size < 2) fallBack()
 
-                when (pathSegments[0]) {
+                when (pathSegments[1]) {
                     "classroom" -> openRouter(uri)
                     "courses" -> openRouter(uri)
                     "player" -> openRouter(uri)
+                    "tracks" -> openRouter(uri)
                     else -> fallBack()
                 }
             }
