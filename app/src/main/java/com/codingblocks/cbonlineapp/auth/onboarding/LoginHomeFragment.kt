@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.auth.onboarding
 
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -10,7 +11,13 @@ import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.CookieManager
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import com.codingblocks.cbonlineapp.BuildConfig
+import com.codingblocks.cbonlineapp.BuildConfig.CLIENT_ID
+import com.codingblocks.cbonlineapp.BuildConfig.OAUTH_URL
+import com.codingblocks.cbonlineapp.BuildConfig.REDIRECT_URI
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
@@ -42,9 +49,7 @@ class LoginHomeFragment : BaseCBFragment() {
         }
 
         gmailBtn.setOnClickListener {
-            requireContext().openChrome(
-                "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
-            )
+            showWebView()
         }
 
         fbBtn.setOnClickListener {
@@ -52,6 +57,33 @@ class LoginHomeFragment : BaseCBFragment() {
                 "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
             )
         }
+    }
+
+    private fun showWebView() {
+        CookieManager.getInstance().apply {
+            setAcceptCookie(false)
+            setAcceptThirdPartyCookies(webview, false)
+        }
+        val web: WebView = webview
+        web.settings.javaScriptEnabled = true
+        web.loadUrl("$OAUTH_URL?redirect_uri=$REDIRECT_URI&response_type=code&client_id=$CLIENT_ID")
+        web.webViewClient = object : WebViewClient() {
+
+            var authComplete = false
+
+            override fun onPageFinished(view: WebView, url: String) {
+                super.onPageFinished(view, url)
+
+                if (url.contains("code=") && !authComplete) {
+                    val grantCode = Uri.parse(url).getQueryParameter("code")
+                    authComplete = true
+                } else if (url.contains("error=access_denied")) {
+                    authComplete = true
+                    web.visibility = View.GONE
+                }
+            }
+        }
+        web.visibility = View.VISIBLE
     }
 
     private fun setSecondSpan() {
