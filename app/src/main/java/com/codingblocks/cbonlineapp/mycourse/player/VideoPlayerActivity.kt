@@ -20,7 +20,6 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
@@ -31,8 +30,8 @@ import com.codingblocks.cbonlineapp.mycourse.player.notes.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.LECTURE
-import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.MediaUtils.deleteRecursive
+import com.codingblocks.cbonlineapp.util.MediaUtils.getYoutubeVideoId
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
@@ -53,9 +52,7 @@ import com.crashlytics.android.Crashlytics
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.youtube.player.YouTubeInitializationResult
-import com.google.android.youtube.player.YouTubePlayer
-import com.google.android.youtube.player.YouTubePlayerSupportFragment
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
@@ -77,30 +74,17 @@ import org.jetbrains.anko.toast
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
-import java.util.Objects
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
-    VdoPlayer.InitializationListener {
+    VdoPlayer.InitializationListener, VdoPlayerControls.FullscreenActionListener, VdoPlayerControls.ControllerVisibilityListener {
     private var isDownloaded = false
     private val viewModel by viewModel<VideoPlayerViewModel>()
-    private val fullscreenToggleListener = object : VdoPlayerControls.FullscreenActionListener {
-        override fun onFullscreenAction(enterFullscreen: Boolean): Boolean {
-            showFullScreen(enterFullscreen)
-            return true
-        }
-    }
+
     private val prefs by inject<PreferenceHelper>()
 
-    private val visibilityListener = object : VdoPlayerControls.ControllerVisibilityListener {
-        override fun onControllerVisibilityChange(visibility: Int) {
-            if (viewModel.currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-                if (visibility != View.VISIBLE) {
-                    showSystemUi(false)
-                }
-            }
-        }
-    }
+
     val progressDialog by lazy {
         ProgressDialog.progressDialog(this)
     }
@@ -124,10 +108,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             null
         )
     }
+    private var currentTimeMillis: Float = 0f
     private lateinit var playerFragment: VdoPlayerSupportFragment
     private var videoPlayer: VdoPlayer? = null
-    private var youtubePlayer: YouTubePlayer? = null
-    private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
+    private var youtubePlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -164,7 +148,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                 isDownloaded = it.contentLecture.isDownloaded
                 downloadBtn.isActivated = isDownloaded
                 viewModel.videoId = it.contentLecture.lectureId
-                youtubePlayerView.view?.visibility = View.GONE
+                youtubePlayerView.isVisible = false
                 videoContainer.visibility = View.VISIBLE
                 playerFragment =
                     supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerSupportFragment
@@ -176,13 +160,14 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                     setupVideoView()
                 }
             } else if (it.contentable == VIDEO) {
-                youtubePlayerView.view?.visibility = View.VISIBLE
+                lifecycle.addObserver(youtubePlayerView)
+                youtubePlayerView.isVisible = true
                 setYoutubePlayer(it.contentVideo.videoUrl)
             } else {
                 finish()
             }
             viewModel.bookmark.observe(this) {
-                // Dont Remove
+                // Don't Remove
                 bookmarkBtn.isActivated = if (it == null) false else it.bookmarkUid.isNotEmpty()
             }
 
@@ -312,8 +297,8 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         player.addPlaybackEventListener(playbackListener)
         playerControlView.apply {
             setPlayer(player)
-            setFullscreenActionListener(fullscreenToggleListener)
-            setControllerVisibilityListener(visibilityListener)
+            setFullscreenActionListener(this@VideoPlayerActivity)
+            setControllerVisibilityListener(this@VideoPlayerActivity)
         }
         showControls(true)
 
@@ -572,31 +557,19 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     }
 
     private fun setYoutubePlayer(youtubeUrl: String) {
-        youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
-            override fun onInitializationFailure(
-                p0: YouTubePlayer.Provider?,
-                p1: YouTubeInitializationResult?
-            ) {
+        youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onCurrentSecond(youTubePlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer, second: Float) {
+                currentTimeMillis = second
             }
 
-            override fun onInitializationSuccess(
-                p0: YouTubePlayer.Provider?,
-                youtubePlayerInstance: YouTubePlayer?,
-                p2: Boolean
-            ) {
-                if (!p2) {
-                    youtubePlayer = youtubePlayerInstance
-                    val url = if (youtubeUrl.split("=").size == 2) youtubeUrl.split("=")[1]
-                    else {
-                        MediaUtils.getYotubeVideoId(youtubeUrl)
-                    }
-                    youtubePlayerInstance?.loadVideo(url)
-                }
+            override fun onReady(player: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer) {
+                this@VideoPlayerActivity.youtubePlayer = player
+                val id = getYoutubeVideoId(youtubeUrl)
+                player.loadVideo(id, 0f)
             }
-        }
-        val youTubePlayerSupportFragment =
-            supportFragmentManager.findFragmentById(R.id.youtubePlayerView) as YouTubePlayerSupportFragment?
-        youTubePlayerSupportFragment?.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
+
+        })
+
     }
 
     override fun onBackPressed() {
@@ -677,7 +650,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                     bottomSheetSaveBtn.apply {
                         val notePos: Double? =
                             if (youtubePlayerView.isVisible)
-                                (youtubePlayer?.currentTimeMillis?.div(1000))?.toDouble()
+                                currentTimeMillis.toDouble()
                             else
                                 (videoPlayer?.currentTime?.div(1000))?.toDouble()
                         setOnClickListener {
@@ -710,5 +683,19 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     override fun onResume() {
         super.onResume()
         videoPlayer?.playWhenReady = true
+    }
+
+
+    override fun onControllerVisibilityChange(visibility: Int) {
+        if (viewModel.currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (visibility != View.VISIBLE) {
+                showSystemUi(false)
+            }
+        }
+    }
+
+    override fun onFullscreenAction(enterFullscreen: Boolean): Boolean {
+        showFullScreen(enterFullscreen)
+        return true
     }
 }

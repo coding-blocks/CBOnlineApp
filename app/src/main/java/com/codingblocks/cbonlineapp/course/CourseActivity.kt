@@ -259,7 +259,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 if (!p2) {
                     val url = if (youtubeUrl.split("=").size == 2) youtubeUrl.split("=")[1]
                     else {
-                        MediaUtils.getYotubeVideoId(youtubeUrl)
+                        MediaUtils.getYoutubeVideoId(youtubeUrl)
                     }
                     youtubePlayerInstance?.cueVideo(url)
                 }

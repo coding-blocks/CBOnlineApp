@@ -53,9 +53,7 @@ class LoginHomeFragment : BaseCBFragment() {
         }
 
         fbBtn.setOnClickListener {
-            requireContext().openChrome(
-                "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
-            )
+          showWebView()
         }
     }
 

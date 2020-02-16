@@ -30,18 +30,13 @@ object MediaUtils {
         fileOrDirectory.delete()
     }
 
-    fun getYotubeVideoId(videoUrl: String): String {
-        var vId = ""
-        // TODO fix regex pattern
-        val pattern = Pattern.compile(
-            "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$",
-            Pattern.CASE_INSENSITIVE
-        )
-        val matcher = pattern.matcher(videoUrl)
-        if (matcher.matches()) {
-            vId = matcher.group(1)
+    fun getYoutubeVideoId(videoUrl: String): String {
+        var videoId = videoUrl.split("v=")[1]
+        val ampersandPosition  = videoId.indexOf('&')
+        if(ampersandPosition != -1) {
+            videoId = videoId.substring(0, ampersandPosition);
         }
-        return vId
+        return videoId
     }
 
     fun checkPermission(context: Context): Boolean {
