@@ -15,7 +15,6 @@ import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.io.File
-import java.util.regex.Pattern
 
 object MediaUtils {
 
@@ -32,9 +31,9 @@ object MediaUtils {
 
     fun getYoutubeVideoId(videoUrl: String): String {
         var videoId = videoUrl.split("v=")[1]
-        val ampersandPosition  = videoId.indexOf('&')
-        if(ampersandPosition != -1) {
-            videoId = videoId.substring(0, ampersandPosition);
+        val ampersandPosition = videoId.indexOf('&')
+        if (ampersandPosition != -1) {
+            videoId = videoId.substring(0, ampersandPosition)
         }
         return videoId
     }

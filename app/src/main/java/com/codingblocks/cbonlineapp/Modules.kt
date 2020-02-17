@@ -45,7 +45,7 @@ val viewModelModule = module {
     viewModel { NotificationViewModel(get()) }
 
     // Activities
-    viewModel { VideoPlayerViewModel(get(), get()) }
+    viewModel { VideoPlayerViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { JobsViewModel(get()) }
     viewModel { JobDetailViewModel(get(), get()) }

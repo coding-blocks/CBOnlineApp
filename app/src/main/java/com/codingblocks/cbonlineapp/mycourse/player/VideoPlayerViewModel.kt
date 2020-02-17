@@ -17,6 +17,7 @@ import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.mycourse.player.notes.NotesWorker
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.LIVE
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.extensions.runIO
@@ -33,7 +34,8 @@ import java.util.concurrent.TimeUnit
 
 class VideoPlayerViewModel(
     private val repo: VideoPlayerRepository,
-    private val repoDoubts: DashboardDoubtsRepository
+    private val repoDoubts: DashboardDoubtsRepository,
+    val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
     var contentLength: Long = 0L
     var playWhenReady = false
@@ -45,6 +47,7 @@ class VideoPlayerViewModel(
     var videoId: String = ""
     var contentId: String = ""
     var getOtpProgress: MutableLiveData<Boolean> = MutableLiveData()
+    var isDownloaded = false
 
     val doubts = Transformations.switchMap(attemptId) {
         fetchDoubts()

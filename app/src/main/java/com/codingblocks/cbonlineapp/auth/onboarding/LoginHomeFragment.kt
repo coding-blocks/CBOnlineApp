@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.BuildConfig.CLIENT_ID
 import com.codingblocks.cbonlineapp.BuildConfig.OAUTH_URL
 import com.codingblocks.cbonlineapp.BuildConfig.REDIRECT_URI
@@ -53,7 +52,7 @@ class LoginHomeFragment : BaseCBFragment() {
         }
 
         fbBtn.setOnClickListener {
-          showWebView()
+            showWebView()
         }
     }
 
