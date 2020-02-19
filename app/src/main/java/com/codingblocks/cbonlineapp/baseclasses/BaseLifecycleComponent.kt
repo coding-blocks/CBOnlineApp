@@ -12,7 +12,7 @@ import com.crashlytics.android.core.CrashlyticsCore
  * Created by championswimmer on 2020-02-02.
  */
 interface BaseLifecycleComponent : LifecycleObserver {
-    private fun log(msg: String) {
+    fun log(msg: String) {
         if (BuildConfig.DEBUG) {
             Log.d("LIFECYCLE", msg)
         } else {
