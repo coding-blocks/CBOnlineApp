@@ -43,10 +43,8 @@ import com.codingblocks.cbonlineapp.purchases.PurchasesActivity
 import com.codingblocks.cbonlineapp.settings.AboutActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
-import com.codingblocks.cbonlineapp.util.Actions
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
-import com.codingblocks.cbonlineapp.util.EndlessService
 import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.NetworkUtils.okHttpClient
@@ -108,21 +106,6 @@ class DashboardActivity : BaseCBActivity(),
         viewModel.isLoggedIn.postValue(prefs.SP_JWT_TOKEN_KEY.isNotEmpty())
         viewModel.isLoggedIn.observe(this) {
             initializeUI(it)
-        }
-
-        startMyService()
-    }
-
-    private fun startMyService() {
-        Intent(this, EndlessService::class.java).also {
-            it.action = Actions.START.name
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                log("Starting the service in >=26 Mode")
-                startForegroundService(it)
-                return
-            }
-            log("Starting the service in < 26 Mode")
-            startService(it)
         }
     }
 

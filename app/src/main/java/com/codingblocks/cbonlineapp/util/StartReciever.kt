@@ -12,12 +12,11 @@ class StartReceiver : BroadcastReceiver() {
             Intent(context, EndlessService::class.java).also {
                 it.action = Actions.START.name
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                    log("Starting the service in >=26 Mode from a BroadcastReceiver")
                     context.startForegroundService(it)
                     return
+                } else {
+                    context.startService(it)
                 }
-//                log("Starting the service in < 26 Mode from a BroadcastReceiver")
-                context.startService(it)
             }
         }
     }

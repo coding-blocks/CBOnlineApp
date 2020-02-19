@@ -11,10 +11,16 @@ import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
+import android.util.Log
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper.log
+import com.codingblocks.cbonlineapp.util.extensions.isotomillisecond
+import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.ResultWrapper
+import com.codingblocks.onlineapi.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -27,17 +33,12 @@ class EndlessService : Service() {
     private var isServiceStarted = false
 
     override fun onBind(intent: Intent): IBinder? {
-        log("Some component want to bind with the service")
-        // We don't provide binding, so return null
         return null
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        log("onStartCommand executed with startId: $startId")
         if (intent != null) {
-            val action = intent.action
-            log("using an intent with action $action")
-            when (action) {
+            when (intent.action) {
                 Actions.START.name -> startService()
                 Actions.STOP.name -> stopService()
                 else -> log("This should never happen. No action in the received intent")
@@ -53,7 +54,6 @@ class EndlessService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        log("The service has been created".toUpperCase(Locale.ROOT))
         val notification = createNotification()
         startForeground(1, notification)
     }
@@ -75,7 +75,7 @@ class EndlessService : Service() {
         wakeLock =
             (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
                 newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "EndlessService::lock").apply {
-                    acquire(10*60*1000L /*10 minutes*/)
+                    acquire(10 * 60 * 1000L /*10 minutes*/)
                 }
             }
 
@@ -109,11 +109,26 @@ class EndlessService : Service() {
         setServiceState(this, ServiceState.STOPPED)
     }
 
-    private fun pingFakeServer() {
+    private suspend fun pingFakeServer() {
+        when (val response = safeApiCall(Dispatchers.IO) { Clients.onlineV2JsonApi.getLiveDoubts() }) {
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful)
+                    if (!body()?.get().isNullOrEmpty()) {
+                        body()?.get()?.get(0)?.apply {
+                            Log.i("Notification Worker", "CurrentTime ${System.currentTimeMillis()} AckTime ${createdAt.isotomillisecond()}")
+                            if ((System.currentTimeMillis() - createdAt.isotomillisecond()) < 900000) {
+                                val notification = createNotification()
+                                val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                                mNotificationManager.notify(1, notification)
+                            }
+                        }
+                    }
+            }
+        }
     }
 
     private fun createNotification(): Notification {
-        val notificationChannelId = "ENDLESS SERVICE CHANNEL"
+        val notificationChannelId = "DOUBT SERVICE CHANNEL"
 
         // depending on the Android API that we're dealing with we will have
         // to use a specific method to create the notification
@@ -121,10 +136,10 @@ class EndlessService : Service() {
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val channel = NotificationChannel(
                 notificationChannelId,
-                "Endless Service notifications channel",
+                "Doubts Notifications channel",
                 NotificationManager.IMPORTANCE_HIGH
             ).let {
-                it.description = "Endless Service channel"
+                it.description = "Doubts Service channel"
                 it.enableLights(true)
                 it.lightColor = Color.RED
                 it.enableVibration(true)
@@ -144,11 +159,12 @@ class EndlessService : Service() {
         ) else Notification.Builder(this)
 
         return builder
-            .setContentTitle("Endless Service")
-            .setContentText("This is your favorite endless service working")
+            .setContentTitle("New Doubts to Resolve !!!!!")
+            .setSmallIcon(R.drawable.ic_conversation)
             .setContentIntent(pendingIntent)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setTicker("Ticker text")
+            .setContentText("Students are waiting for your response.")
+            .setAutoCancel(true)
+            .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
             .setPriority(Notification.PRIORITY_HIGH) // for under android 26 compatibility
             .build()
     }
