@@ -432,6 +432,15 @@ class DashboardActivity : BaseCBActivity(),
         return true
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (intent.data != null && intent.data!!.isHierarchical) {
+            if (intent.data!!.getQueryParameter("code") != null) {
+                fetchToken(intent.data!!)
+            }
+        }
+    }
+
     fun openProfile(view: View) {
         if (prefs.SP_JWT_TOKEN_KEY.isEmpty()) {
             startActivity<LoginActivity>()
