@@ -16,7 +16,7 @@ import org.koin.core.context.GlobalContext
 
 var position: Long = 0
 
-private val notificationDao = GlobalContext.get().koin.get<NotificationDao>()
+private val notificationDao = GlobalContext().get().get<NotificationDao>()
 
 class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
 

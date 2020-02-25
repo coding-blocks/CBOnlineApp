@@ -1,11 +1,13 @@
 package com.codingblocks.cbonlineapp
 
 import android.app.Application
+import androidx.lifecycle.SavedStateHandle
 import androidx.room.Room
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtRepository
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtsViewModel
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewRepository
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewViewModel
+import com.codingblocks.cbonlineapp.auth.onboarding.AuthViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.course.CourseViewModel
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutViewModel
@@ -60,6 +62,7 @@ val viewModelModule = module {
     viewModel { CheckoutViewModel() }
     viewModel { TrackViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
+    viewModel { (handle: SavedStateHandle) -> AuthViewModel(handle) }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
