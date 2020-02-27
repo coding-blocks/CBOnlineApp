@@ -11,6 +11,7 @@ import androidx.lifecycle.OnLifecycleEvent
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
+import java.lang.Exception
 
 /**
  * @author aggarwalpulkit596
@@ -54,7 +55,13 @@ class MySMSBroadcastReceiver(val otpReceivedListener: OnSmsOTPReceivedListener) 
             val receiver = MySMSBroadcastReceiver(otpReceivedListener)
             val lifecycleObserver = object : LifecycleObserver {
                 @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-                fun unregister() = activity.unregisterReceiver(receiver)
+                fun unregister() {
+                    try {
+                        activity.unregisterReceiver(receiver)
+                    }catch (e:Exception){
+                        //Handle Error
+                    }
+                }
             }
 
             if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
