@@ -265,6 +265,7 @@
     <string name="certified">"Certified in "</string>
     <string name="certified_desc">At the end of the track, you will be job ready and can start applying for jobs!</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="logout">Logout</string>
 
 
 </resources>

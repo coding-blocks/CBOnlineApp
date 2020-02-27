@@ -216,6 +216,19 @@
             android:textSize="16sp"
             android:visibility="gone" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/logoutBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_xl"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_xl"
+            android:onClick="logout"
+            android:text="@string/logout"
+            android:textSize="16sp"
+            android:visibility="visible" />
+
 
     </LinearLayout>
 </ScrollView>

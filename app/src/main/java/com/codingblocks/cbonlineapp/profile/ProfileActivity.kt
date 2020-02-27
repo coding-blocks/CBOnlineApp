@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.JWTUtils
@@ -15,6 +16,11 @@ import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM
 import kotlinx.android.synthetic.main.activity_profile.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.jetbrains.anko.intentFor
 import org.json.JSONException
 import org.json.JSONObject
 import org.koin.android.ext.android.inject
@@ -134,5 +140,14 @@ class ProfileActivity : BaseCBActivity() {
                 }
             }
         }
+    }
+
+    fun logout(view: View) {
+        GlobalScope.launch {
+            withContext(Dispatchers.IO) { sharedPrefs.clearPrefs() }
+            startActivity(intentFor<LoginActivity>())
+            finish()
+        }
+
     }
 }
