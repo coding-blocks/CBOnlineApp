@@ -11,9 +11,15 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
+import com.codingblocks.cbonlineapp.util.extensions.observer
 import kotlinx.android.synthetic.main.fragment_social_login.*
+import org.jetbrains.anko.support.v4.intentFor
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SocialLoginFragment : Fragment() {
+
+    val vm by sharedViewModel<AuthViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,6 +45,13 @@ class SocialLoginFragment : Fragment() {
 
                 if (url.contains("code=") && !authComplete) {
                     val grantCode = Uri.parse(url).getQueryParameter("code")
+                    if (grantCode != null) {
+                        vm.fetchToken(grantCode).observer(viewLifecycleOwner) {
+                            if (it) {
+                                startActivity(intentFor<DashboardActivity>())
+                            }
+                        }
+                    }
                     authComplete = true
                 } else if (url.contains("error=access_denied")) {
                     authComplete = true

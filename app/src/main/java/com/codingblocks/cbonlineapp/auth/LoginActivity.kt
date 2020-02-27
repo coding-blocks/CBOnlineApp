@@ -11,11 +11,11 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import org.jetbrains.anko.AnkoLogger
-import org.koin.androidx.viewmodel.ext.android.stateViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : BaseCBActivity(), AnkoLogger {
 
-    val vm by stateViewModel<AuthViewModel>()
+    val vm by viewModel<AuthViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

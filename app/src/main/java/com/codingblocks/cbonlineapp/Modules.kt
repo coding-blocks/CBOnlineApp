@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp
 
 import android.app.Application
-import androidx.lifecycle.SavedStateHandle
 import androidx.room.Room
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtRepository
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtsViewModel
@@ -62,7 +61,7 @@ val viewModelModule = module {
     viewModel { CheckoutViewModel() }
     viewModel { TrackViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
-    viewModel { (handle: SavedStateHandle) -> AuthViewModel(handle) }
+    viewModel { (AuthViewModel(get())) }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
