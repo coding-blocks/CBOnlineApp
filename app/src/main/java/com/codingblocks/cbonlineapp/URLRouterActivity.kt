@@ -17,8 +17,9 @@ class URLRouterActivity : BaseCBActivity() {
     private fun fallBack(uri: Uri) {
         if (uri.pathSegments.size > 0) {
             openChrome("", uri = uri)
-        } else
-        startActivity(intentFor<DashboardActivity>())
+        } else {
+            startActivity(intentFor<DashboardActivity>())
+        }
     }
     private val sharedPrefs by inject<PreferenceHelper>()
 
@@ -32,7 +33,11 @@ class URLRouterActivity : BaseCBActivity() {
                 if (!uri.host!!.contains("online.codingblocks.com")) fallBack(uri)
 
                 val pathSegments = uri.pathSegments
-                if (pathSegments.size < 2) fallBack(uri)
+                if (pathSegments.size < 2)  {
+                    fallBack(uri)
+                    finish()
+                    return
+                }
 
                 when (pathSegments[1]) {
                     "classroom" -> openRouter(uri)
@@ -41,8 +46,8 @@ class URLRouterActivity : BaseCBActivity() {
                     "tracks" -> openRouter(uri)
                     else -> fallBack(uri)
                 }
+                finish()
             }
-
                 ?: finish()
         } else {
             fallBack(Uri.EMPTY)
