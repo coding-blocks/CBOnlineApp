@@ -8,10 +8,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.widget.LinearLayout
+import android.widget.Toast
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.DownloadBroadcastReceiver
 import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import es.voghdev.pdfviewpager.library.PDFViewPager
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter
 import kotlinx.android.synthetic.main.activity_pdf.*
@@ -20,8 +21,8 @@ import java.io.File
 
 class PdfActivity : BaseCBActivity(), AnkoLogger {
     lateinit var pdfViewPager: PDFViewPager
-    lateinit var url: String
-    lateinit var fileName: String
+    var url: String? = null
+    var fileName: String? = null
     var path: String? = null
     var isDownloaded: Boolean = false
     lateinit var receiver: DownloadBroadcastReceiver
@@ -33,6 +34,11 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
 
         url = intent.getStringExtra("fileUrl")
         fileName = intent.getStringExtra("fileName")
+
+        if (url.isNullOrEmpty() || fileName.isNullOrEmpty()) {
+            Toast.makeText(this, "Error fetching document", Toast.LENGTH_SHORT).show()
+            finish()
+        }
 
         if (MediaUtils.checkPermission(this)) {
             path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -108,7 +114,7 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
             val manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             manager.enqueue(request)
         } catch (e: java.lang.Exception) {
-            Crashlytics.log("Error Downloading Pdf: $url}")
+            FirebaseCrashlytics.getInstance().log("Error Downloading Pdf: $url}")
         }
     }
 

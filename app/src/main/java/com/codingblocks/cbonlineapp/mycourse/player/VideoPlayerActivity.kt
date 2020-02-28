@@ -47,7 +47,7 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -382,7 +382,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         override fun onLoadError(p0: VdoPlayer.VdoInitParams, p1: ErrorDescription) {
             info { p0 }
             info { p1 }
-            Crashlytics.log(
+            FirebaseCrashlytics.getInstance().log(
                 "Error Message: ${p1.errorMsg}, " +
                     "Error Code: ${p1.errorCode} , ${p1.httpStatusCode}"
             )
@@ -400,7 +400,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         override fun onError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
             info { p0 }
             info { p1 }
-            Crashlytics.log(
+            FirebaseCrashlytics.getInstance().log(
                 "Error Message: ${p1?.errorMsg}," +
                     " Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}"
             )

@@ -22,7 +22,8 @@ import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.onlineapi.Clients
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.notificationManager
@@ -98,7 +99,7 @@ class CBOnlineApp : Application() {
                     TrackActivity::class.java
             })
         } catch (e: ConcurrentModificationException) {
-            Crashlytics.log("Router not working : ${e.localizedMessage}")
+            FirebaseCrashlytics.getInstance().log("Router not working : ${e.localizedMessage}")
         }
     }
 }
