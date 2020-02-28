@@ -58,8 +58,8 @@ class MySMSBroadcastReceiver(val otpReceivedListener: OnSmsOTPReceivedListener) 
                 fun unregister() {
                     try {
                         activity.unregisterReceiver(receiver)
-                    }catch (e:Exception){
-                        //Handle Error
+                    } catch (e: Exception) {
+                        // Handle Error
                     }
                 }
             }

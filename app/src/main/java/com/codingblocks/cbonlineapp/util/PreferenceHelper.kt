@@ -97,7 +97,7 @@ class PreferenceHelper private constructor() {
         set(value) {
             prefs?.save("COURSE_FILTER_TYPE", value)
         }
-    fun clearPrefs(){
+    fun clearPrefs() {
         prefs?.edit()?.clear()?.apply()
     }
 

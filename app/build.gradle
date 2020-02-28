@@ -59,8 +59,8 @@ android {
         debug {
             signingConfig signingConfigs.debug
             minifyEnabled false
-            versionNameSuffix '-debug-version'
-            applicationIdSuffix = '.debug'
+//            versionNameSuffix '-debug-version'
+//            applicationIdSuffix = '.debug'
 
         }
         release {

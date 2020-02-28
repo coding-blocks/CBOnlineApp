@@ -30,10 +30,20 @@ object MediaUtils {
     }
 
     fun getYoutubeVideoId(videoUrl: String): String {
-        var videoId = videoUrl.split("v=")[1]
+        var videoId: String
+        val url = videoUrl.split("v=")
+        videoId = if (url.size == 1) {
+            videoUrl.split("embed/")[1]
+        } else {
+            url[1]
+        }
         val ampersandPosition = videoId.indexOf('&')
         if (ampersandPosition != -1) {
             videoId = videoId.substring(0, ampersandPosition)
+        }
+        val questionPosition = videoId.indexOf('?')
+        if (questionPosition != -1) {
+            videoId = videoId.substring(0, questionPosition)
         }
         return videoId
     }

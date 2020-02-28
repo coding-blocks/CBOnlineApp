@@ -148,6 +148,5 @@ class ProfileActivity : BaseCBActivity() {
             startActivity(intentFor<LoginActivity>())
             finish()
         }
-
     }
 }
