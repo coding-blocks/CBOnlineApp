@@ -21,13 +21,23 @@
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/login" />
 
+            <TextView
+                android:text="@string/login_with"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="80dp"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:textSize="18sp"
+                android:fontFamily="@font/gilroy_bold"
+                android:textColor="@color/orangish" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/mobileBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="100dp"
                 android:layout_marginBottom="@dimen/margin_medium"
-                android:text="@string/continue_with_mobile_number" />
+                android:text="@string/mobile_or_email" />
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -136,7 +136,8 @@
     <string name="empty_library">Your library will start showing once you enroll in any course</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
-    <string name="continue_with_mobile_number">Continue With Mobile Number</string>
+    <string name="login_with">Login with</string>
+    <string name="mobile_or_email">Mobile Number or Email ID</string>
     <string name="google">Google</string>
     <string name="facebook">Facebook</string>
     <string name="performance_graph">Performance Graph</string>
