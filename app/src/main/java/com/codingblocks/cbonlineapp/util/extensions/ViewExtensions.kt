@@ -200,9 +200,10 @@ fun Context.showDialog(
     type: String,
     cancelable: Boolean = false,
     @DrawableRes image: Int = R.drawable.ic_lock,
-    @StringRes primaryText: Int = R.string.confirm,
+    @StringRes primaryText: Int = R.string.confirmation,
     @StringRes secondaryText: Int = R.string.unavailable,
-    @StringRes buttonText: Int = R.string.ok,
+    @StringRes primaryButtonText: Int = R.string.ok,
+    @StringRes secondaryButtonText: Int = 0,
     callback: (state: Boolean) -> Unit = { }
 ) {
 
@@ -232,13 +233,23 @@ fun Context.showDialog(
                 dialogImg.setImageResource(image)
                 dialogTitle.text = context.getString(primaryText)
                 dialogDesc.text = context.getString(secondaryText)
-                primaryBtn.text = context.getString(buttonText)
+                primaryBtn.text = context.getString(primaryButtonText)
             }
         }
     }
     view.primaryBtn.setOnClickListener {
         callback(true)
         dialog.dismiss()
+    }
+    if (secondaryButtonText != 0) {
+        view.secondaryBtn.apply {
+            isVisible = true
+            setText(secondaryButtonText)
+            setOnClickListener {
+                callback(false)
+                dialog.dismiss()
+            }
+        }
     }
     dialog.apply {
         window?.setBackgroundDrawableResource(android.R.color.transparent)

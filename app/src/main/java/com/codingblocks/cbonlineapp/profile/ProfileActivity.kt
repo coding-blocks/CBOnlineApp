@@ -1,10 +1,16 @@
 package com.codingblocks.cbonlineapp.profile
 
+import android.app.ActivityManager
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.SplashActivity
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.FileUtils
@@ -12,6 +18,7 @@ import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.loadSvg
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM
@@ -143,10 +150,32 @@ class ProfileActivity : BaseCBActivity() {
     }
 
     fun logout(view: View) {
-        GlobalScope.launch {
-            withContext(Dispatchers.IO) { sharedPrefs.clearPrefs() }
-            startActivity(intentFor<LoginActivity>())
-            finish()
-        }
+        showDialog(
+            type = "Logout",
+            image = R.drawable.ic_info,
+            cancelable = false,
+            primaryText = R.string.logout_dialog_title,
+            secondaryText = R.string.logout_dialog_description,
+            primaryButtonText = R.string.confirm,
+            secondaryButtonText = R.string.cancel,
+            callback = { confirmed ->
+                if (confirmed) {
+                    GlobalScope.launch {
+                        withContext(Dispatchers.IO) {
+                            getExternalFilesDirs(null).forEach {
+                                try { it.deleteRecursively() } catch (e: Exception) {
+                                    Log.e("LOGOUT", "Error deleting files", e)
+                                }
+                            }
+                            sharedPrefs.clearPrefs()
+                        }
+                        startActivity(intentFor<SplashActivity>().apply {
+                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        })
+                    }
+                }
+            }
+        )
+
     }
 }

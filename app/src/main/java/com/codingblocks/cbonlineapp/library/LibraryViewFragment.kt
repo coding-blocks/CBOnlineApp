@@ -146,7 +146,7 @@ class LibraryViewFragment : BaseCBFragment() {
                 true,
                 R.drawable.ic_delete,
                 secondaryText = R.string.delete_confrim,
-                buttonText = R.string.confirm
+                primaryButtonText = R.string.confirmation
             ) {
 
                 when (vm.type) {

@@ -134,7 +134,6 @@
     <string name="explore_courses">Explore Courses</string>
     <string name="nothing_to_show">Nothing to show</string>
     <string name="empty_library">Your library will start showing once you enroll in any course</string>
-    <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="login_with">Login with</string>
     <string name="mobile_or_email">Mobile Number or Email ID</string>
@@ -245,11 +244,13 @@
     <string name="i_want_to_become">I want to become</string>
     <string name="choose_track">Choose Track</string>
     <string name="purchase">"You need to buy this course to access this content"</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
     <string name="wait">"Your course will start on "</string>
     <string name="expired">This section is unavailable as your course has been expired.Please buy an extension to watch your videos</string>
     <string name="unavailable">This section is unavailable on mobile, please view it on the browser instead!</string>
-    <string name="confirm">Confirmation</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="confirm">Confirm</string>
     <string name="country">Country</string>
     <string name="state">State</string>
 
@@ -267,6 +268,8 @@
     <string name="certified_desc">At the end of the track, you will be job ready and can start applying for jobs!</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="logout">Logout</string>
+    <string name="logout_dialog_title">Logout Confirmation</string>
+    <string name="logout_dialog_description">Logging out will remove all your downloaded course videos. Are you sure ?</string>
 
 
 </resources>
