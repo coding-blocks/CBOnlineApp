@@ -8,8 +8,26 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
+
+ext {
+    ankoVersion = '0.10.6'
+    room_version = "2.2.4"
+    koin_version = "2.1.0"
+    markwon_version = "4.2.1"
+    ankoLibs = [
+            // commons
+            'commons',
+            // layouts
+            'sdk25', 'appcompat-v7', 'support-v4', 'recyclerview-v7', 'constraint-layout', 'cardview-v7',
+            // coroutines
+            'sdk25-coroutines', 'appcompat-v7-coroutines', 'coroutines',
+            'design',
+            // 'percent',
+    ]
+}
+
 
 
 def YOUTUBE_KEY = System.getenv('YOUTUBE_KEY') ?: "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
@@ -59,8 +77,8 @@ android {
         debug {
             signingConfig signingConfigs.debug
             minifyEnabled false
-//            versionNameSuffix '-debug-version'
-//            applicationIdSuffix = '.debug'
+            versionNameSuffix '-debug-version'
+            applicationIdSuffix = '.debug'
 
         }
         release {
@@ -84,22 +102,6 @@ android {
     buildToolsVersion = '29.0.3'
 }
 
-ext {
-    ankoVersion = '0.10.6'
-    room_version = "2.2.4"
-    koin_version = "2.1.0"
-    markwon_version = "4.2.1"
-    ankoLibs = [
-            // commons
-            'commons',
-            // layouts
-            'sdk25', 'appcompat-v7', 'support-v4', 'recyclerview-v7', 'constraint-layout', 'cardview-v7',
-            // coroutines
-            'sdk25-coroutines', 'appcompat-v7-coroutines', 'coroutines',
-            'design',
-            // 'percent',
-    ]
-}
 spotless {
     kotlin {
         ktlint()
@@ -187,7 +189,7 @@ dependencies {
     //Firebase
     implementation 'com.google.firebase:firebase-core:17.2.2'
     implementation 'com.google.firebase:firebase-messaging:20.1.0'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.4.0'
     implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.3'
     implementation 'com.google.firebase:firebase-perf:19.0.5'
