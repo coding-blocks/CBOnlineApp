@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.profile
 import androidx.lifecycle.MutableLiveData
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
+import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.User
@@ -40,7 +41,8 @@ class ProfileViewModel(private val repo: ProfileRepository) : BaseCBViewModel() 
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
-                            res.postValue("Success")
+                            refreshToken()
+                            res.postValue("Update Succesfully")
                         }
                     else {
                         val errRes = response.value.errorBody()?.string()
@@ -54,5 +56,24 @@ class ProfileViewModel(private val repo: ProfileRepository) : BaseCBViewModel() 
             }
         }
         return res
+    }
+
+    fun refreshToken() {
+        runIO {
+            when (val response = repo.refreshToken()) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let {
+                            val jwt = it.asJsonObject.get("jwt").asString
+                            val rt = it.asJsonObject.get("refresh_token").asString
+                            repo.prefs.SP_JWT_TOKEN_KEY = jwt
+                            repo.prefs.SP_JWT_REFRESH_TOKEN = rt
+                            Clients.authJwt = jwt
+                            Clients.refreshToken = rt
+                        }
+                }
+            }
+        }
     }
 }

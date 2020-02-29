@@ -257,7 +257,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             ) {
                 youtubePlayer = youtubePlayerInstance
                 if (!p2) {
-                    val url = MediaUtils.getYoutubeVideoId(youtubeUrl)
+                    val url = if (youtubeUrl.isNotEmpty()) MediaUtils.getYoutubeVideoId(youtubeUrl) else ""
                     youtubePlayerInstance?.cueVideo(url)
                 }
             }

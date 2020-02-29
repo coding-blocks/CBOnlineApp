@@ -1,9 +1,6 @@
 package com.codingblocks.cbonlineapp.profile
 
-import android.app.ActivityManager
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,8 +8,8 @@ import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.SplashActivity
-import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
+import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
@@ -37,6 +34,7 @@ class ProfileActivity : BaseCBActivity() {
 
     private val vm by viewModel<ProfileViewModel>()
     private val sharedPrefs by inject<PreferenceHelper>()
+    val db: AppDatabase by inject()
 
     var map = HashMap<String, String>()
     val id by lazy {
@@ -167,6 +165,7 @@ class ProfileActivity : BaseCBActivity() {
                                     Log.e("LOGOUT", "Error deleting files", e)
                                 }
                             }
+                            db.clearAllTables()
                             sharedPrefs.clearPrefs()
                         }
                         startActivity(intentFor<SplashActivity>().apply {
@@ -176,6 +175,5 @@ class ProfileActivity : BaseCBActivity() {
                 }
             }
         )
-
     }
 }

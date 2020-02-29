@@ -33,7 +33,7 @@ class URLRouterActivity : BaseCBActivity() {
                 if (!uri.host!!.contains("online.codingblocks.com")) fallBack(uri)
 
                 val pathSegments = uri.pathSegments
-                if (pathSegments.size < 2)  {
+                if (pathSegments.size < 2) {
                     fallBack(uri)
                     finish()
                     return
