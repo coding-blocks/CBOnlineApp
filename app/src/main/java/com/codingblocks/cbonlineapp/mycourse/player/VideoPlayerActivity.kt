@@ -679,9 +679,11 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
     override fun onYouTubePlayerEnterFullScreen() {
         youtubePlayerView.enterFullScreen()
+        showFullScreen(true)
     }
 
     override fun onYouTubePlayerExitFullScreen() {
         youtubePlayerView.exitFullScreen()
+        showFullScreen(false)
     }
 }

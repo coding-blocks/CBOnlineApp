@@ -30,7 +30,7 @@ ext {
 
 
 
-def YOUTUBE_KEY = System.getenv('YOUTUBE_KEY') ?: "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEM7UaEt4"
+def YOUTUBE_KEY = System.getenv('YOUTUBE_KEY') ?: "AIzaSyAqdhonCxTsQ5oQ-tyNaSgDJWjEMo7UaEt4"
 def CLIENT_ID = System.getenv('CLIENT_ID') ?: "5633768694"
 def REDIRECT_URI = System.getenv('REDIRECT_URI') ?: "app://online.codingblocks.com"
 def DEBUG_REDIRECT_URI = System.getenv('REDIRECT_URI') ?: "app://online.codingblocks.xyz"
@@ -45,13 +45,13 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 101000007
+        versionCode 101000100
         // 1 (versioning scheme)
         // 00 (major version)
         // 00 (minor version)
-        // 00 (patch version)
-        // 02 spare for betas/RCs
-        versionName "1.0.0-rc07"
+        // 01 (patch version)
+        // 00 spare for betas/RCs
+        versionName "1.0.1"
         signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false
