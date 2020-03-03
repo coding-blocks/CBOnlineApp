@@ -24,6 +24,7 @@ import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
+import com.codingblocks.cbonlineapp.util.extensions.getDateForRun
 import com.codingblocks.cbonlineapp.util.extensions.getDateForTime
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
@@ -215,7 +216,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             goodiesImg.isVisible = false
         }
         mrpTv.text = "₹ ${it.mrp}"
-        batchBtn.text = it.name
+        batchBtn.text = getDateForRun(it.start)
         deadlineTv.text = "Enrollment Ends ${it.enrollmentEnd.let { it1 -> getDateForTime(it1) }}"
         mrpTv.paintFlags = mrpTv.paintFlags or
             Paint.STRIKE_THRU_TEXT_FLAG

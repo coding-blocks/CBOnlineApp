@@ -132,6 +132,16 @@ fun getDate(): String {
     return dateFormat.format(calendar.time)
 }
 
+fun getDateForRun(time: String): String {
+    val dateFormat = SimpleDateFormat("MMM yyyy", Locale.getDefault())
+    dateFormat.timeZone = TimeZone.getDefault()
+
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = time.toLong() * 1000
+    calendar.timeZone = TimeZone.getTimeZone("IST")
+    return dateFormat.format(calendar.time)
+}
+
 fun getSpannableSring(boldText: String, normalText: String): SpannableStringBuilder =
     SpannableStringBuilder()
         .bold { append(boldText) }
