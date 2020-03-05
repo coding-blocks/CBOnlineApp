@@ -54,9 +54,7 @@ class CheckoutPaymentFragment : BaseCBFragment() {
                 finalPriceTv.text =
                     "${getString(R.string.rupee_sign)} ${json["totalAmount"].asString}"
                 walletBal.text =
-                    "${getString(R.string.rupee_sign)} ${json?.get("user")?.asJsonObject?.get("wallet_amount")?.asInt?.div(
-                        100
-                    )
+                    "${getString(R.string.rupee_sign)} ${json?.get("user")?.asJsonObject?.get("wallet_amount")?.asInt?.div(100)
                         ?: 0}"
 
                 payBtn.setOnClickListener {

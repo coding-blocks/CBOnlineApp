@@ -170,8 +170,6 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
                 QuizResultFragment(),
                 "result",
                 containerViewId = R.id.quizContainer,
-                enterAnimation = R.animator.slide_in_right,
-                exitAnimation = R.animator.slide_out_left,
                 addToStack = true
             )
         }
