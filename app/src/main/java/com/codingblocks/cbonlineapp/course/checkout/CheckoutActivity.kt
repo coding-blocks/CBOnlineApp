@@ -65,10 +65,10 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if(item.itemId == android.R.id.home){
+        return if (item.itemId == android.R.id.home) {
             onBackPressed()
             true
-        }else{
+        } else {
             super.onOptionsItemSelected(item)
         }
     }

@@ -46,7 +46,7 @@ class QuizResultFragment : BaseCBFragment() {
 //        })
 
         quizResultGoBackBtn.setOnClickListener {
-            replaceFragmentSafely(QuizFragment(),containerViewId =  R.id.quizContainer)
+            replaceFragmentSafely(QuizFragment(), containerViewId = R.id.quizContainer)
         }
     }
 }

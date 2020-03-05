@@ -11,6 +11,7 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.google.gson.JsonObject
 import com.razorpay.Checkout
 import kotlinx.android.synthetic.main.fragment_checkout_payment.*
+import org.jetbrains.anko.design.snackbar
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -32,24 +33,30 @@ class CheckoutPaymentFragment : BaseCBFragment() {
             vm.map["applyCredits"] = vm.map["applyCredits"] != "true"
             payBtn.isEnabled = false
             vm.updateCart()
-            vm.getCart()
         }
         numberLayout.setEndIconOnClickListener {
             vm.map["coupon"] = numberLayout.editText?.text.toString()
             payBtn.isEnabled = false
             vm.updateCart()
-            vm.getCart()
         }
         vm.cart.observer(viewLifecycleOwner) { json ->
             json.getAsJsonArray("cartItems")?.get(0)?.asJsonObject?.run {
                 payBtn.isEnabled = true
                 val credits = get("credits_used")?.asInt?.div(100) ?: 0
                 if (credits != 0) {
+                    rootPayment.snackbar("Credits Applied Successfully")
                     vm.map["applyCredits"] = true.toString()
                 } else {
+                    rootPayment.snackbar("Credits Removed")
                     vm.map["applyCredits"] = false.toString()
                 }
                 creditsTv.text = "- ${getString(R.string.rupee_sign)} $credits"
+
+                if (credits == 0)
+                    useBalance.text = "Use Wallet Balance"
+                else {
+                    useBalance.text = "Remove Wallet Balance"
+                }
                 totalTv.text = "${getString(R.string.rupee_sign)} ${json["totalAmount"].asString}"
                 finalPriceTv.text =
                     "${getString(R.string.rupee_sign)} ${json["totalAmount"].asString}"

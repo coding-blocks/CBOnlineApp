@@ -42,6 +42,7 @@ class CheckoutViewModel : BaseCBViewModel() {
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
                         cart.postValue(body())
+                        getCart()
                     } else {
                         setError(fetchError(code()))
                     }

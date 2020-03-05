@@ -147,7 +147,7 @@ fun <F : Fragment> F.replaceFragmentSafely(
 ) {
     val ft = fragmentManager!!
         .beginTransaction()
-        .setCustomAnimations(enterAnimation,exitAnimation,
+        .setCustomAnimations(enterAnimation, exitAnimation,
             popEnterAnimation, popExitAnimation)
         .replace(containerViewId, fragment, tag)
     if (addToStack) {
