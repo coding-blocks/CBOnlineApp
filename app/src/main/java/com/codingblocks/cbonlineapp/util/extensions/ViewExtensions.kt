@@ -139,15 +139,16 @@ fun <F : Fragment> F.replaceFragmentSafely(
     tag: String = "",
     allowStateLoss: Boolean = false,
     @IdRes containerViewId: Int,
-    @AnimatorRes enterAnimation: Int = R.animator.slide_in_right,
+    @AnimatorRes enterAnimation: Int = R.animator.slide_in_left,
     @AnimatorRes exitAnimation: Int = R.animator.slide_out_left,
-    @AnimRes popEnterAnimation: Int = 0,
-    @AnimRes popExitAnimation: Int = 0,
+    @AnimatorRes popEnterAnimation: Int = R.animator.slide_out_right,
+    @AnimatorRes popExitAnimation: Int = R.animator.slide_in_right,
     addToStack: Boolean = true
 ) {
     val ft = fragmentManager!!
         .beginTransaction()
-        .setCustomAnimations(enterAnimation, exitAnimation, popEnterAnimation, popExitAnimation)
+        .setCustomAnimations(enterAnimation,exitAnimation,
+            popEnterAnimation, popExitAnimation)
         .replace(containerViewId, fragment, tag)
     if (addToStack) {
         ft.addToBackStack(tag)
