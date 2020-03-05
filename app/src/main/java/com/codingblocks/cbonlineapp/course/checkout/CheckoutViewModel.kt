@@ -27,6 +27,7 @@ class CheckoutViewModel : BaseCBViewModel() {
                     if (isSuccessful) {
                         cart.postValue(body())
                     } else {
+                        cart.postValue(null)
                         setError(fetchError(code()))
                     }
                 }

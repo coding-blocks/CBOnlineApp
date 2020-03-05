@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.loadSvg
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.google.android.material.snackbar.Snackbar
@@ -44,6 +45,7 @@ class ProfileActivity : BaseCBActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+        setToolbar(profileToolbar)
         updateViews(false)
         vm.fetchUser().observer(this) {
             graduation.setText(it.graduationyear)

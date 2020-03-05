@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.course.checkout
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
@@ -61,5 +62,14 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultListener {
          *       amount: 2394723 (paise)
          *  }
          */
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if(item.itemId == android.R.id.home){
+            onBackPressed()
+            true
+        }else{
+            super.onOptionsItemSelected(item)
+        }
     }
 }

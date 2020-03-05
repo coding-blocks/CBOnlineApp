@@ -83,6 +83,7 @@
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".course.checkout.CheckoutActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".dashboard.DashboardActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity

@@ -32,6 +32,7 @@ import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Tags
@@ -193,9 +194,14 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             buyBtn.isEnabled = true
             startActivity<CheckoutActivity>()
         }
-        viewModel.enrollTrialProgress.observeOnce {
-            startActivity<DashboardActivity>()
-            finish()
+        viewModel.enrollTrialProgress.observeOnce { status ->
+            if (status){
+                startActivity<DashboardActivity>()
+                finish()
+            }else{
+
+            }
+
         }
 
         viewAllTv.setOnClickListener {
