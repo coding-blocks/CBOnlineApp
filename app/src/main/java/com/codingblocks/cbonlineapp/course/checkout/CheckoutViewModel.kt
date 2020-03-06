@@ -44,7 +44,7 @@ class CheckoutViewModel : BaseCBViewModel() {
                         cart.postValue(body())
                         getCart()
                     } else {
-                        setError(fetchError(code()))
+                        errorBody()?.string()?.let { setError(it) } ?: setError(fetchError(code()))
                     }
                 }
             }

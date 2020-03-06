@@ -55,7 +55,6 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultListener {
         // To change body of created functions use File | Settings | File Templates.
         /** Make Network call to capture payment.
          *  Body : {
-         *
          *       razorpay_payment_id: payment_ksdnvsdlv,
          *       razorpay_order_id: order_ijkdbsn,
          *       txnId: 192721,

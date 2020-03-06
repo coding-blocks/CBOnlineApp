@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -34,10 +35,14 @@ class CheckoutPaymentFragment : BaseCBFragment() {
             payBtn.isEnabled = false
             vm.updateCart()
         }
-        numberLayout.setEndIconOnClickListener {
-            vm.map["coupon"] = numberLayout.editText?.text.toString()
+        errorDrawableTv.setOnClickListener {
+            vm.map["coupon"] = ""
+            vm.map.remove("applyCredits")
             payBtn.isEnabled = false
             vm.updateCart()
+        }
+        vm.errorLiveData.observer(viewLifecycleOwner) {
+            rootPayment.snackbar(it)
         }
         vm.cart.observer(viewLifecycleOwner) { json ->
             json.getAsJsonArray("cartItems")?.get(0)?.asJsonObject?.run {
@@ -45,10 +50,17 @@ class CheckoutPaymentFragment : BaseCBFragment() {
                 val credits = get("credits_used")?.asInt?.div(100) ?: 0
                 if (credits != 0) {
                     rootPayment.snackbar("Credits Applied Successfully")
-                    vm.map["applyCredits"] = true.toString()
+                    vm.map["applyCredits"] = true
                 } else {
                     rootPayment.snackbar("Credits Removed")
-                    vm.map["applyCredits"] = false.toString()
+                    vm.map["applyCredits"] = false
+                }
+                get("coupon_code")?.let {
+                    numberLayout.editText?.setText(it.asString)
+                    vm.map["coupon"] = it.asString
+                    errorDrawableTv.isVisible = true
+                } ?: run {
+                    errorDrawableTv.isVisible = false
                 }
                 creditsTv.text = "- ${getString(R.string.rupee_sign)} $credits"
 
