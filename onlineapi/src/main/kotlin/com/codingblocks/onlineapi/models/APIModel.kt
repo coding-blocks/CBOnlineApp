@@ -288,9 +288,6 @@ data class Note(
     constructor(duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent)
         : this(duration, null, null, text, runAttemptId, contentId)
 
-    fun serializeToJson(): String {
-        return Gson().toJson(this)
-    }
 }
 
 @Type("users", "user")
