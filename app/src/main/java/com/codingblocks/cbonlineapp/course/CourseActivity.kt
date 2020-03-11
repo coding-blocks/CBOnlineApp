@@ -189,7 +189,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
 
         courseCardListAdapter.onItemClick = itemClickListener
 
-        viewModel.addedToCartProgress.observeOnce {
+        viewModel.addedToCartProgress.observer(this) {
             buyBtn.isEnabled = true
             startActivity<CheckoutActivity>()
         }

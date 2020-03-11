@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
+import androidx.core.widget.addTextChangedListener
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -32,26 +32,36 @@ class CheckoutPaymentFragment : BaseCBFragment() {
         vm.getCart()
         super.onViewCreated(view, savedInstanceState)
         useBalance.setOnClickListener {
-            vm.map["applyCredits"] = vm.map["applyCredits"] != "true"
+            vm.map["applyCredits"] = !vm.creditsApplied
             payBtn.isEnabled = false
             vm.updateCart()
         }
 
         errorDrawableTv.setOnClickListener {
             if (errorDrawableTv.text == "Apply Coupon") {
-                vm.map["coupon"] = errorDrawableTv.text.toString()
+                vm.map["coupon"] = numberLayout.editText?.text.toString()
             } else {
                 vm.map["coupon"] = ""
+                vm.map["coupon_id"] = vm.couponApplied
+                vm.map["cart_id"] = vm.cartId
             }
             payBtn.isEnabled = false
             vm.updateCart()
         }
         vm.errorLiveData.observer(viewLifecycleOwner) {
+            if (it.contains("coupon")) {
+                vm.map.remove("coupon")
+                if (it.contains("credits")) {
+                    vm.map.remove("applyCredits")
+                }
+            } else if (it.contains("credits")) {
+                vm.map.remove("applyCredits")
+            }
             payBtn.isEnabled = true
             rootPayment.snackbar(it)
         }
-        numberLayout.editText?.doOnTextChanged { text, start, count, after ->
-            if (count >= 3) {
+        numberLayout.editText?.addTextChangedListener {
+            if (it != null && it.length >= 3) {
                 errorDrawableTv.apply {
                     isVisible = true
                     setText("Apply Coupon")
@@ -59,21 +69,35 @@ class CheckoutPaymentFragment : BaseCBFragment() {
             }
         }
         vm.cart.observer(viewLifecycleOwner) { json ->
+            vm.map.remove("applyCredits")
+            vm.map.remove("coupon")
+            vm.map.remove("coupon_id")
+            vm.map.remove("cart_id")
             json.getAsJsonArray("cartItems")?.get(0)?.asJsonObject?.run {
                 payBtn.isEnabled = true
+                vm.cartId = get("id").asString
                 val credits = get("credits_used")?.asInt?.div(100) ?: 0
                 if (credits != 0) {
-                    rootPayment.snackbar("Credits Applied Successfully")
-                    vm.map["applyCredits"] = true
+                    if (!vm.creditsApplied)
+                        rootPayment.snackbar("Credits Applied Successfully")
+                    vm.creditsApplied = true
                 } else {
-                    rootPayment.snackbar("Credits Removed")
-                    vm.map["applyCredits"] = false
+                    if (vm.creditsApplied)
+                        rootPayment.snackbar("Credits Removed")
+                    vm.creditsApplied = false
                 }
                 get("coupon_code")?.let {
                     numberLayout.editText?.setText(it.asString)
-                    vm.map["coupon"] = it.asString
-                    errorDrawableTv.isVisible = true
+                    vm.couponApplied = get("coupon_id").asString
+                    couponDiscount.text = "- ${getString(R.string.rupee_sign)} ${get("discount")?.asInt?.div(100)}"
+                    errorDrawableTv.apply {
+                        isVisible = true
+                        text = "Remove Coupon"
+                    }
                 } ?: run {
+                    couponDiscount.text = "- ${getString(R.string.rupee_sign)} 0"
+
+                    numberLayout.editText?.setText("")
                     errorDrawableTv.isVisible = false
                 }
                 creditsTv.text = "- ${getString(R.string.rupee_sign)} $credits"
