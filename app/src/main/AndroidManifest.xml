@@ -212,17 +212,18 @@
             android:name=".admin.doubts.DoubtReceiver"
             android:enabled="true"
             android:exported="false" />
-        <receiver android:enabled="true" android:name=".util.StartReceiver">
+        <receiver
+            android:enabled="true"
+            android:name=".util.StartReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
         <service
             android:name=".util.EndlessService"
             android:enabled="true"
-            android:exported="false">
-        </service>
+            android:exported="false"></service>
     </application>
 
 </manifest>

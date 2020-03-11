@@ -33,6 +33,7 @@ class CBOnlineApp : Application() {
 
     companion object {
         lateinit var mInstance: CBOnlineApp
+
         @JvmStatic
         var appContext: Context? = null
             private set

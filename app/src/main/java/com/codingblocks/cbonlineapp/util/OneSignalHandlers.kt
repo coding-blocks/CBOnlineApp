@@ -42,13 +42,13 @@ class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
         val url = notification.payload.launchURL
         val videoId = data.optString(VIDEO_ID) ?: ""
         notificationDao.insertWithId(
-            Notification(
-                heading = title,
-                body = body,
-                url = url,
-                videoId = videoId
+                Notification(
+                    heading = title,
+                    body = body,
+                    url = url,
+                    videoId = videoId
+                )
             )
-        )
             .also {
                 position = it
 

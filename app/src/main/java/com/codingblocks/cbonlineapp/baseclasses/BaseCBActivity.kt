@@ -32,7 +32,7 @@ abstract class BaseCBActivity : AppCompatActivity(), BaseLifecycleComponent {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         topView = inflater.inflate(R.layout.offline_page, null)
         topView.offlineBtn.setOnClickListener {
-            //check connectivity
+            // check connectivity
             topView.isVisible = false
         }
         addContentView(topView, ViewGroup.LayoutParams(LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,

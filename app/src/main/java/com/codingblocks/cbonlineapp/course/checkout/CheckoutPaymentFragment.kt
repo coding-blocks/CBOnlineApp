@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -35,14 +36,27 @@ class CheckoutPaymentFragment : BaseCBFragment() {
             payBtn.isEnabled = false
             vm.updateCart()
         }
+
         errorDrawableTv.setOnClickListener {
-            vm.map["coupon"] = ""
-            vm.map.remove("applyCredits")
+            if (errorDrawableTv.text == "Apply Coupon") {
+                vm.map["coupon"] = errorDrawableTv.text.toString()
+            } else {
+                vm.map["coupon"] = ""
+            }
             payBtn.isEnabled = false
             vm.updateCart()
         }
         vm.errorLiveData.observer(viewLifecycleOwner) {
+            payBtn.isEnabled = true
             rootPayment.snackbar(it)
+        }
+        numberLayout.editText?.doOnTextChanged { text, start, count, after ->
+            if (count >= 3) {
+                errorDrawableTv.apply {
+                    isVisible = true
+                    setText("Apply Coupon")
+                }
+            }
         }
         vm.cart.observer(viewLifecycleOwner) { json ->
             json.getAsJsonArray("cartItems")?.get(0)?.asJsonObject?.run {

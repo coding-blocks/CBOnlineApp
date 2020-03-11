@@ -87,9 +87,9 @@ val databaseModule = module {
 
     single {
         Room.databaseBuilder(
-            androidApplication(),
-            AppDatabase::class.java, "online-app-database"
-        )
+                androidApplication(),
+                AppDatabase::class.java, "online-app-database"
+            )
             .fallbackToDestructiveMigration()
             .build()
     }

@@ -43,6 +43,7 @@ data class ContentModel(
 
     @Ignore
     var sectionId: String = ""
+
     @Ignore
     var premium: Boolean = true
 }

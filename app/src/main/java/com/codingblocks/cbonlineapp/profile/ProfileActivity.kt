@@ -163,7 +163,9 @@ class ProfileActivity : BaseCBActivity() {
                     GlobalScope.launch {
                         withContext(Dispatchers.IO) {
                             getExternalFilesDirs(null).forEach {
-                                try { it.deleteRecursively() } catch (e: Exception) {
+                                try {
+                                    it.deleteRecursively()
+                                } catch (e: Exception) {
                                     Log.e("LOGOUT", "Error deleting files", e)
                                 }
                             }

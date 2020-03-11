@@ -11,7 +11,6 @@ import androidx.lifecycle.OnLifecycleEvent
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
-import java.lang.Exception
 
 /**
  * @author aggarwalpulkit596

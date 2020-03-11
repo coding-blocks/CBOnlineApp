@@ -92,5 +92,4 @@ class VideoPlayerRepository(
     fun getBookmark(contentId: String) = bookmarkDao.getBookmarkById(contentId)
 
     suspend fun updateDownload(status: Int, lectureId: String) = contentDao.updateContentWithVideoId(lectureId, status)
-
 }

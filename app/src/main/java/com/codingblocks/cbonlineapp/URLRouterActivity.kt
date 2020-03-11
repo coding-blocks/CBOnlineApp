@@ -21,6 +21,7 @@ class URLRouterActivity : BaseCBActivity() {
             startActivity(intentFor<DashboardActivity>())
         }
     }
+
     private val sharedPrefs by inject<PreferenceHelper>()
 
     override fun onCreate(savedInstanceState: Bundle?) {

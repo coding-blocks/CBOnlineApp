@@ -75,7 +75,7 @@ import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
-import java.util.*
+import java.util.Objects
 import java.util.concurrent.TimeUnit
 
 class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
@@ -646,24 +646,30 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                         hint = "Add a note here"
                     }
                     bottomSheetSaveBtn.apply {
+
                         val notePos: Double? =
                             if (youtubePlayerView.isVisible)
                                 tracker.currentSecond.toDouble()
                             else
                                 (videoPlayer?.currentTime?.div(1000))?.toDouble()
                         setOnClickListener {
-                            val note = Note(
-                                notePos
-                                    ?: 0.0,
-                                sheetDialog.bottoSheetDescTv.text.toString(),
-                                RunAttempts(
-                                    vm.attemptId.value
-                                        ?: ""
-                                ),
-                                LectureContent(vm.contentId)
-                            )
-                            vm.createNote(note)
-                            dialog.dismiss()
+                            val desc = sheetDialog.bottoSheetDescTv.text.toString()
+                            if (desc.isEmpty()) {
+                                toast("Note cannot be empty!!")
+                            } else {
+                                val note = Note(
+                                    notePos
+                                        ?: 0.0,
+                                    sheetDialog.bottoSheetDescTv.text.toString(),
+                                    RunAttempts(
+                                        vm.attemptId.value
+                                            ?: ""
+                                    ),
+                                    LectureContent(vm.contentId)
+                                )
+                                vm.createNote(note)
+                                dialog.dismiss()
+                            }
                         }
                         text = "Save"
                     }

@@ -9,7 +9,7 @@
         android:id="@+id/imgView"
         android:visibility="gone"
         android:layout_marginStart="@dimen/margin_large"
-        android:layout_height="40dp"/>
+        android:layout_height="40dp" />
 
     <TextView
         android:id="@+id/textView"

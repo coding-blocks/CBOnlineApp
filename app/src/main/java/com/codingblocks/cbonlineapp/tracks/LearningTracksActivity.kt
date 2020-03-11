@@ -74,7 +74,7 @@ class LearningTracksActivity : BaseCBActivity() {
         needHelp.setOnClickListener {
             showHelpDialog(type = "Track") { b: Boolean, name: String, number: String ->
                 vm.generateLead(name, number)
-                root.showSnackbar("Your response has been submitted successfully",action = false)
+                root.showSnackbar("Your response has been submitted successfully", action = false)
             }
         }
 

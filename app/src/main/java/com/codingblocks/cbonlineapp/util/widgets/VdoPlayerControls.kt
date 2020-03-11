@@ -69,6 +69,7 @@ class VdoPlayerControls @JvmOverloads constructor(
     private val seekBar: SeekBar
     private val speedControlButton: ImageButton
     private val backButton: ImageButton
+
     //    private val captionsButton: ImageButton
 //    private val qualityButton: ImageButton
     private val enterFullscreenButton: ImageButton

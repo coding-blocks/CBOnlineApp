@@ -31,12 +31,16 @@ data class SectionModel(
 
     @Ignore
     var idList = ArrayList<String>()
+
     @Ignore
     var totalContent = 0
+
     @Ignore
     var completedContent = 0
+
     @Ignore
     var totalTime = 0L
+
     @Ignore
     var pos = 0
 }

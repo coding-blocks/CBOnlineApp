@@ -30,10 +30,6 @@ import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_sign_in.*
-import kotlinx.android.synthetic.main.fragment_sign_in.numberDesc
-import kotlinx.android.synthetic.main.fragment_sign_in.numberTitle
-import kotlinx.android.synthetic.main.fragment_sign_in.proceedBtn
-import kotlinx.android.synthetic.main.fragment_sign_up.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -181,6 +177,7 @@ class SignInFragment : BaseCBFragment() {
             sharedPrefs.SP_JWT_REFRESH_TOKEN = this
         }
     }
+
     override fun onResume() {
         super.onResume()
         requireView().viewTreeObserver
