@@ -39,7 +39,8 @@ interface SectionWithContentsDao {
         ORDER BY s."sectionOrder", sc."order" LIMIT 1;
         """)
     fun resumeCourse(attemptId: String): LiveData<SectionContentHolder.NextContent>
-//
+
+    //
     @Query("""
         SELECT s.* FROM SectionModel s,ContentModel c 
 	    WHERE s.attemptId = :attemptId AND progress = "UNDONE"

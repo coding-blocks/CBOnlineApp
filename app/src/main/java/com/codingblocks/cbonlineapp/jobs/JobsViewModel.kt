@@ -2,7 +2,7 @@ package com.codingblocks.cbonlineapp.jobs
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.jobs.jobdetails.JobRepository
 import com.codingblocks.cbonlineapp.util.extensions.runIO
@@ -11,8 +11,7 @@ import com.codingblocks.onlineapi.fetchError
 
 class JobsViewModel(
     private val repo: JobRepository
-) : ViewModel() {
-    var errorLiveData: MutableLiveData<String> = MutableLiveData()
+) : BaseCBViewModel() {
     var type: MutableLiveData<String> = MutableLiveData()
 //
 //    var searchFilters = FilterData()
@@ -42,10 +41,6 @@ class JobsViewModel(
             }
         }
         return repo.getJobs()
-    }
-
-    private fun setError(error: String) {
-        errorLiveData.postValue(error)
     }
 
     fun getFilteredList() {

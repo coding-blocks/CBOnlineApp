@@ -1,12 +1,12 @@
 package com.codingblocks.cbonlineapp.mycourse.leaderboard
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Leaderboard
 
-class LeaderboardViewModel : ViewModel() {
+class LeaderboardViewModel : BaseCBViewModel() {
 
     var leaderboard: MutableLiveData<List<Leaderboard>> = MutableLiveData()
 

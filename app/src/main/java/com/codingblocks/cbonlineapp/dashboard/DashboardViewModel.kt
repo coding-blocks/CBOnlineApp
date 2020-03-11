@@ -2,7 +2,7 @@ package com.codingblocks.cbonlineapp.dashboard
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
@@ -21,7 +21,7 @@ class DashboardViewModel(
     private val homeRepo: DashboardHomeRepository,
     private val exploreRepo: CourseRepository,
     private val myCourseRepo: DashboardMyCoursesRepository
-) : ViewModel() {
+) : BaseCBViewModel() {
     var courseFilter = MutableLiveData<String>()
     var isLoggedIn: MutableLiveData<Boolean> = MutableLiveData()
     var suggestedCourses = MutableLiveData<List<Course>>()
@@ -48,7 +48,6 @@ class DashboardViewModel(
     val purchasedRuns by lazy {
         myCourseRepo.getPurchasedRuns()
     }
-    var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
     val user by lazy {
         Transformations.switchMap(isLoggedIn) {
@@ -59,6 +58,26 @@ class DashboardViewModel(
     fun fetchToken(grantCode: String) {
         runIO {
             when (val response = homeRepo.getToken(grantCode)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let {
+                            val jwt = it.asJsonObject.get("jwt").asString
+                            val rt = it.asJsonObject.get("refresh_token").asString
+                            homeRepo.prefs.SP_JWT_TOKEN_KEY = jwt
+                            homeRepo.prefs.SP_JWT_REFRESH_TOKEN = rt
+                            Clients.authJwt = jwt
+                            Clients.refreshToken = rt
+                            isLoggedIn.postValue(true)
+                        }
+                }
+            }
+        }
+    }
+
+    fun refreshToken() {
+        runIO {
+            when (val response = homeRepo.refreshToken()) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
@@ -174,9 +193,5 @@ class DashboardViewModel(
                 }
             }
         }
-    }
-
-    private fun setError(error: String) {
-        errorLiveData.postValue(error)
     }
 }

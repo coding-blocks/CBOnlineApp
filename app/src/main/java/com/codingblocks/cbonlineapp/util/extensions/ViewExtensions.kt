@@ -49,7 +49,8 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.dialog.view.*
 import kotlinx.android.synthetic.main.dialog.view.primaryBtn
-import kotlinx.android.synthetic.main.dialog_help.view.*
+import kotlinx.android.synthetic.main.dialog_help.view.mobile
+import kotlinx.android.synthetic.main.dialog_help.view.nameLayout
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.layoutInflater
 import kotlin.math.hypot
@@ -138,15 +139,16 @@ fun <F : Fragment> F.replaceFragmentSafely(
     tag: String = "",
     allowStateLoss: Boolean = false,
     @IdRes containerViewId: Int,
-    @AnimatorRes enterAnimation: Int = R.animator.slide_in_right,
+    @AnimatorRes enterAnimation: Int = R.animator.slide_in_left,
     @AnimatorRes exitAnimation: Int = R.animator.slide_out_left,
-    @AnimRes popEnterAnimation: Int = 0,
-    @AnimRes popExitAnimation: Int = 0,
+    @AnimatorRes popEnterAnimation: Int = R.animator.slide_out_right,
+    @AnimatorRes popExitAnimation: Int = R.animator.slide_in_right,
     addToStack: Boolean = true
 ) {
     val ft = fragmentManager!!
         .beginTransaction()
-        .setCustomAnimations(enterAnimation, exitAnimation, popEnterAnimation, popExitAnimation)
+        .setCustomAnimations(enterAnimation, exitAnimation,
+            popEnterAnimation, popExitAnimation)
         .replace(containerViewId, fragment, tag)
     if (addToStack) {
         ft.addToBackStack(tag)
@@ -174,7 +176,7 @@ private fun Float.toDp(): Float {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, CBOnlineApp.appContext?.displayMetrics)
 }
 
-fun View.showSnackbar(message: String, length: Int, anchorView: FabNavigation? = null, action: Boolean = true, actionText: String = "Retry", callback: () -> Unit = { }): Snackbar {
+fun View.showSnackbar(message: String, length: Int = Snackbar.LENGTH_SHORT, anchorView: FabNavigation? = null, action: Boolean = true, actionText: String = "Retry", callback: () -> Unit = { }): Snackbar {
     val snackBarView = Snackbar.make(this, message, length)
     val params = snackBarView.view.layoutParams as ViewGroup.MarginLayoutParams
     params.setMargins(params.leftMargin,
@@ -199,9 +201,10 @@ fun Context.showDialog(
     type: String,
     cancelable: Boolean = false,
     @DrawableRes image: Int = R.drawable.ic_lock,
-    @StringRes primaryText: Int = R.string.confirm,
+    @StringRes primaryText: Int = R.string.confirmation,
     @StringRes secondaryText: Int = R.string.unavailable,
-    @StringRes buttonText: Int = R.string.ok,
+    @StringRes primaryButtonText: Int = R.string.ok,
+    @StringRes secondaryButtonText: Int = 0,
     callback: (state: Boolean) -> Unit = { }
 ) {
 
@@ -231,13 +234,23 @@ fun Context.showDialog(
                 dialogImg.setImageResource(image)
                 dialogTitle.text = context.getString(primaryText)
                 dialogDesc.text = context.getString(secondaryText)
-                primaryBtn.text = context.getString(buttonText)
+                primaryBtn.text = context.getString(primaryButtonText)
             }
         }
     }
     view.primaryBtn.setOnClickListener {
         callback(true)
         dialog.dismiss()
+    }
+    if (secondaryButtonText != 0) {
+        view.secondaryBtn.apply {
+            isVisible = true
+            setText(secondaryButtonText)
+            setOnClickListener {
+                callback(false)
+                dialog.dismiss()
+            }
+        }
     }
     dialog.apply {
         window?.setBackgroundDrawableResource(android.R.color.transparent)
@@ -247,7 +260,7 @@ fun Context.showDialog(
     }
 }
 
-fun Context.openChrome(url: String, newTask: Boolean = false) {
+fun Context.openChrome(url: String, newTask: Boolean = false, uri: Uri = Uri.EMPTY) {
     val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         CustomTabsIntent.Builder()
             .enableUrlBarHiding()
@@ -265,7 +278,11 @@ fun Context.openChrome(url: String, newTask: Boolean = false) {
     if (newTask) {
         customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
     }
-    customTabsIntent.launchUrl(this, Uri.parse(url))
+    if (uri.pathSegments.size > 0) {
+        customTabsIntent.launchUrl(this, uri)
+    } else {
+        customTabsIntent.launchUrl(this, Uri.parse(url))
+    }
 }
 
 fun View.animateVisibility(visible: Int) {

@@ -19,8 +19,12 @@ import com.codingblocks.cbonlineapp.util.extensions.getDurationBreakdown
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
-import kotlinx.android.synthetic.main.item_bookmark.view.*
-import kotlinx.android.synthetic.main.item_download.view.*
+import kotlinx.android.synthetic.main.item_bookmark.view.bookmarkSubtitleTv
+import kotlinx.android.synthetic.main.item_bookmark.view.bookmarkTimeTv
+import kotlinx.android.synthetic.main.item_bookmark.view.bookmarkTitleTv
+import kotlinx.android.synthetic.main.item_download.view.downloadArwBtn
+import kotlinx.android.synthetic.main.item_download.view.downloadSubtitleTv
+import kotlinx.android.synthetic.main.item_download.view.downloadTitleTv
 import kotlinx.android.synthetic.main.item_note.view.*
 import kotlinx.android.synthetic.main.item_note.view.selectionImg
 import kotlinx.android.synthetic.main.item_note_player.view.*

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
+import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_quiz_result.*
 
 class QuizResultFragment : BaseCBFragment() {
@@ -45,17 +46,7 @@ class QuizResultFragment : BaseCBFragment() {
 //        })
 
         quizResultGoBackBtn.setOnClickListener {
-            val fragmentManager = fragmentManager!!
-            val fragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.setCustomAnimations(
-                R.animator.slide_in_right,
-                R.animator.slide_out_left
-            )
-            fragmentTransaction.replace(
-                R.id.quizContainer,
-                QuizFragment()
-            )
-            fragmentTransaction.commit()
+            replaceFragmentSafely(QuizFragment(), containerViewId = R.id.quizContainer)
         }
     }
 }

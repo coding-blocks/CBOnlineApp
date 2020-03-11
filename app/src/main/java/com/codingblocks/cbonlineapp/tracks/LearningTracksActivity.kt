@@ -21,6 +21,7 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showHelpDialog
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.models.Professions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.activity_learning_tracks.*
@@ -73,6 +74,7 @@ class LearningTracksActivity : BaseCBActivity() {
         needHelp.setOnClickListener {
             showHelpDialog(type = "Track") { b: Boolean, name: String, number: String ->
                 vm.generateLead(name, number)
+                root.showSnackbar("Your response has been submitted successfully", action = false)
             }
         }
 

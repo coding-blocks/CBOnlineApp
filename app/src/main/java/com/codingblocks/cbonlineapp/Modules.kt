@@ -6,6 +6,7 @@ import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtRepository
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtsViewModel
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewRepository
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewViewModel
+import com.codingblocks.cbonlineapp.auth.onboarding.AuthViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.course.CourseViewModel
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutViewModel
@@ -28,6 +29,8 @@ import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizRepository
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
 import com.codingblocks.cbonlineapp.notifications.NotificationViewModel
+import com.codingblocks.cbonlineapp.profile.ProfileRepository
+import com.codingblocks.cbonlineapp.profile.ProfileViewModel
 import com.codingblocks.cbonlineapp.settings.SettingsViewModel
 import com.codingblocks.cbonlineapp.tracks.TrackViewModel
 import com.codingblocks.cbonlineapp.tracks.TracksRepository
@@ -43,7 +46,7 @@ val viewModelModule = module {
     viewModel { NotificationViewModel(get()) }
 
     // Activities
-    viewModel { VideoPlayerViewModel(get(), get()) }
+    viewModel { VideoPlayerViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { JobsViewModel(get()) }
     viewModel { JobDetailViewModel(get(), get()) }
@@ -57,6 +60,8 @@ val viewModelModule = module {
     viewModel { QuizViewModel(get()) }
     viewModel { CheckoutViewModel() }
     viewModel { TrackViewModel(get()) }
+    viewModel { ProfileViewModel(get()) }
+    viewModel { (AuthViewModel(get())) }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
@@ -70,6 +75,7 @@ val viewModelModule = module {
     single { JobRepository(get()) }
     single { MyCourseRepository(get(), get(), get(), get(), get(), get()) }
     single { TracksRepository() }
+    single { ProfileRepository(get()) }
 }
 val preferencesModule = module {
     single { provideSettingsPreferences(androidApplication()) }
@@ -81,9 +87,9 @@ val databaseModule = module {
 
     single {
         Room.databaseBuilder(
-            androidApplication(),
-            AppDatabase::class.java, "online-app-database"
-        )
+                androidApplication(),
+                AppDatabase::class.java, "online-app-database"
+            )
             .fallbackToDestructiveMigration()
             .build()
     }

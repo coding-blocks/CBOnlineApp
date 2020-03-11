@@ -48,8 +48,6 @@ class AboutQuizFragment : BaseCBFragment(), AnkoLogger {
                         QuizFragment(),
                         "quiz",
                         containerViewId = R.id.quizContainer,
-                        enterAnimation = R.animator.slide_in_right,
-                        exitAnimation = R.animator.slide_out_left,
                         addToStack = true
                     )
                 }
@@ -58,7 +56,7 @@ class AboutQuizFragment : BaseCBFragment(), AnkoLogger {
     }
 
     private fun setupViewPager() {
-        val adapter = TabLayoutAdapter(fragmentManager!!)
+        val adapter = TabLayoutAdapter(parentFragmentManager)
         adapter.add(QuizInfoFragment(), "About")
         adapter.add(QuizSubmissionsFragment(), "Submissions")
         quizViewPager.adapter = adapter

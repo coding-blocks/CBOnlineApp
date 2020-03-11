@@ -19,13 +19,14 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.android.synthetic.main.activity_course.courseToolbar
-import kotlinx.android.synthetic.main.activity_track.*
 import kotlinx.android.synthetic.main.activity_track.appbar
+import kotlinx.android.synthetic.main.activity_track.certifiedTv
 import kotlinx.android.synthetic.main.activity_track.courseBackdrop
 import kotlinx.android.synthetic.main.activity_track.courseLogo
 import kotlinx.android.synthetic.main.activity_track.shortTv
+import kotlinx.android.synthetic.main.activity_track.trackCourseNumTv
+import kotlinx.android.synthetic.main.activity_track.trackCourseRv
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {

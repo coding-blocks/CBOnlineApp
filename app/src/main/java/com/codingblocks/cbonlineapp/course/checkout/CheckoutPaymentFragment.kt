@@ -5,12 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.google.gson.JsonObject
 import com.razorpay.Checkout
 import kotlinx.android.synthetic.main.fragment_checkout_payment.*
+import org.jetbrains.anko.design.snackbar
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -32,31 +35,59 @@ class CheckoutPaymentFragment : BaseCBFragment() {
             vm.map["applyCredits"] = vm.map["applyCredits"] != "true"
             payBtn.isEnabled = false
             vm.updateCart()
-            vm.getCart()
         }
-        numberLayout.setEndIconOnClickListener {
-            vm.map["coupon"] = numberLayout.editText?.text.toString()
+
+        errorDrawableTv.setOnClickListener {
+            if (errorDrawableTv.text == "Apply Coupon") {
+                vm.map["coupon"] = errorDrawableTv.text.toString()
+            } else {
+                vm.map["coupon"] = ""
+            }
             payBtn.isEnabled = false
             vm.updateCart()
-            vm.getCart()
+        }
+        vm.errorLiveData.observer(viewLifecycleOwner) {
+            payBtn.isEnabled = true
+            rootPayment.snackbar(it)
+        }
+        numberLayout.editText?.doOnTextChanged { text, start, count, after ->
+            if (count >= 3) {
+                errorDrawableTv.apply {
+                    isVisible = true
+                    setText("Apply Coupon")
+                }
+            }
         }
         vm.cart.observer(viewLifecycleOwner) { json ->
             json.getAsJsonArray("cartItems")?.get(0)?.asJsonObject?.run {
                 payBtn.isEnabled = true
                 val credits = get("credits_used")?.asInt?.div(100) ?: 0
                 if (credits != 0) {
-                    vm.map["applyCredits"] = true.toString()
+                    rootPayment.snackbar("Credits Applied Successfully")
+                    vm.map["applyCredits"] = true
                 } else {
-                    vm.map["applyCredits"] = false.toString()
+                    rootPayment.snackbar("Credits Removed")
+                    vm.map["applyCredits"] = false
+                }
+                get("coupon_code")?.let {
+                    numberLayout.editText?.setText(it.asString)
+                    vm.map["coupon"] = it.asString
+                    errorDrawableTv.isVisible = true
+                } ?: run {
+                    errorDrawableTv.isVisible = false
                 }
                 creditsTv.text = "- ${getString(R.string.rupee_sign)} $credits"
+
+                if (credits == 0)
+                    useBalance.text = "Use Wallet Balance"
+                else {
+                    useBalance.text = "Remove Wallet Balance"
+                }
                 totalTv.text = "${getString(R.string.rupee_sign)} ${json["totalAmount"].asString}"
                 finalPriceTv.text =
                     "${getString(R.string.rupee_sign)} ${json["totalAmount"].asString}"
                 walletBal.text =
-                    "${getString(R.string.rupee_sign)} ${json?.get("user")?.asJsonObject?.get("wallet_amount")?.asInt?.div(
-                        100
-                    )
+                    "${getString(R.string.rupee_sign)} ${json?.get("user")?.asJsonObject?.get("wallet_amount")?.asInt?.div(100)
                         ?: 0}"
 
                 payBtn.setOnClickListener {

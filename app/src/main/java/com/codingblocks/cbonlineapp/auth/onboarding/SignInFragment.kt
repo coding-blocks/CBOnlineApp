@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
+import com.codingblocks.cbonlineapp.util.KeyboardVisibilityUtil
 import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
@@ -42,6 +43,7 @@ class SignInFragment : BaseCBFragment() {
 
     val db: AppDatabase by inject()
     var map = HashMap<String, String>()
+    private lateinit var keyboardVisibilityHelper: KeyboardVisibilityUtil
 
     private val sharedPrefs by inject<PreferenceHelper>()
 
@@ -87,6 +89,9 @@ class SignInFragment : BaseCBFragment() {
             } else {
                 loginWithNumber()
             }
+        }
+        keyboardVisibilityHelper = KeyboardVisibilityUtil(view) {
+            proceedBtn.isVisible = it
         }
     }
 
@@ -171,6 +176,18 @@ class SignInFragment : BaseCBFragment() {
             Clients.refreshToken = this
             sharedPrefs.SP_JWT_REFRESH_TOKEN = this
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        requireView().viewTreeObserver
+            .addOnGlobalLayoutListener(keyboardVisibilityHelper.visibilityListener)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireView().viewTreeObserver
+            .removeOnGlobalLayoutListener(keyboardVisibilityHelper.visibilityListener)
     }
 
     private fun requestHint() {

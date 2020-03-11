@@ -13,7 +13,9 @@ import com.codingblocks.cbonlineapp.admin.doubts.DoubtReceiver
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewFragment
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
+import com.codingblocks.cbonlineapp.util.Actions
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.EndlessService
 import com.codingblocks.cbonlineapp.util.KeyboardVisibilityUtil
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
@@ -50,7 +52,7 @@ class AdminActivity : BaseCBActivity(), FragmentChangeListener {
         setContentView(R.layout.activity_admin)
         setToolbar(toolbarAdmin)
         navigationAdapter.setupWithBottomNavigation(bottomNavAdmin)
-        setupAlarm()
+        startMyService()
 
         keyboardVisibilityHelper = KeyboardVisibilityUtil(contentView!!) {
             //            completeBtn.isVisible = it
@@ -63,6 +65,19 @@ class AdminActivity : BaseCBActivity(), FragmentChangeListener {
             Components.showConfirmation(this, "admin") {
                 finish()
             }
+        }
+    }
+
+    private fun startMyService() {
+        Intent(this, EndlessService::class.java).also {
+            it.action = Actions.START.name
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                log("Starting the service in >=26 Mode")
+                startForegroundService(it)
+                return
+            }
+            log("Starting the service in < 26 Mode")
+            startService(it)
         }
     }
 

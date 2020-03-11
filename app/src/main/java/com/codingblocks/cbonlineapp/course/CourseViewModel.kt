@@ -1,7 +1,7 @@
 package com.codingblocks.cbonlineapp.course
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
@@ -13,14 +13,13 @@ import kotlinx.coroutines.withContext
 
 class CourseViewModel(
     private val repo: CourseRepository
-) : ViewModel() {
+) : BaseCBViewModel() {
     lateinit var id: String
     var course = MutableLiveData<Course>()
     var suggestedCourses = MutableLiveData<List<Course>>()
     val findCourses = MutableLiveData<List<Course>>()
     val projects = MutableLiveData<List<Project>>()
     val sections = MutableLiveData<List<Sections>>()
-    var errorLiveData = MutableLiveData<String>()
 
     var image: MutableLiveData<String> = MutableLiveData()
     var name: MutableLiveData<String> = MutableLiveData()
@@ -112,10 +111,6 @@ class CourseViewModel(
                 sections.postValue(list)
             }
         }
-    }
-
-    private fun setError(error: String) {
-        errorLiveData.postValue(error)
     }
 
 //    fun getCart() {

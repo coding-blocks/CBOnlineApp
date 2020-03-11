@@ -25,8 +25,7 @@ class CheckoutPersonalDetailsFragment : BaseCBFragment(), AnkoLogger {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ):
-        View? = inflater.inflate(R.layout.fragment_checkout_personal_details, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_checkout_personal_details, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,9 +65,8 @@ class CheckoutPersonalDetailsFragment : BaseCBFragment(), AnkoLogger {
         checkoutBtn.setOnClickListener {
             replaceFragmentSafely(
                 CheckoutPaymentFragment(),
+                tag = "Personal",
                 containerViewId = R.id.checkoutContainer,
-                enterAnimation = R.animator.slide_in_right,
-                exitAnimation = R.animator.slide_out_left,
                 addToStack = true
             )
         }

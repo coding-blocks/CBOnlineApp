@@ -101,13 +101,13 @@ class SignUpFragment : BaseCBFragment() {
 
     override fun onResume() {
         super.onResume()
-        view!!.viewTreeObserver
+        requireView().viewTreeObserver
             .addOnGlobalLayoutListener(keyboardVisibilityHelper.visibilityListener)
     }
 
     override fun onPause() {
         super.onPause()
-        view!!.viewTreeObserver
+        requireView().viewTreeObserver
             .removeOnGlobalLayoutListener(keyboardVisibilityHelper.visibilityListener)
     }
 

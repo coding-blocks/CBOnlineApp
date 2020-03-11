@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.course.checkout
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
@@ -54,12 +55,20 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultListener {
         // To change body of created functions use File | Settings | File Templates.
         /** Make Network call to capture payment.
          *  Body : {
-         *
          *       razorpay_payment_id: payment_ksdnvsdlv,
          *       razorpay_order_id: order_ijkdbsn,
          *       txnId: 192721,
          *       amount: 2394723 (paise)
          *  }
          */
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
     }
 }

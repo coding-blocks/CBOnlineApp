@@ -10,7 +10,6 @@ import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
@@ -42,16 +41,20 @@ class LoginHomeFragment : BaseCBFragment() {
         }
 
         gmailBtn.setOnClickListener {
-            requireContext().openChrome(
-                "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
-            )
+            showWebView()
         }
 
         fbBtn.setOnClickListener {
-            requireContext().openChrome(
-                "${BuildConfig.OAUTH_URL}?redirect_uri=${BuildConfig.REDIRECT_URI}&response_type=code&client_id=${BuildConfig.CLIENT_ID}"
-            )
+            showWebView()
         }
+    }
+
+    private fun showWebView() {
+        replaceFragmentSafely(
+            SocialLoginFragment(),
+            tag = "SocialSignIn",
+            containerViewId = R.id.loginContainer
+        )
     }
 
     private fun setSecondSpan() {

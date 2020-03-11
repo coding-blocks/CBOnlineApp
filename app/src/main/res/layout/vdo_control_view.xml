@@ -6,7 +6,6 @@
     android:layout_height="match_parent">
 
 
-
     <RelativeLayout
         android:id="@+id/vdo_control_panel"
         android:layout_width="match_parent"

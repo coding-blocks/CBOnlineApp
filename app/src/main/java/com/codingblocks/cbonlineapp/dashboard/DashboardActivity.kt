@@ -37,6 +37,7 @@ import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesFragme
 import com.codingblocks.cbonlineapp.jobs.JobsActivity
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
+import com.codingblocks.cbonlineapp.profile.ProfileActivity
 import com.codingblocks.cbonlineapp.profile.ReferralActivity
 import com.codingblocks.cbonlineapp.purchases.PurchasesActivity
 import com.codingblocks.cbonlineapp.settings.AboutActivity
@@ -44,6 +45,7 @@ import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.NetworkUtils.okHttpClient
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
@@ -70,7 +72,8 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.dialog.view.primaryBtn
-import kotlinx.android.synthetic.main.dialog_help.view.*
+import kotlinx.android.synthetic.main.dialog_help.view.mobile
+import kotlinx.android.synthetic.main.dialog_help.view.nameLayout
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -108,6 +111,8 @@ class DashboardActivity : BaseCBActivity(),
 
     private fun setUser() {
         referralContainer.isVisible = true
+        if (JWTUtils.isExpired(prefs.SP_JWT_TOKEN_KEY))
+            viewModel.refreshToken()
         viewModel.user.observer(this) {
             val navMenu = dashboardNavigation.menu
             navMenu.findItem(R.id.nav_inbox).isVisible = true
@@ -153,10 +158,18 @@ class DashboardActivity : BaseCBActivity(),
 
         dashboardBottomNav.apply {
             setTitleTypeface(Typeface.createFromAsset(assets, "fonts/gilroy_medium.ttf"))
-            defaultBackgroundColor = getColor(R.color.dark)
+            defaultBackgroundColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getColor(R.color.dark)
+            } else {
+                resources.getColor(R.color.dark)
+            }
             titleState = (FabNavigation.TitleState.ALWAYS_SHOW)
             setOnTabSelectedListener(this@DashboardActivity)
-            accentColor = getColor(R.color.bottomNavSelected)
+            accentColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getColor(R.color.bottomNavSelected)
+            } else {
+                resources.getColor(R.color.bottomNavSelected)
+            }
         }
         if (loggedIn) {
             setUser()
@@ -202,7 +215,7 @@ class DashboardActivity : BaseCBActivity(),
                         with(SVG.getFromInputStream(it.byteStream())) {
                             val picDrawable = PictureDrawable(
                                 this.renderToPicture(
-                                    40, 40
+                                    80, 80
                                 )
                             )
                             val bitmap = MediaUtils.getBitmapFromPictureDrawable(picDrawable)
@@ -322,11 +335,6 @@ class DashboardActivity : BaseCBActivity(),
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        checkForUpdates()
-    }
-
     private fun checkForUpdates() {
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
 
@@ -379,7 +387,11 @@ class DashboardActivity : BaseCBActivity(),
                 searchBtn.setOnClickListener {
                     startActivity(intentFor<LearningTracksActivity>().singleTop())
                 }
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+                } else {
+                    dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, resources.getColor(R.color.white))
+                }
                 dashboardToolbarSecondary.post {
                     dashboardToolbarSearch.slideDown()
                     dashboardToolbarSecondary.slideUp()
@@ -387,7 +399,11 @@ class DashboardActivity : BaseCBActivity(),
             }
             2 -> {
                 supportActionBar?.title = getString(R.string.dashboard)
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+                } else {
+                    dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, resources.getColor(R.color.white))
+                }
 
                 if (viewModel.isLoggedIn.value == true) {
                     dashboardToolbarSearch.slideUp()
@@ -401,7 +417,11 @@ class DashboardActivity : BaseCBActivity(),
                     1 -> supportActionBar?.title = getString(R.string.my_courses)
                     else -> supportActionBar?.title = getString(R.string.my_library)
                 }
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
+                } else {
+                    dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, resources.getColor(R.color.black))
+                }
                 dashboardToolbarSecondary.post {
                     dashboardToolbarSearch.slideUp()
                     dashboardToolbarSecondary.slideUp()
@@ -412,10 +432,21 @@ class DashboardActivity : BaseCBActivity(),
         return true
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (intent.data != null && intent.data!!.isHierarchical) {
+            if (intent.data!!.getQueryParameter("code") != null) {
+                fetchToken(intent.data!!)
+            }
+        }
+    }
+
     fun openProfile(view: View) {
         if (prefs.SP_JWT_TOKEN_KEY.isEmpty()) {
             startActivity<LoginActivity>()
             finish()
+        } else {
+            startActivity<ProfileActivity>()
         }
     }
 

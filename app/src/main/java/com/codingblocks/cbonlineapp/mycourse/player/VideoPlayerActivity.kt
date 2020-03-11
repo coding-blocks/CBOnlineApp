@@ -3,12 +3,12 @@ package com.codingblocks.cbonlineapp.mycourse.player
 import android.animation.LayoutTransition
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
-import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
@@ -19,7 +19,6 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
@@ -27,12 +26,12 @@ import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.library.EditNoteClickListener
 import com.codingblocks.cbonlineapp.mycourse.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.player.notes.VideoNotesFragment
+import com.codingblocks.cbonlineapp.util.Animations
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.LECTURE
-import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.MediaUtils.deleteRecursive
-import com.codingblocks.cbonlineapp.util.PreferenceHelper
+import com.codingblocks.cbonlineapp.util.MediaUtils.getYoutubeVideoId
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
@@ -41,6 +40,7 @@ import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
+import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
 import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
@@ -48,13 +48,13 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
-import com.crashlytics.android.Crashlytics
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.youtube.player.YouTubeInitializationResult
-import com.google.android.youtube.player.YouTubePlayer
-import com.google.android.youtube.player.YouTubePlayerSupportFragment
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerFullScreenListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
@@ -73,72 +73,39 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.util.Objects
 import java.util.concurrent.TimeUnit
 
 class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
-    VdoPlayer.InitializationListener {
-    private var isDownloaded = false
-    private val viewModel by viewModel<VideoPlayerViewModel>()
-    private val fullscreenToggleListener = object : VdoPlayerControls.FullscreenActionListener {
-        override fun onFullscreenAction(enterFullscreen: Boolean): Boolean {
-            showFullScreen(enterFullscreen)
-            return true
-        }
-    }
-    private val prefs by inject<PreferenceHelper>()
+    VdoPlayer.InitializationListener, VdoPlayerControls.FullscreenActionListener,
+    VdoPlayerControls.ControllerVisibilityListener, YouTubePlayerFullScreenListener {
+    private val vm by viewModel<VideoPlayerViewModel>()
 
-    private val visibilityListener = object : VdoPlayerControls.ControllerVisibilityListener {
-        override fun onControllerVisibilityChange(visibility: Int) {
-            if (viewModel.currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-                if (visibility != View.VISIBLE) {
-                    showSystemUi(false)
-                }
-            }
-        }
+    private val animationUtils by lazy {
+        Animations(this)
     }
-    val progressDialog by lazy {
-        ProgressDialog.progressDialog(this)
-    }
-    private val fab_open by lazy {
-        AnimationUtils.loadAnimation(applicationContext, R.anim.fab_open)
-    }
-    private val fab_close by lazy {
-        AnimationUtils.loadAnimation(applicationContext, R.anim.fab_close)
-    }
-    private val fab_clock by lazy {
-        AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_clock)
-    }
-    private val fab_anticlock by lazy {
-        AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_anticlock)
-    }
-
+    private val progressDialog by lazy { ProgressDialog.progressDialog(this) }
     private val dialog by lazy { BottomSheetDialog(this) }
-    private val sheetDialog: View by lazy {
-        layoutInflater.inflate(
-            R.layout.bottom_sheet_note,
-            null
-        )
-    }
+    private val sheetDialog: View by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, null) }
+    val tracker = YouTubePlayerTracker()
+
     private lateinit var playerFragment: VdoPlayerSupportFragment
     private var videoPlayer: VdoPlayer? = null
-    private var youtubePlayer: YouTubePlayer? = null
-    private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
+    private var youtubePlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_player)
-        Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
-        Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
+        Clients.authJwt = vm.prefs.SP_JWT_TOKEN_KEY
+        Clients.refreshToken = vm.prefs.SP_JWT_REFRESH_TOKEN
 
-        viewModel.contentId = intent.getStringExtra(CONTENT_ID) ?: ""
-        viewModel.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
+        vm.contentId = intent.getStringExtra(CONTENT_ID) ?: ""
+        vm.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
 
         setupUI()
-        viewModel.offlineSnackbar.observer(this) {
+        vm.offlineSnackbar.observer(this) {
             rootLayout.showSnackbar(it, Snackbar.LENGTH_SHORT, action = false)
         }
     }
@@ -152,44 +119,47 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
-        viewModel.currentOrientation = resources.configuration.orientation
-        viewModel.content.observeOnce {
-            viewModel.contentLength = it.contentLecture.lectureDuration
-            viewModel.attemptId.value = it.attempt_id
+        vm.currentOrientation = resources.configuration.orientation
+        vm.content.observeOnce {
+            vm.contentLength = it.contentLecture.lectureDuration
+            vm.attemptId.value = it.attempt_id
             sectionTitle.text = "Section ${it.sectionTitle}"
             contentTitle.text = it.title
-//            bookmarkBtn.isActivated = it.bookmark.bookmarkUid.isNotEmpty()
             if (it.contentable == LECTURE) {
-                isDownloaded = it.contentLecture.isDownloaded
-                downloadBtn.isActivated = isDownloaded
-                viewModel.videoId = it.contentLecture.lectureId
-                youtubePlayerView.view?.visibility = View.GONE
+                vm.isDownloaded = it.contentLecture.isDownloaded
+                downloadBtn.isActivated = vm.isDownloaded
+                vm.videoId = it.contentLecture.lectureId
+                youtubePlayerView.isVisible = false
                 videoContainer.visibility = View.VISIBLE
                 playerFragment =
                     supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerSupportFragment
                 playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
                 showControls(false)
-                if (isDownloaded) {
+                if (vm.isDownloaded) {
                     initializePlayer()
                 } else {
                     setupVideoView()
                 }
             } else if (it.contentable == VIDEO) {
-                youtubePlayerView.view?.visibility = View.VISIBLE
+                with(youtubePlayerView) {
+                    lifecycle.addObserver(this)
+                    isVisible = true
+                    addFullScreenListener(this@VideoPlayerActivity)
+                }
                 setYoutubePlayer(it.contentVideo.videoUrl)
             } else {
                 finish()
             }
-            viewModel.bookmark.observe(this) {
-                // Dont Remove
+            vm.bookmark.observe(this) {
+                // Don't Remove
                 bookmarkBtn.isActivated = if (it == null) false else it.bookmarkUid.isNotEmpty()
             }
 
             bookmarkBtn.setOnClickListener { view ->
                 if (bookmarkBtn.isActivated)
-                    viewModel.removeBookmark()
+                    vm.removeBookmark()
                 else {
-                    viewModel.markBookmark()
+                    vm.markBookmark()
                 }
             }
         }
@@ -203,15 +173,23 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                 doubtFabTv.isVisible = !this
 
                 if (this) {
-                    doubtFab.startAnimation(fab_close)
-                    noteFab.startAnimation(fab_close)
-                    videoFab.startAnimation(fab_anticlock)
-                    fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
+                    doubtFab.startAnimation(animationUtils.close)
+                    noteFab.startAnimation(animationUtils.close)
+                    videoFab.startAnimation(animationUtils.anticlock)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
+                    } else {
+                        fabMenu.setBackgroundColor(resources.getColor(R.color.white_transparent))
+                    }
                 } else {
-                    doubtFab.startAnimation(fab_open)
-                    noteFab.startAnimation(fab_open)
-                    videoFab.startAnimation(fab_clock)
-                    fabMenu.setBackgroundColor(getColor(R.color.black_95))
+                    doubtFab.startAnimation(animationUtils.open)
+                    noteFab.startAnimation(animationUtils.open)
+                    videoFab.startAnimation(animationUtils.clock)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        fabMenu.setBackgroundColor(getColor(R.color.black_95))
+                    } else {
+                        fabMenu.setBackgroundColor(resources.getColor(R.color.black_95))
+                    }
                 }
             }
         }
@@ -223,8 +201,8 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             updateSheet("")
         }
         downloadBtn.setOnClickListener {
-            if (isDownloaded)
-                deleteFolder(viewModel.videoId)
+            if (vm.isDownloaded)
+                showDeleteDialog()
             else
                 startDownloadWorker()
         }
@@ -232,17 +210,34 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         setupViewPager()
     }
 
+    private fun showDeleteDialog() {
+        showDialog(
+            type = "Delete",
+            image = R.drawable.ic_info,
+            cancelable = false,
+            primaryText = R.string.confirmation,
+            secondaryText = R.string.delete_video_desc,
+            primaryButtonText = R.string.confirm,
+            secondaryButtonText = R.string.cancel,
+            callback = { confirmed ->
+                if (confirmed) {
+                    deleteFolder(vm.videoId)
+                }
+            }
+        )
+    }
+
     private fun startDownloadWorker() {
-        val constraints = if (prefs.SP_WIFI)
+        val constraints = if (vm.prefs.SP_WIFI)
             Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
         else
             Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
         val videoData = workDataOf(
-            VIDEO_ID to viewModel.videoId,
+            VIDEO_ID to vm.videoId,
             TITLE to contentTitle.text.toString(),
-            SECTION_ID to viewModel.sectionId,
-            RUN_ATTEMPT_ID to viewModel.attemptId.value,
-            CONTENT_ID to viewModel.contentId
+            SECTION_ID to vm.sectionId,
+            RUN_ATTEMPT_ID to vm.attemptId.value,
+            CONTENT_ID to vm.contentId
         )
 
         val request: OneTimeWorkRequest =
@@ -273,13 +268,13 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     }
 
     private fun setupVideoView() {
-        viewModel.getOtpProgress.observer(this) {
+        vm.getOtpProgress.observer(this) {
             if (it) {
                 initializePlayer()
             } else
                 toast("there was some error with starting feed, try again")
         }
-        viewModel.getOtp()
+        vm.getOtp()
     }
 
     private fun initializePlayer() {
@@ -303,18 +298,18 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         player.addPlaybackEventListener(playbackListener)
         playerControlView.apply {
             setPlayer(player)
-            setFullscreenActionListener(fullscreenToggleListener)
-            setControllerVisibilityListener(visibilityListener)
+            setFullscreenActionListener(this@VideoPlayerActivity)
+            setControllerVisibilityListener(this@VideoPlayerActivity)
         }
         showControls(true)
 
         // load a media to the player
-        val vdoParams: VdoPlayer.VdoInitParams? = if (isDownloaded) {
-            VdoPlayer.VdoInitParams.createParamsForOffline(viewModel.videoId)
+        val vdoParams: VdoPlayer.VdoInitParams? = if (vm.isDownloaded) {
+            VdoPlayer.VdoInitParams.createParamsForOffline(vm.videoId)
         } else {
             VdoPlayer.VdoInitParams.Builder()
-                .setOtp(viewModel.mOtp)
-                .setPlaybackInfo(viewModel.mPlaybackInfo)
+                .setOtp(vm.mOtp)
+                .setPlaybackInfo(vm.mPlaybackInfo)
                 .setPreferredCaptionsLanguage("en")
                 .build()
         }
@@ -385,35 +380,35 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
         override fun onLoaded(p0: VdoPlayer.VdoInitParams?) {
             videoPlayer?.playWhenReady = true
-            videoPlayer?.playbackSpeed = prefs.SP_PLAYBACK_SPEED
+            videoPlayer?.playbackSpeed = vm.prefs.SP_PLAYBACK_SPEED
         }
 
         override fun onBufferUpdate(p0: Long) {
         }
 
         override fun onProgress(progress: Long) {
-            val per = (viewModel.contentLength / 100) * 90
+            val per = (vm.contentLength / 100) * 90
             if (progress > per) {
-                viewModel.updateProgress()
+                vm.updateProgress()
             }
         }
 
         override fun onPlaybackSpeedChanged(speed: Float) {
-            prefs.SP_PLAYBACK_SPEED = speed
+            vm.prefs.SP_PLAYBACK_SPEED = speed
         }
 
         override fun onLoadError(p0: VdoPlayer.VdoInitParams, p1: ErrorDescription) {
             info { p0 }
             info { p1 }
-            Crashlytics.log(
+            FirebaseCrashlytics.getInstance().log(
                 "Error Message: ${p1.errorMsg}, " +
                     "Error Code: ${p1.errorCode} , ${p1.httpStatusCode}"
             )
             if (p1.errorCode == 5110) {
                 rootLayout.snackbar("Seems like your download was corrupted.Please Download Again")
-                deleteFolder(viewModel.videoId)
+                deleteFolder(vm.videoId)
             } else if (p1.errorCode in (2010..2020)) {
-                viewModel.getOtp()
+                vm.getOtp()
             }
         }
 
@@ -423,14 +418,14 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         override fun onError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
             info { p0 }
             info { p1 }
-            Crashlytics.log(
+            FirebaseCrashlytics.getInstance().log(
                 "Error Message: ${p1?.errorMsg}," +
                     " Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}"
             )
         }
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-            viewModel.playWhenReady = playWhenReady
+            vm.playWhenReady = playWhenReady
         }
     }
 
@@ -440,14 +435,15 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             progressDialog.show()
             withContext(Dispatchers.IO) { deleteRecursive(dir) }
             delay(3000)
+            vm.updateDownload(0, contentId)
             progressDialog.dismiss()
         }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         val newOrientation = newConfig.orientation
-        val oldOrientation = viewModel.currentOrientation
-        viewModel.currentOrientation = newOrientation
+        val oldOrientation = vm.currentOrientation
+        vm.currentOrientation = newOrientation
         super.onConfigurationChanged(newConfig)
         when (newOrientation) {
             oldOrientation -> {
@@ -563,35 +559,19 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     }
 
     private fun setYoutubePlayer(youtubeUrl: String) {
-        youtubePlayerInit = object : YouTubePlayer.OnInitializedListener {
-            override fun onInitializationFailure(
-                p0: YouTubePlayer.Provider?,
-                p1: YouTubeInitializationResult?
-            ) {
-            }
+        youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
 
-            override fun onInitializationSuccess(
-                p0: YouTubePlayer.Provider?,
-                youtubePlayerInstance: YouTubePlayer?,
-                p2: Boolean
-            ) {
-                if (!p2) {
-                    youtubePlayer = youtubePlayerInstance
-                    val url = if (youtubeUrl.split("=").size == 2) youtubeUrl.split("=")[1]
-                    else {
-                        MediaUtils.getYotubeVideoId(youtubeUrl)
-                    }
-                    youtubePlayerInstance?.loadVideo(url)
-                }
+            override fun onReady(player: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer) {
+                this@VideoPlayerActivity.youtubePlayer = player
+                this@VideoPlayerActivity.youtubePlayer!!.addListener(tracker)
+                val id = getYoutubeVideoId(youtubeUrl)
+                player.loadVideo(id, 0f)
             }
-        }
-        val youTubePlayerSupportFragment =
-            supportFragmentManager.findFragmentById(R.id.youtubePlayerView) as YouTubePlayerSupportFragment?
-        youTubePlayerSupportFragment?.initialize(BuildConfig.YOUTUBE_KEY, youtubePlayerInit)
+        })
     }
 
     override fun onBackPressed() {
-        if (viewModel.currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (vm.currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
             showFullScreen(false)
             playerControlView.setFullscreenState(false)
         } else {
@@ -617,7 +597,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                         dialog.dismiss()
                     }
                     bottomSheetSaveBtn.setOnClickListener {
-                        viewModel.updateNote(notes.apply {
+                        vm.updateNote(notes.apply {
                             text = sheetDialog.bottoSheetDescTv.text.toString()
                         })
                         dialog.dismiss()
@@ -638,7 +618,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                     }
                     bottomSheetSaveBtn.apply {
                         setOnClickListener {
-                            viewModel.createDoubt(sheetDialog.doubtTitleTv.text.toString(), sheetDialog.bottoSheetDescTv.text.toString()) {
+                            vm.createDoubt(sheetDialog.doubtTitleTv.text.toString(), sheetDialog.bottoSheetDescTv.text.toString()) {
                                 runOnUiThread {
                                     if (it.isEmpty())
                                         dialog.dismiss()
@@ -666,24 +646,30 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                         hint = "Add a note here"
                     }
                     bottomSheetSaveBtn.apply {
+
                         val notePos: Double? =
                             if (youtubePlayerView.isVisible)
-                                (youtubePlayer?.currentTimeMillis?.div(1000))?.toDouble()
+                                tracker.currentSecond.toDouble()
                             else
                                 (videoPlayer?.currentTime?.div(1000))?.toDouble()
                         setOnClickListener {
-                            val note = Note(
-                                notePos
-                                    ?: 0.0,
-                                sheetDialog.bottoSheetDescTv.text.toString(),
-                                RunAttempts(
-                                    viewModel.attemptId.value
-                                        ?: ""
-                                ),
-                                LectureContent(viewModel.contentId)
-                            )
-                            viewModel.createNote(note)
-                            dialog.dismiss()
+                            val desc = sheetDialog.bottoSheetDescTv.text.toString()
+                            if (desc.isEmpty()) {
+                                toast("Note cannot be empty!!")
+                            } else {
+                                val note = Note(
+                                    notePos
+                                        ?: 0.0,
+                                    sheetDialog.bottoSheetDescTv.text.toString(),
+                                    RunAttempts(
+                                        vm.attemptId.value
+                                            ?: ""
+                                    ),
+                                    LectureContent(vm.contentId)
+                                )
+                                vm.createNote(note)
+                                dialog.dismiss()
+                            }
                         }
                         text = "Save"
                     }
@@ -701,5 +687,28 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     override fun onResume() {
         super.onResume()
         videoPlayer?.playWhenReady = true
+    }
+
+    override fun onControllerVisibilityChange(visibility: Int) {
+        if (vm.currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (visibility != View.VISIBLE) {
+                showSystemUi(false)
+            }
+        }
+    }
+
+    override fun onFullscreenAction(enterFullscreen: Boolean): Boolean {
+        showFullScreen(enterFullscreen)
+        return true
+    }
+
+    override fun onYouTubePlayerEnterFullScreen() {
+        youtubePlayerView.enterFullScreen()
+        showFullScreen(true)
+    }
+
+    override fun onYouTubePlayerExitFullScreen() {
+        youtubePlayerView.exitFullScreen()
+        showFullScreen(false)
     }
 }

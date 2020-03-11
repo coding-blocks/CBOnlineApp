@@ -17,7 +17,6 @@ import com.caverock.androidsvg.SVG
 import com.codingblocks.cbonlineapp.util.GlideApp
 import com.codingblocks.cbonlineapp.util.GlideRequest
 import com.codingblocks.cbonlineapp.util.NetworkUtils.okHttpClient
-import kotlinx.android.synthetic.main.tour_layout.view.*
 import okhttp3.Request
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -41,6 +40,21 @@ fun ImageView.loadSvg(svgUrl: String, callback: () -> Unit = { }) {
         }
     }
 }
+
+fun Context.getSvg(image: String) =
+    createGlideRequest(Uri.parse(image), this)
+        .listener(SvgSoftwareLayerSetter1())
+        .listener(object : RequestListener<Drawable> {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                return false
+            }
+
+            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                return false
+            }
+        })
+        .error(createGlideRequest(Uri.parse(image), this))
+        .submit()
 
 fun ImageView.loadImage(imgUrl: String, scale: Boolean = false, callback: (loaded: Boolean) -> Unit = { }) {
     val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -86,9 +100,13 @@ class SvgSoftwareLayerSetter1 : RequestListener<Drawable> {
     }
 }
 
-private fun createGlideRequest(source: Uri?, context: Context): GlideRequest<Drawable> {
-    return GlideApp.with(context)
+fun createGlideRequest(source: Uri?, context: Context, resize: Boolean = false): GlideRequest<Drawable> {
+    val req = GlideApp.with(context)
         .load(source)
-        .optionalCenterCrop()
-        .dontAnimate() // will load image
+    if (resize)
+        req.override(80, 80)
+            .centerCrop()
+    else
+        req.optionalCenterCrop()
+    return req
 }

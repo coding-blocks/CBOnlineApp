@@ -54,7 +54,13 @@ class MySMSBroadcastReceiver(val otpReceivedListener: OnSmsOTPReceivedListener) 
             val receiver = MySMSBroadcastReceiver(otpReceivedListener)
             val lifecycleObserver = object : LifecycleObserver {
                 @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-                fun unregister() = activity.unregisterReceiver(receiver)
+                fun unregister() {
+                    try {
+                        activity.unregisterReceiver(receiver)
+                    } catch (e: Exception) {
+                        // Handle Error
+                    }
+                }
             }
 
             if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {

@@ -6,17 +6,17 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import com.codingblocks.cbonlineapp.BuildConfig
-import com.crashlytics.android.core.CrashlyticsCore
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 /**
  * Created by championswimmer on 2020-02-02.
  */
 interface BaseLifecycleComponent : LifecycleObserver {
-    private fun log(msg: String) {
+    fun log(msg: String) {
         if (BuildConfig.DEBUG) {
             Log.d("LIFECYCLE", msg)
         } else {
-            CrashlyticsCore.getInstance().log(msg)
+            FirebaseCrashlytics.getInstance().log(msg)
         }
     }
 

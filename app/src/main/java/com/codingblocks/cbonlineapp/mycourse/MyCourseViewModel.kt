@@ -3,7 +3,6 @@ package com.codingblocks.cbonlineapp.mycourse
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.Data
@@ -12,6 +11,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.ProgressWorker
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit
 
 class MyCourseViewModel(
     private val repo: MyCourseRepository
-) : ViewModel() {
+) : BaseCBViewModel() {
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
     var revoked: MutableLiveData<Boolean> = MutableLiveData()
@@ -44,7 +44,6 @@ class MyCourseViewModel(
     var filters: MutableLiveData<String> = MutableLiveData()
     var complete: MutableLiveData<String> = MutableLiveData("")
     var content: LiveData<List<SectionContentHolder.SectionContentPair>> = MutableLiveData()
-    var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
     init {
         content = Transformations.switchMap(DoubleTrigger(complete, filters)) {
@@ -67,10 +66,6 @@ class MyCourseViewModel(
                 }
             }
         }
-    }
-
-    private fun setError(error: String) {
-        errorLiveData.postValue(error)
     }
 
     fun getRun() = repo.getRunById(attemptId)

@@ -16,7 +16,10 @@ import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.item_track.view.trackCourseNumTv
 import kotlinx.android.synthetic.main.item_track.view.trackLogo
 import kotlinx.android.synthetic.main.item_track.view.trackTitleTv
-import kotlinx.android.synthetic.main.item_track_card.view.*
+import kotlinx.android.synthetic.main.item_track_card.view.course_card_share
+import kotlinx.android.synthetic.main.item_track_card.view.ratingTv
+import kotlinx.android.synthetic.main.item_track_card.view.trackChips
+import kotlinx.android.synthetic.main.item_track_card.view.trackCover
 import org.jetbrains.anko.share
 
 class TracksListAdapter(val type: String = "") : ListAdapter<CareerTracks, TracksListAdapter.ItemViewHolder>(DiffCallback()) {

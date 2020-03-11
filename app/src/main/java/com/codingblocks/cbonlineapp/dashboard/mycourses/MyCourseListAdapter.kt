@@ -89,18 +89,18 @@ class DefaultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         progressTv.text = "${progress.toInt()} %"
         progressView1.progress = progress.toFloat()
         if (progress > 90) {
-            progressView1.highlightView.colorGradientStart = context.getColor(R.color.kiwigreen)
-            progressView1.highlightView.colorGradientEnd = context.getColor(R.color.tealgreen)
+            progressView1.highlightView.colorGradientStart = context.resources.getColor(R.color.kiwigreen)
+            progressView1.highlightView.colorGradientEnd = context.resources.getColor(R.color.tealgreen)
         } else {
-            progressView1.highlightView.colorGradientStart = context.getColor(R.color.pastel_red)
-            progressView1.highlightView.colorGradientEnd = context.getColor(R.color.dusty_orange)
+            progressView1.highlightView.colorGradientStart = context.resources.getColor(R.color.pastel_red)
+            progressView1.highlightView.colorGradientEnd = context.resources.getColor(R.color.dusty_orange)
         }
         setOnClickListener {
-                itemClickListener?.onClick(
-                    item.courseRun.course.cid,
-                    item.courseRun.run.crUid,
-                    item.courseRun.runAttempt.attemptId,
-                    item.courseRun.course.title)
+            itemClickListener?.onClick(
+                item.courseRun.course.cid,
+                item.courseRun.run.crUid,
+                item.courseRun.runAttempt.attemptId,
+                item.courseRun.course.title)
         }
     }
 }

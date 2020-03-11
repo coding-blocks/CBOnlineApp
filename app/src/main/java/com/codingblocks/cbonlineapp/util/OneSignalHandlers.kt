@@ -16,7 +16,7 @@ import org.koin.core.context.GlobalContext
 
 var position: Long = 0
 
-private val notificationDao = GlobalContext.get().koin.get<NotificationDao>()
+private val notificationDao = GlobalContext().get().get<NotificationDao>()
 
 class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
 
@@ -42,13 +42,13 @@ class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
         val url = notification.payload.launchURL
         val videoId = data.optString(VIDEO_ID) ?: ""
         notificationDao.insertWithId(
-            Notification(
-                heading = title,
-                body = body,
-                url = url,
-                videoId = videoId
+                Notification(
+                    heading = title,
+                    body = body,
+                    url = url,
+                    videoId = videoId
+                )
             )
-        )
             .also {
                 position = it
 

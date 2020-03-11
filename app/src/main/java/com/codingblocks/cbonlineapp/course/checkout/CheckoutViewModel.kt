@@ -1,7 +1,7 @@
 package com.codingblocks.cbonlineapp.course.checkout
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
@@ -12,10 +12,9 @@ import com.google.gson.JsonObject
 /**
  * @author aggarwalpulkit596
  */
-class CheckoutViewModel : ViewModel() {
+class CheckoutViewModel : BaseCBViewModel() {
 
     val paymentStart = MutableLiveData<Boolean>()
-    var errorLiveData = MutableLiveData<String>()
     var cart = MutableLiveData<JsonObject>()
     var map = hashMapOf<String, Any>()
     var paymentMap = hashMapOf<String, String>()
@@ -28,6 +27,7 @@ class CheckoutViewModel : ViewModel() {
                     if (isSuccessful) {
                         cart.postValue(body())
                     } else {
+                        cart.postValue(null)
                         setError(fetchError(code()))
                     }
                 }
@@ -42,16 +42,13 @@ class CheckoutViewModel : ViewModel() {
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
                         cart.postValue(body())
+                        getCart()
                     } else {
-                        setError(fetchError(code()))
+                        errorBody()?.string()?.let { setError(it) } ?: setError(fetchError(code()))
                     }
                 }
             }
         }
-    }
-
-    private fun setError(error: String) {
-        errorLiveData.postValue(error)
     }
 
     fun capturePayment(function: (status: Boolean) -> Unit) {

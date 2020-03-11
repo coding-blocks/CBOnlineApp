@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".CBOnlineApp"
@@ -34,7 +36,9 @@
         <activity
             android:name=".tracks.LearningTracksActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
-        <activity android:name=".profile.ProfileActivity" />
+        <activity
+            android:name=".profile.ProfileActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".course.SearchCourseActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
@@ -79,6 +83,7 @@
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".course.checkout.CheckoutActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".dashboard.DashboardActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -95,7 +100,6 @@
                 <data android:host="online.codingblocks.com" />
                 <data android:pathPrefix="/classroom" />
                 <data android:pathPrefix="/app" />
-                <data android:pathPrefix="/courses" />
                 <data android:pathPrefix="/player" />
                 <data android:pathPrefix="/tracks" />
             </intent-filter>
@@ -208,6 +212,18 @@
             android:name=".admin.doubts.DoubtReceiver"
             android:enabled="true"
             android:exported="false" />
+        <receiver
+            android:enabled="true"
+            android:name=".util.StartReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".util.EndlessService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>

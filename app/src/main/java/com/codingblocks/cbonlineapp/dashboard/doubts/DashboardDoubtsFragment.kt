@@ -38,7 +38,6 @@ import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard_doubts.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
@@ -112,9 +111,7 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpBottomSheet()
-        viewLifecycleOwnerLiveData.observer(viewLifecycleOwner) {
-            info { it.lifecycle.currentState.name }
-        }
+
         doubtEmptyBtn.setOnClickListener { requireActivity().dashboardBottomNav.setCurrentItem(1) }
         liveDoubtBtn.setOnClickListener {
             viewModel.type.value = LIVE
@@ -129,7 +126,8 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
         }
 
         filterTv.setOnClickListener {
-            //            dialog.show()
+            adapter.notifyDataSetChanged()
+            dialog.show()
         }
 
         viewModel.type.observer(viewLifecycleOwner) {
@@ -162,16 +160,16 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
             viewModel.getRuns().observer(viewLifecycleOwner) {
                 if (it.isNotEmpty()) {
                     viewModel.attemptId.value = it.first().courseRun.runAttempt.attemptId
+                    list.clear()
                     it.forEach {
                         list.add(
                             SheetItem(
-                                it.courseRun.run.crName,
+                                it.courseRun.course.title,
                                 image = it.courseRun.course.logo,
                                 courseId = it.courseRun.runAttempt.attemptId
                             )
                         )
                     }
-                    adapter.notifyDataSetChanged()
                 }
             }
         } else {

@@ -53,8 +53,7 @@
             android:fontFamily="@font/gilroy_bold"
             android:text="Allow Picture in Picture Mode"
             android:textSize="18sp"
-            app:theme="@style/ColorSwitchStyle">
-        </Switch>
+            app:theme="@style/ColorSwitchStyle"></Switch>
 
         <View
             android:layout_width="match_parent"

@@ -24,6 +24,7 @@ import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
+import com.codingblocks.cbonlineapp.util.extensions.getDateForRun
 import com.codingblocks.cbonlineapp.util.extensions.getDateForTime
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
@@ -167,7 +168,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         viewModel.errorLiveData.observer(this) {
             when (it) {
                 ErrorStatus.NO_CONNECTION -> {
-//                    showEmptyView(internetll, emptyll, doubtShimmer)
+                    showOffline()
                 }
                 ErrorStatus.UNAUTHORIZED -> {
                     Components.showConfirmation(this, UNAUTHORIZED) {
@@ -192,9 +193,12 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             buyBtn.isEnabled = true
             startActivity<CheckoutActivity>()
         }
-        viewModel.enrollTrialProgress.observeOnce {
-            startActivity<DashboardActivity>()
-            finish()
+        viewModel.enrollTrialProgress.observeOnce { status ->
+            if (status) {
+                startActivity<DashboardActivity>()
+                finish()
+            } else {
+            }
         }
 
         viewAllTv.setOnClickListener {
@@ -215,7 +219,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             goodiesImg.isVisible = false
         }
         mrpTv.text = "₹ ${it.mrp}"
-        batchBtn.text = it.name
+        batchBtn.text = getDateForRun(it.start)
         deadlineTv.text = "Enrollment Ends ${it.enrollmentEnd.let { it1 -> getDateForTime(it1) }}"
         mrpTv.paintFlags = mrpTv.paintFlags or
             Paint.STRIKE_THRU_TEXT_FLAG
@@ -257,10 +261,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             ) {
                 youtubePlayer = youtubePlayerInstance
                 if (!p2) {
-                    val url = if (youtubeUrl.split("=").size == 2) youtubeUrl.split("=")[1]
-                    else {
-                        MediaUtils.getYotubeVideoId(youtubeUrl)
-                    }
+                    val url = if (youtubeUrl.isNotEmpty()) MediaUtils.getYoutubeVideoId(youtubeUrl) else ""
                     youtubePlayerInstance?.cueVideo(url)
                 }
             }

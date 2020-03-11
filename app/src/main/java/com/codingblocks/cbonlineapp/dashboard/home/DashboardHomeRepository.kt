@@ -21,6 +21,8 @@ class DashboardHomeRepository(
 
     suspend fun getToken(grantCode: String) = safeApiCall { Clients.api.getToken(grantCode) }
 
+    suspend fun refreshToken() = safeApiCall { Clients.api.refreshToken(prefs.SP_JWT_REFRESH_TOKEN) }
+
     fun insertUser(user: User) {
         with(user) {
             prefs.apply {

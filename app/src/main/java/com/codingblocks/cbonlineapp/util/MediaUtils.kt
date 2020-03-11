@@ -15,7 +15,6 @@ import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.io.File
-import java.util.regex.Pattern
 
 object MediaUtils {
 
@@ -30,18 +29,23 @@ object MediaUtils {
         fileOrDirectory.delete()
     }
 
-    fun getYotubeVideoId(videoUrl: String): String {
-        var vId = ""
-        // TODO fix regex pattern
-        val pattern = Pattern.compile(
-            "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$",
-            Pattern.CASE_INSENSITIVE
-        )
-        val matcher = pattern.matcher(videoUrl)
-        if (matcher.matches()) {
-            vId = matcher.group(1)
+    fun getYoutubeVideoId(videoUrl: String): String {
+        var videoId: String
+        val url = videoUrl.split("v=")
+        videoId = if (url.size == 1) {
+            videoUrl.split("embed/")[1]
+        } else {
+            url[1]
         }
-        return vId
+        val ampersandPosition = videoId.indexOf('&')
+        if (ampersandPosition != -1) {
+            videoId = videoId.substring(0, ampersandPosition)
+        }
+        val questionPosition = videoId.indexOf('?')
+        if (questionPosition != -1) {
+            videoId = videoId.substring(0, questionPosition)
+        }
+        return videoId
     }
 
     fun checkPermission(context: Context): Boolean {

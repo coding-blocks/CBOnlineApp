@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.mycourse.player
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.Data
@@ -11,12 +10,14 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.mycourse.player.notes.NotesWorker
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.LIVE
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.extensions.runIO
@@ -33,8 +34,9 @@ import java.util.concurrent.TimeUnit
 
 class VideoPlayerViewModel(
     private val repo: VideoPlayerRepository,
-    private val repoDoubts: DashboardDoubtsRepository
-) : ViewModel() {
+    private val repoDoubts: DashboardDoubtsRepository,
+    val prefs: PreferenceHelper
+) : BaseCBViewModel() {
     var contentLength: Long = 0L
     var playWhenReady = false
     var currentOrientation: Int = 0
@@ -45,6 +47,7 @@ class VideoPlayerViewModel(
     var videoId: String = ""
     var contentId: String = ""
     var getOtpProgress: MutableLiveData<Boolean> = MutableLiveData()
+    var isDownloaded = false
 
     val doubts = Transformations.switchMap(attemptId) {
         fetchDoubts()
@@ -131,10 +134,6 @@ class VideoPlayerViewModel(
                 }
             }
         }
-    }
-
-    private fun setError(error: String) {
-//        errorLiveData.postValue(error)
     }
 
     fun deleteNote(noteId: String) {
@@ -288,4 +287,6 @@ class VideoPlayerViewModel(
         WorkManager.getInstance()
             .enqueue(request)
     }
+
+    fun updateDownload(status: Int, lectureId: String) = runIO { repo.updateDownload(status, lectureId) }
 }

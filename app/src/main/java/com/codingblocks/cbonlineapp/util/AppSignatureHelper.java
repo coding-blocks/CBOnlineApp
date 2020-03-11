@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 /**
  * This is a helper class to generate your message hash to be included in your SMS message.
- *
+ * <p>
  * Without the correct hash, your app won't recieve the message callback. This only needs to be
  * generated once per app and stored. Then you can remove this helper class from your code.
  */
@@ -32,6 +32,7 @@ public class AppSignatureHelper extends ContextWrapper {
 
     /**
      * Get all the app signatures for the current package
+     *
      * @return
      */
     public ArrayList<String> getAppSignatures() {

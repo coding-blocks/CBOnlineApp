@@ -98,6 +98,10 @@ class PreferenceHelper private constructor() {
             prefs?.save("COURSE_FILTER_TYPE", value)
         }
 
+    fun clearPrefs() {
+        prefs?.edit()?.clear()?.apply()
+    }
+
     companion object {
         const val PREFS_FILENAME = "com.codingblocks.cbonline.prefs"
         const val ACCESS_TOKEN = "access_token"
