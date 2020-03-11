@@ -35,8 +35,6 @@ class MyCourseViewModel(
     var revoked: MutableLiveData<Boolean> = MutableLiveData()
     lateinit var runStartEnd: Pair<Long, Long>
     var attemptId: String = ""
-    var runId: String = ""
-    var courseId: String = ""
     var name: String = ""
     private val mutablePopMessage = SingleLiveEvent<String>()
     private val extensions = MutableLiveData<List<ProductExtensionsItem>>()

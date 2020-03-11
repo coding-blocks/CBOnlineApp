@@ -11,11 +11,9 @@ import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
-import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.models.ProgressItem
@@ -61,8 +59,6 @@ class DashboardHomeFragment : BaseCBFragment() {
                                 setOnClickListener {
                                     startActivity(
                                         intentFor<MyCourseActivity>(
-                                            COURSE_ID to course.cid,
-                                            RUN_ID to run.crUid,
                                             RUN_ATTEMPT_ID to runAttempt.attemptId,
                                             COURSE_NAME to course.title
                                         ).singleTop()
