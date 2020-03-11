@@ -40,6 +40,7 @@ import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
+import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
 import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
@@ -47,10 +48,10 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerFullScreenListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
@@ -74,7 +75,7 @@ import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
-import java.util.Objects
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
@@ -201,12 +202,29 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
         downloadBtn.setOnClickListener {
             if (vm.isDownloaded)
-                deleteFolder(vm.videoId)
+                showDeleteDialog()
             else
                 startDownloadWorker()
         }
 
         setupViewPager()
+    }
+
+    private fun showDeleteDialog() {
+        showDialog(
+            type = "Delete",
+            image = R.drawable.ic_info,
+            cancelable = false,
+            primaryText = R.string.confirmation,
+            secondaryText = R.string.delete_video_desc,
+            primaryButtonText = R.string.confirm,
+            secondaryButtonText = R.string.cancel,
+            callback = { confirmed ->
+                if (confirmed) {
+                    deleteFolder(vm.videoId)
+                }
+            }
+        )
     }
 
     private fun startDownloadWorker() {
@@ -417,6 +435,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             progressDialog.show()
             withContext(Dispatchers.IO) { deleteRecursive(dir) }
             delay(3000)
+            vm.updateDownload(0, contentId)
             progressDialog.dismiss()
         }
     }

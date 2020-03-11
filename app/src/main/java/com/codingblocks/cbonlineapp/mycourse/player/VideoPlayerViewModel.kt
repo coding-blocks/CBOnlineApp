@@ -287,4 +287,7 @@ class VideoPlayerViewModel(
         WorkManager.getInstance()
             .enqueue(request)
     }
+
+    fun updateDownload(status: Int, lectureId: String) = runIO { repo.updateDownload(status, lectureId) }
+
 }

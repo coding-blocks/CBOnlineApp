@@ -89,4 +89,7 @@ class VideoPlayerRepository(
     suspend fun addDoubt(doubt: Doubts) = safeApiCall { Clients.onlineV2JsonApi.createDoubt(doubt) }
 
     fun getBookmark(contentId: String) = bookmarkDao.getBookmarkById(contentId)
+
+    suspend fun updateDownload(status: Int, lectureId: String) = contentDao.updateContentWithVideoId(lectureId, status)
+
 }
