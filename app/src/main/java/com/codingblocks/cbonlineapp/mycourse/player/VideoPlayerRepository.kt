@@ -20,6 +20,7 @@ class VideoPlayerRepository(
     suspend fun fetchCourseNotes(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.getNotesByAttemptId(attemptId) }
 
     suspend fun deleteNote(noteId: String) = safeApiCall { Clients.onlineV2JsonApi.deleteNoteById(noteId) }
+
     fun deleteNoteFromDb(noteId: String) = notesDao.deleteNoteByID(noteId)
 
     suspend fun addNote(note: Note) = safeApiCall { Clients.onlineV2JsonApi.createNote(note) }

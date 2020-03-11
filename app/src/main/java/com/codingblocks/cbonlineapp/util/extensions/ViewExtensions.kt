@@ -176,7 +176,7 @@ private fun Float.toDp(): Float {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, CBOnlineApp.appContext?.displayMetrics)
 }
 
-fun View.showSnackbar(message: String, length: Int, anchorView: FabNavigation? = null, action: Boolean = true, actionText: String = "Retry", callback: () -> Unit = { }): Snackbar {
+fun View.showSnackbar(message: String, length: Int = Snackbar.LENGTH_SHORT, anchorView: FabNavigation? = null, action: Boolean = true, actionText: String = "Retry", callback: () -> Unit = { }): Snackbar {
     val snackBarView = Snackbar.make(this, message, length)
     val params = snackBarView.view.layoutParams as ViewGroup.MarginLayoutParams
     params.setMargins(params.leftMargin,
