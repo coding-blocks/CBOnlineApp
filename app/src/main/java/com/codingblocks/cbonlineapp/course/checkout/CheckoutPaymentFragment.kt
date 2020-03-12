@@ -86,6 +86,12 @@ class CheckoutPaymentFragment : BaseCBFragment() {
                         rootPayment.snackbar("Credits Removed")
                     vm.creditsApplied = false
                 }
+                vm.paymentMap["txnId"] = get("txnId")?.asString ?: ""
+                try {
+                    vm.paymentMap["razorpay_order_id"] = get("razorpay_order_id")?.asString ?: ""
+                } catch (e: Exception) {
+                    vm.isFree = true
+                }
                 get("coupon_code")?.let {
                     numberLayout.editText?.setText(it.asString)
                     vm.couponApplied = get("coupon_id").asString

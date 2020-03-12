@@ -5,6 +5,7 @@ import android.view.MenuItem
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
+import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
@@ -16,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_checkout.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.intentFor
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
@@ -44,7 +46,7 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
                 vm.capturePayment {
                     GlobalScope.launch {
                         delay(3000)
-                        finish()
+                        startActivity(intentFor<DashboardActivity>())
                     }
                 }
             }
@@ -93,7 +95,7 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
         vm.capturePayment {
             GlobalScope.launch {
                 delay(3000)
-                finish()
+                startActivity(intentFor<DashboardActivity>())
             }
         }
     }

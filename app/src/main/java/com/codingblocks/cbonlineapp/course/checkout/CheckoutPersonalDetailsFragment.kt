@@ -33,6 +33,8 @@ class CheckoutPersonalDetailsFragment : BaseCBFragment(), AnkoLogger {
         viewLifecycleOwnerLiveData.observer(viewLifecycleOwner) {
             info { it.lifecycle.currentState.name }
         }
+        if (vm.map["stateId"] != null)
+            checkoutBtn.isEnabled = true
         vm.cart.observer(viewLifecycleOwner) {
             finalPriceTv.text = "${getString(R.string.rupee_sign)} ${it["totalAmount"].asString}"
         }
