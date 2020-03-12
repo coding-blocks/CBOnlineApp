@@ -191,4 +191,11 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
         super.onDestroyView()
         courseListAdapter.onItemClick = null
     }
+
+    override fun onResume() {
+        super.onResume()
+        if (courseListAdapter.currentList.isNullOrEmpty()) {
+            viewModel.fetchMyCourses()
+        }
+    }
 }

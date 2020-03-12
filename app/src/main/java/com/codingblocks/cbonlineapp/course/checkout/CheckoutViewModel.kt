@@ -22,6 +22,7 @@ class CheckoutViewModel : BaseCBViewModel() {
     var paymentMap = hashMapOf<String, String>()
     var creditsApplied = false
     var couponApplied: String = ""
+    var isFree: Boolean = false
 
     fun getCart() {
         runIO {

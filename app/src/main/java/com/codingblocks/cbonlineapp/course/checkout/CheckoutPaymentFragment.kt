@@ -117,7 +117,8 @@ class CheckoutPaymentFragment : BaseCBFragment() {
                 payBtn.setOnClickListener {
                     vm.paymentMap["amount"] = json["totalAmount"].asString!!
                     vm.paymentStart.value = true
-                    showRazorPayCheckoutForm(this)
+                    if (!vm.isFree)
+                        showRazorPayCheckoutForm(this)
                 }
             }
         }

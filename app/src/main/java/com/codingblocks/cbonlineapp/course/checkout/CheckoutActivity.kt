@@ -40,6 +40,14 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
                 isVisible = true
                 playAnimation()
             }
+            if (vm.isFree) {
+                vm.capturePayment {
+                    GlobalScope.launch {
+                        delay(3000)
+                        finish()
+                    }
+                }
+            }
         }
     }
 
