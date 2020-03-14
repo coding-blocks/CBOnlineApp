@@ -78,7 +78,7 @@ class LearningTracksActivity : BaseCBActivity() {
                 root.showSnackbar("Your response has been submitted successfully", action = false)
             }
         }
-        viewModel.errorLiveData.observer(this) {
+        vm.errorLiveData.observer(this) {
             when (it) {
                 ErrorStatus.NO_CONNECTION -> {
                     showOffline()
