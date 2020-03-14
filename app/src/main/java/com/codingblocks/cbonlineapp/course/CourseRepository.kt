@@ -12,6 +12,8 @@ class CourseRepository() : AnkoLogger {
 
     suspend fun getSuggestedCourses(offset: Int = 0, page: Int = 12) = safeApiCall { Clients.onlineV2JsonApi.getRecommendedCourses(offset = offset, page = page) }
 
+    suspend fun getAllCourses(offset: String) = safeApiCall { Clients.onlineV2JsonApi.getAllCourses(offset = offset) }
+
     suspend fun getProjects(id: String) = Clients.onlineV2JsonApi.getProject(id)
 
     suspend fun getSection(id: String) = Clients.onlineV2JsonApi.getSections(id)
