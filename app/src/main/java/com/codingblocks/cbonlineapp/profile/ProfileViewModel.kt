@@ -42,7 +42,7 @@ class ProfileViewModel(private val repo: ProfileRepository) : BaseCBViewModel() 
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
                             refreshToken()
-                            res.postValue("Update Succesfully")
+                            res.postValue("Updated Successfully")
                         }
                     else {
                         val errRes = response.value.errorBody()?.string()

@@ -72,6 +72,7 @@ class ProfileActivity : BaseCBActivity() {
     private fun updateViews(visible: Boolean) {
         ediBtn.isVisible = !visible
         updateBtn.isVisible = visible
+        logoutBtn.isVisible = !visible
         listOf(branch, college, graduation).forEach {
             it.isFocusableInTouchMode = visible
             it.isCursorVisible = visible
@@ -138,8 +139,9 @@ class ProfileActivity : BaseCBActivity() {
 
         vm.updateUser(id.toString(), map).observer(this) {
             when (it) {
-                "Success" -> {
+                "Updated Successfully" -> {
                     updateViews(false)
+                    profileRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, action = false)
                 }
                 else -> {
                     updateBtn.isEnabled = true

@@ -12,6 +12,7 @@ import com.codingblocks.cbonlineapp.util.extensions.folderSize
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.readableFileSize
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,18 +45,30 @@ class SettingsActivity : BaseCBActivity() {
         }
         updateSpaceStats()
         deleteAllTv.setOnClickListener {
-            lifecycleScope.launch {
-                val files = viewModel.getDownloads()
-                files.forEach { content ->
+            showDialog(
+                type = "Delete",
+                image = R.drawable.ic_info,
+                cancelable = false,
+                primaryText = R.string.confirmation,
+                secondaryText = R.string.delete_video_desc,
+                primaryButtonText = R.string.confirm,
+                secondaryButtonText = R.string.cancel,
+                callback = { confirmed ->
+                    if (confirmed) {
+                        lifecycleScope.launch {
+                            val files = viewModel.getDownloads()
+                            files.forEach { content ->
 
-                    val folderFile = File(file, "/${content.contentLecture.lectureId}")
+                                val folderFile = File(file, "/${content.contentLecture.lectureId}")
 
-                    withContext(Dispatchers.IO) {
-                        MediaUtils.deleteRecursive(folderFile)
-                    }
-                    runOnUiThread { updateSpaceStats() }
+                                withContext(Dispatchers.IO) {
+                                    MediaUtils.deleteRecursive(folderFile)
+                                }
+                                runOnUiThread { updateSpaceStats() }
+                            }
+                        } }
                 }
-            }
+            )
         }
 
         seekbarLimit.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
