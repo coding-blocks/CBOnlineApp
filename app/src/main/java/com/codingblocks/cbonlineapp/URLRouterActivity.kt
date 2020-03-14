@@ -15,7 +15,7 @@ import org.koin.android.ext.android.inject
 class URLRouterActivity : BaseCBActivity() {
 
     private fun fallBack(uri: Uri) {
-        if (uri.pathSegments.size > 0) {
+        if (uri.pathSegments.size > 1) {
             openChrome("", uri = uri)
         } else {
             startActivity(intentFor<DashboardActivity>())
@@ -34,17 +34,17 @@ class URLRouterActivity : BaseCBActivity() {
                 if (!uri.host!!.contains("online.codingblocks.com")) fallBack(uri)
 
                 val pathSegments = uri.pathSegments
-                if (pathSegments.size < 2) {
+                if (pathSegments.size < 1) {
                     fallBack(uri)
                     finish()
                     return
                 }
 
-                when (pathSegments[1]) {
+                when (pathSegments[0]) {
                     "classroom" -> openRouter(uri)
                     "courses" -> openRouter(uri)
                     "player" -> openRouter(uri)
-                    "tracks" -> openRouter(uri)
+                    "app" -> openRouter(uri)
                     else -> fallBack(uri)
                 }
                 finish()
