@@ -260,6 +260,17 @@ fun Context.showDialog(
     }
 }
 
+fun Context.getLoadingDialog(): AlertDialog {
+    val dialog = AlertDialog.Builder(this).create()
+    val view = layoutInflater.inflate(R.layout.dialog_loading, null)
+    dialog.apply {
+        window?.setBackgroundDrawableResource(android.R.color.transparent)
+        setView(view)
+        setCancelable(false)
+    }
+    return dialog
+}
+
 fun Context.openChrome(url: String, newTask: Boolean = false, uri: Uri = Uri.EMPTY) {
     val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         CustomTabsIntent.Builder()

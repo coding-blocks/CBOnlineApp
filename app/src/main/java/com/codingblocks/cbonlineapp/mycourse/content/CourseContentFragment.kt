@@ -22,6 +22,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.DownloadStarter
 import com.codingblocks.cbonlineapp.commons.SectionListClickListener
+import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.database.ListObject
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
@@ -42,11 +43,13 @@ import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
+import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.startService
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -57,7 +60,9 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
     var popupWindowDogs: PopupWindow? = null
     var sectionitem = ArrayList<SectionModel>()
     var type: String = ""
-
+    private val dialog by lazy {
+        requireContext().getLoadingDialog()
+    }
     private val sectionItemsAdapter = SectionItemsAdapter()
     private val sectionListAdapter = SectionListAdapter(sectionitem)
     private val viewModel by sharedViewModel<MyCourseViewModel>()
@@ -339,6 +344,10 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 }
             }
         }
+        viewModel.addedToCartProgress.observer(this) {
+            dialog.hide()
+            requireContext().startActivity<CheckoutActivity>()
+        }
     }
 
     private fun checkSection(premium: Boolean) {
@@ -359,7 +368,12 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                     secondaryText = R.string.purchase,
                     primaryButtonText = R.string.buy_now,
                     cancelable = true
-                ) { if (it) viewModel.clearCart() }
+                ) {
+                    if (it) {
+                        viewModel.clearCart()
+                        dialog.show()
+                    }
+                }
             }
             viewModel.runStartEnd.second > System.currentTimeMillis() -> {
                 requireContext().showDialog(
