@@ -199,6 +199,7 @@
                 android:hint="@string/coupon_code"
                 android:textAllCaps="true"
                 android:lines="1"
+                android:inputType="textCapCharacters"
                 android:paddingStart="0dp"
                 android:paddingEnd="0dp"
                 android:textColorHighlight="@color/orangish"

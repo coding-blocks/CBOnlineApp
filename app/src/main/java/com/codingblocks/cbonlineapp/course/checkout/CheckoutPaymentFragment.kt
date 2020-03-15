@@ -2,9 +2,11 @@ package com.codingblocks.cbonlineapp.course.checkout
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import com.codingblocks.cbonlineapp.R
@@ -12,6 +14,7 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.google.gson.JsonObject
 import com.razorpay.Checkout
+import kotlinx.android.synthetic.main.dialog_coupon.view.*
 import kotlinx.android.synthetic.main.fragment_checkout_payment.*
 import org.jetbrains.anko.design.snackbar
 import org.json.JSONObject
@@ -39,7 +42,7 @@ class CheckoutPaymentFragment : BaseCBFragment() {
 
         errorDrawableTv.setOnClickListener {
             if (errorDrawableTv.text == "Apply Coupon") {
-                vm.map["coupon"] = numberLayout.editText?.text.toString()
+                vm.map["coupon"] = numberLayout.editText?.text.toString().toUpperCase()
             } else {
                 vm.map["coupon"] = ""
                 vm.map["coupon_id"] = vm.couponApplied
@@ -57,14 +60,15 @@ class CheckoutPaymentFragment : BaseCBFragment() {
             } else if (it.contains("credits")) {
                 vm.map.remove("applyCredits")
             }
-            payBtn.isEnabled = true
+            payBtn.isEnabled = false
+            vm.updateCart()
             rootPayment.snackbar(it)
         }
         numberLayout.editText?.addTextChangedListener {
             if (it != null && it.length >= 3) {
                 errorDrawableTv.apply {
                     isVisible = true
-                    setText("Apply Coupon")
+                    text = "Apply Coupon"
                 }
             }
         }
@@ -95,7 +99,9 @@ class CheckoutPaymentFragment : BaseCBFragment() {
                 get("coupon_code")?.let {
                     numberLayout.editText?.setText(it.asString)
                     vm.couponApplied = get("coupon_id").asString
-                    couponDiscount.text = "- ${getString(R.string.rupee_sign)} ${get("discount")?.asInt?.div(100)}"
+                    val discountPrice = "${getString(R.string.rupee_sign)} ${get("discount")?.asInt?.div(100)}"
+                    showCouponDialog(discountPrice, it.asString)
+                    couponDiscount.text = "- $discountPrice"
                     errorDrawableTv.apply {
                         isVisible = true
                         text = "Remove Coupon"
@@ -127,6 +133,22 @@ class CheckoutPaymentFragment : BaseCBFragment() {
                         showRazorPayCheckoutForm(this)
                 }
             }
+        }
+    }
+
+    private fun showCouponDialog(discountPrice: String, coupon: String) {
+        val dialog = AlertDialog.Builder(requireContext()).create()
+        val view = layoutInflater.inflate(R.layout.dialog_coupon, null)
+        view.couponTv.text = coupon
+        view.couponDiscountTv.text = discountPrice
+        view.posBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.apply {
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            setView(view)
+            setCancelable(true)
+            show()
         }
     }
 

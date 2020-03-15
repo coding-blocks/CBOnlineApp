@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="36dp"
+        android:id="@+id/couponCard"
+        android:layout_marginEnd="36dp"
+        app:cardCornerRadius="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_xxxl"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="@dimen/margin_xxxl"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/margin_large"
+            android:paddingBottom="@dimen/margin_large">
+
+            <TextView
+                android:id="@+id/couponTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_bold"
+                android:textAllCaps="true"
+                android:textColor="@color/orangish"
+                android:textSize="18sp"
+                tools:text="“NIGHTCB”" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_medium"
+                android:text="Successfully Applied"
+                android:textAllCaps="true"
+                android:textColor="@color/orangish"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/couponDiscountTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:fontFamily="@font/gilroy_bold"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="26sp"
+                tools:text="999" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_extra_small"
+                android:fontFamily="@font/gilroy_medium"
+                android:text="Savings with this coupon"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_medium_small"
+                android:layout_marginEnd="@dimen/margin_medium"
+                android:background="?attr/divider" />
+
+
+            <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium_small"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="YAY!"
+                android:id="@+id/posBtn"
+                android:focusable="true"
+                android:clickable="true"
+                android:textAllCaps="true"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <ImageView
+        android:elevation="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/couponCard"
+        android:layout_alignEnd="@+id/couponCard"
+        android:layout_marginStart="-8dp"
+        android:src="@drawable/ic_coupon" />
+</RelativeLayout>
