@@ -42,6 +42,8 @@ class MyCourseViewModel(
     var filters: MutableLiveData<String> = MutableLiveData()
     var complete: MutableLiveData<String> = MutableLiveData("")
     var content: LiveData<List<SectionContentHolder.SectionContentPair>> = MutableLiveData()
+    var addedToCartProgress: MutableLiveData<Boolean> = MutableLiveData()
+    var runId: String = ""
 
     init {
         content = Transformations.switchMap(DoubleTrigger(complete, filters)) {
@@ -148,5 +150,27 @@ class MyCourseViewModel(
 
         WorkManager.getInstance()
             .enqueue(request)
+    }
+
+    fun clearCart() {
+        runIO {
+            repo.clearCart()
+            addToCart(runId)
+        }
+    }
+
+    private fun addToCart(id: String) {
+        runIO {
+            when (val response = repo.addToCart(id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        addedToCartProgress.postValue(true)
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
     }
 }

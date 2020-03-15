@@ -34,10 +34,15 @@ class MyCourseRepository(
     private val runPerformanceDao: RunPerformanceDao,
     private val bookmarkDao: BookmarkDao
 ) {
+    suspend fun getSectionWithContentNonLive(attemptId: String) = sectionWithContentsDao.getSectionWithContentNonLive(attemptId)
 
     fun getSectionWithContent(attemptId: String) = sectionWithContentsDao.getSectionWithContent(attemptId)
 
-    suspend fun getSectionWithContentNonLive(attemptId: String) = sectionWithContentsDao.getSectionWithContentNonLive(attemptId)
+    fun getRunById(attemptId: String) = courseWithInstructorDao.getRunById(attemptId)
+
+    fun getRunStats(attemptId: String) = runPerformanceDao.getPerformance(attemptId)
+
+    fun getNextContent(attemptId: String) = sectionWithContentsDao.resumeCourse(attemptId)
 
     suspend fun insertSections(runAttempt: RunAttempts) {
         runAttempt.run?.sections?.forEach { courseSection ->
@@ -235,12 +240,6 @@ class MyCourseRepository(
         }
     }
 
-    suspend fun fetchSections(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.enrolledCourseById(attemptId) }
-
-    fun getRunById(attemptId: String) = courseWithInstructorDao.getRunById(attemptId)
-
-    fun getRunStats(attemptId: String) = runPerformanceDao.getPerformance(attemptId)
-    suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
     suspend fun saveStats(body: PerformanceResponse, id: String) {
         runPerformanceDao.insert(
             RunPerformance(
@@ -253,7 +252,13 @@ class MyCourseRepository(
         )
     }
 
-    fun getNextContent(attemptId: String) = sectionWithContentsDao.resumeCourse(attemptId)
-
     suspend fun resetProgress(attemptId: ResetRunAttempt) = safeApiCall { Clients.api.resetProgress(attemptId) }
+
+    suspend fun clearCart() = safeApiCall { Clients.api.clearCart() }
+
+    suspend fun addToCart(id: String) = safeApiCall { Clients.api.addToCart(id) }
+
+    suspend fun fetchSections(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.enrolledCourseById(attemptId) }
+
+    suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
 }

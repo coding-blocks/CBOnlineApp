@@ -49,6 +49,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         viewModel.getRun().observer(viewLifecycleOwner) { courseAndRun ->
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
             viewModel.getStats(courseAndRun.runAttempt.attemptId)
+            viewModel.runId = (courseAndRun.run.crUid)
             val progressValue = if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
             homeProgressTv.text = "${progressValue.toInt()} %"
             homeProgressView.apply {

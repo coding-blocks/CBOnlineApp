@@ -359,9 +359,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                     secondaryText = R.string.purchase,
                     primaryButtonText = R.string.buy_now,
                     cancelable = true
-                ) {
-                    // add to cart
-                }
+                ) { if (it) viewModel.clearCart() }
             }
             viewModel.runStartEnd.second > System.currentTimeMillis() -> {
                 requireContext().showDialog(

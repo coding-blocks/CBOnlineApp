@@ -18,13 +18,13 @@ class CourseRepository() : AnkoLogger {
 
     suspend fun getSection(id: String) = Clients.onlineV2JsonApi.getSections(id)
 
+    suspend fun clearCart() = safeApiCall { Clients.api.clearCart() }
+
     suspend fun addToCart(id: String) = safeApiCall { Clients.api.addToCart(id) }
 
     suspend fun enrollToTrial(id: String) = safeApiCall { Clients.api.enrollTrial(id) }
 
     suspend fun getTracks() = safeApiCall { Clients.onlineV2JsonApi.getTracks() }
-
-    suspend fun clearCart() = safeApiCall { Clients.api.clearCart() }
 
     suspend fun findCourses(query: String) = safeApiCall { Clients.onlineV2JsonApi.findCourses(query = "%$query%") }
 }

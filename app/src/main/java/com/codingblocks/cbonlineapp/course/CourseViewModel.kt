@@ -148,6 +148,7 @@ class CourseViewModel(
     fun enrollTrial(id: String) {
         runIO {
             when (val response = repo.enrollToTrial(id)) {
+
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
