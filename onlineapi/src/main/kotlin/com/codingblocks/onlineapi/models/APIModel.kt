@@ -11,7 +11,7 @@ import com.google.gson.JsonObject
 import java.io.Serializable
 
 
-open class BaseModel {
+open class BaseModel {  
     @Id
     var id: String = ""
     var updatedAt: String = ""

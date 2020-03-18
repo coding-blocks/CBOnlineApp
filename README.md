@@ -28,6 +28,7 @@ Application is available here:
         <tr>
         <td><img src = "app/screenshots/7.png" height = "480" width="270"></td>
         <td><img src = "app/screenshots/8.png" height = "480" width="270"></td>
+        <td><img src = "app/screenshots/9.png" height = "480" width="270"></td>
         </tr>
 </table>    
 
