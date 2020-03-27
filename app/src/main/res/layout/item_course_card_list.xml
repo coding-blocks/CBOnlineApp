@@ -36,7 +36,7 @@
                 android:id="@+id/courseCardTitleTv"
                 android:layout_width="0dp"
                 android:ellipsize="end"
-                android:lines="1"
+                android:maxLines="1"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/gilroy_bold"
@@ -79,14 +79,16 @@
             <TextView
                 android:id="@+id/ratingTv"
                 android:layout_width="0dp"
+                android:layout_gravity="fill_vertical"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:maxLines="2"
                 android:fontFamily="@font/gilroy_medium"
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 android:drawableStart="@drawable/ic_start_black"
                 android:drawablePadding="5dp"
-                tools:text="4/5, 435 ratings" />
+                tools:text="4/5, 435 ratingsbfbvffkbvkbvbbvjjbvkbfvbvjkb" />
 
             <TextView
                 android:id="@+id/courseCardPriceTv"
