@@ -88,7 +88,7 @@
                 android:textSize="12sp"
                 android:drawableStart="@drawable/ic_start_black"
                 android:drawablePadding="5dp"
-                tools:text="4/5, 435 ratingsbfbvffkbvkbvbbvjjbvkbfvbvjkb" />
+                tools:text="4/5, 435 ratings" />
 
             <TextView
                 android:id="@+id/courseCardPriceTv"
