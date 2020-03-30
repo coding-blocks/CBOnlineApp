@@ -241,7 +241,7 @@ interface OnlineJsonApi {
     suspend fun getCarouselCards(): Response<List<CarouselCards>>
 
     @POST("players")
-    fun setPlayerId(@Body params: Player): Call<ResponseBody>
+    suspend fun setPlayerId(@Body params: Player): Response<ResponseBody>
 
     @GET("jobs")
     suspend fun getJobs(

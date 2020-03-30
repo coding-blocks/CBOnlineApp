@@ -13,7 +13,7 @@ apply plugin: 'com.google.firebase.firebase-perf'
 
 ext {
     ankoVersion = '0.10.6'
-    room_version = "2.2.4"
+    room_version = "2.2.5"
     koin_version = "2.1.4"
     markwon_version = "4.2.2"
     ankoLibs = [
@@ -117,15 +117,14 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5'
     implementation 'androidx.browser:browser:1.2.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'com.google.android.play:core:1.7.1'
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
-    implementation "androidx.paging:paging-runtime-ktx:2.1.1"
     implementation "android.arch.work:work-runtime-ktx:1.0.1"
-    implementation "androidx.fragment:fragment-ktx:1.2.2"
+    implementation "androidx.fragment:fragment-ktx:1.2.3"
     implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:17.4.0'
@@ -165,7 +164,7 @@ dependencies {
 
 
     //VideoCipher library
-    implementation 'com.vdocipher.aegis:vdocipher-android:1.3.3'
+    implementation 'com.vdocipher.aegis:vdocipher-android:1.4.0'
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
 
 

@@ -210,7 +210,7 @@ class SignInFragment : BaseCBFragment() {
                 val unformattedPhone = cred.id
                 val formatNumber = SpannableString(unformattedPhone)
                 val boldSpan = StyleSpan1(Typeface.BOLD) // Span to make text bold
-                formatNumber.setSpan(boldSpan, 0, 3, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                formatNumber.setSpan(boldSpan, 0, 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 numberLayout.editText?.setText(formatNumber)
             }
         }

@@ -60,7 +60,6 @@ class CheckoutPaymentFragment : BaseCBFragment() {
                 vm.map.remove("applyCredits")
             }
             payBtn.isEnabled = false
-            vm.updateCart()
             rootPayment.snackbar(it)
         }
         numberLayout.editText?.addTextChangedListener {

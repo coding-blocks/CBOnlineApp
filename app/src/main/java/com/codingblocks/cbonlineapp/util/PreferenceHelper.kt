@@ -34,6 +34,11 @@ class PreferenceHelper private constructor() {
         set(value) {
             prefs?.save(ONEAUTH_ID, value)
         }
+    var SP_PUSH_NOTIFICATIONS: Boolean
+        get() = prefs?.getBoolean(NOTIFICATIONS, false) ?: false
+        set(value) {
+            prefs?.save(NOTIFICATIONS, value)
+        }
 
     var SP_USER_ID: String
         get() = prefs?.getString(USER_ID, USER_ID) ?: ""
@@ -113,6 +118,7 @@ class PreferenceHelper private constructor() {
         const val USER_NAME = "user_name"
         const val NAME = "name"
         const val ADMIN = "admin"
+        const val NOTIFICATIONS = "notification"
         const val EMAIL_ID = "email_id"
         const val ROLE_ID_DEFAULT = 0
         const val COURSE_FILTER_TYPE = 0

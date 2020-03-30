@@ -26,6 +26,7 @@ import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.getDateForRun
 import com.codingblocks.cbonlineapp.util.extensions.getDateForTime
+import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
@@ -73,6 +74,9 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     private val dialog by lazy { BottomSheetDialog(this) }
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private var youtubePlayer: YouTubePlayer? = null
+    private val loadingDialog by lazy {
+        getLoadingDialog()
+    }
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -190,14 +194,15 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         courseCardListAdapter.onItemClick = itemClickListener
 
         viewModel.addedToCartProgress.observer(this) {
+            loadingDialog.hide()
             buyBtn.isEnabled = true
             startActivity<CheckoutActivity>()
         }
         viewModel.enrollTrialProgress.observeOnce { status ->
             if (status) {
+                loadingDialog.hide()
                 startActivity<DashboardActivity>()
                 finish()
-            } else {
             }
         }
 
@@ -226,9 +231,11 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         buyBtn.setOnClickListener { _ ->
             buyBtn.isEnabled = false
             viewModel.clearCart(it.id)
+            loadingDialog.show()
         }
         trialBtn.setOnClickListener { _ ->
             viewModel.enrollTrial(it.id)
+            loadingDialog.show()
         }
     }
 

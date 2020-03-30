@@ -7,6 +7,7 @@ import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.PerformanceResponse
+import com.codingblocks.onlineapi.models.Player
 import com.codingblocks.onlineapi.models.User
 import com.codingblocks.onlineapi.safeApiCall
 
@@ -49,6 +50,7 @@ class DashboardHomeRepository(
             )
         )
     }
+    suspend fun updatePlayerId(player: Player) = safeApiCall { Clients.onlineV2JsonApi.setPlayerId(player) }
 
     fun getTopRun() = courseWithInstructorDao.getTopRun().distinctUntilChanged()
     fun getRunStats(query: String?) = query?.let { runPerformanceDao.getPerformance(it) }
