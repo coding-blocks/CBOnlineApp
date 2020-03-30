@@ -42,6 +42,8 @@ class CBOnlineApp : Application() {
     }
 
     override fun onCreate() {
+        // Set your custom UncaughtExceptionHandler
+        Thread.setDefaultUncaughtExceptionHandler(CrashHandler(applicationContext))
         super.onCreate()
         appContext = applicationContext
         mInstance = this

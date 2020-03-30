@@ -50,12 +50,6 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                 contentType.isActivated = false
                 title.textColor = getColor(context, R.color.black)
             }
-//            if(expired.second < System.currentTimeMillis()){
-//                downloadBtn.setImageResource(R.drawable.ic_lock)
-//                itemView.isClickable = false
-//            }else{
-//                itemView.isClickable = true
-//            }
             setOnClickListener {
                 onItemClick?.invoke(contentModel)
             }

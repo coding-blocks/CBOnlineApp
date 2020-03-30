@@ -156,23 +156,6 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
             //            swiperefresh.isRefreshing = it
         }
 
-//        viewModel.revoked.observer(viewLifecycleOwner) { value ->
-//            if (value) {
-//                alert {
-//                    title = "Error Fetching Course"
-//                    message = """
-//                        There was an error downloading courseRun contents.
-//                        Please contact support@codingblocks.com
-//                        """.trimIndent()
-//                    yesButton {
-//                        it.dismiss()
-//                        activity?.finish()
-//                    }
-//                    isCancelable = false
-//                }.show()
-//            }
-//        }
-
         viewModel.content.observer(viewLifecycleOwner) { SectionContent ->
             sectionitem.clear()
             val consolidatedList = ArrayList<ListObject>()
