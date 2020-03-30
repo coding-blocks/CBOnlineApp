@@ -187,10 +187,6 @@
             android:name=".util.DownloadService"
             android:enabled="true"
             android:exported="true" />
-        <service
-            android:name=".util.SectionDownloadService"
-            android:enabled="true"
-            android:exported="true" />
 
         <meta-data
             android:name="com.onesignal.NotificationOpened.DEFAULT"
