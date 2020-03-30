@@ -18,13 +18,15 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_below="@id/dividerTop"
-        android:layout_marginTop="18dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/dividerTop"
         android:layout_alignParentStart="true"
+        android:layout_marginTop="18dp"
+        android:layout_toStartOf="@id/downloadBtn"
+        android:ellipsize="end"
         android:fontFamily="@font/gilroy_bold"
-        android:layout_toStartOf="@id/downloadSectionBtn"
+        android:lines="1"
         android:textColor="@color/black"
         android:textSize="18sp"
         tools:text="1.Introduction to Android Development" />
@@ -34,11 +36,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
-        android:layout_marginTop="4dp"
         android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
         android:layout_toEndOf="@id/lectures"
-        android:maxLines="1"
         android:fontFamily="@font/gilroy_medium"
+        android:maxLines="1"
         android:textColor="@color/brownish_grey"
         android:textSize="14sp"
         tools:text="30 Mins" />
@@ -48,23 +50,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
-        android:layout_marginTop="4dp"
         android:layout_alignParentStart="true"
+        android:layout_marginTop="4dp"
         android:fontFamily="@font/gilroy_medium"
         android:maxLines="1"
         android:textColor="@color/brownish_grey"
         android:textSize="14sp"
         tools:text="3 Lectures" />
 
+
     <ImageView
-        android:id="@+id/downloadSectionBtn"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:contentDescription="Download Section"
+        android:id="@+id/downloadBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginTop="8dp"
-        android:src="@android:drawable/stat_sys_download"
-        android:tint="@color/colorPrimary"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/download_states"
+        android:tint="@color/black"
         android:visibility="gone" />
 
     <View

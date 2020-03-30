@@ -41,4 +41,10 @@ class SectionContentHolder {
         var contentId: String,
         var contentable: String
     )
+
+    data class DownloadableContent(
+        var videoId: String,
+        var sectionId: String,
+        var contentId: String
+    )
 }

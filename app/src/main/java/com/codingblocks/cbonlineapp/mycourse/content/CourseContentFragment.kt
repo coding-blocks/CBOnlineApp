@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +17,7 @@ import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.PdfActivity
@@ -52,9 +54,11 @@ import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.support.v4.intentFor
-import org.jetbrains.anko.support.v4.startService
+import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.concurrent.TimeUnit
+
+const val SECTION_DOWNLOAD = "sectionDownload"
 
 class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
 
@@ -163,6 +167,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
             SectionContent.forEach { sectionContent ->
                 var duration: Long = 0
                 var sectionComplete = 0
+                var isDownloadEnabled = false
                 val list = if (viewModel.complete.value!!.isEmpty() && type.isEmpty()) {
                     sectionContent.contents.sortedBy { it.order }
                 } else if (type.isEmpty()) {
@@ -184,6 +189,9 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                     if (content.progress == "DONE") {
                         sectionComplete++
                     }
+                    if (content.contentable == "lecture" && content.contentLecture.lectureUid.isNotEmpty() && !content.contentLecture.isDownloaded) {
+                        isDownloadEnabled = true
+                    }
 
                     if (content.contentable == "lecture")
                         duration += content.contentLecture.lectureDuration
@@ -198,6 +206,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                     totalTime = duration
                     completedContent = sectionComplete
                     pos = consolidatedList.size
+                    isSectionDownloadEnabled = isDownloadEnabled
                 }
                 if (item.totalContent > 0 || type.isEmpty()) {
                     consolidatedList.add(item)
@@ -243,7 +252,32 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
     }
 
     override fun startSectionDownlod(sectionId: String) {
-        startService<SectionDownloadService>(SECTION_ID to sectionId)
+        val constraints = if (getPrefs(requireContext()).SP_WIFI)
+            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
+        else
+            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val videoData = workDataOf(
+            SECTION_ID to sectionId,
+            RUN_ATTEMPT_ID to viewModel.attemptId
+        )
+
+        val request: OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<SectionDownloadService>()
+                .setConstraints(constraints)
+                .addTag(SECTION_DOWNLOAD)
+                .setInputData(videoData)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                .build()
+        WorkManager.getInstance().getWorkInfosByTagLiveData(SECTION_DOWNLOAD)
+            .observe(viewLifecycleOwner, Observer { workList ->
+                if (workList.size == 0) {
+                    WorkManager.getInstance()
+                        .enqueue(request)
+                } else if (workList.size == 1 && workList[0].state == WorkInfo.State.RUNNING) {
+                    toast("Section Download in Progress")
+                } else if (workList[0].state == WorkInfo.State.SUCCEEDED)
+                    WorkManager.getInstance().pruneWork()
+            })
     }
 
     private fun popUpWindowSection(): PopupWindow {
