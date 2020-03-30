@@ -528,11 +528,12 @@ class Professions(
     val title: String = ""
 ) : BaseModel()
 
-@Type("player")
-class Player(
+@Type("players")
+data class Player(
+    @Id
+    var id: String? = null,
     var playerId: String? = null
 )
-
 @Type("jobs")
 class Jobs(
     val coverImage: String?,

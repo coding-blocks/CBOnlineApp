@@ -206,10 +206,8 @@ class DashboardViewModel(
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
-                        body()?.let {
                            homeRepo.prefs.SP_PUSH_NOTIFICATIONS = true
                             OneSignal.setExternalUserId(homeRepo.prefs.SP_ONEAUTH_ID)
-                        }
                     } else {
                         setError(fetchError(code()))
                     }
