@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.NetworkType
@@ -139,9 +140,9 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
             view.clearDim()
         }
 
-//        swiperefresh.setOnRefreshListener {
-//            (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
-//        }
+        swiperefresh.setOnRefreshListener {
+            (activity as SwipeRefreshLayout.OnRefreshListener).onRefresh()
+        }
         rvExpendableView.apply {
             adapter = sectionItemsAdapter
             layoutManager = mLayoutManager
@@ -153,7 +154,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
     private fun attachObservers() {
 
         viewModel.progress.observer(viewLifecycleOwner) {
-            //            swiperefresh.isRefreshing = it
+            swiperefresh.isRefreshing = it
         }
 
         viewModel.content.observer(viewLifecycleOwner) { SectionContent ->

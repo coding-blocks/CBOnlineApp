@@ -3,8 +3,10 @@ package com.codingblocks.cbonlineapp.util
 import android.content.Context
 import android.os.Environment
 import android.util.Log
+import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.util.extensions.folderSize
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
+import org.jetbrains.anko.intentFor
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -56,8 +58,12 @@ object FileUtils {
 
     fun showIfCleanDialog(context: Context, onCleanDialogListener: OnCleanDialogListener) {
         Components.showConfirmation(context, "file") {
-            clearOldestDirectory(context)
-            onCleanDialogListener.onComplete()
+            if (it) {
+                clearOldestDirectory(context)
+                onCleanDialogListener.onComplete()
+            } else {
+                context.startActivity(context.intentFor<SettingsActivity>())
+            }
         }
     }
 

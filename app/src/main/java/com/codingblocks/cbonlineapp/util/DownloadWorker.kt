@@ -168,8 +168,25 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
             if (data != null) {
                 notificationManager.cancel(data.notificationId)
                 data.notificationBuilder.setOngoing(false)
-                data.notificationBuilder.setContentText("Download Failed")
+                data.notificationBuilder.setContentText("Download Failed.Retrying")
+                GlobalScope.launch(Dispatchers.IO) {
+                    contentDao.updateContent(data.contentId, 0)
+                }
+                retryDownload(data)
                 notificationManager.notify(data.notificationId, data.notificationBuilder.build())
+            }
+        }
+    }
+
+    private fun retryDownload(downloadData: DownloadData) {
+        GlobalScope.launch {
+            val response: Response<JsonObject> = withContext(Dispatchers.IO) { Clients.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    val mOtp = it.get("otp").asString
+                    val mPlaybackInfo = it.get("playbackInfo").asString
+                    initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
+                }
             }
         }
     }
