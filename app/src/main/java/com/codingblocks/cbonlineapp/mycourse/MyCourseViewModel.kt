@@ -51,14 +51,15 @@ class MyCourseViewModel(
         }
     }
 
-    fun fetchSections() {
+    fun fetchSections(refresh: Boolean = false) {
         runIO {
             when (val response = repo.fetchSections(attemptId)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         response.value.body()?.let { runAttempt ->
-                            repo.insertSections(runAttempt)
+                            repo.insertSections(runAttempt, refresh)
+                            progress.postValue(false)
                         }
                     else {
                         setError(fetchError(response.value.code()))

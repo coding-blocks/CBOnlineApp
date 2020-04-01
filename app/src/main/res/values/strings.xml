@@ -54,7 +54,7 @@
     <string name="clean_dialog_title">You have reached your data limit!</string>
     <string name="clean_dialog_description">If you want to continue with the download, Please clear the oldest download.</string>
     <string name="clean_dialog_okBtn">Clear Oldest Download</string>
-    <string name="clean_dialog_cancelBtn">Cancel Current Download</string>
+    <string name="clean_dialog_cancelBtn">Change Settings</string>
     <string name="recommended_courses_description">Based on the industry trends, you should complete these courses</string>
     <string name="applied">Applied</string>
     <string name="job_eligible">Status:  Eligible</string>

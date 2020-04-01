@@ -126,6 +126,6 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
     }
 
     override fun onRefresh() {
-//        viewModel.fetchCourse(viewModel.attemptId)
+        viewModel.fetchSections(true)
     }
 }

@@ -44,7 +44,7 @@ class MyCourseRepository(
 
     fun getNextContent(attemptId: String) = sectionWithContentsDao.resumeCourse(attemptId)
 
-    suspend fun insertSections(runAttempt: RunAttempts) {
+    suspend fun insertSections(runAttempt: RunAttempts, refresh: Boolean = false) {
         runAttempt.run?.sections?.forEach { courseSection ->
             courseSection.run {
                 val newSection = SectionModel(
@@ -52,7 +52,10 @@ class MyCourseRepository(
                     order ?: 0, premium ?: false, status ?: "",
                     runId ?: "", runAttempt.id
                 )
-                sectionDao.insertNew(newSection)
+                if (refresh)
+                    sectionDao.insert(newSection)
+                else
+                    sectionDao.insertNew(newSection)
             }
             getSectionContent(courseSection.id, runAttempt.id, courseSection.name)
         }

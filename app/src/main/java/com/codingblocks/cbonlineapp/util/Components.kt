@@ -99,6 +99,9 @@ object Components {
         updateView.cancelBtn.setOnClickListener {
             confirmDialog.dismiss()
             when (type) {
+                "file" -> {
+                    callback(false)
+                }
                 UNAUTHORIZED -> {
                     callback(false)
                 }
