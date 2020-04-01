@@ -26,10 +26,14 @@ class SectionViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             dividerTop.isVisible = false
         }
         title.text = section.name
-        downloadBtn.isVisible = section.isSectionDownloadEnabled
+        downloadBtn.apply {
+            isEnabled = section.isSectionDownloadEnabled
+            isVisible = section.isSectionDownloadEnabled
+        }
         lectures.text = "${section.totalContent} Items |"
         lectureTime.text = "Duration : ${section.totalTime.getDurationBreakdown()}"
         downloadBtn.setOnClickListener {
+            downloadBtn.isEnabled = false
             starterListener?.startSectionDownlod(section.csid)
         }
     }

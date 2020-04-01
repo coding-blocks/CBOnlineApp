@@ -2,12 +2,16 @@ package com.codingblocks.cbonlineapp.mycourse
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.content.CourseContentFragment
+import com.codingblocks.cbonlineapp.mycourse.content.SECTION_DOWNLOAD
 import com.codingblocks.cbonlineapp.mycourse.library.CourseLibraryFragment
 import com.codingblocks.cbonlineapp.mycourse.overview.OverviewFragment
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
@@ -34,7 +38,6 @@ import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
-import org.jetbrains.anko.startActivity
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -92,6 +95,13 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
                 }
             }
         }
+        WorkManager.getInstance().getWorkInfosByTagLiveData(SECTION_DOWNLOAD).observe(this, Observer {
+            it.forEach {
+                if (it.state == WorkInfo.State.FAILED) {
+                    WorkManager.getInstance().pruneWork()
+                }
+            }
+        })
     }
 
     private fun initUI() {

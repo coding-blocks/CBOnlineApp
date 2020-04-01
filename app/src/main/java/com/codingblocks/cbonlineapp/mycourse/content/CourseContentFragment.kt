@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -268,16 +267,22 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 .setInputData(videoData)
                 .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
                 .build()
-        WorkManager.getInstance().getWorkInfosByTagLiveData(SECTION_DOWNLOAD)
-            .observe(viewLifecycleOwner, Observer { workList ->
-                if (workList.size == 0) {
-                    WorkManager.getInstance()
-                        .enqueue(request)
-                } else if (workList.size == 1 && workList[0].state == WorkInfo.State.RUNNING) {
-                    toast("Section Download in Progress")
-                } else if (workList[0].state == WorkInfo.State.SUCCEEDED)
-                    WorkManager.getInstance().pruneWork()
-            })
+        val pendingRequest = WorkManager.getInstance().getWorkInfosByTag(SECTION_DOWNLOAD).get()
+
+        pendingRequest.let { workList ->
+            if (workList.size == 0) {
+                WorkManager.getInstance()
+                    .enqueue(request)
+            } else if (workList.size == 1 && workList[0].state == WorkInfo.State.RUNNING) {
+                toast("Section Download in Progress")
+            } else if (workList[0].state == WorkInfo.State.FAILED) {
+                WorkManager.getInstance().pruneWork()
+                WorkManager.getInstance()
+                    .enqueue(request)
+            } else {
+                toast("Cannot Start Download !!!")
+            }
+        }
     }
 
     private fun popUpWindowSection(): PopupWindow {

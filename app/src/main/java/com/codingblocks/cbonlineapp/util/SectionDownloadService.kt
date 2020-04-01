@@ -7,6 +7,7 @@ import android.os.Environment
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
+import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
@@ -42,30 +43,25 @@ class SectionDownloadService(val context: Context, private val workerParameters:
     private val sectionWithContentsDao: SectionWithContentsDao by inject()
     lateinit var sectionId: String
     lateinit var attemptId: String
-    private var totalCount = 0
-    private var completedCount = 0
     private lateinit var notification: NotificationCompat.Builder
 
     override suspend fun doWork(): Result {
-        totalCount = 0
-        completedCount = 0
         attemptId = workerParameters.inputData.getString(RUN_ATTEMPT_ID) ?: ""
         sectionId = workerParameters.inputData.getString(SECTION_ID) ?: ""
-
+        downloadList.clear()
         val list = withContext(Dispatchers.IO) { sectionWithContentsDao.getVideoIdsWithSectionId(sectionId, attemptId) }
 
         return if (list.isNotEmpty()) downloadSection(list) else Result.failure()
     }
 
     private suspend fun downloadSection(list: List<DownloadableContent>): Result {
-        totalCount = list.size
         notification = NotificationCompat.Builder(context, DOWNLOAD_CHANNEL_ID).apply {
             setSmallIcon(R.drawable.ic_file_download)
             setContentTitle("Downloading Section")
             setOnlyAlertOnce(true)
             setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
-            setContentText("0 out of $totalCount downloaded")
-            setProgress(totalCount, 0, false)
+            setContentText("0 out of ${list.size} downloaded")
+            setProgress(list.size, 0, false)
             setOngoing(true)
             setAutoCancel(false)
         }
@@ -95,8 +91,7 @@ class SectionDownloadService(val context: Context, private val workerParameters:
 
     override fun onChanged(p0: String?, p1: DownloadStatus?) {
         notification.apply {
-            setProgress(totalCount, completedCount, false)
-            setContentText("$completedCount out of $totalCount downloaded(Current ${p1?.downloadPercent}% )")
+            setContentText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded(Current ${p1?.downloadPercent}% )")
         }
         notificationManager.notify(1, notification.build())
     }
@@ -111,23 +106,24 @@ class SectionDownloadService(val context: Context, private val workerParameters:
     }
 
     override fun onCompleted(videoId: String, p1: DownloadStatus?) {
-        completedCount++
-        val data = findDataWithId(videoId)
+        val data = downloadList[videoId]
         GlobalScope.launch(Dispatchers.IO) {
+            downloadList[videoId]?.isDownloaded = true
             contentDao.updateContent(data?.contentId ?: "", 1)
         }
         notification.apply {
-            setProgress(totalCount, completedCount, false)
-            setContentText("$completedCount out of $totalCount downloaded")
+            setProgress(downloadList.size, downloadList.filterValues { it.isDownloaded }.size, false)
+            setContentText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded")
         }
         notificationManager.notify(1, notification.build())
-        if (totalCount == completedCount) {
+        if (downloadList.filterValues { !it.isDownloaded }.isEmpty()) {
             notification.apply {
                 setProgress(0, 0, false)
                 setContentText("Section Downloaded")
                 setOngoing(false)
                 setAutoCancel(true)
             }
+            WorkManager.getInstance().pruneWork()
             notificationManager.notify(1, notification.build())
         }
     }
