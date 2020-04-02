@@ -4,6 +4,7 @@ import android.content.Intent
 import cn.campusapp.router.Router
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
+import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.database.models.Notification
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
@@ -12,6 +13,7 @@ import com.onesignal.OSNotification
 import com.onesignal.OSNotificationOpenResult
 import com.onesignal.OneSignal
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.intentFor
 import org.koin.core.context.GlobalContext
 
 var position: Long = 0
@@ -24,6 +26,9 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
         val url = result.notification.payload.launchURL
 
         Router.open("activity://courseRun/$url").otherwise {
+            if (url.contains("admin")) {
+                with(mInstance) { startActivity(intentFor<AdminActivity>()) }
+            }
             mInstance.openChrome(url, true)
         }
         doAsync {

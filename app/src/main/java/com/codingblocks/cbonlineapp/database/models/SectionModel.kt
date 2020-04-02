@@ -30,7 +30,7 @@ data class SectionModel(
     override fun getType(): Int = TYPE_SECTION
 
     @Ignore
-    var idList = ArrayList<String>()
+    var isSectionDownloadEnabled: Boolean = false
 
     @Ignore
     var totalContent = 0

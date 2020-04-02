@@ -52,7 +52,6 @@ class AdminActivity : BaseCBActivity(), FragmentChangeListener {
         setContentView(R.layout.activity_admin)
         setToolbar(toolbarAdmin)
         navigationAdapter.setupWithBottomNavigation(bottomNavAdmin)
-        startMyService()
 
         keyboardVisibilityHelper = KeyboardVisibilityUtil(contentView!!) {
             //            completeBtn.isVisible = it
