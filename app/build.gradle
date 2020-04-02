@@ -44,13 +44,13 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 101000101
+        versionCode 101000200
         // 1 (versioning scheme)
         // 00 (major version)
         // 00 (minor version)
         // 01 (patch version)
         // 01 spare for betas/RCs
-        versionName "1.0.1-rc01"
+        versionName "1.0.2"
         signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false

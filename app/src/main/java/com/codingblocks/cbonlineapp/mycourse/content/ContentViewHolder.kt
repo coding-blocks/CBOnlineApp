@@ -76,7 +76,6 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                     val downloadStatus = if (id) false else content.contentLecture.isDownloaded
                     downloadBtn.setImageResource(R.drawable.download_states_content)
                     downloadBtn.isActivated = downloadStatus
-                    downloadBtn.isEnabled = !downloadStatus
                     downloadBtn.setOnClickListener {
                         if (!downloadStatus) {
                             if (!id)
@@ -120,7 +119,6 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
     private fun downloadFile(downloadBtn: ImageView) {
         if (MediaUtils.checkPermission(itemView.context)) {
-            downloadBtn.isEnabled = false
             starterListener?.startDownload(
                 contentModel.contentLecture.lectureId,
                 contentModel.ccid,
