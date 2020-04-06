@@ -9,8 +9,10 @@ import com.codingblocks.cbonlineapp.auth.onboarding.AuthViewModel
 import com.codingblocks.cbonlineapp.auth.onboarding.LoginHomeFragment
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
+import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : BaseCBActivity(), AnkoLogger {
@@ -21,6 +23,9 @@ class LoginActivity : BaseCBActivity(), AnkoLogger {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login2)
         replaceFragmentSafely(LoginHomeFragment(), containerViewId = R.id.loginContainer)
+        vm.errorLiveData.observer(this) {
+            info { it }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

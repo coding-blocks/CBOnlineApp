@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <debug-overrides>
-        <trust-anchors>
-            <certificates src="system" />
-            <certificates src="user" />
-        </trust-anchors>
-    </debug-overrides>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">localhost:3000</domain>
+    </domain-config>
 </network-security-config>

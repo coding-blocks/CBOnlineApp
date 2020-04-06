@@ -1,4 +1,4 @@
-package com.codingblocks.onlineapi.models
+ package com.codingblocks.onlineapi.models
 
 import com.github.jasminb.jsonapi.Links
 import com.github.jasminb.jsonapi.RelType
@@ -17,7 +17,7 @@ open class BaseModel {
     var updatedAt: String = ""
 }
 
-
+//Not to be null
 data class CourseFeatures(
     val icon: String,
     val text: String

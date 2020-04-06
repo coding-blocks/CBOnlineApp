@@ -6,6 +6,7 @@ import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtRepository
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtsViewModel
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewRepository
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewViewModel
+import com.codingblocks.cbonlineapp.auth.onboarding.AuthRepository
 import com.codingblocks.cbonlineapp.auth.onboarding.AuthViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.course.CourseViewModel
@@ -61,7 +62,7 @@ val viewModelModule = module {
     viewModel { CheckoutViewModel() }
     viewModel { TrackViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
-    viewModel { (AuthViewModel(get())) }
+    viewModel { (AuthViewModel(get(),get())) }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
@@ -76,6 +77,7 @@ val viewModelModule = module {
     single { MyCourseRepository(get(), get(), get(), get(), get(), get()) }
     single { TracksRepository() }
     single { ProfileRepository(get()) }
+    single { AuthRepository() }
 }
 val preferencesModule = module {
     single { provideSettingsPreferences(androidApplication()) }

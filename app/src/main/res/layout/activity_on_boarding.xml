@@ -8,11 +8,11 @@
 
 
     <com.codingblocks.cbonlineapp.util.widgets.ViewPagerCustomDuration
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/viewPager"
-        android:overScrollMode="never"
-        android:layout_weight=".5">
+        android:layout_weight=".5"
+        android:overScrollMode="never">
 
     </com.codingblocks.cbonlineapp.util.widgets.ViewPagerCustomDuration>
 
@@ -21,14 +21,46 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/margin_xl"
+        android:layout_marginBottom="@dimen/margin_medium"
         android:orientation="horizontal" />
+
+
+    <TextView
+        android:id="@+id/numberTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:fontFamily="@font/gilroy_bold"
+        android:text="Enter your number to get started"
+        android:textSize="18sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/numberLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:layout_marginEnd="@dimen/margin_medium">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/white"
+            android:fontFamily="@font/gilroy_medium"
+            android:hint="@string/mobile_number"
+            android:inputType="phone"
+            android:paddingStart="0dp"
+            android:textColorHighlight="@color/orangish"
+            android:textColorHint="@color/black"
+            android:textSize="16sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginStart="@dimen/margin_large"
-        android:layout_marginTop="@dimen/margin_xl"
+        android:layout_marginTop="@dimen/margin_small"
         android:layout_marginEnd="@dimen/margin_large"
         android:background="@color/veryLightPink" />
 
@@ -37,9 +69,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingStart="@dimen/margin_medium"
-        android:paddingTop="@dimen/margin_xl"
+        android:paddingTop="@dimen/margin_medium"
         android:paddingEnd="@dimen/margin_medium"
-        android:paddingBottom="@dimen/margin_xl">
+        android:paddingBottom="@dimen/margin_large">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/browseBtn"

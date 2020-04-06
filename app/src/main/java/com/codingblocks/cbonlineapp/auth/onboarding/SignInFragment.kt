@@ -12,50 +12,29 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
-import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
 import com.codingblocks.cbonlineapp.util.KeyboardVisibilityUtil
-import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver
-import com.codingblocks.cbonlineapp.util.PreferenceHelper
-import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
-import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.ResultWrapper
-import com.codingblocks.onlineapi.safeApiCall
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
-import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_sign_in.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.jetbrains.anko.support.v4.intentFor
-import org.jetbrains.anko.support.v4.runOnUiThread
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import android.text.style.StyleSpan as StyleSpan1
+
 
 class SignInFragment : BaseCBFragment() {
 
-    val db: AppDatabase by inject()
-    var map = HashMap<String, String>()
     private lateinit var keyboardVisibilityHelper: KeyboardVisibilityUtil
+    val vm by sharedViewModel<AuthViewModel>()
 
-    private val sharedPrefs by inject<PreferenceHelper>()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_sign_in, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+        View? = inflater.inflate(R.layout.fragment_sign_in, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         errorDrawableTv.setOnClickListener {
             if (errorDrawableTv.text == getString(R.string.use_email)) {
                 errorDrawableTv.text = "Use Number"
@@ -100,82 +79,53 @@ class SignInFragment : BaseCBFragment() {
         if (numberEditText.isNullOrEmpty() || numberEditText.length < 10) {
             signInRoot.showSnackbar("Number is too short", Snackbar.LENGTH_SHORT)
         } else {
-            val number = if (numberEditText.length > 10) "+91-${numberEditText.takeLast(10)}" else "+91-$numberEditText"
-            map["phone"] = number
+            val number = if (numberEditText.length > 10) numberEditText.takeLast(10) else numberEditText
             proceedBtn.isEnabled = false
-            GlobalScope.launch {
-                when (val response = safeApiCall { Clients.api.getOtp(map) }) {
-                    is ResultWrapper.GenericError -> {
-                        runOnUiThread {
-                            proceedBtn.isEnabled = true
-                            signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
-                        }
-                    }
-                    is ResultWrapper.Success -> {
-                        if (response.value.isSuccessful) {
-                            activity?.let {
-                                val otpFragment = LoginOtpFragment.newInstance(map["phone"] ?: "")
-                                SmsRetriever.getClient(it).startSmsRetriever() // start retriever
-                                replaceFragmentSafely(
-                                    otpFragment,
-                                    containerViewId = R.id.loginContainer
-                                )
-                                MySMSBroadcastReceiver.register(it, otpFragment) // the new fragment will listen for otp
-                            }
-                        } else {
-                            runOnUiThread {
-                                errorDrawableTv.isVisible = true
-                                signInRoot.showSnackbar("Number Not Verified.Please Try Again !!", Snackbar.LENGTH_SHORT)
-                                proceedBtn.isEnabled = true
-                            }
-                        }
-                    }
-                }
-            }
+            vm.getOtp(number)
         }
     }
 
     private fun validateEmailPassWord() {
-        map["client"] = "android"
-        map["username"] = numberLayout.editText?.text.toString()
-        map["password"] = passwordLayout.editText?.text.toString()
-        proceedBtn.isEnabled = false
-        GlobalScope.launch {
-            when (val response = safeApiCall { Clients.api.getJwtWithEmail(map) }) {
-                is ResultWrapper.GenericError -> {
-                    signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
-                }
-                is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful) {
-                        response.value.body()?.let {
-                            if (sharedPrefs.SP_JWT_TOKEN_KEY.isNotEmpty() && sharedPrefs.SP_JWT_TOKEN_KEY != it["jwt"].asString) {
-                                withContext(Dispatchers.IO) { db.clearAllTables() }
-                                saveKeys(it)
-                            } else {
-                                saveKeys(it)
-                            }
-                        }
-                        startActivity(intentFor<DashboardActivity>())
-                        requireActivity().finish()
-                    } else
-                        runOnUiThread {
-                            signInRoot.showSnackbar("Invalid Username or Password.Please Try Again", Snackbar.LENGTH_SHORT)
-                            proceedBtn.isEnabled = true
-                        }
-                }
-            }
-        }
+//        map["client"] = "android"
+//        map["username"] = numberLayout.editText?.text.toString()
+//        map["password"] = passwordLayout.editText?.text.toString()
+//        proceedBtn.isEnabled = false
+//        GlobalScope.launch {
+//            when (val response = safeApiCall { Clients.api.getJwtWithEmail(map) }) {
+//                is ResultWrapper.GenericError -> {
+//                    signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
+//                }
+//                is ResultWrapper.Success -> {
+//                    if (response.value.isSuccessful) {
+//                        response.value.body()?.let {
+//                            if (sharedPrefs.SP_JWT_TOKEN_KEY.isNotEmpty() && sharedPrefs.SP_JWT_TOKEN_KEY != it["jwt"].asString) {
+//                                withContext(Dispatchers.IO) { db.clearAllTables() }
+//                                saveKeys(it)
+//                            } else {
+//                                saveKeys(it)
+//                            }
+//                        }
+//                        startActivity(intentFor<DashboardActivity>())
+//                        requireActivity().finish()
+//                    } else
+//                        runOnUiThread {
+//                            signInRoot.showSnackbar("Invalid Username or Password.Please Try Again", Snackbar.LENGTH_SHORT)
+//                            proceedBtn.isEnabled = true
+//                        }
+//                }
+//            }
+//        }
     }
 
     private fun saveKeys(it: JsonObject) {
-        with(it["jwt"].asString) {
-            Clients.authJwt = this
-            sharedPrefs.SP_JWT_TOKEN_KEY = this
-        }
-        with(it["refresh_token"].asString) {
-            Clients.refreshToken = this
-            sharedPrefs.SP_JWT_REFRESH_TOKEN = this
-        }
+//        with(it["jwt"].asString) {
+//            Clients.authJwt = this
+//            sharedPrefs.SP_JWT_TOKEN_KEY = this
+//        }
+//        with(it["refresh_token"].asString) {
+//            Clients.refreshToken = this
+//            sharedPrefs.SP_JWT_REFRESH_TOKEN = this
+//        }
     }
 
     override fun onResume() {

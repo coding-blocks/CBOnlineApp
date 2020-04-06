@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/NewAppTheme"
-        android:usesCleartextTraffic="true"
+        android:usesCleartextTraffic="${usesCleartextTraffic}"
         tools:targetApi="q">
         <activity
             android:name=".tracks.TrackActivity"
@@ -215,11 +215,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <service
-            android:name=".util.EndlessService"
-            android:enabled="true"
-            android:exported="false"></service>
     </application>
 
 </manifest>

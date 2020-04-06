@@ -106,6 +106,7 @@ interface OnlineRestApi {
     @POST("v2/chats/{id}")
     suspend fun getChatId(@Path("id") doubtId: String): Response<JsonObject>
 
+    @Deprecated("Use v2 for otp")
     @POST("jwt/otp")
     @FormUrlEncoded
     suspend fun getOtp(@FieldMap params: HashMap<String, String>): Response<JsonObject>
@@ -137,5 +138,36 @@ interface OnlineRestApi {
 
     @POST("v2/hubspot/lead")
     suspend fun generateLead(@Body body: HashMap<String, Any>): Response<JsonObject>
+
+    /*
+     *API Based Login Endpoints
+     */
+
+    @POST("jwt/otp/v2")
+    @FormUrlEncoded
+    suspend fun getOtpV2(
+        @FieldMap params: HashMap<String, String>
+    ): Response<JsonObject>
+
+    @POST("jwt/otp/v2/:id/verify")
+    @FormUrlEncoded
+    suspend fun verifyOtp(
+        @Path("id") id: String,
+        @FieldMap params: HashMap<String, String>
+    ): Response<JsonObject>
+
+    @POST("jwt/otp/v2/:id/login")
+    @FormUrlEncoded
+    suspend fun loginUsingClaim(
+        @Path("id") id: String,
+        @FieldMap params: HashMap<String, String> = hashMapOf("client" to "android")
+    ): Response<JsonObject>
+
+    @POST("users/find")
+    @FormUrlEncoded
+    suspend fun findUser(
+        @FieldMap params: HashMap<String, String>
+    ): Response<JsonObject>
+
 
 }

@@ -8,7 +8,8 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 
 class AuthViewModel(
-    private val homeRepo: DashboardHomeRepository
+    private val homeRepo: DashboardHomeRepository,
+    private val repo: AuthRepository
 ) : BaseCBViewModel() {
     fun fetchToken(grantCode: String): MutableLiveData<Boolean> {
         val authComplete = MutableLiveData<Boolean>()
@@ -30,5 +31,19 @@ class AuthViewModel(
             }
         }
         return authComplete
+    }
+
+    fun getOtp(number: CharSequence) {
+        runIO {
+            when (val response = repo.getOtp(number.toString())) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let {
+
+                        }
+                }
+            }
+        }
     }
 }

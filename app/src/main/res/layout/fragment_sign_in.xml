@@ -63,6 +63,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
+                    android:maxLength="10"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/white"
                     android:fontFamily="@font/gilroy_medium"
