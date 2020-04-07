@@ -18,6 +18,7 @@ import com.airbnb.lottie.LottieAnimationView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.VideoUtils.digitalClockTime
 import com.codingblocks.cbonlineapp.util.VideoUtils.getClosestFloatIndex
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
@@ -71,7 +72,7 @@ class VdoPlayerControls @JvmOverloads constructor(
     private val backButton: ImageButton
 
     //    private val captionsButton: ImageButton
-//    private val qualityButton: ImageButton
+    private val qualityButton: ImageButton
     private val enterFullscreenButton: ImageButton
     private val exitFullscreenButton: ImageButton
     private val loaderView: ProgressBar
@@ -122,8 +123,8 @@ class VdoPlayerControls @JvmOverloads constructor(
         speedControlButton.setOnClickListener(uiListener)
         backButton = findViewById(R.id.vdo_back)
 //        captionsButton.setOnClickListener(uiListener)
-//        qualityButton = findViewById(R.id.vdo_quality)
-//        qualityButton.setOnClickListener(uiListener)
+        qualityButton = findViewById(R.id.vdo_quality)
+        qualityButton.setOnClickListener(uiListener)
         enterFullscreenButton = findViewById(R.id.vdo_enter_fullscreen)
         enterFullscreenButton.setOnClickListener(uiListener)
         exitFullscreenButton = findViewById(R.id.vdo_exit_fullscreen)
@@ -327,8 +328,8 @@ class VdoPlayerControls @JvmOverloads constructor(
     }
 
     private fun showSelectionDialog(title: CharSequence, trackHolders: Array<TrackHolder>, selectedTrackIndex: Int) {
-        val adapter: ListAdapter = ArrayAdapter(context, android.R.layout.simple_list_item_single_choice, trackHolders)
-        AlertDialog.Builder(context)
+        val adapter: ListAdapter = ArrayAdapter(context, R.layout.simple_list_item_single_choice, trackHolders)
+        MaterialAlertDialogBuilder(context)
             .setTitle(title)
             .setSingleChoiceItems(adapter, selectedTrackIndex) { dialog, which ->
                 player?.let {
@@ -413,10 +414,9 @@ class VdoPlayerControls @JvmOverloads constructor(
 //            } else if (v === captionsButton) {
 //                hideAfterTimeout = false
 //                showTrackSelectionDialog(Track.TYPE_CAPTIONS)
-//            } else if (v === qualityButton) {
-//                hideAfterTimeout = false
-//                showTrackSelectionDialog(Track.TYPE_VIDEO)
-//            }
+            } else if (v === qualityButton) {
+                hideAfterTimeout = false
+                showTrackSelectionDialog(Track.TYPE_VIDEO)
             } else if (v === enterFullscreenButton || v === exitFullscreenButton) {
                 toggleFullscreen()
             } else if (v === errorView || v === errorTextView) {

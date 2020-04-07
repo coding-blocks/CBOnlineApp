@@ -15,7 +15,6 @@ import com.onesignal.OneSignal
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.newTask
-import org.jetbrains.anko.singleTop
 import org.koin.core.context.GlobalContext
 
 var position: Long = 0
