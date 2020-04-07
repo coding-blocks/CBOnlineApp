@@ -22,11 +22,13 @@ import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.onlineapi.Clients
+import com.facebook.stetho.Stetho
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.notificationManager
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 
 class CBOnlineApp : Application() {
@@ -73,6 +75,8 @@ class CBOnlineApp : Application() {
             modules(listOf(viewModelModule,
                 databaseModule, preferencesModule))
         }
+        
+        Stetho.initializeWithDefaults(this)
 
         Picasso.setSingletonInstance(Picasso.Builder(this).build())
 
