@@ -64,7 +64,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             }
             courseAndRun.run.whatsappLink.let { link ->
                 whatsappContainer.apply {
-                    isVisible = !link.isNullOrEmpty()
+                    isVisible = !link.isNullOrEmpty() || courseAndRun.runAttempt.premium
                     setOnClickListener {
                         val intent = Intent(Intent.ACTION_VIEW)
                         intent.setPackage("com.whatsapp")

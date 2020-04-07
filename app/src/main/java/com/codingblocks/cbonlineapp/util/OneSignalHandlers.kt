@@ -14,6 +14,8 @@ import com.onesignal.OSNotificationOpenResult
 import com.onesignal.OneSignal
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.newTask
+import org.jetbrains.anko.singleTop
 import org.koin.core.context.GlobalContext
 
 var position: Long = 0
@@ -27,7 +29,7 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
 
         Router.open("activity://courseRun/$url").otherwise {
             if (url.contains("admin")) {
-                with(mInstance) { startActivity(intentFor<AdminActivity>()) }
+                with(mInstance) { startActivity(intentFor<AdminActivity>().newTask()) }
             }
             mInstance.openChrome(url, true)
         }
