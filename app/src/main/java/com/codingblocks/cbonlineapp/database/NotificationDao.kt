@@ -28,4 +28,7 @@ abstract class NotificationDao : BaseDao<Notification> {
 
     @get:Query("SELECT * FROM Notification")
     abstract val allNotificationNonLive: List<Notification>
+
+    @Query("SELECT * FROM Notification WHERE id = :notificationId")
+    abstract fun getNotification(notificationId : Long) : Notification?
 }

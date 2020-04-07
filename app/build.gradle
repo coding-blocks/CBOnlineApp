@@ -16,6 +16,13 @@ ext {
     room_version = "2.2.4"
     koin_version = "2.1.1"
     markwon_version = "4.2.2"
+    hamcrestVersion = '1.3'
+    androidXTestCoreVersion = '1.2.0'
+    robolectricVersion = '4.3.1'
+    androidXTestExtKotlinRunnerVersion = '1.1.1'
+    archTestingVersion = '2.0.0'
+    coroutinesVersion = '1.3.3'
+
     ankoLibs = [
             // commons
             'commons',
@@ -55,7 +62,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false
         manifestPlaceholders = [
-                onesignal_app_id               : '01d75aac-5123-4145-b655-ba8d27c5dc13',
+                onesignal_app_id               : 'c277757c-9744-43ef-9fa7-34ef6ead5dfe',
                 onesignal_google_project_number: 'REMOTE'
         ]
         buildConfigField "String", "YOUTUBE_KEY", '"' + YOUTUBE_KEY + '"'
@@ -194,8 +201,24 @@ dependencies {
     implementation project(':onlineapi')
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
 
+    //Debugging Dependencies
+    implementation 'com.facebook.stetho:stetho:1.5.1'
+
     // Test Dependencies
     testImplementation 'junit:junit:4.12'
+    testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"
+    testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
+    testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+
+    // AndroidX Test - Instrumented testing
+    androidTestImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation "androidx.arch.core:core-testing:$archTestingVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidXTestExtKotlinRunnerVersion"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
 }

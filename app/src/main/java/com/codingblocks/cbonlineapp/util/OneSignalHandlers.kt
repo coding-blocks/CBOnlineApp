@@ -1,9 +1,11 @@
 package com.codingblocks.cbonlineapp.util
 
 import android.content.Intent
+import android.util.Log
 import cn.campusapp.router.Router
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
+import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.database.models.Notification
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
@@ -11,14 +13,19 @@ import com.codingblocks.cbonlineapp.util.extensions.otherwise
 import com.onesignal.OSNotification
 import com.onesignal.OSNotificationOpenResult
 import com.onesignal.OneSignal
+import kotlinx.coroutines.*
 import org.jetbrains.anko.doAsync
+import org.koin.core.KoinComponent
 import org.koin.core.context.GlobalContext
+import org.koin.core.inject
 
 var position: Long = 0
 
-private val notificationDao = GlobalContext().get().get<NotificationDao>()
 
-class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
+
+class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler, KoinComponent {
+
+    private val notificationDao : NotificationDao by inject()
 
     override fun notificationOpened(result: OSNotificationOpenResult) {
         val url = result.notification.payload.launchURL
@@ -32,9 +39,13 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
     }
 }
 
-class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
+class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler , KoinComponent{
+
+    private val notificationDao : NotificationDao by inject()
 
     override fun notificationReceived(notification: OSNotification) {
+        Log.d("Koin" , "$notificationDao")
+
         val data = notification.payload.additionalData
         val payload = notification.payload
         val title = notification.payload.title
@@ -52,11 +63,13 @@ class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
             .also {
                 position = it
 
+                Log.d("Koin" , "$position")
+
                 val local = Intent()
 
                 local.action = "com.codingblocks.notification"
 
-                CBOnlineApp.mInstance.sendBroadcast(local)
+                mInstance.sendBroadcast(local)
             }
     }
 }
