@@ -12,7 +12,6 @@ import android.widget.ListAdapter
 import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.lottie.LottieAnimationView
 import com.codingblocks.cbonlineapp.R
@@ -249,6 +248,8 @@ class VdoPlayerControls @JvmOverloads constructor(
         player?.let {
             if (it.isSpeedControlSupported) {
                 speedControlButton.visibility = VISIBLE
+                qualityButton.visibility = VISIBLE
+
                 val speed = it.playbackSpeed
                 chosenSpeedIndex = getClosestFloatIndex(allowedSpeedList, speed)
 //                speedControlButton.text = allowedSpeedStrList[chosenSpeedIndex]
@@ -256,6 +257,17 @@ class VdoPlayerControls @JvmOverloads constructor(
                 speedControlButton.visibility = GONE
             }
         }
+    }
+
+    private fun changeDefaultPlaybackQuality(trackType: Int) {
+        val playerRef = player ?: return
+        val availableTracks = playerRef.availableTracks.filter { it.type == trackType }
+        val trackHolders = availableTracks.map { TrackHolder(it) }.toMutableList()
+
+        if (trackHolders.size > 1) {
+            player?.selectedTracks = arrayOf(trackHolders[0].track)
+        }
+
     }
 
     private fun toggleFullscreen() {
@@ -278,7 +290,7 @@ class VdoPlayerControls @JvmOverloads constructor(
     }
 
     private fun showSpeedControlDialog() {
-        AlertDialog.Builder(context)
+        MaterialAlertDialogBuilder(context, R.style.CustomMaterialDialog)
             .setSingleChoiceItems(allowedSpeedStrList,
                 chosenSpeedIndex
             ) { dialog, which ->
@@ -323,13 +335,13 @@ class VdoPlayerControls @JvmOverloads constructor(
         Log.i(TAG, "total ${trackHolders.size}, selected $selectedIndex")
 
         // show the type tracks in dialog for selection
-        val title = if (trackType == Track.TYPE_CAPTIONS) "CAPTIONS" else "Quality"
+        val title = if (trackType == Track.TYPE_CAPTIONS) "CAPTIONS" else "Streaming at"
         showSelectionDialog(title, trackHolderArr, selectedIndex)
     }
 
     private fun showSelectionDialog(title: CharSequence, trackHolders: Array<TrackHolder>, selectedTrackIndex: Int) {
         val adapter: ListAdapter = ArrayAdapter(context, R.layout.simple_list_item_single_choice, trackHolders)
-        MaterialAlertDialogBuilder(context)
+        MaterialAlertDialogBuilder(context, R.style.CustomMaterialDialog)
             .setTitle(title)
             .setSingleChoiceItems(adapter, selectedTrackIndex) { dialog, which ->
                 player?.let {
@@ -458,6 +470,7 @@ class VdoPlayerControls @JvmOverloads constructor(
             player?.let {
                 durationView.text = "/${digitalClockTime(it.duration.toInt())}"
                 seekBar.max = it.duration.toInt()
+                changeDefaultPlaybackQuality(Track.TYPE_VIDEO)
                 updateSpeedControlButton()
             }
         }

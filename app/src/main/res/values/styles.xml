@@ -245,5 +245,13 @@
         <item name="cornerRadius">20dp</item>
     </style>
 
+    <style name="CustomMaterialDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="materialAlertDialogTitleTextStyle">@style/MyTitle_MaterialAlertDialog.MaterialComponents.Title.Text</item>
+    </style>
+    <style name="MyTitle_MaterialAlertDialog.MaterialComponents.Title.Text" parent="@style/MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="fontFamily">@font/gilroy_semibold</item>
+    </style>
+
+
 
 </resources>

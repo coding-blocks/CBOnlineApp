@@ -47,6 +47,7 @@
                     style="@style/VdoMediaButton"
                     android:layout_width="38dp"
                     android:padding="8dp"
+                    android:visibility="invisible"
                     android:scaleType="fitXY"
                     android:layout_height="38dp"
                     android:src="@drawable/ic_high_quality_white_24dp"/>
