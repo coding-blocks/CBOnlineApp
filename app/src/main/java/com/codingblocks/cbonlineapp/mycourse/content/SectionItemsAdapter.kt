@@ -21,6 +21,7 @@ class SectionItemsAdapter : ListAdapter<ListObject, RecyclerView.ViewHolder>(dif
                 val section = getItem(position) as SectionModel
                 val sectionViewHolder = holder as SectionViewHolder
                 sectionViewHolder.bindTo(section)
+                sectionViewHolder.starterListener = starter
             }
             ListObject.TYPE_CONTENT -> {
                 val content = getItem(position) as ContentModel

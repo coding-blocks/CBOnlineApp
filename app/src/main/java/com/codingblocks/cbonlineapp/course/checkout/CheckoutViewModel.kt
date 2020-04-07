@@ -8,16 +8,21 @@ import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.safeApiCall
 import com.google.gson.JsonObject
+import org.json.JSONObject
 
 /**
  * @author aggarwalpulkit596
  */
 class CheckoutViewModel : BaseCBViewModel() {
 
+    var cartId: String = ""
     val paymentStart = MutableLiveData<Boolean>()
     var cart = MutableLiveData<JsonObject>()
     var map = hashMapOf<String, Any>()
     var paymentMap = hashMapOf<String, String>()
+    var creditsApplied = false
+    var couponApplied: String = ""
+    var isFree: Boolean = false
 
     fun getCart() {
         runIO {
@@ -44,8 +49,16 @@ class CheckoutViewModel : BaseCBViewModel() {
                         cart.postValue(body())
                         getCart()
                     } else {
-                        errorBody()?.string()?.let { setError(it) } ?: setError(fetchError(code()))
-                    }
+                        errorBody()?.string()?.let {
+                            val error = JSONObject(it)
+                            val msg: String
+                            if (error.getJSONObject("err").has("err")) {
+                                msg = error.getJSONObject("err").getString("err")
+                            } else
+                                msg = error.getJSONObject("err").getString("error")
+                            setError(msg)
+                        }
+                    } ?: setError(fetchError(code()))
                 }
             }
         }

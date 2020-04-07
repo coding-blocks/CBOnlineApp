@@ -56,6 +56,9 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
         val videoId = workerParameters.inputData.getString(VIDEO_ID) ?: ""
         val sectionId = workerParameters.inputData.getString(SECTION_ID) ?: ""
         val title = workerParameters.inputData.getString(TITLE) ?: ""
+        if (downloadList.containsKey(videoId)) {
+            return Result.success()
+        }
         val downloadData = DownloadData(
             sectionId,
             videoId,
@@ -79,7 +82,7 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
         response = withContext(Dispatchers.IO) { Clients.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
         if (response.isSuccessful) {
             response.body()?.let {
-                downloadList.add(downloadData)
+                downloadList[videoId] = (downloadData)
                 val mOtp = it.get("otp").asString
                 val mPlaybackInfo = it.get("playbackInfo").asString
                 initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
@@ -87,7 +90,7 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
             return Result.success()
         } else {
             for (data in downloadList) {
-                notificationManager.cancel(data.notificationId)
+                notificationManager.cancel(data.value.notificationId)
             }
             if (response.code() in (500..599)) {
                 // try again if there is a server error
@@ -141,8 +144,8 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
 
     private fun findDataWithId(videoId: String): DownloadData? {
         for (data in downloadList) {
-            if (videoId == data.videoId)
-                return data
+            if (videoId == data.key)
+                return data.value
         }
         return null
     }
@@ -165,8 +168,25 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
             if (data != null) {
                 notificationManager.cancel(data.notificationId)
                 data.notificationBuilder.setOngoing(false)
-                data.notificationBuilder.setContentText("Download Failed")
+                data.notificationBuilder.setContentText("Download Failed.Retrying")
+                GlobalScope.launch(Dispatchers.IO) {
+                    contentDao.updateContent(data.contentId, 0)
+                }
+                retryDownload(data)
                 notificationManager.notify(data.notificationId, data.notificationBuilder.build())
+            }
+        }
+    }
+
+    private fun retryDownload(downloadData: DownloadData) {
+        GlobalScope.launch {
+            val response: Response<JsonObject> = withContext(Dispatchers.IO) { Clients.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    val mOtp = it.get("otp").asString
+                    val mPlaybackInfo = it.get("playbackInfo").asString
+                    initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
+                }
             }
         }
     }
@@ -206,6 +226,6 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
     companion object {
         @JvmStatic
         var notificationId = 0
-        private val downloadList = mutableListOf<DownloadData>()
+        private val downloadList = hashMapOf<String, DownloadData>()
     }
 }

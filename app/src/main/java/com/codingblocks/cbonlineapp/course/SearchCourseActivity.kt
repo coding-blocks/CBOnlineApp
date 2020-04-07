@@ -48,7 +48,7 @@ class SearchCourseActivity : BaseCBActivity() {
         setContentView(R.layout.activity_search_course)
         setToolbar(searchToolbar, title = "All Courses")
 
-        viewModel.fetchRecommendedCourses()
+        viewModel.fetchAllCourses()
         courseSearchRv.setRv(
             this@SearchCourseActivity,
             courseCardListAdapter,

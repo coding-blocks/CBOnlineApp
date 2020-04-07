@@ -144,7 +144,11 @@
                 android:completionThreshold="1"
                 android:fontFamily="@font/gilroy_medium"
                 android:hint="@string/college"
-                android:maxLines="1"
+                android:lines="1"
+                android:singleLine="true"
+                android:scrollHorizontally="false"
+                android:inputType="text"
+                android:ellipsize="end"
                 android:paddingStart="0dp"
                 android:paddingEnd="0dp"
                 android:textColorHighlight="@color/orangish"
@@ -162,6 +166,7 @@
 
             <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                 android:id="@+id/branch"
+                android:isScrollContainer="false"
                 style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -170,6 +175,7 @@
                 android:fontFamily="@font/gilroy_medium"
                 android:hint="@string/branch"
                 android:maxLines="1"
+                android:ellipsize="end"
                 android:paddingStart="0dp"
                 android:paddingEnd="0dp"
                 android:textColorHighlight="@color/orangish"

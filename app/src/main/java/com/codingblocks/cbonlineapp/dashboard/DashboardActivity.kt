@@ -302,10 +302,10 @@ class DashboardActivity : BaseCBActivity(),
         view.primaryBtn.setOnClickListener {
 
             if (view.nameLayout.editText?.text.isNullOrEmpty()) {
-                view.nameLayout.error = "Name Cannot Be Empty"
+                view.nameLayout.error = "Title Cannot Be Empty"
                 return@setOnClickListener
             } else if (view.mobile.editText?.text.isNullOrEmpty() && view.mobile.editText?.text?.length!! < 10) {
-                view.mobile.error = "Number Cannot Be Empty"
+                view.mobile.error = "Description Cannot Be Empty"
                 return@setOnClickListener
             } else {
                 val data = hashMapOf(

@@ -13,7 +13,9 @@ import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.getMeta
 import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.Course
+import com.codingblocks.onlineapi.models.Player
 import com.codingblocks.onlineapi.models.User
+import com.onesignal.OneSignal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -105,6 +107,8 @@ class DashboardViewModel(
                         response.value.body()?.let {
                             user.postValue(it)
                             homeRepo.insertUser(it)
+                            if (!homeRepo.prefs.SP_PUSH_NOTIFICATIONS)
+                                setPlayerId()
                         }
                     else {
                         setError(fetchError(response.value.code()))
@@ -187,6 +191,23 @@ class DashboardViewModel(
                         body()?.let { response ->
                             homeRepo.saveStats(response, id)
                         }
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setPlayerId() {
+        runIO {
+            val status = OneSignal.getPermissionSubscriptionState()
+            when (val response = homeRepo.updatePlayerId(Player(playerId = status.subscriptionStatus.userId))) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        homeRepo.prefs.SP_PUSH_NOTIFICATIONS = true
+                        OneSignal.setExternalUserId(homeRepo.prefs.SP_ONEAUTH_ID)
                     } else {
                         setError(fetchError(code()))
                     }

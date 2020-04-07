@@ -5,6 +5,7 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
+import com.codingblocks.onlineapi.getMeta
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Project
 import com.codingblocks.onlineapi.models.Sections
@@ -20,6 +21,7 @@ class CourseViewModel(
     val findCourses = MutableLiveData<List<Course>>()
     val projects = MutableLiveData<List<Project>>()
     val sections = MutableLiveData<List<Sections>>()
+    private val allCourse = arrayListOf<Course>()
 
     var image: MutableLiveData<String> = MutableLiveData()
     var name: MutableLiveData<String> = MutableLiveData()
@@ -39,19 +41,26 @@ class CourseViewModel(
                 }
             }
         }
-        fetchRecommendedCourses()
+        fetchAllCourses()
     }
 
-    fun fetchRecommendedCourses() {
+    fun fetchAllCourses(offset: String = "0") {
         runIO {
-            when (val response = repo.getSuggestedCourses()) {
+            when (val response = repo.getAllCourses(offset)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
-                    if (isSuccessful) {
-                        suggestedCourses.postValue(body())
-                    } else {
-                        setError(fetchError(code()))
-                    }
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let {
+                            val currentOffSet = getMeta(it.meta, "currentOffset").toString()
+                            val nextOffSet = getMeta(it.meta, "nextOffset").toString()
+                            if (currentOffSet != nextOffSet && nextOffSet != "null") {
+                                fetchAllCourses(nextOffSet)
+                                it.get()?.let { it1 -> allCourse.addAll(it1) }
+                                suggestedCourses.postValue(allCourse)
+                            } else {
+                                setError(fetchError(code()))
+                            }
+                        }
                 }
             }
         }
@@ -139,6 +148,7 @@ class CourseViewModel(
     fun enrollTrial(id: String) {
         runIO {
             when (val response = repo.enrollToTrial(id)) {
+
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {

@@ -15,7 +15,6 @@ import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_checkout_order_details.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class CheckoutOrderDetailsFragment : BaseCBFragment(), AnkoLogger {
@@ -51,10 +50,8 @@ class CheckoutOrderDetailsFragment : BaseCBFragment(), AnkoLogger {
                     try {
                         vm.paymentMap["razorpay_order_id"] = get("razorpay_order_id")?.asString ?: ""
                     } catch (e: Exception) {
-                        toast("There was some error.")
-                        requireActivity().finish()
+                        vm.isFree = true
                     }
-
                     batchTileTv.text = get("productName")?.asString
                     val price = get("final_price")?.asInt?.div(100)
                     val credits = get("credits_used")?.asInt?.div(100) ?: 0

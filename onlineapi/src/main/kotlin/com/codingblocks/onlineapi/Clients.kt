@@ -26,6 +26,7 @@ import com.codingblocks.onlineapi.models.JobId
 import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
+import com.codingblocks.onlineapi.models.Player
 import com.codingblocks.onlineapi.models.Professions
 import com.codingblocks.onlineapi.models.Project
 import com.codingblocks.onlineapi.models.Question
@@ -107,7 +108,8 @@ object Clients {
         DoubtLeaderBoard::class.java,
         User::class.java,
         CareerTracks::class.java,
-        Project::class.java
+        Project::class.java,
+        Player::class.java
     )
 
     //type resolver
@@ -144,7 +146,7 @@ object Clients {
         }
         .build()
 
-    private const val LOCAL = "192.168.0.101:3000"
+    private const val LOCAL = "192.168.1.13:3000"
     private const val DEBUG = "api-online.codingblocks.xyz"
     private const val PROD = "online-api.codingblocks.com"
 

@@ -288,9 +288,6 @@ data class Note(
     constructor(duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent)
         : this(duration, null, null, text, runAttemptId, contentId)
 
-    fun serializeToJson(): String {
-        return Gson().toJson(this)
-    }
 }
 
 @Type("users", "user")
@@ -531,11 +528,12 @@ class Professions(
     val title: String = ""
 ) : BaseModel()
 
-@Type("player")
-class Player(
+@Type("players")
+data class Player(
+    @Id
+    var id: String? = null,
     var playerId: String? = null
 )
-
 @Type("jobs")
 class Jobs(
     val coverImage: String?,

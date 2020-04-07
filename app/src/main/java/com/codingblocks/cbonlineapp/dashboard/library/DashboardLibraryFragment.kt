@@ -1,13 +1,11 @@
 package com.codingblocks.cbonlineapp.dashboard.library
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.dashboard.mycourses.ItemClickListener
 import com.codingblocks.cbonlineapp.dashboard.mycourses.MyCourseListAdapter
@@ -17,6 +15,7 @@ import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard_library.*
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
@@ -24,7 +23,6 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DashboardLibraryFragment : BaseCBFragment() {
 
-    private lateinit var listener: FragmentChangeListener
     private val viewModel by sharedViewModel<DashboardViewModel>()
     private val courseListAdapter = MyCourseListAdapter("RUN")
 
@@ -59,15 +57,10 @@ class DashboardLibraryFragment : BaseCBFragment() {
         }
 
         dashboardLibraryEmptyBtn.setOnClickListener {
-            listener.openExplore()
+            requireActivity().dashboardBottomNav.setCurrentItem(0)
         }
         courseListAdapter.onItemClick = itemClickListener
 //        loginBtn.setOnClickListener{ startActivity(intentFor<LoginActivity>()) }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        listener = context as FragmentChangeListener
     }
 
     override fun onDestroyView() {

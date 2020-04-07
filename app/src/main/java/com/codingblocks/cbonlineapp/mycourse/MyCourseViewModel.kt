@@ -35,8 +35,6 @@ class MyCourseViewModel(
     var revoked: MutableLiveData<Boolean> = MutableLiveData()
     lateinit var runStartEnd: Pair<Long, Long>
     var attemptId: String = ""
-    var runId: String = ""
-    var courseId: String = ""
     var name: String = ""
     private val mutablePopMessage = SingleLiveEvent<String>()
     private val extensions = MutableLiveData<List<ProductExtensionsItem>>()
@@ -44,6 +42,8 @@ class MyCourseViewModel(
     var filters: MutableLiveData<String> = MutableLiveData()
     var complete: MutableLiveData<String> = MutableLiveData("")
     var content: LiveData<List<SectionContentHolder.SectionContentPair>> = MutableLiveData()
+    var addedToCartProgress: MutableLiveData<Boolean> = MutableLiveData()
+    var runId: String = ""
 
     init {
         content = Transformations.switchMap(DoubleTrigger(complete, filters)) {
@@ -51,14 +51,15 @@ class MyCourseViewModel(
         }
     }
 
-    fun fetchSections() {
+    fun fetchSections(refresh: Boolean = false) {
         runIO {
             when (val response = repo.fetchSections(attemptId)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         response.value.body()?.let { runAttempt ->
-                            repo.insertSections(runAttempt)
+                            repo.insertSections(runAttempt, refresh)
+                            progress.postValue(false)
                         }
                     else {
                         setError(fetchError(response.value.code()))
@@ -150,5 +151,27 @@ class MyCourseViewModel(
 
         WorkManager.getInstance()
             .enqueue(request)
+    }
+
+    fun clearCart() {
+        runIO {
+            repo.clearCart()
+            addToCart(runId)
+        }
+    }
+
+    private fun addToCart(id: String) {
+        runIO {
+            when (val response = repo.addToCart(id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        addedToCartProgress.postValue(true)
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
     }
 }

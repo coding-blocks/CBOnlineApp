@@ -16,9 +16,12 @@ import com.codingblocks.cbonlineapp.database.models.BaseModel
 import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.LibraryTypes
+import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
@@ -29,6 +32,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -137,7 +141,12 @@ class LibraryViewFragment : BaseCBFragment() {
                 }
             })
         classRoomBtn.setOnClickListener {
-            //            browse(url)
+            startActivity(
+                requireContext().intentFor<MyCourseActivity>(
+                    RUN_ATTEMPT_ID to vm.attemptId,
+                    COURSE_NAME to requireActivity().title
+                ).singleTop()
+            )
         }
 
         deleteAction.setOnClickListener {

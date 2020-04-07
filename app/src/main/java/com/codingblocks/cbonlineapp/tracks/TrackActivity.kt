@@ -18,6 +18,7 @@ import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_course.courseToolbar
 import kotlinx.android.synthetic.main.activity_track.appbar
@@ -96,6 +97,13 @@ class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
         }
         courseCardListAdapter.onItemClick = itemClickListener
         appbar.addOnOffsetChangedListener(this)
+        viewModel.errorLiveData.observer(this) {
+            when (it) {
+                ErrorStatus.NO_CONNECTION -> {
+                    showOffline()
+                }
+            }
+        }
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {

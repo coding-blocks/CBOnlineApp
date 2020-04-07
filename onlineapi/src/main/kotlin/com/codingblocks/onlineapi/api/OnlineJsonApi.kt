@@ -122,6 +122,15 @@ interface OnlineJsonApi {
     ): Response<List<Course>>
 
     @GET("courses")
+    suspend fun getAllCourses(
+        @Query("exclude") query: String = "ratings,instructors.*,jobs,runs.*",
+        @Query("filter[unlisted]") unlisted: String = "false",
+        @Query("page[offset]") offset: String,
+        @Query("include") include: String = "instructors,runs",
+        @Query("sort") sort: String = "difficulty"
+    ): Response<JSONAPIDocument<List<Course>>>
+
+    @GET("courses")
     suspend fun findCourses(
         @Query("exclude") exclude: String = "ratings,instructors.*",
         @Query("filter[title][\$iLike]") query: String,
@@ -228,22 +237,11 @@ interface OnlineJsonApi {
     @POST("comments")
     suspend fun createComment(@Body params: Comment): Response<Comment>
 
-
-    @GET("courses")
-    suspend fun getAllCourses(
-        @Query("exclude") query: String = "ratings,instructors.*",
-        @Query("filter[unlisted]") unlisted: String = "false",
-        @Query("include") include: String = "instructors,runs",
-        @Query("page[limit]") page: String = "8",
-        @Query("page[offset]") offset: String = "0",
-        @Query("sort") sort: String = "difficulty"
-    ): Response<List<Course>>
-
     @GET("carousel_cards?sort=order")
     suspend fun getCarouselCards(): Response<List<CarouselCards>>
 
     @POST("players")
-    fun setPlayerId(@Body params: Player): Call<ResponseBody>
+    suspend fun setPlayerId(@Body params: Player): Response<ResponseBody>
 
     @GET("jobs")
     suspend fun getJobs(
@@ -274,7 +272,6 @@ interface OnlineJsonApi {
 
     @GET("career_tracks")
     suspend fun getTracks(
-        @Query("page[limit]") pageLimit: String = "5",
         @Query("include") include: String = "professions"
     ): Response<List<CareerTracks>>
 

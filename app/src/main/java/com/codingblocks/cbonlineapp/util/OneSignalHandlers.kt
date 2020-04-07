@@ -5,7 +5,7 @@ import android.util.Log
 import cn.campusapp.router.Router
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
-import com.codingblocks.cbonlineapp.database.AppDatabase
+import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.database.models.Notification
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
@@ -13,15 +13,14 @@ import com.codingblocks.cbonlineapp.util.extensions.otherwise
 import com.onesignal.OSNotification
 import com.onesignal.OSNotificationOpenResult
 import com.onesignal.OneSignal
-import kotlinx.coroutines.*
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.newTask
 import org.koin.core.KoinComponent
 import org.koin.core.context.GlobalContext
 import org.koin.core.inject
 
 var position: Long = 0
-
-
 
 class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler, KoinComponent {
 
@@ -31,6 +30,9 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler, KoinCompo
         val url = result.notification.payload.launchURL
 
         Router.open("activity://courseRun/$url").otherwise {
+            if (url.contains("admin")) {
+                with(mInstance) { startActivity(intentFor<AdminActivity>().newTask()) }
+            }
             mInstance.openChrome(url, true)
         }
         doAsync {
@@ -39,13 +41,11 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler, KoinCompo
     }
 }
 
-class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler , KoinComponent{
+class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler , KoinComponent {
 
     private val notificationDao : NotificationDao by inject()
 
     override fun notificationReceived(notification: OSNotification) {
-        Log.d("Koin" , "$notificationDao")
-
         val data = notification.payload.additionalData
         val payload = notification.payload
         val title = notification.payload.title

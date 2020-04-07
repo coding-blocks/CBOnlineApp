@@ -11,7 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import retrofit2.Response
 
 class NotesWorker(context: Context, private val workerParameters: WorkerParameters) : CoroutineWorker(context, workerParameters), KoinComponent {
 
@@ -19,19 +18,22 @@ class NotesWorker(context: Context, private val workerParameters: WorkerParamete
         val notesDao: NotesDao by inject()
         val noteId = workerParameters.inputData.getString("NOTE_ID")
         val noteJson = workerParameters.inputData.getString("NOTE")
-        val response: Response<Note> =
-            if (noteId.isNullOrEmpty()) {
-                val note = noteJson?.deserializeNoteFromJson()
-                withContext(Dispatchers.IO) { Clients.onlineV2JsonApi.updateNoteById(note?.id ?: "", note!!) }
-            } else {
-                withContext(Dispatchers.IO) { Clients.onlineV2JsonApi.deleteNoteById(noteId ?: "") }
-            }
+        val doubtJson = workerParameters.inputData.getString("DOUBT")
+        val response = if (noteId.isNullOrEmpty()) {
+            val note: Note = noteJson?.deserializeNoteFromJson()!!
+            withContext(Dispatchers.IO) { Clients.onlineV2JsonApi.updateNoteById(note.id ?: "", note) }
+        } else if (noteJson.isNullOrEmpty()) {
+            withContext(Dispatchers.IO) { Clients.onlineV2JsonApi.deleteNoteById(noteId ?: "") }
+        } else {
+            withContext(Dispatchers.IO) { Clients.onlineV2JsonApi.createDoubt(doubtJson?.deserializeNoteFromJson()!!) }
+        }
 
         if (response.isSuccessful) {
             if (noteId.isNullOrEmpty()) {
-                notesDao.updateBody(response.body()?.id ?: "", response.body()?.text ?: "")
-            } else {
+                notesDao.updateBody(response.body()?.id ?: "", (response.body() as Note).text)
+            } else if (noteJson.isNullOrEmpty()) {
                 noteId.let { notesDao.deleteNoteByID(it) }
+            } else {
             }
             return Result.success()
         } else {

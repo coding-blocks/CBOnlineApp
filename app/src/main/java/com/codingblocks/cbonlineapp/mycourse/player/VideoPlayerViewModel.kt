@@ -21,6 +21,7 @@ import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.extensions.runIO
+import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Bookmark
@@ -253,7 +254,11 @@ class VideoPlayerViewModel(
         val doubt = Doubts(null, title, body, RunAttempts(attemptId.value ?: ""), LectureContent(contentId))
         runIO {
             when (val response = repo.addDoubt(doubt)) {
-                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.GenericError -> if (response.code in 100..103)
+                    createDoubtOffline(doubtModel = doubt)
+                else {
+                    setError(response.error)
+                }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         offlineSnackbar.postValue(("Doubt Created Successfully !"))
@@ -272,6 +277,21 @@ class VideoPlayerViewModel(
                 }
             }
         }
+    }
+
+    private fun createDoubtOffline(doubtModel: Doubts) {
+        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val progressData = workDataOf("DOUBT" to doubtModel.serializeToJson())
+        offlineSnackbar.postValue("Doubt will be posted once you connect to Network")
+        val request: OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<NotesWorker>()
+                .setConstraints(constraints)
+                .setInputData(progressData)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                .build()
+
+        WorkManager.getInstance()
+            .enqueue(request)
     }
 
     fun updateProgress() {

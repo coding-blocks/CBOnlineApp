@@ -15,12 +15,10 @@ import com.codingblocks.cbonlineapp.commons.SheetAdapter
 import com.codingblocks.cbonlineapp.commons.SheetItem
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
-import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -55,8 +53,6 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
             override fun onClick(id: String, runId: String, runAttemptId: String, name: String) {
                 startActivity(
                     intentFor<MyCourseActivity>(
-                        COURSE_ID to id,
-                        RUN_ID to runId,
                         RUN_ATTEMPT_ID to runAttemptId,
                         COURSE_NAME to name
                     ).singleTop()
@@ -113,7 +109,9 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
                 )
             }
         }
-
+        dashboardMyCoursesExploreBtn.setOnClickListener {
+            requireActivity().dashboardBottomNav.setCurrentItem(0)
+        }
         dashboardCoursesRv.setRv(requireContext(), courseListAdapter, true)
         viewModel.isLoggedIn.observer(viewLifecycleOwner) { isLoggedIn ->
             if (isLoggedIn) {
@@ -192,5 +190,12 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
     override fun onDestroyView() {
         super.onDestroyView()
         courseListAdapter.onItemClick = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (courseListAdapter.currentList.isNullOrEmpty()) {
+            viewModel.fetchMyCourses()
+        }
     }
 }

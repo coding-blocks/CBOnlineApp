@@ -197,7 +197,9 @@
                 android:backgroundTint="@color/white"
                 android:fontFamily="@font/gilroy_medium"
                 android:hint="@string/coupon_code"
+                android:textAllCaps="true"
                 android:lines="1"
+                android:inputType="textCapCharacters"
                 android:paddingStart="0dp"
                 android:paddingEnd="0dp"
                 android:textColorHighlight="@color/orangish"
@@ -225,13 +227,14 @@
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/couponDiscount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:fontFamily="@font/gilroy_bold"
             android:textColor="@color/brownish_grey"
             android:textSize="18sp"
-            tools:text="- 999 " />
+            android:text="-" />
 
     </LinearLayout>
 

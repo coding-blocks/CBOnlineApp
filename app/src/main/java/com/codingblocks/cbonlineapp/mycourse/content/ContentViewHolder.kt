@@ -8,7 +8,6 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.DownloadStarter
 import com.codingblocks.cbonlineapp.database.models.ContentModel
@@ -50,12 +49,6 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                 contentType.isActivated = false
                 title.textColor = getColor(context, R.color.black)
             }
-//            if(expired.second < System.currentTimeMillis()){
-//                downloadBtn.setImageResource(R.drawable.ic_lock)
-//                itemView.isClickable = false
-//            }else{
-//                itemView.isClickable = true
-//            }
             setOnClickListener {
                 onItemClick?.invoke(contentModel)
             }
@@ -80,7 +73,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                     downloadBtn.isVisible = true
                     contentType.setImageResource(R.drawable.ic_video)
                     val id = content.contentLecture.lectureUid.isEmpty()
-                    val downloadStatus = if (id) false else FileUtils.checkDownloadFileExists(CBOnlineApp.mInstance, content.contentLecture.lectureId)
+                    val downloadStatus = if (id) false else content.contentLecture.isDownloaded
                     downloadBtn.setImageResource(R.drawable.download_states_content)
                     downloadBtn.isActivated = downloadStatus
                     downloadBtn.setOnClickListener {
@@ -126,7 +119,6 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
     private fun downloadFile(downloadBtn: ImageView) {
         if (MediaUtils.checkPermission(itemView.context)) {
-            downloadBtn.isEnabled = false
             starterListener?.startDownload(
                 contentModel.contentLecture.lectureId,
                 contentModel.ccid,

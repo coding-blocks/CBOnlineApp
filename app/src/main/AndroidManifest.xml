@@ -99,9 +99,9 @@
                 <data android:scheme="https" />
                 <data android:host="online.codingblocks.com" />
                 <data android:pathPrefix="/classroom" />
-                <data android:pathPrefix="/app" />
                 <data android:pathPrefix="/player" />
-                <data android:pathPrefix="/tracks" />
+                <data android:pathPrefix="/courses" />
+                <data android:pathPrefix="/app/tracks" />
             </intent-filter>
         </activity>
         <activity
@@ -185,10 +185,6 @@
 
         <service
             android:name=".util.DownloadService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name=".util.SectionDownloadService"
             android:enabled="true"
             android:exported="true" />
 

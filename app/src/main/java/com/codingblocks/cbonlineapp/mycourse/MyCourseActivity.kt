@@ -2,24 +2,26 @@ package com.codingblocks.cbonlineapp.mycourse
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.content.CourseContentFragment
+import com.codingblocks.cbonlineapp.mycourse.content.SECTION_DOWNLOAD
 import com.codingblocks.cbonlineapp.mycourse.library.CourseLibraryFragment
 import com.codingblocks.cbonlineapp.mycourse.overview.OverviewFragment
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.VIDEO
@@ -51,12 +53,9 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
         setToolbar(toolbar_mycourse)
         Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
         Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
-
-        viewModel.courseId = intent.getStringExtra(COURSE_ID) ?: ""
         title = intent.getStringExtra(COURSE_NAME)
         viewModel.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
         viewModel.name = title as String? ?: ""
-        viewModel.runId = intent.getStringExtra(RUN_ID) ?: ""
 
         initUI()
         if (!MediaUtils.checkPermission(this)) {
@@ -96,6 +95,13 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
                 }
             }
         }
+        WorkManager.getInstance().getWorkInfosByTagLiveData(SECTION_DOWNLOAD).observe(this, Observer {
+            it.forEach {
+                if (it.state == WorkInfo.State.FAILED) {
+                    WorkManager.getInstance().pruneWork()
+                }
+            }
+        })
     }
 
     private fun initUI() {
@@ -130,6 +136,6 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
     }
 
     override fun onRefresh() {
-//        viewModel.fetchCourse(viewModel.attemptId)
+        viewModel.fetchSections(true)
     }
 }
