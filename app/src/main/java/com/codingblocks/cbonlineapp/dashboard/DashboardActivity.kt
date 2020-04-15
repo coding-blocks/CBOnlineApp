@@ -127,7 +127,6 @@ class DashboardActivity : BaseCBActivity(),
 
     override fun onStart() {
         super.onStart()
-        checkForUpdates()
         val data = this.intent.data
         if (data != null && data.isHierarchical) {
             if (data.getQueryParameter("code") != null) {
@@ -253,6 +252,11 @@ class DashboardActivity : BaseCBActivity(),
         return true
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkForUpdates()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.dashboard_notification -> {
             startActivity(intentFor<NotificationsActivity>())
@@ -344,7 +348,7 @@ class DashboardActivity : BaseCBActivity(),
             ) {
                 appUpdateManager.startUpdateFlowForResult(
                     appUpdateInfo,
-                    AppUpdateType.FLEXIBLE,
+                    AppUpdateType.IMMEDIATE,
                     this,
                     1001
                 )

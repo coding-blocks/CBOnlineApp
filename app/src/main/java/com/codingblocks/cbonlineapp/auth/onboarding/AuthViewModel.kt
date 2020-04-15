@@ -11,6 +11,9 @@ class AuthViewModel(
     private val homeRepo: DashboardHomeRepository,
     private val repo: AuthRepository
 ) : BaseCBViewModel() {
+    var claimId: String = ""
+    var mobile: String = ""
+
     fun fetchToken(grantCode: String): MutableLiveData<Boolean> {
         val authComplete = MutableLiveData<Boolean>()
         runIO {
@@ -33,14 +36,32 @@ class AuthViewModel(
         return authComplete
     }
 
-    fun getOtp(number: CharSequence) {
+    fun getOtp(number: String, function: (id: String) -> Unit) {
         runIO {
-            when (val response = repo.getOtp(number.toString())) {
+            when (val response = repo.getOtp(number)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
+                            val id = it["id"].asString
+                            mobile = number
+                            claimId = id
+                            function(id)
+                        }
+                }
+            }
+        }
+    }
 
+
+    fun verifyOtp(otp:String,function: (id: String) -> Unit) {
+        runIO {
+            when (val response = repo.verifyOtp(claimId)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let {
+                            val id = it["id"].asString
                         }
                 }
             }

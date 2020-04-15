@@ -309,6 +309,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         } else {
             VdoPlayer.VdoInitParams.Builder()
                 .setOtp(vm.mOtp)
+                .setForceLowestBitrate(true)
                 .setPlaybackInfo(vm.mPlaybackInfo)
                 .setPreferredCaptionsLanguage("en")
                 .build()

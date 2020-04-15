@@ -14,10 +14,13 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
 import com.codingblocks.cbonlineapp.util.KeyboardVisibilityUtil
+import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver
+import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
+import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_sign_in.*
@@ -77,11 +80,22 @@ class SignInFragment : BaseCBFragment() {
     private fun loginWithNumber() {
         val numberEditText = numberLayout.editText?.text
         if (numberEditText.isNullOrEmpty() || numberEditText.length < 10) {
-            signInRoot.showSnackbar("Number is too short", Snackbar.LENGTH_SHORT)
+            signInRoot.showSnackbar("Number is too short", Snackbar.LENGTH_SHORT, action = false)
         } else {
-            val number = if (numberEditText.length > 10) numberEditText.takeLast(10) else numberEditText
+            val number = if (numberEditText.length > 10) numberEditText.takeLast(10).toString() else numberEditText.toString()
             proceedBtn.isEnabled = false
-            vm.getOtp(number)
+            vm.getOtp(number) {
+                activity?.let {
+                    val otpFragment = LoginOtpFragment.newInstance(number)
+                    SmsRetriever.getClient(it).startSmsRetriever() // start retriever
+                    replaceFragmentSafely(
+                        otpFragment,
+                        containerViewId = R.id.loginContainer
+                    )
+                    // the new fragment will listen for otp
+                    MySMSBroadcastReceiver.register(it, otpFragment)
+                }
+            }
         }
     }
 

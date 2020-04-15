@@ -7,4 +7,6 @@ class AuthRepository {
 
     suspend fun getOtp(mobile: String) = safeApiCall { Clients.api.getOtpV2(hashMapOf("mobile" to mobile)) }
 
+    suspend fun verifyOtp(id: String) = safeApiCall { Clients.api.verifyOtp(id) }
+
 }

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.*
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
@@ -55,11 +56,11 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             homeProgressView.apply {
                 progress = progressValue.toFloat()
                 if (progressValue > 90) {
-                    highlightView.colorGradientStart = androidx.core.content.ContextCompat.getColor(requireContext(), com.codingblocks.cbonlineapp.R.color.kiwigreen)
-                    highlightView.colorGradientEnd = androidx.core.content.ContextCompat.getColor(requireContext(), com.codingblocks.cbonlineapp.R.color.tealgreen)
+                    highlightView.colorGradientStart = getColor(requireContext(), R.color.kiwigreen)
+                    highlightView.colorGradientEnd = getColor(requireContext(), R.color.tealgreen)
                 } else {
-                    highlightView.colorGradientStart = androidx.core.content.ContextCompat.getColor(requireContext(), com.codingblocks.cbonlineapp.R.color.pastel_red)
-                    highlightView.colorGradientEnd = androidx.core.content.ContextCompat.getColor(requireContext(), com.codingblocks.cbonlineapp.R.color.dusty_orange)
+                    highlightView.colorGradientStart = getColor(requireContext(), R.color.pastel_red)
+                    highlightView.colorGradientEnd = getColor(requireContext(), R.color.dusty_orange)
                 }
             }
             courseAndRun.run.whatsappLink.let { link ->
@@ -109,7 +110,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         val set1 = LineDataSet(values, "Average Progress")
         set1.apply {
             setDrawCircles(false)
-            color = ContextCompat.getColor(requireContext(), R.color.pastel_red)
+            color = getColor(requireContext(), R.color.pastel_red)
             setDrawValues(false)
             mode = LineDataSet.Mode.CUBIC_BEZIER
             lineWidth = 3f
@@ -118,7 +119,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         val set2 = LineDataSet(values2, "User Progress")
         set2.apply {
             setDrawCircles(false)
-            color = ContextCompat.getColor(requireContext(), R.color.kiwigreen)
+            color = getColor(requireContext(), R.color.kiwigreen)
             mode = LineDataSet.Mode.CUBIC_BEZIER
             setDrawValues(false)
             lineWidth = 3f

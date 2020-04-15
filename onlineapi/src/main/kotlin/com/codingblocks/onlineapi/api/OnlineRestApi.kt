@@ -149,11 +149,11 @@ interface OnlineRestApi {
         @FieldMap params: HashMap<String, String>
     ): Response<JsonObject>
 
-    @POST("jwt/otp/v2/:id/verify")
+    @POST("jwt/otp/v2/{id}/verify")
     @FormUrlEncoded
     suspend fun verifyOtp(
         @Path("id") id: String,
-        @FieldMap params: HashMap<String, String>
+        @FieldMap params: HashMap<String, String> = hashMapOf("client" to "android")
     ): Response<JsonObject>
 
     @POST("jwt/otp/v2/:id/login")

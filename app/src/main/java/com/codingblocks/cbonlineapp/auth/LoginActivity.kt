@@ -11,8 +11,9 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import kotlinx.android.synthetic.main.activity_login2.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : BaseCBActivity(), AnkoLogger {
@@ -24,7 +25,7 @@ class LoginActivity : BaseCBActivity(), AnkoLogger {
         setContentView(R.layout.activity_login2)
         replaceFragmentSafely(LoginHomeFragment(), containerViewId = R.id.loginContainer)
         vm.errorLiveData.observer(this) {
-            info { it }
+            loginRoot.showSnackbar(it, action = false)
         }
     }
 

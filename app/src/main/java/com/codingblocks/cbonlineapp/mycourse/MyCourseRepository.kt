@@ -103,7 +103,7 @@ class MyCourseRepository(
                             content.sectionContent?.id
                                 ?: "",
                             contentLectureType.updatedAt
-                        )
+                         )
                 }
                 "document" -> content.document?.let { contentDocumentType ->
                     contentDocument =
