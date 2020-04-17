@@ -16,7 +16,9 @@ import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
+import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import kotlinx.android.synthetic.main.activity_notifications.*
+import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
 
 class NotificationsActivity : BaseCBActivity() {
@@ -39,20 +41,22 @@ class NotificationsActivity : BaseCBActivity() {
                 url: String,
                 videoId: String
             ) {
-                notificationDao.updateseen(notificationID)
-                if (url.contains("courseRun", true) ||
-                    url.contains("classroom", true)
-                ) {
-                    Router.open("activity://courseRun/$url")
-                } else if (url.contains("player", true)) {
-                    val activityRoute =
-                        Router.getRoute("activity://courseRun/$url") as ActivityRoute
-                    activityRoute
-                        .withParams(VIDEO_ID, videoId)
-                        .open()
-                } else {
-                    this@NotificationsActivity.openChrome(url)
-                }
+                GlobalScope.async {
+                        notificationDao.updateseen(notificationID)
+                    }
+                    if (url.contains("courseRun", true) ||
+                        url.contains("classroom", true)
+                    ) {
+                        Router.open("activity://courseRun/$url")
+                    } else if (url.contains("player", true)) {
+                        val activityRoute =
+                            Router.getRoute("activity://courseRun/$url") as ActivityRoute
+                        activityRoute
+                            .withParams(VIDEO_ID, videoId)
+                            .open()
+                    } else {
+                        this@NotificationsActivity.openChrome(url)
+                    }
             }
         }
         notificationAdapter.apply {
@@ -107,10 +111,15 @@ class NotificationsActivity : BaseCBActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_clear -> {
-//                if (notificationDao.allNotificationNonLive.isNotEmpty()) {
-//                    showconfirmation()
-//                }
-                true
+                runBlocking {
+                    val a =withContext(Dispatchers.Default){
+                        notificationDao.allNotificationNonLive.isNotEmpty()
+                    }
+                    if(a) {showconfirmation()}
+                    else{ }
+
+                    true
+                }
             }
             android.R.id.home -> {
                 onBackPressed()
@@ -121,7 +130,20 @@ class NotificationsActivity : BaseCBActivity() {
     }
 
     private fun showconfirmation() {
-        notificationDao.nukeTable()
+        showDialog(
+            type = "Delete",
+            image = R.drawable.ic_info,
+            cancelable = false,
+            primaryText = R.string.confirmation,
+            secondaryText = R.string.delete_all_notifications,
+            primaryButtonText = R.string.confirm,
+            secondaryButtonText = R.string.cancel,
+            callback = {confirmed ->
+                if(confirmed){
+                   GlobalScope.launch { notificationDao.nukeTable()} }
+            }
+
+        )
     }
 
     override fun onDestroy() {
