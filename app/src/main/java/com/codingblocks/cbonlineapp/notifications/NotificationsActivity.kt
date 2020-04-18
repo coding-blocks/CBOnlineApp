@@ -16,18 +16,22 @@ import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
+import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import kotlinx.android.synthetic.main.activity_notifications.*
+import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
 
 class NotificationsActivity : BaseCBActivity() {
 
     private val notificationDao: NotificationDao by inject()
     private val notificationAdapter = NotificationsAdapter(NotificationsDiffCallback())
+    private lateinit var job  : Job
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notifications)
-
+        job = Job()
         setSupportActionBar(notificationToolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -39,7 +43,9 @@ class NotificationsActivity : BaseCBActivity() {
                 url: String,
                 videoId: String
             ) {
-                notificationDao.updateseen(notificationID)
+                coroutineScope.launch(Dispatchers.IO) {
+                    notificationDao.updateseen(notificationID)
+                }
                 if (url.contains("courseRun", true) ||
                     url.contains("classroom", true)
                 ) {
@@ -70,13 +76,15 @@ class NotificationsActivity : BaseCBActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                // get all notifications
-                val notifications = notificationDao.allNotificationNonLive
-                // get the id of element which needs to be deleted
-                val deleteUID = notifications[position].id
-                // remove the item from database
-                notificationDao.deleteNotificationByID(deleteUID.toString())
+                coroutineScope.launch {
+                    val position = viewHolder.adapterPosition
+                    // get all notifications
+                    val notifications = withContext(Dispatchers.IO) { notificationDao.allNotificationNonLive}
+                    // get the id of element which needs to be deleted
+                    val deleteUID = notifications[position].id
+                    // remove the item from database
+                    async(Dispatchers.IO){ notificationDao.deleteNotificationByID(deleteUID)}
+                }
             }
         }
         val helper = ItemTouchHelper(itemTouch)
@@ -107,9 +115,11 @@ class NotificationsActivity : BaseCBActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_clear -> {
-//                if (notificationDao.allNotificationNonLive.isNotEmpty()) {
-//                    showconfirmation()
-//                }
+                coroutineScope.launch{
+                    val isNotEmpty = withContext(Dispatchers.IO){notificationDao.allNotificationNonLive.isNotEmpty()}
+                    if(isNotEmpty)
+                        showconfirmation()
+                }
                 true
             }
             android.R.id.home -> {
@@ -121,7 +131,23 @@ class NotificationsActivity : BaseCBActivity() {
     }
 
     private fun showconfirmation() {
-        notificationDao.nukeTable()
+        showDialog(
+            type = "Delete",
+            image = R.drawable.ic_info,
+            cancelable = false,
+            primaryText = R.string.confirmation,
+            secondaryText = R.string.delete_all_notifications,
+            primaryButtonText = R.string.confirm,
+            secondaryButtonText = R.string.cancel,
+            callback = { confirmed ->
+                if (confirmed) {
+                    coroutineScope.launch(Dispatchers.IO) {
+                        notificationDao.nukeTable()
+                    }
+                }
+            }
+
+        )
     }
 
     override fun onDestroy() {
@@ -129,5 +155,6 @@ class NotificationsActivity : BaseCBActivity() {
         notificationAdapter.apply {
             onClick = null
         }
+        job.cancel()
     }
 }
