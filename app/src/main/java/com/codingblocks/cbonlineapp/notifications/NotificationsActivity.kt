@@ -25,13 +25,11 @@ class NotificationsActivity : BaseCBActivity() {
 
     private val notificationDao: NotificationDao by inject()
     private val notificationAdapter = NotificationsAdapter(NotificationsDiffCallback())
-    private lateinit var job  : Job
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notifications)
-        job = Job()
         setSupportActionBar(notificationToolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -155,6 +153,5 @@ class NotificationsActivity : BaseCBActivity() {
         notificationAdapter.apply {
             onClick = null
         }
-        job.cancel()
     }
 }
