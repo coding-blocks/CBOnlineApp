@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -51,6 +52,7 @@ import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.toast
@@ -160,10 +162,14 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
             swiperefresh.isRefreshing = it
         }
 
-        viewModel.content.observer(viewLifecycleOwner) { SectionContent ->
+        viewModel.computedData.observe(viewLifecycleOwner, Observer {
+                    info { it }
+        })
+
+        viewModel.content.observer(viewLifecycleOwner) { sectionWithContentList ->
             sectionitem.clear()
             val consolidatedList = ArrayList<ListObject>()
-            SectionContent.forEach { sectionContent ->
+            sectionWithContentList.forEach { sectionContent ->
                 var duration: Long = 0
                 var sectionComplete = 0
                 var isDownloadEnabled = false
@@ -216,7 +222,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
 
                 sectionItemsAdapter.submitList(consolidatedList)
             }
-            contentShimmer.isVisible = SectionContent.isEmpty()
+            contentShimmer.isVisible = sectionWithContentList.isEmpty()
         }
     }
 
@@ -367,10 +373,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 }
             }
         }
-        viewModel.addedToCartProgress.observer(this) {
-            dialog.hide()
-            requireContext().startActivity<CheckoutActivity>()
-        }
+
     }
 
     private fun checkSection(premium: Boolean) {
@@ -393,8 +396,11 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                     cancelable = true
                 ) {
                     if (it) {
-                        viewModel.clearCart()
                         dialog.show()
+                        viewModel.addToCart().observer(viewLifecycleOwner) {
+                            dialog.hide()
+                            requireContext().startActivity<CheckoutActivity>()
+                        }
                     }
                 }
             }

@@ -44,106 +44,207 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/videoContentContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:paddingStart="@dimen/margin_large"
-                android:paddingTop="@dimen/margin_medium"
-                android:paddingEnd="@dimen/margin_large"
-                android:paddingBottom="@dimen/margin_small">
+                android:layout_marginTop="50dp"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:gravity="center_vertical"
+                    android:paddingStart="@dimen/margin_large"
+                    android:paddingTop="@dimen/margin_medium"
+                    android:paddingEnd="@dimen/margin_large"
+                    android:paddingBottom="@dimen/margin_small">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
 
-                    <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
-                        android:id="@+id/sectionTitle"
+                        <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+                            android:id="@+id/contentTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gilroy_bold"
+                            android:text="Section "
+                            android:textSize="16sp"
+                            tools:text="Section 1.4 - Catalan Number" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/bookmarkBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/gilroy_bold"
-                        android:text="Section "
-                        android:textSize="16sp"
-                        tools:text="Section 1.4 - Catalan Number" />
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:padding="4dp"
+                        android:src="@drawable/bookmark_state" />
 
-                    <TextView
-                        android:id="@+id/contentTitle"
+                    <ImageView
+                        android:id="@+id/downloadBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:fontFamily="@font/gilroy_medium"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        tools:text="Introduction to Python" />
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/download_states" />
+
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/bookmarkBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="4dp"
-                    android:src="@drawable/bookmark_state" />
 
-                <ImageView
-                    android:id="@+id/downloadBtn"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/playerTabs"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_medium"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:src="@drawable/download_states" />
+                    android:background="@color/dark"
+                    android:paddingStart="@dimen/margin_large"
+                    android:paddingEnd="@dimen/margin_large"
+                    app:tabIndicatorColor="@color/white"
+                    app:tabMode="scrollable"
+                    app:tabSelectedTextColor="@color/white"
+                    app:tabTextAppearance="@style/AppTabTextAppearance"
+                    app:tabTextColor="@color/brownish_grey" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:background="@color/divider" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/playerViewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/dark" />
+
+
+                </FrameLayout>
             </LinearLayout>
 
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/playerTabs"
+            <LinearLayout
+                android:id="@+id/contentListContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/dark"
-                android:paddingStart="@dimen/margin_large"
-                android:paddingEnd="@dimen/margin_large"
-                app:tabIndicatorColor="@color/white"
-                app:tabMode="scrollable"
-                app:tabSelectedTextColor="@color/white"
-                app:tabTextAppearance="@style/AppTabTextAppearance"
-                app:tabTextColor="@color/brownish_grey" />
+                android:background="#242832"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:background="@color/divider" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/playerViewPager"
+                <TextView
+                    android:id="@+id/sectionTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/dark" />
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_dropdown"
+                    android:drawableTint="@color/white"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:paddingStart="@dimen/margin_large"
+                    android:paddingTop="20dp"
+                    android:paddingEnd="@dimen/margin_large"
+                    android:paddingBottom="20dp"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    tools:text="Introduction to Python" />
+
+                <LinearLayout
+                    android:id="@+id/contentListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="@dimen/margin_large"
+                        android:layout_marginEnd="@dimen/margin_large"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        android:background="@color/dark" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/contentRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:overScrollMode="never"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/item_content" />
+
+                    <!--                    <View-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="1dp"-->
+                    <!--                        android:layout_marginStart="@dimen/margin_large"-->
+                    <!--                        android:layout_marginTop="@dimen/margin_small"-->
+                    <!--                        android:layout_marginEnd="@dimen/margin_large"-->
+                    <!--                        android:background="@color/dark" />-->
 
 
-            </FrameLayout>
-        </LinearLayout>
+                    <!--                    <LinearLayout-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="0dp"-->
+                    <!--                        android:layout_weight=".3"-->
+                    <!--                        android:paddingStart="@dimen/margin_large"-->
+                    <!--                        android:paddingEnd="@dimen/margin_large">-->
 
+                    <!--                        <TextView-->
+                    <!--                            android:id="@+id/prevBtn"-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:layout_gravity="center"-->
+                    <!--                            android:drawableStart="@drawable/ic_dropright"-->
+                    <!--                            android:drawablePadding="10dp"-->
+                    <!--                            android:drawableTint="@color/orangish"-->
+                    <!--                            android:fontFamily="@font/gilroy_medium"-->
+                    <!--                            android:paddingTop="@dimen/margin_medium"-->
+                    <!--                            android:paddingBottom="@dimen/margin_medium"-->
+                    <!--                            android:text="@string/previous"-->
+                    <!--                            android:textColor="@color/orangish"-->
+                    <!--                            android:textSize="16sp" />-->
+
+                    <!--                        <View-->
+                    <!--                            android:layout_width="0dp"-->
+                    <!--                            android:layout_height="0dp"-->
+                    <!--                            android:layout_weight="1" />-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:id="@+id/nextBtn"-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:layout_gravity="center"-->
+                    <!--                            android:drawableEnd="@drawable/ic_dropright"-->
+                    <!--                            android:drawablePadding="10dp"-->
+                    <!--                            android:drawableTint="@color/orangish"-->
+                    <!--                            android:fontFamily="@font/gilroy_medium"-->
+                    <!--                            android:gravity="end"-->
+                    <!--                            android:paddingTop="@dimen/margin_medium"-->
+                    <!--                            android:paddingBottom="@dimen/margin_medium"-->
+                    <!--                            android:text="@string/next"-->
+                    <!--                            android:textColor="@color/orangish"-->
+                    <!--                            android:textSize="16sp" />-->
+                    <!--                    </LinearLayout>-->
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </FrameLayout>
 
     </LinearLayout>
 

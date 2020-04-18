@@ -2,7 +2,9 @@ package com.codingblocks.cbonlineapp.mycourse
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.liveData
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.Data
@@ -14,42 +16,72 @@ import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.SingleLiveEvent
+import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
-import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.extensions.runIO
-import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
-import com.codingblocks.onlineapi.models.ProductExtensionsItem
 import com.codingblocks.onlineapi.models.ResetRunAttempt
+import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
 
 class MyCourseViewModel(
+    private val handle: SavedStateHandle,
     private val repo: MyCourseRepository
 ) : BaseCBViewModel() {
+    var attemptId: String
+        get() {
+            return handle[RUN_ATTEMPT_ID] ?: ""
+        }
+        set(value) {
+            handle.set(RUN_ATTEMPT_ID, value)
+        }
+    var name: String
+        get() {
+            return handle[COURSE_NAME] ?: ""
+        }
+        set(value) {
+            handle.set(COURSE_NAME, value)
+        }
+
+    var runId: String
+        get() {
+            return handle[RUN_ID] ?: ""
+        }
+        set(value) {
+            handle.set(RUN_ID, value)
+        }
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
-    var revoked: MutableLiveData<Boolean> = MutableLiveData()
-    lateinit var runStartEnd: Pair<Long, Long>
-    var attemptId: String = ""
-    var name: String = ""
-    private val mutablePopMessage = SingleLiveEvent<String>()
-    private val extensions = MutableLiveData<List<ProductExtensionsItem>>()
-    val popMessage: LiveData<String> = mutablePopMessage
+
+    /** MutableLiveData Filters for [SectionContentHolder.SectionContentPair]. */
     var filters: MutableLiveData<String> = MutableLiveData()
     var complete: MutableLiveData<String> = MutableLiveData("")
     var content: LiveData<List<SectionContentHolder.SectionContentPair>> = MutableLiveData()
-    var addedToCartProgress: MutableLiveData<Boolean> = MutableLiveData()
-    var runId: String = ""
 
     init {
+        fetchSections()
         content = Transformations.switchMap(DoubleTrigger(complete, filters)) {
             repo.getSectionWithContent(attemptId)
         }
     }
+
+    var runStartEnd: Pair<Long, Long>
+        get() {
+            return handle["runStartEnd"] ?: Pair(0L, 0L)
+        }
+        set(value) {
+            handle.set("runStartEnd", value)
+        }
+
+    val performance = repo.getRunStats(attemptId)
+
+    val run = repo.getRunById(attemptId)
+
+    val computedData = repo.getSectionWithContentComputer(attemptId)
 
     fun fetchSections(refresh: Boolean = false) {
         runIO {
@@ -69,65 +101,14 @@ class MyCourseViewModel(
         }
     }
 
-    fun getRun() = repo.getRunById(attemptId)
-
-    fun getPerformance() = repo.getRunStats(attemptId)
-
-    fun resetProgress(): MutableLiveData<Boolean> {
-        val resetProgress = MutableLiveData<Boolean>()
-        val resetCourse = ResetRunAttempt(attemptId)
+    fun getStats() {
         runIO {
-            when (val response = repo.resetProgress(resetCourse)) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful)
-                        resetProgress.postValue(true)
-                    else {
-                        setError(fetchError(response.value.code()))
-                    }
-                }
-            }
-        }
-        return resetProgress
-    }
-
-    fun requestApproval() {
-        Clients.api.requestApproval(attemptId).enqueue(retrofitCallback { throwable, response ->
-            response.let {
-                if (it?.isSuccessful == true) {
-                    mutablePopMessage.value = it.body()?.string()
-                } else {
-                    mutablePopMessage.value = it?.errorBody()?.string()
-                }
-            }
-            throwable.let {
-                mutablePopMessage.value = it?.message
-            }
-        })
-    }
-
-    fun fetchExtensions(productId: Int): MutableLiveData<List<ProductExtensionsItem>> {
-        Clients.api.getExtensions(productId).enqueue(retrofitCallback { throwable, response ->
-            response?.body().let { list ->
-                if (response?.isSuccessful == true) {
-                    extensions.postValue(list?.productExtensions)
-                }
-            }
-            throwable.let {
-                mutablePopMessage.value = it?.message
-            }
-        })
-        return extensions
-    }
-
-    fun getStats(id: String = attemptId) {
-        runIO {
-            when (val response = repo.getStats(id)) {
+            when (val response = repo.getStats(attemptId)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
                         body()?.let { response ->
-                            repo.saveStats(response, id)
+                            repo.saveStats(response, attemptId)
                         }
                     } else {
                         setError(fetchError(code()))
@@ -137,7 +118,20 @@ class MyCourseViewModel(
         }
     }
 
-    fun getNextContent() = repo.getNextContent(attemptId)
+    val resetProgress = liveData(Dispatchers.IO) {
+        when (val response = repo.resetProgress(ResetRunAttempt(attemptId))) {
+            is ResultWrapper.GenericError -> setError(response.error)
+            is ResultWrapper.Success -> {
+                if (response.value.isSuccessful)
+                    emit(true)
+                else {
+                    setError(fetchError(response.value.code()))
+                }
+            }
+        }
+    }
+
+    val nextContent = repo.getNextContent(attemptId)
 
     fun updateProgress(contentId: String) {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
@@ -153,25 +147,45 @@ class MyCourseViewModel(
             .enqueue(request)
     }
 
-    fun clearCart() {
-        runIO {
-            repo.clearCart()
-            addToCart(runId)
-        }
-    }
-
-    private fun addToCart(id: String) {
-        runIO {
-            when (val response = repo.addToCart(id)) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> with(response.value) {
-                    if (isSuccessful) {
-                        addedToCartProgress.postValue(true)
-                    } else {
-                        setError(fetchError(code()))
-                    }
+    fun addToCart() = liveData(Dispatchers.IO) {
+        when (val response = repo.addToCart(runId)) {
+            is ResultWrapper.GenericError -> setError(response.error)
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful) {
+                    emit(true)
+                } else {
+                    setError(fetchError(code()))
                 }
             }
         }
     }
+
+//    fun requestApproval() {
+//        Clients.api.requestApproval(attemptId).enqueue(retrofitCallback { throwable, response ->
+//            response.let {
+//                if (it?.isSuccessful == true) {
+//                    mutablePopMessage.value = it.body()?.string()
+//                } else {
+//                    mutablePopMessage.value = it?.errorBody()?.string()
+//                }
+//            }
+//            throwable.let {
+//                mutablePopMessage.value = it?.message
+//            }
+//        })
+//    }
+//
+//    fun fetchExtensions(productId: Int): MutableLiveData<List<ProductExtensionsItem>> {
+//        Clients.api.getExtensions(productId).enqueue(retrofitCallback { throwable, response ->
+//            response?.body().let { list ->
+//                if (response?.isSuccessful == true) {
+//                    extensions.postValue(list?.productExtensions)
+//                }
+//            }
+//            throwable.let {
+//                mutablePopMessage.value = it?.message
+//            }
+//        })
+//        return extensions
+//    }
 }

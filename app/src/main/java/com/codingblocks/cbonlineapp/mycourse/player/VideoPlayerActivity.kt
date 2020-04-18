@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.mycourse.player
 
 import android.animation.LayoutTransition
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Build
@@ -120,49 +121,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         vm.currentOrientation = resources.configuration.orientation
-        vm.content.observeOnce {
-            vm.contentLength = it.contentLecture.lectureDuration
-            vm.attemptId.value = it.attempt_id
-            sectionTitle.text = "Section ${it.sectionTitle}"
-            contentTitle.text = it.title
-            if (it.contentable == LECTURE) {
-                vm.isDownloaded = it.contentLecture.isDownloaded
-                downloadBtn.isActivated = vm.isDownloaded
-                vm.videoId = it.contentLecture.lectureId
-                youtubePlayerView.isVisible = false
-                videoContainer.visibility = View.VISIBLE
-                playerFragment =
-                    supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerSupportFragment
-                playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
-                showControls(false)
-                if (vm.isDownloaded) {
-                    initializePlayer()
-                } else {
-                    setupVideoView()
-                }
-            } else if (it.contentable == VIDEO) {
-                with(youtubePlayerView) {
-                    lifecycle.addObserver(this)
-                    isVisible = true
-                    addFullScreenListener(this@VideoPlayerActivity)
-                }
-                setYoutubePlayer(it.contentVideo.videoUrl)
-            } else {
-                finish()
-            }
-            vm.bookmark.observe(this) {
-                // Don't Remove
-                bookmarkBtn.isActivated = if (it == null) false else it.bookmarkUid.isNotEmpty()
-            }
-
-            bookmarkBtn.setOnClickListener { view ->
-                if (bookmarkBtn.isActivated)
-                    vm.removeBookmark()
-                else {
-                    vm.markBookmark()
-                }
-            }
-        }
         playerControlView.vdo_back.setOnClickListener {
             onBackPressed()
         }
@@ -208,6 +166,51 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
 
         setupViewPager()
+
+        vm.content.observeOnce {
+            vm.contentLength = it.contentLecture.lectureDuration
+            vm.attemptId.value = it.attempt_id
+            sectionTitle.text = "Section ${it.sectionTitle}"
+            contentTitle.text = it.title
+            if (it.contentable == LECTURE) {
+                vm.isDownloaded = it.contentLecture.isDownloaded
+                downloadBtn.isActivated = vm.isDownloaded
+                vm.videoId = it.contentLecture.lectureId
+                youtubePlayerView.isVisible = false
+                videoContainer.visibility = View.VISIBLE
+                playerFragment =
+                    supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerSupportFragment
+                playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
+                showControls(false)
+                if (vm.isDownloaded) {
+                    initializePlayer()
+                } else {
+                    setupVideoView()
+                }
+            } else if (it.contentable == VIDEO) {
+                with(youtubePlayerView) {
+                    lifecycle.addObserver(this)
+                    isVisible = true
+                    addFullScreenListener(this@VideoPlayerActivity)
+                }
+                setYoutubePlayer(it.contentVideo.videoUrl)
+            } else {
+                finish()
+            }
+            vm.bookmark.observe(this) {
+                // Don't Remove
+                bookmarkBtn.isActivated = if (it == null) false else it.bookmarkUid.isNotEmpty()
+            }
+
+            bookmarkBtn.setOnClickListener { view ->
+                if (bookmarkBtn.isActivated)
+                    vm.removeBookmark()
+                else {
+                    vm.markBookmark()
+                }
+            }
+        }
+
     }
 
     private fun showDeleteDialog() {
@@ -287,6 +290,11 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         if (data != null && data.isHierarchical) {
             setupUI()
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
     }
 
     override fun onInitializationSuccess(

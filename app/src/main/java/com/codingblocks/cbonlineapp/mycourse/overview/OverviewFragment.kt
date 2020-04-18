@@ -19,7 +19,6 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
@@ -35,36 +34,26 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_overview, container, false)
 
-//        extensionsAdapter = ExtensionsAdapter(ArrayList())
-//        view.extensionsRv.apply {
-//            isNestedScrollingEnabled = false
-//            layoutManager =
-//                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-//
-//            adapter = extensionsAdapter
-//        }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getRun().observer(viewLifecycleOwner) { courseAndRun ->
+        viewModel.run.observer(viewLifecycleOwner) { courseAndRun ->
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
-            viewModel.getStats(courseAndRun.runAttempt.attemptId)
             viewModel.runId = (courseAndRun.run.crUid)
             val progressValue = if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
             homeProgressTv.text = "${progressValue.toInt()} %"
             homeProgressView.apply {
                 progress = progressValue.toFloat()
                 if (progressValue > 90) {
-                    highlightView.colorGradientStart = androidx.core.content.ContextCompat.getColor(requireContext(), com.codingblocks.cbonlineapp.R.color.kiwigreen)
-                    highlightView.colorGradientEnd = androidx.core.content.ContextCompat.getColor(requireContext(), com.codingblocks.cbonlineapp.R.color.tealgreen)
+                    highlightView.colorGradientStart = ContextCompat.getColor(requireContext(), R.color.kiwigreen)
+                    highlightView.colorGradientEnd = ContextCompat.getColor(requireContext(), R.color.tealgreen)
                 } else {
-                    highlightView.colorGradientStart = androidx.core.content.ContextCompat.getColor(requireContext(), com.codingblocks.cbonlineapp.R.color.pastel_red)
-                    highlightView.colorGradientEnd = androidx.core.content.ContextCompat.getColor(requireContext(), com.codingblocks.cbonlineapp.R.color.dusty_orange)
+                    highlightView.colorGradientStart = ContextCompat.getColor(requireContext(), R.color.pastel_red)
+                    highlightView.colorGradientEnd = ContextCompat.getColor(requireContext(), R.color.dusty_orange)
                 }
             }
             courseAndRun.run.whatsappLink.let { link ->
                 whatsappContainer.apply {
-                    isVisible = !link.isNullOrEmpty() || courseAndRun.runAttempt.premium
+                    isVisible = courseAndRun.runAttempt.premium
                     setOnClickListener {
                         val intent = Intent(Intent.ACTION_VIEW)
                         intent.setPackage("com.whatsapp")
@@ -79,7 +68,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             }
         }
 
-        viewModel.getPerformance().observer(viewLifecycleOwner) {
+        viewModel.performance.observer(viewLifecycleOwner) {
             homePerformanceTv.text = it.remarks
             homePercentileTv.text = it.percentile.toString()
             loadData(it.averageProgress, it.userProgress)
@@ -88,7 +77,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         confirmReset.setOnClickListener {
             Components.showConfirmation(requireContext(), "reset") {
                 if (it) {
-                    viewModel.resetProgress().observer(viewLifecycleOwner) {
+                    viewModel.resetProgress.observer(viewLifecycleOwner) {
                         requireActivity().finish()
                     }
                 }
@@ -139,15 +128,5 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             invalidate()
         }
     }
-
-    private fun setUpObservers(view: View) {
-
-//        extensionsAdapter.checkedPosition.observer(viewLifecycleOwner) {
-//            buyBtn.isEnabled = it != -1
-//        }
-
-        viewModel.popMessage.observer(viewLifecycleOwner) { message ->
-            Snackbar.make(view.rootView, message, Snackbar.LENGTH_LONG).show()
-        }
-    }
 }
+
