@@ -63,7 +63,7 @@ class MyCourseViewModel(
     var content: LiveData<List<SectionContentHolder.SectionContentPair>> = MutableLiveData()
 
     init {
-        fetchSections()
+        getStats()
         content = Transformations.switchMap(DoubleTrigger(complete, filters)) {
             repo.getSectionWithContent(attemptId)
         }
@@ -77,11 +77,15 @@ class MyCourseViewModel(
             handle.set("runStartEnd", value)
         }
 
-    val performance = repo.getRunStats(attemptId)
+    val performance by lazy {
+        repo.getRunStats(attemptId)
+    }
 
-    val run = repo.getRunById(attemptId)
+    val run by lazy {
+        repo.getRunById(attemptId)
+    }
 
-    val computedData = repo.getSectionWithContentComputer(attemptId)
+//    val computedData = repo.getSectionWithContentComputer(attemptId)
 
     fun fetchSections(refresh: Boolean = false) {
         runIO {
@@ -131,7 +135,9 @@ class MyCourseViewModel(
         }
     }
 
-    val nextContent = repo.getNextContent(attemptId)
+    val nextContent by lazy {
+        repo.getNextContent(attemptId)
+    }
 
     fun updateProgress(contentId: String) {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()

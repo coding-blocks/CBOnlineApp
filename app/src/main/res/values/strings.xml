@@ -200,7 +200,7 @@
     <string name="generate_certificate">Generate Certificate</string>
     <string name="mentor_approval_pending">Mentor Approval - Pending</string>
     <string name="generate">Generate</string>
-    <string name="threshold_completion_90">Threshold Completion: 90%+</string>
+    <string name="threshold_completion">Threshold Completion: %d %+</string>
     <string name="percentile">Percentile</string>
     <string name="my_wishlist">My Wishlist</string>
     <string name="wishlisted_desc">Your wishlisted courses appear here</string>

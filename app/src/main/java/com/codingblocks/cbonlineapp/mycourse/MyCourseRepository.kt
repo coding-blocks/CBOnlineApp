@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.mycourse
 
 import androidx.sqlite.db.SimpleSQLiteQuery
-import androidx.sqlite.db.SupportSQLiteQuery
 import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
@@ -40,8 +39,8 @@ class MyCourseRepository(
 
     fun getSectionWithContent(attemptId: String) = sectionWithContentsDao.getSectionWithContent(attemptId)
 
-    fun getSectionWithContentComputer(attemptId: String) = sectionWithContentsDao.getSectionWithContentComputed(SimpleSQLiteQuery("""
-SELECT s.*, swc.content_id as "content_id", c.contentDuration as "contentDuration", s."sectionOrder" as "sectionOrder", count(c.ccid) FILTER( where c.progress == 'DONE' ) as "completedContents", count(c.ccid) FILTER( where c.isDownloaded == false AND c.lectureUid != "" ) OVER(partition by s.csid) as "isSectionDownloadable" FROM SectionModel s LEFT OUTER join SectionWithContent swc on swc."section_id" = s.csid LEFT OUTER join ContentModel c on c.ccid = swc.content_id where s.attemptId = 44872 ORDER BY s."sectionOrder"         """))
+//    fun getSectionWithContentComputer(attemptId: String) = sectionWithContentsDao.getSectionWithContentComputed(SimpleSQLiteQuery("""
+//SELECT s.*, swc.content_id as "content_id", c.contentDuration as "contentDuration", s."sectionOrder" as "sectionOrder", count (c.ccid)  as "completedContents" FROM SectionModel s LEFT OUTER join SectionWithContent swc on swc."section_id" = s.csid LEFT OUTER join ContentModel c on c.ccid = swc.content_id where s.attemptId = 44872 ORDER BY s."sectionOrder"         """))
 
     fun getRunById(attemptId: String) = courseWithInstructorDao.getRunById(attemptId)
 

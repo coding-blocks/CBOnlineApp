@@ -20,6 +20,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import kotlinx.android.synthetic.main.fragment_overview.*
+import kotlinx.android.synthetic.main.item_certificate.*
 import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -41,8 +42,13 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             viewModel.runId = (courseAndRun.run.crUid)
             val progressValue = if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
             homeProgressTv.text = "${progressValue.toInt()} %"
+            mentorApprovalTv.isActivated = courseAndRun.runAttempt.certificateApproved
             homeProgressView.apply {
                 progress = progressValue.toFloat()
+                progressTv.apply {
+                    text = getString(R.string.threshold_completion)
+                    isActivated = courseAndRun.run.completionThreshold > progress
+                }
                 if (progressValue > 90) {
                     highlightView.colorGradientStart = ContextCompat.getColor(requireContext(), R.color.kiwigreen)
                     highlightView.colorGradientEnd = ContextCompat.getColor(requireContext(), R.color.tealgreen)
@@ -51,21 +57,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     highlightView.colorGradientEnd = ContextCompat.getColor(requireContext(), R.color.dusty_orange)
                 }
             }
-            courseAndRun.run.whatsappLink.let { link ->
-                whatsappContainer.apply {
-                    isVisible = courseAndRun.runAttempt.premium
-                    setOnClickListener {
-                        val intent = Intent(Intent.ACTION_VIEW)
-                        intent.setPackage("com.whatsapp")
-                        intent.data = Uri.parse(link.toString())
-                        if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
-                            startActivity(intent)
-                        } else {
-                            Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            }
+            courseAndRun.run.whatsappLink?.let { setWhatsappCard(it, courseAndRun.runAttempt.premium) }
         }
 
         viewModel.performance.observer(viewLifecycleOwner) {
@@ -83,6 +75,23 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
         }
+    }
+
+    private fun setWhatsappCard(link: String, premium: Boolean) {
+        whatsappContainer.apply {
+            isVisible = premium
+            setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setPackage("com.whatsapp")
+                intent.data = Uri.parse(link)
+                if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
     }
 
     private fun loadData(averageProgress: ArrayList<ProgressItem>, userProgress: ArrayList<ProgressItem>) {

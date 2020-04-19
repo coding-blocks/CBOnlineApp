@@ -162,9 +162,9 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
             swiperefresh.isRefreshing = it
         }
 
-        viewModel.computedData.observe(viewLifecycleOwner, Observer {
-                    info { it }
-        })
+//        viewModel.computedData.observe(viewLifecycleOwner, Observer {
+//                    info { it }
+//        })
 
         viewModel.content.observer(viewLifecycleOwner) { sectionWithContentList ->
             sectionitem.clear()
@@ -313,7 +313,6 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.fetchSections()
         sectionItemsAdapter.starter = this
         sectionItemsAdapter.onItemClick = {
             when (it) {

@@ -252,6 +252,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/whatsappContainer"
                     android:clickable="true"
                     android:focusable="true"
