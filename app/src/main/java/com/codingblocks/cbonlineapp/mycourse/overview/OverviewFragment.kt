@@ -46,8 +46,8 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             homeProgressView.apply {
                 progress = progressValue.toFloat()
                 progressTv.apply {
-                    text = getString(R.string.threshold_completion)
-                    isActivated = courseAndRun.run.completionThreshold > progress
+                    text = getString(R.string.thresholdcompletion, courseAndRun.run.completionThreshold)
+                    isActivated = courseAndRun.run.completionThreshold < progress
                 }
                 if (progressValue > 90) {
                     highlightView.colorGradientStart = ContextCompat.getColor(requireContext(), R.color.kiwigreen)
@@ -58,6 +58,10 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
             courseAndRun.run.whatsappLink?.let { setWhatsappCard(it, courseAndRun.runAttempt.premium) }
+
+            if (courseAndRun.run.crPrice > 10.toString() || courseAndRun.runAttempt.premium) {
+                setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
+            }
         }
 
         viewModel.performance.observer(viewLifecycleOwner) {
@@ -75,6 +79,19 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
         }
+    }
+
+    private fun setGoodiesCard(goodiesThreshold: Int, progress: Double) {
+        goodiesContainer.isVisible = true
+        val canRequest = progress > goodiesThreshold
+        goodiesRequestTv.isActivated = canRequest
+        goodiesTv.apply {
+            text = if (canRequest)
+                getString(R.string.goodiedesc, goodiesThreshold)
+            else
+                getString(R.string.goodiedesclocked, goodiesThreshold)
+        }
+
     }
 
     private fun setWhatsappCard(link: String, premium: Boolean) {

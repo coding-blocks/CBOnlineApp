@@ -193,14 +193,14 @@
     <string name="whatsapp">Whatsapp</string>
     <string name="course_leaderboard">Course Leaderboard</string>
     <string name="claim_goodies">Claim Goodies</string>
-    <string name="goodie_desc">You have completed 70% of the course. You can claim your goodies now!</string>
+    <string name="goodiedesc">You have completed %d%% of the course. You can claim your goodies now!</string>
     <string name="request_now">Request Now</string>
     <string name="reset">Reset</string>
     <string name="certificate_desc">Complete 90% of the course to unlock certificate</string>
     <string name="generate_certificate">Generate Certificate</string>
     <string name="mentor_approval_pending">Mentor Approval - Pending</string>
     <string name="generate">Generate</string>
-    <string name="threshold_completion">Threshold Completion: %d %+</string>
+    <string name="thresholdcompletion">Threshold Completion: %d %%+</string>
     <string name="percentile">Percentile</string>
     <string name="my_wishlist">My Wishlist</string>
     <string name="wishlisted_desc">Your wishlisted courses appear here</string>
@@ -272,6 +272,7 @@
     <string name="logout">Logout</string>
     <string name="logout_dialog_title">Logout Confirmation</string>
     <string name="logout_dialog_description">Logging out will remove all your downloaded course videos. Are you sure ?</string>
+    <string name="goodiedesclocked">Complete %d%% of your course to unlock and claim goodies</string>
 
 
 </resources>

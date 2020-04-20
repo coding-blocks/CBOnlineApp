@@ -68,6 +68,7 @@
                 android:drawablePadding="10dp"
                 android:fontFamily="@font/gilroy_bold"
                 android:gravity="center"
+                android:text="@string/thresholdcompletion"
                 android:textSize="16sp" />
 
             <TextView

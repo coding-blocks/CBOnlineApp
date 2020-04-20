@@ -261,7 +261,7 @@ class MyCourseRepository(
 
     suspend fun resetProgress(attemptId: ResetRunAttempt) = safeApiCall { Clients.api.resetProgress(attemptId) }
 
-    suspend fun clearCart() = safeApiCall { Clients.api.clearCart() }
+    private suspend fun clearCart() = safeApiCall { Clients.api.clearCart() }
 
     suspend fun addToCart(id: String) = safeApiCall {
         clearCart()
