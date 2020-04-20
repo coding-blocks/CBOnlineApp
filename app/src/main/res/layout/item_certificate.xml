@@ -80,18 +80,19 @@
                 android:drawablePadding="10dp"
                 android:fontFamily="@font/gilroy_bold"
                 android:gravity="center"
-                android:text="@string/mentor_approval_pending"
+                android:text="@string/mentorapproval"
                 android:textSize="16sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:id="@+id/requestCertificateBtn"
                 android:layout_marginTop="@dimen/margin_large"
                 android:drawableStart="@drawable/ic_lock"
                 android:drawablePadding="10dp"
                 android:enabled="false"
-                android:text="@string/generate"
+                android:text="@string/request"
                 android:textColor="@color/brownish_grey" />
 
 

@@ -166,6 +166,18 @@ class MyCourseViewModel(
         }
     }
 
+    fun requestMentorApproval() {
+        runIO {
+            when (val response = repo.requestApproval(attemptId)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (!isSuccessful) setError(fetchError(code()))
+                }
+            }
+        }
+    }
+}
+
 //    fun requestApproval() {
 //        Clients.api.requestApproval(attemptId).enqueue(retrofitCallback { throwable, response ->
 //            response.let {
@@ -194,4 +206,4 @@ class MyCourseViewModel(
 //        })
 //        return extensions
 //    }
-}
+

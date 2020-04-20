@@ -198,9 +198,9 @@
     <string name="reset">Reset</string>
     <string name="certificate_desc">Complete 90% of the course to unlock certificate</string>
     <string name="generate_certificate">Generate Certificate</string>
-    <string name="mentor_approval_pending">Mentor Approval - Pending</string>
-    <string name="generate">Generate</string>
-    <string name="thresholdcompletion">Threshold Completion: %d %%+</string>
+    <string name="mentorapproval">Mentor Approval - %s</string>
+    <string name="request">Request</string>
+    <string name="thresholdcompletion">Threshold Completion: %d%%+</string>
     <string name="percentile">Percentile</string>
     <string name="my_wishlist">My Wishlist</string>
     <string name="wishlisted_desc">Your wishlisted courses appear here</string>

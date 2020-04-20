@@ -89,7 +89,7 @@ interface OnlineRestApi {
     suspend fun resetProgress(@Body runAttemptId: ResetRunAttempt): Response<ResponseBody>
 
     @GET("v2/run_attempts/{runAttemptId}/requestApproval")
-    fun requestApproval(@Path("runAttemptId") id: String): Call<ResponseBody>
+    suspend fun requestApproval(@Path("runAttemptId") id: String): Response<ResponseBody>
 
     @GET("v2/runs/products/{id}")
     fun getExtensions(@Path("id") productId: Int): Call<Extension>

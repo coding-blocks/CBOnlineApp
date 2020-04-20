@@ -42,13 +42,8 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             viewModel.runId = (courseAndRun.run.crUid)
             val progressValue = if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
             homeProgressTv.text = "${progressValue.toInt()} %"
-            mentorApprovalTv.isActivated = courseAndRun.runAttempt.certificateApproved
             homeProgressView.apply {
                 progress = progressValue.toFloat()
-                progressTv.apply {
-                    text = getString(R.string.thresholdcompletion, courseAndRun.run.completionThreshold)
-                    isActivated = courseAndRun.run.completionThreshold < progress
-                }
                 if (progressValue > 90) {
                     highlightView.colorGradientStart = ContextCompat.getColor(requireContext(), R.color.kiwigreen)
                     highlightView.colorGradientEnd = ContextCompat.getColor(requireContext(), R.color.tealgreen)
@@ -57,9 +52,38 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     highlightView.colorGradientEnd = ContextCompat.getColor(requireContext(), R.color.dusty_orange)
                 }
             }
+            progressTv.apply {
+                text = getString(R.string.thresholdcompletion, courseAndRun.run.completionThreshold)
+                isActivated = courseAndRun.run.completionThreshold < progressValue
+            }
+            mentorApprovalTv.apply {
+                isActivated = courseAndRun.runAttempt.approvalRequested
+                val status = if (courseAndRun.runAttempt.approvalRequested) "Requested" else "Pending"
+                text = getString(R.string.mentorapproval, status)
+            }
+            if (progressTv.isActivated && mentorApprovalTv.isActivated) {
+                requestCertificateBtn.apply {
+                    isEnabled = true
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                }
+            } else if (progressTv.isActivated && !mentorApprovalTv.isActivated) {
+                requestCertificateBtn.apply {
+                    isEnabled = true
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                    setOnClickListener {
+                        isEnabled = false
+                        text = "Requested"
+                        setTextColor(ContextCompat.getColor(requireContext(), R.color.brownish_grey))
+                        setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, 0, 0)
+                        viewModel.requestMentorApproval()
+                    }
+                }
+            }
             courseAndRun.run.whatsappLink?.let { setWhatsappCard(it, courseAndRun.runAttempt.premium) }
 
-            if (courseAndRun.run.crPrice > 10.toString() || courseAndRun.runAttempt.premium) {
+            if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium) {
                 setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
             }
         }

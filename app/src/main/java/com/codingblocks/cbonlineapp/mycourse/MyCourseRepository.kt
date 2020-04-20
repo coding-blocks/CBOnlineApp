@@ -271,4 +271,6 @@ class MyCourseRepository(
     suspend fun fetchSections(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.enrolledCourseById(attemptId) }
 
     suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
+
+    suspend fun requestApproval(attemptId: String) = safeApiCall { Clients.api.requestApproval(attemptId) }
 }
