@@ -1,9 +1,9 @@
 package com.codingblocks.cbonlineapp.util.extensions
 
+import android.graphics.Color
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
 import androidx.core.text.color
-import com.codingblocks.cbonlineapp.R
 import org.ocpsoft.prettytime.PrettyTime
 import java.io.File
 import java.text.DecimalFormat
@@ -147,8 +147,9 @@ fun getSpannableSring(boldText: String, normalText: String): SpannableStringBuil
 
 fun getSpannableString(text: String): SpannableStringBuilder =
     SpannableStringBuilder()
-        .color(R.color.brownish_grey) {}
-        .append(text)
+        .color(Color.parseColor("#f2734c")){
+            append(text)
+        }
 
 fun getSpannableStringSecondBold(normalText: String, boldText: String): SpannableStringBuilder =
     SpannableStringBuilder()
