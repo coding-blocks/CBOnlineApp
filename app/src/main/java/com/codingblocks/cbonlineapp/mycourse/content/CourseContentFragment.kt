@@ -109,7 +109,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.fetchSections()
         typeChipGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.webinarChip -> viewModel.filters.value = VIDEO.also {

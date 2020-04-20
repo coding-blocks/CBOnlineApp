@@ -61,11 +61,15 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 val status = if (courseAndRun.runAttempt.approvalRequested) "Requested" else "Pending"
                 text = getString(R.string.mentorapproval, status)
             }
-            if (progressTv.isActivated && mentorApprovalTv.isActivated) {
+            if (progressTv.isActivated && mentorApprovalTv.isActivated && courseAndRun.runAttempt.certificateApproved) {
                 requestCertificateBtn.apply {
                     isEnabled = true
+                    text = "Download & Share"
                     setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                    setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                    setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share,0)
+                    setOnClickListener {
+                        downloadCertificate(courseAndRun.runAttempt.certificateUrl)
+                    }
                 }
             } else if (progressTv.isActivated && !mentorApprovalTv.isActivated) {
                 requestCertificateBtn.apply {
@@ -103,6 +107,10 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
         }
+    }
+
+    private fun downloadCertificate(certificateUrl: String) {
+
     }
 
     private fun setGoodiesCard(goodiesThreshold: Int, progress: Double) {

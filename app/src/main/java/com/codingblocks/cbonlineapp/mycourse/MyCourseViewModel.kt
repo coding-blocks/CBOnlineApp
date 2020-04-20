@@ -176,6 +176,16 @@ class MyCourseViewModel(
             }
         }
     }
+
+    fun updateRunAttempt() {
+        runIO {
+            when (val response = repo.fetchSections(attemptId)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (!isSuccessful) setError(fetchError(code()))
+                }
+            }
+        }    }
 }
 
 //    fun requestApproval() {

@@ -1,9 +1,9 @@
 package com.codingblocks.cbonlineapp.mycourse
 
-import androidx.sqlite.db.SimpleSQLiteQuery
 import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.database.RunAttemptDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
 import com.codingblocks.cbonlineapp.database.SectionDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.ContentQnaModel
 import com.codingblocks.cbonlineapp.database.models.ContentVideo
+import com.codingblocks.cbonlineapp.database.models.RunAttemptModel
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
@@ -33,7 +34,8 @@ class MyCourseRepository(
     private val sectionDao: SectionDao,
     private val courseWithInstructorDao: CourseWithInstructorDao,
     private val runPerformanceDao: RunPerformanceDao,
-    private val bookmarkDao: BookmarkDao
+    private val bookmarkDao: BookmarkDao,
+    private val attemptDao: RunAttemptDao
 ) {
     suspend fun getSectionWithContentNonLive(attemptId: String) = sectionWithContentsDao.getSectionWithContentNonLive(attemptId)
 
@@ -49,6 +51,21 @@ class MyCourseRepository(
     fun getNextContent(attemptId: String) = sectionWithContentsDao.resumeCourse(attemptId)
 
     suspend fun insertSections(runAttempt: RunAttempts, refresh: Boolean = false) {
+        val runAttemptModel = RunAttemptModel(
+            runAttempt.id,
+            runAttempt.certificateApproved,
+            runAttempt.end,
+            runAttempt.premium,
+            runAttempt.revoked,
+            runAttempt.approvalRequested,
+            runAttempt.doubtSupport ?: "",
+            runAttempt.completedContents,
+            runAttempt.lastAccessedAt ?: "",
+            runAttempt.run?.id ?: "",
+            runAttempt.certifcate?.url ?: ""
+        )
+        attemptDao.update(runAttemptModel)
+
         runAttempt.run?.sections?.forEach { courseSection ->
             courseSection.run {
                 val newSection = SectionModel(

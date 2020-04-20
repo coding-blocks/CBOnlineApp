@@ -28,7 +28,6 @@ import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_my_course.*
-import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
@@ -45,7 +44,7 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
         setToolbar(toolbar_mycourse)
         title = intent.getStringExtra(COURSE_NAME)
         viewModel.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
-        viewModel.name = intent.getStringExtra(COURSE_NAME)
+        viewModel.name = intent.getStringExtra(COURSE_NAME) ?: ""
         if (!MediaUtils.checkPermission(this)) {
             MediaUtils.isStoragePermissionGranted(this)
         }
