@@ -4,6 +4,7 @@ import android.app.NotificationManager
 import android.content.Context
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.newTask
 
 class CrashHandler(val context: Context) : Thread.UncaughtExceptionHandler {
     private val defaultUEH: Thread.UncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
@@ -12,7 +13,7 @@ class CrashHandler(val context: Context) : Thread.UncaughtExceptionHandler {
         if (notificationManager != null) {
             try {
                 notificationManager!!.cancelAll()
-                with(context) { startActivity(intentFor<DashboardActivity>()) }
+                with(context) { startActivity(intentFor<DashboardActivity>().newTask()) }
             } catch (ex: Throwable) {
                 ex.printStackTrace()
             }

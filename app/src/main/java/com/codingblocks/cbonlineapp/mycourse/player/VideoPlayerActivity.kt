@@ -25,6 +25,7 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.library.EditNoteClickListener
+import com.codingblocks.cbonlineapp.mycourse.content.SectionItemsAdapter
 import com.codingblocks.cbonlineapp.mycourse.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.player.notes.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.Animations
@@ -41,6 +42,7 @@ import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
+import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
@@ -53,6 +55,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerFullScreenListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
@@ -84,9 +87,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     VdoPlayerControls.ControllerVisibilityListener, YouTubePlayerFullScreenListener {
     private val vm by viewModel<VideoPlayerViewModel>()
 
-    private val animationUtils by lazy {
-        Animations(this)
-    }
+    private val animationUtils by lazy { Animations(this) }
     private val progressDialog by lazy { ProgressDialog.progressDialog(this) }
     private val dialog by lazy { BottomSheetDialog(this) }
     private val sheetDialog: View by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, null) }
@@ -94,13 +95,12 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
     private lateinit var playerFragment: VdoPlayerSupportFragment
     private var videoPlayer: VdoPlayer? = null
-    private var youtubePlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer? = null
+    private var youtubePlayer: YouTubePlayer? = null
+    private val sectionItemsAdapter = PlaylistAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_player)
-        Clients.authJwt = vm.prefs.SP_JWT_TOKEN_KEY
-        Clients.refreshToken = vm.prefs.SP_JWT_REFRESH_TOKEN
 
         vm.contentId = intent.getStringExtra(CONTENT_ID) ?: ""
         vm.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
@@ -108,6 +108,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         setupUI()
         vm.offlineSnackbar.observer(this) {
             rootLayout.showSnackbar(it, Snackbar.LENGTH_SHORT, action = false)
+        }
+        contentRv.setRv(this, sectionItemsAdapter)
+        vm.contentList.observer(this) {
+            sectionItemsAdapter.submitList(it.contents,vm.contentId)
         }
     }
 
@@ -123,6 +127,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         vm.currentOrientation = resources.configuration.orientation
         playerControlView.vdo_back.setOnClickListener {
             onBackPressed()
+        }
+        contentListContainer.setOnClickListener {
+            contentListView.isVisible = !contentListView.isVisible
+            videoFab.isVisible = !contentListView.isVisible
         }
 
         videoFab.setOnClickListener {

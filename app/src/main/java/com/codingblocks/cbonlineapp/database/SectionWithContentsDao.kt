@@ -41,8 +41,8 @@ interface SectionWithContentsDao {
     //
     @Query("""
         SELECT s.* FROM SectionModel s,ContentModel c 
-	    WHERE s.attemptId = :attemptId AND s.csid = :sectionId
-        ORDER BY s."sectionOrder" LIMIT 1
+	    WHERE s.attemptId = :attemptId AND s.csid = :sectionId  AND (c.contentable = "lecture" OR c.contentable = "video")
+        ORDER BY s."sectionOrder", s."sectionOrder" LIMIT 1
         """)
     fun getNextContent(attemptId: String, sectionId: String): LiveData<SectionContentPair>
 
