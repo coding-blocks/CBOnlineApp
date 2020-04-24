@@ -15,13 +15,14 @@ import com.onesignal.OneSignal
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.newTask
-import org.koin.core.context.GlobalContext
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 var position: Long = 0
 
-private val notificationDao = GlobalContext().get().get<NotificationDao>()
+class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler, KoinComponent {
 
-class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
+    private val notificationDao: NotificationDao by inject()
 
     override fun notificationOpened(result: OSNotificationOpenResult) {
         val url = result.notification.payload.launchURL
@@ -38,7 +39,9 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler {
     }
 }
 
-class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
+class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler, KoinComponent {
+
+    private val notificationDao : NotificationDao by inject()
 
     override fun notificationReceived(notification: OSNotification) {
         val data = notification.payload.additionalData
@@ -47,7 +50,8 @@ class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
         val body = notification.payload.body
         val url = notification.payload.launchURL
         val videoId = data.optString(VIDEO_ID) ?: ""
-        notificationDao.insertWithId(
+        doAsync {
+            notificationDao.insertWithId(
                 Notification(
                     heading = title,
                     body = body,
@@ -64,5 +68,6 @@ class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
 
                 CBOnlineApp.mInstance.sendBroadcast(local)
             }
+    }
     }
 }

@@ -15,7 +15,7 @@ abstract class NotificationDao : BaseDao<Notification> {
     abstract fun updateseenAll()
 
     @Query("DELETE FROM Notification where id = :uid")
-    abstract fun deleteNotificationByID(uid: String)
+    abstract fun deleteNotificationByID(uid: Long)
 
     @Query("DELETE FROM Notification")
     abstract fun nukeTable()
