@@ -27,33 +27,32 @@ import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
+import kotlin.properties.Delegates
+import kotlin.properties.ObservableProperty
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
+
+
+inline fun <T>savedStateValue(handle: SavedStateHandle, key: String): ReadWriteProperty<Any?, T?> {
+    return (object: ReadWriteProperty<Any?, T?> {
+        override fun getValue(thisRef: Any?, property: KProperty<*>): T? {
+            return handle[key]
+        }
+
+        override fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
+            handle.set(key, value)
+        }
+    })
+}
 
 class MyCourseViewModel(
     private val handle: SavedStateHandle,
     private val repo: MyCourseRepository
 ) : BaseCBViewModel() {
-    var attemptId: String
-        get() {
-            return handle[RUN_ATTEMPT_ID] ?: ""
-        }
-        set(value) {
-            handle.set(RUN_ATTEMPT_ID, value)
-        }
-    var name: String
-        get() {
-            return handle[COURSE_NAME] ?: ""
-        }
-        set(value) {
-            handle.set(COURSE_NAME, value)
-        }
 
-    var runId: String
-        get() {
-            return handle[RUN_ID] ?: ""
-        }
-        set(value) {
-            handle.set(RUN_ID, value)
-        }
+    var attemptId by savedStateValue<String>(handle, COURSE_NAME)
+    var name by savedStateValue<String>(handle, COURSE_NAME)
+    var runId by savedStateValue<String>(handle, RUN_ID)
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
 
