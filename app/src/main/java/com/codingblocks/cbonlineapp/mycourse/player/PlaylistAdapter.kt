@@ -27,7 +27,6 @@ class PlaylistAdapter : ListAdapter<ContentModel, PlaylistAdapter.PlaylistViewHo
         super.submitList(list)
     }
 
-
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<ContentModel>() {
             override fun areItemsTheSame(oldItem: ContentModel, newItem: ContentModel): Boolean =
@@ -41,9 +40,7 @@ class PlaylistAdapter : ListAdapter<ContentModel, PlaylistAdapter.PlaylistViewHo
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
         val content = getItem(position)
         holder.bindTo(content, onItemClick, position)
-
     }
-
 
     inner class PlaylistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -55,19 +52,16 @@ class PlaylistAdapter : ListAdapter<ContentModel, PlaylistAdapter.PlaylistViewHo
                 selectedItem == position -> {
                     contentTitleTv.isEnabled = false
                     contentTitleTv.isActivated = true
-
                 }
                 else -> {
                     contentTitleTv.isActivated = false
                     contentTitleTv.isEnabled = false
-
                 }
             }
             contentTitleTv.text = content.title
-            if(selectedItem != position){
+            if (selectedItem != position) {
                 setOnClickListener { onItemClick?.invoke(content) }
             }
         }
-
     }
 }

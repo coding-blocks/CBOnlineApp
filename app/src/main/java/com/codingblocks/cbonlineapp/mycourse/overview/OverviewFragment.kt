@@ -111,7 +111,6 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     }
 
     private fun downloadCertificate(certificateUrl: String) {
-
     }
 
     private fun setGoodiesCard(goodiesThreshold: Int, progress: Double) {
@@ -127,11 +126,10 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         goodiesContainer.setOnClickListener {
             showGoodiesForm()
         }
-
     }
 
     private fun showGoodiesForm() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     private fun setWhatsappCard(link: String, premium: Boolean) {
@@ -148,7 +146,6 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
         }
-
     }
 
     private fun loadData(averageProgress: ArrayList<ProgressItem>, userProgress: ArrayList<ProgressItem>) {
@@ -195,4 +192,3 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         }
     }
 }
-

@@ -25,7 +25,6 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.library.EditNoteClickListener
-import com.codingblocks.cbonlineapp.mycourse.content.SectionItemsAdapter
 import com.codingblocks.cbonlineapp.mycourse.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.player.notes.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.Animations
@@ -47,7 +46,6 @@ import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
 import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
-import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
@@ -76,6 +74,8 @@ import kotlinx.coroutines.withContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.info
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
@@ -104,20 +104,26 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
         vm.contentId = intent.getStringExtra(CONTENT_ID) ?: ""
         vm.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
-
+        setUpBottomSheet()
         setupUI()
+    }
+
+    private fun setupUI() {
         vm.offlineSnackbar.observer(this) {
             rootLayout.showSnackbar(it, Snackbar.LENGTH_SHORT, action = false)
         }
         contentRv.setRv(this, sectionItemsAdapter)
         vm.contentList.observer(this) {
-            sectionItemsAdapter.submitList(it.contents,vm.contentId)
+            sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }, vm.contentId)
         }
-    }
-
-    private fun setupUI() {
-        setUpBottomSheet()
-
+        sectionItemsAdapter.onItemClick = {
+            startActivity(
+                intentFor<VideoPlayerActivity>(
+                    CONTENT_ID to it.ccid,
+                    SECTION_ID to vm.sectionId
+                ).singleTop()
+            )
+        }
         rootLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         window.setFlags(
@@ -218,7 +224,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                 }
             }
         }
-
     }
 
     private fun showDeleteDialog() {
@@ -300,9 +305,13 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
+        vm.contentId = intent.getStringExtra(CONTENT_ID) ?: ""
+        vm.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
+
+        setupUI()
     }
 
     override fun onInitializationSuccess(

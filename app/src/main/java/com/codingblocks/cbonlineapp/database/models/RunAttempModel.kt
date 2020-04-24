@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.database.models
 
 import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 

@@ -267,7 +267,6 @@ class VdoPlayerControls @JvmOverloads constructor(
         if (trackHolders.size > 1) {
             player?.selectedTracks = arrayOf(trackHolders[0].track)
         }
-
     }
 
     private fun toggleFullscreen() {

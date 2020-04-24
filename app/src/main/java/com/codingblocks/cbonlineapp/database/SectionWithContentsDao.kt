@@ -54,7 +54,7 @@ interface SectionWithContentsDao {
     fun getSectionWithContent(attemptId: String): LiveData<List<SectionContentPair>>
 
     @RawQuery(observedEntities = [SectionModel::class, ContentModel::class])
-    fun getSectionWithContentComputed(query:SupportSQLiteQuery): LiveData<List<SectionContentPair>>
+    fun getSectionWithContentComputed(query: SupportSQLiteQuery): LiveData<List<SectionContentPair>>
 
     @Query("""
         SELECT s.* FROM SectionModel s

@@ -185,7 +185,7 @@ class MyCourseViewModel(
                     if (!isSuccessful) setError(fetchError(code()))
                 }
             }
-        }    }
+        } }
 }
 
 //    fun requestApproval() {
@@ -216,4 +216,3 @@ class MyCourseViewModel(
 //        })
 //        return extensions
 //    }
-

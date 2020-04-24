@@ -54,16 +54,14 @@ class DashboardHomeFragment : BaseCBFragment() {
                                 text = course.title
                                 isVisible = true
                             }
-                            activity?.toolbarCourseResumeTv?.apply {
-                                isVisible = true
-                                setOnClickListener {
-                                    startActivity(
-                                        intentFor<MyCourseActivity>(
-                                            RUN_ATTEMPT_ID to runAttempt.attemptId,
-                                            COURSE_NAME to course.title
-                                        ).singleTop()
-                                    )
-                                }
+                            activity?.toolbarCourseResumeTv?.isVisible = true
+                            activity?.dashboardToolbarSecondary?.setOnClickListener {
+                                startActivity(
+                                    intentFor<MyCourseActivity>(
+                                        RUN_ATTEMPT_ID to runAttempt.attemptId,
+                                        COURSE_NAME to course.title
+                                    ).singleTop()
+                                )
                             }
 
                             homeCourseLogoImg.loadImage(course.logo)
