@@ -176,7 +176,7 @@ class DashboardActivity : BaseCBActivity(),
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 createShortcut()
             }
-            dashboardBottomNav.setCurrentItem(1)
+            dashboardBottomNav.setCurrentItem(2)
         } else {
             dashboardNavigation.getHeaderView(0).apply {
                 findViewById<TextView>(R.id.navUsernameTv).text = "Login/Signup"
@@ -406,9 +406,7 @@ class DashboardActivity : BaseCBActivity(),
                 }
 
                 if (viewModel.isLoggedIn.value == true) {
-                    dashboardToolbarSearch.slideUp()
                     dashboardToolbarSecondary.slideDown()
-//                    dashboardToolbarSecondary.crossfade(dashboardToolbarSearch, null)
                 }
             }
             else -> {

@@ -208,6 +208,8 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/background_purple"
                     android:orientation="vertical"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:paddingStart="@dimen/margin_medium_small"
                     android:paddingTop="@dimen/margin_large"
                     android:paddingEnd="@dimen/margin_medium"

@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp
+package com.codingblocks.cbonlineapp.di
 
 import android.app.Application
 import androidx.lifecycle.SavedStateHandle

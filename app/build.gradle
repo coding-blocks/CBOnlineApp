@@ -14,17 +14,15 @@ apply plugin: 'com.google.firebase.firebase-perf'
 ext {
     ankoVersion = '0.10.6'
     room_version = "2.2.5"
-    koin_version = "2.1.4"
+    koin_version = "2.1.5"
     markwon_version = "4.2.2"
     ankoLibs = [
             // commons
             'commons',
-            // layouts
-            'sdk25', 'appcompat-v7', 'support-v4', 'recyclerview-v7', 'constraint-layout', 'cardview-v7',
-            // coroutines
+            'sdk25', 'appcompat-v7',
+            /// coroutines
             'sdk25-coroutines', 'appcompat-v7-coroutines', 'coroutines',
             'design',
-            // 'percent',
     ]
 }
 
@@ -120,15 +118,15 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5'
     implementation 'androidx.browser:browser:1.2.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'com.google.android.play:core:1.7.1'
+    implementation 'com.google.android.play:core:1.7.2'
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
     implementation "android.arch.work:work-runtime-ktx:1.0.1"
-    implementation "androidx.fragment:fragment-ktx:1.2.3"
+    implementation "androidx.fragment:fragment-ktx:1.2.4"
     implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
-    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:17.4.0'
-    implementation "androidx.drawerlayout:drawerlayout:1.1.0-alpha04"
+    implementation "androidx.drawerlayout:drawerlayout:1.1.0-beta01"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0'
 
 
@@ -182,12 +180,13 @@ dependencies {
         implementation "org.jetbrains.anko:anko-$name:$ankoVersion"
     }
     //Firebase
-    implementation 'com.google.firebase:firebase-core:17.2.3'
+    implementation 'com.google.firebase:firebase-core:17.3.0'
     implementation 'com.google.firebase:firebase-messaging:20.1.2'
-    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta02'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.4.0'
-    implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.3'
-    implementation 'com.google.firebase:firebase-perf:19.0.5'
+    implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.5'
+    implementation 'com.google.firebase:firebase-perf:19.0.6'
+    implementation 'com.google.firebase:firebase-config-ktx:19.1.3'
 
 
     implementation project(':onlineapi')

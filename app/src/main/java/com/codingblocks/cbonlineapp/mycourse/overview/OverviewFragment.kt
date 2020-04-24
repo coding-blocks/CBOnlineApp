@@ -66,7 +66,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     isEnabled = true
                     text = "Download & Share"
                     setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                    setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share,0)
+                    setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share, 0)
                     setOnClickListener {
                         downloadCertificate(courseAndRun.runAttempt.certificateUrl)
                     }
@@ -87,8 +87,9 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             }
             courseAndRun.run.whatsappLink?.let { setWhatsappCard(it, courseAndRun.runAttempt.premium) }
 
-            if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium) {
-                setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
+            if (courseAndRun.run.crStart > "1574985600") {
+                if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium)
+                    setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
             }
         }
 
@@ -123,7 +124,14 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             else
                 getString(R.string.goodiedesclocked, goodiesThreshold)
         }
+        goodiesContainer.setOnClickListener {
+            showGoodiesForm()
+        }
 
+    }
+
+    private fun showGoodiesForm() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     private fun setWhatsappCard(link: String, premium: Boolean) {

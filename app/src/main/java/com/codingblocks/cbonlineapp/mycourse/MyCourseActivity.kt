@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.mycourse
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
@@ -48,7 +49,7 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
         if (!MediaUtils.checkPermission(this)) {
             MediaUtils.isStoragePermissionGranted(this)
         }
-        viewModel.nextContent.observer(this) { content ->
+        viewModel.nextContent.observe(this, Observer { content ->
             courseResumeBtn.setOnClickListener {
                 when (content.contentable) {
                     LECTURE, VIDEO -> startActivity(
@@ -59,7 +60,7 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
                     )
                 }
             }
-        }
+        })
 
         viewModel.errorLiveData.observer(this) {
             when (it) {
