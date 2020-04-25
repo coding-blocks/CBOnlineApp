@@ -87,52 +87,58 @@
             tools:itemCount="4"
             tools:listitem="@layout/item_doubts" />
 
-        <LinearLayout
-            android:id="@+id/emptyLl"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingTop="150dp"
-            android:paddingBottom="20dp"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/ic_comment" />
-
-            <TextView
-                android:id="@+id/emptyMessageTv"
-                android:layout_width="wrap_content"
+            android:fillViewport="true">
+            <LinearLayout
+                android:id="@+id/emptyLl"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
-                android:fontFamily="@font/gilroy_bold"
-                android:text="@string/no_doubts"
-                android:textAlignment="center"
-                android:textSize="20sp" />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingBottom="20dp"
+                android:paddingTop="150dp"
+                android:visibility="gone">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_extra_small"
-                android:fontFamily="@font/gilroy_bold"
-                android:text="@string/doubts_that_you_ask_appear_here"
-                android:textAlignment="center"
-                android:textColor="@color/brownish_grey"
-                android:textSize="16sp" />
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/ic_comment" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/doubtEmptyBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_medium"
-                android:paddingStart="20dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="10dp"
-                android:text="@string/go_to_classroom" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/emptyMessageTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/no_doubts"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_extra_small"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/doubts_that_you_ask_appear_here"
+                    android:textAlignment="center"
+                    android:textColor="@color/brownish_grey"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/doubtEmptyBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:paddingBottom="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/go_to_classroom" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
 
         <LinearLayout
             android:id="@+id/internetll"
