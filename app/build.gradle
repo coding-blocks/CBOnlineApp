@@ -184,7 +184,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.1.2'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.4.0'
-    implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.5'
+    implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.6'
     implementation 'com.google.firebase:firebase-perf:19.0.6'
     implementation 'com.google.firebase:firebase-config-ktx:19.1.3'
 
