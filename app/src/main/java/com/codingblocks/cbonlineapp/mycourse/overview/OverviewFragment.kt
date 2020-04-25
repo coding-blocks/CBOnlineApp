@@ -129,7 +129,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     }
 
     private fun showGoodiesForm() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+
     }
 
     private fun setWhatsappCard(link: String, premium: Boolean) {

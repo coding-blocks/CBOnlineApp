@@ -304,7 +304,7 @@ class VideoPlayerViewModel(
 
     fun updateProgress() {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val progressData: Data = workDataOf(CONTENT_ID to currentContentId, RUN_ATTEMPT_ID to attemptId.value)
+        val progressData: Data = workDataOf(CONTENT_ID to currentContentId.value, RUN_ATTEMPT_ID to attemptId.value)
         val request: OneTimeWorkRequest =
             OneTimeWorkRequestBuilder<ProgressWorker>()
                 .setConstraints(constraints)
