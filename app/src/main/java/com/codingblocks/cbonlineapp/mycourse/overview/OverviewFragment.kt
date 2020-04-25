@@ -19,8 +19,8 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_overview.*
+import kotlinx.android.synthetic.main.item_certificate.*
 import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -35,51 +35,65 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_overview, container, false)
 
-//        extensionsAdapter = ExtensionsAdapter(ArrayList())
-//        view.extensionsRv.apply {
-//            isNestedScrollingEnabled = false
-//            layoutManager =
-//                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-//
-//            adapter = extensionsAdapter
-//        }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getRun().observer(viewLifecycleOwner) { courseAndRun ->
+        viewModel.run?.observer(viewLifecycleOwner) { courseAndRun ->
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
-            viewModel.getStats(courseAndRun.runAttempt.attemptId)
             viewModel.runId = (courseAndRun.run.crUid)
             val progressValue = if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
             homeProgressTv.text = "${progressValue.toInt()} %"
             homeProgressView.apply {
                 progress = progressValue.toFloat()
                 if (progressValue > 90) {
-                    highlightView.colorGradientStart = androidx.core.content.ContextCompat.getColor(requireContext(), com.codingblocks.cbonlineapp.R.color.kiwigreen)
-                    highlightView.colorGradientEnd = androidx.core.content.ContextCompat.getColor(requireContext(), com.codingblocks.cbonlineapp.R.color.tealgreen)
+                    highlightView.colorGradientStart = ContextCompat.getColor(requireContext(), R.color.kiwigreen)
+                    highlightView.colorGradientEnd = ContextCompat.getColor(requireContext(), R.color.tealgreen)
                 } else {
-                    highlightView.colorGradientStart = androidx.core.content.ContextCompat.getColor(requireContext(), com.codingblocks.cbonlineapp.R.color.pastel_red)
-                    highlightView.colorGradientEnd = androidx.core.content.ContextCompat.getColor(requireContext(), com.codingblocks.cbonlineapp.R.color.dusty_orange)
+                    highlightView.colorGradientStart = ContextCompat.getColor(requireContext(), R.color.pastel_red)
+                    highlightView.colorGradientEnd = ContextCompat.getColor(requireContext(), R.color.dusty_orange)
                 }
             }
-            courseAndRun.run.whatsappLink.let { link ->
-                whatsappContainer.apply {
-                    isVisible = !link.isNullOrEmpty() || courseAndRun.runAttempt.premium
+            progressTv.apply {
+                text = getString(R.string.thresholdcompletion, courseAndRun.run.completionThreshold)
+                isActivated = courseAndRun.run.completionThreshold < progressValue
+            }
+            mentorApprovalTv.apply {
+                isActivated = courseAndRun.runAttempt.approvalRequested
+                val status = if (courseAndRun.runAttempt.approvalRequested) "Requested" else "Pending"
+                text = getString(R.string.mentorapproval, status)
+            }
+            if (progressTv.isActivated && mentorApprovalTv.isActivated && courseAndRun.runAttempt.certificateApproved) {
+                requestCertificateBtn.apply {
+                    isEnabled = true
+                    text = "Download & Share"
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share, 0)
                     setOnClickListener {
-                        val intent = Intent(Intent.ACTION_VIEW)
-                        intent.setPackage("com.whatsapp")
-                        intent.data = Uri.parse(link.toString())
-                        if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
-                            startActivity(intent)
-                        } else {
-                            Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
-                        }
+                        downloadCertificate(courseAndRun.runAttempt.certificateUrl)
+                    }
+                }
+            } else if (progressTv.isActivated && !mentorApprovalTv.isActivated) {
+                requestCertificateBtn.apply {
+                    isEnabled = true
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                    setOnClickListener {
+                        isEnabled = false
+                        text = "Requested"
+                        setTextColor(ContextCompat.getColor(requireContext(), R.color.brownish_grey))
+                        setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, 0, 0)
+                        viewModel.requestMentorApproval()
                     }
                 }
             }
+            courseAndRun.run.whatsappLink?.let { setWhatsappCard(it, courseAndRun.runAttempt.premium) }
+
+            if (courseAndRun.run.crStart > "1574985600") {
+                if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium)
+                    setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
+            }
         }
 
-        viewModel.getPerformance().observer(viewLifecycleOwner) {
+        viewModel.performance?.observer(viewLifecycleOwner) {
             homePerformanceTv.text = it.remarks
             homePercentileTv.text = it.percentile.toString()
             loadData(it.averageProgress, it.userProgress)
@@ -88,9 +102,47 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         confirmReset.setOnClickListener {
             Components.showConfirmation(requireContext(), "reset") {
                 if (it) {
-                    viewModel.resetProgress().observer(viewLifecycleOwner) {
+                    viewModel.resetProgress.observer(viewLifecycleOwner) {
                         requireActivity().finish()
                     }
+                }
+            }
+        }
+    }
+
+    private fun downloadCertificate(certificateUrl: String) {
+    }
+
+    private fun setGoodiesCard(goodiesThreshold: Int, progress: Double) {
+        goodiesContainer.isVisible = true
+        val canRequest = progress > goodiesThreshold
+        goodiesRequestTv.isActivated = canRequest
+        goodiesTv.apply {
+            text = if (canRequest)
+                getString(R.string.goodiedesc, goodiesThreshold)
+            else
+                getString(R.string.goodiedesclocked, goodiesThreshold)
+        }
+        goodiesContainer.setOnClickListener {
+            showGoodiesForm()
+        }
+    }
+
+    private fun showGoodiesForm() {
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun setWhatsappCard(link: String, premium: Boolean) {
+        whatsappContainer.apply {
+            isVisible = premium
+            setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setPackage("com.whatsapp")
+                intent.data = Uri.parse(link)
+                if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -137,17 +189,6 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             notifyDataSetChanged()
             xAxis.labelCount = 10
             invalidate()
-        }
-    }
-
-    private fun setUpObservers(view: View) {
-
-//        extensionsAdapter.checkedPosition.observer(viewLifecycleOwner) {
-//            buyBtn.isEnabled = it != -1
-//        }
-
-        viewModel.popMessage.observer(viewLifecycleOwner) { message ->
-            Snackbar.make(view.rootView, message, Snackbar.LENGTH_LONG).show()
         }
     }
 }

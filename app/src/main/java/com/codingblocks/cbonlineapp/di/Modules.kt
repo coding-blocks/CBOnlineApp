@@ -1,6 +1,7 @@
-package com.codingblocks.cbonlineapp
+package com.codingblocks.cbonlineapp.di
 
 import android.app.Application
+import androidx.lifecycle.SavedStateHandle
 import androidx.room.Room
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtRepository
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtsViewModel
@@ -41,7 +42,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel { MyCourseViewModel(get()) }
+    viewModel { (handle: SavedStateHandle) -> MyCourseViewModel(handle, get()) }
     viewModel { LeaderboardViewModel() }
     viewModel { NotificationViewModel(get()) }
 
@@ -70,10 +71,10 @@ val viewModelModule = module {
     single { DashboardMyCoursesRepository(get(), get(), get(), get(), get()) }
     single { LibraryRepository(get(), get(), get(), get()) }
     single { DashboardHomeRepository(get(), get(), get()) }
-    single { VideoPlayerRepository(get(), get(), get()) }
+    single { VideoPlayerRepository(get(), get(), get(), get()) }
     single { QuizRepository(get()) }
     single { JobRepository(get()) }
-    single { MyCourseRepository(get(), get(), get(), get(), get(), get()) }
+    single { MyCourseRepository(get(), get(), get(), get(), get(), get(), get()) }
     single { TracksRepository() }
     single { ProfileRepository(get()) }
 }

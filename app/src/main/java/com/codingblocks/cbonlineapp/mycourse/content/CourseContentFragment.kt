@@ -107,7 +107,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.fetchSections()
         typeChipGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.webinarChip -> viewModel.filters.value = VIDEO.also {
@@ -160,10 +160,14 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
             swiperefresh.isRefreshing = it
         }
 
-        viewModel.content.observer(viewLifecycleOwner) { SectionContent ->
+//        viewModel.computedData.observe(viewLifecycleOwner, Observer {
+//                    info { it }
+//        })
+
+        viewModel.content.observer(viewLifecycleOwner) { sectionWithContentList ->
             sectionitem.clear()
             val consolidatedList = ArrayList<ListObject>()
-            SectionContent.forEach { sectionContent ->
+            sectionWithContentList.forEach { sectionContent ->
                 var duration: Long = 0
                 var sectionComplete = 0
                 var isDownloadEnabled = false
@@ -216,7 +220,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
 
                 sectionItemsAdapter.submitList(consolidatedList)
             }
-            contentShimmer.isVisible = SectionContent.isEmpty()
+            contentShimmer.isVisible = sectionWithContentList.isEmpty()
         }
     }
 
@@ -307,7 +311,6 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.fetchSections()
         sectionItemsAdapter.starter = this
         sectionItemsAdapter.onItemClick = {
             when (it) {
@@ -367,10 +370,6 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 }
             }
         }
-        viewModel.addedToCartProgress.observer(this) {
-            dialog.hide()
-            requireContext().startActivity<CheckoutActivity>()
-        }
     }
 
     private fun checkSection(premium: Boolean) {
@@ -393,8 +392,11 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                     cancelable = true
                 ) {
                     if (it) {
-                        viewModel.clearCart()
                         dialog.show()
+                        viewModel.addToCart().observer(viewLifecycleOwner) {
+                            dialog.hide()
+                            requireContext().startActivity<CheckoutActivity>()
+                        }
                     }
                 }
             }

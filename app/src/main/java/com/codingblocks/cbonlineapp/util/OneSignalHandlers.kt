@@ -5,6 +5,7 @@ import cn.campusapp.router.Router
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
 import com.codingblocks.cbonlineapp.admin.AdminActivity
+import com.codingblocks.cbonlineapp.database.DoubtsDao
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.database.models.Notification
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
@@ -41,11 +42,11 @@ class NotificationOpenedHandler : OneSignal.NotificationOpenedHandler, KoinCompo
 
 class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler, KoinComponent {
 
-    private val notificationDao : NotificationDao by inject()
+    private val notificationDao: NotificationDao by inject()
+    private val doubtsDao: DoubtsDao by inject()
 
     override fun notificationReceived(notification: OSNotification) {
         val data = notification.payload.additionalData
-        val payload = notification.payload
         val title = notification.payload.title
         val body = notification.payload.body
         val url = notification.payload.launchURL
@@ -59,15 +60,15 @@ class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler, KoinC
                     videoId = videoId
                 )
             )
-            .also {
-                position = it
+                .also {
+                    position = it
 
-                val local = Intent()
+                    val local = Intent()
 
-                local.action = "com.codingblocks.notification"
+                    local.action = "com.codingblocks.notification"
 
-                CBOnlineApp.mInstance.sendBroadcast(local)
-            }
-    }
+                    CBOnlineApp.mInstance.sendBroadcast(local)
+                }
+        }
     }
 }

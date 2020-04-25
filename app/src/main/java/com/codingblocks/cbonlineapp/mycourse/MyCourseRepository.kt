@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.mycourse
 import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.database.RunAttemptDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
 import com.codingblocks.cbonlineapp.database.SectionDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
@@ -14,6 +15,7 @@ import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.ContentQnaModel
 import com.codingblocks.cbonlineapp.database.models.ContentVideo
+import com.codingblocks.cbonlineapp.database.models.RunAttemptModel
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
@@ -32,11 +34,15 @@ class MyCourseRepository(
     private val sectionDao: SectionDao,
     private val courseWithInstructorDao: CourseWithInstructorDao,
     private val runPerformanceDao: RunPerformanceDao,
-    private val bookmarkDao: BookmarkDao
+    private val bookmarkDao: BookmarkDao,
+    private val attemptDao: RunAttemptDao
 ) {
     suspend fun getSectionWithContentNonLive(attemptId: String) = sectionWithContentsDao.getSectionWithContentNonLive(attemptId)
 
     fun getSectionWithContent(attemptId: String) = sectionWithContentsDao.getSectionWithContent(attemptId)
+
+//    fun getSectionWithContentComputer(attemptId: String) = sectionWithContentsDao.getSectionWithContentComputed(SimpleSQLiteQuery("""
+// SELECT s.*, swc.content_id as "content_id", c.contentDuration as "contentDuration", s."sectionOrder" as "sectionOrder", count (c.ccid)  as "completedContents" FROM SectionModel s LEFT OUTER join SectionWithContent swc on swc."section_id" = s.csid LEFT OUTER join ContentModel c on c.ccid = swc.content_id where s.attemptId = 44872 ORDER BY s."sectionOrder"         """))
 
     fun getRunById(attemptId: String) = courseWithInstructorDao.getRunById(attemptId)
 
@@ -45,6 +51,21 @@ class MyCourseRepository(
     fun getNextContent(attemptId: String) = sectionWithContentsDao.resumeCourse(attemptId)
 
     suspend fun insertSections(runAttempt: RunAttempts, refresh: Boolean = false) {
+        val runAttemptModel = RunAttemptModel(
+            runAttempt.id,
+            runAttempt.certificateApproved,
+            runAttempt.end,
+            runAttempt.premium,
+            runAttempt.revoked,
+            runAttempt.approvalRequested,
+            runAttempt.doubtSupport ?: "",
+            runAttempt.completedContents,
+            runAttempt.lastAccessedAt ?: "",
+            runAttempt.run?.id ?: "",
+            runAttempt.certifcate?.url ?: ""
+        )
+        attemptDao.update(runAttemptModel)
+
         runAttempt.run?.sections?.forEach { courseSection ->
             courseSection.run {
                 val newSection = SectionModel(
@@ -257,11 +278,16 @@ class MyCourseRepository(
 
     suspend fun resetProgress(attemptId: ResetRunAttempt) = safeApiCall { Clients.api.resetProgress(attemptId) }
 
-    suspend fun clearCart() = safeApiCall { Clients.api.clearCart() }
+    private suspend fun clearCart() = safeApiCall { Clients.api.clearCart() }
 
-    suspend fun addToCart(id: String) = safeApiCall { Clients.api.addToCart(id) }
+    suspend fun addToCart(id: String) = safeApiCall {
+        clearCart()
+        Clients.api.addToCart(id)
+    }
 
     suspend fun fetchSections(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.enrolledCourseById(attemptId) }
 
     suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
+
+    suspend fun requestApproval(attemptId: String) = safeApiCall { Clients.api.requestApproval(attemptId) }
 }

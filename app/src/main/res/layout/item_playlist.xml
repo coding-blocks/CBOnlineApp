@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/margin_large"
+    android:paddingTop="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground"
+    android:paddingEnd="@dimen/margin_medium"
+    android:paddingBottom="16dp">
+
+    <TextView
+        android:id="@+id/contentTitleTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_round_play_button_white"
+        android:drawableEnd="@drawable/ic_content_status"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:gravity="center_vertical"
+        android:textColor="@color/content_text_color"
+        tools:text="Section 1.1 - Introduction" />
+
+</LinearLayout>

@@ -4,14 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.content.CourseContentFragment
-import com.codingblocks.cbonlineapp.mycourse.content.SECTION_DOWNLOAD
 import com.codingblocks.cbonlineapp.mycourse.library.CourseLibraryFragment
 import com.codingblocks.cbonlineapp.mycourse.overview.OverviewFragment
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
@@ -20,7 +17,6 @@ import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
@@ -30,38 +26,30 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.pageChangeCallback
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
-import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_my_course.*
-import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
 
-    private val viewModel by viewModel<MyCourseViewModel>()
+    private val viewModel: MyCourseViewModel by stateViewModel()
     private val pagerAdapter by lazy { TabLayoutAdapter(supportFragmentManager) }
-    private val prefs by inject<PreferenceHelper>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_course)
         setToolbar(toolbar_mycourse)
-        Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
-        Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
         title = intent.getStringExtra(COURSE_NAME)
         viewModel.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
-        viewModel.name = title as String? ?: ""
-
-        initUI()
+        viewModel.name = intent.getStringExtra(COURSE_NAME) ?: ""
         if (!MediaUtils.checkPermission(this)) {
             MediaUtils.isStoragePermissionGranted(this)
         }
-        viewModel.getNextContent().observer(this) { content ->
+        viewModel.nextContent?.observe(this, Observer { content ->
             courseResumeBtn.setOnClickListener {
                 when (content.contentable) {
                     LECTURE, VIDEO -> startActivity(
@@ -72,15 +60,15 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
                     )
                 }
             }
-        }
+        })
 
         viewModel.errorLiveData.observer(this) {
             when (it) {
                 ErrorStatus.NO_CONNECTION -> {
-                    myCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
+                    myCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT)
                 }
                 ErrorStatus.TIMEOUT -> {
-                    myCourseRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, dashboardBottomNav) {
+                    myCourseRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE) {
                         viewModel.fetchSections()
                         viewModel.getStats()
                     }
@@ -90,21 +78,11 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
                     }
                 }
                 else -> {
-                    myCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
+                    myCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT)
                     AppCrashlyticsWrapper.log(it)
                 }
             }
         }
-        WorkManager.getInstance().getWorkInfosByTagLiveData(SECTION_DOWNLOAD).observe(this, Observer {
-            it.forEach {
-                if (it.state == WorkInfo.State.FAILED) {
-                    WorkManager.getInstance().pruneWork()
-                }
-            }
-        })
-    }
-
-    private fun initUI() {
         setupViewPager()
     }
 

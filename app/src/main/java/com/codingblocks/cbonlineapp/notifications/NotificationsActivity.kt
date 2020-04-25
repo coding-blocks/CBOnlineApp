@@ -18,7 +18,11 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import kotlinx.android.synthetic.main.activity_notifications.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 
 class NotificationsActivity : BaseCBActivity() {
@@ -77,11 +81,11 @@ class NotificationsActivity : BaseCBActivity() {
                 coroutineScope.launch {
                     val position = viewHolder.adapterPosition
                     // get all notifications
-                    val notifications = withContext(Dispatchers.IO) { notificationDao.allNotificationNonLive}
+                    val notifications = withContext(Dispatchers.IO) { notificationDao.allNotificationNonLive }
                     // get the id of element which needs to be deleted
                     val deleteUID = notifications[position].id
                     // remove the item from database
-                    async(Dispatchers.IO){ notificationDao.deleteNotificationByID(deleteUID)}
+                    async(Dispatchers.IO) { notificationDao.deleteNotificationByID(deleteUID) }
                 }
             }
         }
@@ -113,9 +117,9 @@ class NotificationsActivity : BaseCBActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_clear -> {
-                coroutineScope.launch{
-                    val isNotEmpty = withContext(Dispatchers.IO){notificationDao.allNotificationNonLive.isNotEmpty()}
-                    if(isNotEmpty)
+                coroutineScope.launch {
+                    val isNotEmpty = withContext(Dispatchers.IO) { notificationDao.allNotificationNonLive.isNotEmpty() }
+                    if (isNotEmpty)
                         showconfirmation()
                 }
                 true

@@ -104,6 +104,34 @@ class DashboardActivity : BaseCBActivity(),
         Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
         Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
         viewModel.isLoggedIn.postValue(prefs.SP_JWT_TOKEN_KEY.isNotEmpty())
+        setToolbar(dashboardToolbar, hasUpEnabled = false, homeButtonEnabled = false, title = "Dashboard")
+        val toggle = ActionBarDrawerToggle(
+            this,
+            dashboardDrawer,
+            dashboardToolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+        dashboardDrawer.addDrawerListener(toggle)
+        toggle.syncState()
+        dashboardNavigation.setNavigationItemSelectedListener(this)
+        navigationAdapter.setupWithBottomNavigation(dashboardBottomNav)
+
+        dashboardBottomNav.apply {
+            setTitleTypeface(Typeface.createFromAsset(assets, "fonts/gilroy_medium.ttf"))
+            defaultBackgroundColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getColor(R.color.dark)
+            } else {
+                resources.getColor(R.color.dark)
+            }
+            titleState = (FabNavigation.TitleState.ALWAYS_SHOW)
+            setOnTabSelectedListener(this@DashboardActivity)
+            accentColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getColor(R.color.bottomNavSelected)
+            } else {
+                resources.getColor(R.color.bottomNavSelected)
+            }
+        }
         viewModel.isLoggedIn.observe(this) {
             initializeUI(it)
         }
@@ -142,41 +170,13 @@ class DashboardActivity : BaseCBActivity(),
     }
 
     private fun initializeUI(loggedIn: Boolean) {
-        setToolbar(dashboardToolbar, hasUpEnabled = false, homeButtonEnabled = false, title = "Dashboard")
-        val toggle = ActionBarDrawerToggle(
-            this,
-            dashboardDrawer,
-            dashboardToolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-        dashboardDrawer.addDrawerListener(toggle)
-        toggle.syncState()
-        dashboardNavigation.setNavigationItemSelectedListener(this)
-        navigationAdapter.setupWithBottomNavigation(dashboardBottomNav)
         setupViewPager()
-
-        dashboardBottomNav.apply {
-            setTitleTypeface(Typeface.createFromAsset(assets, "fonts/gilroy_medium.ttf"))
-            defaultBackgroundColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                getColor(R.color.dark)
-            } else {
-                resources.getColor(R.color.dark)
-            }
-            titleState = (FabNavigation.TitleState.ALWAYS_SHOW)
-            setOnTabSelectedListener(this@DashboardActivity)
-            accentColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                getColor(R.color.bottomNavSelected)
-            } else {
-                resources.getColor(R.color.bottomNavSelected)
-            }
-        }
         if (loggedIn) {
             setUser()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 createShortcut()
             }
-            dashboardBottomNav.setCurrentItem(1)
+            dashboardBottomNav.setCurrentItem(2)
         } else {
             dashboardNavigation.getHeaderView(0).apply {
                 findViewById<TextView>(R.id.navUsernameTv).text = "Login/Signup"
@@ -406,9 +406,7 @@ class DashboardActivity : BaseCBActivity(),
                 }
 
                 if (viewModel.isLoggedIn.value == true) {
-                    dashboardToolbarSearch.slideUp()
                     dashboardToolbarSecondary.slideDown()
-//                    dashboardToolbarSecondary.crossfade(dashboardToolbarSearch, null)
                 }
             }
             else -> {

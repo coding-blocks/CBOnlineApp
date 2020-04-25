@@ -67,7 +67,8 @@ class DashboardMyCoursesRepository(
                         myAttempt.doubtSupport ?: "",
                         myAttempt.completedContents,
                         myAttempt.lastAccessedAt ?: "",
-                        id
+                        id,
+                        myAttempt.certifcate?.url ?: ""
                     )
                     if (response == -2L && !attemptDao.getAttemptId(myAttempt.id).isNullOrEmpty()) {
                         runDao.update(runModel)

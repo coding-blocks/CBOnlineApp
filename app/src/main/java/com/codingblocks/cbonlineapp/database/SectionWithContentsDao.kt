@@ -5,10 +5,14 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.RawQuery
+import androidx.sqlite.db.SupportSQLiteQuery
+import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder.DownloadableContent
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder.NextContent
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder.SectionContentPair
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder.SectionWithContent
+import com.codingblocks.cbonlineapp.database.models.SectionModel
 
 @Dao
 interface SectionWithContentsDao {
@@ -37,10 +41,10 @@ interface SectionWithContentsDao {
     //
     @Query("""
         SELECT s.* FROM SectionModel s,ContentModel c 
-	    WHERE s.attemptId = :attemptId AND progress = "UNDONE"
-        ORDER BY s."sectionOrder" LIMIT 1
+	    WHERE s.attemptId = :attemptId AND s.csid = :sectionId  AND (c.contentable = "lecture" OR c.contentable = "video")
+        ORDER BY s."sectionOrder", s."sectionOrder" LIMIT 1
         """)
-    fun getNextContent(attemptId: String): LiveData<SectionContentPair>
+    fun getNextContent(attemptId: String, sectionId: String): LiveData<SectionContentPair>
 
     @Query("""
         SELECT s.* FROM SectionModel s
@@ -48,6 +52,9 @@ interface SectionWithContentsDao {
         ORDER BY s."sectionOrder"
         """)
     fun getSectionWithContent(attemptId: String): LiveData<List<SectionContentPair>>
+
+    @RawQuery(observedEntities = [SectionModel::class, ContentModel::class])
+    fun getSectionWithContentComputed(query: SupportSQLiteQuery): LiveData<List<SectionContentPair>>
 
     @Query("""
         SELECT s.* FROM SectionModel s

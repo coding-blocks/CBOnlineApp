@@ -6,7 +6,6 @@ import com.github.jasminb.jsonapi.annotations.Id
 import com.github.jasminb.jsonapi.annotations.Relationship
 import com.github.jasminb.jsonapi.annotations.RelationshipLinks
 import com.github.jasminb.jsonapi.annotations.Type
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import java.io.Serializable
 
@@ -95,12 +94,17 @@ data class RunAttempts(
     val completedContents: Int = 0,
     val lastAccessedAt: String? = "",
     @Relationship("run")
-    val run: Runs? = null
+    val run: Runs? = null,
+    @Relationship("certificate")
+    val certifcate: Certificate? = null
 ) : BaseModel() {
     constructor(id: String) : this() {
         super.id = id
     }
 }
+
+@Type("certificates")
+data class Certificate(val url: String?) : BaseModel()
 
 @Type("doubts", "doubt")
 data class Doubts(
@@ -321,10 +325,13 @@ class SectionContent(
 class ContentCodeChallenge() : BaseModel() {
     @JvmField
     var contentId: String? = null
+
     @JvmField
     var hbContestId: Int? = null
+
     @JvmField
     var name: String? = null
+
     @JvmField
     var hbProblemId: Int? = null
 }
@@ -345,16 +352,22 @@ class ContentQna(
 class ContentCsv : BaseModel() {
     @JvmField
     var contentId: String? = null
+
     @JvmField
     var name: String? = null
+
     @JvmField
     var description: String? = null
+
     @JvmField
     var refCsv: String? = null
+
     @JvmField
     var datasetUrl: String? = null
+
     @JvmField
     var testcasesUrl: String? = null
+
     @JvmField
     var judgeScript: String? = null
 }
@@ -363,12 +376,16 @@ class ContentCsv : BaseModel() {
 class ContentDocumentType : BaseModel() {
     @JvmField
     var contentId: String? = null
+
     @JvmField
     var duration: Long? = null
+
     @JvmField
     var name: String? = null
+
     @JvmField
     var markdown: String? = null
+
     @JvmField
     var pdfLink: String? = null
 }
@@ -377,14 +394,19 @@ class ContentDocumentType : BaseModel() {
 class ContentLectureType : BaseModel() {
     @JvmField
     var createdAt: String? = null
+
     @JvmField
     var description: String? = null
+
     @JvmField
     var name: String? = null
+
     @JvmField
     var duration: Long? = null
+
     @JvmField
     var status: String? = null
+
     @JvmField
     var videoId: String? = null
 }
@@ -393,12 +415,16 @@ class ContentLectureType : BaseModel() {
 class ContentVideoType : BaseModel() {
     @JvmField
     var description: String? = null
+
     @JvmField
     var contentId: String? = null
+
     @JvmField
     var duration: Long? = null
+
     @JvmField
     var name: String? = null
+
     @JvmField
     var url: String? = null
 }
@@ -407,12 +433,16 @@ class ContentVideoType : BaseModel() {
 class Announcement : BaseModel() {
     @JvmField
     var userId: String? = null
+
     @JvmField
     var createdAt: String? = null
+
     @JvmField
     var text: String? = null
+
     @JvmField
     var title: String? = null
+
     @JvmField
     var runId: String? = null
 }
@@ -432,8 +462,10 @@ class Quizzes(
 class Question : BaseModel() {
     @JvmField
     var title: String? = null
+
     @JvmField
     var description: String? = null
+
     @Relationship("choices", resolve = true)
     @JvmField
     var choices: ArrayList<Choice>? = null
@@ -443,10 +475,13 @@ class Question : BaseModel() {
 class Choice : BaseModel() {
     @JvmField
     var title: String? = null
+
     @JvmField
     var description: String? = null
+
     @JvmField
     var marked: Boolean = false
+
     @JvmField
     var correct: Boolean? = null
 }
@@ -459,8 +494,10 @@ class QuizSubmission : BaseModel() {
 class QuizResult : BaseModel() {
     @JvmField
     var type: String? = null
+
     @JvmField
     var score: Int? = null
+
     @JvmField
     var questions: ArrayList<QuizQuestion>? = null
 }
@@ -468,10 +505,13 @@ class QuizResult : BaseModel() {
 class QuizQuestion : BaseModel() {
     @JvmField
     var score: Int? = null
+
     @JvmField
     var answers: Array<String>? = null
+
     @JvmField
     var correctlyAnswered: Array<Choice>? = null
+
     @JvmField
     var incorrectlyAnswered: Array<Choice>? = null
 }
@@ -534,6 +574,7 @@ data class Player(
     var id: String? = null,
     var playerId: String? = null
 )
+
 @Type("jobs")
 class Jobs(
     val coverImage: String?,

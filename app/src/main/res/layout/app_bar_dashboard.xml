@@ -30,9 +30,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
                 android:background="@drawable/toolbar_bg_colored"
                 android:orientation="horizontal"
-                android:visibility="visible">
+                android:visibility="visible"
+                android:focusable="true">
 
                 <TextView
                     android:id="@+id/toolbarCourseTitleTv"
@@ -58,12 +61,9 @@
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginEnd="@dimen/margin_large"
                     android:layout_weight="1.1"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
                     android:drawablePadding="5dp"
                     android:drawableEnd="@drawable/ic_dropright"
                     android:lines="1"
-                    android:focusable="true"
                     android:fontFamily="@font/gilroy_medium"
                     android:paddingTop="@dimen/margin_xxl"
                     android:paddingBottom="@dimen/margin_medium"
