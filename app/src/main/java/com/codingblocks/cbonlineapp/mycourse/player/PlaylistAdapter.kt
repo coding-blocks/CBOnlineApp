@@ -28,6 +28,7 @@ class PlaylistAdapter : ListAdapter<ContentModel, PlaylistAdapter.PlaylistViewHo
     }
      fun updateSelectedItem(contentId: String){
          selectedItem = currentList.indexOfFirst { it.ccid == contentId  }
+         notifyDataSetChanged()
      }
 
     companion object {
