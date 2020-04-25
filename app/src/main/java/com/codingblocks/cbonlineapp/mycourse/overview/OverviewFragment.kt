@@ -37,7 +37,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.run.observer(viewLifecycleOwner) { courseAndRun ->
+        viewModel.run?.observer(viewLifecycleOwner) { courseAndRun ->
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
             viewModel.runId = (courseAndRun.run.crUid)
             val progressValue = if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
@@ -93,7 +93,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             }
         }
 
-        viewModel.performance.observer(viewLifecycleOwner) {
+        viewModel.performance?.observer(viewLifecycleOwner) {
             homePerformanceTv.text = it.remarks
             homePercentileTv.text = it.percentile.toString()
             loadData(it.averageProgress, it.userProgress)

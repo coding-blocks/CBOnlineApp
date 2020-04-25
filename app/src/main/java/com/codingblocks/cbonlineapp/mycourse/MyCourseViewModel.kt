@@ -22,35 +22,21 @@ import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.extensions.runIO
+import com.codingblocks.cbonlineapp.util.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
-import kotlin.properties.Delegates
-import kotlin.properties.ObservableProperty
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
-
-
-inline fun <T>savedStateValue(handle: SavedStateHandle, key: String): ReadWriteProperty<Any?, T?> {
-    return (object: ReadWriteProperty<Any?, T?> {
-        override fun getValue(thisRef: Any?, property: KProperty<*>): T? {
-            return handle[key]
-        }
-
-        override fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
-            handle.set(key, value)
-        }
-    })
-}
 
 class MyCourseViewModel(
     private val handle: SavedStateHandle,
     private val repo: MyCourseRepository
 ) : BaseCBViewModel() {
 
-    var attemptId by savedStateValue<String>(handle, COURSE_NAME)
+    var attemptId by savedStateValue<String>(handle, RUN_ATTEMPT_ID)
     var name by savedStateValue<String>(handle, COURSE_NAME)
     var runId by savedStateValue<String>(handle, RUN_ID)
 
@@ -64,7 +50,9 @@ class MyCourseViewModel(
     init {
         getStats()
         content = Transformations.switchMap(DoubleTrigger(complete, filters)) {
-            repo.getSectionWithContent(attemptId)
+            attemptId?.let {
+                repo.getSectionWithContent(it)
+            }
         }
     }
 
@@ -77,18 +65,18 @@ class MyCourseViewModel(
         }
 
     val performance by lazy {
-        repo.getRunStats(attemptId)
+        attemptId?.let { repo.getRunStats(it) }
     }
 
     val run by lazy {
-        repo.getRunById(attemptId)
+        attemptId?.let { repo.getRunById(it) }
     }
 
 //    val computedData = repo.getSectionWithContentComputer(attemptId)
 
     fun fetchSections(refresh: Boolean = false) {
         runIO {
-            when (val response = repo.fetchSections(attemptId)) {
+            when (val response = attemptId?.let { repo.fetchSections(it) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
@@ -106,12 +94,12 @@ class MyCourseViewModel(
 
     fun getStats() {
         runIO {
-            when (val response = repo.getStats(attemptId)) {
+            when (val response = attemptId?.let { repo.getStats(it) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
                         body()?.let { response ->
-                            repo.saveStats(response, attemptId)
+                            attemptId?.let { repo.saveStats(response, it) }
                         }
                     } else {
                         setError(fetchError(code()))
@@ -122,7 +110,7 @@ class MyCourseViewModel(
     }
 
     val resetProgress = liveData(Dispatchers.IO) {
-        when (val response = repo.resetProgress(ResetRunAttempt(attemptId))) {
+        when (val response = attemptId?.let { ResetRunAttempt(it) }?.let { repo.resetProgress(it) }) {
             is ResultWrapper.GenericError -> setError(response.error)
             is ResultWrapper.Success -> {
                 if (response.value.isSuccessful)
@@ -135,7 +123,7 @@ class MyCourseViewModel(
     }
 
     val nextContent by lazy {
-        repo.getNextContent(attemptId)
+        attemptId?.let { repo.getNextContent(it) }
     }
 
     fun updateProgress(contentId: String) {
@@ -153,7 +141,7 @@ class MyCourseViewModel(
     }
 
     fun addToCart() = liveData(Dispatchers.IO) {
-        when (val response = repo.addToCart(runId)) {
+        when (val response = runId?.let { repo.addToCart(it) }) {
             is ResultWrapper.GenericError -> setError(response.error)
             is ResultWrapper.Success -> with(response.value) {
                 if (isSuccessful) {
@@ -167,7 +155,7 @@ class MyCourseViewModel(
 
     fun requestMentorApproval() {
         runIO {
-            when (val response = repo.requestApproval(attemptId)) {
+            when (val response = attemptId?.let { repo.requestApproval(it) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (!isSuccessful) setError(fetchError(code()))
@@ -178,13 +166,14 @@ class MyCourseViewModel(
 
     fun updateRunAttempt() {
         runIO {
-            when (val response = repo.fetchSections(attemptId)) {
+            when (val response = attemptId?.let { repo.fetchSections(it) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (!isSuccessful) setError(fetchError(code()))
                 }
             }
-        } }
+        }
+    }
 }
 
 //    fun requestApproval() {

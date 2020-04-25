@@ -274,6 +274,7 @@
     <string name="logout_dialog_title">Logout Confirmation</string>
     <string name="logout_dialog_description">Logging out will remove all your downloaded course videos. Are you sure ?</string>
     <string name="goodiedesclocked">Complete %d%% of your course to unlock and claim goodies</string>
+    <string name="section_name">Section %s</string>
 
 
 </resources>

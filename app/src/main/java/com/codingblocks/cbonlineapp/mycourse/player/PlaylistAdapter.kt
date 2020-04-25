@@ -26,6 +26,9 @@ class PlaylistAdapter : ListAdapter<ContentModel, PlaylistAdapter.PlaylistViewHo
         selectedItem = list.indexOfFirst { it.ccid == contentId }
         super.submitList(list)
     }
+     fun updateSelectedItem(contentId: String){
+         selectedItem = currentList.indexOfFirst { it.ccid == contentId  }
+     }
 
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<ContentModel>() {
@@ -46,12 +49,12 @@ class PlaylistAdapter : ListAdapter<ContentModel, PlaylistAdapter.PlaylistViewHo
 
         fun bindTo(content: ContentModel, onItemClick: ((ContentModel) -> Unit)?, position: Int) = with(itemView) {
             when {
-                content.progress == "DONE" -> {
-                    contentTitleTv.isEnabled = true
-                }
                 selectedItem == position -> {
                     contentTitleTv.isEnabled = false
                     contentTitleTv.isActivated = true
+                }
+                content.progress == "DONE" -> {
+                    contentTitleTv.isEnabled = true
                 }
                 else -> {
                     contentTitleTv.isActivated = false

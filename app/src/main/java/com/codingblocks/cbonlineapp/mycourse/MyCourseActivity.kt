@@ -49,7 +49,7 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
         if (!MediaUtils.checkPermission(this)) {
             MediaUtils.isStoragePermissionGranted(this)
         }
-        viewModel.nextContent.observe(this, Observer { content ->
+        viewModel.nextContent?.observe(this, Observer { content ->
             courseResumeBtn.setOnClickListener {
                 when (content.contentable) {
                     LECTURE, VIDEO -> startActivity(
