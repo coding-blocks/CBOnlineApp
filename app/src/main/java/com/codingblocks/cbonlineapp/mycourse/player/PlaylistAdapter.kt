@@ -26,10 +26,11 @@ class PlaylistAdapter : ListAdapter<ContentModel, PlaylistAdapter.PlaylistViewHo
         selectedItem = list.indexOfFirst { it.ccid == contentId }
         super.submitList(list)
     }
-     fun updateSelectedItem(contentId: String){
-         selectedItem = currentList.indexOfFirst { it.ccid == contentId  }
-         notifyDataSetChanged()
-     }
+
+    fun updateSelectedItem(contentId: String) {
+        selectedItem = currentList.indexOfFirst { it.ccid == contentId }
+        notifyDataSetChanged()
+    }
 
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<ContentModel>() {

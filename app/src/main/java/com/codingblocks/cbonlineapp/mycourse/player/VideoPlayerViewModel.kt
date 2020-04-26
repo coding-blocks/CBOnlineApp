@@ -42,7 +42,6 @@ class VideoPlayerViewModel(
     var sectionId = MutableLiveData<String>()
     var attemptId = MutableLiveData<String>()
 
-
     var currentVideoId = MutableLiveData<String>()
     var currentContentId = MutableLiveData<String>()
 
@@ -62,7 +61,6 @@ class VideoPlayerViewModel(
     val bookmark = Transformations.switchMap(currentContentId) {
         repo.getBookmark(it)
     }
-
 
     val notes = Transformations.switchMap(attemptId) {
         fetchNotes()

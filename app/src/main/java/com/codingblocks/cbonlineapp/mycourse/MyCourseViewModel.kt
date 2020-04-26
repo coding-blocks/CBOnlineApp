@@ -28,8 +28,6 @@ import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
-import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
 
 class MyCourseViewModel(
     private val handle: SavedStateHandle,

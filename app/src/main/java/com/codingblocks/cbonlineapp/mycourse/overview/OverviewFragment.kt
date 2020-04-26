@@ -129,7 +129,6 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     }
 
     private fun showGoodiesForm() {
-
     }
 
     private fun setWhatsappCard(link: String, premium: Boolean) {

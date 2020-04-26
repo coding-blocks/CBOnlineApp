@@ -38,7 +38,6 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
-import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.extensions.setRv
@@ -79,7 +78,7 @@ import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
-import java.util.*
+import java.util.Objects
 import java.util.concurrent.TimeUnit
 
 class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
@@ -107,7 +106,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         setUpBottomSheet()
         setupViewPager()
         setupUI()
-
     }
 
     private fun setupUI() {
@@ -128,7 +126,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                 ).singleTop()
             )
         }
-
 
         rootLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -225,7 +222,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                 // Don't Remove
                 bookmarkBtn.isActivated = if (it == null) false else it.bookmarkUid.isNotEmpty()
             }
-
         }
     }
 
@@ -295,7 +291,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
         playerFragment.initialize(this)
         showControls(false)
-
     }
 
 //    override fun onStart() {

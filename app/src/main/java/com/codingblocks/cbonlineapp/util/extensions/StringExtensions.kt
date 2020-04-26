@@ -147,7 +147,7 @@ fun getSpannableSring(boldText: String, normalText: String): SpannableStringBuil
 
 fun getSpannableString(text: String): SpannableStringBuilder =
     SpannableStringBuilder()
-        .color(Color.parseColor("#f2734c")){
+        .color(Color.parseColor("#f2734c")) {
             append(text)
         }
 

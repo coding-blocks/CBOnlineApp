@@ -31,7 +31,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DashboardHomeFragment : BaseCBFragment() {
 
-    private val viewModel by sharedViewModel<DashboardViewModel>()
+    private val viewModel: DashboardViewModel by sharedViewModel()
     private val sharedPrefs by inject<PreferenceHelper>()
 
     override fun onCreateView(
