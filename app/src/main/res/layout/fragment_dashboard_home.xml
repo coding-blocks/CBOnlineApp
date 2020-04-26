@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingTop="@dimen/margin_large"
         android:layout_marginBottom="@dimen/margin_9xl"
         android:paddingBottom="@dimen/margin_large">
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <RelativeLayout
                 android:id="@+id/dashboardProgressContainer"
@@ -168,6 +168,8 @@
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/explore_courses"
                     android:textSize="16sp" />
+
+
 
             </LinearLayout>
 
@@ -359,6 +361,16 @@
                 android:textSize="16sp" />
 
         </LinearLayout>
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/dashboardHomeShimmer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:background="@color/dark_white"
+            android:visibility="visible">
+
+            <include layout="@layout/item_skeleton_dashbaord" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

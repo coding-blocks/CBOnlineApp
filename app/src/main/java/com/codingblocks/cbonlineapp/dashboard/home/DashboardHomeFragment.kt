@@ -14,6 +14,7 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.models.ProgressItem
@@ -40,12 +41,19 @@ class DashboardHomeFragment : BaseCBFragment() {
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_dashboard_home, container, false)
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        dashboardHomeShimmer.startShimmer()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.isLoggedIn.observer(viewLifecycleOwner) { isLoggedIn ->
             if (isLoggedIn) {
                 viewModel.added.observer(viewLifecycleOwner) {
                     viewModel.topRun.observer(viewLifecycleOwner) { courseAndRun ->
+                        dashboardHomeShimmer.hideAndStop()
+                        dashboardHome.isVisible = true
                         viewModel.getStats(courseAndRun.runAttempt.attemptId)
                         with(courseAndRun) {
                             dashboardProgressContainer.isVisible = true
@@ -90,6 +98,7 @@ class DashboardHomeFragment : BaseCBFragment() {
                     loadData(it.averageProgress, it.userProgress)
                 }
             } else {
+                dashboardHomeShimmer.hideAndStop()
                 dashboardHome.isVisible = false
                 dashboardHomeLoggedOut.isVisible = true
             }

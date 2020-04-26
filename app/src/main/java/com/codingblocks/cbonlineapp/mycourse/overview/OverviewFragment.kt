@@ -13,6 +13,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.models.ProgressItem
 import com.github.mikephil.charting.data.Entry
@@ -23,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
 import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
@@ -37,7 +39,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.run?.observer(viewLifecycleOwner) { courseAndRun ->
+        viewModel.run?.getDistinct()?.observer(viewLifecycleOwner) { courseAndRun ->
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
             viewModel.runId = (courseAndRun.run.crUid)
             val progressValue = if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
@@ -111,6 +113,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     }
 
     private fun downloadCertificate(certificateUrl: String) {
+        toast("Will be added soon")
     }
 
     private fun setGoodiesCard(goodiesThreshold: Int, progress: Double) {

@@ -406,7 +406,10 @@ class DashboardActivity : BaseCBActivity(),
                 }
 
                 if (viewModel.isLoggedIn.value == true) {
-                    dashboardToolbarSecondary.slideDown()
+                    dashboardToolbarSecondary.post {
+                        dashboardToolbarSearch.slideUp()
+                        dashboardToolbarSecondary.slideDown()
+                    }
                 }
             }
             else -> {
