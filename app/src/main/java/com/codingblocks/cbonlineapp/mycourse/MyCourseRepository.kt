@@ -121,7 +121,7 @@ class MyCourseRepository(
                                 ?: 0,
                             contentLectureType.videoId
                                 ?: "",
-                            content.sectionContent?.id
+                            content.sectionContent?.sectionId
                                 ?: "",
                             contentLectureType.updatedAt
                         )
@@ -134,7 +134,7 @@ class MyCourseRepository(
                                 ?: "",
                             contentDocumentType.pdfLink
                                 ?: "",
-                            content.sectionContent?.id
+                            content.sectionContent?.sectionId
                                 ?: "",
                             contentDocumentType.updatedAt
                         )
@@ -151,7 +151,7 @@ class MyCourseRepository(
                                 ?: "",
                             contentVideoType.url
                                 ?: "",
-                            content.sectionContent?.id
+                            content.sectionContent?.sectionId
                                 ?: "",
                             contentVideoType.updatedAt
                         )
@@ -164,7 +164,7 @@ class MyCourseRepository(
                                 ?: "",
                             contentQna1.qId
                                 ?: 0,
-                            content.sectionContent?.id
+                            content.sectionContent?.sectionId
                                 ?: "",
                             contentQna1.updatedAt
                         )
@@ -179,7 +179,7 @@ class MyCourseRepository(
                                 ?: 0,
                             codeChallenge.hbContestId
                                 ?: 0,
-                            content.sectionContent?.id
+                            content.sectionContent?.sectionId
                                 ?: "",
                             codeChallenge.updatedAt
                         )

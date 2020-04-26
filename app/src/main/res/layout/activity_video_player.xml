@@ -42,6 +42,8 @@
             android:id="@+id/youtubePlayerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:showYouTubeButton="false"
+            app:handleNetworkEvents="true"
             android:visibility="gone" />
 
         <FrameLayout

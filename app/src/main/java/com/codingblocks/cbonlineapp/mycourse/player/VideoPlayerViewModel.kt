@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.mycourse.player
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.Data
@@ -44,25 +45,26 @@ class VideoPlayerViewModel(
 
     var currentVideoId = MutableLiveData<String>()
     var currentContentId = MutableLiveData<String>()
+    var currentContentProgress: String = "UNDONE"
 
     var mOtp: String? = null
     var mPlaybackInfo: String? = null
     var getOtpProgress: MutableLiveData<Boolean> = MutableLiveData()
     var isDownloaded = false
 
-    val doubts = Transformations.switchMap(attemptId) {
+    val doubts = Transformations.distinctUntilChanged(attemptId).switchMap {
         fetchDoubts()
         repoDoubts.getDoubtsByCourseRun(LIVE, it)
     }
-    val content = Transformations.switchMap(currentContentId) {
+    val content = Transformations.distinctUntilChanged(currentContentId).switchMap {
         repo.getContent(it)
     }
 
-    val bookmark = Transformations.switchMap(currentContentId) {
+    val bookmark = Transformations.distinctUntilChanged(currentContentId).switchMap {
         repo.getBookmark(it)
     }
 
-    val notes = Transformations.switchMap(attemptId) {
+    val notes = Transformations.distinctUntilChanged(attemptId).switchMap {
         fetchNotes()
         repo.getNotes(it)
     }

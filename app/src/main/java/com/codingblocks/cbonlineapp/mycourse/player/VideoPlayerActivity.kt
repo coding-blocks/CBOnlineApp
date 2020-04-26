@@ -38,6 +38,7 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
+import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.extensions.setRv
@@ -62,6 +63,7 @@ import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_video_player.*
+import kotlinx.android.synthetic.main.activity_video_player.youtubePlayerView
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import kotlinx.android.synthetic.main.my_fab_menu.*
 import kotlinx.android.synthetic.main.vdo_control_view.view.*
@@ -72,7 +74,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
-import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
@@ -94,7 +95,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
     private lateinit var playerFragment: VdoPlayerSupportFragment
     private var videoPlayer: VdoPlayer? = null
-    private var youtubePlayer: YouTubePlayer? = null
+    private lateinit var youtubePlayer: YouTubePlayer
     private val sectionItemsAdapter = PlaylistAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,7 +117,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
         contentRv.setRv(this, sectionItemsAdapter)
         vm.contentList.observer(this) {
-            sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }, vm.currentContentId.value!!)
+            sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }.sortedBy { it.order }, vm.currentContentId.value!!)
         }
         sectionItemsAdapter.onItemClick = {
             startActivity(
@@ -189,14 +190,16 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                 startDownloadWorker()
         }
 
-        vm.content.observe(this) {
+        vm.content.getDistinct().observe(this) {
             //            vm.contentLength = it.contentLecture.lectureDuration
             sectionItemsAdapter.updateSelectedItem(it.ccid)
             vm.attemptId.value = it.attempt_id
             sectionTitle.text = getString(R.string.section_name, it.sectionTitle)
             contentTitle.text = it.title
             if (it.contentable == LECTURE) {
+                vm.currentContentProgress = it.progress
                 vm.isDownloaded = it.contentLecture.isDownloaded
+                downloadBtn.isVisible = true
                 downloadBtn.isActivated = vm.isDownloaded
                 vm.currentVideoId.value = it.contentLecture.lectureId
                 youtubePlayerView.isVisible = false
@@ -209,9 +212,11 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                     setupVideoView()
                 }
             } else if (it.contentable == VIDEO) {
+                downloadBtn.isVisible = false
                 with(youtubePlayerView) {
                     lifecycle.addObserver(this)
                     isVisible = true
+                    videoContainer.visibility = View.GONE
                     addFullScreenListener(this@VideoPlayerActivity)
                 }
                 setYoutubePlayer(it.contentVideo.videoUrl)
@@ -250,7 +255,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         val videoData = workDataOf(
             VIDEO_ID to vm.currentVideoId.value,
             TITLE to contentTitle.text.toString(),
-            SECTION_ID to vm.sectionId,
+            SECTION_ID to vm.sectionId.value,
             RUN_ATTEMPT_ID to vm.attemptId.value,
             CONTENT_ID to vm.currentContentId.value
         )
@@ -306,7 +311,12 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
         vm.currentContentId.value = intent.getStringExtra(CONTENT_ID) ?: ""
         vm.sectionId.value = intent.getStringExtra(SECTION_ID) ?: ""
-        playerFragment.player.release()
+        if (::playerFragment.isInitialized) {
+            playerFragment.player.release()
+        }
+        if (::youtubePlayer.isInitialized) {
+            youtubePlayer.pause()
+        }
     }
 
     override fun onInitializationSuccess(
@@ -407,10 +417,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
 
         override fun onProgress(progress: Long) {
-            val per = (playerFragment.player.duration / 100) * 90
-            if (progress > per) {
-                vm.updateProgress()
-            }
+            checkProgress(progress, playerFragment.player.duration)
         }
 
         override fun onPlaybackSpeedChanged(speed: Float) {
@@ -422,11 +429,15 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                 "Error Message: ${p1.errorMsg}, " +
                     "Error Code: ${p1.errorCode} , ${p1.httpStatusCode}"
             )
-            if (p1.errorCode == 5110) {
-                rootLayout.snackbar("Seems like your download was corrupted.Please Download Again")
-                deleteFolder(vm.currentContentId.value!!)
-            } else if (p1.errorCode in (2010..2020)) {
-                vm.getOtp()
+            when (p1.errorCode) {
+                5110 -> {
+                    rootLayout.snackbar("Seems like your download was corrupted.Please Download Again")
+                    deleteFolder(vm.currentContentId.value!!)
+                }
+                in (2010..2020) -> {
+                }
+                6120 -> {
+                }
             }
         }
 
@@ -434,8 +445,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
 
         override fun onError(p0: VdoPlayer.VdoInitParams?, p1: ErrorDescription?) {
-            info { p0 }
-            info { p1 }
             FirebaseCrashlytics.getInstance().log(
                 "Error Message: ${p1?.errorMsg}," +
                     " Error Code: ${p1?.errorCode} , ${p1?.httpStatusCode}"
@@ -443,6 +452,14 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+        }
+    }
+
+    private fun checkProgress(progress: Long, duration: Long) {
+        val per = (duration / 100) * 90
+        if (progress > per && vm.currentContentProgress != "DONE") {
+            vm.currentContentProgress = "DONE"
+            vm.updateProgress()
         }
     }
 
@@ -576,11 +593,20 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     }
 
     private fun setYoutubePlayer(youtubeUrl: String) {
+        if (::youtubePlayer.isInitialized) {
+            val id = getYoutubeVideoId(youtubeUrl)
+            youtubePlayer.loadVideo(id, 0f)
+        }
         youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
 
+            override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
+                super.onCurrentSecond(youTubePlayer, second)
+                checkProgress(second.toLong(), tracker.videoDuration.toLong())
+            }
+
             override fun onReady(player: YouTubePlayer) {
-                this@VideoPlayerActivity.youtubePlayer = player
-                this@VideoPlayerActivity.youtubePlayer!!.addListener(tracker)
+                youtubePlayer = player
+                youtubePlayer.addListener(tracker)
                 val id = getYoutubeVideoId(youtubeUrl)
                 player.loadVideo(id, 0f)
             }
@@ -697,7 +723,8 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     }
 
     override fun onDestroy() {
-        videoPlayer?.release()
+        if (::playerFragment.isInitialized)
+            playerFragment.player?.release()
         super.onDestroy()
     }
 

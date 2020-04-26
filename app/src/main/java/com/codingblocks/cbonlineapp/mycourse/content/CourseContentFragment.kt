@@ -339,7 +339,6 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                                 checkSection(premium)
                         VIDEO ->
                             if (contentVideo.videoUid.isNotEmpty()) {
-                                viewModel.updateProgress(ccid)
                                 startActivity(
                                     intentFor<VideoPlayerActivity>(
                                         CONTENT_ID to ccid,

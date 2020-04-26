@@ -202,10 +202,8 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
                     contentDao.updateContent(data.contentId, 1)
                 }
                 val intent = Intent(applicationContext, VideoPlayerActivity::class.java)
-                intent.putExtra(VIDEO_ID, data.videoId)
-                intent.putExtra(RUN_ATTEMPT_ID, data.attemptId)
                 intent.putExtra(CONTENT_ID, data.contentId)
-                intent.putExtra(DOWNLOADED, true)
+                intent.putExtra(SECTION_ID, data.sectionId)
 
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 val pendingIntent = PendingIntent.getActivity(
