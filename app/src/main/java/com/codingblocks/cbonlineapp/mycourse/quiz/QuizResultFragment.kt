@@ -10,9 +10,13 @@ import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_quiz_result.*
+import kotlinx.coroutines.*
 
-class QuizResultFragment : BaseCBFragment() {
+class QuizResultFragment(val quizAttemptId: String) : BaseCBFragment() {
+
+    val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,22 +35,24 @@ class QuizResultFragment : BaseCBFragment() {
         // 0x90CE8700
         correctBackground.color = ColorStateList.valueOf(Color.parseColor("#90ce87"))
 
-//        Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId).enqueue(retrofitCallback { _, response ->
-//            val questions = response?.body()?.result?.questions
-//            val totalQuestions = questions?.size
-//            var correctQuestions = 0
-//            questions?.forEach { question ->
-//                if (question.score!! > 0)
-//                    correctQuestions++
-//            }
-//            val wrongQuestions = totalQuestions?.minus(correctQuestions)
-//            total_questions_image.text = totalQuestions.toString()
-//            correct_answers_score_image.text = correctQuestions.toString()
-//            wrong_answers_image.text = wrongQuestions.toString()
-//        })
+        coroutineScope.launch {
+            val response = withContext(Dispatchers.IO) { Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId) }
+            val questions = response?.body()?.result?.questions
+            val totalQuestions = questions?.size
+            var correctQuestions = 0
+            questions?.forEach { question ->
+                if (question.score!! > 0)
+                    correctQuestions++
+            }
 
-        quizResultGoBackBtn.setOnClickListener {
-            replaceFragmentSafely(QuizFragment(), containerViewId = R.id.quizContainer)
+            val wrongQuestions = totalQuestions?.minus(correctQuestions)
+            total_questions_image.text = totalQuestions.toString()
+            correct_answers_score_image.text = correctQuestions.toString()
+            wrong_answers_image.text = wrongQuestions.toString()
+
+            quizResultGoBackBtn.setOnClickListener {
+                replaceFragmentSafely(QuizFragment(), containerViewId = R.id.quizContainer)
+            }
         }
     }
 }
