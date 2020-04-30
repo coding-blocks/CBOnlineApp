@@ -53,6 +53,11 @@
 
     </LinearLayout>
 
+    <View
+        android:background="#e8e8e8"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
+
 
     <com.codingblocks.cbonlineapp.util.widgets.BottomSheetListView
         android:id="@+id/compareBatchRv"

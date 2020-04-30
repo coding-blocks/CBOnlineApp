@@ -11,19 +11,22 @@ import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.commons.SheetAdapter
 import com.codingblocks.cbonlineapp.course.CourseViewModel
+import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.extensions.getDateForRun
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.onlineapi.Clients.gson
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
-import kotlinx.android.synthetic.main.bottom_sheet_comparsion.*
+import com.google.gson.reflect.TypeToken
+import kotlinx.android.synthetic.main.bottom_sheet_comparsion.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_runs.*
 import kotlinx.android.synthetic.main.bottom_sheet_runs.view.*
+import org.json.JSONArray
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.lang.reflect.Type
 
 
 class CourseTierFragment : BottomSheetDialogFragment() {
@@ -68,12 +71,11 @@ class CourseTierFragment : BottomSheetDialogFragment() {
 
     private fun setUpBottomSheet() {
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_comparsion, null)
-        val list =
-        sheetDialog.run {
-            val sheetAdapter = BatchComparionAdapter(list)
-            compareBatchRv.adapter = sheetAdapter
-
-        }
+        val json = FileUtils.loadJsonObjectFromAsset(requireContext(), "comparision.json") as JSONArray?
+        val listType: Type = object : TypeToken<List<Comparision>>() {}.type
+        val list: List<Comparision> = gson.fromJson(json.toString(), listType)
+        val sheetAdapter = BatchComparisonAdapter(list)
+        sheetDialog.compareBatchRv.adapter = sheetAdapter
         comparisionDialog.dismissWithAnimation = true
         comparisionDialog.setContentView(sheetDialog)
     }

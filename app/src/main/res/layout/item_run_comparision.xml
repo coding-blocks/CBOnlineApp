@@ -3,34 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
+
     android:orientation="horizontal">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/titleTv"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1.3"
+        android:layout_weight="3.8"
+        android:drawableStart="@drawable/ic_goodie"
+        android:drawablePadding="@dimen/margin_medium"
+        android:fontFamily="@font/gilroy_bold"
+        android:gravity="center_vertical"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:drawablePadding="@dimen/margin_medium"
-        android:gravity="center_vertical"
-        android:drawableStart="@drawable/ic_goodie"
-        android:fontFamily="@font/gilroy_bold"
-        android:text="Compare"
+        android:text="Compans dk dkdsnaknlnlasdnlre"
         android:textColor="@color/black"
         android:textSize="14sp" />
 
     <ImageView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:src="@drawable/ic_status" />
-    
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#e8e8e8"/>
-
-    <ImageView
+        android:id="@+id/lite"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -39,19 +31,34 @@
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="#e8e8e8"/>
+        android:background="#e8e8e8" />
 
     <ImageView
+        android:id="@+id/premium"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:src="@drawable/ic_status" />
+
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="#e8e8e8"/>
+        android:background="#e8e8e8" />
 
     <ImageView
+        android:id="@+id/live"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:src="@drawable/ic_status" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="#e8e8e8" />
+
+    <ImageView
+        android:id="@+id/classroom"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
