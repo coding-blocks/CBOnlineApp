@@ -122,18 +122,6 @@ class CourseViewModel(
         }
     }
 
-//    fun getCart() {
-//        Clients.api.getCart().enqueue(retrofitCallback { _, response ->
-//            response?.body().let { json ->
-//                json?.getAsJsonArray("cartItems")?.get(0)?.asJsonObject.let {
-//                    image.value = it?.get("image_url")?.asString
-//                    name.value = it?.get("productName")?.asString
-//                    sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-//                }
-//            }
-//        })
-//    }
-
     fun clearCart(id: String) {
         runIO {
             when (val response = repo.clearCart()) {

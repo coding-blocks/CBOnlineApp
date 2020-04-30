@@ -78,7 +78,8 @@ data class Runs(
     val productId: Int?,
     val completionThreshold: Int?,
     val goodiesThreshold: Int?,
-    val totalContents: Int
+    val totalContents: Int,
+    val tier:String?
 ) : BaseModel() {
 
 }
@@ -96,8 +97,9 @@ data class RunAttempts(
     @Relationship("run")
     val run: Runs? = null,
     @Relationship("certificate")
-    val certifcate: Certificate? = null
-) : BaseModel() {
+    val certifcate: Certificate? = null,
+    val runTier: String? = ""
+    ) : BaseModel() {
     constructor(id: String) : this() {
         super.id = id
     }

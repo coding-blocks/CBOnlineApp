@@ -275,6 +275,9 @@
     <string name="logout_dialog_description">Logging out will remove all your downloaded course videos. Are you sure ?</string>
     <string name="goodiedesclocked">Complete %d%% of your course to unlock and claim goodies</string>
     <string name="section_name">Section %s</string>
+    <string name="rupee_price">₹ %s</string>
+    <string name="batch_starting">"Batch starting %s"</string>
+    <string name="compare">Compare</string>
 
 
 </resources>
