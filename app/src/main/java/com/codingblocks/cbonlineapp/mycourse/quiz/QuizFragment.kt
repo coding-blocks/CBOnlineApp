@@ -167,7 +167,7 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
     private fun submitQuiz() {
         vm.submitQuiz {
             replaceFragmentSafely(
-                QuizResultFragment(vm.quizAttemptId),
+                QuizResultFragment.newInstance(vm.quizAttemptId),
                 "result",
                 containerViewId = R.id.quizContainer,
                 addToStack = true

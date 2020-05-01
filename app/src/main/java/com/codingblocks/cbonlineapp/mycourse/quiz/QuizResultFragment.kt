@@ -14,9 +14,18 @@ import com.codingblocks.onlineapi.Clients
 import kotlinx.android.synthetic.main.fragment_quiz_result.*
 import kotlinx.coroutines.*
 
-class QuizResultFragment(val quizAttemptId: String) : BaseCBFragment() {
+class QuizResultFragment : BaseCBFragment() {
 
     val coroutineScope = CoroutineScope(Dispatchers.Main)
+    private lateinit var quizAttemptId: String
+
+    companion object {
+        fun newInstance(quizAttemptId: String): QuizResultFragment {
+            val quizResultFragment = QuizResultFragment()
+            quizResultFragment.quizAttemptId = quizAttemptId
+            return quizResultFragment
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
