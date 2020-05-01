@@ -98,7 +98,7 @@ data class RunAttempts(
     val run: Runs? = null,
     @Relationship("certificate")
     val certifcate: Certificate? = null,
-    val runTier: String? = ""
+    val runTier: String? = "PREMIUM"
     ) : BaseModel() {
     constructor(id: String) : this() {
         super.id = id

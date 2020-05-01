@@ -46,7 +46,7 @@ interface CourseWithInstructorDao {
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
-       WHERE rA.premium = 1 AND rA.`end` > :currenttimeSec
+       WHERE rA.premium = 1 AND rA.`end` > :currenttimeSec AND rA.runTier != "LITE"
        ORDER BY rA.lastAccessedAt DESC
     """)
     fun getActiveRuns(currenttimeSec: Long): LiveData<List<CourseInstructorPair>>

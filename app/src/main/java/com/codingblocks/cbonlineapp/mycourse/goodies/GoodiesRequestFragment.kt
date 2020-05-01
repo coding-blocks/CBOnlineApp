@@ -10,14 +10,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NonNull
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.bottom_sheet_goodies.*
 import org.jetbrains.anko.support.v4.toast
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class GoodiesRequestFragment : BottomSheetDialogFragment() {
+
+    private val vm:MyCourseViewModel by sharedViewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.bottom_sheet_goodies, container, false)
@@ -28,7 +32,7 @@ class GoodiesRequestFragment : BottomSheetDialogFragment() {
 
         bottomSheetSaveBtn.setOnClickListener {
             if (checkValid(goodieFormNameEt) && checkValid(goodieFormAddressEt) && checkValid(goodieFormPostalCodeEt)) {
-                // form submission logic
+                vm.requestGoodies(goodieFormNameEt.text.toString(),goodieFormAddressEt.text.toString(),goodieFormPostalCodeEt.text.toString(),goodieFormAcnEt.text.toString())
             } else {
                 when (true) {
                     !checkValid(goodieFormNameEt) -> toast("Name Required")
@@ -39,7 +43,7 @@ class GoodiesRequestFragment : BottomSheetDialogFragment() {
         }
 
         bottomSheetCancelBtn.setOnClickListener {
-            this.dialog?.onBackPressed()
+            dialog?.dismiss()
         }
     }
 
@@ -50,7 +54,7 @@ class GoodiesRequestFragment : BottomSheetDialogFragment() {
             val bottomSheetDialog = dialogInterface as BottomSheetDialog
             setupFullHeight(bottomSheetDialog)
         })
-        dialog.onBackPressed()
+//        dialog.onBackPressed()
         return dialog
     }
 

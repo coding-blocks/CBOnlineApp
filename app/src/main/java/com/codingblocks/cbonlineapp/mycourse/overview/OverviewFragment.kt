@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
+import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
 import com.codingblocks.cbonlineapp.util.Components
@@ -91,7 +92,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             courseAndRun.run.whatsappLink?.let { setWhatsappCard(it, courseAndRun.runAttempt.premium) }
 
             if (courseAndRun.run.crStart > "1574985600") {
-                if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium)
+                if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium && RUNTIERS.LITE.name !=  courseAndRun.runAttempt.runTier)
                     setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
             }
         }
@@ -128,9 +129,11 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 getString(R.string.goodiedesclocked, goodiesThreshold)
         }
         goodiesContainer.setOnClickListener {
-            if (canRequest) {
-                showGoodiesForm()
-            }
+            toast("Will be added soon")
+
+//            if (canRequest) {
+//                showGoodiesForm()
+//            }
         }
     }
 

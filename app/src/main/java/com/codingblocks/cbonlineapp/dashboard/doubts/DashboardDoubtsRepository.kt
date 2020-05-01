@@ -5,6 +5,7 @@ import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.database.CommentsDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.DoubtsDao
+import com.codingblocks.cbonlineapp.database.RunAttemptDao
 import com.codingblocks.cbonlineapp.database.models.CommentModel
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.LIVE
@@ -19,7 +20,8 @@ import com.codingblocks.onlineapi.safeApiCall
 class DashboardDoubtsRepository(
     private val doubtsDao: DoubtsDao,
     private val commentsDao: CommentsDao,
-    private val runDao: CourseWithInstructorDao
+    private val runDao: CourseWithInstructorDao,
+    private val runAttemptDao:RunAttemptDao
 ) {
 
     suspend fun fetchDoubtsByCourseRun(id: String) = safeApiCall { Clients.onlineV2JsonApi.getDoubtByAttemptId(id) }
@@ -95,4 +97,6 @@ class DashboardDoubtsRepository(
     suspend fun updateDb(dbtUid: String) {
         doubtsDao.updateStatus(dbtUid, "RESOLVED")
     }
+
+    fun getRunAttempt(id:String)  = runAttemptDao.getRunAttempt(id)
 }

@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:showYouTubeButton="false"
-            app:handleNetworkEvents="true"
+            app:handleNetworkEvents="false"
             android:visibility="gone" />
 
         <FrameLayout

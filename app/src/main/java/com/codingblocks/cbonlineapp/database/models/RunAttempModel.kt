@@ -21,7 +21,8 @@ data class RunAttemptModel(
     val completedContents: Int,
     val lastAccessedAt: String,
     val runId: String,
-    val certificateUrl: String = ""
+    val certificateUrl: String = "",
+    val runTier: String = ""
 ) {
     constructor() : this("", end = "", doubtSupport = " ", completedContents = 0, lastAccessedAt = "", runId = "")
 }

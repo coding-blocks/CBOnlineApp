@@ -20,9 +20,11 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
+import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.library.EditNoteClickListener
 import com.codingblocks.cbonlineapp.mycourse.player.doubts.VideoDoubtFragment
@@ -40,6 +42,7 @@ import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
@@ -78,7 +81,7 @@ import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
-import java.util.Objects
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
@@ -169,7 +172,14 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             }
         }
         doubtFab.setOnClickListener {
-            updateSheet("DOUBT")
+                vm.runAttempts.observer(this) {
+                    if (it.premium && RUNTIERS.LITE.name != it.runTier)
+                        updateSheet("DOUBT")
+                    else {
+                        toast("Doubt Support is only available for PREMIUM+ Runs.")
+                        openChrome(BuildConfig.DISCUSS_URL + contentTitle.text.toString().replace(" ", "-"))
+                    }
+                }
         }
 
         noteFab.setOnClickListener {

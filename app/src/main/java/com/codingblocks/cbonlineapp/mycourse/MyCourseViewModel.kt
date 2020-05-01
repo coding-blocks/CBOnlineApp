@@ -172,6 +172,17 @@ class MyCourseViewModel(
             }
         }
     }
+
+    fun requestGoodies(name: String, address: String, postal: String, mobile: String?) {
+        runIO {
+            when (val response = attemptId?.let { repo.fetchSections(it) }) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (!isSuccessful) setError(fetchError(code()))
+                }
+            }
+        }
+    }
 }
 
 //    fun requestApproval() {

@@ -127,8 +127,19 @@ class CourseViewModel(
         addedToCartProgress.postValue(STATE.LOADING)
         runIO {
             when (val response = repo.clearCart()) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> addToCart(id)
+                is ResultWrapper.GenericError -> {
+                    enrollTrialProgress.postValue(STATE.ERROR)
+                    setError(response.error)
+                }
+                is ResultWrapper.Success ->with(response.value) {
+                    if (isSuccessful) {
+                        addToCart(id)
+                    } else {
+                        enrollTrialProgress.postValue(STATE.ERROR)
+                        setError(fetchError(code()))
+                    }
+
+                }
             }
         }
     }
@@ -138,7 +149,10 @@ class CourseViewModel(
         runIO {
             when (val response = repo.enrollToTrial(id)) {
 
-                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.GenericError -> {
+                    enrollTrialProgress.postValue(STATE.ERROR)
+                    setError(response.error)
+                }
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
                         enrollTrialProgress.postValue(STATE.SUCCESS)
@@ -154,7 +168,10 @@ class CourseViewModel(
     fun addToCart(id: String) {
         runIO {
             when (val response = repo.addToCart(id)) {
-                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.GenericError -> {
+                    enrollTrialProgress.postValue(STATE.ERROR)
+                    setError(response.error)
+                }
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
                         addedToCartProgress.postValue(STATE.SUCCESS)

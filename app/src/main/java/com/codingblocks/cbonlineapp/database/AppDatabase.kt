@@ -27,7 +27,7 @@ import com.codingblocks.cbonlineapp.database.models.SectionModel
         CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, RunModel::class,
         JobsModel::class, SectionContentHolder.SectionWithContent::class, BookmarkModel::class,
         CommentModel::class, RunAttemptModel::class, RunPerformance::class
-    ], exportSchema = true, version = 27
+    ], exportSchema = true, version = 28
 )
 @TypeConverters(TimestampConverter::class, CourseIdList::class, ProgressItemConverter::class)
 abstract class AppDatabase : RoomDatabase() {

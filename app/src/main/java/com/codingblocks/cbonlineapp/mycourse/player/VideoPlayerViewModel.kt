@@ -56,6 +56,11 @@ class VideoPlayerViewModel(
         fetchDoubts()
         repoDoubts.getDoubtsByCourseRun(LIVE, it)
     }
+
+    val runAttempts = Transformations.distinctUntilChanged(attemptId).switchMap {
+        repoDoubts.getRunAttempt(it)
+    }
+
     val content = Transformations.distinctUntilChanged(currentContentId).switchMap {
         repo.getContent(it)
     }
