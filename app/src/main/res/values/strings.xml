@@ -274,7 +274,9 @@
     <string name="logout_dialog_title">Logout Confirmation</string>
     <string name="logout_dialog_description">Logging out will remove all your downloaded course videos. Are you sure ?</string>
     <string name="goodiedesclocked">Complete %d%% of your course to unlock and claim goodies</string>
+    <string name="goodieFormNote">1. Provide correct postal address where there will be someone to collect.\n2. We will send bags only in India.\n3. In case, bag is returned back to us then you have to collect the same from our center.\n3. We will send the goodies within next 10 days and will share the tracking ids as soon it is in transit.</string>
     <string name="section_name">Section %s</string>
+    <string name="submit">Submit</string>
 
 
 </resources>
