@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.course
 
 import android.content.Intent
-import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Menu
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
+import com.codingblocks.cbonlineapp.baseclasses.STATE
 import com.codingblocks.cbonlineapp.commons.InstructorListAdapter
 import com.codingblocks.cbonlineapp.course.batches.CourseTierFragment
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
@@ -186,14 +186,25 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         courseCardListAdapter.onItemClick = itemClickListener
 
         viewModel.addedToCartProgress.observer(this) {
-            loadingDialog.hide()
-            startActivity<CheckoutActivity>()
+            when (it!!) {
+                STATE.LOADING -> loadingDialog.show()
+                STATE.ERROR -> loadingDialog.dismiss()
+                STATE.SUCCESS -> {
+                    loadingDialog.hide()
+                    startActivity<CheckoutActivity>()
+                }
+            }
+
         }
         viewModel.enrollTrialProgress.observeOnce { status ->
-            if (status) {
-                loadingDialog.hide()
-                startActivity<DashboardActivity>()
-                finish()
+            when (status!!) {
+                STATE.LOADING -> loadingDialog.show()
+                STATE.ERROR -> loadingDialog.dismiss()
+                STATE.SUCCESS -> {
+                    loadingDialog.hide()
+                    startActivity<DashboardActivity>()
+                    finish()
+                }
             }
         }
 
@@ -228,7 +239,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         }
         trialBtn.setOnClickListener { _ ->
             viewModel.enrollTrial(it.id)
-            loadingDialog.show()
         }
     }
 

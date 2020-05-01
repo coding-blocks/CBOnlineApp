@@ -43,7 +43,7 @@ class RunListAdapter : ListAdapter<Runs, RunListAdapter.RunsViewHolder>(DiffCall
     inner class RunsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: Runs, isActivated: Boolean = false) = with(itemView) {
             priceTv.text = if (item.price == "0") "FREE" else context.getString(R.string.rupee_price, item.price)
-            deadlineTv.text = context.getString(R.string.batch_starting, getDateForTime(item.enrollmentStart))
+            deadlineTv.text = context.getString(R.string.batch_starting, getDateForTime(item.start))
 
             mrpTv.apply {
                 text = context.getString(R.string.rupee_price, item.mrp)

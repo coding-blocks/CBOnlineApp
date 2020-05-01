@@ -19,7 +19,7 @@ class BatchComparisonAdapter(val items: List<Comparision>) : BaseAdapter() {
         with(sheetItem.name) {
            val item =  when {
                 contains("Recorded") -> R.drawable.ic_recorded
-                contains("Quizzes") -> R.drawable.ic_quiz
+                contains("Quizzes") -> R.drawable.ic_quiz_black
                 contains("Completion") -> R.drawable.ic_certificate_black
                 contains("Achievement") -> R.drawable.ic_certificate_black
                 contains("Resolution") -> R.drawable.ic_doubt

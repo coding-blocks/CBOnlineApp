@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.course
 
 import androidx.lifecycle.MutableLiveData
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
+import com.codingblocks.cbonlineapp.baseclasses.STATE
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
@@ -25,8 +26,8 @@ class CourseViewModel(
 
     var image: MutableLiveData<String> = MutableLiveData()
     var name: MutableLiveData<String> = MutableLiveData()
-    var addedToCartProgress: MutableLiveData<Boolean> = MutableLiveData()
-    var enrollTrialProgress: MutableLiveData<Boolean> = MutableLiveData()
+    var addedToCartProgress: MutableLiveData<STATE> = MutableLiveData()
+    var enrollTrialProgress: MutableLiveData<STATE> = MutableLiveData()
 
     fun fetchCourse() {
         runIO {
@@ -123,25 +124,26 @@ class CourseViewModel(
     }
 
     fun clearCart(id: String) {
+        addedToCartProgress.postValue(STATE.LOADING)
         runIO {
             when (val response = repo.clearCart()) {
                 is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> with(response.value) {
-                    addToCart(id)
-                }
+                is ResultWrapper.Success -> addToCart(id)
             }
         }
     }
 
     fun enrollTrial(id: String) {
+        enrollTrialProgress.postValue(STATE.LOADING)
         runIO {
             when (val response = repo.enrollToTrial(id)) {
 
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
-                        enrollTrialProgress.postValue(true)
+                        enrollTrialProgress.postValue(STATE.SUCCESS)
                     } else {
+                        enrollTrialProgress.postValue(STATE.ERROR)
                         setError(fetchError(code()))
                     }
                 }
@@ -155,8 +157,9 @@ class CourseViewModel(
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
-                        addedToCartProgress.postValue(true)
+                        addedToCartProgress.postValue(STATE.SUCCESS)
                     } else {
+                        addedToCartProgress.postValue(STATE.ERROR)
                         setError(fetchError(code()))
                     }
                 }
