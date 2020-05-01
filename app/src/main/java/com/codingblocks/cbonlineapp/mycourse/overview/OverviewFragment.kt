@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
+import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -127,11 +128,15 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 getString(R.string.goodiedesclocked, goodiesThreshold)
         }
         goodiesContainer.setOnClickListener {
+            if (canRequest) {
             showGoodiesForm()
         }
     }
+    }
 
     private fun showGoodiesForm() {
+        val goodiesRequestFragment = GoodiesRequestFragment()
+        goodiesRequestFragment.show(parentFragmentManager, "goodiesRequestFragment")
     }
 
     private fun setWhatsappCard(link: String, premium: Boolean) {
