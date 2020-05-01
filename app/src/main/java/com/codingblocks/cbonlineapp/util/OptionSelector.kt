@@ -1,22 +1,22 @@
 package com.codingblocks.cbonlineapp.util
 
-import android.content.DialogInterface
-import android.view.View
-import com.vdocipher.aegis.offline.DownloadOptions
-import kotlin.collections.ArrayList
-import android.widget.CheckedTextView
 import android.content.Context
+import android.content.DialogInterface
 import android.util.Log
-import android.view.ViewGroup
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.CheckedTextView
 import androidx.appcompat.app.AlertDialog
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.VideoUtils.getSizeBytes
 import com.codingblocks.cbonlineapp.util.VideoUtils.getSizeString
 import com.codingblocks.cbonlineapp.util.VideoUtils.round
 import com.vdocipher.aegis.media.Track
+import com.vdocipher.aegis.offline.DownloadOptions
 import java.util.Arrays
 import java.util.Locale
+import kotlin.collections.ArrayList
 
 class OptionSelector(
     private val downloadOptions: DownloadOptions,

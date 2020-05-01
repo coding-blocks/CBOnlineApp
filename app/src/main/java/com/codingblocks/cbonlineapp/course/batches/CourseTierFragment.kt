@@ -28,7 +28,6 @@ import org.json.JSONArray
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.lang.reflect.Type
 
-
 class CourseTierFragment : BottomSheetDialogFragment() {
 
     private val viewModel by sharedViewModel<CourseViewModel>()
@@ -64,10 +63,8 @@ class CourseTierFragment : BottomSheetDialogFragment() {
             compareBtn.setOnClickListener {
                 comparisionDialog.show()
             }
-
         }
     }
-
 
     private fun setUpBottomSheet() {
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_comparsion, null)

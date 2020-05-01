@@ -129,9 +129,9 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         }
         goodiesContainer.setOnClickListener {
             if (canRequest) {
-            showGoodiesForm()
+                showGoodiesForm()
+            }
         }
-    }
     }
 
     private fun showGoodiesForm() {

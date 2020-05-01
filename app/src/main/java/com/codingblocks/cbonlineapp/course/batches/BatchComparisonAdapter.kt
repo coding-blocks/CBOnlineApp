@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.course.batches
 
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,14 +9,13 @@ import kotlinx.android.synthetic.main.item_run_comparision.view.*
 
 class BatchComparisonAdapter(val items: List<Comparision>) : BaseAdapter() {
 
-
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView
             ?: LayoutInflater.from(parent.context).inflate(R.layout.item_run_comparision, parent, false)
 
         val sheetItem = getItem(position)
         with(sheetItem.name) {
-           val item =  when {
+            val item = when {
                 contains("Recorded") -> R.drawable.ic_recorded
                 contains("Quizzes") -> R.drawable.ic_quiz_black
                 contains("Completion") -> R.drawable.ic_certificate_black
@@ -38,7 +36,6 @@ class BatchComparisonAdapter(val items: List<Comparision>) : BaseAdapter() {
             view.premium.isActivated = sheetItem.premium
             view.live.isActivated = sheetItem.live
             view.classroom.isActivated = sheetItem.classroom
-
         }
         return view
     }
@@ -51,4 +48,3 @@ class BatchComparisonAdapter(val items: List<Comparision>) : BaseAdapter() {
 }
 
 data class Comparision(val name: String, val lite: Boolean, val premium: Boolean, val live: Boolean, val classroom: Boolean)
-

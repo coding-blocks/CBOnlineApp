@@ -49,23 +49,20 @@ class RunListAdapter : ListAdapter<Runs, RunListAdapter.RunsViewHolder>(DiffCall
                 text = context.getString(R.string.rupee_price, item.mrp)
                 paintFlags = mrpTv.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             }
-            titleTv.text = item.tier?:"PREMIUM"
+            titleTv.text = item.tier ?: "PREMIUM"
             when (RUNTIERS.valueOf(item.tier ?: "PREMIUM")) {
                 RUNTIERS.LITE -> {
-                    titleTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lite, 0, 0, 0);
+                    titleTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lite, 0, 0, 0)
                 }
                 RUNTIERS.PREMIUM -> {
-                    titleTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_premium, 0, 0, 0);
-
+                    titleTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_premium, 0, 0, 0)
                 }
                 RUNTIERS.LIVE -> {
-                    titleTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_live, 0, 0, 0);
-
+                    titleTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_live, 0, 0, 0)
                 }
                 RUNTIERS.CLASSROOM -> {
-                    titleTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_classroom, 0, 0, 0);
+                    titleTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_classroom, 0, 0, 0)
                 }
-
             }
             selectionImg.isActivated = isActivated
         }
@@ -76,7 +73,6 @@ class RunListAdapter : ListAdapter<Runs, RunListAdapter.RunsViewHolder>(DiffCall
                 override fun getSelectionKey(): String? = getItem(adapterPosition).id
             }
     }
-
 }
 
 enum class RUNTIERS {

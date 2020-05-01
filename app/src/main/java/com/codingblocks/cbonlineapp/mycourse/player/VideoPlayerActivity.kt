@@ -63,7 +63,6 @@ import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_video_player.*
-import kotlinx.android.synthetic.main.activity_video_player.youtubePlayerView
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import kotlinx.android.synthetic.main.my_fab_menu.*
 import kotlinx.android.synthetic.main.vdo_control_view.view.*

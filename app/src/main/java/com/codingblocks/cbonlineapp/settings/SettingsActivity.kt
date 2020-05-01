@@ -66,7 +66,8 @@ class SettingsActivity : BaseCBActivity() {
                                 }
                                 runOnUiThread { updateSpaceStats() }
                             }
-                        } }
+                        }
+                    }
                 }
             )
         }

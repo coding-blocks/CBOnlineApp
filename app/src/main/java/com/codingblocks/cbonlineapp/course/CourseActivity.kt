@@ -194,7 +194,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                     startActivity<CheckoutActivity>()
                 }
             }
-
         }
         viewModel.enrollTrialProgress.observeOnce { status ->
             when (status!!) {
@@ -226,8 +225,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
 
             courseTierFragment.show(supportFragmentManager, "CourseTierFragment")
         }
-
-
     }
 
     @Deprecated("Tier Based")

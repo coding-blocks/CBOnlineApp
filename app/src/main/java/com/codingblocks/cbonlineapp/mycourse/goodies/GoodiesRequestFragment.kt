@@ -23,7 +23,6 @@ class GoodiesRequestFragment : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.bottom_sheet_goodies, container, false)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -42,7 +41,6 @@ class GoodiesRequestFragment : BottomSheetDialogFragment() {
         bottomSheetCancelBtn.setOnClickListener {
             this.dialog?.onBackPressed()
         }
-
     }
 
     @NonNull
@@ -73,9 +71,7 @@ class GoodiesRequestFragment : BottomSheetDialogFragment() {
         return displayMetrics.heightPixels
     }
 
-
-    private fun checkValid(textInputEditText: TextInputEditText):Boolean{
+    private fun checkValid(textInputEditText: TextInputEditText): Boolean {
         return textInputEditText.text.toString().isNotEmpty()
     }
-
 }

@@ -42,7 +42,6 @@ class RunFragment : BaseCBFragment() {
             SelectionPredicates.createSelectSingleAnything()
         ).build()
 
-
         runListAdapter.apply {
             this.tracker = selectionTracker
         }
@@ -68,7 +67,7 @@ class RunFragment : BaseCBFragment() {
                 runListAdapter.submitList(list)
             }
         } else {
-            //Error Handling
+            // Error Handling
         }
     }
 

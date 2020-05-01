@@ -50,6 +50,7 @@ class DashboardHomeRepository(
             )
         )
     }
+
     suspend fun updatePlayerId(player: Player) = safeApiCall { Clients.onlineV2JsonApi.setPlayerId(player) }
 
     fun getTopRun() = courseWithInstructorDao.getTopRun().distinctUntilChanged()
