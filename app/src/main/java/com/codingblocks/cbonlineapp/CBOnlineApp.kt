@@ -78,7 +78,7 @@ class CBOnlineApp : Application() {
         startKoin {
             androidContext(this@CBOnlineApp)
             modules(listOf(viewModelModule,
-                    databaseModule, preferencesModule))
+                databaseModule, preferencesModule))
         }
 
         Picasso.setSingletonInstance(Picasso.Builder(this).build())

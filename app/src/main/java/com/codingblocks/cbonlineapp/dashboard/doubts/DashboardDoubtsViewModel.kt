@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.dashboard.doubts
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.ALL
@@ -20,7 +21,7 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Ba
     var attemptId: MutableLiveData<String> = MutableLiveData()
 
     val doubts by lazy {
-        Transformations.switchMap(DoubleTrigger(type, attemptId)) {
+        Transformations.distinctUntilChanged(DoubleTrigger(type, attemptId)).switchMap {
             fetchDoubts()
             repo.getDoubtsByCourseRun(it.first, it.second ?: "")
         }

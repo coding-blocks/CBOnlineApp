@@ -117,7 +117,7 @@ class LibraryViewFragment : BaseCBFragment() {
         }
         libraryRv.setRv(requireContext(), libraryListAdapter, true)
 
-        selectionTracker = SelectionTracker.Builder<String>(
+        selectionTracker = SelectionTracker.Builder(
             "mySelection",
             libraryRv,
             MyItemKeyProvider(libraryListAdapter),

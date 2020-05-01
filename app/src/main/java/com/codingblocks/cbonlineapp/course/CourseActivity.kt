@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.course
 
 import android.content.Intent
-import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Menu
@@ -14,8 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
+import com.codingblocks.cbonlineapp.baseclasses.STATE
 import com.codingblocks.cbonlineapp.commons.InstructorListAdapter
-import com.codingblocks.cbonlineapp.course.batches.BatchListAdapter
+import com.codingblocks.cbonlineapp.course.batches.CourseTierFragment
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.COURSE_ID
@@ -24,8 +24,6 @@ import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
-import com.codingblocks.cbonlineapp.util.extensions.getDateForRun
-import com.codingblocks.cbonlineapp.util.extensions.getDateForTime
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
@@ -37,7 +35,6 @@ import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Tags
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
@@ -45,7 +42,6 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import io.noties.markwon.Markwon
 import io.noties.markwon.core.CorePlugin
 import kotlinx.android.synthetic.main.activity_course.*
-import kotlinx.android.synthetic.main.bottom_sheet_batch.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
@@ -70,8 +66,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     private val instructorAdapter = InstructorListAdapter()
     private val courseSectionListAdapter = CourseSectionListAdapter()
     private val courseCardListAdapter = CourseListAdapter()
-    private val batchListAdapter = BatchListAdapter()
-    private val dialog by lazy { BottomSheetDialog(this) }
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private var youtubePlayer: YouTubePlayer? = null
     private val loadingDialog by lazy {
@@ -104,7 +98,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         setToolbar(courseToolbar)
         viewModel.id = courseId
         viewModel.fetchCourse()
-        setUpBottomSheet()
 
         courseProjectsRv.setRv(this@CourseActivity, projectAdapter, true)
         courseSuggestedRv.setRv(
@@ -149,7 +142,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             viewModel.fetchProjects(course.projects)
             if (!course.runs.isNullOrEmpty()) viewModel.fetchSections(course.runs?.first()?.sections)
             instructorAdapter.submitList(course.instructors)
-            batchListAdapter.submitList(course.activeRuns)
             if (!course.activeRuns.isNullOrEmpty())
                 course.activeRuns?.first()?.let {
                     setRun(it)
@@ -194,15 +186,24 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         courseCardListAdapter.onItemClick = itemClickListener
 
         viewModel.addedToCartProgress.observer(this) {
-            loadingDialog.hide()
-            buyBtn.isEnabled = true
-            startActivity<CheckoutActivity>()
+            when (it!!) {
+                STATE.LOADING -> loadingDialog.show()
+                STATE.ERROR -> loadingDialog.dismiss()
+                STATE.SUCCESS -> {
+                    loadingDialog.hide()
+                    startActivity<CheckoutActivity>()
+                }
+            }
         }
         viewModel.enrollTrialProgress.observeOnce { status ->
-            if (status) {
-                loadingDialog.hide()
-                startActivity<DashboardActivity>()
-                finish()
+            when (status!!) {
+                STATE.LOADING -> loadingDialog.show()
+                STATE.ERROR -> loadingDialog.dismiss()
+                STATE.SUCCESS -> {
+                    loadingDialog.hide()
+                    startActivity<DashboardActivity>()
+                    finish()
+                }
             }
         }
 
@@ -215,27 +216,26 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
 
             courseSectionAllFragment.show(supportFragmentManager, "courseSectionAllFragment")
         }
+
+        batchBtn.setOnClickListener {
+            val courseTierFragment = CourseTierFragment()
+            val bundle = Bundle()
+            bundle.putString(COURSE_ID, courseId)
+            courseTierFragment.arguments = bundle
+
+            courseTierFragment.show(supportFragmentManager, "CourseTierFragment")
+        }
     }
 
+    @Deprecated("Tier Based")
     private fun setRun(it: Runs) {
-        val price = it.price
-        priceTv.text = if (price == "0") "FREE" else "${getString(R.string.rupee_sign)} $price"
-        if (price == "0") {
+
+        val price = it.price.toInt()
+        if (price < 10) {
             goodiesImg.isVisible = false
-        }
-        mrpTv.text = "₹ ${it.mrp}"
-        batchBtn.text = getDateForRun(it.start)
-        deadlineTv.text = "Enrollment Ends ${it.enrollmentEnd.let { it1 -> getDateForTime(it1) }}"
-        mrpTv.paintFlags = mrpTv.paintFlags or
-            Paint.STRIKE_THRU_TEXT_FLAG
-        buyBtn.setOnClickListener { _ ->
-            buyBtn.isEnabled = false
-            viewModel.clearCart(it.id)
-            loadingDialog.show()
         }
         trialBtn.setOnClickListener { _ ->
             viewModel.enrollTrial(it.id)
-            loadingDialog.show()
         }
     }
 
@@ -302,22 +302,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         shortTv.alpha = alpha
         ratingBar.alpha = alpha
         ratingTv.alpha = alpha
-    }
-
-    private fun setUpBottomSheet() {
-        batchBtn.setOnClickListener {
-            dialog.show()
-        }
-        val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_batch, null)
-        sheetDialog.run {
-            batchRv.setRv(this@CourseActivity, batchListAdapter)
-        }
-        batchListAdapter.onItemClick = {
-            setRun(it as Runs)
-            dialog.dismiss()
-        }
-        dialog.dismissWithAnimation = true
-        dialog.setContentView(sheetDialog)
     }
 
     override fun onBackPressed() {
