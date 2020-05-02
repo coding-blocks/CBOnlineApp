@@ -140,12 +140,15 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             courseBackdrop.loadImage(course.coverImage ?: "")
             setYoutubePlayer(course.promoVideo ?: "")
             viewModel.fetchProjects(course.projects)
-            if (!course.runs.isNullOrEmpty()) viewModel.fetchSections(course.runs?.first()?.sections)
+            if (!course.activeRuns.isNullOrEmpty()) {
+                val run: Runs? = course.activeRuns?.groupBy { it.tier }?.get("LITE")?.firstOrNull()
+                    ?: course.activeRuns?.minBy { it.price }!!
+                viewModel.fetchSections(run?.sections)
+                run?.let { setRun(it) }
+
+            }
             instructorAdapter.submitList(course.instructors)
-            if (!course.activeRuns.isNullOrEmpty())
-                course.activeRuns?.first()?.let {
-                    setRun(it)
-                }
+
         }
 
         viewModel.projects.observer(this) { projects ->

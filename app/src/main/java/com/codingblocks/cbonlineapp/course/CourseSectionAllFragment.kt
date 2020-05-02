@@ -15,6 +15,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.onlineapi.models.Runs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -42,7 +43,9 @@ class CourseSectionAllFragment : BottomSheetDialogFragment() {
         }
 
         viewModel.course.observer(this) { course ->
-            viewModel.fetchAllSections(course.runs?.first()?.sections)
+            val run: Runs? = course.activeRuns?.groupBy { it.tier }?.get("LITE")?.firstOrNull()
+                ?: course.activeRuns?.minBy { it.price }!!
+            viewModel.fetchAllSections(run?.sections)
         }
 
         viewModel.sections.observe(this) { sections ->
