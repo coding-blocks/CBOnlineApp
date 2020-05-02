@@ -10,8 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.core.view.isVisible
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
@@ -42,10 +44,10 @@ class CourseSectionAllFragment : BottomSheetDialogFragment() {
             dialog?.dismiss()
         }
 
-        viewModel.course.observer(this) { course ->
-            val run: Runs? = course.activeRuns?.groupBy { it.tier }?.get("LITE")?.firstOrNull()
-                ?: course.activeRuns?.minBy { it.price }!!
-            viewModel.fetchAllSections(run?.sections)
+        viewModel.course.distinctUntilChanged().observer(this) { course ->
+            course.getContentRun(RUNTIERS.PREMIUM.name)?.let {
+                viewModel.fetchAllSections(it.sections)
+            }
         }
 
         viewModel.sections.observe(this) { sections ->

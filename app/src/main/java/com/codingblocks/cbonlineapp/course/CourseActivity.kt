@@ -16,6 +16,7 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.baseclasses.STATE
 import com.codingblocks.cbonlineapp.commons.InstructorListAdapter
 import com.codingblocks.cbonlineapp.course.batches.CourseTierFragment
+import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.COURSE_ID
@@ -140,12 +141,17 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             courseBackdrop.loadImage(course.coverImage ?: "")
             setYoutubePlayer(course.promoVideo ?: "")
             viewModel.fetchProjects(course.projects)
-            if (!course.activeRuns.isNullOrEmpty()) {
-                val run: Runs? = course.activeRuns?.groupBy { it.tier }?.get("LITE")?.firstOrNull()
-                    ?: course.activeRuns?.minBy { it.price }!!
-                viewModel.fetchSections(run?.sections)
-                run?.let { setRun(it) }
-
+            course.getTrialRun(RUNTIERS.LITE.name)?.let {
+                trialBtn.setOnClickListener { _ ->
+                    viewModel.enrollTrial(it.id)
+                }
+            }
+            course.getContentRun(RUNTIERS.PREMIUM.name)?.let {
+                viewModel.fetchSections(it.sections)
+                val price = it.price.toInt()
+                if (price < 10) {
+                    goodiesImg.isVisible = false
+                }
             }
             instructorAdapter.submitList(course.instructors)
 
@@ -230,17 +236,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         }
     }
 
-    @Deprecated("Tier Based")
-    private fun setRun(it: Runs) {
-
-        val price = it.price.toInt()
-        if (price < 10) {
-            goodiesImg.isVisible = false
-        }
-        trialBtn.setOnClickListener { _ ->
-            viewModel.enrollTrial(it.id)
-        }
-    }
 
     private fun showTags(tags: ArrayList<Tags>?) {
         with(!tags.isNullOrEmpty()) {

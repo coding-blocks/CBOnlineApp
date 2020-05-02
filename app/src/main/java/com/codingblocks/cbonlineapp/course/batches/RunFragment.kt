@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.distinctUntilChanged
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
@@ -63,7 +64,7 @@ class RunFragment : BaseCBFragment() {
 
         val runKey: String? = arguments?.getString("run")
         if (!runKey.isNullOrEmpty()) {
-            viewModel.course.observer(viewLifecycleOwner) { course ->
+            viewModel.course.distinctUntilChanged().observer(viewLifecycleOwner) { course ->
                 val list = course.activeRuns?.groupBy { it.start }?.get(runKey)?.sortedBy { it.price }
                 runListAdapter.submitList(list)
             }
