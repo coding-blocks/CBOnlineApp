@@ -20,6 +20,7 @@ import com.codingblocks.onlineapi.models.Comparision
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.bottom_sheet_comparsion.view.*
@@ -47,13 +48,24 @@ class CourseTierFragment : BottomSheetDialogFragment() {
         viewModel.course.distinctUntilChanged().observer(viewLifecycleOwner) { course ->
             with(view) {
                 runTabs.removeAllTabs()
-                val list = course.activeRuns?.groupBy { it.start }
+                val list = course.activeRuns?.sortedBy { it.start }?.groupBy { it.start }
                 list?.forEach { runTabs.addTab(runTabs.newTab().setText(getDateForRun(it.key))) }
 
                 val adapter = list?.keys?.let { RunsPagerAdapter(childFragmentManager, it.toList()) }
                 viewPager.adapter = adapter
                 viewPager.offscreenPageLimit = 1
-                viewPager.addOnPageChangeListener(TabLayoutOnPageChangeListener(view.runTabs))
+                viewPager.addOnPageChangeListener(TabLayoutOnPageChangeListener(runTabs))
+                runTabs.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
+                    override fun onTabReselected(tab: TabLayout.Tab?) {}
+
+                    override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+                    override fun onTabSelected(tab: TabLayout.Tab?) {
+                       viewPager.currentItem =  tab?.position?:0
+                    }
+
+                })
+
                 //                if (view.runTabs.tabCount == 2) {
 //                    view.runTabs.tabMode = TabLayout.MODE_FIXED
 //                } else {

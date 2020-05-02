@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.course.batches
 
 import android.graphics.Paint
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.selection.ItemDetailsLookup
@@ -71,6 +72,7 @@ class RunListAdapter : ListAdapter<Runs, RunListAdapter.RunsViewHolder>(DiffCall
             object : ItemDetailsLookup.ItemDetails<String>() {
                 override fun getPosition(): Int = adapterPosition
                 override fun getSelectionKey(): String? = getItem(adapterPosition).id
+                override fun inSelectionHotspot(e: MotionEvent): Boolean { return true }
             }
     }
 }

@@ -40,7 +40,8 @@ class RunFragment : BaseCBFragment() {
             StorageStrategy.createStringStorage()
         ).withSelectionPredicate(
             SelectionPredicates.createSelectSingleAnything()
-        ).build()
+        )
+            .build()
 
         runListAdapter.apply {
             this.tracker = selectionTracker
@@ -63,7 +64,7 @@ class RunFragment : BaseCBFragment() {
         val runKey: String? = arguments?.getString("run")
         if (!runKey.isNullOrEmpty()) {
             viewModel.course.observer(viewLifecycleOwner) { course ->
-                val list = course.activeRuns?.groupBy { it.start }?.get(runKey)
+                val list = course.activeRuns?.groupBy { it.start }?.get(runKey)?.sortedBy { it.price }
                 runListAdapter.submitList(list)
             }
         } else {

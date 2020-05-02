@@ -43,7 +43,7 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 101000301
+        versionCode 101000302
         // 1 (versioning scheme)
         // 00 (major version)
         // 00 (minor version)
@@ -81,7 +81,6 @@ android {
 
         }
         release {
-            debuggable true
             signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

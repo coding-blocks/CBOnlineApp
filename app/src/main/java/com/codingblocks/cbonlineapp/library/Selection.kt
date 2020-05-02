@@ -47,4 +47,5 @@ class MyItemKeyProvider(private val adapter: ListAdapter<out Any, out RecyclerVi
                 else -> false
             }
         }
+
 }
