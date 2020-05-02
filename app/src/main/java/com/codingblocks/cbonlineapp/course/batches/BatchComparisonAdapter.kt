@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.onlineapi.models.Comparision
 import kotlinx.android.synthetic.main.item_run_comparision.view.*
 
 class BatchComparisonAdapter(val items: List<Comparision>) : BaseAdapter() {
@@ -47,4 +48,3 @@ class BatchComparisonAdapter(val items: List<Comparision>) : BaseAdapter() {
     override fun getCount() = items.size
 }
 
-data class Comparision(val name: String, val lite: Boolean, val premium: Boolean, val live: Boolean, val classroom: Boolean)
