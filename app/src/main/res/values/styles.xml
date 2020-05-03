@@ -252,6 +252,15 @@
         <item name="fontFamily">@font/gilroy_semibold</item>
     </style>
 
+    <style name="BottomNavigationViewTextStyle">
+        <item name="fontFamily">@font/gilroy_semibold</item>
+        <item name="fontSize">12sp</item>
+    </style>
+
+    <style name="BottomNavigationViewInActiveTextStyle">
+        <item name="fontFamily">@font/gilroy_medium</item>
+        <item name="fontSize">10sp</item>
+    </style>
 
 
 </resources>

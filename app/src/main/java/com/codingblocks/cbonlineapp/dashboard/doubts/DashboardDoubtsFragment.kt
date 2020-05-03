@@ -46,7 +46,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
 
-    private lateinit var listener: FragmentChangeListener
 
     private val viewModel by viewModel<DashboardDoubtsViewModel>()
     private val doubtListAdapter = DashboardDoubtListAdapter()
@@ -112,7 +111,7 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
         super.onViewCreated(view, savedInstanceState)
         setUpBottomSheet()
 
-        doubtEmptyBtn.setOnClickListener { requireActivity().dashboardBottomNav.setCurrentItem(1) }
+        doubtEmptyBtn.setOnClickListener { requireActivity().dashboardPager.currentItem = 1 }
         liveDoubtBtn.setOnClickListener {
             viewModel.type.value = LIVE
         }
@@ -240,11 +239,6 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
 
         dialog.dismissWithAnimation = true
         dialog.setContentView(sheetDialog)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        listener = context as FragmentChangeListener
     }
 
     override fun onDestroyView() {

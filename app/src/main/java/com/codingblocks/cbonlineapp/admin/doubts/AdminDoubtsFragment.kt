@@ -139,15 +139,15 @@ class AdminDoubtsFragment : BaseCBFragment(), TabLayout.OnTabSelectedListener {
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
-                    root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin) {
-                        fetchDoubts(adminTabLayout.selectedTabPosition)
-                    }
+//                    root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin) {
+//                        fetchDoubts(adminTabLayout.selectedTabPosition)
+//                    }
                 }
             }
         }
 
         viewModel.barMessage.observer(viewLifecycleOwner) {
-            root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin, false)
+//            root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin, false)
         }
 
         doubtsAdapter.apply {

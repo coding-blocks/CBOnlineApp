@@ -46,6 +46,7 @@ import com.codingblocks.cbonlineapp.util.REOPENED
 import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.fabnavigation.FabNavigation
 import com.facebook.shimmer.ShimmerFrameLayout
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.dialog.view.*
 import kotlinx.android.synthetic.main.dialog.view.primaryBtn
@@ -176,7 +177,7 @@ private fun Float.toDp(): Float {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, CBOnlineApp.appContext?.displayMetrics)
 }
 
-fun View.showSnackbar(message: String, length: Int = Snackbar.LENGTH_SHORT, anchorView: FabNavigation? = null, action: Boolean = true, actionText: String = "Retry", callback: () -> Unit = { }): Snackbar {
+fun View.showSnackbar(message: String, length: Int = Snackbar.LENGTH_SHORT, anchorView: BottomNavigationView? = null, action: Boolean = true, actionText: String = "Retry", callback: () -> Unit = { }): Snackbar {
     val snackBarView = Snackbar.make(this, message, length)
     val params = snackBarView.view.layoutParams as ViewGroup.MarginLayoutParams
     params.setMargins(params.leftMargin,

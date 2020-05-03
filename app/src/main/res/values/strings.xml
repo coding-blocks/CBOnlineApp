@@ -280,4 +280,5 @@
     <string name="batch_starting">"Batch starting %s"</string>
     <string name="compare">Compare</string>
     <string name="submit">Submit</string>
+    <string name="back_press">Please click Back again to exit</string>
 </resources>

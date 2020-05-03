@@ -141,5 +141,23 @@ class PreferenceHelper private constructor() {
             }
             return instance
         }
+
+        /**
+         * A function to run when changing app [SharedPreferences] file name.
+         */
+        fun runMigration(context: Context): Boolean {
+            val oldPrefsMap =
+                context.getSharedPreferences("com.codingblocks.cbonlineapp.prefs", MODE_PRIVATE).all
+            val newPrefsMap =
+                context.getSharedPreferences("com.codingblocks.cbonline.prefs", MODE_PRIVATE)
+
+            for (entry in oldPrefsMap) {
+                val current = entry.value
+                if (current is String) {
+                    newPrefsMap.edit().putString(entry.key, current).apply()
+                }
+            }
+            return true
+        }
     }
 }

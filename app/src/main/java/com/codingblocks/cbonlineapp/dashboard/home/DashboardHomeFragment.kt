@@ -48,63 +48,63 @@ class DashboardHomeFragment : BaseCBFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.isLoggedIn.observer(viewLifecycleOwner) { isLoggedIn ->
-            if (isLoggedIn) {
-                viewModel.added.observer(viewLifecycleOwner) {
-                    viewModel.topRun.observer(viewLifecycleOwner) { courseAndRun ->
-                        dashboardHomeShimmer.hideAndStop()
-                        dashboardHome.isVisible = true
-                        viewModel.getStats(courseAndRun.runAttempt.attemptId)
-                        with(courseAndRun) {
-                            dashboardProgressContainer.isVisible = true
-                            dashboardEmptyProgress.isVisible = false
-                            activity?.toolbarCourseTitleTv?.apply {
-                                text = course.title
-                                isVisible = true
-                            }
-                            activity?.toolbarCourseResumeTv?.isVisible = true
-                            activity?.dashboardToolbarSecondary?.setOnClickListener {
-                                startActivity(
-                                    intentFor<MyCourseActivity>(
-                                        RUN_ATTEMPT_ID to runAttempt.attemptId,
-                                        COURSE_NAME to course.title
-                                    ).singleTop()
-                                )
-                            }
-
-                            homeCourseLogoImg.loadImage(course.logo)
-                            val progress =
-                                if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
-
-                            homeProgressTv.text = "${progress.toInt()} %"
-                            homeProgressView.progress = progress.toFloat()
-                            if (progress > 90) {
-                                homeProgressView.highlightView.colorGradientStart =
-                                    getColor(requireContext(), R.color.kiwigreen)
-                                homeProgressView.highlightView.colorGradientEnd =
-                                    getColor(requireContext(), R.color.tealgreen)
-                            } else {
-                                homeProgressView.highlightView.colorGradientStart =
-                                    getColor(requireContext(), R.color.pastel_red)
-                                homeProgressView.highlightView.colorGradientEnd =
-                                    getColor(requireContext(), R.color.dusty_orange)
-                            }
-                        }
-                    }
-                }
-                viewModel.runPerformance.observer(viewLifecycleOwner) {
-                    homePerformanceTv.text = it.remarks
-                    homePercentileTv.text = it.percentile.toString()
-                    loadData(it.averageProgress, it.userProgress)
-                }
-            } else {
-                dashboardHomeShimmer.hideAndStop()
-                dashboardHome.isVisible = false
-                dashboardHomeLoggedOut.isVisible = true
-            }
-        }
-        exploreBtn.setOnClickListener { requireActivity().dashboardBottomNav.setCurrentItem(0) }
-        exploreBtn2.setOnClickListener { requireActivity().dashboardBottomNav.setCurrentItem(0) }
+//        viewModel.isLoggedIn.observer(viewLifecycleOwner) { isLoggedIn ->
+//            if (isLoggedIn) {
+//                viewModel.added.observer(viewLifecycleOwner) {
+//                    viewModel.topRun.observer(viewLifecycleOwner) { courseAndRun ->
+//                        dashboardHomeShimmer.hideAndStop()
+//                        dashboardHome.isVisible = true
+//                        viewModel.getStats(courseAndRun.runAttempt.attemptId)
+//                        with(courseAndRun) {
+//                            dashboardProgressContainer.isVisible = true
+//                            dashboardEmptyProgress.isVisible = false
+//                            activity?.toolbarCourseTitleTv?.apply {
+//                                text = course.title
+//                                isVisible = true
+//                            }
+//                            activity?.toolbarCourseResumeTv?.isVisible = true
+//                            activity?.dashboardToolbarSecondary?.setOnClickListener {
+//                                startActivity(
+//                                    intentFor<MyCourseActivity>(
+//                                        RUN_ATTEMPT_ID to runAttempt.attemptId,
+//                                        COURSE_NAME to course.title
+//                                    ).singleTop()
+//                                )
+//                            }
+//
+//                            homeCourseLogoImg.loadImage(course.logo)
+//                            val progress =
+//                                if (courseAndRun.runAttempt.completedContents > 0) (courseAndRun.runAttempt.completedContents / courseAndRun.run.totalContents.toDouble()) * 100 else 0.0
+//
+//                            homeProgressTv.text = "${progress.toInt()} %"
+//                            homeProgressView.progress = progress.toFloat()
+//                            if (progress > 90) {
+//                                homeProgressView.highlightView.colorGradientStart =
+//                                    getColor(requireContext(), R.color.kiwigreen)
+//                                homeProgressView.highlightView.colorGradientEnd =
+//                                    getColor(requireContext(), R.color.tealgreen)
+//                            } else {
+//                                homeProgressView.highlightView.colorGradientStart =
+//                                    getColor(requireContext(), R.color.pastel_red)
+//                                homeProgressView.highlightView.colorGradientEnd =
+//                                    getColor(requireContext(), R.color.dusty_orange)
+//                            }
+//                        }
+//                    }
+//                }
+//                viewModel.runPerformance.observer(viewLifecycleOwner) {
+//                    homePerformanceTv.text = it.remarks
+//                    homePercentileTv.text = it.percentile.toString()
+//                    loadData(it.averageProgress, it.userProgress)
+//                }
+//            } else {
+//                dashboardHomeShimmer.hideAndStop()
+//                dashboardHome.isVisible = false
+//                dashboardHomeLoggedOut.isVisible = true
+//            }
+//        }
+        exploreBtn.setOnClickListener { requireActivity().dashboardPager.currentItem = 0 }
+        exploreBtn2.setOnClickListener { requireActivity().dashboardPager.currentItem = 0 }
         loginBtn.setOnClickListener {
             startActivity(intentFor<LoginActivity>())
             requireActivity().finish()

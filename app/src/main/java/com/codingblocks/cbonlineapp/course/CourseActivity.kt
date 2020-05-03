@@ -69,9 +69,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     private val courseCardListAdapter = CourseListAdapter()
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private var youtubePlayer: YouTubePlayer? = null
-    private val loadingDialog by lazy {
-        getLoadingDialog()
-    }
+
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -300,6 +298,10 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         shortTv.alpha = alpha
         ratingBar.alpha = alpha
         ratingTv.alpha = alpha
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     override fun onBackPressed() {

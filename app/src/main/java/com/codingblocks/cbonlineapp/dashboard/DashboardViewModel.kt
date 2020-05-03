@@ -1,12 +1,15 @@
 package com.codingblocks.cbonlineapp.dashboard
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.runIO
+import com.codingblocks.cbonlineapp.util.savedStateValue
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
@@ -20,16 +23,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class DashboardViewModel(
+    handle: SavedStateHandle,
     private val homeRepo: DashboardHomeRepository,
     private val exploreRepo: CourseRepository,
-    private val myCourseRepo: DashboardMyCoursesRepository
+    private val myCourseRepo: DashboardMyCoursesRepository,
+    val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
-    var courseFilter = MutableLiveData<String>()
-    var isLoggedIn: MutableLiveData<Boolean> = MutableLiveData()
+    var isLoggedIn:Boolean? by savedStateValue(handle, LOGGED_IN)
     var suggestedCourses = MutableLiveData<List<Course>>()
     var trendingCourses = MutableLiveData<List<Course>>()
     var tracks = MutableLiveData<List<CareerTracks>>()
     val added = MutableLiveData<Boolean>()
+    var courseFilter = MutableLiveData<String>()
 
     val courses by lazy {
         Transformations.switchMap(courseFilter) { query ->
@@ -51,11 +56,11 @@ class DashboardViewModel(
         myCourseRepo.getPurchasedRuns()
     }
 
-    val user by lazy {
-        Transformations.switchMap(isLoggedIn) {
-            fetchUser()
-        }
-    }
+//    val user by lazy {
+//        Transformations.switchMap(isLoggedIn) {
+//            fetchUser()
+//        }
+//    }
 
     fun fetchToken(grantCode: String) {
         runIO {
@@ -70,7 +75,7 @@ class DashboardViewModel(
                             homeRepo.prefs.SP_JWT_REFRESH_TOKEN = rt
                             Clients.authJwt = jwt
                             Clients.refreshToken = rt
-                            isLoggedIn.postValue(true)
+//                            isLoggedIn.postValue(true)
                         }
                 }
             }
@@ -90,7 +95,6 @@ class DashboardViewModel(
                             homeRepo.prefs.SP_JWT_REFRESH_TOKEN = rt
                             Clients.authJwt = jwt
                             Clients.refreshToken = rt
-                            isLoggedIn.postValue(true)
                         }
                 }
             }

@@ -57,7 +57,7 @@ class DashboardLibraryFragment : BaseCBFragment() {
         }
 
         dashboardLibraryEmptyBtn.setOnClickListener {
-            requireActivity().dashboardBottomNav.setCurrentItem(0)
+            requireActivity().dashboardPager.currentItem = 0
         }
         courseListAdapter.onItemClick = itemClickListener
 //        loginBtn.setOnClickListener{ startActivity(intentFor<LoginActivity>()) }

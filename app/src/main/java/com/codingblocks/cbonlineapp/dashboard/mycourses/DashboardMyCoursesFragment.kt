@@ -110,28 +110,28 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
             }
         }
         dashboardMyCoursesExploreBtn.setOnClickListener {
-            requireActivity().dashboardBottomNav.setCurrentItem(0)
+            requireActivity().dashboardPager.currentItem = 0
         }
         dashboardCoursesRv.setRv(requireContext(), courseListAdapter, true)
-        viewModel.isLoggedIn.observer(viewLifecycleOwner) { isLoggedIn ->
-            if (isLoggedIn) {
-                viewModel.fetchMyCourses()
-                viewModel.added.observer(viewLifecycleOwner) {
-                    viewModel.courses.observer(viewLifecycleOwner) {
-                        courseListAdapter.submitList(it)
-                        changeViewState(
-                            dashboardCoursesRv,
-                            emptyLl,
-                            dashboardCourseShimmer,
-                            it.isEmpty()
-                        )
-                    }
-                }
-            } else {
-                dashboardMyCourseLoggedOut.isVisible = true
-                dashboardMyCourse.isVisible = false
-            }
-        }
+//        viewModel.isLoggedIn.observer(viewLifecycleOwner) { isLoggedIn ->
+//            if (isLoggedIn) {
+//                viewModel.fetchMyCourses()
+//                viewModel.added.observer(viewLifecycleOwner) {
+//                    viewModel.courses.observer(viewLifecycleOwner) {
+//                        courseListAdapter.submitList(it)
+//                        changeViewState(
+//                            dashboardCoursesRv,
+//                            emptyLl,
+//                            dashboardCourseShimmer,
+//                            it.isEmpty()
+//                        )
+//                    }
+//                }
+//            } else {
+//                dashboardMyCourseLoggedOut.isVisible = true
+//                dashboardMyCourse.isVisible = false
+//            }
+//        }
 
         viewModel.errorLiveData.observer(viewLifecycleOwner) {
             when (it) {

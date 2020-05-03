@@ -41,6 +41,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class DashboardExploreFragment : BaseCBFragment() {
 
     private val vm by sharedViewModel<DashboardViewModel>()
+
     private val courseCardListAdapter = CourseListAdapter()
     private val coursePopularListAdapter = CourseListAdapter("POPULAR")
     private val tracksListAdapter = TracksListAdapter()

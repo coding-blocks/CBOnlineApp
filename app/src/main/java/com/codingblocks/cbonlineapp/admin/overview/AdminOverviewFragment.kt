@@ -65,9 +65,9 @@ class AdminOverviewFragment : BaseCBFragment() {
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
-                    adminOverviewRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin) {
-                        viewModel.fetchDoubtStats()
-                    }
+//                    adminOverviewRoot.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin) {
+//                        viewModel.fetchDoubtStats()
+//                    }
                 }
             }
         }
