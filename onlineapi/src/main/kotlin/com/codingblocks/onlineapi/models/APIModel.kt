@@ -105,7 +105,7 @@ data class Runs (
     val productId: Int? = 0,
     val completionThreshold: Int? = 0,
     val goodiesThreshold: Int? = 0,
-    val totalContents: Int? = 0,
+    val totalContents: Int = 0,
     val tier:String? = ""
 ) : BaseModel() {
     constructor(id : String) : this() {
@@ -328,12 +328,12 @@ data class Runs (
 
 @Type("goodie-requests")
 data class Goodies(
-    val status_in_progress: String,
-    val formInfo :FormInfo,
+    val status_in_progress: String? = null,
+    val formInfo :FormInfo? = null,
     @Relationship("run")
     val run: Runs? = null,
     @Relationship("run_attempt", "run-attempt")
-    val runAttempt: RunAttempts? = null ) :BaseModel()
+    val runAttempt: RunAttempts? = null )
 
 
     @Type("users", "user")
