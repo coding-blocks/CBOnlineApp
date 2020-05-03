@@ -37,7 +37,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DashboardExploreFragment : BaseCBFragment() {
 
-    private val vm by sharedViewModel<DashboardViewModel>()
+    private val vm: DashboardViewModel by sharedViewModel()
 
     private val courseCardListAdapter = CourseListAdapter()
     private val coursePopularListAdapter = CourseListAdapter("POPULAR")
@@ -101,10 +101,18 @@ class DashboardExploreFragment : BaseCBFragment() {
 
         }
         vm.trendingCourses.observe(viewLifecycleOwner) { courses ->
-            coursePopularListAdapter.submitList(courses)
+            if (courses.isNotEmpty()) {
+                coursePopularListAdapter.submitList(courses)
+                dashboardSuggestedShimmer.hideAndStop()
+                courseSuggestedRv.isVisible = true
+            }
         }
-        vm.tracks.observe(viewLifecycleOwner) { courses ->
-            tracksListAdapter.submitList(courses)
+        vm.tracks.observe(viewLifecycleOwner) { tracks ->
+            if (tracks.isNotEmpty()) {
+                tracksListAdapter.submitList(tracks)
+                dashboardTrackShimmer.hideAndStop()
+                dashboardTracksRv.isVisible = true
+            }
         }
 
         courseCardListAdapter.onItemClick = itemClickListener
