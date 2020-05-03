@@ -16,10 +16,12 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
+import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.jobs.JobsActivity
 import com.codingblocks.cbonlineapp.notifications.NotificationsActivity
+import com.codingblocks.cbonlineapp.profile.ProfileActivity
 import com.codingblocks.cbonlineapp.profile.ReferralActivity
 import com.codingblocks.cbonlineapp.purchases.PurchasesActivity
 import com.codingblocks.cbonlineapp.settings.AboutActivity
@@ -287,12 +289,12 @@ class DashboardActivity : BaseCBActivity(),
     }
 
     fun openProfile() {
-//        if (prefs.SP_JWT_TOKEN_KEY.isEmpty()) {
-//            startActivity<LoginActivity>()
-//            finish()
-//        } else {
-//            startActivity<ProfileActivity>()
-//        }
+        if (vm.isLoggedIn == false) {
+            startActivity<LoginActivity>()
+            finish()
+        } else {
+            startActivity<ProfileActivity>()
+        }
     }
 
     fun openReferral() {
