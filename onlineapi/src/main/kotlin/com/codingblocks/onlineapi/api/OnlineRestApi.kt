@@ -1,12 +1,6 @@
 package com.codingblocks.onlineapi.api
 
-import com.codingblocks.onlineapi.models.DoubtStats
-import com.codingblocks.onlineapi.models.Extension
-import com.codingblocks.onlineapi.models.Leaderboard
-import com.codingblocks.onlineapi.models.PerformanceResponse
-import com.codingblocks.onlineapi.models.PostStream
-import com.codingblocks.onlineapi.models.RatingModel
-import com.codingblocks.onlineapi.models.ResetRunAttempt
+import com.codingblocks.onlineapi.models.*
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -90,6 +84,9 @@ interface OnlineRestApi {
 
     @GET("v2/run_attempts/{runAttemptId}/requestApproval")
     suspend fun requestApproval(@Path("runAttemptId") id: String): Response<ResponseBody>
+
+    @POST("v2/goodie_requests")
+    suspend fun requestGoodies(@Body params: Goodies): Response<ResponseBody>
 
     @GET("v2/runs/products/{id}")
     fun getExtensions(@Path("id") productId: Int): Call<Extension>

@@ -51,7 +51,7 @@ class DashboardMyCoursesRepository(
                         mrp ?: "",
                         updatedAt,
                         whatsappLink,
-                        totalContents,
+                        totalContents!!,
                         completionThreshold ?: 0,
                         goodiesThreshold ?: 0,
                         productId ?: 0,

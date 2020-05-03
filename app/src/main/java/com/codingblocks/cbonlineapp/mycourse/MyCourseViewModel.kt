@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.mycourse
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -25,7 +26,7 @@ import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
-import com.codingblocks.onlineapi.models.ResetRunAttempt
+import com.codingblocks.onlineapi.models.*
 import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
 
@@ -39,6 +40,7 @@ class MyCourseViewModel(
     var runId by savedStateValue<String>(handle, RUN_ID)
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
+    val requested: MutableLiveData<Boolean> = MutableLiveData()
 
     /** MutableLiveData Filters for [SectionContentHolder.SectionContentPair]. */
     var filters: MutableLiveData<String> = MutableLiveData()
@@ -156,7 +158,11 @@ class MyCourseViewModel(
             when (val response = attemptId?.let { repo.requestApproval(it) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
-                    if (!isSuccessful) setError(fetchError(code()))
+                    if (isSuccessful) {
+                    }
+                    else {
+                        setError(fetchError(code()))
+                    }
                 }
             }
         }
@@ -175,10 +181,17 @@ class MyCourseViewModel(
 
     fun requestGoodies(name: String, address: String, postal: String, mobile: String?) {
         runIO {
-            when (val response = attemptId?.let { repo.fetchSections(it) }) {
+            val form = FormInfo(name = name, address = address, tshirt = "",postalCode = postal, alternateContact = mobile)
+            when (val response = attemptId?.let { repo.requestGoodies(Goodies("requested", form, Runs(runId!!), RunAttempts(it))) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
-                    if (!isSuccessful) setError(fetchError(code()))
+                    if (!isSuccessful) {
+                        setError(fetchError(code()))
+                        Log.d("Goodies", this.errorBody().toString() + this.headers())
+                    }
+                    else{
+                        Log.d("Goodies", this.body().toString())
+                    }
                 }
             }
         }

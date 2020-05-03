@@ -22,6 +22,15 @@ data class CourseFeatures(
     val text: String
 )
 
+data class FormInfo(
+    val name: String,
+    val tshirt:String?,
+    val address: String,
+    val postalCode: String?,
+    val alternateContact:String? = null
+)
+
+
 @Type("projects")
 data class Project(
     val title: String = "",
@@ -73,32 +82,35 @@ data class Course(
     }
 }
 
-    @Type("runs", "run")
-    data class Runs(
-        val name: String = "",
-        val description: String = "",
-        val start: String = "",
-        val end: String = "",
-        val price: String = "",
-        val mrp: String? = "",
-        val unlisted: Boolean,
-        val enrollmentStart: String = "",
-        val enrollmentEnd: String = "",
-        @Relationship("sections")
-        val sections: ArrayList<Sections>?,
-        @Relationship("run-attempts", "run_attempts")
-        var runAttempts: ArrayList<RunAttempts>?,
-        @Relationship("course")
-        var course: Course?,
-        @Relationship("ratings")
-        var rating: ArrayList<Rating>?,
-        val whatsappLink: String?,
-        val productId: Int?,
-        val completionThreshold: Int?,
-        val goodiesThreshold: Int?,
-        val totalContents: Int,
-        val tier: String?
-    ) : BaseModel() {
+@Type("runs", "run")
+data class Runs (
+    val name: String = "",
+    val description: String = "",
+    val start: String = "",
+    val end: String = "",
+    val price: String = "",
+    val mrp: String? = "",
+    val unlisted: Boolean = false,
+    val enrollmentStart: String = "",
+    val enrollmentEnd: String = "",
+    @Relationship("sections")
+    val sections: ArrayList<Sections>? = null,
+    @Relationship("run-attempts", "run_attempts")
+    var runAttempts: ArrayList<RunAttempts>? = null,
+    @Relationship("course")
+    var course: Course? = null,
+    @Relationship("ratings")
+    var rating: ArrayList<Rating>? = null,
+    val whatsappLink: String? = "",
+    val productId: Int? = 0,
+    val completionThreshold: Int? = 0,
+    val goodiesThreshold: Int? = 0,
+    val totalContents: Int? = 0,
+    val tier:String? = ""
+) : BaseModel() {
+    constructor(id : String) : this() {
+        super.id=id
+    }
 
     }
 
@@ -314,6 +326,16 @@ data class Course(
 
     }
 
+@Type("goodie-requests")
+data class Goodies(
+    val status_in_progress: String,
+    val formInfo :FormInfo,
+    @Relationship("run")
+    val run: Runs? = null,
+    @Relationship("run_attempt", "run-attempt")
+    val runAttempt: RunAttempts? = null ) :BaseModel()
+
+
     @Type("users", "user")
     data class User(
         val email: String?,
@@ -496,8 +518,8 @@ data class Course(
         @JvmField
         var title: String? = null
 
-        @JvmField
-        var description: String? = null
+    @JvmField
+    var description: String? = null
 
         @JvmField
         var marked: Boolean = false

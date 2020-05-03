@@ -22,10 +22,7 @@ import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
-import com.codingblocks.onlineapi.models.LectureContent
-import com.codingblocks.onlineapi.models.PerformanceResponse
-import com.codingblocks.onlineapi.models.ResetRunAttempt
-import com.codingblocks.onlineapi.models.RunAttempts
+import com.codingblocks.onlineapi.models.*
 import com.codingblocks.onlineapi.safeApiCall
 
 class MyCourseRepository(
@@ -290,4 +287,6 @@ class MyCourseRepository(
     suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
 
     suspend fun requestApproval(attemptId: String) = safeApiCall { Clients.api.requestApproval(attemptId) }
+
+    suspend fun requestGoodies(body: Goodies) = safeApiCall {Clients.api.requestGoodies(body) }
 }
