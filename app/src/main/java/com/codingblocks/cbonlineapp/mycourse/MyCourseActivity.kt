@@ -1,5 +1,7 @@
 package com.codingblocks.cbonlineapp.mycourse
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
@@ -115,5 +117,12 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
 
     override fun onRefresh() {
         viewModel.fetchSections(true)
+    }
+
+    companion object {
+
+        fun createMyCourseActivityIntent(context: Context, attemptId: String,name:String = ""): Intent {
+            return context.intentFor<MyCourseActivity>(COURSE_NAME to name,RUN_ATTEMPT_ID to attemptId).singleTop()
+        }
     }
 }

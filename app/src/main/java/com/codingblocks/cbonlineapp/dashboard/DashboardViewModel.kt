@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.dashboard
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.liveData
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
@@ -29,7 +30,7 @@ class DashboardViewModel(
     private val myCourseRepo: DashboardMyCoursesRepository,
     val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
-    var isLoggedIn:Boolean? by savedStateValue(handle, LOGGED_IN)
+    var isLoggedIn: Boolean? by savedStateValue(handle, LOGGED_IN)
     var suggestedCourses = MutableLiveData<List<Course>>()
     var trendingCourses = MutableLiveData<List<Course>>()
     var tracks = MutableLiveData<List<CareerTracks>>()
@@ -42,9 +43,6 @@ class DashboardViewModel(
         }
     }
     val attemptId = MutableLiveData<String>()
-    val topRun by lazy {
-        homeRepo.getTopRun()
-    }
 
     val runPerformance = Transformations.switchMap(attemptId) { query ->
         homeRepo.getRunStats(query)
@@ -101,26 +99,22 @@ class DashboardViewModel(
         }
     }
 
-    private fun fetchUser(): MutableLiveData<User> {
-        val user = MutableLiveData<User>()
-        runIO {
-            when (val response = homeRepo.fetchUser()) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful)
-                        response.value.body()?.let {
-                            user.postValue(it)
-                            homeRepo.insertUser(it)
-                            if (!homeRepo.prefs.SP_PUSH_NOTIFICATIONS)
-                                setPlayerId()
-                        }
-                    else {
-                        setError(fetchError(response.value.code()))
+    fun fetchUser() = liveData<User>(Dispatchers.IO) {
+        when (val response = homeRepo.fetchUser()) {
+            is ResultWrapper.GenericError -> setError(response.error)
+            is ResultWrapper.Success -> {
+                if (response.value.isSuccessful)
+                    response.value.body()?.let {
+                        emit(it)
+                        homeRepo.insertUser(it)
+                        if (!prefs.SP_PUSH_NOTIFICATIONS)
+                            setPlayerId()
                     }
+                else {
+                    setError(fetchError(response.value.code()))
                 }
             }
         }
-        return user
     }
 
     fun fetchRecommendedCourses(offset: Int, page: Int) {
@@ -185,6 +179,44 @@ class DashboardViewModel(
         }
     }
 
+    private fun setPlayerId() {
+        runIO {
+            OneSignal.getPermissionSubscriptionState().subscriptionStatus.userId?.let {
+                when (val response = homeRepo.updatePlayerId(Player(playerId = it))) {
+                    is ResultWrapper.GenericError -> setError(response.error)
+                    is ResultWrapper.Success -> with(response.value) {
+                        if (isSuccessful) {
+                            homeRepo.prefs.SP_PUSH_NOTIFICATIONS = true
+                            OneSignal.setExternalUserId(prefs.SP_ONEAUTH_ID)
+                        } else {
+                            setError(fetchError(code()))
+                        }
+                    }
+                }
+            }
+            /**
+             * Send error to crashlytics if no playerid found for Onesignal
+             * */
+        }
+    }
+
+    fun fetchTopRunWithStats() = liveData(Dispatchers.IO) {
+        when (val response = homeRepo.fetchLastAccessedRun()) {
+            is ResultWrapper.GenericError -> {
+                if (response.code in 101..103)
+                    emitSource(homeRepo.getTopRun())
+                setError(response.error)
+            }
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful) {
+                    emitSource(homeRepo.getTopRunById(body()!!.runAttempts!!.first().id))
+                } else {
+                    setError(fetchError(code()))
+                }
+            }
+        }
+    }
+
     fun getStats(id: String) {
         attemptId.postValue(id)
         runIO {
@@ -195,23 +227,6 @@ class DashboardViewModel(
                         body()?.let { response ->
                             homeRepo.saveStats(response, id)
                         }
-                    } else {
-                        setError(fetchError(code()))
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setPlayerId() {
-        runIO {
-            val status = OneSignal.getPermissionSubscriptionState()
-            when (val response = homeRepo.updatePlayerId(Player(playerId = status.subscriptionStatus.userId))) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> with(response.value) {
-                    if (isSuccessful) {
-                        homeRepo.prefs.SP_PUSH_NOTIFICATIONS = true
-                        OneSignal.setExternalUserId(homeRepo.prefs.SP_ONEAUTH_ID)
                     } else {
                         setError(fetchError(code()))
                     }

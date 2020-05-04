@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.auth.onboarding
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -34,7 +35,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.runOnUiThread
 import org.koin.android.ext.android.inject
 import android.text.style.StyleSpan as StyleSpan1
@@ -155,8 +155,8 @@ class SignInFragment : BaseCBFragment() {
                                 saveKeys(it)
                             }
                         }
-                        startActivity(intentFor<DashboardActivity>())
-                        requireActivity().finish()
+                        navigateToActivity()
+
                     } else
                         runOnUiThread {
                             signInRoot.showSnackbar("Invalid Username or Password.Please Try Again", Snackbar.LENGTH_SHORT)
@@ -165,6 +165,18 @@ class SignInFragment : BaseCBFragment() {
                 }
             }
         }
+    }
+
+    private fun navigateToActivity() {
+        with(requireActivity()) {
+            finish()
+            if (callingActivity == null) {
+                setResult(RESULT_OK)
+            } else {
+                startActivity(DashboardActivity.createDashboardActivityIntent(requireContext(), false))
+            }
+        }
+
     }
 
     private fun saveKeys(it: JsonObject) {

@@ -33,6 +33,10 @@ import org.jetbrains.anko.share
 
 class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListAdapter.ItemViewHolder>(DiffCallback()) {
 
+    init {
+        setHasStableIds(true)
+    }
+
     var onItemClick: ItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -48,6 +52,10 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                     .inflate(R.layout.item_course_card, parent, false)
             }
         )
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {

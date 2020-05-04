@@ -89,7 +89,7 @@ object Components {
                     context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
                 }
                 UNAUTHORIZED -> {
-                    context.startActivity(context.intentFor<LoginActivity>())
+                    callback(true)
                 }
                 else -> {
                     callback(true)

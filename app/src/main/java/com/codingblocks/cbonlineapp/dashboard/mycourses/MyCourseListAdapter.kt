@@ -17,6 +17,10 @@ class MyCourseListAdapter(val type: String = "DEFAULT") : ListAdapter<CourseInst
 
     var onItemClick: ItemClickListener? = null
 
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (type) {
             "RUN" -> {
@@ -30,6 +34,10 @@ class MyCourseListAdapter(val type: String = "DEFAULT") : ListAdapter<CourseInst
                         .inflate(R.layout.item_courses, parent, false))
             }
         }
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -48,6 +56,7 @@ class MyCourseListAdapter(val type: String = "DEFAULT") : ListAdapter<CourseInst
             }
         }
     }
+
 
     class RunViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var itemClickListener: ItemClickListener? = null

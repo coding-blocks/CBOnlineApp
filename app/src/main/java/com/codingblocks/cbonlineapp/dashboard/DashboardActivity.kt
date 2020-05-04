@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.auth.LoginActivity
@@ -30,6 +31,7 @@ import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.slideDown
 import com.codingblocks.cbonlineapp.util.extensions.slideUp
@@ -83,17 +85,20 @@ class DashboardActivity : BaseCBActivity(),
     }
 
     private fun setUser() {
-        referralContainer.isVisible = true
-        if (JWTUtils.isExpired(vm.prefs.SP_JWT_TOKEN_KEY))
-            vm.refreshToken()
-        val navMenu = dashboardNavigation.menu
-        navMenu.findItem(R.id.nav_inbox).isVisible = true
-        navMenu.findItem(R.id.nav_admin).isVisible = vm.prefs.SP_ADMIN
+        vm.fetchUser().observe(this, Observer {
+            referralContainer.isVisible = true
+            if (JWTUtils.isExpired(vm.prefs.SP_JWT_TOKEN_KEY))
+                vm.refreshToken()
+            val navMenu = dashboardNavigation.menu
+            navMenu.findItem(R.id.nav_inbox).isVisible = true
+            navMenu.findItem(R.id.nav_admin).isVisible = vm.prefs.SP_ADMIN
 
-        dashboardNavigation.getHeaderView(0).apply {
-            findViewById<CircleImageView>(R.id.navHeaderImageView).loadImage(vm.prefs.SP_USER_IMAGE, true)
-            findViewById<TextView>(R.id.navUsernameTv).text = ("Hello ${vm.prefs.SP_USER_NAME}")
-        }
+            dashboardNavigation.getHeaderView(0).apply {
+                findViewById<CircleImageView>(R.id.navHeaderImageView).loadImage(vm.prefs.SP_USER_IMAGE, true)
+                findViewById<TextView>(R.id.navUsernameTv).text = ("Hello ${vm.prefs.SP_USER_NAME}")
+            }
+        })
+
     }
 
 

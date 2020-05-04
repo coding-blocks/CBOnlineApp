@@ -1,17 +1,22 @@
 package com.codingblocks.cbonlineapp.course
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
+import androidx.activity.invoke
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.baseclasses.STATE
 import com.codingblocks.cbonlineapp.commons.InstructorListAdapter
@@ -25,15 +30,12 @@ import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
-import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.onlineapi.ErrorStatus
-import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Tags
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
@@ -70,6 +72,12 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private var youtubePlayer: YouTubePlayer? = null
 
+    val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            // Handle the Intent
+        }
+    }
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -175,7 +183,9 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 }
                 ErrorStatus.UNAUTHORIZED -> {
                     Components.showConfirmation(this, UNAUTHORIZED) {
-                        finish()
+                        if (it) {
+                            startForResult(Intent(this, LoginActivity::class.java))
+                        }
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
@@ -202,7 +212,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 }
             }
         }
-        viewModel.enrollTrialProgress.observeOnce { status ->
+        viewModel.enrollTrialProgress.observer(this) { status ->
             when (status!!) {
                 STATE.LOADING -> loadingDialog.show()
                 STATE.ERROR -> loadingDialog.dismiss()
@@ -215,21 +225,13 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         }
 
         viewAllTv.setOnClickListener {
-            // Bottom Sheet
             val courseSectionAllFragment = CourseSectionAllFragment()
-            val bundle = Bundle()
-            bundle.putString(COURSE_ID, courseId)
-            courseSectionAllFragment.arguments = bundle
 
             courseSectionAllFragment.show(supportFragmentManager, "courseSectionAllFragment")
         }
 
         batchBtn.setOnClickListener {
             val courseTierFragment = CourseTierFragment()
-            val bundle = Bundle()
-            bundle.putString(COURSE_ID, courseId)
-            courseTierFragment.arguments = bundle
-
             courseTierFragment.show(supportFragmentManager, "CourseTierFragment")
         }
     }
@@ -300,12 +302,11 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         ratingTv.alpha = alpha
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     override fun onBackPressed() {
         youtubePlayer?.release()
         super.onBackPressed()
     }
+
 }
+
+

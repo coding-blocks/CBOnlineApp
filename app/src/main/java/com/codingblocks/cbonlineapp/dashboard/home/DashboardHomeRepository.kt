@@ -17,13 +17,6 @@ class DashboardHomeRepository(
     val prefs: PreferenceHelper
 
 ) {
-
-    suspend fun fetchUser() = safeApiCall { Clients.onlineV2JsonApi.getMe() }
-
-    suspend fun getToken(grantCode: String) = safeApiCall { Clients.api.getToken(grantCode) }
-
-    suspend fun refreshToken() = safeApiCall { Clients.api.refreshToken(prefs.SP_JWT_REFRESH_TOKEN) }
-
     fun insertUser(user: User) {
         with(user) {
             prefs.apply {
@@ -38,7 +31,7 @@ class DashboardHomeRepository(
         }
     }
 
-    suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
+
     suspend fun saveStats(body: PerformanceResponse, id: String) {
         runPerformanceDao.insert(
             RunPerformance(
@@ -51,8 +44,16 @@ class DashboardHomeRepository(
         )
     }
 
-    suspend fun updatePlayerId(player: Player) = safeApiCall { Clients.onlineV2JsonApi.setPlayerId(player) }
 
-    fun getTopRun() = courseWithInstructorDao.getTopRun().distinctUntilChanged()
+    fun getTopRun() = courseWithInstructorDao.getTopRun()
+    fun getTopRunById(id: String) = courseWithInstructorDao.getRunById(id)
     fun getRunStats(query: String?) = query?.let { runPerformanceDao.getPerformance(it) }
+
+    suspend fun updatePlayerId(player: Player) = safeApiCall { Clients.onlineV2JsonApi.setPlayerId(player) }
+    suspend fun fetchLastAccessedRun() = safeApiCall { Clients.onlineV2JsonApi.getLastAccessed() }
+    suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
+    suspend fun fetchUser() = safeApiCall { Clients.onlineV2JsonApi.getMe() }
+    suspend fun getToken(grantCode: String) = safeApiCall { Clients.api.getToken(grantCode) }
+    suspend fun refreshToken() = safeApiCall { Clients.api.refreshToken(prefs.SP_JWT_REFRESH_TOKEN) }
+
 }
