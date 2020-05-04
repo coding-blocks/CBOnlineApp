@@ -70,8 +70,6 @@ class MyCourseViewModel(
         attemptId?.let { repo.getRunById(it) }
     }
 
-//    val computedData = repo.getSectionWithContentComputer(attemptId)
-
     fun fetchSections(refresh: Boolean = false) {
         runIO {
             when (val response = attemptId?.let { repo.fetchSections(it) }) {

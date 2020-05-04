@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -18,6 +19,7 @@ import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.models.ProgressItem
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -25,6 +27,10 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.skydoves.progressview.ProgressView
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard_home.*
+import kotlinx.android.synthetic.main.fragment_dashboard_home.chart1
+import kotlinx.android.synthetic.main.fragment_dashboard_home.homeProgressTv
+import kotlinx.android.synthetic.main.fragment_dashboard_home.homeProgressView
+import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.support.v4.intentFor
 import org.koin.android.ext.android.inject
@@ -76,7 +82,7 @@ class DashboardHomeFragment : BaseCBFragment() {
                     vm.getPerformance(coursePair.runAttempt.attemptId).observer(viewLifecycleOwner) {
                         homePerformanceTv.text = it.remarks
                         homePercentileTv.text = it.percentile.toString()
-                        loadData(it.averageProgress, it.userProgress)
+                        chart1.loadData(it.averageProgress, it.userProgress)
                     }
                 }
             })
@@ -93,52 +99,6 @@ class DashboardHomeFragment : BaseCBFragment() {
         }
     }
 
-    private fun loadData(
-        averageProgress: ArrayList<ProgressItem>,
-        userProgress: ArrayList<ProgressItem>
-    ) {
-        val values: ArrayList<Entry> = ArrayList()
-        averageProgress.forEachIndexed { index, progressItem ->
-            values.add(Entry(index.toFloat(), progressItem.progress.toFloat()))
-        }
-
-        val values2: ArrayList<Entry> = ArrayList()
-        userProgress.forEachIndexed { index, progressItem ->
-            values2.add(Entry(index.toFloat(), progressItem.progress.toFloat()))
-        }
-        val set1 = LineDataSet(values, "Average Progress")
-        set1.apply {
-            setDrawCircles(false)
-            color = getColor(requireContext(), R.color.pastel_red)
-            setDrawValues(false)
-            mode = LineDataSet.Mode.CUBIC_BEZIER
-            lineWidth = 3f
-        }
-
-        val set2 = LineDataSet(values2, "User Progress")
-        set2.apply {
-            setDrawCircles(false)
-            color = getColor(requireContext(), R.color.kiwigreen)
-            mode = LineDataSet.Mode.CUBIC_BEZIER
-            setDrawValues(false)
-            lineWidth = 3f
-        }
-        val dataSets: ArrayList<ILineDataSet> = ArrayList()
-        dataSets.add(set1)
-        dataSets.add(set2)
-        val data = LineData(dataSets)
-
-        chart1.apply {
-            this.data = data
-            setTouchEnabled(false)
-            axisRight.setDrawGridLines(false)
-            axisLeft.setDrawGridLines(true)
-            xAxis.setDrawGridLines(true)
-            notifyDataSetChanged()
-            xAxis.labelCount = 10
-            invalidate()
-        }
-    }
 }
 
 fun ProgressView.setGradientColor(progress: Double) {
@@ -152,5 +112,49 @@ fun ProgressView.setGradientColor(progress: Double) {
             getColor(context, R.color.pastel_red)
         highlightView.colorGradientEnd =
             getColor(context, R.color.dusty_orange)
+    }
+}
+
+fun LineChart.loadData(averageProgress: java.util.ArrayList<ProgressItem>, userProgress: java.util.ArrayList<ProgressItem>) {
+    val values: ArrayList<Entry> = ArrayList()
+    averageProgress.forEachIndexed { index, progressItem ->
+        values.add(Entry(index.toFloat(), progressItem.progress.toFloat()))
+    }
+
+    val values2: ArrayList<Entry> = ArrayList()
+    userProgress.forEachIndexed { index, progressItem ->
+        values2.add(Entry(index.toFloat(), progressItem.progress.toFloat()))
+    }
+    val set1 = LineDataSet(values, "Average Progress")
+    set1.apply {
+        setDrawCircles(false)
+        color = getColor(context, R.color.pastel_red)
+        setDrawValues(false)
+        mode = LineDataSet.Mode.CUBIC_BEZIER
+        lineWidth = 3f
+    }
+
+    val set2 = LineDataSet(values2, "User Progress")
+    set2.apply {
+        setDrawCircles(false)
+        color = getColor(context, R.color.kiwigreen)
+        mode = LineDataSet.Mode.CUBIC_BEZIER
+        setDrawValues(false)
+        lineWidth = 3f
+    }
+    val dataSets: ArrayList<ILineDataSet> = ArrayList()
+    dataSets.add(set1)
+    dataSets.add(set2)
+    val data = LineData(dataSets)
+
+    this.apply {
+        this.data = data
+        setTouchEnabled(false)
+        axisRight.setDrawGridLines(false)
+        axisLeft.setDrawGridLines(true)
+        xAxis.setDrawGridLines(true)
+        notifyDataSetChanged()
+        xAxis.labelCount = 10
+        invalidate()
     }
 }
