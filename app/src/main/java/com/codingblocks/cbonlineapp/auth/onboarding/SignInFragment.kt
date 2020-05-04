@@ -173,7 +173,7 @@ class SignInFragment : BaseCBFragment() {
             if (callingActivity == null) {
                 setResult(RESULT_OK)
             } else {
-                startActivity(DashboardActivity.createDashboardActivityIntent(requireContext(), false))
+                startActivity(DashboardActivity.createDashboardActivityIntent(requireContext(), true))
             }
         }
 

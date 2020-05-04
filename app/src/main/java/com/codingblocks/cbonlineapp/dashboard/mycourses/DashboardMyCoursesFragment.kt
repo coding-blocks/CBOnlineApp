@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
@@ -17,10 +16,8 @@ import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
-import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showEmptyView
@@ -34,7 +31,6 @@ import kotlinx.android.synthetic.main.fragment_dashboard_my_courses.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
@@ -42,10 +38,9 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
     private val dialog by lazy { BottomSheetDialog(requireContext()) }
     private val imgs by lazy { resources.obtainTypedArray(R.array.course_type_img) }
     private val coursesType by lazy { resources.getStringArray(R.array.course_type) }
-    private val viewModel by sharedViewModel<DashboardViewModel>()
+    private val vm: DashboardViewModel by sharedViewModel()
     private val type = MutableLiveData<Int>()
     private val courseListAdapter = MyCourseListAdapter()
-    private val sharedPrefs by inject<PreferenceHelper>()
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -61,12 +56,8 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? =
-        inflater.inflate(R.layout.fragment_dashboard_my_courses, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_dashboard_my_courses, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -79,9 +70,9 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
         setUpBottomSheet()
 
         courseTypeTv.apply {
-            val lastSelected = sharedPrefs.SP_COURSE_FILTER_TYPE
+            val lastSelected = vm.prefs.SP_COURSE_FILTER_TYPE
             text = coursesType[lastSelected]
-            viewModel.courseFilter.postValue(coursesType[lastSelected])
+            vm.courseFilter.postValue(coursesType[lastSelected])
             setCompoundDrawablesRelativeWithIntrinsicBounds(
                 requireContext().getDrawable(imgs.getResourceId(lastSelected, 0)),
                 null,
@@ -96,9 +87,8 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
 
         type.observer(viewLifecycleOwner) { num ->
             courseTypeTv.apply {
-                //                viewModel.prefs.courseFilter = num
                 text = coursesType[num]
-                viewModel.courseFilter.postValue(coursesType[num])
+                vm.courseFilter.postValue(coursesType[num])
                 setCompoundDrawablesRelativeWithIntrinsicBounds(
                     requireContext().getDrawable(
                         imgs.getResourceId(
@@ -133,32 +123,32 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
 //            }
 //        }
 
-        viewModel.errorLiveData.observer(viewLifecycleOwner) {
-            when (it) {
-                ErrorStatus.NO_CONNECTION -> {
+//        viewModel.errorLiveData.observer(viewLifecycleOwner) {
+//            when (it) {
+//                ErrorStatus.NO_CONNECTION -> {
+////                    dashboardCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
+//                }
+//                ErrorStatus.TIMEOUT -> {
+//                    dashboardCourseRoot.showSnackbar(
+//                        it,
+//                        Snackbar.LENGTH_INDEFINITE,
+//                        dashboardBottomNav
+//                    ) {
+//                        viewModel.fetchMyCourses()
+//                    }
+//                }
+//                ErrorStatus.UNAUTHORIZED -> {
+//                    Components.showConfirmation(requireContext(), UNAUTHORIZED) {
+//                    }
+//                }
+//                else -> {
 //                    dashboardCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
-                }
-                ErrorStatus.TIMEOUT -> {
-                    dashboardCourseRoot.showSnackbar(
-                        it,
-                        Snackbar.LENGTH_INDEFINITE,
-                        dashboardBottomNav
-                    ) {
-                        viewModel.fetchMyCourses()
-                    }
-                }
-                ErrorStatus.UNAUTHORIZED -> {
-                    Components.showConfirmation(requireContext(), UNAUTHORIZED) {
-                    }
-                }
-                else -> {
-                    dashboardCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
-                    AppCrashlyticsWrapper.log(it)
-                }
-            }
-            if (courseListAdapter.currentList.isEmpty())
-                showEmptyView(emptyView = emptyLl, shimmerView = dashboardCourseShimmer)
-        }
+//                    AppCrashlyticsWrapper.log(it)
+//                }
+//            }
+//            if (courseListAdapter.currentList.isEmpty())
+//                showEmptyView(emptyView = emptyLl, shimmerView = dashboardCourseShimmer)
+//        }
         courseListAdapter.onItemClick = itemClickListener
         loginBtn.setOnClickListener {
             startActivity(intentFor<LoginActivity>())
@@ -173,12 +163,12 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
             list.add(SheetItem(coursesType[it], imgs.getResourceId(it, 0)))
         }
         sheetDialog.run {
-            val initialSelectedItem = sharedPrefs.SP_COURSE_FILTER_TYPE
+            val initialSelectedItem = vm.prefs.SP_COURSE_FILTER_TYPE
             val sheetAdapter = SheetAdapter(list, initialSelectedItem)
             sheetLv.adapter = sheetAdapter
             sheetLv.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
                 type.postValue(position)
-                sharedPrefs.SP_COURSE_FILTER_TYPE = position
+                vm.prefs.SP_COURSE_FILTER_TYPE = position
                 sheetAdapter.selectedItem = position
                 dialog.dismiss()
             }
@@ -192,10 +182,10 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
         courseListAdapter.onItemClick = null
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (courseListAdapter.currentList.isNullOrEmpty()) {
-            viewModel.fetchMyCourses()
-        }
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        if (courseListAdapter.currentList.isNullOrEmpty()) {
+//            viewModel.fetchMyCourses()
+//        }
+//    }
 }

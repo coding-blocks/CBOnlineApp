@@ -38,26 +38,11 @@ class DashboardViewModel(
     val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
     var isLoggedIn: Boolean? by savedStateValue(handle, LOGGED_IN)
-    var suggestedCourses = MutableLiveData<List<Course>>()
-    var trendingCourses = MutableLiveData<List<Course>>()
-    var tracks = MutableLiveData<List<CareerTracks>>()
-    val added = MutableLiveData<Boolean>()
-    var courseFilter = MutableLiveData<String>()
 
-    val courses by lazy {
-        Transformations.switchMap(courseFilter) { query ->
-            myCourseRepo.getMyRuns(query)
-        }
-    }
-    val attemptId = MutableLiveData<String>()
 
-    val allRuns by lazy {
-        myCourseRepo.getActiveRuns()
-    }
-    val purchasedRuns by lazy {
-        myCourseRepo.getPurchasedRuns()
-    }
-
+    /**
+     * Home Fragment
+     */
     fun fetchToken(grantCode: String) {
         runIO {
             when (val response = homeRepo.getToken(grantCode)) {
@@ -115,68 +100,6 @@ class DashboardViewModel(
         }
     }
 
-    fun fetchRecommendedCourses(offset: Int, page: Int) {
-        runIO {
-            when (val response = exploreRepo.getSuggestedCourses(offset, page)) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> with(response.value) {
-                    if (isSuccessful) {
-                        if (offset == 0)
-                            suggestedCourses.postValue(body())
-                        else
-                            trendingCourses.postValue(body())
-                    } else {
-                        setError(fetchError(code()))
-                    }
-                }
-            }
-        }
-    }
-
-    fun fetchTracks() {
-        runIO {
-            when (val response = exploreRepo.getTracks()) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> with(response.value) {
-                    if (isSuccessful) {
-                        tracks.postValue(body())
-                    } else {
-                        setError(fetchError(code()))
-                    }
-                }
-            }
-        }
-    }
-
-    fun fetchMyCourses(offset: String = "0") {
-        runIO {
-            when (val response = myCourseRepo.fetchMyCourses(offset)) {
-                is ResultWrapper.GenericError -> {
-                    added.postValue(true)
-                    setError(response.error)
-                }
-                is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful)
-                        response.value.body()?.let {
-                            withContext(Dispatchers.Default) {
-                                myCourseRepo.insertCourses(it.get() ?: emptyList())
-                            }
-                            val currentOffSet = getMeta(it.meta, "currentOffset").toString()
-                            val nextOffSet = getMeta(it.meta, "nextOffset").toString()
-                            if (currentOffSet != nextOffSet && nextOffSet != "null") {
-                                fetchMyCourses(nextOffSet)
-                            } else {
-                                added.postValue(true)
-                            }
-                        }
-                    else {
-                        setError(fetchError(response.value.code()))
-                    }
-                }
-            }
-        }
-    }
-
     private fun setPlayerId() {
         runIO {
             OneSignal.getPermissionSubscriptionState().subscriptionStatus.userId?.let {
@@ -198,6 +121,87 @@ class DashboardViewModel(
         }
     }
 
+    var suggestedCourses = MutableLiveData<List<Course>>()
+    var trendingCourses = MutableLiveData<List<Course>>()
+    fun fetchRecommendedCourses(offset: Int, page: Int) {
+        runIO {
+            when (val response = exploreRepo.getSuggestedCourses(offset, page)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        if (offset == 0)
+                            suggestedCourses.postValue(body())
+                        else
+                            trendingCourses.postValue(body())
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
+
+    var tracks = MutableLiveData<List<CareerTracks>>()
+    fun fetchTracks() {
+        runIO {
+            when (val response = exploreRepo.getTracks()) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        tracks.postValue(body())
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * My Course Fragment
+     */
+    val allRuns by lazy {
+        myCourseRepo.getActiveRuns()
+    }
+    val purchasedRuns by lazy {
+        myCourseRepo.getPurchasedRuns()
+    }
+    var courseFilter = MutableLiveData<String>()
+    val courses by lazy {
+        Transformations.switchMap(courseFilter) { query ->
+            myCourseRepo.getMyRuns(query)
+        }
+    }
+    fun fetchMyCourses(offset: String = "0") {
+        runIO {
+            when (val response = myCourseRepo.fetchMyCourses(offset)) {
+                is ResultWrapper.GenericError -> {
+                    setError(response.error)
+                }
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let {
+                            withContext(Dispatchers.Default) {
+                                myCourseRepo.insertCourses(it.get() ?: emptyList())
+                            }
+                            val currentOffSet = getMeta(it.meta, "currentOffset").toString()
+                            val nextOffSet = getMeta(it.meta, "nextOffset").toString()
+                            if (currentOffSet != nextOffSet && nextOffSet != "null") {
+                                fetchMyCourses(nextOffSet)
+                            }
+                        }
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Home Fragment Top Course Run and Stats
+     */
+
     fun fetchTopRunWithStats() = liveData(Dispatchers.IO) {
         when (val response = homeRepo.fetchLastAccessedRun()) {
             is ResultWrapper.GenericError -> {
@@ -207,6 +211,7 @@ class DashboardViewModel(
             }
             is ResultWrapper.Success -> with(response.value) {
                 if (isSuccessful) {
+                    myCourseRepo.insertCourses(listOf(body()!!))
                     emitSource(homeRepo.getTopRunById(body()!!.runAttempts!!.first().id))
                 } else {
                     setError(fetchError(code()))
@@ -234,9 +239,10 @@ class DashboardViewModel(
 
     /**
      * Doubt Variables and functions
-     * */
+     */
 
     var type: MutableLiveData<String> = MutableLiveData(ALL)
+    val attemptId = MutableLiveData<String>()
 
     val doubts: LiveData<List<DoubtsModel>> by lazy {
         Transformations.distinctUntilChanged(DoubleTrigger(type, attemptId)).switchMap {

@@ -117,7 +117,13 @@ class DashboardActivity : BaseCBActivity(),
         searchBtn.setOnClickListener {
             startActivity(intentFor<LearningTracksActivity>().singleTop())
         }
-        setupViewPager()
+        pagerAdapter.apply {
+            add(ViewPager2Adapter.FragmentName.EXPLORE)
+            add(ViewPager2Adapter.FragmentName.COURSES)
+            add(ViewPager2Adapter.FragmentName.HOME)
+            add(ViewPager2Adapter.FragmentName.DOUBTS)
+            add(ViewPager2Adapter.FragmentName.LIBRARY)
+        }
         if (loggedIn) {
             setUser()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
@@ -129,6 +135,12 @@ class DashboardActivity : BaseCBActivity(),
                 findViewById<TextView>(R.id.navUsernameTv).text = "Login/Signup"
             }
             dashboardBottomNav.selectedItemId = R.id.dashboard_explore
+        }
+        dashboardPager.apply {
+            isUserInputEnabled = false
+            adapter = pagerAdapter
+            currentItem  = if(loggedIn) 2 else 0
+            offscreenPageLimit = 4
         }
         dashboardAppBarLayout.bringToFront()
 
@@ -181,21 +193,6 @@ class DashboardActivity : BaseCBActivity(),
 //        }
     }
 
-    private fun setupViewPager() {
-
-        pagerAdapter.apply {
-            add(ViewPager2Adapter.FragmentName.EXPLORE)
-            add(ViewPager2Adapter.FragmentName.COURSES)
-            add(ViewPager2Adapter.FragmentName.HOME)
-            add(ViewPager2Adapter.FragmentName.DOUBTS)
-            add(ViewPager2Adapter.FragmentName.LIBRARY)
-        }
-        dashboardPager.apply {
-            isUserInputEnabled = false
-            adapter = pagerAdapter
-            offscreenPageLimit = 4
-        }
-    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.dashboard, menu)

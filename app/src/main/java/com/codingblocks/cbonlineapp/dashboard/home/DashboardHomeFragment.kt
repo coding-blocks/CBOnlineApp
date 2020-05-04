@@ -55,7 +55,7 @@ class DashboardHomeFragment : BaseCBFragment() {
                     vm.getStats(coursePair.runAttempt.attemptId)
                     dashboardHomeShimmer.hideAndStop()
                     dashboardHome.isVisible = true
-                    requireActivity().let {
+                    activity?.let {
                         toolbarCourseTitleTv?.text = coursePair.course.title
                         toolbarCourseResumeTv?.isVisible = true
                         homeCourseLogoImg.loadImage(coursePair.course.logo)
@@ -73,11 +73,11 @@ class DashboardHomeFragment : BaseCBFragment() {
                             ))
                         }
                     }
-                }
-                vm.getPerformance(coursePair.runAttempt.attemptId).observer(viewLifecycleOwner) {
-                    homePerformanceTv.text = it.remarks
-                    homePercentileTv.text = it.percentile.toString()
-                    loadData(it.averageProgress, it.userProgress)
+                    vm.getPerformance(coursePair.runAttempt.attemptId).observer(viewLifecycleOwner) {
+                        homePerformanceTv.text = it.remarks
+                        homePercentileTv.text = it.percentile.toString()
+                        loadData(it.averageProgress, it.userProgress)
+                    }
                 }
             })
         } else {
