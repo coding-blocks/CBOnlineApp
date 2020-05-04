@@ -15,19 +15,9 @@ import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Doubts
 
 class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : BaseCBViewModel() {
+    val attemptId = MutableLiveData<String>()
 
-    var barMessage: MutableLiveData<String> = MutableLiveData()
-    var type: MutableLiveData<String> = MutableLiveData(ALL)
-    var attemptId: MutableLiveData<String> = MutableLiveData()
-
-    val doubts by lazy {
-        Transformations.distinctUntilChanged(DoubleTrigger(type, attemptId)).switchMap {
-            fetchDoubts()
-            repo.getDoubtsByCourseRun(it.first, it.second ?: "")
-        }
-    }
-
-    fun fetchDoubts() {
+    private fun fetchDoubts() {
         runIO {
             if (!attemptId.value.isNullOrEmpty())
                 when (val response = repo.fetchDoubtsByCourseRun(attemptId.value ?: "")) {
@@ -44,6 +34,7 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Ba
                 }
         }
     }
+
 
     fun resolveDoubt(doubt: DoubtsModel, saveToDb: Boolean = false) {
         runIO {
@@ -63,9 +54,6 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Ba
             }
         }
     }
-
-//    fun getRunId() = repo.getRuns()
-
     fun getDoubt(doubtId: String): LiveData<DoubtsModel> {
         fetchComments(doubtId)
         return repo.getDoubtById(doubtId)
@@ -103,6 +91,4 @@ class DashboardDoubtsViewModel(private val repo: DashboardDoubtsRepository) : Ba
             }
         }
     }
-
-    fun getRuns() = repo.getRuns()
 }

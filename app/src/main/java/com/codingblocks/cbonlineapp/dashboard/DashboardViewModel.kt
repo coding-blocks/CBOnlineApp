@@ -1,14 +1,20 @@
 package com.codingblocks.cbonlineapp.dashboard
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
+import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
+import com.codingblocks.cbonlineapp.database.models.DoubtsModel
+import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
+import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
 import com.codingblocks.onlineapi.Clients
@@ -28,6 +34,7 @@ class DashboardViewModel(
     private val homeRepo: DashboardHomeRepository,
     private val exploreRepo: CourseRepository,
     private val myCourseRepo: DashboardMyCoursesRepository,
+    private val repo: DashboardDoubtsRepository,
     val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
     var isLoggedIn: Boolean? by savedStateValue(handle, LOGGED_IN)
@@ -44,21 +51,12 @@ class DashboardViewModel(
     }
     val attemptId = MutableLiveData<String>()
 
-    val runPerformance = Transformations.switchMap(attemptId) { query ->
-        homeRepo.getRunStats(query)
-    }
     val allRuns by lazy {
         myCourseRepo.getActiveRuns()
     }
     val purchasedRuns by lazy {
         myCourseRepo.getPurchasedRuns()
     }
-
-//    val user by lazy {
-//        Transformations.switchMap(isLoggedIn) {
-//            fetchUser()
-//        }
-//    }
 
     fun fetchToken(grantCode: String) {
         runIO {
@@ -218,7 +216,6 @@ class DashboardViewModel(
     }
 
     fun getStats(id: String) {
-        attemptId.postValue(id)
         runIO {
             when (val response = homeRepo.getStats(id)) {
                 is ResultWrapper.GenericError -> setError(response.error)
@@ -234,4 +231,58 @@ class DashboardViewModel(
             }
         }
     }
+
+    /**
+     * Doubt Variables and functions
+     * */
+
+    var type: MutableLiveData<String> = MutableLiveData(ALL)
+
+    val doubts: LiveData<List<DoubtsModel>> by lazy {
+        Transformations.distinctUntilChanged(DoubleTrigger(type, attemptId)).switchMap {
+            fetchDoubts()
+            repo.getDoubtsByCourseRun(it.first, it.second ?: "")
+        }
+    }
+
+    private fun fetchDoubts() {
+        runIO {
+            if (!attemptId.value.isNullOrEmpty())
+                when (val response = repo.fetchDoubtsByCourseRun(attemptId.value ?: "")) {
+                    is ResultWrapper.GenericError -> setError(response.error)
+                    is ResultWrapper.Success -> {
+                        if (response.value.isSuccessful)
+                            response.value.body()?.let {
+                                repo.insertDoubts(it)
+                            }
+                        else {
+                            setError(fetchError(response.value.code()))
+                        }
+                    }
+                }
+        }
+    }
+
+    fun resolveDoubt(doubt: DoubtsModel, saveToDb: Boolean = false) {
+        runIO {
+            when (val response = repo.resolveDoubt(doubt)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        if (saveToDb) {
+                            repo.updateDb(doubt.dbtUid)
+                        } else {
+                            fetchDoubts()
+                        }
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun getPerformance(attemptId: String) = homeRepo.getRunStats(attemptId)
+
+
 }

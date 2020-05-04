@@ -13,6 +13,7 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
+import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -32,7 +33,6 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class DashboardHomeFragment : BaseCBFragment() {
 
     private val vm: DashboardViewModel by sharedViewModel()
-    private val sharedPrefs by inject<PreferenceHelper>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,7 +48,7 @@ class DashboardHomeFragment : BaseCBFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (vm.isLoggedIn == true) {
-            vm.fetchTopRunWithStats().observe(viewLifecycleOwner, Observer { coursePair ->
+            vm.fetchTopRunWithStats().getDistinct().observe(viewLifecycleOwner, Observer { coursePair ->
                 dashboardProgressContainer.isVisible = coursePair != null
                 dashboardEmptyProgress.isVisible = coursePair == null
                 if (coursePair != null) {
@@ -74,12 +74,12 @@ class DashboardHomeFragment : BaseCBFragment() {
                         }
                     }
                 }
+                vm.getPerformance(coursePair.runAttempt.attemptId).observer(viewLifecycleOwner) {
+                    homePerformanceTv.text = it.remarks
+                    homePercentileTv.text = it.percentile.toString()
+                    loadData(it.averageProgress, it.userProgress)
+                }
             })
-            vm.runPerformance.observer(viewLifecycleOwner) {
-                homePerformanceTv.text = it.remarks
-                homePercentileTv.text = it.percentile.toString()
-                loadData(it.averageProgress, it.userProgress)
-            }
         } else {
             dashboardHomeShimmer.hideAndStop()
             dashboardHome.isVisible = false

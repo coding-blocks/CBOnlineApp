@@ -1,39 +1,33 @@
 package com.codingblocks.cbonlineapp.dashboard.doubts
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.doubts.ChatClickListener
-import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
 import com.codingblocks.cbonlineapp.commons.SheetAdapter
 import com.codingblocks.cbonlineapp.commons.SheetItem
 import com.codingblocks.cbonlineapp.dashboard.ChatActivity
+import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.dashboard.DoubtCommentActivity
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.DOUBT_ID
 import com.codingblocks.cbonlineapp.util.LIVE
-import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.REOPENED
 import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
-import com.codingblocks.cbonlineapp.util.extensions.showEmptyView
-import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
-import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard_doubts.*
@@ -41,32 +35,31 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
 
 
-    private val viewModel by viewModel<DashboardDoubtsViewModel>()
+    private val vm: DashboardViewModel by sharedViewModel()
     private val doubtListAdapter = DashboardDoubtListAdapter()
     private val dialog by lazy { BottomSheetDialog(requireContext()) }
     val list = arrayListOf<SheetItem>()
     val adapter = SheetAdapter(list)
-    private val sharedPrefs by inject<PreferenceHelper>()
 
     private val resolveClickListener: ResolveDoubtClickListener by lazy {
         object : ResolveDoubtClickListener {
             override fun onClick(doubt: DoubtsModel) {
                 if (doubt.status == RESOLVED) {
                     requireContext().showDialog(RESOLVED, cancelable = true) {
-                        viewModel.type.value = RESOLVED
+                        vm.type.value = RESOLVED
                     }
                 } else {
                     requireContext().showDialog(REOPENED, cancelable = true) {
-                        viewModel.type.value = LIVE
+                        vm.type.value = LIVE
                     }
                 }
-                viewModel.resolveDoubt(doubt)
+                vm.resolveDoubt(doubt)
             }
         }
     }
@@ -113,15 +106,15 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
 
         doubtEmptyBtn.setOnClickListener { requireActivity().dashboardPager.currentItem = 1 }
         liveDoubtBtn.setOnClickListener {
-            viewModel.type.value = LIVE
+            vm.type.value = LIVE
         }
 
         resolvedDoubtBtn.setOnClickListener {
-            viewModel.type.value = RESOLVED
+            vm.type.value = RESOLVED
         }
 
         allDoubtBtn.setOnClickListener {
-            viewModel.type.value = ALL
+            vm.type.value = ALL
         }
 
         filterTv.setOnClickListener {
@@ -129,7 +122,7 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
             dialog.show()
         }
 
-        viewModel.type.observer(viewLifecycleOwner) {
+        vm.type.observer(viewLifecycleOwner) {
             when (it) {
                 LIVE -> {
                     liveDoubtBtn.isActivated = true
@@ -154,11 +147,10 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
             }
         }
 
-        if (sharedPrefs.SP_JWT_TOKEN_KEY.isNotEmpty()) {
-
-            viewModel.getRuns().observer(viewLifecycleOwner) {
+        if (vm.isLoggedIn == true) {
+            vm.allRuns.observer(viewLifecycleOwner) {
                 if (it.isNotEmpty()) {
-                    viewModel.attemptId.value = it.first().courseRun.runAttempt.attemptId
+                    vm.attemptId.value = it.first().courseRun.runAttempt.attemptId
                     list.clear()
                     it.forEach {
                         list.add(
@@ -175,9 +167,11 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
             dashboardDoubts.isVisible = false
             dashboardDoubtsLoggedOut.isVisible = true
         }
+
+
         dashboardDoubtRv.setRv(requireContext(), doubtListAdapter, true, "thick")
 
-        viewModel.doubts.observer(viewLifecycleOwner) {
+        vm.doubts.observe(viewLifecycleOwner, Observer {
             doubtListAdapter.submitList(it)
             changeViewState(
                 dashboardDoubtRv,
@@ -186,33 +180,33 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
                 dashboardDoubtShimmer,
                 it.isEmpty()
             )
-        }
-        viewModel.errorLiveData.observer(viewLifecycleOwner) {
-            when (it) {
-                ErrorStatus.NO_CONNECTION -> {
+        })
+//        vm.errorLiveData.observer(viewLifecycleOwner) {
+//            when (it) {
+//                ErrorStatus.NO_CONNECTION -> {
+////                    dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
+//                }
+//                ErrorStatus.TIMEOUT -> {
+//                    dashboardDoubtRoot.showSnackbar(
+//                        it,
+//                        Snackbar.LENGTH_INDEFINITE,
+//                        dashboardBottomNav
+//                    ) {
+//                        vm.fetchDoubts()
+//                    }
+//                }
+//                else -> {
 //                    dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
-                }
-                ErrorStatus.TIMEOUT -> {
-                    dashboardDoubtRoot.showSnackbar(
-                        it,
-                        Snackbar.LENGTH_INDEFINITE,
-                        dashboardBottomNav
-                    ) {
-                        viewModel.fetchDoubts()
-                    }
-                }
-                else -> {
-                    dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
-                    AppCrashlyticsWrapper.log(it)
-                }
-            }
-            if (doubtListAdapter.currentList.isEmpty())
-                showEmptyView(emptyView = emptyLl, shimmerView = dashboardDoubtShimmer)
-        }
+//                    AppCrashlyticsWrapper.log(it)
+//                }
+//            }
+//            if (doubtListAdapter.currentList.isEmpty())
+//                showEmptyView(emptyView = emptyLl, shimmerView = dashboardDoubtShimmer)
+//        }
 
-        viewModel.barMessage.observer(viewLifecycleOwner) {
-            dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav, false)
-        }
+//        viewModel.barMessage.observer(viewLifecycleOwner) {
+//            dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav, false)
+//        }
 
         doubtListAdapter.apply {
             onResolveClick = resolveClickListener
@@ -231,7 +225,7 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
         sheetDialog.run {
             sheetLv.adapter = adapter
             sheetLv.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-                viewModel.attemptId.postValue(list[position].courseId)
+                vm.attemptId.postValue(list[position].courseId)
                 adapter.selectedItem = position
                 dialog.dismiss()
             }
