@@ -67,7 +67,6 @@ class DashboardHomeFragment : BaseCBFragment() {
                         homeCourseLogoImg.loadImage(coursePair.course.logo)
                         coursePair.getProgress().let { progress ->
                             homeProgressTv.text = getString(R.string.progress, progress.toInt())
-                            homeProgressView.progress = progress.toFloat()
                             homeProgressView.setGradientColor(progress)
                         }
 
@@ -102,6 +101,7 @@ class DashboardHomeFragment : BaseCBFragment() {
 }
 
 fun ProgressView.setGradientColor(progress: Double) {
+    this.progress = progress.toFloat()
     if (progress > 90) {
         highlightView.colorGradientStart =
             getColor(context, R.color.kiwigreen)

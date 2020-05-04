@@ -34,6 +34,7 @@ import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
@@ -53,13 +54,17 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
         }
         viewModel.nextContent?.observe(this, Observer { content ->
             courseResumeBtn.setOnClickListener {
-                when (content.contentable) {
-                    LECTURE, VIDEO -> startActivity(
-                        intentFor<VideoPlayerActivity>(
-                            CONTENT_ID to content.contentId,
-                            SECTION_ID to content.sectionId
-                        ).singleTop()
-                    )
+                if (content != null)
+                    when (content.contentable) {
+                        LECTURE, VIDEO -> startActivity(
+                            intentFor<VideoPlayerActivity>(
+                                CONTENT_ID to content.contentId,
+                                SECTION_ID to content.sectionId
+                            ).singleTop()
+                        )
+                    }
+                else {
+                    toast("Please Wait while the content is being updated!")
                 }
             }
         })
@@ -121,8 +126,8 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
 
     companion object {
 
-        fun createMyCourseActivityIntent(context: Context, attemptId: String,name:String = ""): Intent {
-            return context.intentFor<MyCourseActivity>(COURSE_NAME to name,RUN_ATTEMPT_ID to attemptId).singleTop()
+        fun createMyCourseActivityIntent(context: Context, attemptId: String, name: String = ""): Intent {
+            return context.intentFor<MyCourseActivity>(COURSE_NAME to name, RUN_ATTEMPT_ID to attemptId).singleTop()
         }
     }
 }

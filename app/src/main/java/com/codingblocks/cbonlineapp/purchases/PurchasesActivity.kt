@@ -26,16 +26,12 @@ class PurchasesActivity : BaseCBActivity() {
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
-
             override fun onClick(id: String, runId: String, runAttemptId: String, name: String) {
-                startActivity(
-                    intentFor<MyCourseActivity>(
-                        COURSE_ID to id,
-                        RUN_ID to runId,
-                        RUN_ATTEMPT_ID to runAttemptId,
-                        COURSE_NAME to name
-                    ).singleTop()
-                )
+                startActivity(MyCourseActivity.createMyCourseActivityIntent(
+                    this@PurchasesActivity,
+                    runAttemptId,
+                    name
+                ))
             }
         }
     }
