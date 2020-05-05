@@ -69,8 +69,7 @@ class LibraryViewFragment : BaseCBFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ):
-        View? = inflater.inflate(R.layout.fragment_library_view, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_library_view, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -99,7 +98,7 @@ class LibraryViewFragment : BaseCBFragment() {
                     hideRecyclerView(it.isNotEmpty())
                 }
             }
-            getString(R.string.downloads) -> {
+            else -> {
                 libraryListAdapter = LibraryListAdapter(LibraryTypes.DOWNLOADS)
                 vm.fetchDownloads().observe(viewLifecycleOwner) {
                     if (it.isNullOrEmpty()) {
@@ -140,8 +139,8 @@ class LibraryViewFragment : BaseCBFragment() {
         classRoomBtn.setOnClickListener {
             startActivity(MyCourseActivity.createMyCourseActivityIntent(
                 requireContext(),
-                vm.attemptId,
-                requireActivity().title.toString()
+                vm.attemptId!!,
+                vm.name!!
             ))
         }
 

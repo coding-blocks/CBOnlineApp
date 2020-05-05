@@ -9,22 +9,31 @@ import com.codingblocks.cbonlineapp.util.TYPE
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import kotlinx.android.synthetic.main.activity_library.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 class LibraryActivity : BaseCBActivity() {
 
-    val vm by viewModel<LibraryViewModel>()
+    val vm: LibraryViewModel by stateViewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_library)
         setToolbar(libraryToolbar)
-        title = intent.getStringExtra(COURSE_NAME)
-        vm.type = intent.getStringExtra(TYPE) ?: ""
-        vm.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
-        if (vm.type != "") {
-            replaceFragmentSafely(LibraryViewFragment(), containerViewId = R.id.libraryContainer)
-        } else {
+        intent.getStringExtra(COURSE_NAME)?.let {
+            vm.name = it
+        }
+        intent.getStringExtra(TYPE)?.let {
+            vm.type = it
+        }
+        intent.getStringExtra(RUN_ATTEMPT_ID)?.let {
+            vm.attemptId = it
+        }
+        title = vm.name
+        if (vm.type.isNullOrEmpty()) {
             replaceFragmentSafely(LibraryHomeFragment(), containerViewId = R.id.libraryContainer)
+        } else {
+            replaceFragmentSafely(LibraryViewFragment(), containerViewId = R.id.libraryContainer)
+
         }
     }
 }

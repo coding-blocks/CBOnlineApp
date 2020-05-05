@@ -171,9 +171,9 @@ class SignInFragment : BaseCBFragment() {
         with(requireActivity()) {
             finish()
             if (callingActivity == null) {
-                setResult(RESULT_OK)
-            } else {
                 startActivity(DashboardActivity.createDashboardActivityIntent(requireContext(), true))
+            } else {
+                setResult(RESULT_OK)
             }
         }
 

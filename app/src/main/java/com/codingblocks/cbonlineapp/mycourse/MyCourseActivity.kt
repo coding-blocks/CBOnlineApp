@@ -13,14 +13,12 @@ import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.content.CourseContentFragment
 import com.codingblocks.cbonlineapp.mycourse.library.CourseLibraryFragment
 import com.codingblocks.cbonlineapp.mycourse.overview.OverviewFragment
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.extensions.animateVisibility
@@ -46,9 +44,14 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_course)
         setToolbar(toolbar_mycourse)
-        title = intent.getStringExtra(COURSE_NAME)
-        viewModel.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
-        viewModel.name = intent.getStringExtra(COURSE_NAME) ?: ""
+        intent.getStringExtra(RUN_ATTEMPT_ID)?.let {
+            viewModel.attemptId = it
+        }
+        intent.getStringExtra(COURSE_NAME)?.let {
+            viewModel.name = it
+        }
+        title = viewModel.name
+
         if (!MediaUtils.checkPermission(this)) {
             MediaUtils.isStoragePermissionGranted(this)
         }
@@ -56,12 +59,7 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
             courseResumeBtn.setOnClickListener {
                 if (content != null)
                     when (content.contentable) {
-                        LECTURE, VIDEO -> startActivity(
-                            intentFor<VideoPlayerActivity>(
-                                CONTENT_ID to content.contentId,
-                                SECTION_ID to content.sectionId
-                            ).singleTop()
-                        )
+                        LECTURE, VIDEO -> startActivity(createVideoPlayerActivityIntent(this, content.contentId, content.sectionId))
                     }
                 else {
                     toast("Please Wait while the content is being updated!")

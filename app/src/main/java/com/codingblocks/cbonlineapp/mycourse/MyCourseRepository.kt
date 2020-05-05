@@ -88,15 +88,12 @@ class MyCourseRepository(
     /**
      *Function to delete [SectionModel] which are no longer part of course content.
      */
-    private suspend fun deleteOldSections(list1: List<String>, id: String?) {
-        val list2 = withContext(Dispatchers.IO) { sectionDao.getCourseSection(id!!) }
-        val sum = list1 + list2
-        val finalList = sum.groupBy { it }
-            .filter { it.value.size == 1 }
-            .flatMap { it.value }
-
-        finalList.forEach {
-            sectionDao.deleteSection(it)
+    private suspend fun deleteOldSections(newList: List<String>, id: String?) {
+        val oldList = withContext(Dispatchers.IO) { sectionDao.getCourseSection(id!!) }
+        oldList.forEach {
+            if (!newList.contains(it)) {
+                sectionDao.deleteSection(it)
+            }
         }
     }
 

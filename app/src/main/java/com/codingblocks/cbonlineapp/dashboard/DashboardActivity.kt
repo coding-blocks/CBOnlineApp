@@ -65,7 +65,7 @@ class DashboardActivity : BaseCBActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        vm.isLoggedIn = intent.getBooleanExtra(LOGGED_IN, false)
+        vm.isLoggedIn = intent?.getBooleanExtra(LOGGED_IN, false)
 
         setToolbar(dashboardToolbar, hasUpEnabled = false, homeButtonEnabled = false, title = getString(R.string.dashboard))
         val toggle = ActionBarDrawerToggle(this, dashboardDrawer, dashboardToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)

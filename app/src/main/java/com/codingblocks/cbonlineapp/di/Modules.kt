@@ -45,18 +45,15 @@ val viewModelModule = module {
     viewModel { (handle: SavedStateHandle) -> MyCourseViewModel(handle, get()) }
     viewModel { LeaderboardViewModel() }
     viewModel { NotificationViewModel(get()) }
-
-    // Activities
-    viewModel { VideoPlayerViewModel(get(), get(), get()) }
+    viewModel { (handle: SavedStateHandle) ->VideoPlayerViewModel(handle,get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { JobsViewModel(get()) }
     viewModel { JobDetailViewModel(get(), get()) }
-
     viewModel { AdminDoubtsViewModel(get()) }
     viewModel { AdminOverviewViewModel(get(), get()) }
     viewModel { DashboardDoubtsViewModel(get()) }
     viewModel { CourseViewModel(get()) }
-    viewModel { LibraryViewModel(get(), get()) }
+    viewModel { (handle: SavedStateHandle) ->LibraryViewModel(handle,get(), get()) }
     viewModel { (handle: SavedStateHandle) -> DashboardViewModel(handle,get(), get(), get(),get(),get()) }
     viewModel { QuizViewModel(get()) }
     viewModel { CheckoutViewModel() }

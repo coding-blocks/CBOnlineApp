@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.library
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.Data
@@ -13,8 +14,12 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.mycourse.player.notes.NotesWorker
+import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.TYPE
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
+import com.codingblocks.cbonlineapp.util.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Note
@@ -23,17 +28,18 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 class LibraryViewModel(
+    private val handle: SavedStateHandle,
     private val repo: LibraryRepository,
     private val courseRepo: MyCourseRepository
 ) : BaseCBViewModel() {
-    var attemptId: String = ""
-    var type: String = ""
-    var name: String = ""
+    var attemptId: String? by savedStateValue(handle, RUN_ATTEMPT_ID)
+    var type: String? by savedStateValue(handle, TYPE)
+    var name: String? by savedStateValue(handle, COURSE_NAME)
 
     fun fetchNotes(): LiveData<List<NotesModel>> {
-        val notes = repo.getNotes(attemptId)
+        val notes = repo.getNotes(attemptId!!)
         runIO {
-            when (val response = repo.fetchCourseNotes(attemptId)) {
+            when (val response = repo.fetchCourseNotes(attemptId!!)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
@@ -51,8 +57,8 @@ class LibraryViewModel(
 
     fun fetchSections() {
         runIO {
-            if (withContext(Dispatchers.IO) { courseRepo.getSectionWithContentNonLive(attemptId) }.isEmpty())
-                when (val response = courseRepo.fetchSections(attemptId)) {
+            if (withContext(Dispatchers.IO) { courseRepo.getSectionWithContentNonLive(attemptId!!) }.isEmpty())
+                when (val response = courseRepo.fetchSections(attemptId!!)) {
                     is ResultWrapper.GenericError -> setError(response.error)
                     is ResultWrapper.Success -> {
                         if (response.value.isSuccessful)
@@ -108,8 +114,8 @@ class LibraryViewModel(
             .enqueue(request)
     }
 
-    fun fetchBookmarks() = repo.getBookmarks(attemptId)
-    fun fetchDownloads() = repo.getDownloads(attemptId)
+    fun fetchBookmarks() = repo.getBookmarks(attemptId!!)
+    fun fetchDownloads() = repo.getDownloads(attemptId!!)
     fun updateDownload(status: Int, lectureId: String) = runIO { repo.updateDownload(status, lectureId) }
 
     fun removeBookmark(id: String) {
