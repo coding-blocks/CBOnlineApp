@@ -61,15 +61,16 @@ class DashboardHomeFragment : BaseCBFragment() {
                     vm.getStats(coursePair.runAttempt.attemptId)
                     dashboardHomeShimmer.hideAndStop()
                     dashboardHome.isVisible = true
-                    activity?.let {
-                        toolbarCourseTitleTv?.text = coursePair.course.title
-                        toolbarCourseResumeTv?.isVisible = true
-                        homeCourseLogoImg.loadImage(coursePair.course.logo)
-                        coursePair.getProgress().let { progress ->
-                            homeProgressTv.text = getString(R.string.progress, progress.toInt())
-                            homeProgressView.setGradientColor(progress)
-                        }
+                    homeCourseLogoImg.loadImage(coursePair.course.logo)
+                    coursePair.getProgress().let { progress ->
+                        homeProgressTv.text = getString(R.string.progress, progress.toInt())
+                        homeProgressView.setGradientColor(progress)
+                    }
 
+                    with(requireActivity()) {
+                        toolbarCourseTitleTv?.text = coursePair.course.title
+                        toolbarCourseTitleTv?.isVisible = true
+                        toolbarCourseResumeTv?.isVisible = true
                         dashboardToolbarSecondary?.setOnClickListener {
                             startActivity(MyCourseActivity.createMyCourseActivityIntent(
                                 requireContext(),

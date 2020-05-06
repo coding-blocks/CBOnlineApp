@@ -89,11 +89,11 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     VdoPlayer.InitializationListener, VdoPlayerControls.FullscreenActionListener,
     VdoPlayerControls.ControllerVisibilityListener, YouTubePlayerFullScreenListener {
 
-    private val vm:VideoPlayerViewModel by stateViewModel()
+    private val vm: VideoPlayerViewModel by stateViewModel()
 
     private val animationUtils by lazy { Animations(this) }
     private val progressDialog by lazy { ProgressDialog.progressDialog(this) }
-    private val dialog by lazy { BottomSheetDialog(this) }
+    private val dialog: BottomSheetDialog by lazy { BottomSheetDialog(this) }
     private val sheetDialog: View by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, playerRoot) }
     val tracker = YouTubePlayerTracker()
 
@@ -112,11 +112,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         intent.getStringExtra(SECTION_ID)?.let {
             vm.sectionId = it
         }
-        if (savedInstanceState == null) {
             setUpBottomSheet()
             setupViewPager()
             setupUI()
-        }
+
     }
 
     private fun setupUI() {
@@ -330,7 +329,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             setControllerVisibilityListener(this@VideoPlayerActivity)
         }
         showControls(true)
-        player.load(getVdoParams())
     }
 
     /**Function to generate new /Reload Video for opt and videoId*/
