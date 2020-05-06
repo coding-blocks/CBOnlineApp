@@ -105,17 +105,13 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_player)
-
-        intent.getStringExtra(CONTENT_ID)?.let {
-            vm.currentContentId = it
-        }
-        intent.getStringExtra(SECTION_ID)?.let {
-            vm.sectionId = it
+        if (savedInstanceState == null) {
+            vm.currentContentId = intent.getStringExtra(CONTENT_ID)
+            vm.sectionId = intent.getStringExtra(SECTION_ID)
         }
         setUpBottomSheet()
         setupViewPager()
         setupUI()
-
 
     }
 
@@ -130,7 +126,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }.sortedBy { it.order }, vm.currentContentId!!)
         }
         sectionItemsAdapter.onItemClick = {
-            startActivity(createVideoPlayerActivityIntent(this, it.ccid, vm.sectionId?:""))
+            startActivity(createVideoPlayerActivityIntent(this, it.ccid, vm.sectionId ?: ""))
         }
 
         rootLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
@@ -717,12 +713,16 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
     override fun onStop() {
         vm.position = videoPlayer.currentTime
+        if (::playerFragment.isInitialized) {
+            vm.savePlayerState(playerFragment.player.currentTime)
+        }
         super.onStop()
     }
 
     override fun onDestroy() {
-        if (::playerFragment.isInitialized)
+        if (::playerFragment.isInitialized) {
             playerFragment.player?.release()
+        }
         super.onDestroy()
     }
 

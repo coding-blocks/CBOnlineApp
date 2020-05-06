@@ -14,6 +14,9 @@ class SectionItemsAdapter : ListAdapter<ListObject, RecyclerView.ViewHolder>(dif
 
     var starter: DownloadStarter? = null
     var onItemClick: ((ListObject) -> Unit)? = null
+    init {
+        setHasStableIds(true)
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
@@ -41,6 +44,13 @@ class SectionItemsAdapter : ListAdapter<ListObject, RecyclerView.ViewHolder>(dif
 
     override fun getItemViewType(position: Int): Int {
         return getItem(position).getType()
+    }
+
+    override fun getItemId(position: Int): Long {
+        return when(currentList[position].getType()){
+            ListObject.TYPE_SECTION -> (getItem(position) as SectionModel).csid.toLong()
+            else -> (getItem(position) as ContentModel).ccid.toLong()
+        }
     }
 
     companion object {

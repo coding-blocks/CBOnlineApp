@@ -4,9 +4,11 @@ import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.NotesDao
+import com.codingblocks.cbonlineapp.database.PlayerDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
+import com.codingblocks.cbonlineapp.database.models.PlayerState
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.Doubts
@@ -17,7 +19,8 @@ class VideoPlayerRepository(
     private val notesDao: NotesDao,
     private val contentDao: ContentDao,
     private val bookmarkDao: BookmarkDao,
-    private val sectionDao: SectionWithContentsDao
+    private val sectionDao: SectionWithContentsDao,
+    private val playerDao: PlayerDao
 ) {
     suspend fun fetchCourseNotes(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.getNotesByAttemptId(attemptId) }
 
@@ -96,4 +99,8 @@ class VideoPlayerRepository(
     fun getBookmark(contentId: String) = bookmarkDao.getBookmarkById(contentId)
 
     suspend fun updateDownload(status: Int, lectureId: String) = contentDao.updateContentWithVideoId(lectureId, status)
+
+    suspend fun savePlayerState(attemptId: String, sectionId: String, contentId: String, time: Long) {
+        playerDao.insert(PlayerState(attemptId,sectionId,contentId,time))
+    }
 }
