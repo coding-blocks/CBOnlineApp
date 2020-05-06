@@ -4,20 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
-import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.onlineapi.models.ProgressItem
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
@@ -27,18 +27,16 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.skydoves.progressview.ProgressView
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard_home.*
-import kotlinx.android.synthetic.main.fragment_dashboard_home.chart1
-import kotlinx.android.synthetic.main.fragment_dashboard_home.homeProgressTv
-import kotlinx.android.synthetic.main.fragment_dashboard_home.homeProgressView
-import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.support.v4.intentFor
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DashboardHomeFragment : BaseCBFragment() {
 
     private val vm: DashboardViewModel by sharedViewModel()
+
+    private val recentlyPlayedAdapter = RecentlyPlayedAdapter()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +51,8 @@ class DashboardHomeFragment : BaseCBFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recentPlayedRv.setRv(requireContext(), recentlyPlayedAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
+
         if (vm.isLoggedIn == true) {
             vm.fetchTopRunWithStats().getDistinct().observe(viewLifecycleOwner, Observer { coursePair ->
                 dashboardProgressContainer.isVisible = coursePair != null
@@ -86,6 +86,11 @@ class DashboardHomeFragment : BaseCBFragment() {
                     }
                 }
             })
+
+            vm.fetchRecentlyPlayed().observer(viewLifecycleOwner) {
+                recentlyPlayedContainer.isVisible = it.isNotEmpty()
+                recentlyPlayedAdapter.submitList(it)
+            }
         } else {
             dashboardHomeShimmer.hideAndStop()
             dashboardHome.isVisible = false

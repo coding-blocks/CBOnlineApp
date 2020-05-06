@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 29,
-    "identityHash": "cbb1e051016650dd3289644660ba55e6",
+    "identityHash": "0d2724c2bd0df52d11fdf5c4321eb8a1",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -1302,7 +1302,7 @@
       },
       {
         "tableName": "PlayerState",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`attemptId` TEXT NOT NULL, `sectionId` TEXT NOT NULL, `contentId` TEXT NOT NULL, `duration` INTEGER NOT NULL, `lastAccessedAt` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`sectionId`) REFERENCES `SectionModel`(`csid`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`contentId`) REFERENCES `ContentModel`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`attemptId` TEXT NOT NULL, `sectionId` TEXT NOT NULL, `contentId` TEXT NOT NULL, `duration` INTEGER NOT NULL, `lastAccessedAt` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `sectionName` TEXT NOT NULL, `contentTitle` TEXT NOT NULL, FOREIGN KEY(`sectionId`) REFERENCES `SectionModel`(`csid`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`contentId`) REFERENCES `ContentModel`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "attemptId",
@@ -1338,6 +1338,18 @@
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sectionName",
+            "columnName": "sectionName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentTitle",
+            "columnName": "contentTitle",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -1386,7 +1398,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cbb1e051016650dd3289644660ba55e6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0d2724c2bd0df52d11fdf5c4321eb8a1')"
     ]
   }
 }

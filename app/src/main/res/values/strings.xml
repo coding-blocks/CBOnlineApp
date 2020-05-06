@@ -282,4 +282,5 @@
     <string name="submit">Submit</string>
     <string name="back_press">Please click Back again to exit</string>
     <string name="progress" >%d %%</string>
+    <string name="continue_from_where_you_left">Continue from where you left</string>
 </resources>

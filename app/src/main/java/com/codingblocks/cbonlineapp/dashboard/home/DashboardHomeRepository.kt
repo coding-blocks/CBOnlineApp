@@ -1,7 +1,7 @@
 package com.codingblocks.cbonlineapp.dashboard.home
 
-import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.database.PlayerDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
@@ -15,7 +15,8 @@ import com.codingblocks.onlineapi.safeApiCall
 class DashboardHomeRepository(
     private val courseWithInstructorDao: CourseWithInstructorDao,
     private val runPerformanceDao: RunPerformanceDao,
-    val prefs: PreferenceHelper
+    val prefs: PreferenceHelper,
+    val playerDao: PlayerDao
 
 ) {
     fun insertUser(user: User) {
@@ -49,6 +50,8 @@ class DashboardHomeRepository(
     fun getTopRun() = courseWithInstructorDao.getTopRun().getDistinct()
     fun getTopRunById(id: String) = courseWithInstructorDao.getRunById(id).getDistinct()
     fun getRunStats(it: String) = runPerformanceDao.getPerformance(it)
+    fun getRecentlyPlayed() = playerDao.getPromotedStories()
+
 
     suspend fun updatePlayerId(player: Player) = safeApiCall { Clients.onlineV2JsonApi.setPlayerId(player) }
     suspend fun fetchLastAccessedRun() = safeApiCall { Clients.onlineV2JsonApi.getLastAccessed() }

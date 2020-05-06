@@ -12,6 +12,7 @@ import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
+import com.codingblocks.cbonlineapp.database.models.PlayerState
 import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
@@ -172,6 +173,7 @@ class DashboardViewModel(
             myCourseRepo.getMyRuns(query)
         }
     }
+
     fun fetchMyCourses(offset: String = "0") {
         runIO {
             when (val response = myCourseRepo.fetchMyCourses(offset)) {
@@ -235,6 +237,10 @@ class DashboardViewModel(
                 }
             }
         }
+    }
+
+    fun fetchRecentlyPlayed() = liveData(Dispatchers.IO) {
+        emitSource(homeRepo.getRecentlyPlayed())
     }
 
     /**

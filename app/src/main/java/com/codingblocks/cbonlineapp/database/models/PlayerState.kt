@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.database.models
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
@@ -25,14 +24,9 @@ class PlayerState(
     var duration: Long,
     val lastAccessedAt: Long = System.currentTimeMillis(),
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0
-    ) {
-    constructor() : this("",  "", "",0L)
-
-    @Ignore
-    lateinit var sectionName: String
-
-    @Ignore
-    lateinit var contentTitle: String
-
+    val id: Int = 0,
+    var sectionName: String = "",
+    var contentTitle: String = ""
+) {
+    constructor() : this("", "", "", 0L)
 }
