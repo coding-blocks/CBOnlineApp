@@ -204,6 +204,16 @@
             android:name="com.razorpay.ApiKey"
             android:value="rzp_live_I5IJibPxZuZfWT" />
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/paths" />
+        </provider>
+
         <receiver
             android:name=".admin.doubts.DoubtReceiver"
             android:enabled="true"
@@ -215,6 +225,10 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".util.CertificateDownloadReceiver"
+            android:enabled="true"
+            android:exported="false"/>
 
         <service
             android:name=".util.EndlessService"
