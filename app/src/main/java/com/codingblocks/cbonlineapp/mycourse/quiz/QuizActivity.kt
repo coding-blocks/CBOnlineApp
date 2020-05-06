@@ -19,15 +19,14 @@ class QuizActivity : BaseCBActivity() {
         setContentView(R.layout.activity_quiz)
         setToolbar(quizToolbar, hasUpEnabled = true, homeButtonEnabled = true)
         viewModel.contentId = intent.getStringExtra(CONTENT_ID) ?: ""
-
         replaceFragmentSafely(AboutQuizFragment(), containerViewId = R.id.quizContainer)
     }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount == 0) {
-            Components.showConfirmation(this, "exit")
+        if (supportFragmentManager.backStackEntryCount == 1) {
+            Components.showConfirmation(this, "leave")
         } else {
-            supportFragmentManager.popBackStack()
+            finish()
         }
     }
 }

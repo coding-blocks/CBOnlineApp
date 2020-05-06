@@ -56,7 +56,7 @@ class AboutQuizFragment : BaseCBFragment(), AnkoLogger {
     }
 
     private fun setupViewPager() {
-        val adapter = TabLayoutAdapter(parentFragmentManager)
+        val adapter = TabLayoutAdapter(childFragmentManager)
         adapter.add(QuizInfoFragment(), "About")
         adapter.add(QuizSubmissionsFragment(), "Submissions")
         quizViewPager.adapter = adapter
