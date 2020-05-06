@@ -50,7 +50,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     ): View {
       val view =  inflater.inflate(R.layout.fragment_overview, container, false)
         receiver = CertificateDownloadReceiver()
-        activity?.registerReceiver(receiver,IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+        requireActivity().registerReceiver(receiver,IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
         return view
     }
 
@@ -228,7 +228,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     }
 
     override fun onDestroy() {
-        activity?.unregisterReceiver(receiver)
+        requireActivity().unregisterReceiver(receiver)
         super.onDestroy()
     }
 }
