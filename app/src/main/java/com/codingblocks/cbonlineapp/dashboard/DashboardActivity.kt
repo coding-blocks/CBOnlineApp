@@ -124,6 +124,11 @@ class DashboardActivity : BaseCBActivity(),
             add(ViewPager2Adapter.FragmentName.DOUBTS)
             add(ViewPager2Adapter.FragmentName.LIBRARY)
         }
+        dashboardPager.apply {
+            isUserInputEnabled = false
+            adapter = pagerAdapter
+            offscreenPageLimit = 4
+        }
         if (loggedIn) {
             setUser()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
@@ -136,12 +141,7 @@ class DashboardActivity : BaseCBActivity(),
             }
             dashboardBottomNav.selectedItemId = R.id.dashboard_explore
         }
-        dashboardPager.apply {
-            isUserInputEnabled = false
-            adapter = pagerAdapter
-            currentItem  = if(loggedIn) 2 else 0
-            offscreenPageLimit = 4
-        }
+
         dashboardAppBarLayout.bringToFront()
 
     }

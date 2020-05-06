@@ -46,6 +46,7 @@ import io.noties.markwon.Markwon
 import io.noties.markwon.core.CorePlugin
 import kotlinx.android.synthetic.main.activity_course.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
@@ -184,7 +185,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 ErrorStatus.UNAUTHORIZED -> {
                     Components.showConfirmation(this, UNAUTHORIZED) {
                         if (it) {
-                            startForResult(Intent(this, LoginActivity::class.java))
+                            startForResult(intentFor<LoginActivity>())
                         }
                     }
                 }

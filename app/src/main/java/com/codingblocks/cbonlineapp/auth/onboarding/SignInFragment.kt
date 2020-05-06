@@ -167,14 +167,17 @@ class SignInFragment : BaseCBFragment() {
         }
     }
 
+    /**
+     * Always call finish after setResult or startActivity otherwise you'll lose reference of previous activity
+     */
     private fun navigateToActivity() {
         with(requireActivity()) {
-            finish()
             if (callingActivity == null) {
                 startActivity(DashboardActivity.createDashboardActivityIntent(requireContext(), true))
             } else {
                 setResult(RESULT_OK)
             }
+            finish()
         }
 
     }

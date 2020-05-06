@@ -112,9 +112,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         intent.getStringExtra(SECTION_ID)?.let {
             vm.sectionId = it
         }
-            setUpBottomSheet()
-            setupViewPager()
-            setupUI()
+        setUpBottomSheet()
+        setupViewPager()
+        setupUI()
+
 
     }
 
@@ -129,12 +130,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }.sortedBy { it.order }, vm.currentContentId!!)
         }
         sectionItemsAdapter.onItemClick = {
-            startActivity(
-                intentFor<VideoPlayerActivity>(
-                    CONTENT_ID to it.ccid,
-                    SECTION_ID to vm.sectionId
-                ).singleTop()
-            )
+            startActivity(createVideoPlayerActivityIntent(this, it.ccid, vm.sectionId?:""))
         }
 
         rootLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
@@ -407,6 +403,8 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         override fun onLoaded(p0: VdoPlayer.VdoInitParams?) {
             videoPlayer.playWhenReady = true
             videoPlayer.playbackSpeed = vm.prefs.SP_PLAYBACK_SPEED
+            vm.position?.let { videoPlayer.seekTo(it) }
+
         }
 
         override fun onBufferUpdate(p0: Long) {
@@ -717,6 +715,11 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         dialog.show()
     }
 
+    override fun onStop() {
+        vm.position = videoPlayer.currentTime
+        super.onStop()
+    }
+
     override fun onDestroy() {
         if (::playerFragment.isInitialized)
             playerFragment.player?.release()
@@ -751,6 +754,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
         vm.currentContentId = intent.getStringExtra(CONTENT_ID) ?: ""
         vm.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
+        vm.position = 0L
         if (::playerFragment.isInitialized) {
             playerFragment.player.release()
         }

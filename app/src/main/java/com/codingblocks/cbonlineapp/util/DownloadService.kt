@@ -38,7 +38,7 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
 
     private val contentDao: ContentDao by inject()
 
-    private val notificationManager by lazy {
+    private val notificationManager:NotificationManager by lazy {
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 

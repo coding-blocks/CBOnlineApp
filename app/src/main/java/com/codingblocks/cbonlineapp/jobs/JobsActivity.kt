@@ -25,7 +25,7 @@ class JobsActivity : BaseCBActivity() {
     private val viewModel by viewModel<JobsViewModel>()
     private val jobsAdapter = JobsAdapter()
 
-    private val bottomSheetDialog by lazy {
+    private val bottomSheetDialog:SheetDialog by lazy {
         SheetDialog(this, R.style.sheetStyle)
     }
 

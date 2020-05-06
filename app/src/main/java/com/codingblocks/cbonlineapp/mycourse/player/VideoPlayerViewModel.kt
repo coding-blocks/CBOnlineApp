@@ -37,6 +37,7 @@ import com.codingblocks.onlineapi.models.Sections
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
+const val VIDEO_POSITION = "videoPos"
 class VideoPlayerViewModel(
     handle: SavedStateHandle,
     private val repo: VideoPlayerRepository,
@@ -49,7 +50,8 @@ class VideoPlayerViewModel(
 
     var currentVideoId = MutableLiveData<String>()
     var currentContentId by savedStateValue<String>(handle, CONTENT_ID)
-    var currentContentIdLive = handle.getLiveData<String>(CONTENT_ID)
+    private var currentContentIdLive = handle.getLiveData<String>(CONTENT_ID)
+    var position by savedStateValue<Long>(handle,VIDEO_POSITION)
     var currentContentProgress: String = "UNDONE"
 
     var mOtp: String? = null

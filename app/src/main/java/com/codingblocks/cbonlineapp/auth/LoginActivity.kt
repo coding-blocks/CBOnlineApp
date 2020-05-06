@@ -15,7 +15,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : BaseCBActivity(), AnkoLogger {
 
-    val vm by viewModel<AuthViewModel>()
+    val vm:AuthViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

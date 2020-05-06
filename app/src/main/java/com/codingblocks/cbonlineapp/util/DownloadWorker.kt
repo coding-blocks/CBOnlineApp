@@ -37,7 +37,7 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
     KoinComponent,
     VdoDownloadManager.EventListener {
 
-    private val notificationManager by lazy {
+    private val notificationManager:NotificationManager by lazy {
         applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
