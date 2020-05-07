@@ -108,6 +108,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         if (savedInstanceState == null) {
             vm.currentContentId = intent.getStringExtra(CONTENT_ID)
             vm.sectionId = intent.getStringExtra(SECTION_ID)
+            vm.position = intent.getLongExtra(VIDEO_POSITION, 0)
         }
         setUpBottomSheet()
         setupViewPager()
