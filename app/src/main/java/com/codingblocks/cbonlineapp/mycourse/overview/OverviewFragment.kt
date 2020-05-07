@@ -19,10 +19,8 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
-import com.codingblocks.cbonlineapp.util.Certificate
 import com.codingblocks.cbonlineapp.util.CertificateDownloadReceiver
 import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.DownloadBroadcastReceiver
 import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.onlineapi.models.ProgressItem
@@ -139,7 +137,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             intentShareFile.putExtra(Intent.EXTRA_STREAM, fileUri)
             startActivity(Intent.createChooser(intentShareFile, "Share Certificate"))
         } else {
-            Certificate.downloadCertificateAndShow(context, certificateUrl, name)
+            viewModel.downloadCertificateAndShow(context, certificateUrl, name)
         }
     }
 
