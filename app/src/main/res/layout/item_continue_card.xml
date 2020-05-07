@@ -3,40 +3,76 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="280dp"
-    android:layout_height="wrap_content"
+    android:layout_height="120dp"
     android:layout_marginStart="@dimen/margin_large"
+    android:layout_marginTop="@dimen/margin_small"
+    android:layout_marginBottom="@dimen/margin_small"
+    android:background="?attr/selectableItemBackgroundBorderless"
     android:clickable="true"
     android:focusable="true"
-    android:layout_marginTop="@dimen/margin_small"
-    android:background="?attr/selectableItemBackgroundBorderless"
-    android:layout_marginBottom="@dimen/margin_small"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="@dimen/card_corner_radius">
+    app:shapeAppearance="@style/CardShapeApperance">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:orientation="vertical">
 
-        <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+        <ImageView
+            android:id="@+id/thumbnailImg"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium" />
+
+        <TextView
             android:id="@+id/sectionTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@id/thumbnailImg"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/thumbnailImg"
             android:fontFamily="@font/gilroy_bold"
-            android:textSize="16sp"
+            android:textColor="@color/brownish_grey"
+            android:textSize="14sp"
             tools:text="Kotlin Fundamentals" />
 
         <TextView
             android:id="@+id/contentTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_below="@id/sectionTitle"
+            android:layout_alignStart="@id/sectionTitle"
             android:fontFamily="@font/gilroy_medium"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/orangish"
             tools:text="Difference Between Val &amp; Var" />
 
+        <TextView
+            android:id="@+id/progressTv"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contentTitle"
+            android:layout_alignStart="@id/sectionTitle"
+            android:fontFamily="@font/gilroy_medium"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            tools:text="50% Completed" />
 
-    </LinearLayout>
+        <ProgressBar
+            android:id="@id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:progress="50"
+            android:progressTint="@color/orangish" />
+
+
+    </RelativeLayout>
 
 
 </com.google.android.material.card.MaterialCardView>

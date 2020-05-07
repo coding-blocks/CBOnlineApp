@@ -262,5 +262,13 @@
         <item name="fontSize">10sp</item>
     </style>
 
+    <style name="CardShapeApperance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">4dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeTopRight">4dp</item>
+    </style>
+
 
 </resources>

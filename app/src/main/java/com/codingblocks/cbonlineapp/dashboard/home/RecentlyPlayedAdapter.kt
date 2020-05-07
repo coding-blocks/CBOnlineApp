@@ -46,7 +46,7 @@ class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         contentTitle.text = item.contentTitle
         setOnClickListener {
             itemClickListener?.onClick(
-                item.sectionId, item.contentId, item.duration
+                item.sectionId, item.contentId, item.position
             )
         }
     }

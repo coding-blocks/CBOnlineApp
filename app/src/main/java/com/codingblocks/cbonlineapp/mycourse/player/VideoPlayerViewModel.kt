@@ -23,6 +23,7 @@ import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
 import com.codingblocks.cbonlineapp.util.savedStateValue
@@ -336,8 +337,19 @@ class VideoPlayerViewModel(
      */
     fun savePlayerState(currentTime: Long) {
         runIO {
-            if (currentContentProgress != "DONE")
+            if (currentContentProgress != "DONE") {
                 attemptId.value?.let { repo.savePlayerState(it, sectionId!!, currentContentId!!, currentTime) }
+                val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+                val thumbnailData: Data = workDataOf(VIDEO_ID to currentVideoId, CONTENT_ID to currentContentId)
+                val request: OneTimeWorkRequest =
+                    OneTimeWorkRequestBuilder<ThumbnailWorker>()
+                        .setConstraints(constraints)
+                        .setInputData(thumbnailData)
+                        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                        .build()
+
+                WorkManager.getInstance().enqueue(request)
+            }
         }
     }
 }

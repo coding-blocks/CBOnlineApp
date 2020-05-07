@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.database.models
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
@@ -21,12 +22,15 @@ class PlayerState(
     var attemptId: String,
     var sectionId: String,
     val contentId: String,
-    var duration: Long,
+    var position: Long,
     val lastAccessedAt: Long = System.currentTimeMillis(),
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
+    @Ignore
     var sectionName: String = "",
-    var contentTitle: String = ""
-) {
-    constructor() : this("", "", "", 0L)
-}
+    @Ignore
+    var contentTitle: String = "",
+    @Ignore
+    var contentDuration: Long = 0L,
+    var thumbnail: String = ""
+)

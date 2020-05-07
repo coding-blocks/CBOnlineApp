@@ -101,6 +101,6 @@ class VideoPlayerRepository(
     suspend fun updateDownload(status: Int, lectureId: String) = contentDao.updateContentWithVideoId(lectureId, status)
 
     suspend fun savePlayerState(attemptId: String, sectionId: String, contentId: String, time: Long) {
-        playerDao.insert(PlayerState(attemptId,sectionId,contentId,time))
+        playerDao.insert(PlayerState(attemptId, sectionId, contentId, time))
     }
 }
