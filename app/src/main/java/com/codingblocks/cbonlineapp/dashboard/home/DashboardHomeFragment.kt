@@ -41,11 +41,12 @@ class DashboardHomeFragment : BaseCBFragment() {
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
             override fun onClick(sectionId: String, contentId: String, postition: Long) {
-                startActivity(VideoPlayerActivity.createVideoPlayerActivityIntent(requireContext(), contentId, sectionId,position))
+                startActivity(VideoPlayerActivity.createVideoPlayerActivityIntent(requireContext(), contentId, sectionId, postition))
             }
 
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,6 +61,7 @@ class DashboardHomeFragment : BaseCBFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recentPlayedRv.setRv(requireContext(), recentlyPlayedAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
+        recentlyPlayedAdapter.onItemClick = itemClickListener
 
         if (vm.isLoggedIn == true) {
             vm.fetchTopRunWithStats().getDistinct().observe(viewLifecycleOwner, Observer { coursePair ->
@@ -110,6 +112,11 @@ class DashboardHomeFragment : BaseCBFragment() {
             startActivity(intentFor<LoginActivity>())
             requireActivity().finish()
         }
+    }
+
+    override fun onDestroyView() {
+        recentlyPlayedAdapter.onItemClick = null
+        super.onDestroyView()
     }
 
 }

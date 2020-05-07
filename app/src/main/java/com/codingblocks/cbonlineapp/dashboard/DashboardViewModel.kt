@@ -11,6 +11,7 @@ import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
+import com.codingblocks.cbonlineapp.database.models.CourseRunPair
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.database.models.PlayerState
 import com.codingblocks.cbonlineapp.util.ALL
@@ -204,7 +205,7 @@ class DashboardViewModel(
      * Home Fragment Top Course Run and Stats
      */
 
-    fun fetchTopRunWithStats() = liveData(Dispatchers.IO) {
+    fun fetchTopRunWithStats() = liveData<CourseRunPair>(Dispatchers.IO) {
         when (val response = homeRepo.fetchLastAccessedRun()) {
             is ResultWrapper.GenericError -> {
                 if (response.code in 101..103)
@@ -216,6 +217,7 @@ class DashboardViewModel(
                     myCourseRepo.insertCourses(listOf(body()!!))
                     emitSource(homeRepo.getTopRunById(body()!!.runAttempts!!.first().id))
                 } else {
+                    emitSource(MutableLiveData(null))
                     setError(fetchError(code()))
                 }
             }

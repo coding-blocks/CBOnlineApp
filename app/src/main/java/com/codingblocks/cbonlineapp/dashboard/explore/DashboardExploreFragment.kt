@@ -142,9 +142,9 @@ class DashboardExploreFragment : BaseCBFragment() {
 
 
     override fun onDestroyView() {
-        super.onDestroyView()
         courseCardListAdapter.onItemClick = null
         coursePopularListAdapter.onItemClick = null
         tracksListAdapter.onItemClick = null
+        super.onDestroyView()
     }
 }
