@@ -340,7 +340,7 @@ class VideoPlayerViewModel(
             if (currentContentProgress != "DONE") {
                 attemptId.value?.let { repo.savePlayerState(it, sectionId!!, currentContentId!!, currentTime) }
                 val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-                val thumbnailData: Data = workDataOf(VIDEO_ID to currentVideoId, CONTENT_ID to currentContentId)
+                val thumbnailData: Data = workDataOf(VIDEO_ID to currentVideoId.value, CONTENT_ID to currentContentId)
                 val request: OneTimeWorkRequest =
                     OneTimeWorkRequestBuilder<ThumbnailWorker>()
                         .setConstraints(constraints)

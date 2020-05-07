@@ -6,6 +6,7 @@ import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.onlineapi.Clients
+import org.jetbrains.anko.newTask
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -24,9 +25,9 @@ class CrashHandler(val context: Context) : Thread.UncaughtExceptionHandler, Koin
                     if (key.isNotEmpty() && !JWTUtils.isExpired(key)) {
                         Clients.authJwt = sharedPrefs.SP_JWT_TOKEN_KEY
                         Clients.refreshToken = sharedPrefs.SP_JWT_REFRESH_TOKEN
-                        startActivity(DashboardActivity.createDashboardActivityIntent(this, true))
+                        startActivity(DashboardActivity.createDashboardActivityIntent(this, true).newTask())
                     } else {
-                        startActivity(DashboardActivity.createDashboardActivityIntent(this, false))
+                        startActivity(DashboardActivity.createDashboardActivityIntent(this, false).newTask())
                     }
                 }
             } catch (ex: Throwable) {

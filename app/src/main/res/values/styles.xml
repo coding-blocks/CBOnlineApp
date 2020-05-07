@@ -264,10 +264,15 @@
 
     <style name="CardShapeApperance">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">4dp</item>
+        <item name="cornerSizeTopLeft">10dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
         <item name="cornerSizeBottomRight">0dp</item>
-        <item name="cornerSizeTopRight">4dp</item>
+        <item name="cornerSizeTopRight">10dp</item>
+    </style>
+
+    <style name="roundedImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
     </style>
 
 

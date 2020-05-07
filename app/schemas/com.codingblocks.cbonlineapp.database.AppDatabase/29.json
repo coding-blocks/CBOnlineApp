@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 29,
-    "identityHash": "0d2724c2bd0df52d11fdf5c4321eb8a1",
+    "identityHash": "c76d3dd3c6a99822aeb14e5c415e6932",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -1302,7 +1302,7 @@
       },
       {
         "tableName": "PlayerState",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`attemptId` TEXT NOT NULL, `sectionId` TEXT NOT NULL, `contentId` TEXT NOT NULL, `duration` INTEGER NOT NULL, `lastAccessedAt` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `sectionName` TEXT NOT NULL, `contentTitle` TEXT NOT NULL, FOREIGN KEY(`sectionId`) REFERENCES `SectionModel`(`csid`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`contentId`) REFERENCES `ContentModel`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`attemptId` TEXT NOT NULL, `sectionId` TEXT NOT NULL, `contentId` TEXT NOT NULL, `position` INTEGER NOT NULL, `lastAccessedAt` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `sectionName` TEXT NOT NULL, `contentTitle` TEXT NOT NULL, `contentDuration` INTEGER NOT NULL, `thumbnail` TEXT NOT NULL, FOREIGN KEY(`sectionId`) REFERENCES `SectionModel`(`csid`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`contentId`) REFERENCES `ContentModel`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "attemptId",
@@ -1323,8 +1323,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "duration",
-            "columnName": "duration",
+            "fieldPath": "position",
+            "columnName": "position",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -1349,6 +1349,18 @@
           {
             "fieldPath": "contentTitle",
             "columnName": "contentTitle",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentDuration",
+            "columnName": "contentDuration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "thumbnail",
+            "columnName": "thumbnail",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -1398,7 +1410,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0d2724c2bd0df52d11fdf5c4321eb8a1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c76d3dd3c6a99822aeb14e5c415e6932')"
     ]
   }
 }

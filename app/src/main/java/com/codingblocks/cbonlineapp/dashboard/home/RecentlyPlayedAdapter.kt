@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.PlayerState
+import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import kotlinx.android.synthetic.main.item_continue_card.view.*
 
@@ -41,9 +42,11 @@ class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var itemClickListener: ItemClickListener? = null
 
     fun bind(item: PlayerState) = with(itemView) {
-
+        progressTv.text = context.getString(R.string.completed, item.getProgress())
+        progressBar.progress = item.getProgress()
         sectionTitle.text = item.sectionName
         contentTitle.text = item.contentTitle
+        thumbnailImg.loadImage(item.thumbnail)
         setOnClickListener {
             itemClickListener?.onClick(
                 item.sectionId, item.contentId, item.position

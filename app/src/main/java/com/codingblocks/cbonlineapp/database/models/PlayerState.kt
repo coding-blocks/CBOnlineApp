@@ -21,16 +21,19 @@ import androidx.room.PrimaryKey
 class PlayerState(
     var attemptId: String,
     var sectionId: String,
-    val contentId: String,
+    var contentId: String,
     var position: Long,
-    val lastAccessedAt: Long = System.currentTimeMillis(),
+    var lastAccessedAt: Long = System.currentTimeMillis(),
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    @Ignore
+    var id: Int = 0,
     var sectionName: String = "",
-    @Ignore
     var contentTitle: String = "",
-    @Ignore
     var contentDuration: Long = 0L,
     var thumbnail: String = ""
-)
+) {
+    constructor() : this("", "", "", 0L)
+
+    fun getProgress(): Int {
+        return ((position.toFloat() / contentDuration) * 100).toInt()
+    }
+}
