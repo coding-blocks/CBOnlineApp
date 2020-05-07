@@ -13,6 +13,7 @@ import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
+import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
@@ -37,7 +38,14 @@ class DashboardHomeFragment : BaseCBFragment() {
 
     private val recentlyPlayedAdapter = RecentlyPlayedAdapter()
 
+    private val itemClickListener: ItemClickListener by lazy {
+        object : ItemClickListener {
+            override fun onClick(sectionId: String, contentId: String, postition: Long) {
+                startActivity(VideoPlayerActivity.createVideoPlayerActivityIntent(requireContext(), contentId, sectionId,position))
+            }
 
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -766,9 +766,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
     companion object {
 
-        fun createVideoPlayerActivityIntent(context: Context, contentId: String, sectionId: String): Intent {
+        fun createVideoPlayerActivityIntent(context: Context, contentId: String, sectionId: String,position:Long = 0): Intent {
             return context.intentFor<VideoPlayerActivity>(
                 CONTENT_ID to contentId,
+                VIDEO_POSITION to position,
                 SECTION_ID to sectionId).singleTop()
         }
     }
