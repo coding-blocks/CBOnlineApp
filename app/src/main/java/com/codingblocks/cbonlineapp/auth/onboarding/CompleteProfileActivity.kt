@@ -35,7 +35,7 @@ class CompleteProfileActivity : BaseCBActivity() {
         setContentView(R.layout.activity_complete_profile)
         val id = JWTUtils.getIdentity(sharedPrefs.SP_JWT_TOKEN_KEY)
         courseResumeBtn.setOnClickListener {
-            startActivity(intentFor<DashboardActivity>())
+            startActivity(DashboardActivity.createDashboardActivityIntent(this, true))
             finish()
         }
         val json =
@@ -108,7 +108,7 @@ class CompleteProfileActivity : BaseCBActivity() {
                     }
                     is ResultWrapper.Success -> {
                         if (response.value.isSuccessful) {
-                            startActivity(intentFor<DashboardActivity>())
+                            startActivity(DashboardActivity.createDashboardActivityIntent(this@CompleteProfileActivity, true))
                             finish()
                         } else
                             runOnUiThread {

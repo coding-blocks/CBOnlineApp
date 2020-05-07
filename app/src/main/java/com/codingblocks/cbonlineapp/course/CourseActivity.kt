@@ -219,7 +219,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 STATE.ERROR -> loadingDialog.dismiss()
                 STATE.SUCCESS -> {
                     loadingDialog.hide()
-                    startActivity<DashboardActivity>()
+                    startActivity(DashboardActivity.createDashboardActivityIntent(this, true))
                     finish()
                 }
             }

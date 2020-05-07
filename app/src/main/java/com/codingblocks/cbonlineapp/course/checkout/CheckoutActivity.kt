@@ -46,7 +46,8 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
                 vm.capturePayment {
                     GlobalScope.launch {
                         delay(3000)
-                        startActivity(intentFor<DashboardActivity>())
+                        startActivity(DashboardActivity.createDashboardActivityIntent(this@CheckoutActivity, true))
+                        finish()
                     }
                 }
             }
@@ -95,7 +96,8 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
         vm.capturePayment {
             GlobalScope.launch {
                 delay(3000)
-                startActivity(intentFor<DashboardActivity>())
+                startActivity(DashboardActivity.createDashboardActivityIntent(this@CheckoutActivity, true))
+                finish()
             }
         }
     }

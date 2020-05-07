@@ -50,7 +50,7 @@ class SocialLoginFragment : Fragment() {
                     if (grantCode != null) {
                         vm.fetchToken(grantCode).observer(viewLifecycleOwner) {
                             if (it) {
-                                startActivity(intentFor<DashboardActivity>())
+                                startActivity(DashboardActivity.createDashboardActivityIntent(requireContext(), true))
                             }
                         }
                     }

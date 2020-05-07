@@ -6,36 +6,39 @@ import android.text.TextUtils
 import cn.campusapp.router.Router
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
+import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.otherwise
-import org.jetbrains.anko.intentFor
+import com.codingblocks.onlineapi.Clients
 import org.koin.android.ext.android.inject
 
 class URLRouterActivity : BaseCBActivity() {
 
-    private fun fallBack(uri: Uri) {
+    private fun fallBack(uri: Uri, loggedIn: Boolean) {
         if (uri.pathSegments.size > 1) {
             openChrome("", uri = uri)
         } else {
-            startActivity(intentFor<DashboardActivity>())
+            startActivity(DashboardActivity.createDashboardActivityIntent(this, loggedIn))
         }
     }
 
-    private val sharedPrefs by inject<PreferenceHelper>()
+    private val sharedPrefs:PreferenceHelper by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (sharedPrefs.SP_JWT_TOKEN_KEY.isNotEmpty()) {
-
+        val key = sharedPrefs.SP_JWT_TOKEN_KEY
+        if (key.isNotEmpty() && !JWTUtils.isExpired(key)) {
+            Clients.authJwt = sharedPrefs.SP_JWT_TOKEN_KEY
+            Clients.refreshToken = sharedPrefs.SP_JWT_REFRESH_TOKEN
             intent?.data?.let { uri ->
 
-                if (TextUtils.isEmpty(uri.host)) fallBack(uri)
-                if (!uri.host!!.contains("online.codingblocks.com")) fallBack(uri)
+                if (TextUtils.isEmpty(uri.host)) fallBack(uri, true)
+                if (!uri.host!!.contains("online.codingblocks.com")) fallBack(uri,true)
 
                 val pathSegments = uri.pathSegments
                 if (pathSegments.size < 1) {
-                    fallBack(uri)
+                    fallBack(uri, true)
                     finish()
                     return
                 }
@@ -45,18 +48,18 @@ class URLRouterActivity : BaseCBActivity() {
                     "courses" -> openRouter(uri)
                     "player" -> openRouter(uri)
                     "app" -> openRouter(uri)
-                    else -> fallBack(uri)
+                    else -> fallBack(uri, true)
                 }
                 finish()
             }
                 ?: finish()
         } else {
-            fallBack(Uri.EMPTY)
+            fallBack(Uri.EMPTY, false)
         }
     }
 
     private fun openRouter(uri: Uri) {
-        Router.open("activity://courseRun/$uri").otherwise { fallBack(uri) }
+        Router.open("activity://courseRun/$uri").otherwise { fallBack(uri, true) }
         finish()
     }
 }
