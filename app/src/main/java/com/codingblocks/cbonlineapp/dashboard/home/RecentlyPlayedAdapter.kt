@@ -34,8 +34,6 @@ class RecentlyPlayedAdapter : ListAdapter<PlayerState, ItemViewHolder>(
         holder.bind(getItem(position))
         holder.itemClickListener = onItemClick
     }
-
-
 }
 
 class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -53,11 +51,8 @@ class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             )
         }
     }
-
 }
 
 interface ItemClickListener {
     fun onClick(sectionId: String, contentId: String, postition: Long)
 }
-
-

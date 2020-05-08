@@ -31,7 +31,6 @@ import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.slideDown
 import com.codingblocks.cbonlineapp.util.extensions.slideUp
@@ -75,7 +74,6 @@ class DashboardActivity : BaseCBActivity(),
         dashboardNavigation.setNavigationItemSelectedListener(this)
         dashboardBottomNav.setOnNavigationItemSelectedListener(this)
         initializeUI(vm.isLoggedIn ?: false)
-
     }
 
     override fun onStart() {
@@ -98,9 +96,7 @@ class DashboardActivity : BaseCBActivity(),
                 findViewById<TextView>(R.id.navUsernameTv).text = ("Hello ${vm.prefs.SP_USER_NAME}")
             }
         })
-
     }
-
 
     private fun fetchToken() {
         val data = intent.data
@@ -110,7 +106,6 @@ class DashboardActivity : BaseCBActivity(),
                 vm.fetchToken(grantCode)
             }
         }
-
     }
 
     private fun initializeUI(loggedIn: Boolean) {
@@ -143,7 +138,6 @@ class DashboardActivity : BaseCBActivity(),
         }
 
         dashboardAppBarLayout.bringToFront()
-
     }
 
     @TargetApi(25)
@@ -193,7 +187,6 @@ class DashboardActivity : BaseCBActivity(),
 //        }
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.dashboard, menu)
         return true
@@ -210,7 +203,6 @@ class DashboardActivity : BaseCBActivity(),
         }
         else -> super.onOptionsItemSelected(item)
     }
-
 
     private fun showReportDialog() {
 //        val dialog = AlertDialog.Builder(this).create()
@@ -330,8 +322,6 @@ class DashboardActivity : BaseCBActivity(),
             R.id.dashboard_doubts -> changeToolbar(getString(R.string.dashboard), 3)
 
             R.id.dashboard_library -> changeToolbar(getString(R.string.dashboard), 4)
-
-
         }
         dashboardDrawer.closeDrawer(GravityCompat.START)
         return true
@@ -346,8 +336,7 @@ class DashboardActivity : BaseCBActivity(),
             } else {
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, resources.getColor(R.color.white))
             }
-        else
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
             } else {
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, resources.getColor(R.color.black))
@@ -368,10 +357,8 @@ class DashboardActivity : BaseCBActivity(),
                     dashboardToolbarSecondary.slideUp()
                 }
             }
-
         }
     }
-
 
     companion object {
 

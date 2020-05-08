@@ -15,9 +15,9 @@ import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import es.voghdev.pdfviewpager.library.PDFViewPager
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter
+import java.io.File
 import kotlinx.android.synthetic.main.activity_pdf.*
 import org.jetbrains.anko.AnkoLogger
-import java.io.File
 
 class PdfActivity : BaseCBActivity(), AnkoLogger {
     lateinit var pdfViewPager: PDFViewPager

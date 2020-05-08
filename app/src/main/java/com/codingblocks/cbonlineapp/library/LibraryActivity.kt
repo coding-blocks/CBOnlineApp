@@ -33,7 +33,6 @@ class LibraryActivity : BaseCBActivity() {
             replaceFragmentSafely(LibraryHomeFragment(), containerViewId = R.id.libraryContainer)
         } else {
             replaceFragmentSafely(LibraryViewFragment(), containerViewId = R.id.libraryContainer)
-
         }
     }
 }

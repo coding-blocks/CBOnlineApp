@@ -60,8 +60,7 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
                 if (content != null)
                     when (content.contentable) {
                         LECTURE, VIDEO -> startActivity(createVideoPlayerActivityIntent(this, content.contentId, content.sectionId))
-                    }
-                else {
+                    } else {
                     toast("Please Wait while the content is being updated!")
                 }
             }

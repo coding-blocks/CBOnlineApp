@@ -30,7 +30,7 @@ abstract class BaseCBActivity : AppCompatActivity(), BaseLifecycleComponent {
 
     override fun onDestroy() {
         super.onDestroy()
-        if(loadingDialog.isShowing){
+        if (loadingDialog.isShowing) {
             loadingDialog.dismiss()
         }
         lifecycle.removeObserver(this)
@@ -46,6 +46,4 @@ abstract class BaseCBActivity : AppCompatActivity(), BaseLifecycleComponent {
         addContentView(topView, ViewGroup.LayoutParams(LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.MATCH_PARENT)))
     }
-
-
 }

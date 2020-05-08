@@ -97,7 +97,6 @@ class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
             }
             finish()
         }
-
     }
 
     override fun onSmsOTPReceieved(otp: String) {

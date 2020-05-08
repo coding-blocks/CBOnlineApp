@@ -2,7 +2,6 @@ package com.codingblocks.cbonlineapp.util
 
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-
 import androidx.recyclerview.widget.RecyclerView
 
 class DividerItemDecorator(private val mDivider: Drawable) : RecyclerView.ItemDecoration() {

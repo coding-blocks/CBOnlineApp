@@ -22,6 +22,7 @@ import com.vdocipher.aegis.offline.DownloadSelections
 import com.vdocipher.aegis.offline.DownloadStatus
 import com.vdocipher.aegis.offline.OptionsDownloader
 import com.vdocipher.aegis.offline.VdoDownloadManager
+import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -29,7 +30,6 @@ import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import retrofit2.Response
-import java.io.File
 
 class SectionDownloadService(val context: Context, private val workerParameters: WorkerParameters) :
     CoroutineWorker(context, workerParameters),

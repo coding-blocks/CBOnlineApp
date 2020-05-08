@@ -68,5 +68,4 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun bookmarkDao(): BookmarkDao
 
     abstract fun playerDao(): PlayerDao
-
 }

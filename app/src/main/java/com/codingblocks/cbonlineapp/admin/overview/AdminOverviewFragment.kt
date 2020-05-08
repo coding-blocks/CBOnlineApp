@@ -11,9 +11,7 @@ import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
-import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.ErrorStatus
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_admin.*
 import kotlinx.android.synthetic.main.admin_overview_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel

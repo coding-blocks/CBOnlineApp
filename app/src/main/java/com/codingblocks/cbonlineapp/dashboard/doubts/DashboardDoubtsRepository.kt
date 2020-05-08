@@ -21,7 +21,7 @@ class DashboardDoubtsRepository(
     private val doubtsDao: DoubtsDao,
     private val commentsDao: CommentsDao,
     private val runDao: CourseWithInstructorDao,
-    private val runAttemptDao:RunAttemptDao
+    private val runAttemptDao: RunAttemptDao
 ) {
 
     suspend fun fetchDoubtsByCourseRun(id: String) = safeApiCall { Clients.onlineV2JsonApi.getDoubtByAttemptId(id) }
@@ -98,5 +98,5 @@ class DashboardDoubtsRepository(
         doubtsDao.updateStatus(dbtUid, "RESOLVED")
     }
 
-    fun getRunAttempt(id:String)  = runAttemptDao.getRunAttempt(id)
+    fun getRunAttempt(id: String) = runAttemptDao.getRunAttempt(id)
 }

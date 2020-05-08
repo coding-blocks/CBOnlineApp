@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.activity_checkout.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.intentFor
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {

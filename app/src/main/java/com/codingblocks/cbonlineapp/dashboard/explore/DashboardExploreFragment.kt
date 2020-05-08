@@ -76,9 +76,8 @@ class DashboardExploreFragment : BaseCBFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
-        : View? = inflater.inflate(R.layout.fragment_dashboard_explore, container, false)
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+        View? = inflater.inflate(R.layout.fragment_dashboard_explore, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -86,7 +85,6 @@ class DashboardExploreFragment : BaseCBFragment() {
         vm.fetchRecommendedCourses(0, 4)
         vm.fetchRecommendedCourses(4, 4)
         vm.fetchTracks()
-
 
         dashboardPopularRv.setRv(requireContext(), coursePopularListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
         courseSuggestedRv.setRv(requireContext(), courseCardListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
@@ -98,7 +96,6 @@ class DashboardExploreFragment : BaseCBFragment() {
                 dashboardPopularShimmer.hideAndStop()
                 dashboardPopularRv.isVisible = true
             }
-
         }
         vm.trendingCourses.observe(viewLifecycleOwner) { courses ->
             if (courses.isNotEmpty()) {
@@ -139,7 +136,6 @@ class DashboardExploreFragment : BaseCBFragment() {
             }
         }
     }
-
 
     override fun onDestroyView() {
         courseCardListAdapter.onItemClick = null

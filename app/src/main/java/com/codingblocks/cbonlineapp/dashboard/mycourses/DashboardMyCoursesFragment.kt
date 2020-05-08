@@ -17,13 +17,9 @@ import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
-import com.codingblocks.cbonlineapp.util.extensions.showEmptyView
-import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
-import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.bottom_sheet_mycourses.view.*
@@ -56,7 +52,10 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_dashboard_my_courses, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -121,7 +120,7 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
 //        viewModel.errorLiveData.observer(viewLifecycleOwner) {
 //            when (it) {
 //                ErrorStatus.NO_CONNECTION -> {
-////                    dashboardCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
+// //                    dashboardCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
 //                }
 //                ErrorStatus.TIMEOUT -> {
 //                    dashboardCourseRoot.showSnackbar(

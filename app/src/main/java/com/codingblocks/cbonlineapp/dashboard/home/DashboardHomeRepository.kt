@@ -34,7 +34,6 @@ class DashboardHomeRepository(
         }
     }
 
-
     suspend fun saveStats(body: PerformanceResponse, id: String) {
         runPerformanceDao.insert(
             RunPerformance(
@@ -47,12 +46,10 @@ class DashboardHomeRepository(
         )
     }
 
-
     fun getTopRun() = courseWithInstructorDao.getTopRun().getDistinct()
     fun getTopRunById(id: String) = courseWithInstructorDao.getRunById(id).distinctUntilChanged()
     fun getRunStats(it: String) = runPerformanceDao.getPerformance(it)
     fun getRecentlyPlayed() = playerDao.getPromotedStories()
-
 
     suspend fun updatePlayerId(player: Player) = safeApiCall { Clients.onlineV2JsonApi.setPlayerId(player) }
     suspend fun fetchLastAccessedRun() = safeApiCall { Clients.onlineV2JsonApi.getLastAccessed() }
@@ -60,5 +57,4 @@ class DashboardHomeRepository(
     suspend fun fetchUser() = safeApiCall { Clients.onlineV2JsonApi.getMe() }
     suspend fun getToken(grantCode: String) = safeApiCall { Clients.api.getToken(grantCode) }
     suspend fun refreshToken() = safeApiCall { Clients.api.refreshToken(prefs.SP_JWT_REFRESH_TOKEN) }
-
 }

@@ -14,7 +14,6 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import kotlinx.android.synthetic.main.fragment_social_login.*
-import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SocialLoginFragment : Fragment() {

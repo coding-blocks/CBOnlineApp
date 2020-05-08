@@ -66,6 +66,9 @@ import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
+import java.io.File
+import java.util.Objects
+import java.util.concurrent.TimeUnit
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import kotlinx.android.synthetic.main.my_fab_menu.*
@@ -81,9 +84,6 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
-import java.io.File
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     VdoPlayer.InitializationListener, VdoPlayerControls.FullscreenActionListener,
@@ -113,7 +113,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         setUpBottomSheet()
         setupViewPager()
         setupUI()
-
     }
 
     private fun setupUI() {
@@ -308,7 +307,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         showControls(false)
     }
 
-
     override fun onInitializationSuccess(
         playerHost: VdoPlayer.PlayerHost,
         player: VdoPlayer,
@@ -401,7 +399,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             videoPlayer.playWhenReady = true
             videoPlayer.playbackSpeed = vm.prefs.SP_PLAYBACK_SPEED
             vm.position?.let { videoPlayer.seekTo(it) }
-
         }
 
         override fun onBufferUpdate(p0: Long) {
@@ -766,7 +763,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
     companion object {
 
-        fun createVideoPlayerActivityIntent(context: Context, contentId: String, sectionId: String,position:Long = 0): Intent {
+        fun createVideoPlayerActivityIntent(context: Context, contentId: String, sectionId: String, position: Long = 0): Intent {
             return context.intentFor<VideoPlayerActivity>(
                 CONTENT_ID to contentId,
                 VIDEO_POSITION to position,

@@ -23,7 +23,6 @@ class CourseRunPair : RunWithAttempt() {
     var course: CourseModel = CourseModel()
     @Ignore
     fun getProgress() = if (runAttempt.completedContents > 0) (runAttempt.completedContents / run.totalContents.toDouble()) * 100 else 0.0
-
 }
 
 data class CourseInstructorPair(

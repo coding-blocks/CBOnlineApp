@@ -36,10 +36,8 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
-
 
     private val vm: DashboardViewModel by sharedViewModel()
     private val doubtListAdapter = DashboardDoubtListAdapter()
@@ -178,12 +176,11 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
             dashboardDoubtsLoggedOut.isVisible = true
         }
 
-
         dashboardDoubtRv.setRv(requireContext(), doubtListAdapter, true, "thick")
 //        vm.errorLiveData.observer(viewLifecycleOwner) {
 //            when (it) {
 //                ErrorStatus.NO_CONNECTION -> {
-////                    dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
+// //                    dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
 //                }
 //                ErrorStatus.TIMEOUT -> {
 //                    dashboardDoubtRoot.showSnackbar(

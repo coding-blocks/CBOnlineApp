@@ -57,8 +57,6 @@ class MyCourseListAdapter(val type: String = "DEFAULT") : ListAdapter<CourseInst
             }
         }
     }
-
-
 }
 
 class RunViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

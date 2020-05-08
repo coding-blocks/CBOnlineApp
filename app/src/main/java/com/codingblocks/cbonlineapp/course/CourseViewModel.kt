@@ -131,14 +131,13 @@ class CourseViewModel(
                     enrollTrialProgress.postValue(STATE.ERROR)
                     setError(response.error)
                 }
-                is ResultWrapper.Success ->with(response.value) {
+                is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
                         addToCart(id)
                     } else {
                         enrollTrialProgress.postValue(STATE.ERROR)
                         setError(fetchError(code()))
                     }
-
                 }
             }
         }

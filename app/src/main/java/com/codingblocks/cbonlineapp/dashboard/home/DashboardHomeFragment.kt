@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.distinctUntilChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.LoginActivity
@@ -15,7 +14,6 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -44,7 +42,6 @@ class DashboardHomeFragment : BaseCBFragment() {
             override fun onClick(sectionId: String, contentId: String, postition: Long) {
                 startActivity(VideoPlayerActivity.createVideoPlayerActivityIntent(requireContext(), contentId, sectionId, postition))
             }
-
         }
     }
 
@@ -119,7 +116,6 @@ class DashboardHomeFragment : BaseCBFragment() {
         recentlyPlayedAdapter.onItemClick = null
         super.onDestroyView()
     }
-
 }
 
 fun ProgressView.setGradientColor(progress: Double) {

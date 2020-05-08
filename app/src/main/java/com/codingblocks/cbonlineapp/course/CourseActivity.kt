@@ -161,7 +161,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 }
             }
             instructorAdapter.submitList(course.instructors)
-
         }
 
         viewModel.projects.observer(this) { projects ->
@@ -237,7 +236,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         }
     }
 
-
     private fun showTags(tags: ArrayList<Tags>?) {
         with(!tags.isNullOrEmpty()) {
             topicsTv.isVisible = this
@@ -307,7 +305,4 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         youtubePlayer?.release()
         super.onBackPressed()
     }
-
 }
-
-

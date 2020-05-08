@@ -39,7 +39,6 @@ fun ImageView.loadSvg(svgUrl: String, callback: () -> Unit = { }) {
     }
 }
 
-
 fun ImageView.loadImage(imgUrl: String, scale: Boolean = false, callback: (loaded: Boolean) -> Unit = { }) {
 
     if (imgUrl.isNotEmpty())

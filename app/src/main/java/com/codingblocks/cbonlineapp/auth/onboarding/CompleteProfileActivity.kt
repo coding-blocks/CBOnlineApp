@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.activity_complete_profile.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.contentView
-import org.jetbrains.anko.intentFor
 import org.json.JSONException
 import org.json.JSONObject
 import org.koin.android.ext.android.inject

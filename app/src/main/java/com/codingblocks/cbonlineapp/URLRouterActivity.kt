@@ -23,7 +23,7 @@ class URLRouterActivity : BaseCBActivity() {
         }
     }
 
-    private val sharedPrefs:PreferenceHelper by inject()
+    private val sharedPrefs: PreferenceHelper by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +34,7 @@ class URLRouterActivity : BaseCBActivity() {
             intent?.data?.let { uri ->
 
                 if (TextUtils.isEmpty(uri.host)) fallBack(uri, true)
-                if (!uri.host!!.contains("online.codingblocks.com")) fallBack(uri,true)
+                if (!uri.host!!.contains("online.codingblocks.com")) fallBack(uri, true)
 
                 val pathSegments = uri.pathSegments
                 if (pathSegments.size < 1) {

@@ -44,17 +44,16 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.DividerItemDecorator
 import com.codingblocks.cbonlineapp.util.REOPENED
 import com.codingblocks.cbonlineapp.util.RESOLVED
-import com.codingblocks.fabnavigation.FabNavigation
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import kotlin.math.hypot
 import kotlinx.android.synthetic.main.dialog.view.*
 import kotlinx.android.synthetic.main.dialog.view.primaryBtn
 import kotlinx.android.synthetic.main.dialog_help.view.mobile
 import kotlinx.android.synthetic.main.dialog_help.view.nameLayout
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.layoutInflater
-import kotlin.math.hypot
 
 fun View.applyDim(dimAmount: Float) {
     val dim = ColorDrawable(Color.BLACK)

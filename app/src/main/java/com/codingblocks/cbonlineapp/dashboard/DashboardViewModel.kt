@@ -306,6 +306,4 @@ class DashboardViewModel(
     }
 
     fun getPerformance(attemptId: String) = homeRepo.getRunStats(attemptId)
-
-
 }

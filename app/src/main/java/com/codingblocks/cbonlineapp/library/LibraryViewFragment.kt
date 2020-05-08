@@ -24,6 +24,7 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
+import java.io.File
 import kotlinx.android.synthetic.main.fragment_library_view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -33,7 +34,6 @@ import kotlinx.coroutines.withContext
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.io.File
 
 class LibraryViewFragment : BaseCBFragment() {
 

@@ -16,7 +16,6 @@ interface PlayerDao : BaseDao<PlayerState> {
             """)
     fun getPromotedStories(): LiveData<List<PlayerState>>
 
-
     @Query("UPDATE PlayerState SET thumbnail = :thumbnail WHERE contentId = :contentId")
     suspend fun updateThumbnail(thumbnail: String, contentId: String)
 }

@@ -4,18 +4,18 @@ import android.graphics.Color
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
 import androidx.core.text.color
-import org.ocpsoft.prettytime.PrettyTime
 import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.TimeZone
-import java.util.Locale
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 import kotlin.NoSuchElementException
 import kotlin.math.floor
 import kotlin.math.log10
+import org.ocpsoft.prettytime.PrettyTime
 
 fun folderSize(directory: File): Long {
     var length: Long = 0

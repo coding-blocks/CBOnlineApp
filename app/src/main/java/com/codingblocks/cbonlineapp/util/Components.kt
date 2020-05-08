@@ -7,7 +7,6 @@ import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import kotlinx.android.synthetic.main.custom_dialog.view.*
@@ -92,7 +91,7 @@ object Components {
                 "exit" -> {
                     (context as Activity).finish()
                 }
-                "leave"-> {
+                "leave" -> {
                     (context as AppCompatActivity).supportFragmentManager.popBackStack()
                 }
                 "wifi" -> {
