@@ -1,13 +1,18 @@
 package com.codingblocks.cbonlineapp.mycourse.overview
 
+import android.app.DownloadManager
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
@@ -16,6 +21,7 @@ import com.codingblocks.cbonlineapp.dashboard.home.loadData
 import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
+import com.codingblocks.cbonlineapp.util.CertificateDownloadReceiver
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -25,16 +31,23 @@ import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.io.File
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
+    private lateinit var receiver:CertificateDownloadReceiver
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_overview, container, false)
+    ): View {
+      val view =  inflater.inflate(R.layout.fragment_overview, container, false)
+        receiver = CertificateDownloadReceiver()
+        requireActivity().registerReceiver(receiver,IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+        return view
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,7 +73,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                     setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share, 0)
                     setOnClickListener {
-                        downloadCertificate(courseAndRun.runAttempt.certificateUrl)
+                        downloadCertificate(requireContext(), courseAndRun.runAttempt.certificateUrl, "${viewModel.name}.pdf")
                     }
                 }
             } else if (progressTv.isActivated && !mentorApprovalTv.isActivated) {
@@ -102,8 +115,18 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         }
     }
 
-    private fun downloadCertificate(certificateUrl: String) {
-        toast("Will be added soon")
+    private fun downloadCertificate(context: Context, certificateUrl: String, name: String) {
+        val file = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), name)
+        if (file.exists()) {
+            val fileUri = FileProvider.getUriForFile(context, context.packageName + ".provider", file)
+            context.grantUriPermission(requireContext().packageName, fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            val intentShareFile = Intent(Intent.ACTION_SEND)
+            intentShareFile.type = "application/pdf"
+            intentShareFile.putExtra(Intent.EXTRA_STREAM, fileUri)
+            startActivity(Intent.createChooser(intentShareFile, "Share Certificate"))
+        } else {
+            viewModel.downloadCertificateAndShow(context, certificateUrl, name)
+        }
     }
 
     private fun setGoodiesCard(goodiesThreshold: Int, progress: Double) {
@@ -144,5 +167,54 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
         }
+    }
+
+    private fun loadData(averageProgress: ArrayList<ProgressItem>, userProgress: ArrayList<ProgressItem>) {
+        val values: ArrayList<Entry> = ArrayList()
+        averageProgress.forEachIndexed { index, progressItem ->
+            values.add(Entry(index.toFloat(), progressItem.progress.toFloat()))
+        }
+
+        val values2: ArrayList<Entry> = ArrayList()
+        userProgress.forEachIndexed { index, progressItem ->
+            values2.add(Entry(index.toFloat(), progressItem.progress.toFloat()))
+        }
+        val set1 = LineDataSet(values, "Average Progress")
+        set1.apply {
+            setDrawCircles(false)
+            color = ContextCompat.getColor(requireContext(), R.color.pastel_red)
+            setDrawValues(false)
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            lineWidth = 3f
+        }
+
+        val set2 = LineDataSet(values2, "User Progress")
+        set2.apply {
+            setDrawCircles(false)
+            color = ContextCompat.getColor(requireContext(), R.color.kiwigreen)
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            setDrawValues(false)
+            lineWidth = 3f
+        }
+        val dataSets: ArrayList<ILineDataSet> = ArrayList()
+        dataSets.add(set1)
+        dataSets.add(set2)
+        val data = LineData(dataSets)
+
+        chart1.apply {
+            this.data = data
+            setTouchEnabled(false)
+            axisRight.setDrawGridLines(false)
+            axisLeft.setDrawGridLines(true)
+            xAxis.setDrawGridLines(true)
+            notifyDataSetChanged()
+            xAxis.labelCount = 10
+            invalidate()
+        }
+    }
+
+    override fun onDestroy() {
+        requireActivity().unregisterReceiver(receiver)
+        super.onDestroy()
     }
 }
