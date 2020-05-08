@@ -41,6 +41,10 @@ class DashboardViewModel(
 ) : BaseCBViewModel() {
     var isLoggedIn: Boolean? by savedStateValue(handle, LOGGED_IN)
 
+    init {
+        Clients.refreshToken = homeRepo.prefs.SP_JWT_REFRESH_TOKEN
+        Clients.authJwt = homeRepo.prefs.SP_JWT_TOKEN_KEY
+    }
 
     /**
      * Home Fragment
@@ -85,14 +89,7 @@ class DashboardViewModel(
 
     fun fetchUser() = liveData(Dispatchers.IO) {
         when (val response = homeRepo.fetchUser()) {
-            is ResultWrapper.GenericError -> {
-                if (response.code == 401)
-                    if (prefs.SP_JWT_REFRESH_TOKEN.isNotEmpty()) {
-                        refreshToken()
-                    } else {
-                        setError(response.error)
-                    }
-            }
+            is ResultWrapper.GenericError -> setError(response.error)
             is ResultWrapper.Success -> {
                 if (response.value.isSuccessful)
                     response.value.body()?.let {
@@ -103,7 +100,12 @@ class DashboardViewModel(
                             setPlayerId()
                     }
                 else {
-                    setError(fetchError(response.value.code()))
+                    if (response.value.code() == 401)
+                        if (prefs.SP_JWT_REFRESH_TOKEN.isNotEmpty()) {
+                            refreshToken()
+                        } else {
+                            setError(fetchError(response.value.code()))
+                        }
                 }
             }
         }
