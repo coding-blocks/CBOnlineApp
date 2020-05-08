@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
 import kotlinx.android.synthetic.main.offline_page.view.*
 
 /**
@@ -16,6 +17,10 @@ import kotlinx.android.synthetic.main.offline_page.view.*
  */
 abstract class BaseCBActivity : AppCompatActivity(), BaseLifecycleComponent {
     override val thisLifecycleOwner: LifecycleOwner get() = this
+
+    val loadingDialog by lazy {
+        getLoadingDialog()
+    }
 
     init {
         lifecycle.addObserver(this)
@@ -25,6 +30,9 @@ abstract class BaseCBActivity : AppCompatActivity(), BaseLifecycleComponent {
 
     override fun onDestroy() {
         super.onDestroy()
+        if (loadingDialog.isShowing) {
+            loadingDialog.dismiss()
+        }
         lifecycle.removeObserver(this)
     }
 

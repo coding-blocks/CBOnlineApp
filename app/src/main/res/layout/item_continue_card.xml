@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="120dp"
+    android:layout_marginStart="@dimen/margin_large"
+    android:layout_marginTop="@dimen/margin_small"
+    android:layout_marginBottom="@dimen/margin_small"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@color/white"
+    app:cardElevation="0dp"
+    app:shapeAppearance="@style/CardShapeApperance"
+    app:strokeColor="@color/veryLightPink"
+    app:strokeWidth="1dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/thumbnailImg"
+            android:layout_width="80dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_thumbnail"
+            android:layout_height="80dp"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium"
+            app:shapeAppearanceOverlay="@style/roundedImageView" />
+
+        <TextView
+            android:id="@+id/sectionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/thumbnailImg"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/thumbnailImg"
+            android:ellipsize="end"
+            android:fontFamily="@font/gilroy_bold"
+            android:lines="1"
+            android:textColor="@color/brownish_grey"
+            android:textSize="12sp"
+            tools:text="Kotlin Fundamentals" />
+
+        <TextView
+            android:id="@+id/contentTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sectionTitle"
+            android:layout_alignStart="@id/sectionTitle"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/gilroy_medium"
+            android:lines="1"
+            android:textColor="@color/orangish"
+            android:textSize="12sp"
+            tools:text="Difference Between Val &amp; Var" />
+
+        <TextView
+            android:id="@+id/progressTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contentTitle"
+            android:layout_alignStart="@id/sectionTitle"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            tools:text="50% Completed" />
+
+        <ProgressBar
+            android:id="@id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_alignParentBottom="true"
+            android:padding="0dp"
+            android:progress="50"
+            android:progressBackgroundTint="@color/white_transparent"
+            android:progressTint="@color/orangish" />
+
+
+    </RelativeLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

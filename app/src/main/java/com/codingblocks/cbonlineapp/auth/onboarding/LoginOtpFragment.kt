@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.auth.onboarding
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -71,7 +72,7 @@ class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
                             }
                         }
                         if (map["oneauth_id"].isNullOrEmpty())
-                            startActivity(intentFor<DashboardActivity>())
+                            navigateToActivity()
                         else
                             startActivity(intentFor<CompleteProfileActivity>())
                         requireActivity().finish()
@@ -81,6 +82,20 @@ class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
                         }
                 }
             }
+        }
+    }
+
+    /**
+     * Always call finish after setResult or startActivity otherwise you'll lose reference of previous activity
+     */
+    private fun navigateToActivity() {
+        with(requireActivity()) {
+            if (callingActivity == null) {
+                startActivity(DashboardActivity.createDashboardActivityIntent(requireContext(), true))
+            } else {
+                setResult(Activity.RESULT_OK)
+            }
+            finish()
         }
     }
 

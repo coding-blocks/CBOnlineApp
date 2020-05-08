@@ -47,4 +47,3 @@ class BatchComparisonAdapter(val items: List<Comparision>) : BaseAdapter() {
 
     override fun getCount() = items.size
 }
-

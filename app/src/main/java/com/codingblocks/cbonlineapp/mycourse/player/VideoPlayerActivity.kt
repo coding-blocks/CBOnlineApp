@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.mycourse.player
 
 import android.animation.LayoutTransition
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
@@ -65,6 +66,9 @@ import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
+import java.io.File
+import java.util.Objects
+import java.util.concurrent.TimeUnit
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import kotlinx.android.synthetic.main.my_fab_menu.*
@@ -79,33 +83,33 @@ import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.File
-import java.util.*
-import java.util.concurrent.TimeUnit
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     VdoPlayer.InitializationListener, VdoPlayerControls.FullscreenActionListener,
     VdoPlayerControls.ControllerVisibilityListener, YouTubePlayerFullScreenListener {
-    private val vm by viewModel<VideoPlayerViewModel>()
+
+    private val vm: VideoPlayerViewModel by stateViewModel()
 
     private val animationUtils by lazy { Animations(this) }
     private val progressDialog by lazy { ProgressDialog.progressDialog(this) }
-    private val dialog by lazy { BottomSheetDialog(this) }
-    private val sheetDialog: View by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, null) }
+    private val dialog: BottomSheetDialog by lazy { BottomSheetDialog(this) }
+    private val sheetDialog: View by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, playerRoot) }
     val tracker = YouTubePlayerTracker()
 
     private lateinit var playerFragment: VdoPlayerSupportFragment
-    private var videoPlayer: VdoPlayer? = null
+    private lateinit var videoPlayer: VdoPlayer
     private lateinit var youtubePlayer: YouTubePlayer
     private val sectionItemsAdapter = PlaylistAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_player)
-
-        vm.currentContentId.value = intent.getStringExtra(CONTENT_ID)
-        vm.sectionId.value = intent.getStringExtra(SECTION_ID)
+        if (savedInstanceState == null) {
+            vm.currentContentId = intent.getStringExtra(CONTENT_ID)
+            vm.sectionId = intent.getStringExtra(SECTION_ID)
+            vm.position = intent.getLongExtra(VIDEO_POSITION, 0)
+        }
         setUpBottomSheet()
         setupViewPager()
         setupUI()
@@ -119,15 +123,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
         contentRv.setRv(this, sectionItemsAdapter)
         vm.contentList.observer(this) {
-            sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }.sortedBy { it.order }, vm.currentContentId.value!!)
+            sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }.sortedBy { it.order }, vm.currentContentId!!)
         }
         sectionItemsAdapter.onItemClick = {
-            startActivity(
-                intentFor<VideoPlayerActivity>(
-                    CONTENT_ID to it.ccid,
-                    SECTION_ID to vm.sectionId.value
-                ).singleTop()
-            )
+            startActivity(createVideoPlayerActivityIntent(this, it.ccid, vm.sectionId ?: ""))
         }
 
         rootLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
@@ -172,14 +171,14 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             }
         }
         doubtFab.setOnClickListener {
-                vm.runAttempts.observer(this) {
-                    if (it.premium && RUNTIERS.LITE.name != it.runTier)
-                        updateSheet("DOUBT")
-                    else {
-                        toast("Doubt Support is only available for PREMIUM+ Runs.")
-                        openChrome(BuildConfig.DISCUSS_URL + contentTitle.text.toString().replace(" ", "-"))
-                    }
+            vm.runAttempts.observer(this) {
+                if (it.premium && RUNTIERS.LITE.name != it.runTier)
+                    updateSheet("DOUBT")
+                else {
+                    toast("Doubt Support is only available for PREMIUM+ Runs.")
+                    openChrome(BuildConfig.DISCUSS_URL + contentTitle.text.toString().replace(" ", "-"))
                 }
+            }
         }
 
         noteFab.setOnClickListener {
@@ -264,9 +263,9 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         val videoData = workDataOf(
             VIDEO_ID to vm.currentVideoId.value,
             TITLE to contentTitle.text.toString(),
-            SECTION_ID to vm.sectionId.value,
+            SECTION_ID to vm.sectionId,
             RUN_ATTEMPT_ID to vm.attemptId.value,
-            CONTENT_ID to vm.currentContentId.value
+            CONTENT_ID to vm.currentContentId
         )
 
         val request: OneTimeWorkRequest =
@@ -291,9 +290,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     }
 
     private fun setupVideoView() {
+        initializePlayer()
         vm.getOtpProgress.observer(this) {
-            if (it) {
-                initializePlayer()
+            if (it && ::videoPlayer.isInitialized) {
+                videoPlayer.load(getVdoParams())
             } else
                 toast("there was some error with starting feed, try again")
         }
@@ -305,27 +305,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         playerFragment.videoStretchMode = VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
         playerFragment.initialize(this)
         showControls(false)
-    }
-
-//    override fun onStart() {
-//        super.onStart()
-//        val data = this.intent.data
-//        if (data != null && data.isHierarchical) {
-//            setupUI()
-//        }
-//    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-
-        vm.currentContentId.value = intent.getStringExtra(CONTENT_ID) ?: ""
-        vm.sectionId.value = intent.getStringExtra(SECTION_ID) ?: ""
-        if (::playerFragment.isInitialized) {
-            playerFragment.player.release()
-        }
-        if (::youtubePlayer.isInitialized) {
-            youtubePlayer.pause()
-        }
     }
 
     override fun onInitializationSuccess(
@@ -341,9 +320,11 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             setControllerVisibilityListener(this@VideoPlayerActivity)
         }
         showControls(true)
+    }
 
-        // load a media to the player
-        val vdoParams: VdoPlayer.VdoInitParams? = if (vm.isDownloaded) {
+    /**Function to generate new /Reload Video for opt and videoId*/
+    private fun getVdoParams(): VdoPlayer.VdoInitParams? {
+        return if (vm.isDownloaded) {
             VdoPlayer.VdoInitParams.createParamsForOffline(vm.currentVideoId.value)
         } else {
             VdoPlayer.VdoInitParams.Builder()
@@ -351,9 +332,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                 .setPlaybackInfo(vm.mPlaybackInfo)
                 .setPreferredCaptionsLanguage("en")
                 .build()
-        }
-        player.apply {
-            load(vdoParams)
         }
     }
 
@@ -418,8 +396,9 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
 
         override fun onLoaded(p0: VdoPlayer.VdoInitParams?) {
-            videoPlayer?.playWhenReady = true
-            videoPlayer?.playbackSpeed = vm.prefs.SP_PLAYBACK_SPEED
+            videoPlayer.playWhenReady = true
+            videoPlayer.playbackSpeed = vm.prefs.SP_PLAYBACK_SPEED
+            vm.position?.let { videoPlayer.seekTo(it) }
         }
 
         override fun onBufferUpdate(p0: Long) {
@@ -441,7 +420,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             when (p1.errorCode) {
                 5110 -> {
                     rootLayout.snackbar("Seems like your download was corrupted.Please Download Again")
-                    deleteFolder(vm.currentContentId.value!!)
+                    deleteFolder(vm.currentContentId ?: "")
                 }
                 in (2010..2020) -> {
                 }
@@ -591,7 +570,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
     private fun setUpBottomSheet() {
         dialog.dismissWithAnimation = true
-        dialog.setContentView(sheetDialog)
         Objects.requireNonNull(dialog.window)
             ?.setSoftInputMode(SOFT_INPUT_STATE_VISIBLE)
         dialog.setOnShowListener {
@@ -689,7 +667,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                     doubtTitleTv.isVisible = false
                     bottoSheetDescTv.setText("")
                     bottomSheetInfoTv.text =
-                        "${contentTitle.text} | ${videoPlayer?.currentTime?.toDouble()?.secToTime()}"
+                        "${contentTitle.text} | ${videoPlayer.currentTime.toDouble()?.secToTime()}"
                     bottomSheetCancelBtn.setOnClickListener {
                         dialog.dismiss()
                     }
@@ -703,7 +681,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                             if (youtubePlayerView.isVisible)
                                 tracker.currentSecond.toDouble()
                             else
-                                (videoPlayer?.currentTime?.div(1000))?.toDouble()
+                                (videoPlayer.currentTime.div(1000)).toDouble()
                         setOnClickListener {
                             val desc = sheetDialog.bottoSheetDescTv.text.toString()
                             if (desc.isEmpty()) {
@@ -717,7 +695,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                                         vm.attemptId.value
                                             ?: ""
                                     ),
-                                    LectureContent(vm.currentContentId.value!!)
+                                    LectureContent(vm.currentContentId ?: "")
                                 )
                                 vm.createNote(note)
                                 dialog.dismiss()
@@ -731,15 +709,19 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         dialog.show()
     }
 
-    override fun onDestroy() {
-        if (::playerFragment.isInitialized)
-            playerFragment.player?.release()
-        super.onDestroy()
+    override fun onStop() {
+        vm.position = videoPlayer.currentTime
+        if (::playerFragment.isInitialized) {
+            vm.savePlayerState(playerFragment.player.currentTime)
+        }
+        super.onStop()
     }
 
-    override fun onResume() {
-        super.onResume()
-        videoPlayer?.playWhenReady = true
+    override fun onDestroy() {
+        if (::playerFragment.isInitialized) {
+            playerFragment.player?.release()
+        }
+        super.onDestroy()
     }
 
     override fun onControllerVisibilityChange(visibility: Int) {
@@ -763,5 +745,29 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     override fun onYouTubePlayerExitFullScreen() {
         youtubePlayerView.exitFullScreen()
         showFullScreen(false)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+
+        vm.currentContentId = intent.getStringExtra(CONTENT_ID) ?: ""
+        vm.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
+        vm.position = 0L
+        if (::playerFragment.isInitialized) {
+            playerFragment.player.release()
+        }
+        if (::youtubePlayer.isInitialized) {
+            youtubePlayer.pause()
+        }
+    }
+
+    companion object {
+
+        fun createVideoPlayerActivityIntent(context: Context, contentId: String, sectionId: String, position: Long = 0): Intent {
+            return context.intentFor<VideoPlayerActivity>(
+                CONTENT_ID to contentId,
+                VIDEO_POSITION to position,
+                SECTION_ID to sectionId).singleTop()
+        }
     }
 }

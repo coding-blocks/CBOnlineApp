@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.activity_complete_profile.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.contentView
-import org.jetbrains.anko.intentFor
 import org.json.JSONException
 import org.json.JSONObject
 import org.koin.android.ext.android.inject
@@ -35,7 +34,7 @@ class CompleteProfileActivity : BaseCBActivity() {
         setContentView(R.layout.activity_complete_profile)
         val id = JWTUtils.getIdentity(sharedPrefs.SP_JWT_TOKEN_KEY)
         courseResumeBtn.setOnClickListener {
-            startActivity(intentFor<DashboardActivity>())
+            startActivity(DashboardActivity.createDashboardActivityIntent(this, true))
             finish()
         }
         val json =
@@ -108,7 +107,7 @@ class CompleteProfileActivity : BaseCBActivity() {
                     }
                     is ResultWrapper.Success -> {
                         if (response.value.isSuccessful) {
-                            startActivity(intentFor<DashboardActivity>())
+                            startActivity(DashboardActivity.createDashboardActivityIntent(this@CompleteProfileActivity, true))
                             finish()
                         } else
                             runOnUiThread {

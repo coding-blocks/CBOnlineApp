@@ -252,6 +252,28 @@
         <item name="fontFamily">@font/gilroy_semibold</item>
     </style>
 
+    <style name="BottomNavigationViewTextStyle">
+        <item name="fontFamily">@font/gilroy_semibold</item>
+        <item name="fontSize">12sp</item>
+    </style>
+
+    <style name="BottomNavigationViewInActiveTextStyle">
+        <item name="fontFamily">@font/gilroy_medium</item>
+        <item name="fontSize">10sp</item>
+    </style>
+
+    <style name="CardShapeApperance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">10dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeTopRight">10dp</item>
+    </style>
+
+    <style name="roundedImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+    </style>
 
 
 </resources>

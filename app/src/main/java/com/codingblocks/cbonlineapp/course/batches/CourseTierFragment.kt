@@ -23,12 +23,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
 import kotlinx.android.synthetic.main.bottom_sheet_comparsion.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_runs.*
 import kotlinx.android.synthetic.main.bottom_sheet_runs.view.*
 import org.json.JSONArray
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.lang.reflect.Type
 
 class CourseTierFragment : BottomSheetDialogFragment() {
 
@@ -55,15 +55,14 @@ class CourseTierFragment : BottomSheetDialogFragment() {
                 viewPager.adapter = adapter
                 viewPager.offscreenPageLimit = 1
                 viewPager.addOnPageChangeListener(TabLayoutOnPageChangeListener(runTabs))
-                runTabs.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
+                runTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                     override fun onTabReselected(tab: TabLayout.Tab?) {}
 
                     override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
                     override fun onTabSelected(tab: TabLayout.Tab?) {
-                       viewPager.currentItem =  tab?.position?:0
+                        viewPager.currentItem = tab?.position ?: 0
                     }
-
                 })
 
                 //                if (view.runTabs.tabCount == 2) {

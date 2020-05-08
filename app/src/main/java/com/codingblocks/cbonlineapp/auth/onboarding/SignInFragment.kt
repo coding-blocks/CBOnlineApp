@@ -1,11 +1,13 @@
 package com.codingblocks.cbonlineapp.auth.onboarding
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.InputType
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.style.StyleSpan as StyleSpan1
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,10 +36,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.runOnUiThread
 import org.koin.android.ext.android.inject
-import android.text.style.StyleSpan as StyleSpan1
 
 class SignInFragment : BaseCBFragment() {
 
@@ -155,8 +155,7 @@ class SignInFragment : BaseCBFragment() {
                                 saveKeys(it)
                             }
                         }
-                        startActivity(intentFor<DashboardActivity>())
-                        requireActivity().finish()
+                        navigateToActivity()
                     } else
                         runOnUiThread {
                             signInRoot.showSnackbar("Invalid Username or Password.Please Try Again", Snackbar.LENGTH_SHORT)
@@ -164,6 +163,20 @@ class SignInFragment : BaseCBFragment() {
                         }
                 }
             }
+        }
+    }
+
+    /**
+     * Always call finish after setResult or startActivity otherwise you'll lose reference of previous activity
+     */
+    private fun navigateToActivity() {
+        with(requireActivity()) {
+            if (callingActivity == null) {
+                startActivity(DashboardActivity.createDashboardActivityIntent(requireContext(), true))
+            } else {
+                setResult(RESULT_OK)
+            }
+            finish()
         }
     }
 

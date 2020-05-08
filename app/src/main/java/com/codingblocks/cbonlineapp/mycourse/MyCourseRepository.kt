@@ -27,6 +27,8 @@ import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.safeApiCall
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MyCourseRepository(
     private val sectionWithContentsDao: SectionWithContentsDao,
@@ -79,6 +81,19 @@ class MyCourseRepository(
                     sectionDao.insertNew(newSection)
             }
             getSectionContent(courseSection.id, runAttempt.id, courseSection.name)
+        }
+        deleteOldSections(runAttempt.run?.sections?.map { it.id }!!, runAttempt.run?.id)
+    }
+
+    /**
+     *Function to delete [SectionModel] which are no longer part of course content.
+     */
+    private suspend fun deleteOldSections(newList: List<String>, id: String?) {
+        val oldList = withContext(Dispatchers.IO) { sectionDao.getCourseSection(id!!) }
+        oldList.forEach {
+            if (!newList.contains(it)) {
+                sectionDao.deleteSection(it)
+            }
         }
     }
 

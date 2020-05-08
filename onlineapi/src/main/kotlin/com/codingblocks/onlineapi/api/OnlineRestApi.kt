@@ -4,7 +4,6 @@ import com.codingblocks.onlineapi.models.DoubtStats
 import com.codingblocks.onlineapi.models.Extension
 import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.PerformanceResponse
-import com.codingblocks.onlineapi.models.PostStream
 import com.codingblocks.onlineapi.models.RatingModel
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.google.gson.JsonObject
@@ -22,6 +21,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface OnlineRestApi {
+    @Deprecated("Progress is part of run")
     @GET("v2/run_attempts/{runid}/progress")
     fun getMyCourseProgress(@Path("runid") id: String): Call<HashMap<Any, Any>>
 
@@ -65,12 +65,6 @@ interface OnlineRestApi {
 
     @GET("v2/users/myReferral")
     suspend fun myReferral(): Response<JsonObject>
-
-    @GET("v2/courses/{runid}/doubts?order=latest")
-    fun getDoubts(@Path("runid") id: String): Call<ResponseBody>
-
-    @GET("v2/courses/doubts/{doubtid}")
-    fun getDoubtById(@Path("doubtid") id: Int): Call<PostStream>
 
     @GET("v2/runs/cart")
     suspend fun getCart(): Response<JsonObject>

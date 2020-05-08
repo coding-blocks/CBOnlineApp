@@ -1,5 +1,7 @@
 package com.codingblocks.cbonlineapp.mycourse
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
@@ -11,14 +13,12 @@ import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.content.CourseContentFragment
 import com.codingblocks.cbonlineapp.mycourse.library.CourseLibraryFragment
 import com.codingblocks.cbonlineapp.mycourse.overview.OverviewFragment
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.extensions.animateVisibility
@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
@@ -43,21 +44,24 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_course)
         setToolbar(toolbar_mycourse)
-        title = intent.getStringExtra(COURSE_NAME)
-        viewModel.attemptId = intent.getStringExtra(RUN_ATTEMPT_ID) ?: ""
-        viewModel.name = intent.getStringExtra(COURSE_NAME) ?: ""
+        intent.getStringExtra(RUN_ATTEMPT_ID)?.let {
+            viewModel.attemptId = it
+        }
+        intent.getStringExtra(COURSE_NAME)?.let {
+            viewModel.name = it
+        }
+        title = viewModel.name
+
         if (!MediaUtils.checkPermission(this)) {
             MediaUtils.isStoragePermissionGranted(this)
         }
         viewModel.nextContent?.observe(this, Observer { content ->
             courseResumeBtn.setOnClickListener {
-                when (content.contentable) {
-                    LECTURE, VIDEO -> startActivity(
-                        intentFor<VideoPlayerActivity>(
-                            CONTENT_ID to content.contentId,
-                            SECTION_ID to content.sectionId
-                        ).singleTop()
-                    )
+                if (content != null)
+                    when (content.contentable) {
+                        LECTURE, VIDEO -> startActivity(createVideoPlayerActivityIntent(this, content.contentId, content.sectionId))
+                    } else {
+                    toast("Please Wait while the content is being updated!")
                 }
             }
         })
@@ -115,5 +119,12 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
 
     override fun onRefresh() {
         viewModel.fetchSections(true)
+    }
+
+    companion object {
+
+        fun createMyCourseActivityIntent(context: Context, attemptId: String, name: String = ""): Intent {
+            return context.intentFor<MyCourseActivity>(COURSE_NAME to name, RUN_ATTEMPT_ID to attemptId).singleTop()
+        }
     }
 }

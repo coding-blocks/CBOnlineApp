@@ -7,8 +7,6 @@
         <color android:color="@color/dark" />
     </item>
     <item
-        android:width="300dp"
-        android:height="300dp"
         android:drawable="@drawable/splash"
         android:gravity="center" />
 
