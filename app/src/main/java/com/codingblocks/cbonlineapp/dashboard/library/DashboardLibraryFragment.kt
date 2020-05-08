@@ -23,7 +23,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DashboardLibraryFragment : BaseCBFragment() {
 
-    private val viewModel:DashboardViewModel by sharedViewModel()
+    private val viewModel: DashboardViewModel by sharedViewModel()
     private val courseListAdapter = MyCourseListAdapter("RUN")
 
     private val itemClickListener: ItemClickListener by lazy {
@@ -48,10 +48,12 @@ class DashboardLibraryFragment : BaseCBFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dashboardCoursesRv.setRv(requireContext(), courseListAdapter, true)
-        viewModel.allRuns.observer(viewLifecycleOwner) {
-            courseListAdapter.submitList(it)
-            changeViewState(dashboardCoursesRv, emptyLl, dashboardCourseShimmer, it.isEmpty())
+        if (viewModel.isLoggedIn == true) {
+            dashboardCoursesRv.setRv(requireContext(), courseListAdapter, true)
+            viewModel.allRuns.observer(viewLifecycleOwner) {
+                courseListAdapter.submitList(it)
+                changeViewState(dashboardCoursesRv, emptyLl, dashboardCourseShimmer, it.isEmpty())
+            }
         }
         dashboardLibraryEmptyBtn.setOnClickListener {
             requireActivity().dashboardPager.currentItem = 0

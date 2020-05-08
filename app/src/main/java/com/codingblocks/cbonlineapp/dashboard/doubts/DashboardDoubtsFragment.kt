@@ -163,6 +163,16 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
                     }
                 }
             }
+            vm.doubts.observe(viewLifecycleOwner, Observer {
+                doubtListAdapter.submitList(it)
+                changeViewState(
+                    dashboardDoubtRv,
+                    internetll,
+                    emptyLl,
+                    dashboardDoubtShimmer,
+                    it.isEmpty()
+                )
+            })
         } else {
             dashboardDoubts.isVisible = false
             dashboardDoubtsLoggedOut.isVisible = true
@@ -170,17 +180,6 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
 
 
         dashboardDoubtRv.setRv(requireContext(), doubtListAdapter, true, "thick")
-
-        vm.doubts.observe(viewLifecycleOwner, Observer {
-            doubtListAdapter.submitList(it)
-            changeViewState(
-                dashboardDoubtRv,
-                internetll,
-                emptyLl,
-                dashboardDoubtShimmer,
-                it.isEmpty()
-            )
-        })
 //        vm.errorLiveData.observer(viewLifecycleOwner) {
 //            when (it) {
 //                ErrorStatus.NO_CONNECTION -> {

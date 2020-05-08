@@ -13,7 +13,6 @@ import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
 import com.codingblocks.cbonlineapp.database.models.CourseRunPair
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
-import com.codingblocks.cbonlineapp.database.models.PlayerState
 import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
@@ -26,9 +25,9 @@ import com.codingblocks.onlineapi.getMeta
 import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Player
-import com.codingblocks.onlineapi.models.User
 import com.onesignal.OneSignal
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 class DashboardViewModel(
@@ -58,7 +57,6 @@ class DashboardViewModel(
                             homeRepo.prefs.SP_JWT_REFRESH_TOKEN = rt
                             Clients.authJwt = jwt
                             Clients.refreshToken = rt
-//                            isLoggedIn.postValue(true)
                         }
                 }
             }
@@ -84,14 +82,22 @@ class DashboardViewModel(
         }
     }
 
-    fun fetchUser() = liveData<User>(Dispatchers.IO) {
+    fun fetchUser() = liveData(Dispatchers.IO) {
         when (val response = homeRepo.fetchUser()) {
-            is ResultWrapper.GenericError -> setError(response.error)
+            is ResultWrapper.GenericError -> {
+                if (response.code == 401)
+                    if (prefs.SP_JWT_REFRESH_TOKEN.isNotEmpty()) {
+                        refreshToken()
+                    } else {
+                        setError(response.error)
+                    }
+            }
             is ResultWrapper.Success -> {
                 if (response.value.isSuccessful)
                     response.value.body()?.let {
-                        emit(it)
                         homeRepo.insertUser(it)
+                        delay(2000)
+                        emit(it)
                         if (!prefs.SP_PUSH_NOTIFICATIONS)
                             setPlayerId()
                     }
