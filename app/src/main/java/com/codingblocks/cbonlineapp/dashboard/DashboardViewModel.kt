@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
@@ -176,8 +177,8 @@ class DashboardViewModel(
     }
     var courseFilter = MutableLiveData<String>()
     val courses by lazy {
-        Transformations.switchMap(courseFilter) { query ->
-            myCourseRepo.getMyRuns(query)
+        Transformations.distinctUntilChanged(courseFilter).switchMap { query ->
+            myCourseRepo.getMyRuns(query).distinctUntilChanged()
         }
     }
 

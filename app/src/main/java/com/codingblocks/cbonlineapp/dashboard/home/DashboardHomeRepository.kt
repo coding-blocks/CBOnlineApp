@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.dashboard.home
 
+import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.PlayerDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
@@ -48,7 +49,7 @@ class DashboardHomeRepository(
 
 
     fun getTopRun() = courseWithInstructorDao.getTopRun().getDistinct()
-    fun getTopRunById(id: String) = courseWithInstructorDao.getRunById(id).getDistinct()
+    fun getTopRunById(id: String) = courseWithInstructorDao.getRunById(id).distinctUntilChanged()
     fun getRunStats(it: String) = runPerformanceDao.getPerformance(it)
     fun getRecentlyPlayed() = playerDao.getPromotedStories()
 

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import androidx.lifecycle.distinctUntilChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.LoginActivity
@@ -64,7 +65,7 @@ class DashboardHomeFragment : BaseCBFragment() {
         recentlyPlayedAdapter.onItemClick = itemClickListener
 
         if (vm.isLoggedIn == true) {
-            vm.fetchTopRunWithStats().getDistinct().observe(viewLifecycleOwner, Observer { coursePair ->
+            vm.fetchTopRunWithStats().observe(viewLifecycleOwner, Observer { coursePair ->
                 dashboardProgressContainer.isVisible = coursePair != null
                 dashboardEmptyProgress.isVisible = coursePair == null
                 if (coursePair != null) {
