@@ -103,4 +103,8 @@ class VideoPlayerRepository(
     suspend fun savePlayerState(attemptId: String, sectionId: String, contentId: String, time: Long) {
         playerDao.insert(PlayerState(attemptId, sectionId, contentId, time))
     }
+
+    fun deletePlayerState(attemptId: String) {
+        playerDao.deleteById(attemptId)
+    }
 }

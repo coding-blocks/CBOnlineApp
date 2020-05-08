@@ -35,8 +35,8 @@ import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.Sections
-import java.util.concurrent.TimeUnit
 import org.json.JSONObject
+import java.util.concurrent.TimeUnit
 
 const val VIDEO_POSITION = "videoPos"
 
@@ -337,19 +337,23 @@ class VideoPlayerViewModel(
      */
     fun savePlayerState(currentTime: Long) {
         runIO {
-            if (currentContentProgress != "DONE") {
-                attemptId.value?.let { repo.savePlayerState(it, sectionId!!, currentContentId!!, currentTime) }
-                val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-                val thumbnailData: Data = workDataOf(VIDEO_ID to currentVideoId.value, CONTENT_ID to currentContentId)
-                val request: OneTimeWorkRequest =
-                    OneTimeWorkRequestBuilder<ThumbnailWorker>()
-                        .setConstraints(constraints)
-                        .setInputData(thumbnailData)
-                        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
-                        .build()
+            attemptId.value?.let { repo.savePlayerState(it, sectionId!!, currentContentId!!, currentTime) }
+            val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+            val thumbnailData: Data = workDataOf(VIDEO_ID to currentVideoId.value, CONTENT_ID to currentContentId)
+            val request: OneTimeWorkRequest =
+                OneTimeWorkRequestBuilder<ThumbnailWorker>()
+                    .setConstraints(constraints)
+                    .setInputData(thumbnailData)
+                    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                    .build()
 
-                WorkManager.getInstance().enqueue(request)
-            }
+            WorkManager.getInstance().enqueue(request)
+        }
+    }
+
+    fun deletePlayerState() {
+        runIO {
+            attemptId.value?.let { repo.deletePlayerState(it) }
         }
     }
 }

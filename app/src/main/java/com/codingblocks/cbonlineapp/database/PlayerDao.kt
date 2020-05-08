@@ -18,4 +18,7 @@ interface PlayerDao : BaseDao<PlayerState> {
 
     @Query("UPDATE PlayerState SET thumbnail = :thumbnail WHERE contentId = :contentId")
     suspend fun updateThumbnail(thumbnail: String, contentId: String)
+
+    @Query("DELETE FROM PlayerState WHERE attemptId = :attemptId")
+    fun deleteById(attemptId: String)
 }

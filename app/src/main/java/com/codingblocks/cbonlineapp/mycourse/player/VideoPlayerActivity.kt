@@ -66,9 +66,6 @@ import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
-import java.io.File
-import java.util.Objects
-import java.util.concurrent.TimeUnit
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import kotlinx.android.synthetic.main.my_fab_menu.*
@@ -84,6 +81,9 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
+import java.io.File
+import java.util.Objects
+import java.util.concurrent.TimeUnit
 
 class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     VdoPlayer.InitializationListener, VdoPlayerControls.FullscreenActionListener,
@@ -444,10 +444,16 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     }
 
     private fun checkProgress(progress: Long, duration: Long) {
-        val per = (duration / 100) * 90
+        val per = duration * 0.9
         if (progress > per && vm.currentContentProgress != "DONE") {
             vm.currentContentProgress = "DONE"
             vm.updateProgress()
+        }
+        /**Remove [PlayerState] After 95%*/
+
+        val completion = duration * 0.95
+        if (progress > completion) {
+            vm.deletePlayerState()
         }
     }
 
@@ -712,7 +718,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     override fun onStop() {
         vm.position = videoPlayer.currentTime
         if (::playerFragment.isInitialized) {
-            vm.savePlayerState(playerFragment.player.currentTime)
+            val duration = playerFragment.player.duration
+            val time = playerFragment.player.currentTime
+            if (time < duration * 0.95)
+                vm.savePlayerState(time)
         }
         super.onStop()
     }
