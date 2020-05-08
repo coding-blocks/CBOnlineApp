@@ -129,6 +129,7 @@ class CourseViewModel(
             when (val response = repo.clearCart()) {
                 is ResultWrapper.GenericError -> {
                     enrollTrialProgress.postValue(STATE.ERROR)
+                    addToCart(id)
                     setError(response.error)
                 }
                 is ResultWrapper.Success -> with(response.value) {
@@ -136,6 +137,7 @@ class CourseViewModel(
                         addToCart(id)
                     } else {
                         enrollTrialProgress.postValue(STATE.ERROR)
+                        addToCart(id)
                         setError(fetchError(code()))
                     }
                 }

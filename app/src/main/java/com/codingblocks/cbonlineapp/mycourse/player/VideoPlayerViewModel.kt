@@ -35,8 +35,8 @@ import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.Sections
-import org.json.JSONObject
 import java.util.concurrent.TimeUnit
+import org.json.JSONObject
 
 const val VIDEO_POSITION = "videoPos"
 

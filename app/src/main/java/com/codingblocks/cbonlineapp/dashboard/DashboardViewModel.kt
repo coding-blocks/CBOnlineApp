@@ -12,11 +12,13 @@ import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
+import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.database.models.CourseRunPair
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.ALL
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
+import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
 import com.codingblocks.onlineapi.Clients
@@ -171,16 +173,16 @@ class DashboardViewModel(
     /**
      * My Course Fragment
      */
-    val allRuns by lazy {
+    val allRuns: LiveData<List<CourseInstructorPair>> by lazy {
         myCourseRepo.getActiveRuns()
     }
-    val purchasedRuns by lazy {
+    val purchasedRuns: LiveData<List<CourseInstructorPair>> by lazy {
         myCourseRepo.getPurchasedRuns()
     }
     var courseFilter = MutableLiveData<String>()
     val courses by lazy {
         Transformations.distinctUntilChanged(courseFilter).switchMap { query ->
-            myCourseRepo.getMyRuns(query).distinctUntilChanged()
+            myCourseRepo.getMyRuns(query).getDistinct()
         }
     }
 

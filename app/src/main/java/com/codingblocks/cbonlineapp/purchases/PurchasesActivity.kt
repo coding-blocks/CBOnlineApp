@@ -11,11 +11,12 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import kotlinx.android.synthetic.main.activity_purchases.*
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PurchasesActivity : BaseCBActivity() {
 
-    private val viewModel by viewModel<DashboardViewModel>()
+    private val viewModel: DashboardViewModel by stateViewModel()
     private val courseListAdapter = MyCourseListAdapter()
 
     private val itemClickListener: ItemClickListener by lazy {
