@@ -28,12 +28,16 @@ import com.codingblocks.cbonlineapp.purchases.PurchasesActivity
 import com.codingblocks.cbonlineapp.settings.AboutActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
+import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.JWTUtils
+import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.slideDown
 import com.codingblocks.cbonlineapp.util.extensions.slideUp
+import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -74,6 +78,17 @@ class DashboardActivity : BaseCBActivity(),
         dashboardNavigation.setNavigationItemSelectedListener(this)
         dashboardBottomNav.setOnNavigationItemSelectedListener(this)
         initializeUI(vm.isLoggedIn ?: false)
+        vm.errorLiveData.observer(this) { error ->
+            when (error) {
+                ErrorStatus.UNAUTHORIZED -> {
+                    Components.showConfirmation(this, UNAUTHORIZED) {
+                        if (it) {
+                            startActivity(intentFor<LoginActivity>())
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onStart() {
@@ -337,10 +352,10 @@ class DashboardActivity : BaseCBActivity(),
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, resources.getColor(R.color.white))
             }
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
-            } else {
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, resources.getColor(R.color.black))
-            }
+            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
+        } else {
+            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, resources.getColor(R.color.black))
+        }
 
         dashboardToolbarSecondary.post {
             when (pos) {

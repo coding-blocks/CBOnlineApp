@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
@@ -84,6 +83,9 @@ class DashboardViewModel(
                             Clients.authJwt = jwt
                             Clients.refreshToken = rt
                         }
+                    else {
+                        setError(fetchError(response.value.code()))
+                    }
                 }
             }
         }
@@ -180,7 +182,7 @@ class DashboardViewModel(
         myCourseRepo.getPurchasedRuns()
     }
     var courseFilter = MutableLiveData<String>()
-    val courses by lazy {
+    val courses: LiveData<List<CourseInstructorPair>> by lazy {
         Transformations.distinctUntilChanged(courseFilter).switchMap { query ->
             myCourseRepo.getMyRuns(query).getDistinct()
         }
