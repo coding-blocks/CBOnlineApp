@@ -94,7 +94,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     private val animationUtils by lazy { Animations(this) }
     private val progressDialog by lazy { ProgressDialog.progressDialog(this) }
     private val dialog: BottomSheetDialog by lazy { BottomSheetDialog(this) }
-    private val sheetDialog: View by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, playerRoot) }
+    private val sheetDialog: View by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, null) }
     val tracker = YouTubePlayerTracker()
 
     private lateinit var playerFragment: VdoPlayerSupportFragment
@@ -576,6 +576,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
     private fun setUpBottomSheet() {
         dialog.dismissWithAnimation = true
+        dialog.setContentView(sheetDialog)
         Objects.requireNonNull(dialog.window)
             ?.setSoftInputMode(SOFT_INPUT_STATE_VISIBLE)
         dialog.setOnShowListener {
@@ -601,7 +602,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                 youtubePlayer = player
                 youtubePlayer.addListener(tracker)
                 val id = getYoutubeVideoId(youtubeUrl)
-                player.loadVideo(id, 0f)
+                player.loadVideo(id, vm.position?.toFloat()?.div(1000) ?: 0f)
             }
         })
     }
@@ -673,7 +674,11 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                     doubtTitleTv.isVisible = false
                     bottoSheetDescTv.setText("")
                     bottomSheetInfoTv.text =
-                        "${contentTitle.text} | ${videoPlayer.currentTime.toDouble()?.secToTime()}"
+                        if (::youtubePlayer.isInitialized)
+                            "${contentTitle.text} | ${tracker.currentSecond.toDouble().secToTime()}"
+                        else
+                            "${contentTitle.text} | ${playerFragment.player.currentTime.toDouble().secToTime()}"
+
                     bottomSheetCancelBtn.setOnClickListener {
                         dialog.dismiss()
                     }
@@ -716,12 +721,18 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     }
 
     override fun onStop() {
-        vm.position = videoPlayer.currentTime
         if (::playerFragment.isInitialized) {
+            vm.position = videoPlayer.currentTime
             val duration = playerFragment.player.duration
             val time = playerFragment.player.currentTime
             if (time < duration * 0.95)
-                vm.savePlayerState(time)
+                vm.savePlayerState(time, true)
+        } else if (::youtubePlayer.isInitialized) {
+
+            val duration = (tracker.videoDuration * 1000).toLong()
+            val time = (tracker.currentSecond * 1000).toLong()
+            if (time < duration * 0.95)
+                vm.savePlayerState(time, false)
         }
         super.onStop()
     }

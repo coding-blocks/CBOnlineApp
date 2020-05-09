@@ -9,12 +9,15 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.auth.LoginActivity
@@ -35,23 +38,28 @@ import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.extensions.slideDown
 import com.codingblocks.cbonlineapp.util.extensions.slideUp
 import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.firebase.firestore.FirebaseFirestore
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
+import kotlinx.android.synthetic.main.report_dialog.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 const val LOGGED_IN = "loggedIn"
@@ -220,42 +228,42 @@ class DashboardActivity : BaseCBActivity(),
     }
 
     private fun showReportDialog() {
-//        val dialog = AlertDialog.Builder(this).create()
-//        val view = layoutInflater.inflate(R.layout.report_dialog, null)
-//        view.primaryBtn.setOnClickListener {
-//
-//            if (view.nameLayout.editText?.text.isNullOrEmpty()) {
-//                view.nameLayout.error = "Title Cannot Be Empty"
-//                return@setOnClickListener
-//            } else if (view.mobile.editText?.text.isNullOrEmpty() && view.mobile.editText?.text?.length!! < 10) {
-//                view.mobile.error = "Description Cannot Be Empty"
-//                return@setOnClickListener
-//            } else {
-//                val data = hashMapOf(
-//                    "title" to view.nameLayout.editText?.text.toString(),
-//                    "description" to view.mobile.editText?.text.toString(),
-//                    "oneauth-id" to prefs.SP_ONEAUTH_ID,
-//                    "device" to Build.MODEL,
-//                    "version" to Build.VERSION.SDK_INT,
-//                    "app-version" to BuildConfig.VERSION_CODE
-//
-//                )
-//                FirebaseFirestore.getInstance().collection("Reports")
-//                    .add(data)
-//                    .addOnSuccessListener {
-//                        dashboardDrawer.showSnackbar("Bug has been reported !!", Snackbar.LENGTH_SHORT)
-//                    }.addOnFailureListener {
-//                        toast("There was some error reporting the bug,Please Try Again")
-//                    }
-//                dialog.dismiss()
-//            }
-//        }
-//        dialog.apply {
-//            window?.setBackgroundDrawableResource(android.R.color.transparent)
-//            setView(view)
-//            setCancelable(true)
-//            show()
-//        }
+        val dialog = AlertDialog.Builder(this).create()
+        val view = layoutInflater.inflate(R.layout.report_dialog, null)
+        view.primaryBtn.setOnClickListener {
+
+            if (view.nameLayout.editText?.text.isNullOrEmpty()) {
+                view.nameLayout.error = "Title Cannot Be Empty"
+                return@setOnClickListener
+            } else if (view.mobile.editText?.text.isNullOrEmpty() && view.mobile.editText?.text?.length!! < 10) {
+                view.mobile.error = "Description Cannot Be Empty"
+                return@setOnClickListener
+            } else {
+                val data = hashMapOf(
+                    "title" to view.nameLayout.editText?.text.toString(),
+                    "description" to view.mobile.editText?.text.toString(),
+                    "oneauth-id" to vm.prefs.SP_ONEAUTH_ID,
+                    "device" to Build.MODEL,
+                    "version" to Build.VERSION.SDK_INT,
+                    "app-version" to BuildConfig.VERSION_CODE
+
+                )
+                FirebaseFirestore.getInstance().collection("Reports")
+                    .add(data)
+                    .addOnSuccessListener {
+                        dashboardDrawer.showSnackbar("Bug has been reported !!", Snackbar.LENGTH_SHORT)
+                    }.addOnFailureListener {
+                        toast("There was some error reporting the bug,Please Try Again")
+                    }
+                dialog.dismiss()
+            }
+        }
+        dialog.apply {
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            setView(view)
+            setCancelable(true)
+            show()
+        }
     }
 
     private fun checkForUpdates() {
@@ -297,7 +305,7 @@ class DashboardActivity : BaseCBActivity(),
         fetchToken()
     }
 
-    fun openProfile() {
+    fun openProfile(view: View) {
         if (vm.isLoggedIn == false) {
             startActivity<LoginActivity>()
             finish()
@@ -306,7 +314,7 @@ class DashboardActivity : BaseCBActivity(),
         }
     }
 
-    fun openReferral() {
+    fun openReferral(view: View) {
         startActivity<ReferralActivity>()
     }
 

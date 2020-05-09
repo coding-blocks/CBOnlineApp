@@ -335,19 +335,21 @@ class VideoPlayerViewModel(
     /**
      * Function to save player state if current lecture is incomplete
      */
-    fun savePlayerState(currentTime: Long) {
+    fun savePlayerState(currentTime: Long, thumbnail: Boolean) {
         runIO {
             attemptId.value?.let { repo.savePlayerState(it, sectionId!!, currentContentId!!, currentTime) }
-            val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-            val thumbnailData: Data = workDataOf(VIDEO_ID to currentVideoId.value, CONTENT_ID to currentContentId)
-            val request: OneTimeWorkRequest =
-                OneTimeWorkRequestBuilder<ThumbnailWorker>()
-                    .setConstraints(constraints)
-                    .setInputData(thumbnailData)
-                    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
-                    .build()
+            if (thumbnail) {
+                val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+                val thumbnailData: Data = workDataOf(VIDEO_ID to currentVideoId.value, CONTENT_ID to currentContentId)
+                val request: OneTimeWorkRequest =
+                    OneTimeWorkRequestBuilder<ThumbnailWorker>()
+                        .setConstraints(constraints)
+                        .setInputData(thumbnailData)
+                        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                        .build()
 
-            WorkManager.getInstance().enqueue(request)
+                WorkManager.getInstance().enqueue(request)
+            }
         }
     }
 
