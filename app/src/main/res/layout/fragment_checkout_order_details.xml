@@ -14,14 +14,35 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/removeProductLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_large"
-            android:fontFamily="@font/gilroy_bold"
-            android:text="1. Verify Order Details"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="1. Verify Order Details"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/removeProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginStart="24dp"
+                android:text="@string/clear"
+                android:fontFamily="@font/gilroy_bold"
+                android:drawableEnd="@drawable/ic_clear_cart"
+                android:drawablePadding="10dp"
+                android:textColor="@color/white"
+                android:textSize="13.5sp"/>
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

@@ -40,6 +40,22 @@ class CheckoutViewModel : BaseCBViewModel() {
         }
     }
 
+    fun clearCart() {
+        runIO {
+            when (val response = safeApiCall { Clients.api.clearCart() }) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if(isSuccessful) {
+                        // nothing
+                    } else {
+                        cart.postValue(null)
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
+
     fun updateCart() {
         runIO {
             when (val response = safeApiCall { Clients.api.updateCart(map) }) {

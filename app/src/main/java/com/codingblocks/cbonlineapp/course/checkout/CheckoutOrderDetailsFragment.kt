@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
 import com.codingblocks.cbonlineapp.R
@@ -73,10 +74,17 @@ class CheckoutOrderDetailsFragment : BaseCBFragment(), AnkoLogger {
                             addToStack = true
                         )
                     }
+                    removeProduct.setOnClickListener {
+                        Toast.makeText(context, "Cart Cleared", Toast.LENGTH_SHORT).show()
+                        vm.clearCart()
+                        emptyCart.isVisible = true
+                        cartLayout.isVisible = false
+                    }
                 }
             }
         }
 
         exploreBtn.setOnClickListener { requireActivity().finish() }
+        removeProduct.setOnClickListener(null)
     }
 }
