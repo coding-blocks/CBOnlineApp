@@ -284,5 +284,7 @@
     <string name="progress">%d %%</string>
     <string name="completed">%d %% Completed</string>
     <string name="continue_from_where_you_left">Continue from where you left</string>
+    <string name="payment_failed">Your payment has failed!</string>
+    <string name="internet_connection_error">Please check your internet connection</string>
     <string name="retry">Retry Now</string>
 </resources>

@@ -121,12 +121,14 @@ fun AppCompatActivity.replaceFragmentSafely(
     @AnimRes enterAnimation: Int = 0,
     @AnimRes exitAnimation: Int = 0,
     @AnimRes popEnterAnimation: Int = 0,
-    @AnimRes popExitAnimation: Int = 0
+    @AnimRes popExitAnimation: Int = 0,
+    addToStack: Boolean = false
 ) {
     val ft = supportFragmentManager
         .beginTransaction()
         .setCustomAnimations(enterAnimation, exitAnimation, popEnterAnimation, popExitAnimation)
         .replace(containerViewId, fragment, tag)
+    if (addToStack) { ft.addToBackStack("")}
     if (!supportFragmentManager.isStateSaved) {
         ft.commit()
     } else if (allowStateLoss) {

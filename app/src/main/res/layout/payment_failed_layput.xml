@@ -20,7 +20,8 @@
         android:layout_marginTop="@dimen/margin_extra_large"
         android:fontFamily="@font/gilroy_bold"
         android:textColor="@color/pastel_red"
-        tools:text="Your payment has failed!" />
+        android:text="@string/payment_failed"
+        tools:text="@string/payment_failed" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -30,7 +31,8 @@
         android:fontFamily="@font/gilroy_medium"
         android:textColor="@color/black"
         android:layout_marginTop="@dimen/margin_small"
-        tools:text="Please check your internet connection" />
+        android:text="@string/internet_connection_error"
+        tools:text="@string/internet_connection_error" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/retryBtn"
