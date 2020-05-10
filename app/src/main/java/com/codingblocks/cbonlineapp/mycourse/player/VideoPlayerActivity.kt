@@ -212,12 +212,12 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                 vm.currentVideoId.value = it.contentLecture.lectureId
                 youtubePlayerView.isVisible = false
                 videoContainer.visibility = View.VISIBLE
+                initializePlayer()
                 if (vm.isDownloaded) {
-                    initializePlayer()
+                    vm.getOtpProgress.postValue(true)
                 } else {
-                    vm.getOtpProgress.value = null
+                    vm.getOtpProgress.postValue(null)
                     vm.getOtp()
-                    setupVideoView()
                 }
             } else if (it.contentable == VIDEO) {
                 downloadBtn.isVisible = false
@@ -289,15 +289,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         playerViewPager.offscreenPageLimit = 2
     }
 
-    private fun setupVideoView() {
-        initializePlayer()
-        vm.getOtpProgress.observer(this) {
-            if (it && ::videoPlayer.isInitialized) {
-                videoPlayer.load(getVdoParams())
-            } else
-                toast("there was some error with starting feed, try again")
-        }
-    }
 
     private fun initializePlayer() {
         playerFragment =
@@ -320,6 +311,12 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             setControllerVisibilityListener(this@VideoPlayerActivity)
         }
         showControls(true)
+        vm.getOtpProgress.observer(this) {
+            if (it && ::videoPlayer.isInitialized) {
+                videoPlayer.load(getVdoParams())
+            } else
+                toast("there was some error with starting feed, try again")
+        }
     }
 
     /**Function to generate new /Reload Video for opt and videoId*/
