@@ -76,13 +76,30 @@ class VideoNotesFragment : BaseCBFragment(), AnkoLogger {
         playerNotesRv.setRv(requireContext(), notesListAdapter, false)
 
         viewModel.notes.observer(viewLifecycleOwner) {
-            notesListAdapter.submitList(it)
+            if (it.isNullOrEmpty()) {
+                notesListAdapter.submitList(emptyList())
+                showEmptyView(false)
+            } else {
+                notesListAdapter.submitList(it)
+                showEmptyView(true)
+            }
+
         }
 
         notesListAdapter.apply {
             onDeleteClick = deleteClickListener
             onEditClick = editClickListener
             onItemClick = itemClickListener
+        }
+    }
+
+    private fun showEmptyView(show: Boolean) {
+        if (show) {
+            playerNotesRv.visibility = View.VISIBLE
+            noNotesLayout.visibility = View.GONE
+        } else {
+            playerNotesRv.visibility = View.GONE
+            noNotesLayout.visibility = View.VISIBLE
         }
     }
 
