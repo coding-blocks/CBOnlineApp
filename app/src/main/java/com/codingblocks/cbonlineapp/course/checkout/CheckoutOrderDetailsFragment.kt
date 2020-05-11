@@ -75,7 +75,7 @@ class CheckoutOrderDetailsFragment : BaseCBFragment(), AnkoLogger {
                         )
                     }
                     removeProduct.setOnClickListener {
-                        Toast.makeText(context, "Cart Cleared", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Items Removed", Toast.LENGTH_SHORT).show()
                         vm.clearCart()
                         emptyCart.isVisible = true
                         cartLayout.isVisible = false

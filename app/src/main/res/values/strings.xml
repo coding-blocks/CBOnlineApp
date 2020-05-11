@@ -284,5 +284,5 @@
     <string name="progress" >%d %%</string>
     <string name="completed" >%d %% Completed</string>
     <string name="continue_from_where_you_left">Continue from where you left</string>
-    <string name="clear">Clear</string>
+    <string name="clear">Remove Product</string>
 </resources>
