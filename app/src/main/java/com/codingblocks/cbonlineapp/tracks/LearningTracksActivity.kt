@@ -57,16 +57,18 @@ class LearningTracksActivity : BaseCBActivity() {
         setToolbar(tracksToolbar)
         setUpBottomSheet()
         setChips()
-        tracksRv.setRv(this, tracksListAdapter)
         activity_learning_shimmer.showShimmer(true)
+        tracksRv.setRv(this, tracksListAdapter)
+
         vm.fetchTracks().observer(this) { courses ->
             tracksListAdapter.submitList(courses)
         }
         vm.fetchProfessions().observer(this) {
             it?.takeIf { it.isNotEmpty() }?.get(0)?.let { it1 -> setProfession(it1) }
             batchListAdapter.submitList(it)
+            activity_learning_shimmer.hideAndStop()
         }
-        activity_learning_shimmer.hideAndStop()
+
 
         needHelp.setOnClickListener {
             showHelpDialog(type = "Track") { b: Boolean, name: String, number: String ->
