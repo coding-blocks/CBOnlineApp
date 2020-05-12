@@ -126,7 +126,8 @@
         </activity>
         <activity
             android:name=".course.CourseActivity"
-            android:parentActivityName=".dashboard.DashboardActivity" />
+            android:parentActivityName=".dashboard.DashboardActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".mycourse.MyCourseActivity"
             android:label="@string/title_activity_my_course"
@@ -225,10 +226,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".util.CertificateDownloadReceiver"
-            android:enabled="true"
-            android:exported="false"/>
 
         <service
             android:name=".util.EndlessService"
