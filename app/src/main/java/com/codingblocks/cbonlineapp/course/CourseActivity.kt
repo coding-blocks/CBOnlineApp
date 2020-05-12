@@ -10,6 +10,7 @@ import android.widget.ImageView
 import androidx.activity.invoke
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
@@ -30,6 +31,7 @@ import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
+import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -63,6 +65,9 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
 
     private val courseLogoUrl by lazy {
         intent.getStringExtra(COURSE_LOGO)
+    }
+    val loadingDialog: AlertDialog by lazy {
+        getLoadingDialog()
     }
     private val viewModel by viewModel<CourseViewModel>()
 
@@ -304,5 +309,12 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     override fun onBackPressed() {
         youtubePlayer?.release()
         super.onBackPressed()
+    }
+
+    override fun onDestroy() {
+        if (loadingDialog.isShowing) {
+            loadingDialog.dismiss()
+        }
+        super.onDestroy()
     }
 }

@@ -101,7 +101,7 @@ class DashboardActivity : BaseCBActivity(),
 
     override fun onStart() {
         super.onStart()
-        checkForUpdates()
+//        checkForUpdates()
         fetchToken()
     }
 
