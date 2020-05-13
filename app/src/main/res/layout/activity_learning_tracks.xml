@@ -23,7 +23,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/activity_learning_shimmer"
+        android:id="@+id/activityLearningShimmer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
