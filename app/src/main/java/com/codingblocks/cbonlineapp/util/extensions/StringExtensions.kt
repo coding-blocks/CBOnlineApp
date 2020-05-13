@@ -1,21 +1,21 @@
 package com.codingblocks.cbonlineapp.util.extensions
 
+import android.graphics.Color
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
 import androidx.core.text.color
-import com.codingblocks.cbonlineapp.R
-import org.ocpsoft.prettytime.PrettyTime
 import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.TimeZone
-import java.util.Locale
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 import kotlin.NoSuchElementException
 import kotlin.math.floor
 import kotlin.math.log10
+import org.ocpsoft.prettytime.PrettyTime
 
 fun folderSize(directory: File): Long {
     var length: Long = 0
@@ -111,8 +111,8 @@ fun Double.secToTime(): String {
 }
 
 fun getDateForTime(time: String): String {
-    val dateFormat = SimpleDateFormat("dd-MMM-yy", Locale.US)
-    dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+    val dateFormat = SimpleDateFormat("dd MMM " + "''" + "yy", Locale.US)
+    dateFormat.timeZone = TimeZone.getTimeZone("IST")
 
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = time.toLong() * 1000
@@ -131,7 +131,7 @@ fun getDate(): String {
 }
 
 fun getDateForRun(time: String): String {
-    val dateFormat = SimpleDateFormat("MMM yyyy", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("MMM " + "''" + "yy", Locale.getDefault())
     dateFormat.timeZone = TimeZone.getDefault()
 
     val calendar = Calendar.getInstance()
@@ -147,8 +147,9 @@ fun getSpannableSring(boldText: String, normalText: String): SpannableStringBuil
 
 fun getSpannableString(text: String): SpannableStringBuilder =
     SpannableStringBuilder()
-        .color(R.color.brownish_grey) {}
-        .append(text)
+        .color(Color.parseColor("#f2734c")) {
+            append(text)
+        }
 
 fun getSpannableStringSecondBold(normalText: String, boldText: String): SpannableStringBuilder =
     SpannableStringBuilder()

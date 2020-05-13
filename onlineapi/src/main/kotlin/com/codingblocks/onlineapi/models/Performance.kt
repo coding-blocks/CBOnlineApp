@@ -16,3 +16,6 @@ data class ProgressItem(
     val progress: String
 )
 
+data class Comparision(val name: String, val lite: Boolean, val premium: Boolean, val live: Boolean, val classroom: Boolean)
+
+

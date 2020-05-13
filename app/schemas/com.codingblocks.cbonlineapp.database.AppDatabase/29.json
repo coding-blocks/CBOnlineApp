@@ -1,0 +1,1416 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 29,
+    "identityHash": "c76d3dd3c6a99822aeb14e5c415e6932",
+    "entities": [
+      {
+        "tableName": "CourseModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cid` TEXT NOT NULL, `title` TEXT NOT NULL, `subtitle` TEXT NOT NULL, `logo` TEXT NOT NULL, `summary` TEXT NOT NULL, `promoVideo` TEXT NOT NULL, `difficulty` TEXT NOT NULL, `reviewCount` INTEGER NOT NULL, `rating` REAL NOT NULL, `slug` TEXT, `coverImage` TEXT NOT NULL, `categoryId` INTEGER NOT NULL, PRIMARY KEY(`cid`))",
+        "fields": [
+          {
+            "fieldPath": "cid",
+            "columnName": "cid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subtitle",
+            "columnName": "subtitle",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "logo",
+            "columnName": "logo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "summary",
+            "columnName": "summary",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "promoVideo",
+            "columnName": "promoVideo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "difficulty",
+            "columnName": "difficulty",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reviewCount",
+            "columnName": "reviewCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rating",
+            "columnName": "rating",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "slug",
+            "columnName": "slug",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "coverImage",
+            "columnName": "coverImage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "categoryId",
+            "columnName": "categoryId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "cid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "SectionModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`csid` TEXT NOT NULL, `name` TEXT NOT NULL, `sectionOrder` INTEGER NOT NULL, `premium` INTEGER NOT NULL, `status` TEXT NOT NULL, `run_id` TEXT NOT NULL, `attemptId` TEXT NOT NULL, PRIMARY KEY(`csid`), FOREIGN KEY(`run_id`) REFERENCES `RunModel`(`crUid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "csid",
+            "columnName": "csid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sectionOrder",
+            "columnName": "sectionOrder",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "premium",
+            "columnName": "premium",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "run_id",
+            "columnName": "run_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "attemptId",
+            "columnName": "attemptId",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "csid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_SectionModel_run_id",
+            "unique": false,
+            "columnNames": [
+              "run_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_SectionModel_run_id` ON `${TABLE_NAME}` (`run_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "RunModel",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "run_id"
+            ],
+            "referencedColumns": [
+              "crUid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "ContentModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ccid` TEXT NOT NULL, `progress` TEXT NOT NULL, `progressId` TEXT NOT NULL, `title` TEXT NOT NULL, `contentDuration` INTEGER NOT NULL, `contentable` TEXT NOT NULL, `order` INTEGER NOT NULL, `attempt_id` TEXT NOT NULL, `sectionTitle` TEXT NOT NULL, `lectureUid` TEXT NOT NULL, `lectureName` TEXT NOT NULL, `lectureDuration` INTEGER NOT NULL, `lectureId` TEXT NOT NULL, `lectureSectionId` TEXT NOT NULL, `lectureUpdatedAt` TEXT NOT NULL, `isDownloaded` INTEGER NOT NULL, `date` INTEGER NOT NULL, `lectureContentId` TEXT NOT NULL, `documentUid` TEXT NOT NULL, `documentName` TEXT NOT NULL, `documentPdfLink` TEXT NOT NULL, `documentContentId` TEXT NOT NULL, `documentUpdatedAt` TEXT NOT NULL, `videoUid` TEXT NOT NULL, `videoName` TEXT NOT NULL, `videoDuration` INTEGER NOT NULL, `videoDescription` TEXT, `videoUrl` TEXT NOT NULL, `videoContentId` TEXT NOT NULL, `videoUpdatedAt` TEXT NOT NULL, `qnaUid` TEXT NOT NULL, `qnaName` TEXT NOT NULL, `qnaQid` INTEGER NOT NULL, `qnaContentId` TEXT NOT NULL, `qnaUpdatedAt` TEXT NOT NULL, `codeUid` TEXT NOT NULL, `codeName` TEXT NOT NULL, `codeProblemId` INTEGER NOT NULL, `codeContestId` INTEGER NOT NULL, `codeContentId` TEXT NOT NULL, `codeUpdatedAt` TEXT NOT NULL, `csvUid` TEXT NOT NULL, `csvName` TEXT NOT NULL, `csvDescription` TEXT NOT NULL, `csvContentId` TEXT NOT NULL, `csvUpdatedAt` TEXT NOT NULL, PRIMARY KEY(`ccid`))",
+        "fields": [
+          {
+            "fieldPath": "ccid",
+            "columnName": "ccid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "progress",
+            "columnName": "progress",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "progressId",
+            "columnName": "progressId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentDuration",
+            "columnName": "contentDuration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentable",
+            "columnName": "contentable",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "order",
+            "columnName": "order",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "attempt_id",
+            "columnName": "attempt_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sectionTitle",
+            "columnName": "sectionTitle",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentLecture.lectureUid",
+            "columnName": "lectureUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentLecture.lectureName",
+            "columnName": "lectureName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentLecture.lectureDuration",
+            "columnName": "lectureDuration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentLecture.lectureId",
+            "columnName": "lectureId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentLecture.lectureSectionId",
+            "columnName": "lectureSectionId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentLecture.lectureUpdatedAt",
+            "columnName": "lectureUpdatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentLecture.isDownloaded",
+            "columnName": "isDownloaded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentLecture.date",
+            "columnName": "date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentLecture.lectureContentId",
+            "columnName": "lectureContentId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentDocument.documentUid",
+            "columnName": "documentUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentDocument.documentName",
+            "columnName": "documentName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentDocument.documentPdfLink",
+            "columnName": "documentPdfLink",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentDocument.documentContentId",
+            "columnName": "documentContentId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentDocument.documentUpdatedAt",
+            "columnName": "documentUpdatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentVideo.videoUid",
+            "columnName": "videoUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentVideo.videoName",
+            "columnName": "videoName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentVideo.videoDuration",
+            "columnName": "videoDuration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentVideo.videoDescription",
+            "columnName": "videoDescription",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "contentVideo.videoUrl",
+            "columnName": "videoUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentVideo.videoContentId",
+            "columnName": "videoContentId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentVideo.videoUpdatedAt",
+            "columnName": "videoUpdatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentQna.qnaUid",
+            "columnName": "qnaUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentQna.qnaName",
+            "columnName": "qnaName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentQna.qnaQid",
+            "columnName": "qnaQid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentQna.qnaContentId",
+            "columnName": "qnaContentId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentQna.qnaUpdatedAt",
+            "columnName": "qnaUpdatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentCode.codeUid",
+            "columnName": "codeUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentCode.codeName",
+            "columnName": "codeName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentCode.codeProblemId",
+            "columnName": "codeProblemId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentCode.codeContestId",
+            "columnName": "codeContestId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentCode.codeContentId",
+            "columnName": "codeContentId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentCode.codeUpdatedAt",
+            "columnName": "codeUpdatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentCsv.csvUid",
+            "columnName": "csvUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentCsv.csvName",
+            "columnName": "csvName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentCsv.csvDescription",
+            "columnName": "csvDescription",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentCsv.csvContentId",
+            "columnName": "csvContentId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentCsv.csvUpdatedAt",
+            "columnName": "csvUpdatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "ccid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "InstructorModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` TEXT NOT NULL, `name` TEXT, `description` TEXT NOT NULL, `photo` TEXT, `email` TEXT, `sub` TEXT, PRIMARY KEY(`uid`))",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "photo",
+            "columnName": "photo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sub",
+            "columnName": "sub",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Notification",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `heading` TEXT NOT NULL, `body` TEXT NOT NULL, `url` TEXT NOT NULL, `seen` INTEGER NOT NULL, `videoId` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "heading",
+            "columnName": "heading",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "body",
+            "columnName": "body",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "seen",
+            "columnName": "seen",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "videoId",
+            "columnName": "videoId",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "CourseWithInstructor",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`course_id` TEXT NOT NULL, `instructor_id` TEXT NOT NULL, PRIMARY KEY(`course_id`, `instructor_id`))",
+        "fields": [
+          {
+            "fieldPath": "courseId",
+            "columnName": "course_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "instructorId",
+            "columnName": "instructor_id",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "course_id",
+            "instructor_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_CourseWithInstructor_course_id",
+            "unique": false,
+            "columnNames": [
+              "course_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_CourseWithInstructor_course_id` ON `${TABLE_NAME}` (`course_id`)"
+          },
+          {
+            "name": "index_CourseWithInstructor_instructor_id",
+            "unique": false,
+            "columnNames": [
+              "instructor_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_CourseWithInstructor_instructor_id` ON `${TABLE_NAME}` (`instructor_id`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "DoubtsModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`dbtUid` TEXT NOT NULL, `title` TEXT NOT NULL, `body` TEXT NOT NULL, `contentId` TEXT NOT NULL, `status` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `discourseTopicId` TEXT NOT NULL, `conversationId` TEXT, `createdAt` TEXT NOT NULL, PRIMARY KEY(`dbtUid`))",
+        "fields": [
+          {
+            "fieldPath": "dbtUid",
+            "columnName": "dbtUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "body",
+            "columnName": "body",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentId",
+            "columnName": "contentId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "runAttemptId",
+            "columnName": "runAttemptId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "discourseTopicId",
+            "columnName": "discourseTopicId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "conversationId",
+            "columnName": "conversationId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "dbtUid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "NotesModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`nttUid` TEXT NOT NULL, `duration` REAL NOT NULL, `text` TEXT NOT NULL, `contentId` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `deletedAt` TEXT, `contentTitle` TEXT NOT NULL, PRIMARY KEY(`nttUid`))",
+        "fields": [
+          {
+            "fieldPath": "nttUid",
+            "columnName": "nttUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "text",
+            "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentId",
+            "columnName": "contentId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "runAttemptId",
+            "columnName": "runAttemptId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deletedAt",
+            "columnName": "deletedAt",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "contentTitle",
+            "columnName": "contentTitle",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "nttUid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "RunModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`crUid` TEXT NOT NULL, `crName` TEXT NOT NULL, `crDescription` TEXT NOT NULL, `crEnrollmentStart` TEXT NOT NULL, `crEnrollmentEnd` TEXT NOT NULL, `crStart` TEXT NOT NULL, `crEnd` TEXT NOT NULL, `crPrice` TEXT NOT NULL, `crMrp` TEXT NOT NULL, `crUpdatedAt` TEXT NOT NULL, `whatsappLink` TEXT, `totalContents` INTEGER NOT NULL, `completionThreshold` INTEGER NOT NULL, `goodiesThreshold` INTEGER NOT NULL, `productId` INTEGER NOT NULL, `crCourseId` TEXT NOT NULL, PRIMARY KEY(`crUid`), FOREIGN KEY(`crCourseId`) REFERENCES `CourseModel`(`cid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "crUid",
+            "columnName": "crUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "crName",
+            "columnName": "crName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "crDescription",
+            "columnName": "crDescription",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "crEnrollmentStart",
+            "columnName": "crEnrollmentStart",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "crEnrollmentEnd",
+            "columnName": "crEnrollmentEnd",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "crStart",
+            "columnName": "crStart",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "crEnd",
+            "columnName": "crEnd",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "crPrice",
+            "columnName": "crPrice",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "crMrp",
+            "columnName": "crMrp",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "crUpdatedAt",
+            "columnName": "crUpdatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "whatsappLink",
+            "columnName": "whatsappLink",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalContents",
+            "columnName": "totalContents",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completionThreshold",
+            "columnName": "completionThreshold",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "goodiesThreshold",
+            "columnName": "goodiesThreshold",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productId",
+            "columnName": "productId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "crCourseId",
+            "columnName": "crCourseId",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "crUid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_RunModel_crCourseId",
+            "unique": false,
+            "columnNames": [
+              "crCourseId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_RunModel_crCourseId` ON `${TABLE_NAME}` (`crCourseId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "CourseModel",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "crCourseId"
+            ],
+            "referencedColumns": [
+              "cid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "JobsModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` TEXT NOT NULL, `coverImage` TEXT, `ctc` TEXT NOT NULL, `deadline` TEXT, `description` TEXT NOT NULL, `eligibility` TEXT NOT NULL, `experience` TEXT NOT NULL, `location` TEXT NOT NULL, `postedOn` TEXT NOT NULL, `type` TEXT NOT NULL, `title` TEXT NOT NULL, `courseId` TEXT NOT NULL, `id` TEXT NOT NULL, `name` TEXT NOT NULL, `logo` TEXT NOT NULL, `companyDescription` TEXT NOT NULL, `website` TEXT NOT NULL, PRIMARY KEY(`uid`))",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "coverImage",
+            "columnName": "coverImage",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ctc",
+            "columnName": "ctc",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deadline",
+            "columnName": "deadline",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eligibility",
+            "columnName": "eligibility",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "experience",
+            "columnName": "experience",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "postedOn",
+            "columnName": "postedOn",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "courseId",
+            "columnName": "courseId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "company.id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "company.name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "company.logo",
+            "columnName": "logo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "company.companyDescription",
+            "columnName": "companyDescription",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "company.website",
+            "columnName": "website",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "SectionWithContent",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`section_id` TEXT NOT NULL, `content_id` TEXT NOT NULL, `order` INTEGER NOT NULL, PRIMARY KEY(`section_id`, `content_id`))",
+        "fields": [
+          {
+            "fieldPath": "sectionId",
+            "columnName": "section_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentId",
+            "columnName": "content_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "order",
+            "columnName": "order",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "section_id",
+            "content_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_SectionWithContent_section_id",
+            "unique": false,
+            "columnNames": [
+              "section_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_SectionWithContent_section_id` ON `${TABLE_NAME}` (`section_id`)"
+          },
+          {
+            "name": "index_SectionWithContent_content_id",
+            "unique": false,
+            "columnNames": [
+              "content_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_SectionWithContent_content_id` ON `${TABLE_NAME}` (`content_id`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "BookmarkModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookmarkUid` TEXT NOT NULL, `runAttemptId` TEXT NOT NULL, `contentId` TEXT NOT NULL, `sectionId` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `sectionName` TEXT NOT NULL, `contentName` TEXT NOT NULL, PRIMARY KEY(`bookmarkUid`), FOREIGN KEY(`contentId`) REFERENCES `ContentModel`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "bookmarkUid",
+            "columnName": "bookmarkUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "runAttemptId",
+            "columnName": "runAttemptId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentId",
+            "columnName": "contentId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sectionId",
+            "columnName": "sectionId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sectionName",
+            "columnName": "sectionName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentName",
+            "columnName": "contentName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "bookmarkUid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_BookmarkModel_contentId",
+            "unique": false,
+            "columnNames": [
+              "contentId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_BookmarkModel_contentId` ON `${TABLE_NAME}` (`contentId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "ContentModel",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "contentId"
+            ],
+            "referencedColumns": [
+              "ccid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "CommentModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `body` TEXT NOT NULL, `dbtId` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `username` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`dbtId`) REFERENCES `DoubtsModel`(`dbtUid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "body",
+            "columnName": "body",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dbtId",
+            "columnName": "dbtId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_CommentModel_dbtId",
+            "unique": false,
+            "columnNames": [
+              "dbtId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_CommentModel_dbtId` ON `${TABLE_NAME}` (`dbtId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "DoubtsModel",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "dbtId"
+            ],
+            "referencedColumns": [
+              "dbtUid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "RunAttemptModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`attemptId` TEXT NOT NULL, `certificateApproved` INTEGER NOT NULL, `end` TEXT NOT NULL, `premium` INTEGER NOT NULL, `revoked` INTEGER NOT NULL, `approvalRequested` INTEGER NOT NULL, `doubtSupport` TEXT NOT NULL, `completedContents` INTEGER NOT NULL, `lastAccessedAt` TEXT NOT NULL, `runId` TEXT NOT NULL, `certificateUrl` TEXT NOT NULL, `runTier` TEXT NOT NULL, PRIMARY KEY(`attemptId`))",
+        "fields": [
+          {
+            "fieldPath": "attemptId",
+            "columnName": "attemptId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "certificateApproved",
+            "columnName": "certificateApproved",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "end",
+            "columnName": "end",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "premium",
+            "columnName": "premium",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "revoked",
+            "columnName": "revoked",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "approvalRequested",
+            "columnName": "approvalRequested",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "doubtSupport",
+            "columnName": "doubtSupport",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completedContents",
+            "columnName": "completedContents",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastAccessedAt",
+            "columnName": "lastAccessedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "runId",
+            "columnName": "runId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "certificateUrl",
+            "columnName": "certificateUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "runTier",
+            "columnName": "runTier",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "attemptId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "RunPerformance",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `percentile` INTEGER NOT NULL, `remarks` TEXT NOT NULL, `averageProgress` TEXT NOT NULL, `userProgress` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "percentile",
+            "columnName": "percentile",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "remarks",
+            "columnName": "remarks",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "averageProgress",
+            "columnName": "averageProgress",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userProgress",
+            "columnName": "userProgress",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PlayerState",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`attemptId` TEXT NOT NULL, `sectionId` TEXT NOT NULL, `contentId` TEXT NOT NULL, `position` INTEGER NOT NULL, `lastAccessedAt` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `sectionName` TEXT NOT NULL, `contentTitle` TEXT NOT NULL, `contentDuration` INTEGER NOT NULL, `thumbnail` TEXT NOT NULL, FOREIGN KEY(`sectionId`) REFERENCES `SectionModel`(`csid`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`contentId`) REFERENCES `ContentModel`(`ccid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "attemptId",
+            "columnName": "attemptId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sectionId",
+            "columnName": "sectionId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentId",
+            "columnName": "contentId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastAccessedAt",
+            "columnName": "lastAccessedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sectionName",
+            "columnName": "sectionName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentTitle",
+            "columnName": "contentTitle",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contentDuration",
+            "columnName": "contentDuration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "thumbnail",
+            "columnName": "thumbnail",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_PlayerState_attemptId",
+            "unique": true,
+            "columnNames": [
+              "attemptId"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_PlayerState_attemptId` ON `${TABLE_NAME}` (`attemptId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "SectionModel",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "sectionId"
+            ],
+            "referencedColumns": [
+              "csid"
+            ]
+          },
+          {
+            "table": "ContentModel",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "contentId"
+            ],
+            "referencedColumns": [
+              "ccid"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c76d3dd3c6a99822aeb14e5c415e6932')"
+    ]
+  }
+}

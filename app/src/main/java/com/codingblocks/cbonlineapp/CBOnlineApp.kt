@@ -9,6 +9,9 @@ import cn.campusapp.router.Router
 import cn.campusapp.router.router.IActivityRouteTableInitializer
 import com.codingblocks.cbonlineapp.course.CourseActivity
 import com.codingblocks.cbonlineapp.course.SearchCourseActivity
+import com.codingblocks.cbonlineapp.di.databaseModule
+import com.codingblocks.cbonlineapp.di.preferencesModule
+import com.codingblocks.cbonlineapp.di.viewModelModule
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity

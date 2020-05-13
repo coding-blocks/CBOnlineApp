@@ -39,8 +39,7 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ):
-        View? = inflater.inflate(R.layout.fragment_quiz, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_quiz, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -167,7 +166,7 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
     private fun submitQuiz() {
         vm.submitQuiz {
             replaceFragmentSafely(
-                QuizResultFragment(),
+                QuizResultFragment.newInstance(vm.quizAttemptId),
                 "result",
                 containerViewId = R.id.quizContainer,
                 addToStack = true

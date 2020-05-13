@@ -1,7 +1,9 @@
 package com.codingblocks.cbonlineapp.mycourse.player
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.Data
@@ -20,8 +22,11 @@ import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
+import com.codingblocks.cbonlineapp.util.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Bookmark
@@ -30,41 +35,56 @@ import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.Sections
-import org.json.JSONObject
 import java.util.concurrent.TimeUnit
+import org.json.JSONObject
+
+const val VIDEO_POSITION = "videoPos"
 
 class VideoPlayerViewModel(
+    handle: SavedStateHandle,
     private val repo: VideoPlayerRepository,
     private val repoDoubts: DashboardDoubtsRepository,
     val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
-    var contentLength: Long = 0L
-    var playWhenReady = false
     var currentOrientation: Int = 0
+    var sectionId by savedStateValue<String>(handle, SECTION_ID)
+    var attemptId = MutableLiveData<String>()
+
+    var currentVideoId = MutableLiveData<String>()
+    var currentContentId by savedStateValue<String>(handle, CONTENT_ID)
+    private var currentContentIdLive = handle.getLiveData<String>(CONTENT_ID)
+    var position by savedStateValue<Long>(handle, VIDEO_POSITION)
+    var currentContentProgress: String = "UNDONE"
+
     var mOtp: String? = null
     var mPlaybackInfo: String? = null
-    var attemptId = MutableLiveData<String>()
-    var sectionId = ""
-    var videoId: String = ""
-    var contentId: String = ""
     var getOtpProgress: MutableLiveData<Boolean> = MutableLiveData()
     var isDownloaded = false
 
-    val doubts = Transformations.switchMap(attemptId) {
+    val doubts = Transformations.distinctUntilChanged(attemptId).switchMap {
         fetchDoubts()
         repoDoubts.getDoubtsByCourseRun(LIVE, it)
     }
-    val content by lazy {
-        repo.getContent(contentId)
+
+    val runAttempts = Transformations.distinctUntilChanged(attemptId).switchMap {
+        repoDoubts.getRunAttempt(it)
     }
 
-    val notes = Transformations.switchMap(attemptId) {
+    val content = Transformations.distinctUntilChanged(currentContentIdLive).switchMap {
+        repo.getContent(it)
+    }
+
+    val bookmark = Transformations.distinctUntilChanged(currentContentIdLive).switchMap {
+        repo.getBookmark(it)
+    }
+
+    val notes = Transformations.distinctUntilChanged(attemptId).switchMap {
         fetchNotes()
         repo.getNotes(it)
     }
 
-    val bookmark by lazy {
-        repo.getBookmark(contentId)
+    val contentList = Transformations.switchMap(attemptId) { attemptId ->
+        sectionId?.let { sectionId -> repo.getContents(attemptId, sectionId) }
     }
     val offlineSnackbar = MutableLiveData<String>()
 
@@ -83,7 +103,7 @@ class VideoPlayerViewModel(
         }
     }
 
-    fun fetchDoubts() {
+    private fun fetchDoubts() {
         runIO {
             when (val response = repoDoubts.fetchDoubtsByCourseRun(attemptId.value ?: "")) {
                 is ResultWrapper.GenericError -> setError(response.error)
@@ -100,7 +120,7 @@ class VideoPlayerViewModel(
         }
     }
 
-    fun fetchNotes() {
+    private fun fetchNotes() {
         runIO {
             when (val response = repo.fetchCourseNotes(attemptId.value ?: "")) {
                 is ResultWrapper.GenericError -> setError(response.error)
@@ -119,8 +139,8 @@ class VideoPlayerViewModel(
 
     fun markBookmark() {
         runIO {
-            val bookmark = Bookmark(RunAttempts(attemptId.value
-                ?: ""), LectureContent(contentId), Sections(sectionId ?: ""))
+            val bookmark = Bookmark(RunAttempts(attemptId.value ?: ""), LectureContent(currentContentId
+                ?: ""), Sections(sectionId))
             when (val response = repo.markDoubt(bookmark)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
@@ -217,7 +237,8 @@ class VideoPlayerViewModel(
 
     fun getOtp() {
         runIO {
-            when (val response = repo.getOtp(videoId, attemptId.value ?: "", sectionId ?: "")) {
+            when (val response = repo.getOtp(currentVideoId.value ?: "", attemptId.value ?: "", sectionId
+                ?: "")) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
@@ -251,7 +272,8 @@ class VideoPlayerViewModel(
     }
 
     fun createDoubt(title: String, body: String, function: (message: String) -> Unit) {
-        val doubt = Doubts(null, title, body, RunAttempts(attemptId.value ?: ""), LectureContent(contentId))
+        val doubt = Doubts(null, title, body, RunAttempts(attemptId.value ?: ""), LectureContent(currentContentId
+            ?: ""))
         runIO {
             when (val response = repo.addDoubt(doubt)) {
                 is ResultWrapper.GenericError -> if (response.code in 100..103)
@@ -296,7 +318,7 @@ class VideoPlayerViewModel(
 
     fun updateProgress() {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val progressData: Data = workDataOf(CONTENT_ID to contentId, RUN_ATTEMPT_ID to attemptId.value)
+        val progressData: Data = workDataOf(CONTENT_ID to currentContentId, RUN_ATTEMPT_ID to attemptId.value)
         val request: OneTimeWorkRequest =
             OneTimeWorkRequestBuilder<ProgressWorker>()
                 .setConstraints(constraints)
@@ -309,4 +331,31 @@ class VideoPlayerViewModel(
     }
 
     fun updateDownload(status: Int, lectureId: String) = runIO { repo.updateDownload(status, lectureId) }
+
+    /**
+     * Function to save player state if current lecture is incomplete
+     */
+    fun savePlayerState(currentTime: Long, thumbnail: Boolean) {
+        runIO {
+            attemptId.value?.let { repo.savePlayerState(it, sectionId!!, currentContentId!!, currentTime) }
+            if (thumbnail) {
+                val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+                val thumbnailData: Data = workDataOf(VIDEO_ID to currentVideoId.value, CONTENT_ID to currentContentId)
+                val request: OneTimeWorkRequest =
+                    OneTimeWorkRequestBuilder<ThumbnailWorker>()
+                        .setConstraints(constraints)
+                        .setInputData(thumbnailData)
+                        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                        .build()
+
+                WorkManager.getInstance().enqueue(request)
+            }
+        }
+    }
+
+    fun deletePlayerState() {
+        runIO {
+            attemptId.value?.let { repo.deletePlayerState(it) }
+        }
+    }
 }

@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.activity_checkout.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.intentFor
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
@@ -46,7 +45,8 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
                 vm.capturePayment {
                     GlobalScope.launch {
                         delay(3000)
-                        startActivity(intentFor<DashboardActivity>())
+                        startActivity(DashboardActivity.createDashboardActivityIntent(this@CheckoutActivity, true))
+                        finish()
                     }
                 }
             }
@@ -95,7 +95,8 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
         vm.capturePayment {
             GlobalScope.launch {
                 delay(3000)
-                startActivity(intentFor<DashboardActivity>())
+                startActivity(DashboardActivity.createDashboardActivityIntent(this@CheckoutActivity, true))
+                finish()
             }
         }
     }

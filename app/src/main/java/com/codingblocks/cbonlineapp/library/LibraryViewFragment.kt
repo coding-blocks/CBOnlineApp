@@ -19,24 +19,21 @@ import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
+import java.io.File
 import kotlinx.android.synthetic.main.fragment_library_view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.io.File
 
 class LibraryViewFragment : BaseCBFragment() {
 
@@ -72,8 +69,7 @@ class LibraryViewFragment : BaseCBFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ):
-        View? = inflater.inflate(R.layout.fragment_library_view, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_library_view, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -102,7 +98,7 @@ class LibraryViewFragment : BaseCBFragment() {
                     hideRecyclerView(it.isNotEmpty())
                 }
             }
-            getString(R.string.downloads) -> {
+            else -> {
                 libraryListAdapter = LibraryListAdapter(LibraryTypes.DOWNLOADS)
                 vm.fetchDownloads().observe(viewLifecycleOwner) {
                     if (it.isNullOrEmpty()) {
@@ -117,7 +113,7 @@ class LibraryViewFragment : BaseCBFragment() {
         }
         libraryRv.setRv(requireContext(), libraryListAdapter, true)
 
-        selectionTracker = SelectionTracker.Builder<String>(
+        selectionTracker = SelectionTracker.Builder(
             "mySelection",
             libraryRv,
             MyItemKeyProvider(libraryListAdapter),
@@ -141,12 +137,11 @@ class LibraryViewFragment : BaseCBFragment() {
                 }
             })
         classRoomBtn.setOnClickListener {
-            startActivity(
-                requireContext().intentFor<MyCourseActivity>(
-                    RUN_ATTEMPT_ID to vm.attemptId,
-                    COURSE_NAME to requireActivity().title
-                ).singleTop()
-            )
+            startActivity(MyCourseActivity.createMyCourseActivityIntent(
+                requireContext(),
+                vm.attemptId!!,
+                vm.name!!
+            ))
         }
 
         deleteAction.setOnClickListener {

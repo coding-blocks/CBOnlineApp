@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:animationCache="true"
-    android:layout_height="match_parent">
+    android:animationCache="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/dashboardAppBarLayout"
@@ -31,6 +31,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:background="@drawable/toolbar_bg_colored"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 android:orientation="horizontal"
                 android:visibility="visible">
 
@@ -39,38 +42,33 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_large"
-                    android:ellipsize="end"
                     android:layout_weight="1"
+                    android:ellipsize="end"
                     android:fontFamily="@font/gilroy_bold"
-                    android:paddingTop="@dimen/margin_xxl"
-                    android:paddingBottom="@dimen/margin_medium"
                     android:lines="1"
-                    android:visibility="gone"
                     android:textColor="@color/white"
                     android:textSize="16sp"
+                    android:visibility="gone"
                     tools:text="Android App Development" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/toolbarCourseResumeTv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginStart="@dimen/margin_small"
                     android:layout_marginEnd="@dimen/margin_large"
-                    android:layout_weight="1.1"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:drawablePadding="5dp"
+                    android:layout_weight="0.8"
                     android:drawableEnd="@drawable/ic_dropright"
-                    android:lines="1"
-                    android:focusable="true"
+                    android:drawablePadding="5dp"
                     android:fontFamily="@font/gilroy_medium"
+                    android:lines="1"
                     android:paddingTop="@dimen/margin_xxl"
                     android:paddingBottom="@dimen/margin_medium"
-                    android:textAlignment="viewEnd"
                     android:text="@string/continue_learning"
+                    android:textAlignment="viewEnd"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <FrameLayout
@@ -88,10 +86,10 @@
                     android:elevation="2dp" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/searchBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_large"
-                    android:id="@+id/searchBtn"
                     android:layout_marginTop="28dp"
                     android:layout_marginEnd="@dimen/margin_large"
                     android:elevation="4dp"
@@ -101,7 +99,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <com.codingblocks.fabnavigation.FabNavigationViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/dashboardPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -109,11 +107,19 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-    <com.codingblocks.fabnavigation.FabNavigation
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/dashboardBottomNav"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:backgroundTint="@color/dark"
+        app:itemIconTint="@color/bnv_tab_item"
+        app:itemTextColor="@color/bnv_tab_item"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+        app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyle"
+        app:itemTextAppearanceInactive="@style/BottomNavigationViewInActiveTextStyle"
+        app:labelVisibilityMode="labeled"
         app:layout_anchorGravity="center"
-        android:layout_gravity="bottom" />
+        app:menu="@menu/bottom_nav_dashboard" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

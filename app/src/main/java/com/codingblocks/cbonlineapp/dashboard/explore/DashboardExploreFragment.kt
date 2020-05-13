@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
@@ -22,15 +24,10 @@ import com.codingblocks.cbonlineapp.tracks.TracksListAdapter
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import kotlinx.android.synthetic.main.activity_course.courseSuggestedRv
-import kotlinx.android.synthetic.main.fragment_dashboard_explore.allCourseCard
-import kotlinx.android.synthetic.main.fragment_dashboard_explore.allCourseCardTv
-import kotlinx.android.synthetic.main.fragment_dashboard_explore.allTracksTv
-import kotlinx.android.synthetic.main.fragment_dashboard_explore.dashboardPopularRv
-import kotlinx.android.synthetic.main.fragment_dashboard_explore.dashboardTracksRv
-import kotlinx.android.synthetic.main.fragment_dashboard_explore.swipeToRefresh
+import kotlinx.android.synthetic.main.fragment_dashboard_explore.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -40,7 +37,8 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DashboardExploreFragment : BaseCBFragment() {
 
-    private val vm by sharedViewModel<DashboardViewModel>()
+    private val vm: DashboardViewModel by sharedViewModel()
+
     private val courseCardListAdapter = CourseListAdapter()
     private val coursePopularListAdapter = CourseListAdapter("POPULAR")
     private val tracksListAdapter = TracksListAdapter()
@@ -78,33 +76,40 @@ class DashboardExploreFragment : BaseCBFragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_dashboard_explore, container, false)
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        vm.fetchRecommendedCourses(0, 4)
-        vm.fetchRecommendedCourses(4, 4)
-        vm.fetchTracks()
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+        View? = inflater.inflate(R.layout.fragment_dashboard_explore, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        vm.fetchRecommendedCourses(0, 4)
+        vm.fetchRecommendedCourses(4, 4)
+        vm.fetchTracks()
+
         dashboardPopularRv.setRv(requireContext(), coursePopularListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
         courseSuggestedRv.setRv(requireContext(), courseCardListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
         dashboardTracksRv.setRv(requireContext(), tracksListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
 
-        vm.suggestedCourses.observer(this) { courses ->
-            courseCardListAdapter.submitList(courses)
+        vm.suggestedCourses.observe(viewLifecycleOwner) { courses ->
+            if (courses.isNotEmpty()) {
+                courseCardListAdapter.submitList(courses)
+                dashboardPopularShimmer.hideAndStop()
+                dashboardPopularRv.isVisible = true
+            }
         }
-        vm.trendingCourses.observer(this) { courses ->
-            coursePopularListAdapter.submitList(courses)
+        vm.trendingCourses.observe(viewLifecycleOwner) { courses ->
+            if (courses.isNotEmpty()) {
+                coursePopularListAdapter.submitList(courses)
+                dashboardSuggestedShimmer.hideAndStop()
+                courseSuggestedRv.isVisible = true
+            }
         }
-        vm.tracks.observer(this) { courses ->
-            tracksListAdapter.submitList(courses)
+        vm.tracks.observe(viewLifecycleOwner) { tracks ->
+            if (tracks.isNotEmpty()) {
+                tracksListAdapter.submitList(tracks)
+                dashboardTrackShimmer.hideAndStop()
+                dashboardTracksRv.isVisible = true
+            }
         }
 
         courseCardListAdapter.onItemClick = itemClickListener
@@ -133,9 +138,9 @@ class DashboardExploreFragment : BaseCBFragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         courseCardListAdapter.onItemClick = null
         coursePopularListAdapter.onItemClick = null
         tracksListAdapter.onItemClick = null
+        super.onDestroyView()
     }
 }

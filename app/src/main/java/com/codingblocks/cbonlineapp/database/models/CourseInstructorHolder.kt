@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.database.models
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.Junction
 import androidx.room.Relation
@@ -20,6 +21,8 @@ class CourseWithInstructor(
 class CourseRunPair : RunWithAttempt() {
     @Embedded
     var course: CourseModel = CourseModel()
+    @Ignore
+    fun getProgress() = if (runAttempt.completedContents > 0) (runAttempt.completedContents / run.totalContents.toDouble()) * 100 else 0.0
 }
 
 data class CourseInstructorPair(

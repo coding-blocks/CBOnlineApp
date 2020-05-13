@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
+import com.codingblocks.cbonlineapp.database.models.ContentModel
 
 fun <T> LiveData<T>.observer(owner: LifecycleOwner, onEmission: (T) -> Unit) {
     return observe(owner, Observer<T> {
@@ -37,8 +38,18 @@ fun <T> LiveData<T>.getDistinct(): LiveData<T> {
             } else if ((obj == null && lastObj != null) ||
                 obj != lastObj
             ) {
-                lastObj = obj
-                distinctLiveData.postValue(lastObj)
+                /** [ContentModel] do not required an update from live data when progress is updated */
+                if (lastObj is ContentModel && obj is ContentModel) {
+                    val oldObj = (lastObj as ContentModel)
+                    val newObj = (obj as ContentModel)
+                    if (oldObj.ccid != newObj.ccid) {
+                        lastObj = obj
+                        distinctLiveData.postValue(lastObj)
+                    }
+                } else {
+                    lastObj = obj
+                    distinctLiveData.postValue(lastObj)
+                }
             }
         }
     })

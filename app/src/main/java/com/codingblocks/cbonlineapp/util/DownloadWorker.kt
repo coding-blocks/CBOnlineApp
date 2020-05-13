@@ -23,6 +23,7 @@ import com.vdocipher.aegis.offline.DownloadSelections
 import com.vdocipher.aegis.offline.DownloadStatus
 import com.vdocipher.aegis.offline.OptionsDownloader
 import com.vdocipher.aegis.offline.VdoDownloadManager
+import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -30,14 +31,13 @@ import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import retrofit2.Response
-import java.io.File
 
 class DownloadWorker(context: Context, private val workerParameters: WorkerParameters) :
     CoroutineWorker(context, workerParameters),
     KoinComponent,
     VdoDownloadManager.EventListener {
 
-    private val notificationManager by lazy {
+    private val notificationManager: NotificationManager by lazy {
         applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
@@ -202,10 +202,8 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
                     contentDao.updateContent(data.contentId, 1)
                 }
                 val intent = Intent(applicationContext, VideoPlayerActivity::class.java)
-                intent.putExtra(VIDEO_ID, data.videoId)
-                intent.putExtra(RUN_ATTEMPT_ID, data.attemptId)
                 intent.putExtra(CONTENT_ID, data.contentId)
-                intent.putExtra(DOWNLOADED, true)
+                intent.putExtra(SECTION_ID, data.sectionId)
 
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 val pendingIntent = PendingIntent.getActivity(

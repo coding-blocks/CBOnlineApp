@@ -2,6 +2,7 @@ package com.codingblocks.cbonlineapp.course
 
 import androidx.lifecycle.MutableLiveData
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
+import com.codingblocks.cbonlineapp.baseclasses.STATE
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
@@ -25,8 +26,8 @@ class CourseViewModel(
 
     var image: MutableLiveData<String> = MutableLiveData()
     var name: MutableLiveData<String> = MutableLiveData()
-    var addedToCartProgress: MutableLiveData<Boolean> = MutableLiveData()
-    var enrollTrialProgress: MutableLiveData<Boolean> = MutableLiveData()
+    var addedToCartProgress: MutableLiveData<STATE> = MutableLiveData()
+    var enrollTrialProgress: MutableLiveData<STATE> = MutableLiveData()
 
     fun fetchCourse() {
         runIO {
@@ -122,38 +123,42 @@ class CourseViewModel(
         }
     }
 
-//    fun getCart() {
-//        Clients.api.getCart().enqueue(retrofitCallback { _, response ->
-//            response?.body().let { json ->
-//                json?.getAsJsonArray("cartItems")?.get(0)?.asJsonObject.let {
-//                    image.value = it?.get("image_url")?.asString
-//                    name.value = it?.get("productName")?.asString
-//                    sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-//                }
-//            }
-//        })
-//    }
-
     fun clearCart(id: String) {
+        addedToCartProgress.postValue(STATE.LOADING)
         runIO {
             when (val response = repo.clearCart()) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> with(response.value) {
+                is ResultWrapper.GenericError -> {
+                    enrollTrialProgress.postValue(STATE.ERROR)
                     addToCart(id)
+                    setError(response.error)
+                }
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        addToCart(id)
+                    } else {
+                        enrollTrialProgress.postValue(STATE.ERROR)
+                        addToCart(id)
+                        setError(fetchError(code()))
+                    }
                 }
             }
         }
     }
 
     fun enrollTrial(id: String) {
+        enrollTrialProgress.postValue(STATE.LOADING)
         runIO {
             when (val response = repo.enrollToTrial(id)) {
 
-                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.GenericError -> {
+                    enrollTrialProgress.postValue(STATE.ERROR)
+                    setError(response.error)
+                }
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
-                        enrollTrialProgress.postValue(true)
+                        enrollTrialProgress.postValue(STATE.SUCCESS)
                     } else {
+                        enrollTrialProgress.postValue(STATE.ERROR)
                         setError(fetchError(code()))
                     }
                 }
@@ -164,11 +169,15 @@ class CourseViewModel(
     fun addToCart(id: String) {
         runIO {
             when (val response = repo.addToCart(id)) {
-                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.GenericError -> {
+                    enrollTrialProgress.postValue(STATE.ERROR)
+                    setError(response.error)
+                }
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
-                        addedToCartProgress.postValue(true)
+                        addedToCartProgress.postValue(STATE.SUCCESS)
                     } else {
+                        addedToCartProgress.postValue(STATE.ERROR)
                         setError(fetchError(code()))
                     }
                 }

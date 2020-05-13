@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.mycourse
 import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.database.RunAttemptDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
 import com.codingblocks.cbonlineapp.database.SectionDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
@@ -14,6 +15,7 @@ import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.ContentQnaModel
 import com.codingblocks.cbonlineapp.database.models.ContentVideo
+import com.codingblocks.cbonlineapp.database.models.RunAttemptModel
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
@@ -25,6 +27,8 @@ import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.safeApiCall
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MyCourseRepository(
     private val sectionWithContentsDao: SectionWithContentsDao,
@@ -32,11 +36,15 @@ class MyCourseRepository(
     private val sectionDao: SectionDao,
     private val courseWithInstructorDao: CourseWithInstructorDao,
     private val runPerformanceDao: RunPerformanceDao,
-    private val bookmarkDao: BookmarkDao
+    private val bookmarkDao: BookmarkDao,
+    private val attemptDao: RunAttemptDao
 ) {
     suspend fun getSectionWithContentNonLive(attemptId: String) = sectionWithContentsDao.getSectionWithContentNonLive(attemptId)
 
     fun getSectionWithContent(attemptId: String) = sectionWithContentsDao.getSectionWithContent(attemptId)
+
+//    fun getSectionWithContentComputer(attemptId: String) = sectionWithContentsDao.getSectionWithContentComputed(SimpleSQLiteQuery("""
+// SELECT s.*, swc.content_id as "content_id", c.contentDuration as "contentDuration", s."sectionOrder" as "sectionOrder", count (c.ccid)  as "completedContents" FROM SectionModel s LEFT OUTER join SectionWithContent swc on swc."section_id" = s.csid LEFT OUTER join ContentModel c on c.ccid = swc.content_id where s.attemptId = 44872 ORDER BY s."sectionOrder"         """))
 
     fun getRunById(attemptId: String) = courseWithInstructorDao.getRunById(attemptId)
 
@@ -45,6 +53,21 @@ class MyCourseRepository(
     fun getNextContent(attemptId: String) = sectionWithContentsDao.resumeCourse(attemptId)
 
     suspend fun insertSections(runAttempt: RunAttempts, refresh: Boolean = false) {
+        val runAttemptModel = RunAttemptModel(
+            runAttempt.id,
+            runAttempt.certificateApproved,
+            runAttempt.end,
+            runAttempt.premium,
+            runAttempt.revoked,
+            runAttempt.approvalRequested,
+            runAttempt.doubtSupport ?: "",
+            runAttempt.completedContents,
+            runAttempt.lastAccessedAt ?: "",
+            runAttempt.run?.id ?: "",
+            runAttempt.certifcate?.url ?: ""
+        )
+        attemptDao.update(runAttemptModel)
+
         runAttempt.run?.sections?.forEach { courseSection ->
             courseSection.run {
                 val newSection = SectionModel(
@@ -58,6 +81,19 @@ class MyCourseRepository(
                     sectionDao.insertNew(newSection)
             }
             getSectionContent(courseSection.id, runAttempt.id, courseSection.name)
+        }
+        deleteOldSections(runAttempt.run?.sections?.map { it.id }!!, runAttempt.run?.id)
+    }
+
+    /**
+     *Function to delete [SectionModel] which are no longer part of course content.
+     */
+    private suspend fun deleteOldSections(newList: List<String>, id: String?) {
+        val oldList = withContext(Dispatchers.IO) { sectionDao.getCourseSection(id!!) }
+        oldList.forEach {
+            if (!newList.contains(it)) {
+                sectionDao.deleteSection(it)
+            }
         }
     }
 
@@ -100,7 +136,7 @@ class MyCourseRepository(
                                 ?: 0,
                             contentLectureType.videoId
                                 ?: "",
-                            content.sectionContent?.id
+                            content.sectionContent?.sectionId
                                 ?: "",
                             contentLectureType.updatedAt
                          )
@@ -113,7 +149,7 @@ class MyCourseRepository(
                                 ?: "",
                             contentDocumentType.pdfLink
                                 ?: "",
-                            content.sectionContent?.id
+                            content.sectionContent?.sectionId
                                 ?: "",
                             contentDocumentType.updatedAt
                         )
@@ -130,7 +166,7 @@ class MyCourseRepository(
                                 ?: "",
                             contentVideoType.url
                                 ?: "",
-                            content.sectionContent?.id
+                            content.sectionContent?.sectionId
                                 ?: "",
                             contentVideoType.updatedAt
                         )
@@ -143,7 +179,7 @@ class MyCourseRepository(
                                 ?: "",
                             contentQna1.qId
                                 ?: 0,
-                            content.sectionContent?.id
+                            content.sectionContent?.sectionId
                                 ?: "",
                             contentQna1.updatedAt
                         )
@@ -158,7 +194,7 @@ class MyCourseRepository(
                                 ?: 0,
                             codeChallenge.hbContestId
                                 ?: 0,
-                            content.sectionContent?.id
+                            content.sectionContent?.sectionId
                                 ?: "",
                             codeChallenge.updatedAt
                         )
@@ -257,11 +293,16 @@ class MyCourseRepository(
 
     suspend fun resetProgress(attemptId: ResetRunAttempt) = safeApiCall { Clients.api.resetProgress(attemptId) }
 
-    suspend fun clearCart() = safeApiCall { Clients.api.clearCart() }
+    private suspend fun clearCart() = safeApiCall { Clients.api.clearCart() }
 
-    suspend fun addToCart(id: String) = safeApiCall { Clients.api.addToCart(id) }
+    suspend fun addToCart(id: String) = safeApiCall {
+        clearCart()
+        Clients.api.addToCart(id)
+    }
 
     suspend fun fetchSections(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.enrolledCourseById(attemptId) }
 
     suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
+
+    suspend fun requestApproval(attemptId: String) = safeApiCall { Clients.api.requestApproval(attemptId) }
 }

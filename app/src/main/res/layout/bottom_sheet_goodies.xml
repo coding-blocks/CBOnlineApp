@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/margin_medium">
+
+        <TextView
+            android:id="@+id/goodieFormTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Goodies Request Form"
+            android:layout_marginStart="@dimen/margin_large"
+            android:fontFamily="@font/gilroy_bold"
+            android:textSize="20sp"
+            android:layout_marginBottom="28dp" />
+
+        <TextView
+            android:id="@+id/goodieFormNameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="Name"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/goodieFormNameEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:background="@drawable/rounded_layout"
+            android:fontFamily="@font/gilroy_medium"
+            android:gravity="start"
+            android:padding="@dimen/margin_medium_small" />
+
+        <TextView
+            android:id="@+id/goodieFormAddressTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="Address"
+            android:layout_marginTop="@dimen/margin_small"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/goodieFormAddressEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:background="@drawable/rounded_layout"
+            android:fontFamily="@font/gilroy_medium"
+            android:gravity="start"
+            android:lines="5"
+            android:padding="@dimen/margin_medium_small" />
+
+        <TextView
+            android:id="@+id/goodieFormPostalCodeTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="Postal Code"
+            android:layout_marginTop="@dimen/margin_small"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/goodieFormPostalCodeEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:background="@drawable/rounded_layout"
+            android:fontFamily="@font/gilroy_medium"
+            android:gravity="start"
+            android:inputType="number"
+            android:maxLength="6"
+            android:padding="@dimen/margin_medium_small" />
+
+        <TextView
+            android:id="@+id/goodieFormAcnTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="Alternate Contact Number"
+            android:layout_marginTop="@dimen/margin_small"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/goodieFormAcnEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:background="@drawable/rounded_layout"
+            android:fontFamily="@font/gilroy_medium"
+            android:gravity="start"
+            android:padding="@dimen/margin_medium_small" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_medium">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:fontFamily="@font/gilroy_medium"
+               android:text="Please Note :">
+           </TextView>
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:fontFamily="@font/gilroy_medium"
+                android:text="@string/goodieFormNote"></TextView>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:id="@+id/saveLayout"
+            android:layout_marginTop="@dimen/margin_small"
+            android:paddingStart="@dimen/margin_large"
+            android:paddingTop="@dimen/margin_medium"
+            android:paddingEnd="@dimen/margin_large"
+            android:paddingBottom="@dimen/margin_medium">
+
+<!--            <TextView-->
+<!--                android:id="@+id/bottomSheetInfoTv"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:fontFamily="@font/gilroy_bold"-->
+<!--                android:lines="1"-->
+<!--                android:textColor="@color/orangish"-->
+<!--                android:textSize="14sp"-->
+<!--                tools:text="This is the title of the doubt " />-->
+
+            <TextView
+                android:id="@+id/bottomSheetCancelBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:fontFamily="@font/gilroy_medium"
+                android:text="@string/cancel"
+                android:clickable="true"
+                android:focusable="true"
+                android:textColor="@color/black" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/bottomSheetSaveBtn"
+                style="@style/ButtonStyleChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_background"
+                android:drawableEnd="@drawable/ic_dropright"
+                android:paddingStart="15dp"
+                android:text="@string/submit"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</ScrollView>

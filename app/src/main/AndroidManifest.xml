@@ -22,6 +22,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/NewAppTheme"
         android:usesCleartextTraffic="${usesCleartextTraffic}"
         tools:targetApi="q">
@@ -203,6 +204,16 @@
             android:name="com.razorpay.ApiKey"
             android:value="rzp_live_I5IJibPxZuZfWT" />
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/paths" />
+        </provider>
+
         <receiver
             android:name=".admin.doubts.DoubtReceiver"
             android:enabled="true"
@@ -214,6 +225,15 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".util.CertificateDownloadReceiver"
+            android:enabled="true"
+            android:exported="false"/>
+
+        <service
+            android:name=".util.EndlessService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>

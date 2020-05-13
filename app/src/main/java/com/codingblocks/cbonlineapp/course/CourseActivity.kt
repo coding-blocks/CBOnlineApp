@@ -1,21 +1,28 @@
 package com.codingblocks.cbonlineapp.course
 
+import android.app.Activity
 import android.content.Intent
-import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
+import androidx.activity.invoke
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
+import com.codingblocks.cbonlineapp.baseclasses.STATE
 import com.codingblocks.cbonlineapp.commons.InstructorListAdapter
-import com.codingblocks.cbonlineapp.course.batches.BatchListAdapter
+import com.codingblocks.cbonlineapp.course.batches.CourseTierFragment
+import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.COURSE_ID
@@ -24,20 +31,15 @@ import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
-import com.codingblocks.cbonlineapp.util.extensions.getDateForRun
-import com.codingblocks.cbonlineapp.util.extensions.getDateForTime
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.observeOnce
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.onlineapi.ErrorStatus
-import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Tags
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
@@ -45,8 +47,8 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import io.noties.markwon.Markwon
 import io.noties.markwon.core.CorePlugin
 import kotlinx.android.synthetic.main.activity_course.*
-import kotlinx.android.synthetic.main.bottom_sheet_batch.view.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
@@ -64,18 +66,23 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     private val courseLogoUrl by lazy {
         intent.getStringExtra(COURSE_LOGO)
     }
+    val loadingDialog: AlertDialog by lazy {
+        getLoadingDialog()
+    }
     private val viewModel by viewModel<CourseViewModel>()
 
     private val projectAdapter = CourseProjectAdapter()
     private val instructorAdapter = InstructorListAdapter()
     private val courseSectionListAdapter = CourseSectionListAdapter()
     private val courseCardListAdapter = CourseListAdapter()
-    private val batchListAdapter = BatchListAdapter()
-    private val dialog by lazy { BottomSheetDialog(this) }
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private var youtubePlayer: YouTubePlayer? = null
-    private val loadingDialog by lazy {
-        getLoadingDialog()
+
+    val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            // Handle the Intent
+        }
     }
 
     private val itemClickListener: ItemClickListener by lazy {
@@ -104,7 +111,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         setToolbar(courseToolbar)
         viewModel.id = courseId
         viewModel.fetchCourse()
-        setUpBottomSheet()
 
         courseProjectsRv.setRv(this@CourseActivity, projectAdapter, true)
         courseSuggestedRv.setRv(
@@ -147,13 +153,19 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             courseBackdrop.loadImage(course.coverImage ?: "")
             setYoutubePlayer(course.promoVideo ?: "")
             viewModel.fetchProjects(course.projects)
-            if (!course.runs.isNullOrEmpty()) viewModel.fetchSections(course.runs?.first()?.sections)
-            instructorAdapter.submitList(course.instructors)
-            batchListAdapter.submitList(course.activeRuns)
-            if (!course.activeRuns.isNullOrEmpty())
-                course.activeRuns?.first()?.let {
-                    setRun(it)
+            course.getTrialRun(RUNTIERS.LITE.name)?.let {
+                trialBtn.setOnClickListener { _ ->
+                    viewModel.enrollTrial(it.id)
                 }
+            }
+            course.getContentRun(RUNTIERS.PREMIUM.name)?.let {
+                viewModel.fetchSections(it.sections)
+                val price = it.price.toInt()
+                if (price < 10) {
+                    goodiesImg.isVisible = false
+                }
+            }
+            instructorAdapter.submitList(course.instructors)
         }
 
         viewModel.projects.observer(this) { projects ->
@@ -176,7 +188,9 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 }
                 ErrorStatus.UNAUTHORIZED -> {
                     Components.showConfirmation(this, UNAUTHORIZED) {
-                        finish()
+                        if (it) {
+                            startForResult(intentFor<LoginActivity>())
+                        }
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
@@ -194,48 +208,36 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         courseCardListAdapter.onItemClick = itemClickListener
 
         viewModel.addedToCartProgress.observer(this) {
-            loadingDialog.hide()
-            buyBtn.isEnabled = true
-            startActivity<CheckoutActivity>()
+            when (it!!) {
+                STATE.LOADING -> loadingDialog.show()
+                STATE.ERROR -> loadingDialog.dismiss()
+                STATE.SUCCESS -> {
+                    loadingDialog.hide()
+                    startActivity<CheckoutActivity>()
+                }
+            }
         }
-        viewModel.enrollTrialProgress.observeOnce { status ->
-            if (status) {
-                loadingDialog.hide()
-                startActivity<DashboardActivity>()
-                finish()
+        viewModel.enrollTrialProgress.observer(this) { status ->
+            when (status!!) {
+                STATE.LOADING -> loadingDialog.show()
+                STATE.ERROR -> loadingDialog.dismiss()
+                STATE.SUCCESS -> {
+                    loadingDialog.hide()
+                    startActivity(DashboardActivity.createDashboardActivityIntent(this, true))
+                    finish()
+                }
             }
         }
 
         viewAllTv.setOnClickListener {
-            // Bottom Sheet
             val courseSectionAllFragment = CourseSectionAllFragment()
-            val bundle = Bundle()
-            bundle.putString(COURSE_ID, courseId)
-            courseSectionAllFragment.arguments = bundle
 
             courseSectionAllFragment.show(supportFragmentManager, "courseSectionAllFragment")
         }
-    }
 
-    private fun setRun(it: Runs) {
-        val price = it.price
-        priceTv.text = if (price == "0") "FREE" else "${getString(R.string.rupee_sign)} $price"
-        if (price == "0") {
-            goodiesImg.isVisible = false
-        }
-        mrpTv.text = "₹ ${it.mrp}"
-        batchBtn.text = getDateForRun(it.start)
-        deadlineTv.text = "Enrollment Ends ${it.enrollmentEnd.let { it1 -> getDateForTime(it1) }}"
-        mrpTv.paintFlags = mrpTv.paintFlags or
-            Paint.STRIKE_THRU_TEXT_FLAG
-        buyBtn.setOnClickListener { _ ->
-            buyBtn.isEnabled = false
-            viewModel.clearCart(it.id)
-            loadingDialog.show()
-        }
-        trialBtn.setOnClickListener { _ ->
-            viewModel.enrollTrial(it.id)
-            loadingDialog.show()
+        batchBtn.setOnClickListener {
+            val courseTierFragment = CourseTierFragment()
+            courseTierFragment.show(supportFragmentManager, "CourseTierFragment")
         }
     }
 
@@ -304,24 +306,15 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         ratingTv.alpha = alpha
     }
 
-    private fun setUpBottomSheet() {
-        batchBtn.setOnClickListener {
-            dialog.show()
-        }
-        val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_batch, null)
-        sheetDialog.run {
-            batchRv.setRv(this@CourseActivity, batchListAdapter)
-        }
-        batchListAdapter.onItemClick = {
-            setRun(it as Runs)
-            dialog.dismiss()
-        }
-        dialog.dismissWithAnimation = true
-        dialog.setContentView(sheetDialog)
-    }
-
     override fun onBackPressed() {
         youtubePlayer?.release()
         super.onBackPressed()
+    }
+
+    override fun onDestroy() {
+        if (loadingDialog.isShowing) {
+            loadingDialog.dismiss()
+        }
+        super.onDestroy()
     }
 }

@@ -114,9 +114,22 @@
                 android:nestedScrollingEnabled="false"
                 android:orientation="horizontal"
                 android:overScrollMode="never"
+                android:visibility="gone"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="4"
                 tools:listitem="@layout/item_course_card_secondary" />
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/dashboardPopularShimmer"
+                android:layout_width="match_parent"
+                app:shimmer_auto_start="true"
+                app:shimmer_tilt="50"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small">
+
+                <include layout="@layout/item_skeleton_card_popular"/>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -193,7 +206,20 @@
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="4"
+                android:visibility="gone"
                 tools:listitem="@layout/item_track" />
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/dashboardTrackShimmer"
+                android:layout_width="match_parent"
+                app:shimmer_auto_start="true"
+                app:shimmer_tilt="50"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small">
+
+                <include layout="@layout/item_skeleton_track"/>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
 
             <View
@@ -269,10 +295,23 @@
                 android:layout_marginBottom="@dimen/margin_xl"
                 android:nestedScrollingEnabled="false"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="4"
                 tools:listitem="@layout/item_course_card" />
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/dashboardSuggestedShimmer"
+                android:layout_width="match_parent"
+                app:shimmer_auto_start="true"
+                app:shimmer_tilt="50"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small">
+
+                <include layout="@layout/item_skeleton_card_popular"/>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
 
         </LinearLayout>

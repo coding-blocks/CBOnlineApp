@@ -18,10 +18,8 @@ import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showEmptyView
 import com.codingblocks.cbonlineapp.util.extensions.showShimmer
-import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Doubts
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_admin.*
 import kotlinx.android.synthetic.main.doubts_fragment.*
@@ -139,15 +137,15 @@ class AdminDoubtsFragment : BaseCBFragment(), TabLayout.OnTabSelectedListener {
                     }
                 }
                 ErrorStatus.TIMEOUT -> {
-                    root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin) {
-                        fetchDoubts(adminTabLayout.selectedTabPosition)
-                    }
+//                    root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin) {
+//                        fetchDoubts(adminTabLayout.selectedTabPosition)
+//                    }
                 }
             }
         }
 
         viewModel.barMessage.observer(viewLifecycleOwner) {
-            root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin, false)
+//            root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin, false)
         }
 
         doubtsAdapter.apply {

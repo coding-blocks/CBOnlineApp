@@ -23,13 +23,13 @@ import com.vdocipher.aegis.offline.DownloadSelections
 import com.vdocipher.aegis.offline.DownloadStatus
 import com.vdocipher.aegis.offline.OptionsDownloader
 import com.vdocipher.aegis.offline.VdoDownloadManager
+import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import retrofit2.Response
-import java.io.File
 
 class DownloadService : Service(), VdoDownloadManager.EventListener {
 
@@ -38,7 +38,7 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
 
     private val contentDao: ContentDao by inject()
 
-    private val notificationManager by lazy {
+    private val notificationManager: NotificationManager by lazy {
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 

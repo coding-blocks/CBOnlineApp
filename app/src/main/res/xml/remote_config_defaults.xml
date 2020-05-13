@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>app_goodies_min_price</key>
+        <value>1</value>
+    </entry>
+    <entry>
+        <key>app_goodies_min_date</key>
+        <value>1</value>
+    </entry>
+</defaultsMap>

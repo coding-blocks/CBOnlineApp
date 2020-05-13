@@ -13,3 +13,9 @@ abstract class BaseCBViewModel : ViewModel() {
         errorLiveData.postValue(error)
     }
 }
+
+enum class STATE {
+    SUCCESS,
+    ERROR,
+    LOADING
+}

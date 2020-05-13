@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:constantSize="true">
+    <item android:drawable="@drawable/ic_tick" android:state_enabled="true" />
+    <item android:drawable="@drawable/ic_circle_orange" android:state_activated="true" />
+    <item android:drawable="@drawable/ic_circle_transparent" android:state_activated="false" />
+</selector>

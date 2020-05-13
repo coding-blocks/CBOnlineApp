@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 26,
-    "identityHash": "422be1c0b391fe4be6028293b0ecccf1",
+    "identityHash": "26ccbe8d79766b4335625f9e948c1e1a",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -1172,8 +1172,14 @@
       },
       {
         "tableName": "RunAttemptModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`attemptId` TEXT NOT NULL, `certificateApproved` INTEGER NOT NULL, `end` TEXT NOT NULL, `premium` INTEGER NOT NULL, `revoked` INTEGER NOT NULL, `approvalRequested` INTEGER NOT NULL, `doubtSupport` TEXT NOT NULL, `completedContents` INTEGER NOT NULL, `lastAccessedAt` TEXT NOT NULL, `runId` TEXT NOT NULL, PRIMARY KEY(`attemptId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`url` TEXT NOT NULL, `attemptId` TEXT NOT NULL, `certificateApproved` INTEGER NOT NULL, `end` TEXT NOT NULL, `premium` INTEGER NOT NULL, `revoked` INTEGER NOT NULL, `approvalRequested` INTEGER NOT NULL, `doubtSupport` TEXT NOT NULL, `completedContents` INTEGER NOT NULL, `lastAccessedAt` TEXT NOT NULL, `runId` TEXT NOT NULL, `certificateUrl` TEXT NOT NULL, PRIMARY KEY(`attemptId`))",
         "fields": [
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
           {
             "fieldPath": "attemptId",
             "columnName": "attemptId",
@@ -1231,6 +1237,12 @@
           {
             "fieldPath": "runId",
             "columnName": "runId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "certificateUrl",
+            "columnName": "certificateUrl",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -1292,7 +1304,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '422be1c0b391fe4be6028293b0ecccf1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '26ccbe8d79766b4335625f9e948c1e1a')"
     ]
   }
 }

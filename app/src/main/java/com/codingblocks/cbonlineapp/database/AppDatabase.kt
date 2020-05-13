@@ -16,6 +16,7 @@ import com.codingblocks.cbonlineapp.database.models.InstructorModel
 import com.codingblocks.cbonlineapp.database.models.JobsModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.database.models.Notification
+import com.codingblocks.cbonlineapp.database.models.PlayerState
 import com.codingblocks.cbonlineapp.database.models.RunAttemptModel
 import com.codingblocks.cbonlineapp.database.models.RunModel
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
@@ -26,8 +27,8 @@ import com.codingblocks.cbonlineapp.database.models.SectionModel
     entities = [CourseModel::class, SectionModel::class, ContentModel::class, InstructorModel::class, Notification::class,
         CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, RunModel::class,
         JobsModel::class, SectionContentHolder.SectionWithContent::class, BookmarkModel::class,
-        CommentModel::class, RunAttemptModel::class, RunPerformance::class
-    ], exportSchema = true, version = 26
+        CommentModel::class, RunAttemptModel::class, RunPerformance::class, PlayerState::class
+    ], exportSchema = true, version = 29
 )
 @TypeConverters(TimestampConverter::class, CourseIdList::class, ProgressItemConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -65,4 +66,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun libraryDao(): LibraryDao
 
     abstract fun bookmarkDao(): BookmarkDao
+
+    abstract fun playerDao(): PlayerDao
 }

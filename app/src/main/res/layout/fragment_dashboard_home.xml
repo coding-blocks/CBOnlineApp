@@ -3,17 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:overScrollMode="never"
     android:animateLayoutChanges="true"
+    android:overScrollMode="never"
     android:paddingTop="@dimen/dashboard_toolbar_comp"
     tools:context="com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="@dimen/margin_large"
         android:layout_marginBottom="@dimen/margin_9xl"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/margin_large"
         android:paddingBottom="@dimen/margin_large">
 
         <LinearLayout
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <RelativeLayout
                 android:id="@+id/dashboardProgressContainer"
@@ -169,6 +169,7 @@
                     android:text="@string/explore_courses"
                     android:textSize="16sp" />
 
+
             </LinearLayout>
 
             <View
@@ -177,10 +178,48 @@
                 android:layout_marginTop="@dimen/margin_large"
                 android:background="@drawable/dividerthick" />
 
-            <RelativeLayout
-                android:layout_marginTop="@dimen/margin_large"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/recentlyPlayedContainer"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:drawableStart="@drawable/ic_video"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/continue_from_where_you_left"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:orientation="horizontal"
+                    android:overScrollMode="never"
+                    android:id="@+id/recentPlayedRv"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="4"
+                    tools:listitem="@layout/item_continue_card" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:background="@drawable/dividerthick" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
                 android:visibility="gone">
 
                 <ImageView
@@ -288,12 +327,12 @@
                     android:background="@drawable/divider" />
 
                 <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+                    android:id="@+id/exploreBtn2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_medium"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
-                    android:id="@+id/exploreBtn2"
                     android:drawableEnd="@drawable/ic_dropright"
                     android:drawablePadding="10dp"
                     android:drawableTint="@color/orangish"
@@ -347,10 +386,10 @@
                 android:background="@drawable/divider" />
 
             <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+                android:id="@+id/loginBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_medium"
-                android:id="@+id/loginBtn"
                 android:drawableEnd="@drawable/ic_dropright"
                 android:drawablePadding="10dp"
                 android:drawableTint="@color/orangish"
@@ -359,6 +398,17 @@
                 android:textSize="16sp" />
 
         </LinearLayout>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/dashboardHomeShimmer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-20dp"
+            android:background="@color/dark_white"
+            android:visibility="visible">
+
+            <include layout="@layout/item_skeleton_dashbaord" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

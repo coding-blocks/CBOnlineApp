@@ -16,18 +16,19 @@ Application is available here:
 ## Screenshots
 <table>
         <tr>
-          <td><img src = "app/screenshots/1.png" height = "480" width="270"></td>
-          <td><img src = "app/screenshots/2.png" height = "480" width="270"></td>
-          <td><img src = "app/screenshots/3.png" height = "480" width="270"></td>
+          <td><img src = "app/screenshots/1.png" ></td>
+          <td><img src = "app/screenshots/2.png" ></td>
+          <td><img src = "app/screenshots/3.png" ></td>
         </tr>
         <tr>
-        <td><img src = "app/screenshots/4.png" height = "480" width="270"></td>
-        <td><img src = "app/screenshots/5.png" height = "480" width="270"></td>
-        <td><img src = "app/screenshots/6.png" height = "480" width="270"></td>
+        <td><img src = "app/screenshots/4.png" ></td>
+        <td><img src = "app/screenshots/5.png" ></td>
+        <td><img src = "app/screenshots/6.png" ></td>
         </tr>
         <tr>
-        <td><img src = "app/screenshots/7.png" height = "480" width="270"></td>
-        <td><img src = "app/screenshots/8.png" height = "480" width="270"></td>
+        <td><img src = "app/screenshots/7.png" ></td>
+        <td><img src = "app/screenshots/8.png" ></td>
+        <td><img src = "app/screenshots/9.png" ></td>
         </tr>
 </table>    
 

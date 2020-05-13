@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        style="@style/ToolBarStyleDark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/runsToolbar"
+            style="@style/ToolBarStyleDark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="Compare batches">
+
+            <TextView
+                android:id="@+id/compareBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:drawableStart="@drawable/ic_compare"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/gilroy_bold"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@string/compare"
+                android:textColor="@color/orangish" />
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/runTabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/margin_medium"
+        android:paddingTop="@dimen/margin_extra_small"
+        android:paddingEnd="@dimen/margin_medium"
+        android:paddingBottom="@dimen/margin_medium"
+        app:tabIndicatorColor="@color/orangish"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/orangish"
+        app:tabTextAppearance="@style/AppTabTextAppearance">
+
+    </com.google.android.material.tabs.TabLayout>
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_large" />
+
+</LinearLayout>

@@ -8,25 +8,21 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
-import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.pageChangeCallback
 import kotlinx.android.synthetic.main.activity_on_boarding.*
 import org.jetbrains.anko.intentFor
-import org.koin.android.ext.android.inject
 
 class OnBoardingActivity : BaseCBActivity() {
 
-    private val sharedPrefs by inject<PreferenceHelper>()
-    private val mAdapter by lazy {
+    private val mAdapter: IntroPagerAdapter by lazy {
         IntroPagerAdapter(this)
     }
-    var dotsCount = 0
-    private val dots by lazy {
+    var dotsCount: Int = 0
+    private val dots: Array<ImageView> by lazy {
         Array(3) {
             ImageView(this)
         }
     }
-    var currentPage = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +30,7 @@ class OnBoardingActivity : BaseCBActivity() {
         setAdapter()
 
         browseBtn.setOnClickListener {
-            startActivity(intentFor<DashboardActivity>())
+            startActivity(DashboardActivity.createDashboardActivityIntent(this, false))
         }
         loginBtn.setOnClickListener {
             startActivity(intentFor<LoginActivity>())

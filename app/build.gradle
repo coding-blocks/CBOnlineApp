@@ -1,5 +1,5 @@
 plugins {
-    id "com.diffplug.gradle.spotless" version "3.24.2"
+    id "com.diffplug.gradle.spotless" version "3.29.0"
 }
 
 apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
@@ -14,17 +14,15 @@ apply plugin: 'com.google.firebase.firebase-perf'
 ext {
     ankoVersion = '0.10.6'
     room_version = "2.2.5"
-    koin_version = "2.1.4"
-    markwon_version = "4.2.2"
+    koin_version = "2.1.5"
+    markwon_version = "4.3.1"
     ankoLibs = [
             // commons
             'commons',
-            // layouts
-            'sdk25', 'appcompat-v7', 'support-v4', 'recyclerview-v7', 'constraint-layout', 'cardview-v7',
-            // coroutines
+            'sdk25', 'appcompat-v7',
+            /// coroutines
             'sdk25-coroutines', 'appcompat-v7-coroutines', 'coroutines',
             'design',
-            // 'percent',
     ]
 }
 
@@ -34,6 +32,7 @@ def CLIENT_ID = System.getenv('CLIENT_ID') ?: "5633768694"
 def REDIRECT_URI = System.getenv('REDIRECT_URI') ?: "app://online.codingblocks.com"
 def DEBUG_REDIRECT_URI = System.getenv('REDIRECT_URI') ?: "app://online.codingblocks.xyz"
 def OAUTH_URL = System.getenv('OAUTH_URL') ?: "https://account.codingblocks.com/oauth/authorize"
+def DISCUSS_URL = System.getenv('DISCUSS_URL') ?: "https://discuss.codingblocks.com/tag/"
 
 // Include signing configs
 apply from: './signingconfigs.gradle'
@@ -44,13 +43,13 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 101000201
+        versionCode 101000404
         // 1 (versioning scheme)
         // 00 (major version)
         // 00 (minor version)
         // 01 (patch version)
         // 01 spare for betas/RCs
-        versionName "1.0.2"
+        versionName "1.0.4"
         signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false
@@ -62,6 +61,7 @@ android {
         buildConfigField "String", "CLIENT_ID", '"' + CLIENT_ID + '"'
         buildConfigField "String", "OAUTH_URL", '"' + OAUTH_URL + '"'
         buildConfigField "String", "REDIRECT_URI", '"' + REDIRECT_URI + '"'
+        buildConfigField "String", "DISCUSS_URL", '"' + DISCUSS_URL + '"'
 
         kapt {
             arguments {
@@ -118,20 +118,23 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    // Kotlin
+    implementation "androidx.activity:activity-ktx:1.2.0-alpha04"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5'
     implementation 'androidx.browser:browser:1.2.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'com.google.android.play:core:1.7.1'
+    implementation 'com.google.android.play:core:1.7.2'
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
     implementation "android.arch.work:work-runtime-ktx:1.0.1"
-    implementation "androidx.fragment:fragment-ktx:1.2.3"
+    implementation "androidx.fragment:fragment-ktx:1.2.4"
     implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
-    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:17.4.0'
-    implementation "androidx.drawerlayout:drawerlayout:1.1.0-alpha04"
+    implementation "androidx.drawerlayout:drawerlayout:1.1.0-beta01"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0'
+    implementation 'com.google.android.material:material:1.2.0-alpha06'
 
 
     // 3rd party libs
@@ -151,7 +154,6 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.4.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
-    implementation 'com.google.android.material:material:1.1.0'
 
 
     // Image view libraries
@@ -185,12 +187,13 @@ dependencies {
         implementation "org.jetbrains.anko:anko-$name:$ankoVersion"
     }
     //Firebase
-    implementation 'com.google.firebase:firebase-core:17.2.3'
+    implementation 'com.google.firebase:firebase-core:17.3.0'
     implementation 'com.google.firebase:firebase-messaging:20.1.2'
-    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta02'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.4.0'
-    implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.3'
-    implementation 'com.google.firebase:firebase-perf:19.0.5'
+    implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.5'
+    implementation 'com.google.firebase:firebase-perf:19.0.6'
+    implementation 'com.google.firebase:firebase-config-ktx:19.1.3'
 
 
     implementation project(':onlineapi')

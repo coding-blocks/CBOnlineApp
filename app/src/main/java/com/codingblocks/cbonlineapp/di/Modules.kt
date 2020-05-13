@@ -1,6 +1,7 @@
-package com.codingblocks.cbonlineapp
+package com.codingblocks.cbonlineapp.di
 
 import android.app.Application
+import androidx.lifecycle.SavedStateHandle
 import androidx.room.Room
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtRepository
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtsViewModel
@@ -42,22 +43,19 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel { MyCourseViewModel(get()) }
+    viewModel { (handle: SavedStateHandle) -> MyCourseViewModel(handle, get()) }
     viewModel { LeaderboardViewModel() }
     viewModel { NotificationViewModel(get()) }
-
-    // Activities
-    viewModel { VideoPlayerViewModel(get(), get(), get()) }
+    viewModel { (handle: SavedStateHandle) -> VideoPlayerViewModel(handle, get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { JobsViewModel(get()) }
     viewModel { JobDetailViewModel(get(), get()) }
-
     viewModel { AdminDoubtsViewModel(get()) }
     viewModel { AdminOverviewViewModel(get(), get()) }
     viewModel { DashboardDoubtsViewModel(get()) }
     viewModel { CourseViewModel(get()) }
-    viewModel { LibraryViewModel(get(), get()) }
-    viewModel { DashboardViewModel(get(), get(), get()) }
+    viewModel { (handle: SavedStateHandle) -> LibraryViewModel(handle, get(), get()) }
+    viewModel { (handle: SavedStateHandle) -> DashboardViewModel(handle, get(), get(), get(), get(), get()) }
     viewModel { QuizViewModel(get()) }
     viewModel { CheckoutViewModel() }
     viewModel { TrackViewModel(get()) }
@@ -67,14 +65,14 @@ val viewModelModule = module {
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
     single { CourseRepository() }
-    single { DashboardDoubtsRepository(get(), get(), get()) }
+    single { DashboardDoubtsRepository(get(), get(), get(), get()) }
     single { DashboardMyCoursesRepository(get(), get(), get(), get(), get()) }
     single { LibraryRepository(get(), get(), get(), get()) }
-    single { DashboardHomeRepository(get(), get(), get()) }
-    single { VideoPlayerRepository(get(), get(), get()) }
+    single { DashboardHomeRepository(get(), get(), get(), get()) }
+    single { VideoPlayerRepository(get(), get(), get(), get(), get()) }
     single { QuizRepository(get()) }
     single { JobRepository(get()) }
-    single { MyCourseRepository(get(), get(), get(), get(), get(), get()) }
+    single { MyCourseRepository(get(), get(), get(), get(), get(), get(), get()) }
     single { TracksRepository() }
     single { ProfileRepository(get()) }
     single { AuthRepository() }
@@ -177,5 +175,10 @@ val databaseModule = module {
     factory {
         val database: AppDatabase = get()
         database.runWithAttemptDao()
+    }
+
+    factory {
+        val database: AppDatabase = get()
+        database.playerDao()
     }
 }

@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Recorded Lectures & Videos",
+    "lite": true,
+    "premium": true,
+    "live": true,
+    "classroom": true
+  },
+  {
+    "name": "Quizzes/Assignments & Projects ",
+    "lite": true,
+    "premium": true,
+    "live": true,
+    "classroom": true
+  },
+  {
+    "name": "Certificate of Completion",
+    "lite": true,
+    "premium": true,
+    "live": true,
+    "classroom": true
+  },
+  {
+    "name": "Certificate of Achievement",
+    "lite": false,
+    "premium": true,
+    "live": true,
+    "classroom": true
+  },
+  {
+    "name": "Instant Doubt Resolution (TA)",
+    "lite": false,
+    "premium": true,
+    "live": true,
+    "classroom": true
+  },
+  {
+    "name": "Placement Support (via Hiring Blocks)",
+    "lite": false,
+    "premium": true,
+    "live": true,
+    "classroom": true
+  },
+  {
+    "name": "Goodies & Swags",
+    "lite": false,
+    "premium": true,
+    "live": true,
+    "classroom": true
+  },
+  {
+    "name": "Live Mentor Sessions (Projects & Doubts)",
+    "lite": false,
+    "premium": false,
+    "live": true,
+    "classroom": true
+  },
+  {
+    "name": "Live Doubt Resolution Sessions (by TA)",
+    "lite": false,
+    "premium": false,
+    "live": true,
+    "classroom": true
+  },
+  {
+    "name": "Offline Classroom Sessions",
+    "lite": false,
+    "premium": false,
+    "live": false,
+    "classroom": true
+  }
+]

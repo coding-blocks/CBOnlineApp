@@ -28,9 +28,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     api 'com.squareup.retrofit2:retrofit:2.7.2'
     api 'com.github.jasminb:jsonapi-converter:0.11-SNAPSHOT'
-    api 'com.squareup.retrofit2:converter-gson:2.7.2'
+    api 'com.squareup.retrofit2:converter-gson:2.8.1'
     api 'com.fasterxml.jackson.module:jackson-module-kotlin:2.10.3'
     implementation 'com.squareup.retrofit2:converter-jackson:2.7.2'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.4.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.6.0'
     testImplementation 'junit:junit:4.12'
 }

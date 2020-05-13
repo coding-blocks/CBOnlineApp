@@ -7,7 +7,6 @@ import android.util.TypedValue
 import android.view.View
 import android.view.WindowManager
 import androidx.annotation.StyleRes
-
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class SheetDialog(context: Context, @StyleRes theme: Int) : BottomSheetDialog(context, getThemeResId(context, theme)) {

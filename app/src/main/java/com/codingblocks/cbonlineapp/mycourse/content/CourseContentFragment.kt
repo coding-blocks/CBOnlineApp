@@ -48,6 +48,7 @@ import com.codingblocks.cbonlineapp.util.extensions.clearDim
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
+import java.util.concurrent.TimeUnit
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
@@ -55,7 +56,6 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.util.concurrent.TimeUnit
 
 const val SECTION_DOWNLOAD = "sectionDownload"
 
@@ -107,7 +107,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.fetchSections()
         typeChipGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.webinarChip -> viewModel.filters.value = VIDEO.also {
@@ -160,10 +160,14 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
             swiperefresh.isRefreshing = it
         }
 
-        viewModel.content.observer(viewLifecycleOwner) { SectionContent ->
+//        viewModel.computedData.observe(viewLifecycleOwner, Observer {
+//                    info { it }
+//        })
+
+        viewModel.content.observer(viewLifecycleOwner) { sectionWithContentList ->
             sectionitem.clear()
             val consolidatedList = ArrayList<ListObject>()
-            SectionContent.forEach { sectionContent ->
+            sectionWithContentList.forEach { sectionContent ->
                 var duration: Long = 0
                 var sectionComplete = 0
                 var isDownloadEnabled = false
@@ -216,7 +220,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
 
                 sectionItemsAdapter.submitList(consolidatedList)
             }
-            contentShimmer.isVisible = SectionContent.isEmpty()
+            contentShimmer.isVisible = sectionWithContentList.isEmpty()
         }
     }
 
@@ -307,7 +311,6 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.fetchSections()
         sectionItemsAdapter.starter = this
         sectionItemsAdapter.onItemClick = {
             when (it) {
@@ -336,7 +339,6 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                                 checkSection(premium)
                         VIDEO ->
                             if (contentVideo.videoUid.isNotEmpty()) {
-                                viewModel.updateProgress(ccid)
                                 startActivity(
                                     intentFor<VideoPlayerActivity>(
                                         CONTENT_ID to ccid,
@@ -367,10 +369,6 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 }
             }
         }
-        viewModel.addedToCartProgress.observer(this) {
-            dialog.hide()
-            requireContext().startActivity<CheckoutActivity>()
-        }
     }
 
     private fun checkSection(premium: Boolean) {
@@ -393,8 +391,11 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                     cancelable = true
                 ) {
                     if (it) {
-                        viewModel.clearCart()
                         dialog.show()
+                        viewModel.addToCart().observer(viewLifecycleOwner) {
+                            dialog.hide()
+                            requireContext().startActivity<CheckoutActivity>()
+                        }
                     }
                 }
             }
