@@ -287,7 +287,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.share -> {
-            share("http://online.codingblocks.com/app/$courseId")
+            share("http://online.codingblocks.com/courses/$courseId")
             true
         }
         android.R.id.home -> {
