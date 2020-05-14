@@ -166,6 +166,8 @@
             android:name=".mycourse.player.VideoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:supportsPictureInPicture="true"
+            android:launchMode="singleTask"
+            android:resizeableActivity="true"
             android:theme="@style/NewAppTheme.Dark" />
         <activity
             android:name=".PdfActivity"
