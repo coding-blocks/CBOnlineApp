@@ -241,13 +241,16 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         }
     }
 
+    var tagsList = ArrayList<String>()
     private fun showTags(tags: ArrayList<Tags>?) {
+        tagsList.clear()
         with(!tags.isNullOrEmpty()) {
             topicsTv.isVisible = this
             courseChipsGroup.isVisible = this
         }
         tags?.take(5)?.forEach {
             val chip = Chip(this)
+            it.name?.let { it1 -> tagsList.add(it1) }
             chip.text = it.name
             val font = Typeface.createFromAsset(assets, "fonts/gilroy_medium.ttf")
             chip.typeface = font
@@ -287,7 +290,11 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.share -> {
-            share("http://online.codingblocks.com/app/$courseId")
+            share("Check out the course *$title* by Coding Blocks!\n\n" +
+                shortTv.text + "\n\n" +
+                "Major topics covered: \n" +
+                tagsList.joinToString( separator = "\n", limit = 5 ) + "\n\n" +
+                "http://online.codingblocks.com/courses/$courseId/")
             true
         }
         android.R.id.home -> {
