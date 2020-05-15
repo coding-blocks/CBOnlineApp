@@ -12,6 +12,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.ImageViewTarget
 import com.bumptech.glide.request.target.Target
 import com.caverock.androidsvg.SVG
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.GlideApp
 import com.codingblocks.cbonlineapp.util.GlideRequest
 import com.codingblocks.cbonlineapp.util.NetworkUtils.okHttpClient
@@ -41,11 +42,12 @@ fun ImageView.loadSvg(svgUrl: String, callback: () -> Unit = { }) {
 
 fun ImageView.loadImage(imgUrl: String, scale: Boolean = false, callback: (loaded: Boolean) -> Unit = { }) {
 
-    if (imgUrl.isNotEmpty())
+    if (imgUrl.isNotEmpty()) {
         createGlideRequest(Uri.parse(imgUrl), context)
             .listener(SvgSoftwareLayerSetter1())
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                    setImageDrawable(resources.getDrawable(R.drawable.defaultavatar))
                     callback(false)
                     return false
                 }
@@ -57,6 +59,10 @@ fun ImageView.loadImage(imgUrl: String, scale: Boolean = false, callback: (loade
             })
             .error(createGlideRequest(Uri.parse(imgUrl), context, scale))
             .into(this)
+    } else {
+        setImageDrawable(resources.getDrawable(R.drawable.defaultavatar))
+    }
+
 }
 
 class SvgSoftwareLayerSetter1 : RequestListener<Drawable> {
