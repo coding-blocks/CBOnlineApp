@@ -105,9 +105,6 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-    }
-
     override fun onBackPressed() {
         if(supportFragmentManager.backStackEntryCount>=3) {
             supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
