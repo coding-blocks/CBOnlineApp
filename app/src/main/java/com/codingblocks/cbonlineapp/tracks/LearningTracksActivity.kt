@@ -15,13 +15,7 @@ import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.PROFESSIONAL
 import com.codingblocks.cbonlineapp.util.STUDENT
-import com.codingblocks.cbonlineapp.util.extensions.nonNull
-import com.codingblocks.cbonlineapp.util.extensions.observeOnce
-import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.codingblocks.cbonlineapp.util.extensions.setRv
-import com.codingblocks.cbonlineapp.util.extensions.setToolbar
-import com.codingblocks.cbonlineapp.util.extensions.showHelpDialog
-import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.codingblocks.cbonlineapp.util.extensions.*
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Professions
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -63,14 +57,18 @@ class LearningTracksActivity : BaseCBActivity() {
         setToolbar(tracksToolbar)
         setUpBottomSheet()
         setChips()
+        activityLearningShimmer.showShimmer(true)
         tracksRv.setRv(this, tracksListAdapter)
+
         vm.fetchTracks().observer(this) { courses ->
             tracksListAdapter.submitList(courses)
         }
         vm.fetchProfessions().observer(this) {
             it?.takeIf { it.isNotEmpty() }?.get(0)?.let { it1 -> setProfession(it1) }
             batchListAdapter.submitList(it)
+            activityLearningShimmer.hideAndStop()
         }
+
 
         needHelp.setOnClickListener {
             showHelpDialog(type = "Track") { b: Boolean, name: String, number: String ->
