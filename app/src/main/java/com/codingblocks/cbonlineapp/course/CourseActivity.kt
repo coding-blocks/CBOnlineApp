@@ -104,6 +104,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         }
     }
 
+    var endLink:String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course)
@@ -134,6 +135,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         }
 
         viewModel.course.observer(this) { course ->
+            endLink = course.slug.toString()
             showTags(course.tags)
             val markWon = Markwon.builder(this)
                 .usePlugin(CorePlugin.create())
@@ -294,7 +296,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 shortTv.text + "\n\n" +
                 "Major topics covered: \n" +
                 tagsList.joinToString( separator = "\n", limit = 5 ) + "\n\n" +
-                "http://online.codingblocks.com/courses/$courseId/")
+                "https://online.codingblocks.com/courses/$endLink/")
             true
         }
         android.R.id.home -> {
