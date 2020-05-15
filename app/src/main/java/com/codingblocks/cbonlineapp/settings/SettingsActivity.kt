@@ -110,4 +110,3 @@ class SettingsActivity : BaseCBActivity() {
         getPrefs().SP_DATA_LIMIT = size
     }
 }
-
