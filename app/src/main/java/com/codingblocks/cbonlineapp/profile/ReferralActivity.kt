@@ -26,7 +26,7 @@ class ReferralActivity : BaseCBActivity() {
                         runOnUiThread {
                             referralTv.append(body()?.get("code")?.asString)
                             shareReferral.setOnClickListener {
-                                share(referralTv.text.toString() + "\n You get 500 CB Credits on your successful Sign Up.")
+                                share("\n You get 500 CB Credits on your successful Sign Up.")
                             }
                             shareWhatsapp.setOnClickListener {
                                 share(referralTv.text.toString() + "\n You get 500 CB Credits on your successful Sign Up.")
