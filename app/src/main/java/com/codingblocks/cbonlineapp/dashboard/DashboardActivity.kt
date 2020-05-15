@@ -85,6 +85,10 @@ class DashboardActivity : BaseCBActivity(),
         toggle.syncState()
         dashboardNavigation.setNavigationItemSelectedListener(this)
         dashboardBottomNav.setOnNavigationItemSelectedListener(this)
+        if(vm.isLoggedIn==false){
+            val navMenu = dashboardNavigation.menu
+            navMenu.findItem(R.id.nav_purchases).isVisible = false
+        }
         initializeUI(vm.isLoggedIn ?: false)
         vm.errorLiveData.observer(this) { error ->
             when (error) {
@@ -112,6 +116,7 @@ class DashboardActivity : BaseCBActivity(),
                 vm.refreshToken()
             val navMenu = dashboardNavigation.menu
             navMenu.findItem(R.id.nav_inbox).isVisible = true
+            navMenu.findItem(R.id.nav_purchases).isVisible = true
             navMenu.findItem(R.id.nav_admin).isVisible = vm.prefs.SP_ADMIN
 
             dashboardNavigation.getHeaderView(0).apply {
