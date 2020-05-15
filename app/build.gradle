@@ -158,7 +158,7 @@ dependencies {
     // Image view libraries
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.caverock:androidsvg-aar:1.4'
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.20'
 
     //database
     implementation "androidx.room:room-runtime:$room_version"
