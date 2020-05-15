@@ -198,7 +198,7 @@
             android:id="@+id/shareWhatsapp"
             android:fontFamily="@font/gilroy_bold"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:text="@string/share_via_whatsapp"
             app:cornerRadius="30dp" />
 
@@ -215,7 +215,7 @@
             android:id="@+id/shareReferral"
             android:text="@string/more"
             android:textColor="@color/black"
-            android:textSize="14sp"
+            android:textSize="12sp"
             app:icon="@drawable/ic_share"
             app:iconPadding="10dp"
             app:iconTint="@color/black"
