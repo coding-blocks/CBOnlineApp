@@ -338,13 +338,13 @@ class DashboardActivity : BaseCBActivity(),
 
             R.id.dashboard_explore -> changeToolbar(getString(R.string.welcome), 0)
 
-            R.id.dashboard_courses -> changeToolbar(getString(R.string.dashboard), 1)
+            R.id.dashboard_courses -> changeToolbar(getString(R.string.my_courses), 1)
 
             R.id.dashboard_home -> changeToolbar(getString(R.string.dashboard), 2)
 
-            R.id.dashboard_doubts -> changeToolbar(getString(R.string.dashboard), 3)
+            R.id.dashboard_doubts -> changeToolbar(getString(R.string.doubts), 3)
 
-            R.id.dashboard_library -> changeToolbar(getString(R.string.dashboard), 4)
+            R.id.dashboard_library -> changeToolbar(getString(R.string.library), 4)
         }
         dashboardDrawer.closeDrawer(GravityCompat.START)
         return true
