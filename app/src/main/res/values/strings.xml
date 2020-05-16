@@ -196,7 +196,7 @@
     <string name="goodiedesc">You have completed %d%% of the course. You can claim your goodies now!</string>
     <string name="request_now">Request Now</string>
     <string name="reset">Reset</string>
-    <string name="certificate_desc">Complete 90% of the course to unlock certificate</string>
+    <string name="certificate_desc">Complete %d%% of the course to unlock certificate</string>
     <string name="generate_certificate">Generate Certificate</string>
     <string name="mentorapproval">Mentor Approval - %s</string>
     <string name="request">Request</string>
@@ -208,7 +208,7 @@
     <string name="commenting_as">Commenting as</string>
     <string name="my_couurse_logged_out">Your enrolled courses will appear here.\nLogin now to explore more!</string>
     <string name="my_doubts_logged_out">All your course related doubts will appear here.\nLogin now to explore more!</string>
-    <string name="my_dashboard_logged_out">Your dashboard consists of uour course performance,\n your wishlisted courses, your applied jobs \n and many more</string>
+    <string name="my_dashboard_logged_out">Your dashboard consists of your course performance,\n your wishlisted courses, your applied jobs \n and many more</string>
     <string name="learning_tracks">Learning Tracks</string>
     <string name="invite_earn"><![CDATA[Invite & Earn]]></string>
     <string name="your_referral_code">Your Referral Code</string>
@@ -281,9 +281,12 @@
     <string name="compare">Compare</string>
     <string name="submit">Submit</string>
     <string name="back_press">Please click Back again to exit</string>
-    <string name="progress" >%d %%</string>
-    <string name="completed" >%d %% Completed</string>
+    <string name="progress">%d %%</string>
+    <string name="completed">%d %% Completed</string>
     <string name="continue_from_where_you_left">Continue from where you left</string>
     <string name="no_notes">No Notes</string>
     <string name="click_on_to_add_a_new_note">Click on + to add a new note.</string>
+    <string name="payment_failed">Your payment has failed!</string>
+    <string name="internet_connection_error">Please check your internet connection</string>
+    <string name="retry">Retry Now</string>
 </resources>
