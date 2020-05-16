@@ -43,7 +43,7 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 101000402
+        versionCode 101000404
         // 1 (versioning scheme)
         // 00 (major version)
         // 00 (minor version)
@@ -145,6 +145,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.razorpay:checkout:1.5.16'
     implementation "io.noties.markwon:core:$markwon_version"
+    implementation "io.noties.markwon:ext-tables:$markwon_version"
     implementation "io.noties.markwon:editor:$markwon_version"
     implementation "io.noties.markwon:ext-strikethrough:$markwon_version"
     implementation "io.noties.markwon:html:$markwon_version"

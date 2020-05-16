@@ -1,9 +1,7 @@
 package com.codingblocks.cbonlineapp.mycourse.overview
 
-import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -14,6 +12,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
+import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
@@ -21,9 +20,7 @@ import com.codingblocks.cbonlineapp.dashboard.home.loadData
 import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
-import com.codingblocks.cbonlineapp.util.CertificateDownloadReceiver
 import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import java.io.File
 import kotlinx.android.synthetic.main.fragment_overview.*
@@ -36,7 +33,6 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
-    private lateinit var receiver: CertificateDownloadReceiver
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,14 +40,12 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_overview, container, false)
-        receiver = CertificateDownloadReceiver()
-        requireActivity().registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.run?.getDistinct()?.observer(viewLifecycleOwner) { courseAndRun ->
+        viewModel.run?.distinctUntilChanged()?.observer(viewLifecycleOwner) { courseAndRun ->
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
             viewModel.runId = (courseAndRun.run.crUid)
             val progressValue = courseAndRun.getProgress()
@@ -170,7 +164,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     }
 
     override fun onDestroy() {
-        requireActivity().unregisterReceiver(receiver)
+//        requireActivity().unregisterReceiver(receiver)
         super.onDestroy()
     }
 }
