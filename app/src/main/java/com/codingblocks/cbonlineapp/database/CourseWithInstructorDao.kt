@@ -79,7 +79,7 @@ interface CourseWithInstructorDao {
    SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
-       WHERE rA.attemptId = :id AND rA.premium = 1 ORDER BY rA.lastAccessedAt DESC LIMIT 1
+       WHERE rA.attemptId = :id ORDER BY rA.lastAccessedAt DESC LIMIT 1
     """)
     fun getRunById(id: String): LiveData<CourseRunPair>
 }
