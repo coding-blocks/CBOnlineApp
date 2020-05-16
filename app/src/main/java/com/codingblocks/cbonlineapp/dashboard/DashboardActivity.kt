@@ -112,6 +112,7 @@ class DashboardActivity : BaseCBActivity(),
                 vm.refreshToken()
             val navMenu = dashboardNavigation.menu
             navMenu.findItem(R.id.nav_inbox).isVisible = true
+            navMenu.findItem(R.id.nav_purchases).isVisible = true
             navMenu.findItem(R.id.nav_admin).isVisible = vm.prefs.SP_ADMIN
 
             dashboardNavigation.getHeaderView(0).apply {
