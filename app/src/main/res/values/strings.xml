@@ -281,9 +281,12 @@
     <string name="compare">Compare</string>
     <string name="submit">Submit</string>
     <string name="back_press">Please click Back again to exit</string>
-    <string name="progress" >%d %%</string>
-    <string name="completed" >%d %% Completed</string>
+    <string name="progress">%d %%</string>
+    <string name="completed">%d %% Completed</string>
     <string name="continue_from_where_you_left">Continue from where you left</string>
     <string name="no_notes">No Notes</string>
     <string name="click_on_to_add_a_new_note">Click on + to add a new note.</string>
+    <string name="payment_failed">Your payment has failed!</string>
+    <string name="internet_connection_error">Please check your internet connection</string>
+    <string name="retry">Retry Now</string>
 </resources>
