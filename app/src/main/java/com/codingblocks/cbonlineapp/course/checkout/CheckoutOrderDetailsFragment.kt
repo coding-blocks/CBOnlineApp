@@ -77,6 +77,6 @@ class CheckoutOrderDetailsFragment : BaseCBFragment(), AnkoLogger {
             }
         }
 
-        exploreBtn.setOnClickListener { requireActivity().finish() }
+        exploreBtn.setOnClickListener {startActivity(intentFor<DashboardActivity>()) }
     }
 }
