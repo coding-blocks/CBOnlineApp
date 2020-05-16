@@ -98,7 +98,7 @@ class DashboardMyCoursesFragment : BaseCBFragment(), AnkoLogger {
             }
         }
         dashboardMyCoursesExploreBtn.setOnClickListener {
-            requireActivity().dashboardPager.currentItem = 0
+            requireActivity().dashboardBottomNav.selectedItemId = R.id.dashboard_explore
         }
         dashboardCoursesRv.setRv(requireContext(), courseListAdapter, true)
         if (vm.isLoggedIn == true) {
