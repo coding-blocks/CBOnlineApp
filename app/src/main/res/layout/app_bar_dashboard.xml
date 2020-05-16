@@ -107,7 +107,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <com.codingblocks.cbonlineapp.PaddingLessBottomNavigation
         android:id="@+id/dashboardBottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
