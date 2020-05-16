@@ -99,7 +99,7 @@
     <string name="wishlisted_courses">Wishlisted Courses</string>
     <string name="all_courses">All Courses</string>
     <string name="expired_courses">Expired Courses</string>
-    <string name="buy_extension">Buy Now</string>
+    <string name="buy_course">Buy Now</string>
     <string name="doubt_resolved_title">Your doubt has been marked Resolved</string>
     <string name="doubt_resolve_desc">You can still reopen the doubt in “Resolved Doubts” section</string>
     <string name="view_resolved">View Resolved</string>
