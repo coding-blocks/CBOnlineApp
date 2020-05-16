@@ -51,6 +51,9 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             val progressValue = courseAndRun.getProgress()
             homeProgressTv.text = getString(R.string.progress, progressValue.toInt())
             homeProgressView.setGradientColor(progressValue)
+            certificateDescTv.apply {
+                text = getString(R.string.certificate_desc, courseAndRun.run.completionThreshold)
+            }
             progressTv.apply {
                 text = getString(R.string.thresholdcompletion, courseAndRun.run.completionThreshold)
                 isActivated = courseAndRun.run.completionThreshold < progressValue
