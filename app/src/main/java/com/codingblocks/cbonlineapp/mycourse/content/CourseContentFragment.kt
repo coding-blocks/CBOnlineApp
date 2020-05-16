@@ -373,16 +373,6 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
 
     private fun checkSection(premium: Boolean) {
         when {
-            viewModel.runStartEnd.first < System.currentTimeMillis() -> {
-                requireContext().showDialog(
-                    "expired",
-                    secondaryText = R.string.expired,
-                    primaryButtonText = R.string.buy_courses,
-                    cancelable = true
-                ) {
-                    // Show Extension Dialog
-                }
-            }
             premium -> {
                 requireContext().showDialog(
                     "purchase",
@@ -390,15 +380,27 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                     primaryButtonText = R.string.buy_now,
                     cancelable = true
                 ) {
-                    if (it) {
-                        dialog.show()
-                        viewModel.addToCart().observer(viewLifecycleOwner) {
-                            dialog.hide()
-                            requireContext().startActivity<CheckoutActivity>()
-                        }
-                    }
+//                    if (it) {
+//                      //  dialog.show()
+//                        viewModel.addToCart().observer(viewLifecycleOwner)
+//                        {
+//                        //    dialog.hide()
+//                            requireContext().startActivity<CheckoutActivity>()
+//                        }
+//                   }
                 }
             }
+            viewModel.runStartEnd.first < System.currentTimeMillis() -> {
+                requireContext().showDialog(
+                    "expired",
+                    secondaryText = R.string.expired,
+                    primaryButtonText = R.string.buy_extension,
+                    cancelable = true
+                ) {
+                    // Show Extension Dialog
+                }
+            }
+
             viewModel.runStartEnd.second > System.currentTimeMillis() -> {
                 requireContext().showDialog(
                     "Wait",

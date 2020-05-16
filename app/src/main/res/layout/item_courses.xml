@@ -94,7 +94,7 @@
             android:drawablePadding="10dp"
             android:drawableTint="@color/orangish"
             android:fontFamily="@font/gilroy_bold"
-            android:text="@string/buy_courses"
+            android:text="@string/buy_extension"
             android:textColor="@color/orangish"
             android:textSize="14sp"
             android:visibility="gone" />
