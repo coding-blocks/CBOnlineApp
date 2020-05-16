@@ -377,7 +377,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 requireContext().showDialog(
                     "expired",
                     secondaryText = R.string.expired,
-                    primaryButtonText = R.string.buy_course,
+                    primaryButtonText = R.string.buy_courses,
                     cancelable = true
                 ) {
                     // Show Extension Dialog

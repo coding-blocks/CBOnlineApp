@@ -99,7 +99,7 @@
     <string name="wishlisted_courses">Wishlisted Courses</string>
     <string name="all_courses">All Courses</string>
     <string name="expired_courses">Expired Courses</string>
-    <string name="buy_course">Buy Now</string>
+    <string name="buy_courses">Buy Now</string>
     <string name="doubt_resolved_title">Your doubt has been marked Resolved</string>
     <string name="doubt_resolve_desc">You can still reopen the doubt in “Resolved Doubts” section</string>
     <string name="view_resolved">View Resolved</string>
@@ -243,7 +243,7 @@
     <string name="i_am_a">I am a</string>
     <string name="i_want_to_become">I want to become</string>
     <string name="choose_track">Choose Track</string>
-    <string name="purchase">"You need to buy this course to access this content"</string>
+    <string name="purchase">"You need to Buy this course to access this content"</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="wait">"Your course will start on "</string>
