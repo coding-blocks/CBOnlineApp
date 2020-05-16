@@ -196,7 +196,7 @@
     <string name="goodiedesc">You have completed %d%% of the course. You can claim your goodies now!</string>
     <string name="request_now">Request Now</string>
     <string name="reset">Reset</string>
-    <string name="certificate_desc">Complete %d%% of the course to unlock certificate</string>
+    <string name="certificate_desc">Complete 90% of the course to unlock certificate</string>
     <string name="generate_certificate">Generate Certificate</string>
     <string name="mentorapproval">Mentor Approval - %s</string>
     <string name="request">Request</string>
