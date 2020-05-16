@@ -102,7 +102,7 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
         super.onViewCreated(view, savedInstanceState)
         setUpBottomSheet()
 
-        doubtEmptyBtn.setOnClickListener { requireActivity().dashboardPager.currentItem = 1 }
+        doubtEmptyBtn.setOnClickListener { requireActivity().dashboardBottomNav.selectedItemId = R.id.dashboard_home }
         liveDoubtBtn.setOnClickListener {
             vm.type.value = LIVE
         }
