@@ -290,8 +290,4 @@
     <string name="payment_failed">Your payment has failed!</string>
     <string name="internet_connection_error">Please check your internet connection</string>
     <string name="retry">Retry Now</string>
-<<<<<<< HEAD
-
-=======
->>>>>>> fixed: free trail certificate bug
 </resources>
