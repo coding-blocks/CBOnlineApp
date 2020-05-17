@@ -62,4 +62,8 @@ class OnBoardingActivity : BaseCBActivity() {
         }
         dots[0].isSelected = true
     }
+
+    override fun onBackPressed() {
+        finishAffinity()
+    }
 }
