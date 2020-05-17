@@ -10,8 +10,6 @@ import com.codingblocks.onlineapi.getMeta
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Project
 import com.codingblocks.onlineapi.models.Sections
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class CourseViewModel(
     private val repo: CourseRepository
@@ -87,8 +85,16 @@ class CourseViewModel(
         if (!projectIdList.isNullOrEmpty()) {
             runIO {
                 projectIdList.forEach {
-                    val projectRes = withContext(Dispatchers.IO) { repo.getProjects(it.id) }
-                    projectRes.body()?.let { it1 -> list.add(it1) }
+                    when (val response = repo.getProjects(it.id)) {
+                        is ResultWrapper.GenericError -> setError(response.error)
+                        is ResultWrapper.Success -> with(response.value) {
+                            if (isSuccessful) {
+                                body()?.let { it1 -> list.add(it1) }
+                            } else {
+                                setError(fetchError(code()))
+                            }
+                        }
+                    }
                 }
                 projects.postValue(list)
             }
@@ -102,10 +108,18 @@ class CourseViewModel(
         if (!sectionIdList.isNullOrEmpty()) {
             runIO {
                 sectionIdList.take(5).forEach {
-                    val sectionRes = withContext(Dispatchers.IO) { repo.getSection(it.id) }
-                    sectionRes.body()?.let { it1 -> list.add(it1) }
+                    when (val response = repo.getSection(it.id)) {
+                        is ResultWrapper.GenericError -> setError(response.error)
+                        is ResultWrapper.Success -> with(response.value) {
+                            if (isSuccessful) {
+                                body()?.let { it1 -> list.add(it1) }
+                            } else {
+                                setError(fetchError(code()))
+                            }
+                        }
+                    }
+                    sections.postValue(list)
                 }
-                sections.postValue(list)
             }
         }
     }
@@ -115,10 +129,18 @@ class CourseViewModel(
         if (!sectionIdList.isNullOrEmpty()) {
             runIO {
                 sectionIdList.forEach {
-                    val sectionRes = withContext(Dispatchers.IO) { repo.getSection(it.id) }
-                    sectionRes.body()?.let { it1 -> list.add(it1) }
+                    when (val response = repo.getSection(it.id)) {
+                        is ResultWrapper.GenericError -> setError(response.error)
+                        is ResultWrapper.Success -> with(response.value) {
+                            if (isSuccessful) {
+                                body()?.let { it1 -> list.add(it1) }
+                            } else {
+                                setError(fetchError(code()))
+                            }
+                        }
+                    }
+                    sections.postValue(list)
                 }
-                sections.postValue(list)
             }
         }
     }

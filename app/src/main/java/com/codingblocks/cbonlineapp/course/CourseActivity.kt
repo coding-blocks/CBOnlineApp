@@ -139,14 +139,16 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         viewModel.course.observer(this) { course ->
             endLink = course.slug.toString()
             showTags(course.tags)
-            var tableTheme:TableTheme = TableTheme.create(this).asBuilder()
+            val tableTheme:TableTheme = TableTheme.create(this).asBuilder()
                 .tableBorderColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
                 .build()
             val markWon = Markwon.builder(this)
                 .usePlugin(TablePlugin.create(tableTheme))
                 .build()
-            var summary:String = course.summary
-            markWon.setMarkdown(courseSummaryTv, summary)
+            courseSummaryTv.post {
+                markWon.setMarkdown(courseSummaryTv, course.summary)
+            }
+
             course.faq?.let {
                 faqTv.isVisible = true
                 courseFaqTv.isVisible = true
@@ -252,6 +254,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     var tagsList = ArrayList<String>()
     private fun showTags(tags: ArrayList<Tags>?) {
         tagsList.clear()
+        courseChipsGroup.removeAllViews()
         with(!tags.isNullOrEmpty()) {
             topicsTv.isVisible = this
             courseChipsGroup.isVisible = this
