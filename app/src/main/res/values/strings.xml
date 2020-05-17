@@ -237,6 +237,7 @@
     <string name="username">Username</string>
     <string name="back">Back</string>
     <string name="your_courses_will_start_showing_once_you_enroll_nin_any_course">Your Courses will start showing once you enroll\nin any course</string>
+    <string name="your_courses_will_start_showing_once_you_purchase_any_course">Your Courses will start showing once you purchase any course</string>
     <string name="frequently_asked_questions">Frequently Asked Questions</string>
     <string name="student">Student</string>
     <string name="professional">Professional</string>
@@ -289,4 +290,5 @@
     <string name="payment_failed">Your payment has failed!</string>
     <string name="internet_connection_error">Please check your internet connection</string>
     <string name="retry">Retry Now</string>
+
 </resources>
