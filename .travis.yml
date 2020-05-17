@@ -47,7 +47,6 @@ before_script:
 script:
 - "./gradlew build"
 - "./gradlew test"
-- "./gradlew spotlessCheck"
 deploy:
   provider: releases
   api_key:

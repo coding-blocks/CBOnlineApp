@@ -1,7 +1,3 @@
-plugins {
-    id "com.diffplug.gradle.spotless" version "3.29.0"
-}
-
 apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
@@ -101,14 +97,6 @@ android {
     buildToolsVersion = '29.0.3'
 }
 
-spotless {
-    kotlin {
-        ktlint()
-        target '**/*.kt'
-    }
-}
-
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -168,7 +156,7 @@ dependencies {
 
 
     //VideoCipher library
-    implementation 'com.vdocipher.aegis:vdocipher-android:1.4.0'
+    implementation 'com.vdocipher.aegis:vdocipher-android:1.5.0'
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
 
 

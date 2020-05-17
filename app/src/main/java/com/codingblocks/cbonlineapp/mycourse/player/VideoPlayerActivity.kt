@@ -419,6 +419,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                     deleteFolder(vm.currentContentId ?: "")
                 }
                 in (2010..2020) -> {
+                    vm.getOtp()
                 }
                 6120 -> {
                 }
@@ -770,7 +771,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         vm.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
         vm.position = 0L
         if (::playerFragment.isInitialized) {
-            playerFragment.player.release()
+            playerFragment.player.stop()
         }
         if (::youtubePlayer.isInitialized) {
             youtubePlayer.pause()

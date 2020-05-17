@@ -32,9 +32,6 @@ jobs:
       - run:
           name: Tests
           command: ./gradlew testDebug
-      - run:
-          name: Code Quality
-          command: ./gradlew lintDebug spotlessCheck
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: app/build/reports
           destination: reports-app
