@@ -25,8 +25,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
-        android:visibility="visible"
+        android:visibility="gone"
         tools:itemCount="4"
         tools:listitem="@layout/item_courses" />
+    <TextView
+        android:id="@+id/emptyPurchaseText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/nav_header_height"
+        android:layout_marginStart="@dimen/centre_container_l_vertical"
+        android:layout_marginEnd="@dimen/centre_container_l_vertical"
+        android:fontFamily="@font/gilroy_medium"
+        android:text="@string/your_courses_will_start_showing_once_you_purchase_any_course"
+        android:textAlignment="center"
+        android:textColor="@color/brownish_grey"
+        android:textSize="16sp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/purchasesMyCoursesExploreBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/centre_container_l_vertical"
+        android:text="@string/explore_courses" />
+
 
 </LinearLayout>

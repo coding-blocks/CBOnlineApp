@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.purchases
 
 import android.os.Bundle
+import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
@@ -12,12 +13,11 @@ import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import kotlinx.android.synthetic.main.activity_purchases.*
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PurchasesActivity : BaseCBActivity() {
 
     private val viewModel: DashboardViewModel by stateViewModel()
-    private val courseListAdapter = MyCourseListAdapter()
+    private val courseListAdapter = MyCourseListAdapter("RUN")
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -35,10 +35,16 @@ class PurchasesActivity : BaseCBActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_purchases)
         setToolbar(purchasesToolbar)
-        purchasedCoursesRv.setRv(this, courseListAdapter, true)
-        viewModel.purchasedRuns.observer(this) {
-            courseListAdapter.submitList(it)
-        }
-        courseListAdapter.onItemClick = itemClickListener
+            purchasedCoursesRv.setRv(this, courseListAdapter, true)
+            viewModel.purchasedRuns.observer(this) {list ->
+                courseListAdapter.submitList(list)
+                if(list.isNotEmpty())
+                {
+                    purchasedCoursesRv.isVisible = true
+                }
+            }
+            courseListAdapter.onItemClick = itemClickListener
+            purchasesMyCoursesExploreBtn.setOnClickListener { finish() }
+
     }
 }
