@@ -63,5 +63,4 @@ class OnBoardingActivity : BaseCBActivity() {
         dots[0].isSelected = true
     }
 
-
 }
