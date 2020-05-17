@@ -4,7 +4,7 @@ labelMapping:
   fix(ui): [fix, ui]
   feat(ui): [feat, ui]
   refactor: [chore, refactor]
-  chore(refactor): [chore, refactor]
+  chore(refactor): [chore, refactor]kjhbjkhbvkjhb SLks
   chore(deps): [dependencies]
   chore(docs): [chore, docs]
   docs: [chore, docs]
