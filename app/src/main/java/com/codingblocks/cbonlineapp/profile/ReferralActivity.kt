@@ -24,12 +24,11 @@ class ReferralActivity : BaseCBActivity() {
         setContentView(R.layout.activity_referral)
         setToolbar(referralToolbar)
         
-        copy_clipboard?.setOnClickListener(View.OnClickListener {
+        copy_clipboard.setOnClickListener(View.OnClickListener {
             val text = referralTv?.text
             val myClip = ClipData.newPlainText("text", text)
             myClipboard!!.setPrimaryClip(myClip)
-            Toast.makeText(applicationContext, "Copied to Clipboard",
-                Toast.LENGTH_SHORT).show()
+             toast("Copied to clipboad")
         })
         
         GlobalScope.launch {
