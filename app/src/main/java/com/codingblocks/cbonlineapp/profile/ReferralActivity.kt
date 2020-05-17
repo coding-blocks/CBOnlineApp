@@ -14,11 +14,23 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.share
 
 class ReferralActivity : BaseCBActivity() {
+    
+    private val myClipboard : ClipboardManager by lazy{
+        getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_referral)
         setToolbar(referralToolbar)
+        
+        copy_clipboard.setOnClickListener(View.OnClickListener {
+            val text = referralTv?.text
+            val myClip = ClipData.newPlainText("text", text)
+            myClipboard!!.setPrimaryClip(myClip)
+             toast("Copied to clipboad")
+        })
+        
         GlobalScope.launch {
             when (val response = safeApiCall { Clients.api.myReferral() }) {
                 is ResultWrapper.Success -> with(response.value) {
