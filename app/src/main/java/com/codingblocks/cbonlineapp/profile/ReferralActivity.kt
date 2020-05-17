@@ -1,7 +1,11 @@
 package com.codingblocks.cbonlineapp.profile
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
@@ -12,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_referral.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.share
+import org.jetbrains.anko.toast
 
 class ReferralActivity : BaseCBActivity() {
     
