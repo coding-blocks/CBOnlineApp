@@ -112,6 +112,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:showAsAction="always|withText"
         app:backgroundTint="@color/dark"
         app:itemIconTint="@color/bnv_tab_item"
         app:itemTextColor="@color/bnv_tab_item"
