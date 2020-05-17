@@ -56,7 +56,7 @@ We have the following branches
 
 Please help us follow the best practices to make it easy for the reviewer as well as the contributor. We want to focus on the code quality more than on managing pull request ethics.
 
- * Single commit per pull request
+ * Single commit per pull request.
  * For writing commit messages please read the COMMITSTYLE carefully. Kindly adhere to the guidelines.
  * Follow uniform design practices. The design language must be consistent throughout the app.
  * The pull request will not get merged until and unless the commits are squashed. In case there are multiple commits on the PR, the commit author needs to squash them and not the maintainers cherrypicking and merging squashes.
