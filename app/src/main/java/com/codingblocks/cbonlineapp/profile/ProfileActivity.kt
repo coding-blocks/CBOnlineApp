@@ -178,7 +178,10 @@ class ProfileActivity : BaseCBActivity() {
                             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         })
                     }
+                    finishAffinity()
+
                 }
+
             }
         )
     }
