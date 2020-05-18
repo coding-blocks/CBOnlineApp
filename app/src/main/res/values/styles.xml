@@ -262,6 +262,10 @@
         <item name="fontSize">10sp</item>
     </style>
 
+    <style name="BottomNavigationTextApperance">
+        <item name="android:ellipsize">end</item>
+    </style>
+
     <style name="CardShapeApperance">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">10dp</item>
