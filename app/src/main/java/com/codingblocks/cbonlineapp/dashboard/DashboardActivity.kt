@@ -119,7 +119,6 @@ class DashboardActivity : BaseCBActivity(),
                 findViewById<CircleImageView>(R.id.navHeaderImageView).loadImage(vm.prefs.SP_USER_IMAGE, true)
                 findViewById<TextView>(R.id.navUsernameTv).text = ("Hello ${vm.prefs.SP_USER_NAME}")
             }
-            it.photo = vm.prefs.SP_USER_IMAGE
         })
     }
 
