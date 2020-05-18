@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
@@ -100,7 +101,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             chart1.loadData(it.averageProgress, it.userProgress)
         }
 
-        viewModel.getHackerBlocksPerformance().observer(viewLifecycleOwner) {
+        viewModel.getHackerBlocksPerformance().observe(viewLifecycleOwner , Observer {
             if(it!=null) {
                 hbRankContainer.isVisible = true
                 currentOverallRank.text = it.currentOverallRank.toString()
@@ -108,7 +109,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 currentMonthScore.text = "${it.currentMonthScore} Points"
                 previousMonthlyScore.text = "${it.currentMonthScore - it.previousMonthScore} Points"
             }
-        }
+        })
 
         confirmReset.setOnClickListener {
             Components.showConfirmation(requireContext(), "reset") {
