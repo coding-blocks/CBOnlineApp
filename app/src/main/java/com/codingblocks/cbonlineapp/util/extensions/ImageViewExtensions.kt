@@ -47,7 +47,6 @@ fun ImageView.loadImage(imgUrl: String, scale: Boolean = false, callback: (loade
             .listener(SvgSoftwareLayerSetter1())
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                    setImageDrawable(resources.getDrawable(R.drawable.defaultavatar))
                     callback(false)
                     return false
                 }
@@ -59,8 +58,6 @@ fun ImageView.loadImage(imgUrl: String, scale: Boolean = false, callback: (loade
             })
             .error(createGlideRequest(Uri.parse(imgUrl), context, scale))
             .into(this)
-    } else {
-        setImageDrawable(resources.getDrawable(R.drawable.defaultavatar))
     }
 
 }
@@ -90,6 +87,7 @@ class SvgSoftwareLayerSetter1 : RequestListener<Drawable> {
 fun createGlideRequest(source: Uri?, context: Context, resize: Boolean = false): GlideRequest<Drawable> {
     val req = GlideApp.with(context)
         .load(source)
+        .error(R.drawable.defaultavatar)
     if (resize)
         req.override(80, 80)
             .centerCrop()
