@@ -253,6 +253,16 @@
     <string name="confirm">Confirm</string>
     <string name="country">Country</string>
     <string name="state">State</string>
+    <string name="extension_pack_heading">Your course will expire soon!</string>
+    <string name="extension_pack_subheading">Buy extension for this course</string>
+    <string name="revision_pack">Revision pack</string>
+    <string name="revision_pack_amount">FREE</string>
+    <string name="extension_30_days">Extension for 30 days</string>
+    <string name="extension_30_days_amount">INR 2500</string>
+    <string name="extension_90_days">Extension for 90 days</string>
+    <string name="extension_90_days_amount">INR 4500</string>
+    <string name="extension_180_days">Extension for 180 days</string>
+    <string name="extension_180_days_amount">INR 7500</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

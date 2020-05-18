@@ -8,6 +8,7 @@ import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -21,14 +22,16 @@ import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import java.io.File
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
+import kotlinx.android.synthetic.main.item_extension_pack.*
 import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.io.File
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
@@ -84,6 +87,12 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     }
                 }
             }
+            courseLogoIv.loadImage(courseAndRun.course.logo, scale = true)
+            extensionPackOptions.clearCheck()
+            extensionPackOptions.setOnCheckedChangeListener { _, checkedId ->
+                buyExtensionBtn.isEnabled = checkedId != -1
+            }
+
             courseAndRun.run.whatsappLink?.let { setWhatsappCard(it, courseAndRun.runAttempt.premium) }
 
             if (courseAndRun.run.crStart > "1574985600") {
@@ -106,6 +115,12 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     }
                 }
             }
+        }
+    }
+
+    fun onRadioButtonClicked(view: View) {
+        if (view is RadioButton) {
+            print(view.isChecked)
         }
     }
 
