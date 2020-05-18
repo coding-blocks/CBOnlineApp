@@ -101,10 +101,13 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         }
 
         viewModel.getHackerBlocksPerformance().observer(viewLifecycleOwner) {
-            currentOverallRank.text = it.currentOverallRank.toString()
-            previousRank.text = "${it.currentOverallRank - it.previousOverallRank} Ranks"
-            currentMonthScore.text = "${it.currentMonthScore} Points"
-            previousMonthlyScore.text = "${it.currentMonthScore - it.previousMonthScore} Points"
+            if(it!=null) {
+                hbRankContainer.isVisible = true
+                currentOverallRank.text = it.currentOverallRank.toString()
+                previousRank.text = "${it.currentOverallRank - it.previousOverallRank} Ranks"
+                currentMonthScore.text = "${it.currentMonthScore} Points"
+                previousMonthlyScore.text = "${it.currentMonthScore - it.previousMonthScore} Points"
+            }
         }
 
         confirmReset.setOnClickListener {

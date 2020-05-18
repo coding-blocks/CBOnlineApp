@@ -111,7 +111,8 @@
             android:layout_below="@id/chart1"
             android:layout_marginStart="@dimen/margin_large"
             android:layout_marginTop="@dimen/margin_large"
-            android:layout_marginEnd="@dimen/margin_large"></include>
+            android:layout_marginEnd="@dimen/margin_large"
+            android:visibility="gone"></include>
 
         <LinearLayout
             android:layout_width="match_parent"
