@@ -13,7 +13,7 @@ import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
-import com.codingblocks.cbonlineapp.util.extensions.loadSvg
+import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
@@ -60,7 +60,7 @@ class ProfileActivity : BaseCBActivity() {
             }
             nameTv.text = "${it.firstname} ${it.lastname}"
             userNameTv.text = it.username
-            userImgView.loadSvg(it.photo ?: "")
+            userImgView.loadImage(it.photo ?: "", scale = true)
             branch.setText(it.branch ?: "Computer Science")
         }
         ediBtn.setOnClickListener {
