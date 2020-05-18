@@ -169,7 +169,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 }
             }
             course.getContentRun(RUNTIERS.PREMIUM.name)?.let {
-                viewModel.fetchSections(it.sections)
+                it.sections?.let { sectionList -> viewModel.fetchSections(sectionList) }
                 val price = it.price.toInt()
                 if (price < 10) {
                     goodiesImg.isVisible = false
@@ -184,7 +184,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         }
 
         viewModel.sections.observer(this) { sections ->
-            courseSectionListAdapter.submitList(sections)
+            courseSectionListAdapter.submitList(sections.take(5))
         }
 
         viewModel.suggestedCourses.observer(this) { courses ->
