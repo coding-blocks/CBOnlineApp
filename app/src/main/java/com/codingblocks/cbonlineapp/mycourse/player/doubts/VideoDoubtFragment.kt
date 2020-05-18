@@ -80,12 +80,8 @@ class VideoDoubtFragment : BaseCBFragment(), AnkoLogger {
         playerDoubtRv.setRv(requireContext(), doubtListAdapter, true, "thick")
 
         viewModel.doubts.observer(viewLifecycleOwner) {
-            if (it.isNullOrEmpty()) {
-                emptyll.isVisible = true
-            } else {
-                emptyll.isVisible = false
-                doubtListAdapter.submitList(it)
-            }
+            doubtListAdapter.submitList(it)
+            showEmptyView(it.isNullOrEmpty())
         }
 
         doubtListAdapter.apply {
@@ -93,6 +89,11 @@ class VideoDoubtFragment : BaseCBFragment(), AnkoLogger {
             onCommentClick = commentsClickListener
             onChatClick = chatClickListener
         }
+    }
+
+    private fun showEmptyView(show: Boolean) {
+        playerDoubtRv.isVisible = !show
+        noDoubtsLayout.isVisible = show
     }
 
     override fun onDestroyView() {
