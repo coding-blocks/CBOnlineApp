@@ -321,7 +321,7 @@ data class Course(
         val lastReadNotification: String?,
         val lastname: String,
         val oneauthId: String?,
-        val photo: String?,
+        var photo: String?,
         val verifiedemail: String?,
         val verifiedmobile: String?,
         val username: String = "",
