@@ -7,6 +7,6 @@ import com.codingblocks.cbonlineapp.database.models.HBRankModel
 
 @Dao
 interface HBRankDao :BaseDao<HBRankModel> {
-    @Query("SELECT * FROM HBRankModel ORDER BY id DESC LIMIT 1")
-    fun getRank():LiveData<HBRankModel?>
+    @Query("SELECT * FROM HBRankModel LIMIT 1")
+    fun getRank():LiveData<HBRankModel>
 }
