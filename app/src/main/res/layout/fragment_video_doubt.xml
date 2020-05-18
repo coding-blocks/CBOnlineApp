@@ -7,6 +7,36 @@
     android:fitsSystemWindows="true"
     tools:context=".mycourse.player.doubts.VideoDoubtFragment">
 
+    <LinearLayout
+        android:id="@+id/emptyll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="150dp"
+            android:src="@drawable/ic_conversation"
+            android:tint="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/emptyMessageTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="150dp"
+            android:text="@string/empty_my_doubt"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/playerDoubtRv"
         android:layout_width="match_parent"

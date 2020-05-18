@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.doubts.ChatClickListener
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
@@ -79,7 +80,12 @@ class VideoDoubtFragment : BaseCBFragment(), AnkoLogger {
         playerDoubtRv.setRv(requireContext(), doubtListAdapter, true, "thick")
 
         viewModel.doubts.observer(viewLifecycleOwner) {
-            doubtListAdapter.submitList(it)
+            if (it.isNullOrEmpty()) {
+                emptyll.isVisible = true
+            } else {
+                emptyll.isVisible = false
+                doubtListAdapter.submitList(it)
+            }
         }
 
         doubtListAdapter.apply {
