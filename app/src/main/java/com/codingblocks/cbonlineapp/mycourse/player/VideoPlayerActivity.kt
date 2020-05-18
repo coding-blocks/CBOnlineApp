@@ -8,15 +8,12 @@ import android.app.PendingIntent
 import android.app.PictureInPictureParams
 import android.app.RemoteAction
 import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
 import android.graphics.drawable.Icon
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Rational
@@ -168,6 +165,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             videoFab.isVisible = !contentListView.isVisible
         }
 
+        registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL))
         videoFab.setOnClickListener {
             with(noteFabTv.isVisible) {
                 noteFabTv.isVisible = !this
@@ -556,14 +554,14 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun playVideo() {
-        videoPlayer!!.playWhenReady = true
+        videoPlayer.playWhenReady = true
         updatePictureInPictureActions(R.drawable.ic_pause, "Pause",
             CONTROL_TYPE_PAUSE, REQUEST_PAUSE)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun pauseVideo() {
-        videoPlayer!!.playWhenReady = false
+        videoPlayer.playWhenReady = false
         updatePictureInPictureActions(R.drawable.ic_play, "Play",
             CONTROL_TYPE_PLAY, REQUEST_PLAY)
     }
@@ -580,10 +578,9 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
 
         if (isInPictureInPictureMode) {
-            registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL))
             showControls(false)
+            playerControlView.isVisible = false
         } else {
-            unregisterReceiver(mReceiver)
             showControls(true)
             playerControlView.isVisible = true
         }
