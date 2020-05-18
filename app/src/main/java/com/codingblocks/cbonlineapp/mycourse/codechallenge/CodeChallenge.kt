@@ -4,9 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.*
+import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import kotlinx.android.synthetic.main.activity_code_challenge.*
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
@@ -28,7 +28,7 @@ class CodeChallenge : AppCompatActivity() {
         }
         vm.fetchCodeChallenge()
 
-        vm.content.observe(this, Observer {
+        vm.content.observer(this){
             downloadBtn.isVisible = true
             title = it.content!!.name
             setTextView(description, it.content!!.details!!.description)
@@ -38,7 +38,7 @@ class CodeChallenge : AppCompatActivity() {
             setTextView(sampleInput, it.content!!.details!!.sample_input)
             setTextView(sampleOutput, it.content!!.details!!.sample_output)
             setTextView(explaination, it.content!!.details!!.explanation)
-        })
+        }
 
         downloadBtn.setOnClickListener {
             if (!downloadBtn.isActivated){
@@ -46,9 +46,9 @@ class CodeChallenge : AppCompatActivity() {
             }
         }
 
-        vm.downloadState.observe(this, Observer {
+        vm.downloadState.observer(this){
             downloadBtn.isActivated = it
-        })
+        }
     }
 
     fun setTextView(textView: TextView, string:String?){

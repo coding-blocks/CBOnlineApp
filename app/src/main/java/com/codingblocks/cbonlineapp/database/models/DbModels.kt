@@ -162,15 +162,15 @@ data class Companies(
 data class CodeChallengeModel (
     @PrimaryKey
     val id:String,
-    val difficulty: String?="",
-    val title: String?="",
-    val constraints: String?="None",
-    val explanation: String?="None",
-    val input_format: String?="None",
-    val sample_input: String?="None",
-    val output_format: String?="None",
-    val sample_output: String?="None",
-    val description: String?="None"
+    val difficulty: String,
+    val title: String,
+    val constraints: String,
+    val explanation: String,
+    val input_format: String,
+    val sample_input: String,
+    val output_format: String,
+    val sample_output: String,
+    val description: String
 )
 
 open class BaseModel()

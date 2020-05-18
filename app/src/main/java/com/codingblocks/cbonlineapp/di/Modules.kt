@@ -62,7 +62,7 @@ val viewModelModule = module {
     viewModel { TrackViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
     viewModel { (AuthViewModel(get())) }
-    viewModel { (handle: SavedStateHandle) -> CodeChallengeViewModel(handle,get(), get(), get()) }
+    viewModel { (handle: SavedStateHandle) -> CodeChallengeViewModel(handle,get(), get()) }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
@@ -77,7 +77,7 @@ val viewModelModule = module {
     single { MyCourseRepository(get(), get(), get(), get(), get(), get(), get()) }
     single { TracksRepository() }
     single { ProfileRepository(get()) }
-    single { CodeChallengeRepository() }
+    single { CodeChallengeRepository(get()) }
 }
 val preferencesModule = module {
     single { provideSettingsPreferences(androidApplication()) }

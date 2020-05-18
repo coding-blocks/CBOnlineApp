@@ -16,7 +16,6 @@ import com.codingblocks.onlineapi.models.included
 
 class CodeChallengeViewModel(
     handle: SavedStateHandle,
-    private val codeDao: CodeChallengeDao,
     private val repo: CodeChallengeRepository,
     val prefs: PreferenceHelper) : BaseCBViewModel() {
 
@@ -33,8 +32,8 @@ class CodeChallengeViewModel(
             when (val response = repo.fetchCodeChallenge(codeId!!.toInt(), contestId ?: "")) {
                 is ResultWrapper.GenericError -> {
                     setError(response.error)
-                    if (isDownloaded()){
-                        content.postValue(getOfflineContent())
+                    if (repo.isDownloaded(codeId!!)){
+                        content.postValue(repo.getOfflineContent(codeId!!))
                         downloadState.postValue(true)
                     }
                 }
@@ -43,12 +42,12 @@ class CodeChallengeViewModel(
                         response.value.body()?.let { codeChallenge ->
                             content.postValue(codeChallenge)
                         }
-                        downloadState.postValue(isDownloaded())
+                        downloadState.postValue(repo.isDownloaded(codeId!!))
                     }
                     else {
                         setError(fetchError(response.value.code()))
-                        if (isDownloaded()){
-                            content.postValue(getOfflineContent())
+                        if (repo.isDownloaded(codeId!!)){
+                            content.postValue(repo.getOfflineContent(codeId!!))
                             downloadState.postValue(true)
                         }
                     }
@@ -57,57 +56,9 @@ class CodeChallengeViewModel(
         }
     }
 
-    fun getOfflineContent(): Code_Challenge? {
-        val model: CodeChallengeModel = codeDao.getCodeChallengeById(codeId!!)
-
-        val challenge = Code_Challenge(
-            model.title,
-            included(
-                model.difficulty,
-                model.title,
-                detailsClass(
-                    model.constraints,
-                    model.explanation,
-                    model.input_format,
-                    model.sample_input,
-                    model.output_format,
-                    model.sample_output,
-                    model.description
-                )
-            )
-        )
-        return challenge
-    }
-
-    fun isDownloaded(): Boolean {
-        return codeId?.let { codeDao.getCodeChallengeById(it) } != null
-    }
-
-    fun saveCode() {
+    fun saveCode(){
         runIO {
-            val newCode: CodeChallengeModel = codeId!!.let {
-                CodeChallengeModel(
-                    it,
-                    content.value!!.name,
-                    content.value!!.content!!.details!!.constraints,
-                    content.value!!.content!!.details!!.explanation,
-                    content.value!!.content!!.details!!.input_format,
-                    content.value!!.content!!.details!!.sample_input,
-                    content.value!!.content!!.details!!.output_format,
-                    content.value!!.content!!.details!!.sample_output,
-                    content.value!!.content!!.details!!.description
-                )
-            }
-
-
-            val oldModel: CodeChallengeModel? = codeId?.let { codeDao.getCodeChallengeById(it) }
-            if (oldModel != null && !oldModel.sameAndEqual(newCode)) {
-                codeDao.update(newCode)
-            } else {
-                codeDao.insertNew(
-                    newCode
-                )
-            }
+            repo.saveCode(codeId!!,content.value!!)
             downloadState.postValue(true)
         }
     }

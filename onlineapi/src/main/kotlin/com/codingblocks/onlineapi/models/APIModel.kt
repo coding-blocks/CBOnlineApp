@@ -104,9 +104,9 @@ data class Course(
 
     @Type("hbcontents")
     data class Code_Challenge(
-        val name: String? = "",
+        val name: String,
         @Relationship("problem")
-        val content: included? = null
+        val content: included?=null
 
     ):BaseModel()
 
@@ -123,8 +123,8 @@ data class Course(
 
     @Type("problems")
     data class included(
-        val difficulty: String?="",
-        val name: String?="",
+        val difficulty: String,
+        val name: String,
         val details:detailsClass?=null
     ):BaseModel()
 
