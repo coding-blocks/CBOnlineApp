@@ -208,12 +208,15 @@ class MyCourseViewModel(
 
     fun getPerformance() {
         runIO {
+            val mRank = repo.getHackerBlocksPerformance().value
             when (val response = repo.getPerformance()) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
                         body()?.let { response ->
-                            repo.saveRank(response)
+                            if (mRank?.currentOverallRank != response.currentOverallRank) {
+                                repo.saveRank(response)
+                            }
                         }
                     } else {
                         setError(fetchError(code()))

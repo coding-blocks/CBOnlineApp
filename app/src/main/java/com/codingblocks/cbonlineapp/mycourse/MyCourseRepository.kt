@@ -297,12 +297,13 @@ class MyCourseRepository(
 
     suspend fun saveRank(rank: RankResponse) {
         hbRankDao.insert(
-            HBRankModel(bestRank = rank.bestRank,
-                currentMonthScore = rank.currentMonthScore,
-                previousMonthScore = rank.previousMonthScore,
-                bestRankAchievedOn = rank.bestRankAchievedOn,
-                currentOverallRank = rank.currentOverallRank,
-                previousOverallRank = rank.previousOverallRank
+            HBRankModel(
+                rank.bestRank,
+                rank.bestRankAchievedOn,
+                rank.currentMonthScore,
+                rank.currentOverallRank,
+                rank.previousMonthScore,
+                rank.previousOverallRank
             )
         )
     }

@@ -105,14 +105,14 @@ data class Notification(
 
 @Entity
 data class HBRankModel(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
     val bestRank: Int = 0,
     val bestRankAchievedOn: String = "",
     val currentMonthScore: Int = 0,
     val currentOverallRank: Int = 0,
     val previousMonthScore: Int = 0,
-    val previousOverallRank: Int = 0
+    val previousOverallRank: Int = 0,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0
 )
 
 @Entity(
