@@ -36,6 +36,7 @@ class CourseSearchFragment : BottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = layoutInflater.inflate(com.codingblocks.cbonlineapp.R.layout.fragment_search_course, container)
+        viewModel.searchCourses("");
         view.searchEditText.addTextChangedListener {
             if (!it.isNullOrEmpty()) {
                 viewModel.searchCourses(it.toString())
