@@ -284,4 +284,10 @@
     <string name="progress" >%d %%</string>
     <string name="completed" >%d %% Completed</string>
     <string name="continue_from_where_you_left">Continue from where you left</string>
+    <string name="input_format">Input Format</string>
+    <string name="constraints">Constraints</string>
+    <string name="output_format">Output Format</string>
+    <string name="sample_input">Sample Input</string>
+    <string name="sample_output">Sample Output</string>
+    <string name="explanation">Explanation</string>
 </resources>

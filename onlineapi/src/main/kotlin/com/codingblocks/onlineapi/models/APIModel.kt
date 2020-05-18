@@ -102,6 +102,32 @@ data class Course(
 
     }
 
+    @Type("hbcontents")
+    data class Code_Challenge(
+        val name: String? = "",
+        @Relationship("problem")
+        val content: included? = null
+
+    ):BaseModel()
+
+    @Type("details")
+    data class detailsClass(
+        val constraints: String?="None",
+        val explanation: String?="None",
+        val input_format: String?="None",
+        val sample_input: String?="None",
+        val output_format: String?="None",
+        val sample_output: String?="None",
+        val description: String?="None"
+    ) : BaseModel()
+
+    @Type("problems")
+    data class included(
+        val difficulty: String?="",
+        val name: String?="",
+        val details:detailsClass?=null
+    ):BaseModel()
+
     @Type("run-attempts", "run_attempts")
     data class RunAttempts(
         val certificateApproved: Boolean = false,

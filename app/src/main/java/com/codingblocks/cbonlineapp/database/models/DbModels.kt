@@ -158,6 +158,21 @@ data class Companies(
     val website: String
 )
 
+@Entity
+data class CodeChallengeModel (
+    @PrimaryKey
+    val id:String,
+    val difficulty: String?="",
+    val title: String?="",
+    val constraints: String?="None",
+    val explanation: String?="None",
+    val input_format: String?="None",
+    val sample_input: String?="None",
+    val output_format: String?="None",
+    val sample_output: String?="None",
+    val description: String?="None"
+)
+
 open class BaseModel()
 
 enum class LibraryTypes {
