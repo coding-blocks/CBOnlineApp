@@ -60,7 +60,21 @@ class DashboardHomeFragment : BaseCBFragment() {
         super.onViewCreated(view, savedInstanceState)
         recentPlayedRv.setRv(requireContext(), recentlyPlayedAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
         recentlyPlayedAdapter.onItemClick = itemClickListener
+        exploreBtn.setOnClickListener { requireActivity().dashboardBottomNav.selectedItemId = R.id.dashboard_explore }
+        exploreBtn2.setOnClickListener { requireActivity().dashboardBottomNav.selectedItemId = R.id.dashboard_explore }
+        loginBtn.setOnClickListener {
+            startActivity(intentFor<LoginActivity>())
+            requireActivity().finish()
+        }
+    }
 
+    override fun onDestroyView() {
+        recentlyPlayedAdapter.onItemClick = null
+        super.onDestroyView()
+    }
+
+    override fun onResume() {
+        super.onResume()
         if (vm.isLoggedIn == true) {
             vm.fetchTopRunWithStats().observe(viewLifecycleOwner, Observer { coursePair ->
                 dashboardProgressContainer.isVisible = coursePair != null
@@ -104,17 +118,6 @@ class DashboardHomeFragment : BaseCBFragment() {
             dashboardHome.isVisible = false
             dashboardHomeLoggedOut.isVisible = true
         }
-        exploreBtn.setOnClickListener { requireActivity().dashboardBottomNav.selectedItemId = R.id.dashboard_explore }
-        exploreBtn2.setOnClickListener { requireActivity().dashboardBottomNav.selectedItemId = R.id.dashboard_explore }
-        loginBtn.setOnClickListener {
-            startActivity(intentFor<LoginActivity>())
-            requireActivity().finish()
-        }
-    }
-
-    override fun onDestroyView() {
-        recentlyPlayedAdapter.onItemClick = null
-        super.onDestroyView()
     }
 }
 
