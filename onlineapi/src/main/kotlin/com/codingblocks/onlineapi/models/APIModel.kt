@@ -116,7 +116,7 @@ data class Course(
         val run: Runs? = null,
         @Relationship("certificate")
         val certifcate: Certificate? = null,
-        val runTier: String? = "PREMIUM"
+        val runTier: String? = null
     ) : BaseModel() {
         constructor(id: String) : this() {
             super.id = id
