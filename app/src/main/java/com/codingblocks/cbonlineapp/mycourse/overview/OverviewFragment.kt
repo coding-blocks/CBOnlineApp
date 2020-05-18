@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -148,16 +149,20 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     }
 
     private fun setWhatsappCard(link: String, premium: Boolean) {
-        whatsappContainer.apply {
-            isVisible = premium
-            setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setPackage("com.whatsapp")
-                intent.data = Uri.parse(link)
-                if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
+        if (link.isNullOrEmpty()) {
+            whatsappContainer.isVisible = false
+        } else {
+            whatsappContainer.apply {
+                isVisible = premium
+                setOnClickListener {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.setPackage("com.whatsapp")
+                    intent.data = Uri.parse(link)
+                    if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
