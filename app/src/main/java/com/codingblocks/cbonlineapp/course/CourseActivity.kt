@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -45,7 +46,8 @@ import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import io.noties.markwon.Markwon
-import io.noties.markwon.core.CorePlugin
+import io.noties.markwon.ext.tables.TablePlugin
+import io.noties.markwon.ext.tables.TableTheme
 import kotlinx.android.synthetic.main.activity_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
@@ -137,10 +139,16 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         viewModel.course.observer(this) { course ->
             endLink = course.slug.toString()
             showTags(course.tags)
-            val markWon = Markwon.builder(this)
-                .usePlugin(CorePlugin.create())
+            val tableTheme:TableTheme = TableTheme.create(this).asBuilder()
+                .tableBorderColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
                 .build()
-            markWon.setMarkdown(courseSummaryTv, course.summary)
+            val markWon = Markwon.builder(this)
+                .usePlugin(TablePlugin.create(tableTheme))
+                .build()
+            courseSummaryTv.post {
+                markWon.setMarkdown(courseSummaryTv, course.summary)
+            }
+
             course.faq?.let {
                 faqTv.isVisible = true
                 courseFaqTv.isVisible = true
@@ -161,7 +169,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 }
             }
             course.getContentRun(RUNTIERS.PREMIUM.name)?.let {
-                viewModel.fetchSections(it.sections)
+                it.sections?.let { sectionList -> viewModel.fetchSections(sectionList) }
                 val price = it.price.toInt()
                 if (price < 10) {
                     goodiesImg.isVisible = false
@@ -176,7 +184,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         }
 
         viewModel.sections.observer(this) { sections ->
-            courseSectionListAdapter.submitList(sections)
+            courseSectionListAdapter.submitList(sections.take(5))
         }
 
         viewModel.suggestedCourses.observer(this) { courses ->
@@ -246,6 +254,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     var tagsList = ArrayList<String>()
     private fun showTags(tags: ArrayList<Tags>?) {
         tagsList.clear()
+        courseChipsGroup.removeAllViews()
         with(!tags.isNullOrEmpty()) {
             topicsTv.isVisible = this
             courseChipsGroup.isVisible = this

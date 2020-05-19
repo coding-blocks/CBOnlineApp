@@ -18,6 +18,7 @@ import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_course.courseToolbar
@@ -28,6 +29,7 @@ import kotlinx.android.synthetic.main.activity_track.courseLogo
 import kotlinx.android.synthetic.main.activity_track.shortTv
 import kotlinx.android.synthetic.main.activity_track.trackCourseNumTv
 import kotlinx.android.synthetic.main.activity_track.trackCourseRv
+import kotlinx.android.synthetic.main.activity_track.trackShimmer
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
@@ -70,6 +72,7 @@ class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
         setToolbar(courseToolbar)
         viewModel.id = courseId
         viewModel.fetchCurrentTrack()
+        trackShimmer.showShimmer(true)
         trackCourseRv.setRv(
             this@TrackActivity,
             courseCardListAdapter,
@@ -94,6 +97,7 @@ class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
 
         viewModel.courses.observer(this) { courses ->
             courseCardListAdapter.submitList(courses)
+            trackShimmer.hideAndStop()
         }
         courseCardListAdapter.onItemClick = itemClickListener
         appbar.addOnOffsetChangedListener(this)

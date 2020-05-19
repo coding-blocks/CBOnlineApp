@@ -62,6 +62,7 @@
             android:layout_height="match_parent"
             android:backgroundTint="@color/white"
             android:completionThreshold="1"
+            android:singleLine="true"
             android:fontFamily="@font/gilroy_medium"
             android:hint="@string/state"
             android:paddingStart="0dp"

@@ -41,8 +41,13 @@
                     android:text="@string/your_referral_code"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
-
-                <TextView
+                
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    
+                   <TextView
                     android:id="@+id/referralTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -54,7 +59,16 @@
                     android:textSize="18sp"
                     android:text="@string/referral_url" />
 
+                    <ImageView
+                        android:id="@+id/copy_clipboard"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginBottom="28dp"
+                        android:src="@drawable/ic_content_copy"/>
 
+                </LinearLayout>
             </LinearLayout>
         </FrameLayout>
 

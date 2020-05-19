@@ -64,7 +64,8 @@ class MyCourseRepository(
             runAttempt.completedContents,
             runAttempt.lastAccessedAt ?: "",
             runAttempt.run?.id ?: "",
-            runAttempt.certifcate?.url ?: ""
+            runAttempt.certifcate?.url ?: "",
+            runAttempt.runTier?:"PREMIUM"
         )
         attemptDao.update(runAttemptModel)
 

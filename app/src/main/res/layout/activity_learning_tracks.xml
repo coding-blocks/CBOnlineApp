@@ -22,6 +22,15 @@
             app:title="@string/learning_tracks" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/activityLearningShimmer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:visibility="visible">
+        <include layout="@layout/item_skeleton_learning_tracks"></include>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

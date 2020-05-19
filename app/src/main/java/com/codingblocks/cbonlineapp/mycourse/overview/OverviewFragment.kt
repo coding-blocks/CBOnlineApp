@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,6 +52,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             val progressValue = courseAndRun.getProgress()
             homeProgressTv.text = getString(R.string.progress, progressValue.toInt())
             homeProgressView.setGradientColor(progressValue)
+            certificate_descTv.apply { text = getString(R.string.certificate_desc, courseAndRun.run.completionThreshold) }
             progressTv.apply {
                 text = getString(R.string.thresholdcompletion, courseAndRun.run.completionThreshold)
                 isActivated = courseAndRun.run.completionThreshold < progressValue
@@ -84,7 +86,10 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     }
                 }
             }
-            courseAndRun.run.whatsappLink?.let { setWhatsappCard(it, courseAndRun.runAttempt.premium) }
+            courseAndRun.run.whatsappLink?.let {
+                if(!it.isNullOrEmpty()){
+                setWhatsappCard(it, courseAndRun.runAttempt.premium)}
+            }
 
             if (courseAndRun.run.crStart > "1574985600") {
                 if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium && RUNTIERS.LITE.name != courseAndRun.runAttempt.runTier)
@@ -148,19 +153,20 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     }
 
     private fun setWhatsappCard(link: String, premium: Boolean) {
-        whatsappContainer.apply {
-            isVisible = premium
-            setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setPackage("com.whatsapp")
-                intent.data = Uri.parse(link)
-                if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
+            whatsappContainer.apply {
+                isVisible = premium
+                setOnClickListener {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.setPackage("com.whatsapp")
+                    intent.data = Uri.parse(link)
+                    if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-        }
+
     }
 
     override fun onDestroy() {

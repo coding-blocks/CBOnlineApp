@@ -7,6 +7,42 @@
     android:fitsSystemWindows="true"
     tools:context=".mycourse.player.doubts.VideoDoubtFragment">
 
+    <LinearLayout
+        android:id="@+id/noDoubtsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:src="@drawable/ic_doubt_gradient" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/no_doubts"
+            android:textAlignment="center"
+            android:textColor="@color/orangish"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_extra_small"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/click_to_add_doubt"
+            android:textAlignment="center"
+            android:textColor="@color/dark_white"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/playerDoubtRv"
         android:layout_width="match_parent"
