@@ -14,7 +14,7 @@ import com.codingblocks.onlineapi.models.Instructor
 import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
-import com.codingblocks.onlineapi.models.Code_Challenge
+import com.codingblocks.onlineapi.models.CoeChallenge
 import com.codingblocks.onlineapi.models.Player
 import com.codingblocks.onlineapi.models.Professions
 import com.codingblocks.onlineapi.models.Project
@@ -337,7 +337,7 @@ interface OnlineJsonApi {
     suspend fun getCodeChallenge(
         @Path("codeId") codeId: Int,
         @Query("contest_id") include: String=""
-    ): Response<Code_Challenge>
+    ): Response<CoeChallenge>
 
 
 }

@@ -103,7 +103,7 @@ data class Course(
     }
 
     @Type("hbcontents")
-    data class Code_Challenge(
+    data class CoeChallenge(
         val name: String,
         @Relationship("problem")
         val content: included?=null

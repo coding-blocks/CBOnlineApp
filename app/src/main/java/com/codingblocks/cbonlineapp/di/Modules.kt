@@ -62,7 +62,7 @@ val viewModelModule = module {
     viewModel { TrackViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
     viewModel { (AuthViewModel(get())) }
-    viewModel { (handle: SavedStateHandle) -> CodeChallengeViewModel(handle,get(), get()) }
+    viewModel { (handle: SavedStateHandle) -> CodeChallengeViewModel(handle,get()) }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }

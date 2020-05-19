@@ -29,7 +29,7 @@ import com.codingblocks.cbonlineapp.database.models.CodeChallengeModel
         CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, RunModel::class,
         JobsModel::class, SectionContentHolder.SectionWithContent::class, BookmarkModel::class,
         CommentModel::class, RunAttemptModel::class, RunPerformance::class, PlayerState::class,CodeChallengeModel::class
-    ], exportSchema = true, version = 32
+    ], exportSchema = true, version = 30
 )
 @TypeConverters(TimestampConverter::class, CourseIdList::class, ProgressItemConverter::class)
 abstract class AppDatabase : RoomDatabase() {

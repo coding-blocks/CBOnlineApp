@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#292c33"
+    android:id="@+id/codeLayout"
     android:orientation="vertical"
     tools:context="com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallenge">
 

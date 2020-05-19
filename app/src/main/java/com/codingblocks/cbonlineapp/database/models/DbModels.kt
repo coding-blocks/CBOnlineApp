@@ -166,10 +166,10 @@ data class CodeChallengeModel (
     val title: String,
     val constraints: String,
     val explanation: String,
-    val input_format: String,
-    val sample_input: String,
-    val output_format: String,
-    val sample_output: String,
+    val inputFormat: String,
+    val sampleInput: String,
+    val outputFormat: String,
+    val sampleOutput: String,
     val description: String
 )
 

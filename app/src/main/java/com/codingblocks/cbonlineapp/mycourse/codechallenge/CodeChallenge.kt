@@ -5,9 +5,13 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.util.*
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.onlineapi.ErrorStatus
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_code_challenge.*
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
@@ -30,14 +34,37 @@ class CodeChallenge : AppCompatActivity() {
 
         vm.content.observer(this){
             downloadBtn.isVisible = true
-            title = it.content!!.name
-            setTextView(description, it.content!!.details!!.description)
-            setTextView(constraints, it.content!!.details!!.constraints)
-            setTextView(inputFormat, it.content!!.details!!.input_format)
-            setTextView(outputFormat, it.content!!.details!!.output_format)
-            setTextView(sampleInput, it.content!!.details!!.sample_input)
-            setTextView(sampleOutput, it.content!!.details!!.sample_output)
-            setTextView(explaination, it.content!!.details!!.explanation)
+            title = it.content?.name
+            setTextView(description, it.content?.details?.description)
+            setTextView(constraints, it.content?.details?.constraints)
+            setTextView(inputFormat, it.content?.details?.input_format)
+            setTextView(outputFormat, it.content?.details?.output_format)
+            setTextView(sampleInput, it.content?.details?.sample_input)
+            setTextView(sampleOutput, it.content?.details?.sample_output)
+            setTextView(explaination, it.content?.details?.explanation)
+        }
+
+        vm.errorLiveData.observer(this) {
+            when (it) {
+                ErrorStatus.NO_CONNECTION -> {
+                    codeLayout.showSnackbar(it, Snackbar.LENGTH_SHORT){
+                        vm.fetchCodeChallenge()
+                    }
+                }
+                ErrorStatus.TIMEOUT -> {
+                    codeLayout.showSnackbar(it, Snackbar.LENGTH_INDEFINITE) {
+                        vm.fetchCodeChallenge()
+                    }
+                }
+                ErrorStatus.UNAUTHORIZED -> {
+                    Components.showConfirmation(this, UNAUTHORIZED) {
+                    }
+                }
+                else -> {
+                    codeLayout.showSnackbar(it, Snackbar.LENGTH_SHORT)
+                    AppCrashlyticsWrapper.log(it)
+                }
+            }
         }
 
         downloadBtn.setOnClickListener {

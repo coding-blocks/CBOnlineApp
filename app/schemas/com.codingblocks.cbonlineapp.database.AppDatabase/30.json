@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 30,
-    "identityHash": "a971e84d0718b26bab6ae3bbb85303a7",
+    "identityHash": "268120f626b17b27232e948add82c745",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -1408,7 +1408,7 @@
       },
       {
         "tableName": "CodeChallengeModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `difficulty` TEXT, `title` TEXT, `constraints` TEXT NOT NULL, `explanation` TEXT NOT NULL, `input_format` TEXT NOT NULL, `sample_input` TEXT NOT NULL, `output_format` TEXT NOT NULL, `sample_output` TEXT NOT NULL, `description` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `difficulty` TEXT NOT NULL, `title` TEXT NOT NULL, `constraints` TEXT NOT NULL, `explanation` TEXT NOT NULL, `inputFormat` TEXT NOT NULL, `sampleInput` TEXT NOT NULL, `outputFormat` TEXT NOT NULL, `sampleOutput` TEXT NOT NULL, `description` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -1420,13 +1420,13 @@
             "fieldPath": "difficulty",
             "columnName": "difficulty",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "title",
             "columnName": "title",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "constraints",
@@ -1441,26 +1441,26 @@
             "notNull": true
           },
           {
-            "fieldPath": "input_format",
-            "columnName": "input_format",
+            "fieldPath": "inputFormat",
+            "columnName": "inputFormat",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "sample_input",
-            "columnName": "sample_input",
+            "fieldPath": "sampleInput",
+            "columnName": "sampleInput",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "output_format",
-            "columnName": "output_format",
+            "fieldPath": "outputFormat",
+            "columnName": "outputFormat",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "sample_output",
-            "columnName": "sample_output",
+            "fieldPath": "sampleOutput",
+            "columnName": "sampleOutput",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -1484,7 +1484,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a971e84d0718b26bab6ae3bbb85303a7')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '268120f626b17b27232e948add82c745')"
     ]
   }
 }
