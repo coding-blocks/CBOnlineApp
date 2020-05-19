@@ -19,6 +19,9 @@ class LibraryActivity : BaseCBActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_library)
         setToolbar(libraryToolbar)
+        libraryToolbar.setNavigationOnClickListener{
+            onBackPressed()
+        }
         intent.getStringExtra(COURSE_NAME)?.let {
             vm.name = it
         }
