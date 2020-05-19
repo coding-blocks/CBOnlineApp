@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
@@ -26,6 +27,7 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import java.io.File
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
+import kotlinx.android.synthetic.main.item_hb_performance.*
 import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
@@ -102,6 +104,16 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             homePercentileTv.text = it.percentile.toString()
             chart1.loadData(it.averageProgress, it.userProgress)
         }
+
+        viewModel.getHackerBlocksPerformance().observe(viewLifecycleOwner , Observer {
+            if(it!=null) {
+                hbRankContainer.isVisible = true
+                currentOverallRank.text = it.currentOverallRank.toString()
+                previousRank.text = "${it.currentOverallRank - it.previousOverallRank} Ranks"
+                currentMonthScore.text = "${it.currentMonthScore} Points"
+                previousMonthlyScore.text = "${it.currentMonthScore - it.previousMonthScore} Points"
+            }
+        })
 
         confirmReset.setOnClickListener {
             Components.showConfirmation(requireContext(), "reset") {

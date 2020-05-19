@@ -71,7 +71,7 @@ val viewModelModule = module {
     single { VideoPlayerRepository(get(), get(), get(), get(), get()) }
     single { QuizRepository(get()) }
     single { JobRepository(get()) }
-    single { MyCourseRepository(get(), get(), get(), get(), get(), get(), get()) }
+    single { MyCourseRepository(get(), get(), get(), get(), get(), get(), get(), get()) }
     single { TracksRepository() }
     single { ProfileRepository(get()) }
 }
@@ -178,5 +178,10 @@ val databaseModule = module {
     factory {
         val database: AppDatabase = get()
         database.playerDao()
+    }
+
+    factory {
+        val database :AppDatabase = get ()
+        database.hbRankDao()
     }
 }
