@@ -15,7 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_code_challenge.*
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
-class CodeChallenge : AppCompatActivity() {
+class CodeChallengeActivity : AppCompatActivity() {
 
     private val vm: CodeChallengeViewModel by stateViewModel()
 
@@ -30,18 +30,19 @@ class CodeChallenge : AppCompatActivity() {
             vm.contestId = intent.getStringExtra(CONTEST_ID)
             vm.codeId = intent.getStringExtra(CODE_ID)
         }
-        vm.fetchCodeChallenge()
-
-        vm.content.observer(this){
+        vm.fetchCodeChallenge().observer(this){
             downloadBtn.isVisible = true
-            title = it.content?.name
-            setTextView(description, it.content?.details?.description)
-            setTextView(constraints, it.content?.details?.constraints)
-            setTextView(inputFormat, it.content?.details?.inputFormat)
-            setTextView(outputFormat, it.content?.details?.outputFormat)
-            setTextView(sampleInput, it.content?.details?.sampleInput)
-            setTextView(sampleOutput, it.content?.details?.sampleOutput)
-            setTextView(explaination, it.content?.details?.explanation)
+            title = it?.content?.name
+
+            with(it?.content?.details!!){
+                setTextView(descriptionTv, description)
+                setTextView(constraintsTv, constraints)
+                setTextView(inputFormatTv, inputFormat)
+                setTextView(outputFormatTv, outputFormat)
+                setTextView(sampleInputTv, sampleInput)
+                setTextView(sampleOutputTv, sampleOutput)
+                setTextView(explaination, explanation)
+            }
         }
 
         vm.errorLiveData.observer(this) {

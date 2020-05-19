@@ -7,7 +7,7 @@
     android:background="#292c33"
     android:id="@+id/codeLayout"
     android:orientation="vertical"
-    tools:context="com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallenge">
+    tools:context="com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
@@ -49,7 +49,7 @@
             app:layout_constraintTop_toBottomOf="@id/appBar">
 
             <TextView
-                android:id="@+id/description"
+                android:id="@+id/descriptionTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/gilroy_medium"
@@ -71,7 +71,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/inputFormat"
+                    android:id="@+id/inputFormatTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -96,7 +96,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/constraints"
+                    android:id="@+id/constraintsTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -122,7 +122,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/outputFormat"
+                    android:id="@+id/outputFormatTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -147,7 +147,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/sampleInput"
+                    android:id="@+id/sampleInputTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -173,7 +173,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/sampleOutput"
+                    android:id="@+id/sampleOutputTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"

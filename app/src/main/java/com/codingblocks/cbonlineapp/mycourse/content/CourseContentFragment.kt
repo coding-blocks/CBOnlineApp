@@ -29,7 +29,7 @@ import com.codingblocks.cbonlineapp.database.ListObject
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallenge
+import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CODE
@@ -364,7 +364,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                         CODE ->
                             if (contentCode.codeUid.isNotEmpty()) {
                                 startActivity(
-                                    intentFor<CodeChallenge>(
+                                    intentFor<CodeChallengeActivity>(
                                         CONTENT_ID to ccid,
                                         SECTION_ID to sectionId,
                                         CONTEST_ID to contentCode.codeContestId.toString(),

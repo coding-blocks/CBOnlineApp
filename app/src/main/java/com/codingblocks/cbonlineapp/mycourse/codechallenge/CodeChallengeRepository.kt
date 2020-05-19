@@ -7,7 +7,7 @@ import com.codingblocks.cbonlineapp.database.models.ProblemModel
 import com.codingblocks.cbonlineapp.database.models.TimeLimitsModel
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.CoeChallenge
+import com.codingblocks.onlineapi.models.CodeChallenge
 import com.codingblocks.onlineapi.models.CodeDetails
 import com.codingblocks.onlineapi.models.Problem
 import com.codingblocks.onlineapi.models.TimeLimits
@@ -17,36 +17,42 @@ class CodeChallengeRepository(
     private val codeDao: CodeChallengeDao) {
     suspend fun fetchCodeChallenge(codeId: Int, contestId: String) = safeApiCall { Clients.onlineV2JsonApi.getCodeChallenge(codeId, contestId) }
 
-    fun getOfflineContent(codeId: String): CoeChallenge? {
+    fun getOfflineContent(codeId: String): CodeChallenge? {
         val model: CodeChallengeModel = codeDao.getCodeChallengeById(codeId)
 
-        val challenge = CoeChallenge(
-            model.title,
-            Problem(
-                model.difficulty,
-                model.title,
-                model.content?.image,
-                model.content?.status,
-                CodeDetails(
-                    model.content?.details?.constraints,
-                    model.content?.details?.explanation,
-                    model.content?.details?.inputFormat,
-                    model.content?.details?.sampleInput,
-                    model.content?.details?.outputFormat,
-                    model.content?.details?.sampleOutput,
-                    model.content?.details?.description
-                ),
-                TimeLimits(
-                    model.content?.timeLimits?.cpp?:"",
-                    model.content?.timeLimits?.c?:"",
-                    model.content?.timeLimits?.py2?:"",
-                    model.content?.timeLimits?.py3?:"",
-                    model.content?.timeLimits?.js?:"",
-                    model.content?.timeLimits?.csharp?:"",
-                    model.content?.timeLimits?.java?:""
+        val challenge = with(model){
+            CodeChallenge(
+                title,
+                Problem(
+                    difficulty,
+                    title,
+                    content?.image,
+                    content?.status,
+                    with(content?.details!!){
+                        CodeDetails(
+                            constraints,
+                            explanation,
+                            inputFormat,
+                            sampleInput,
+                            outputFormat,
+                            sampleOutput,
+                            description
+                        )
+                    },
+                    with(content.timeLimits){
+                        TimeLimits(
+                            cpp,
+                            c,
+                            py2,
+                            py3,
+                            js,
+                            csharp,
+                            java
+                        )
+                    }
                 )
             )
-        )
+        }
         return challenge
     }
 
@@ -54,36 +60,44 @@ class CodeChallengeRepository(
         return codeDao.getCodeChallengeById(codeId) != null
     }
 
-    suspend fun saveCode(codeId: String, codeChallenge: CoeChallenge) {
+    suspend fun saveCode(codeId: String, codeChallenge: CodeChallenge) {
         val newCode: CodeChallengeModel = codeId.let {
-            CodeChallengeModel(
-                it,
-                codeChallenge.content?.difficulty ?: "",
-                codeChallenge.name,
-                ProblemModel(
-                    codeChallenge.content?.name ?: "",
-                    codeChallenge.content?.details?.constraints ?: "",
-                    codeChallenge.content?.details?.explanation ?: "",
-                    CodeDetailsModel(
-                        codeChallenge.content?.details?.constraints ?: "",
-                        codeChallenge.content?.details?.explanation ?: "",
-                        codeChallenge.content?.details?.inputFormat ?: "",
-                        codeChallenge.content?.details?.sampleInput ?: "",
-                        codeChallenge.content?.details?.outputFormat ?: "",
-                        codeChallenge.content?.details?.sampleOutput ?: "",
-                        codeChallenge.content?.details?.description ?: ""
-                    ),
-                    TimeLimitsModel(
-                        codeChallenge.content?.timelimits?.cpp ?: "",
-                        codeChallenge.content?.timelimits?.cpp ?: "",
-                        codeChallenge.content?.timelimits?.cpp ?: "",
-                        codeChallenge.content?.timelimits?.cpp ?: "",
-                        codeChallenge.content?.timelimits?.cpp ?: "",
-                        codeChallenge.content?.timelimits?.cpp ?: "",
-                        codeChallenge.content?.timelimits?.cpp ?: ""
-                    )
+
+            with(codeChallenge.content!!){
+                CodeChallengeModel(
+                    it,
+                    this.difficulty,
+                    name,
+                    with(details!!){
+                        ProblemModel(
+                            name,
+                            image?:"",
+                            status ?: "",
+                            CodeDetailsModel(
+                                constraints ?: "",
+                                explanation ?: "",
+                                inputFormat ?: "",
+                                sampleInput ?: "",
+                                outputFormat ?: "",
+                                sampleOutput ?: "",
+                                description ?: ""
+                            ),
+
+                            with(timelimits!!){
+                                TimeLimitsModel(
+                                    cpp,
+                                    c,
+                                    py2 ,
+                                    py3,
+                                    js,
+                                    csharp,
+                                    java
+                                )
+                            }
+                        )
+                    }
                 )
-            )
+            }
         }
 
 

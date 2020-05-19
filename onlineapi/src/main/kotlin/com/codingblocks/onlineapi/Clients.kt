@@ -38,7 +38,7 @@ import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Tags
 import com.codingblocks.onlineapi.models.User
-import com.codingblocks.onlineapi.models.CoeChallenge
+import com.codingblocks.onlineapi.models.CodeChallenge
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonSetter
 import com.fasterxml.jackson.annotation.Nulls
@@ -110,7 +110,7 @@ object Clients {
         CareerTracks::class.java,
         Project::class.java,
         Player::class.java,
-        CoeChallenge::class.java
+        CodeChallenge::class.java
     )
 
     //type resolver

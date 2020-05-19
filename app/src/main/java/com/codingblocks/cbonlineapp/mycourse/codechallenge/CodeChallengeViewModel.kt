@@ -1,14 +1,14 @@
 package com.codingblocks.cbonlineapp.mycourse.codechallenge
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
+
+import androidx.lifecycle.*
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.*
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
-import com.codingblocks.onlineapi.models.CoeChallenge
+import com.codingblocks.onlineapi.models.CodeChallenge
+import kotlinx.coroutines.Dispatchers
 
 class CodeChallengeViewModel(
     handle: SavedStateHandle,
@@ -19,46 +19,44 @@ class CodeChallengeViewModel(
     var contestId by savedStateValue<String>(handle, CONTEST_ID)
     var codeId by savedStateValue<String>(handle, CODE_ID)
 
-    var content: MutableLiveData<CoeChallenge> = MutableLiveData()
     var downloadState: MutableLiveData<Boolean> = MutableLiveData()
+    var codeChallenge: CodeChallenge? = null
 
-    fun fetchCodeChallenge() {
-        runIO {
-            when (val response = codeId?.toInt()?.let { repo.fetchCodeChallenge(it, contestId ?: "") }) {
-                is ResultWrapper.GenericError -> {
-                    setError(response.error)
-                    getSavedData()
-                }
-                is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful){
-                        response.value.body().let { codeChallenge ->
-                            content.postValue(codeChallenge)
-                        }
-                        downloadState.postValue(repo.isDownloaded(codeId!!))
+    fun fetchCodeChallenge() = liveData(Dispatchers.IO) {
+        when (val response = codeId?.toInt()?.let { repo.fetchCodeChallenge(it, contestId ?: "") }) {
+            is ResultWrapper.GenericError -> {
+                setError(response.error)
+                if (isDownloaded())
+                    emit(getSavedData())
+            }
+            is ResultWrapper.Success -> {
+                if (response.value.isSuccessful) {
+                    response.value.body()?.let {
+                        emit(it)
+                        codeChallenge = it
                     }
-                    else {
-                        setError(fetchError(response.value.code()))
-                        getSavedData()
-                    }
+                    downloadState.postValue(repo.isDownloaded(codeId!!))
+                } else {
+                    setError(fetchError(response.value.code()))
+                    if (isDownloaded())
+                        emit(getSavedData())
                 }
             }
         }
     }
 
-    fun getSavedData(){
-        if (isDownloaded()){
-            content.postValue(codeId?.let { repo.getOfflineContent(it) })
-            downloadState.postValue(true)
-        }
+    fun getSavedData(): CodeChallenge? {
+        downloadState.postValue(true)
+        return codeId?.let { repo.getOfflineContent(it) }
     }
 
     fun isDownloaded(): Boolean {
         return codeId?.let { repo.isDownloaded(it) }!!
     }
 
-    fun saveCode(){
+    fun saveCode() {
         runIO {
-            codeId?.let { content.value?.let { it1 -> repo.saveCode(it, it1) } }
+            codeId?.let { codeId -> codeChallenge?.let {codeContent-> repo.saveCode(codeId, codeContent) } }
             downloadState.postValue(true)
         }
     }
