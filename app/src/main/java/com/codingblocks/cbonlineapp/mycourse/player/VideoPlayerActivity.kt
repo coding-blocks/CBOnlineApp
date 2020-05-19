@@ -4,6 +4,7 @@ import android.animation.LayoutTransition
 import android.content.Context
 import android.content.Intent
 import android.annotation.TargetApi
+import android.app.ActivityManager
 import android.app.PendingIntent
 import android.app.PictureInPictureParams
 import android.app.RemoteAction
@@ -82,6 +83,7 @@ import java.io.File
 import java.util.Objects
 import java.util.concurrent.TimeUnit
 import kotlinx.android.synthetic.main.activity_video_player.*
+import kotlinx.android.synthetic.main.activity_video_player.youtubePlayerView
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import kotlinx.android.synthetic.main.my_fab_menu.*
 import kotlinx.android.synthetic.main.vdo_control_view.*
@@ -116,6 +118,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     private val CONTROL_TYPE_PAUSE = 2
     private val REQUEST_PLAY = 1
     private val REQUEST_PAUSE = 2
+    private var hasBeenIntoPIP: Boolean = false
+    private var isCallingFromFinish: Boolean = false
+    private var isYoutubeVideoReady: Boolean = false
+    private var contentable: String = ""
     private lateinit var mPIPParams: PictureInPictureParams.Builder
 
     private lateinit var playerFragment: VdoPlayerSupportFragment
@@ -226,6 +232,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             vm.attemptId.value = it.attempt_id
             sectionTitle.text = getString(R.string.section_name, it.sectionTitle)
             contentTitle.text = it.title
+            contentable = it.contentable
             if (it.contentable == LECTURE) {
                 vm.currentContentProgress = it.progress
                 vm.isDownloaded = it.contentLecture.isDownloaded
@@ -554,21 +561,35 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun playVideo() {
-        videoPlayer.playWhenReady = true
+        if (contentable == LECTURE) {
+            videoPlayer.playWhenReady = true
+        } else {
+            if (isYoutubeVideoReady)
+                youtubePlayer.play()
+            else
+                return
+        }
         updatePictureInPictureActions(R.drawable.ic_pause, "Pause",
             CONTROL_TYPE_PAUSE, REQUEST_PAUSE)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun pauseVideo() {
-        videoPlayer.playWhenReady = false
+        if (contentable == LECTURE) {
+            videoPlayer.playWhenReady = false
+        } else {
+            if (isYoutubeVideoReady)
+                youtubePlayer.pause()
+            else
+                return
+        }
         updatePictureInPictureActions(R.drawable.ic_play, "Play",
             CONTROL_TYPE_PLAY, REQUEST_PLAY)
     }
 
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        if (getPrefs().SP_PIP) {
+        if (getPrefs().SP_PIP and !isCallingFromFinish) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE))
                     activatePIPMode()
@@ -579,6 +600,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
         if (isInPictureInPictureMode) {
             showControls(false)
+            hasBeenIntoPIP = true
             playerControlView.isVisible = false
         } else {
             showControls(true)
@@ -606,8 +628,19 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     @TargetApi(Build.VERSION_CODES.O)
     fun activatePIPMode() {
 
-        val width = playerFragment.requireView().width
-        val height = playerFragment.requireView().height
+        val width: Int
+        val height: Int
+        when (contentable) {
+            LECTURE -> {
+                width = playerFragment.requireView().width
+                height = playerFragment.requireView().height
+            }
+            VIDEO -> {
+                width = youtubePlayerView.width
+                height = youtubePlayerView.height
+            }
+            else -> return
+        }
 
         val aspectRatio = Rational(width, height)
         mPIPParams = PictureInPictureParams.Builder()
@@ -631,6 +664,19 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
     }
 
+    fun navToLauncherTask(appContext: Context) {
+        val activityManager: ActivityManager = (appContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)!!
+        val appTasks: List<ActivityManager.AppTask> = activityManager.getAppTasks()
+        for (task in appTasks) {
+            val baseIntent: Intent = task.getTaskInfo().baseIntent
+            val categories = baseIntent.categories
+            if (categories != null && categories.contains(Intent.CATEGORY_LAUNCHER)) {
+                task.moveToFront()
+                return
+            }
+        }
+    }
+
     private fun setYoutubePlayer(youtubeUrl: String) {
         if (::youtubePlayer.isInitialized) {
             val id = getYoutubeVideoId(youtubeUrl)
@@ -646,6 +692,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             override fun onReady(player: YouTubePlayer) {
                 youtubePlayer = player
                 youtubePlayer.addListener(tracker)
+                isYoutubeVideoReady = true
                 val id = getYoutubeVideoId(youtubeUrl)
                 player.loadVideo(id, vm.position?.toFloat()?.div(1000) ?: 0f)
             }
@@ -811,6 +858,14 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     override fun onYouTubePlayerExitFullScreen() {
         youtubePlayerView.exitFullScreen()
         showFullScreen(false)
+    }
+
+    override fun finish() {
+        isCallingFromFinish = true
+        if (hasBeenIntoPIP) {
+            navToLauncherTask(applicationContext)
+        }
+        super.finish()
     }
 
     override fun onNewIntent(intent: Intent) {
