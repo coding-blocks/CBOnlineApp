@@ -37,10 +37,10 @@ class CodeChallenge : AppCompatActivity() {
             title = it.content?.name
             setTextView(description, it.content?.details?.description)
             setTextView(constraints, it.content?.details?.constraints)
-            setTextView(inputFormat, it.content?.details?.input_format)
-            setTextView(outputFormat, it.content?.details?.output_format)
-            setTextView(sampleInput, it.content?.details?.sample_input)
-            setTextView(sampleOutput, it.content?.details?.sample_output)
+            setTextView(inputFormat, it.content?.details?.inputFormat)
+            setTextView(outputFormat, it.content?.details?.outputFormat)
+            setTextView(sampleInput, it.content?.details?.sampleInput)
+            setTextView(sampleOutput, it.content?.details?.sampleOutput)
             setTextView(explaination, it.content?.details?.explanation)
         }
 

@@ -32,7 +32,6 @@ class CodeChallengeViewModel(
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful){
                         response.value.body().let { codeChallenge ->
-                            Log.e("codeChallenge",codeChallenge.toString())
                             content.postValue(codeChallenge)
                         }
                         downloadState.postValue(repo.isDownloaded(codeId!!))

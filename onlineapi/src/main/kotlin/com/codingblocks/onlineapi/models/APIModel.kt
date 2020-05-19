@@ -1,5 +1,6 @@
 package com.codingblocks.onlineapi.models
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.github.jasminb.jsonapi.Links
 import com.github.jasminb.jsonapi.RelType
 import com.github.jasminb.jsonapi.annotations.Id
@@ -106,26 +107,44 @@ data class Course(
     data class CoeChallenge(
         val name: String,
         @Relationship("problem")
-        val content: included?=null
+        val content: Problem?=null
 
     ):BaseModel()
 
+    @Type("timelimits")
+    data class TimeLimits(
+        val cpp: String,
+        val c: String,
+        val py2: String,
+        val py3: String,
+        val js: String,
+        val csharp: String,
+        val java: String
+    ):BaseModel()
+
     @Type("details")
-    data class detailsClass(
+    data class CodeDetails(
         val constraints: String?="None",
         val explanation: String?="None",
-        val input_format: String?="None",
-        val sample_input: String?="None",
-        val output_format: String?="None",
-        val sample_output: String?="None",
+        @JsonProperty("input_format")
+        val inputFormat: String?="None",
+        @JsonProperty("sample_input")
+        val sampleInput: String?="None",
+        @JsonProperty("output_format")
+        val outputFormat: String?="None",
+        @JsonProperty("sample_output")
+        val sampleOutput: String?="None",
         val description: String?="None"
     ) : BaseModel()
 
     @Type("problems")
-    data class included(
+    data class Problem(
         val difficulty: String,
         val name: String,
-        val details:detailsClass?=null
+        val image: String?="",
+        val status: String?="",
+        val details:CodeDetails?=null,
+        val timelimits: TimeLimits?=null
     ):BaseModel()
 
     @Type("run-attempts", "run_attempts")
