@@ -85,7 +85,10 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     }
                 }
             }
-            courseAndRun.run.whatsappLink?.let { setWhatsappCard(it, courseAndRun.runAttempt.premium) }
+            courseAndRun.run.whatsappLink?.let {
+                if(!it.isNullOrEmpty()){
+                setWhatsappCard(it, courseAndRun.runAttempt.premium)}
+            }
 
             if (courseAndRun.run.crStart > "1574985600") {
                 if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium && RUNTIERS.LITE.name != courseAndRun.runAttempt.runTier)
@@ -149,9 +152,6 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     }
 
     private fun setWhatsappCard(link: String, premium: Boolean) {
-        if (link.isNullOrEmpty()) {
-            whatsappContainer.isVisible = false
-        } else {
             whatsappContainer.apply {
                 isVisible = premium
                 setOnClickListener {
@@ -165,7 +165,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     }
                 }
             }
-        }
+
     }
 
     override fun onDestroy() {
