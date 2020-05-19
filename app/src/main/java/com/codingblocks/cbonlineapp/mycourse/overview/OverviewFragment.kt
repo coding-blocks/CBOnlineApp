@@ -118,12 +118,6 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         }
     }
 
-    fun onRadioButtonClicked(view: View) {
-        if (view is RadioButton) {
-            print(view.isChecked)
-        }
-    }
-
     private fun downloadCertificate(context: Context, certificateUrl: String, name: String) {
         val file = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), name)
         if (file.exists()) {
