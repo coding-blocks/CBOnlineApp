@@ -654,8 +654,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                         setOnClickListener {
                             vm.createDoubt(sheetDialog.doubtTitleTv.text.toString(), sheetDialog.bottoSheetDescTv.text.toString()) {
                                 runOnUiThread {
-                                    if (it.isEmpty())
+                                    if (it.isEmpty()) {
+                                        hideVideoFab()
                                         dialog.dismiss()
+                                    }
                                     else
                                         toast(it)
                                 }
@@ -706,6 +708,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                                     LectureContent(vm.currentContentId ?: "")
                                 )
                                 vm.createNote(note)
+                                hideVideoFab()
                                 dialog.dismiss()
                             }
                         }
@@ -775,6 +778,19 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
         if (::youtubePlayer.isInitialized) {
             youtubePlayer.pause()
+        }
+    }
+
+    fun hideVideoFab(){
+        noteFabTv.isVisible = false
+        doubtFabTv.isVisible = false
+        doubtFab.startAnimation(animationUtils.close)
+        noteFab.startAnimation(animationUtils.close)
+        videoFab.startAnimation(animationUtils.anticlock)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
+        } else {
+            fabMenu.setBackgroundColor(resources.getColor(R.color.white_transparent))
         }
     }
 
