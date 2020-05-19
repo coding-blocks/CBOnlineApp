@@ -226,9 +226,7 @@ class MyCourseViewModel(
         }
     }
 
-    fun getHackerBlocksPerformance(): LiveData<HBRankModel> {
-        return repo.getHackerBlocksPerformance()
-    }
+    fun getHackerBlocksPerformance() = repo.getHackerBlocksPerformance()
 }
 
 //    fun requestApproval() {

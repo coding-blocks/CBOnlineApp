@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 30,
-    "identityHash": "c06bdf31e3b71b96ef7adcc5acf6ad71",
+    "identityHash": "09fb1f7da0cbe7500c44880d499c7f17",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -1408,14 +1408,8 @@
       },
       {
         "tableName": "HBRankModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `bestRank` INTEGER NOT NULL, `bestRankAchievedOn` TEXT NOT NULL, `currentMonthScore` INTEGER NOT NULL, `currentOverallRank` INTEGER NOT NULL, `previousMonthScore` INTEGER NOT NULL, `previousOverallRank` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bestRank` INTEGER NOT NULL, `bestRankAchievedOn` TEXT NOT NULL, `currentMonthScore` INTEGER NOT NULL, `currentOverallRank` INTEGER NOT NULL, `previousMonthScore` INTEGER NOT NULL, `previousOverallRank` INTEGER NOT NULL, `id` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
           {
             "fieldPath": "bestRank",
             "columnName": "bestRank",
@@ -1451,13 +1445,19 @@
             "columnName": "previousOverallRank",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
             "id"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
@@ -1466,7 +1466,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c06bdf31e3b71b96ef7adcc5acf6ad71')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '09fb1f7da0cbe7500c44880d499c7f17')"
     ]
   }
 }

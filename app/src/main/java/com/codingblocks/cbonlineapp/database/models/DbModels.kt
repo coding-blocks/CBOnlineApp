@@ -111,7 +111,7 @@ data class HBRankModel(
     val currentOverallRank: Int = 0,
     val previousMonthScore: Int = 0,
     val previousOverallRank: Int = 0,
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     val id: Long = 0
 )
 
