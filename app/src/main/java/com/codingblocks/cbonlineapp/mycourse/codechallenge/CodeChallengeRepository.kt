@@ -17,7 +17,7 @@ class CodeChallengeRepository(
     private val codeDao: CodeChallengeDao) {
     suspend fun fetchCodeChallenge(codeId: Int, contestId: String) = safeApiCall { Clients.onlineV2JsonApi.getCodeChallenge(codeId, contestId) }
 
-    fun getOfflineContent(codeId: String): CodeChallenge? {
+    suspend fun getOfflineContent(codeId: String): CodeChallenge? {
         val model: CodeChallengeModel = codeDao.getCodeChallengeById(codeId)
 
         val challenge = with(model){
@@ -56,7 +56,7 @@ class CodeChallengeRepository(
         return challenge
     }
 
-    fun isDownloaded(codeId: String): Boolean {
+    suspend fun isDownloaded(codeId: String): Boolean? {
         return codeDao.getCodeChallengeById(codeId) != null
     }
 

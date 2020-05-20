@@ -26,8 +26,10 @@ class CodeChallengeViewModel(
         when (val response = codeId?.toInt()?.let { repo.fetchCodeChallenge(it, contestId ?: "") }) {
             is ResultWrapper.GenericError -> {
                 setError(response.error)
-                if (isDownloaded())
-                    emit(getSavedData())
+                if (codeId?.let { repo.isDownloaded(it) }!!){
+                    downloadState.postValue(true)
+                    emit(codeId?.let { repo.getOfflineContent(it) } )
+                }
             }
             is ResultWrapper.Success -> {
                 if (response.value.isSuccessful) {
@@ -38,20 +40,13 @@ class CodeChallengeViewModel(
                     downloadState.postValue(repo.isDownloaded(codeId!!))
                 } else {
                     setError(fetchError(response.value.code()))
-                    if (isDownloaded())
-                        emit(getSavedData())
+                    if (codeId?.let { repo.isDownloaded(it) }!!){
+                        downloadState.postValue(true)
+                        emit(codeId?.let { repo.getOfflineContent(it) } )
+                    }
                 }
             }
         }
-    }
-
-    fun getSavedData(): CodeChallenge? {
-        downloadState.postValue(true)
-        return codeId?.let { repo.getOfflineContent(it) }
-    }
-
-    fun isDownloaded(): Boolean {
-        return codeId?.let { repo.isDownloaded(it) }!!
     }
 
     fun saveCode() {
