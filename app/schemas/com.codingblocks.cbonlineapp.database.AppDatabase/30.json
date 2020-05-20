@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 30,
-    "identityHash": "09fb1f7da0cbe7500c44880d499c7f17",
+    "identityHash": "9e33b16b1d6a2e55f4d951f4ccf8f6be",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -1407,6 +1407,140 @@
         ]
       },
       {
+        "tableName": "CodeChallengeModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `difficulty` TEXT NOT NULL, `title` TEXT NOT NULL, `name` TEXT, `image` TEXT, `status` TEXT, `constraints` TEXT, `explanation` TEXT, `inputFormat` TEXT, `sampleInput` TEXT, `outputFormat` TEXT, `sampleOutput` TEXT, `description` TEXT, `cpp` TEXT, `c` TEXT, `py2` TEXT, `py3` TEXT, `js` TEXT, `csharp` TEXT, `java` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "difficulty",
+            "columnName": "difficulty",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "content.name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.image",
+            "columnName": "image",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.details.constraints",
+            "columnName": "constraints",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.details.explanation",
+            "columnName": "explanation",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.details.inputFormat",
+            "columnName": "inputFormat",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.details.sampleInput",
+            "columnName": "sampleInput",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.details.outputFormat",
+            "columnName": "outputFormat",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.details.sampleOutput",
+            "columnName": "sampleOutput",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.details.description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.timeLimits.cpp",
+            "columnName": "cpp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.timeLimits.c",
+            "columnName": "c",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.timeLimits.py2",
+            "columnName": "py2",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.timeLimits.py3",
+            "columnName": "py3",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.timeLimits.js",
+            "columnName": "js",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.timeLimits.csharp",
+            "columnName": "csharp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content.timeLimits.java",
+            "columnName": "java",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
         "tableName": "HBRankModel",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bestRank` INTEGER NOT NULL, `bestRankAchievedOn` TEXT NOT NULL, `currentMonthScore` INTEGER NOT NULL, `currentOverallRank` INTEGER NOT NULL, `previousMonthScore` INTEGER NOT NULL, `previousOverallRank` INTEGER NOT NULL, `id` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
@@ -1466,7 +1600,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '09fb1f7da0cbe7500c44880d499c7f17')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9e33b16b1d6a2e55f4d951f4ccf8f6be')"
     ]
   }
 }

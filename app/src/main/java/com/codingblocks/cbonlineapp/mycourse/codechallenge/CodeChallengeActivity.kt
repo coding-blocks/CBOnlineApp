@@ -22,8 +22,7 @@ class CodeChallengeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_code_challenge)
-        setToolbar(toolbarCodeChallenge)
-        title=""
+        setToolbar(toolbarCodeChallenge,title = "")
         if (savedInstanceState == null) {
             vm.contentId = intent.getStringExtra(CONTENT_ID)
             vm.sectionId = intent.getStringExtra(SECTION_ID)

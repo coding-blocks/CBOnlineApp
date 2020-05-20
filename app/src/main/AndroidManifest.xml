@@ -26,7 +26,10 @@
         android:theme="@style/NewAppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="q">
-        <activity android:name=".mycourse.codechallenge.CodeChallengeActivity" />
+        <activity
+            android:launchMode="singleTop"
+            android:parentActivityName=".mycourse.MyCourseActivity"
+            android:name=".mycourse.codechallenge.CodeChallengeActivity" />
         <activity
             android:name=".tracks.TrackActivity"
             android:parentActivityName=".tracks.LearningTracksActivity" />

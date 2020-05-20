@@ -19,6 +19,8 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
+import com.codingblocks.cbonlineapp.database.models.CourseRunPair
+import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
@@ -51,10 +53,10 @@ class MyCourseViewModel(
     var content: LiveData<List<SectionContentHolder.SectionContentPair>> = MutableLiveData()
 
     init {
-        getStats()
         getPerformance()
         content = Transformations.switchMap(DoubleTrigger(complete, filters)) {
             attemptId?.let {
+                getStats()
                 repo.getSectionWithContent(it)
             }
         }
@@ -68,11 +70,11 @@ class MyCourseViewModel(
             handle.set("runStartEnd", value)
         }
 
-    val performance by lazy {
+    val performance: LiveData<RunPerformance>? by lazy {
         attemptId?.let { repo.getRunStats(it) }
     }
 
-    val run by lazy {
+    val run: LiveData<CourseRunPair>? by lazy {
         attemptId?.let { repo.getRunById(it) }
     }
 
@@ -220,7 +222,7 @@ class MyCourseViewModel(
                     } else {
                         if (code() != 404)
                             setError(fetchError(code()))
-                        else{
+                        else {
                             //No HB Report
                         }
                     }
