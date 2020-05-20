@@ -29,7 +29,6 @@ import com.codingblocks.cbonlineapp.database.models.HBRankModel
     entities = [CourseModel::class, SectionModel::class, ContentModel::class, InstructorModel::class, Notification::class,
         CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, RunModel::class,
         JobsModel::class, SectionContentHolder.SectionWithContent::class, BookmarkModel::class,
-        CommentModel::class, RunAttemptModel::class, RunPerformance::class, PlayerState::class
         CommentModel::class, RunAttemptModel::class, RunPerformance::class, PlayerState::class,CodeChallengeModel::class, HBRankModel::class
     ], exportSchema = true, version = 30
 )
