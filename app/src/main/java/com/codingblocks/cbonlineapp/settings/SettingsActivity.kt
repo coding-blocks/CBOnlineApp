@@ -71,7 +71,7 @@ class SettingsActivity : BaseCBActivity() {
                 }
             )
         }
-
+        setSeekbarMaxValue()
         seekbarLimit.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser)
@@ -108,5 +108,11 @@ class SettingsActivity : BaseCBActivity() {
         val size = (1 + progress / 100.toDouble()).toFloat()
         seekbarTv.text = "${size}GB"
         getPrefs().SP_DATA_LIMIT = size
+    }
+
+    private fun setSeekbarMaxValue(){
+        val bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
+        val progressValue = (100*bytesAvailable/Math.pow(1024.0,3.0)).toInt()-100
+        seekbarLimit.max=progressValue
     }
 }

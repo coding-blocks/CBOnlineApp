@@ -88,6 +88,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="no_doubts">No Doubts</string>
+    <string name="click_to_add_doubt">Click on + to ask a doubt.</string>
     <string name="go_to_classroom">Go to Classroom</string>
     <string name="doubts_that_you_ask_appear_here">Doubts that you ask appear here</string>
     <string name="reopen_doubt">Reopen Doubt</string>
@@ -196,7 +197,7 @@
     <string name="goodiedesc">You have completed %d%% of the course. You can claim your goodies now!</string>
     <string name="request_now">Request Now</string>
     <string name="reset">Reset</string>
-    <string name="certificate_desc">Complete 90% of the course to unlock certificate</string>
+    <string name="certificate_desc">Complete %d%% of the course to unlock certificate</string>
     <string name="generate_certificate">Generate Certificate</string>
     <string name="mentorapproval">Mentor Approval - %s</string>
     <string name="request">Request</string>
@@ -208,7 +209,7 @@
     <string name="commenting_as">Commenting as</string>
     <string name="my_couurse_logged_out">Your enrolled courses will appear here.\nLogin now to explore more!</string>
     <string name="my_doubts_logged_out">All your course related doubts will appear here.\nLogin now to explore more!</string>
-    <string name="my_dashboard_logged_out">Your dashboard consists of uour course performance,\n your wishlisted courses, your applied jobs \n and many more</string>
+    <string name="my_dashboard_logged_out">Your dashboard consists of your course performance,\n your wishlisted courses, your applied jobs \n and many more</string>
     <string name="learning_tracks">Learning Tracks</string>
     <string name="invite_earn"><![CDATA[Invite & Earn]]></string>
     <string name="your_referral_code">Your Referral Code</string>
@@ -237,6 +238,7 @@
     <string name="username">Username</string>
     <string name="back">Back</string>
     <string name="your_courses_will_start_showing_once_you_enroll_nin_any_course">Your Courses will start showing once you enroll\nin any course</string>
+    <string name="your_courses_will_start_showing_once_you_purchase_any_course">Your Courses will start showing once you purchase any course</string>
     <string name="frequently_asked_questions">Frequently Asked Questions</string>
     <string name="student">Student</string>
     <string name="professional">Professional</string>
@@ -281,8 +283,8 @@
     <string name="compare">Compare</string>
     <string name="submit">Submit</string>
     <string name="back_press">Please click Back again to exit</string>
-    <string name="progress" >%d %%</string>
-    <string name="completed" >%d %% Completed</string>
+    <string name="progress">%d %%</string>
+    <string name="completed">%d %% Completed</string>
     <string name="continue_from_where_you_left">Continue from where you left</string>
     <string name="input_format">Input Format</string>
     <string name="constraints">Constraints</string>
@@ -290,4 +292,14 @@
     <string name="sample_input">Sample Input</string>
     <string name="sample_output">Sample Output</string>
     <string name="explanation">Explanation</string>
+    <string name="clear">Remove Product</string>
+    <string name="no_notes">No Notes</string>
+    <string name="click_on_to_add_a_new_note">Click on + to add a new note.</string>
+    <string name="payment_failed">Your payment has failed!</string>
+    <string name="internet_connection_error">Please check your internet connection</string>
+    <string name="retry">Retry Now</string>
+    <string name="hb_report">Hacker Blocks Report</string>
+    <string name="coding_skills">Improve your coding skills</string>
+    <string name="current_rank">Your Current Rank</string>
+    <string name="hb_performance">Your Monthly Score</string>
 </resources>

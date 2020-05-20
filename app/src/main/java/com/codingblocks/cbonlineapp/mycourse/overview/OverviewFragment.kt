@@ -1,12 +1,11 @@
 package com.codingblocks.cbonlineapp.mycourse.overview
 
-import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
@@ -22,12 +22,12 @@ import com.codingblocks.cbonlineapp.dashboard.home.loadData
 import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
-import com.codingblocks.cbonlineapp.util.CertificateDownloadReceiver
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import java.io.File
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
+import kotlinx.android.synthetic.main.item_hb_performance.*
 import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
@@ -54,6 +54,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             val progressValue = courseAndRun.getProgress()
             homeProgressTv.text = getString(R.string.progress, progressValue.toInt())
             homeProgressView.setGradientColor(progressValue)
+            certificate_descTv.apply { text = getString(R.string.certificate_desc, courseAndRun.run.completionThreshold) }
             progressTv.apply {
                 text = getString(R.string.thresholdcompletion, courseAndRun.run.completionThreshold)
                 isActivated = courseAndRun.run.completionThreshold < progressValue
@@ -87,7 +88,10 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     }
                 }
             }
-            courseAndRun.run.whatsappLink?.let { setWhatsappCard(it, courseAndRun.runAttempt.premium) }
+            courseAndRun.run.whatsappLink?.let {
+                if(!it.isNullOrEmpty()){
+                setWhatsappCard(it, courseAndRun.runAttempt.premium)}
+            }
 
             if (courseAndRun.run.crStart > "1574985600") {
                 if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium && RUNTIERS.LITE.name != courseAndRun.runAttempt.runTier)
@@ -100,6 +104,16 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             homePercentileTv.text = it.percentile.toString()
             chart1.loadData(it.averageProgress, it.userProgress)
         }
+
+        viewModel.getHackerBlocksPerformance().observe(viewLifecycleOwner , Observer {
+            if(it!=null) {
+                hbRankContainer.isVisible = true
+                currentOverallRank.text = it.currentOverallRank.toString()
+                previousRank.text = "${it.currentOverallRank - it.previousOverallRank} Ranks"
+                currentMonthScore.text = "${it.currentMonthScore} Points"
+                previousMonthlyScore.text = "${it.currentMonthScore - it.previousMonthScore} Points"
+            }
+        })
 
         confirmReset.setOnClickListener {
             Components.showConfirmation(requireContext(), "reset") {
@@ -151,19 +165,20 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     }
 
     private fun setWhatsappCard(link: String, premium: Boolean) {
-        whatsappContainer.apply {
-            isVisible = premium
-            setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setPackage("com.whatsapp")
-                intent.data = Uri.parse(link)
-                if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
+            whatsappContainer.apply {
+                isVisible = premium
+                setOnClickListener {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.setPackage("com.whatsapp")
+                    intent.data = Uri.parse(link)
+                    if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-        }
+
     }
 
     override fun onDestroy() {

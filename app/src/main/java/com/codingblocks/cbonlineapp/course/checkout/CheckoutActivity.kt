@@ -1,15 +1,16 @@
 package com.codingblocks.cbonlineapp.course.checkout
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.MenuItem
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
-import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.razorpay.Checkout
 import com.razorpay.PaymentData
 import com.razorpay.PaymentResultWithDataListener
@@ -17,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_checkout.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
@@ -72,10 +74,12 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
                     isVisible = false
                     cancelAnimation()
                 }
-                root.showSnackbar("There was some error please try again")
+                toast("Oops, something went wrong")
                 replaceFragmentSafely(
-                    CheckoutOrderDetailsFragment(),
-                    containerViewId = R.id.checkoutContainer
+                    CheckoutFailedFragment(),
+                    containerViewId = R.id.checkoutContainer,
+                    allowStateLoss = true,
+                    addToStack = true
                 )
             }
         }
@@ -98,6 +102,14 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
                 startActivity(DashboardActivity.createDashboardActivityIntent(this@CheckoutActivity, true))
                 finish()
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        if(supportFragmentManager.backStackEntryCount>=3) {
+            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }else{
+            super.onBackPressed()
         }
     }
 }

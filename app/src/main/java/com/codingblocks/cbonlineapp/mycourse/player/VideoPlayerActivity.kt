@@ -289,7 +289,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         playerViewPager.offscreenPageLimit = 2
     }
 
-
     private fun initializePlayer() {
         playerFragment =
             supportFragmentManager.findFragmentById(R.id.videoView) as VdoPlayerSupportFragment
@@ -420,6 +419,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                     deleteFolder(vm.currentContentId ?: "")
                 }
                 in (2010..2020) -> {
+                    vm.getOtp()
                 }
                 6120 -> {
                 }
@@ -719,7 +719,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
     override fun onStop() {
         if (::playerFragment.isInitialized) {
-            vm.position = videoPlayer.currentTime
+            vm.position = playerFragment.player.currentTime
             val duration = playerFragment.player.duration
             val time = playerFragment.player.currentTime
             if (time < duration * 0.95)
@@ -771,7 +771,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         vm.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
         vm.position = 0L
         if (::playerFragment.isInitialized) {
-            playerFragment.player.release()
+            playerFragment.player.stop()
         }
         if (::youtubePlayer.isInitialized) {
             youtubePlayer.pause()

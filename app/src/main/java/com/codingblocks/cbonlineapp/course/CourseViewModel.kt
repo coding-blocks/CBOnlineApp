@@ -11,7 +11,8 @@ import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Project
 import com.codingblocks.onlineapi.models.Sections
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 
 class CourseViewModel(
     private val repo: CourseRepository
@@ -86,39 +87,50 @@ class CourseViewModel(
         val list = arrayListOf<Project>()
         if (!projectIdList.isNullOrEmpty()) {
             runIO {
-                projectIdList.forEach {
-                    val projectRes = withContext(Dispatchers.IO) { repo.getProjects(it.id) }
-                    projectRes.body()?.let { it1 -> list.add(it1) }
+                val projectList = projectIdList.map {
+                    async(Dispatchers.IO) { repo.getProjects(it.id) } // runs in parallel in background thread
+                }.awaitAll()
+                projectList.forEach {
+                    when (it) {
+                        is ResultWrapper.GenericError -> setError(it.error)
+                        is ResultWrapper.Success -> with(it.value) {
+                            if (isSuccessful) {
+                                body()?.let { it1 -> list.add(it1) }
+                            } else {
+                                setError(fetchError(code()))
+                            }
+                        }
+                    }
+                }.also {
+                    projects.postValue(list)
                 }
-                projects.postValue(list)
             }
         } else {
             projects.postValue(emptyList())
         }
     }
-
-    fun fetchSections(sectionIdList: ArrayList<Sections>?) {
+    //Todo - Improvise this
+    fun fetchSections(sectionIdList: ArrayList<Sections>) {
         val list = arrayListOf<Sections>()
         if (!sectionIdList.isNullOrEmpty()) {
             runIO {
-                sectionIdList.take(5).forEach {
-                    val sectionRes = withContext(Dispatchers.IO) { repo.getSection(it.id) }
-                    sectionRes.body()?.let { it1 -> list.add(it1) }
+                val sectionList = sectionIdList.map {
+                    async(Dispatchers.IO) { repo.getSection(it.id) } // runs in parallel in background thread
+                }.awaitAll()
+                sectionList.forEach {
+                    when(it){
+                        is ResultWrapper.GenericError -> setError(it.error)
+                        is ResultWrapper.Success -> with(it.value) {
+                            if (isSuccessful) {
+                                body()?.let { it1 -> list.add(it1) }
+                            } else {
+                                setError(fetchError(code()))
+                            }
+                        }
+                    }
+                }.also {
+                    sections.postValue(list)
                 }
-                sections.postValue(list)
-            }
-        }
-    }
-
-    fun fetchAllSections(sectionIdList: ArrayList<Sections>?) {
-        val list = arrayListOf<Sections>()
-        if (!sectionIdList.isNullOrEmpty()) {
-            runIO {
-                sectionIdList.forEach {
-                    val sectionRes = withContext(Dispatchers.IO) { repo.getSection(it.id) }
-                    sectionRes.body()?.let { it1 -> list.add(it1) }
-                }
-                sections.postValue(list)
             }
         }
     }

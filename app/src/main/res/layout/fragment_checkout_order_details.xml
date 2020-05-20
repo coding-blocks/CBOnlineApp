@@ -308,6 +308,28 @@
 
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/removeProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/clear"
+            android:drawableStart="@drawable/ic_cross"
+            android:drawablePadding="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/orangish"
+            android:textSize="18sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout

@@ -38,7 +38,7 @@ class CourseSectionAllFragment : BottomSheetDialogFragment() {
 
         viewModel.course.distinctUntilChanged().observer(this) { course ->
             course.getContentRun(RUNTIERS.PREMIUM.name)?.let {
-                viewModel.fetchAllSections(it.sections)
+                it.sections?.let { it1 -> viewModel.fetchSections(it1) }
             }
         }
 

@@ -31,8 +31,8 @@ import com.codingblocks.cbonlineapp.util.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.ResetRunAttempt
-import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.Dispatchers
+import java.util.concurrent.TimeUnit
 
 class MyCourseViewModel(
     private val handle: SavedStateHandle,
@@ -52,6 +52,7 @@ class MyCourseViewModel(
 
     init {
         getStats()
+        getPerformance()
         content = Transformations.switchMap(DoubleTrigger(complete, filters)) {
             attemptId?.let {
                 repo.getSectionWithContent(it)
@@ -202,23 +203,35 @@ class MyCourseViewModel(
             dm.enqueue(request)
         }
     }
+
+
+    private fun getPerformance() {
+        runIO {
+            val mRank = repo.getHackerBlocksPerformance().value
+            when (val response = repo.getPerformance()) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        body()?.let { response ->
+                            if (mRank?.currentOverallRank != response.currentOverallRank) {
+                                repo.saveRank(response)
+                            }
+                        }
+                    } else {
+                        if (code() != 404)
+                            setError(fetchError(code()))
+                        else{
+                            //No HB Report
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun getHackerBlocksPerformance() = repo.getHackerBlocksPerformance()
 }
 
-//    fun requestApproval() {
-//        Clients.api.requestApproval(attemptId).enqueue(retrofitCallback { throwable, response ->
-//            response.let {
-//                if (it?.isSuccessful == true) {
-//                    mutablePopMessage.value = it.body()?.string()
-//                } else {
-//                    mutablePopMessage.value = it?.errorBody()?.string()
-//                }
-//            }
-//            throwable.let {
-//                mutablePopMessage.value = it?.message
-//            }
-//        })
-//    }
-//
 //    fun fetchExtensions(productId: Int): MutableLiveData<List<ProductExtensionsItem>> {
 //        Clients.api.getExtensions(productId).enqueue(retrofitCallback { throwable, response ->
 //            response?.body().let { list ->
