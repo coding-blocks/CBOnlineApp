@@ -170,6 +170,49 @@ data class Companies(
     val website: String
 )
 
+@Entity
+data class CodeChallengeModel(
+    @PrimaryKey
+    val id: String,
+    val difficulty: String,
+    val title: String,
+    @Embedded
+    val content: ProblemModel? = null
+)
+
+@Entity
+data class ProblemModel(
+    val name: String,
+    val image: String,
+    val status: String,
+    @Embedded
+    val details: CodeDetailsModel,
+    @Embedded
+    val timeLimits: TimeLimitsModel
+)
+
+@Entity
+data class TimeLimitsModel(
+    val cpp: String,
+    val c: String,
+    val py2: String,
+    val py3: String,
+    val js: String,
+    val csharp: String,
+    val java: String
+)
+
+@Entity
+data class CodeDetailsModel(
+    val constraints: String,
+    val explanation: String,
+    val inputFormat: String,
+    val sampleInput: String,
+    val outputFormat: String,
+    val sampleOutput: String,
+    val description: String
+)
+
 open class BaseModel()
 
 enum class LibraryTypes {

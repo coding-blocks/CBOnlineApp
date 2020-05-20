@@ -29,6 +29,7 @@ import com.codingblocks.cbonlineapp.database.ListObject
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
+import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CODE
@@ -43,6 +44,8 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.SectionDownloadService
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
+import com.codingblocks.cbonlineapp.util.CONTEST_ID
+import com.codingblocks.cbonlineapp.util.CODE_ID
 import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
@@ -359,12 +362,17 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                             } else
                                 checkSection(premium)
                         CODE ->
-                            requireContext().showDialog(
-                                "unavailable",
-                                secondaryText = R.string.unavailable,
-                                primaryButtonText = R.string.ok,
-                                cancelable = true
-                            )
+                            if (contentCode.codeUid.isNotEmpty()) {
+                                startActivity(
+                                    intentFor<CodeChallengeActivity>(
+                                        CONTENT_ID to ccid,
+                                        SECTION_ID to sectionId,
+                                        CONTEST_ID to contentCode.codeContestId.toString(),
+                                        CODE_ID to contentCode.codeUid
+                                    )
+                                )
+                            } else
+                                checkSection(premium)
                     }
                 }
             }

@@ -99,3 +99,7 @@ const val COURSE_FILTER_TYPE = "course_filter_type"
 const val JWT_TOKEN = "jwt_token"
 
 const val REFRESH_TOKEN = "refresh_token"
+
+const val CONTEST_ID = "contestId"
+
+const val CODE_ID = "codeId"

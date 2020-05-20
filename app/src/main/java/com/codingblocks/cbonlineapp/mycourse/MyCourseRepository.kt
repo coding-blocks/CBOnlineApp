@@ -189,7 +189,7 @@ class MyCourseRepository(
                             contentQna1.updatedAt
                         )
                 }
-                "code_challenge" -> content.codeChallenge?.let { codeChallenge ->
+                "code-challenge" -> content.codeChallenge?.let { codeChallenge ->
                     contentCodeChallenge =
                         ContentCodeChallenge(
                             codeChallenge.id,
