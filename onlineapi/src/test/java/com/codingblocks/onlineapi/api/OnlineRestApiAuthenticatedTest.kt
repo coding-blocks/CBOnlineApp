@@ -45,4 +45,77 @@ class OnlineRestApiAuthenticatedTest {
 //        assertNotNull(doubts)
 //    }
 
+    @Test
+    suspend fun `GET getOtp`(){
+        val otp = restapi.getOtp("7f97136df7cc4f349e0129040d85b79f","4688","22685")
+        assertNotNull(otp)
+    }
+
+    @Test
+    suspend fun `POST getToken`(){
+        val getToken=restapi.getToken("7f97136df7cc4f349e0129040d85b79f")
+        assertNotNull(getToken)
+    }
+
+    @Test
+    suspend fun `getCourseRating`(){
+        val rating=restapi.getCourseRating("1230")
+        assertNotNull(rating)
+    }
+
+    @Test
+    suspend fun `GET enrollTrial`(){
+        val enroll=restapi.enrollTrial("1234")
+        assertNotNull(enroll)
+    }
+
+    @Test
+    suspend fun `GET addToCart`(){
+        val add=restapi.addToCart("1234")
+        assertNotNull(add)
+    }
+
+    @Test
+    suspend fun `GET myReferral`(){
+        val refer=restapi.myReferral()
+        assertNotNull(refer)
+    }
+
+    @Test
+    suspend fun `GET getCart`(){
+        val cart=restapi.getCart()
+        assertNotNull(cart)
+    }
+
+    @Test
+    suspend fun `GET clearCart`(){
+        val clearcart=restapi.clearCart()
+        assertNotNull(clearcart)
+    }
+
+    @Test
+    suspend fun `POST refreshToken`(){
+        val refreshtoken=restapi.refreshToken("1234")
+        assertNotNull(refreshtoken)
+    }
+
+    @Test
+    suspend fun `GET requestApproval`(){
+        val requestapprove=restapi.requestApproval("1234")
+        assertNotNull(requestapprove)
+    }
+
+    @Test
+    suspend fun `GET doubtStats`(){
+        val doubtstats=restapi.doubtStats("1234")
+        assertNotNull(doubtstats)
+    }
+
+    @Test
+    suspend fun `POST getChatId`(){
+        val chat=restapi.getChatId("1234")
+        assertNotNull(chat)
+    }
+
+
 }
