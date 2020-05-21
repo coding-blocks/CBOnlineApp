@@ -52,8 +52,7 @@
                         android:id="@+id/rankImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:src="@drawable/ic_performance" />
+                        android:src="@drawable/ic_ranks" />
 
                     <TextView
                         android:id="@+id/currentOverallRank"
@@ -110,8 +109,7 @@
                         android:id="@+id/leaderboardImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:src="@drawable/ic_leaderboard" />
+                        android:src="@drawable/ic_points" />
 
                     <TextView
                         android:id="@+id/currentMonthScore"
