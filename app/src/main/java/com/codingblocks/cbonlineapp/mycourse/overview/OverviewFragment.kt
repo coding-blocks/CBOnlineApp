@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.lang.Math.abs
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
@@ -105,13 +106,21 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             chart1.loadData(it.averageProgress, it.userProgress)
         }
 
-        viewModel.getHackerBlocksPerformance().observe(viewLifecycleOwner , Observer {
+        viewModel.getHackerBlocksPerformance().distinctUntilChanged().observe(viewLifecycleOwner , Observer {
             if(it!=null) {
                 hbRankContainer.isVisible = true
                 currentOverallRank.text = it.currentOverallRank.toString()
-                previousRank.text = "${it.currentOverallRank - it.previousOverallRank} Ranks"
-                currentMonthScore.text = "${it.currentMonthScore} Points"
-                previousMonthlyScore.text = "${it.currentMonthScore - it.previousMonthScore} Points"
+                currentMonthScore.text = requireContext().getString(R.string.points,it.currentMonthScore)
+                val rankDelta = it.currentOverallRank - it.previousOverallRank
+                val pointsDelta = it.currentMonthScore - it.previousMonthScore
+                previousRank.apply {
+                    isActivated = rankDelta >= 0
+                    text = context.getString(R.string.ranks, abs(rankDelta))
+                }
+                previousMonthlyScore.apply {
+                    isActivated = pointsDelta >= 0
+                    text = context.getString(R.string.points,pointsDelta)
+                }
             }
         })
 

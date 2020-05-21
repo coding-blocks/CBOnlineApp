@@ -81,10 +81,11 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/currentRankTv"
                         android:layout_marginTop="10dp"
-                        android:drawableStart="@drawable/ic_arrow_drop_up_black_24dp"
+                        android:drawablePadding="5dp"
+                        android:drawableStart="@drawable/ic_arrow_inverted_selector"
                         android:fontFamily="@font/gilroy_medium"
                         tools:text="1438 Ranks"
-                        android:textColor="@color/green"
+                        android:textColor="@color/rank_text_color"
                         android:textSize="14sp" />
 
                 </RelativeLayout>
@@ -138,10 +139,11 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/monthlyScoreTV"
                         android:layout_marginTop="10dp"
-                        android:drawableStart="@drawable/ic_arrow_drop_up_black_24dp"
+                        android:drawableStart="@drawable/ic_arrow_selector"
                         android:fontFamily="@font/gilroy_medium"
                         tools:text="0 Points"
-                        android:textColor="@color/green"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/rank_text_color"
                         android:textSize="14sp" />
 
                 </RelativeLayout>

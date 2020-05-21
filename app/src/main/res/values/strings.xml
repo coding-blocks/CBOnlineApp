@@ -302,4 +302,6 @@
     <string name="coding_skills">Improve your coding skills</string>
     <string name="current_rank">Your Current Rank</string>
     <string name="hb_performance">Your Monthly Score</string>
+    <string name="ranks">%d Ranks</string>
+    <string name="points">%d Points</string>
 </resources>

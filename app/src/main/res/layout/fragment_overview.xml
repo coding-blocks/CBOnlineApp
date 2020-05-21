@@ -108,11 +108,10 @@
             layout="@layout/item_hb_performance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/chart1"
             android:layout_marginStart="@dimen/margin_large"
             android:layout_marginTop="@dimen/margin_large"
             android:layout_marginEnd="@dimen/margin_large"
-            android:visibility="gone"></include>
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
