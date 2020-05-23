@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp
+package com.codingblocks.cbonlineapp.mycourse.document
 
 import android.app.DownloadManager
 import android.content.Context
@@ -9,15 +9,25 @@ import android.os.Bundle
 import android.os.Environment
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.view.isVisible
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.DownloadBroadcastReceiver
 import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import es.voghdev.pdfviewpager.library.PDFViewPager
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter
 import java.io.File
 import kotlinx.android.synthetic.main.activity_pdf.*
 import org.jetbrains.anko.AnkoLogger
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 class PdfActivity : BaseCBActivity(), AnkoLogger {
     lateinit var pdfViewPager: PDFViewPager
@@ -27,13 +37,20 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
     var isDownloaded: Boolean = false
     lateinit var receiver: DownloadBroadcastReceiver
     lateinit var intentFilter: IntentFilter
+    private val vm: PdfViewModel by stateViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pdf)
+        if (savedInstanceState == null) {
+            vm.contentId = intent.getStringExtra(CONTENT_ID)
+            vm.sectionId = intent.getStringExtra(SECTION_ID)
+            vm.attempId = intent.getStringExtra(RUN_ATTEMPT_ID)
+        }
 
         url = intent.getStringExtra("fileUrl")
         fileName = intent.getStringExtra("fileName")
+        setToolbar(toolbarPdfActivity, title = fileName?:"")
 
         if (url.isNullOrEmpty() || fileName.isNullOrEmpty()) {
             Toast.makeText(this, "Error fetching document", Toast.LENGTH_SHORT).show()
@@ -92,11 +109,28 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
             }
         }
 
+        pdfBookmarkBtn.setOnClickListener{view->
+            if (pdfBookmarkBtn.isActivated)
+                vm.removeBookmark()
+            else {
+                vm.markBookmark()
+            }
+        }
+
+        vm.bookmark.observer(this){
+            pdfBookmarkBtn.isActivated = if (it == null) false else it.bookmarkUid.isNotEmpty()
+        }
+
+        vm.offlineSnackbar.observer(this){
+            root.showSnackbar(it, Snackbar.LENGTH_SHORT, action = false)
+        }
+
         this@PdfActivity.registerReceiver(receiver, intentFilter)
     }
 
     private fun showpdf(downloadedFile: File) {
         pdfViewPager = PDFViewPager(this, downloadedFile.absolutePath)
+        pdfBookmarkBtn.isVisible = true
 
         root.addView(
             pdfViewPager,

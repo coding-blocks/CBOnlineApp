@@ -1,20 +1,24 @@
 package com.codingblocks.cbonlineapp.mycourse.codechallenge
 
+import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.CodeChallengeDao
 import com.codingblocks.cbonlineapp.database.models.CodeChallengeModel
 import com.codingblocks.cbonlineapp.database.models.CodeDetailsModel
 import com.codingblocks.cbonlineapp.database.models.ProblemModel
 import com.codingblocks.cbonlineapp.database.models.TimeLimitsModel
+import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.CodeChallenge
 import com.codingblocks.onlineapi.models.CodeDetails
 import com.codingblocks.onlineapi.models.Problem
 import com.codingblocks.onlineapi.models.TimeLimits
+import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.safeApiCall
 
 class CodeChallengeRepository(
-    private val codeDao: CodeChallengeDao) {
+    private val codeDao: CodeChallengeDao,
+    private val bookmarkDao: BookmarkDao ) {
     suspend fun fetchCodeChallenge(codeId: Int, contestId: String) = safeApiCall { Clients.onlineV2JsonApi.getCodeChallenge(codeId, contestId) }
 
     suspend fun getOfflineContent(codeId: String): CodeChallenge? {
@@ -110,4 +114,20 @@ class CodeChallengeRepository(
             )
         }
     }
+    suspend fun removeBookmark(bookmarkUid: String) = safeApiCall { Clients.onlineV2JsonApi.deleteBookmark(bookmarkUid) }
+
+    fun getBookmark(contentId: String) = bookmarkDao.getBookmarkById(contentId)
+
+    suspend fun updateBookmark(bookmark: Bookmark) {
+        bookmarkDao.insert(BookmarkModel(bookmark.id ?: "",
+            bookmark.runAttempt?.id ?: "",
+            bookmark.content?.id ?: "",
+            bookmark.section?.id ?: "",
+            bookmark.createdAt ?: ""))
+    }
+
+    suspend fun markDoubt(bookmark: Bookmark) = safeApiCall { Clients.onlineV2JsonApi.addBookmark(bookmark) }
+
+    fun deleteBookmark(id: String) = bookmarkDao.deleteBookmark(id)
+
 }

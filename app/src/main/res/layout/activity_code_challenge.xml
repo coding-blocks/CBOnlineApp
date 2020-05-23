@@ -33,6 +33,18 @@
                 android:src="@drawable/download_states"
                 android:visibility="gone" />
 
+            <ImageView
+                android:id="@+id/codeBookmarkBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="4dp"
+                android:src="@drawable/bookmark_state"
+                android:visibility="gone" />
+
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>

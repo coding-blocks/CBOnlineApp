@@ -26,6 +26,8 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeRepository
 import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeViewModel
+import com.codingblocks.cbonlineapp.mycourse.document.PdfActivityRepository
+import com.codingblocks.cbonlineapp.mycourse.document.PdfViewModel
 import com.codingblocks.cbonlineapp.mycourse.leaderboard.LeaderboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerRepository
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
@@ -63,6 +65,7 @@ val viewModelModule = module {
     viewModel { ProfileViewModel(get()) }
     viewModel { (AuthViewModel(get())) }
     viewModel { (handle: SavedStateHandle) -> CodeChallengeViewModel(handle,get()) }
+    viewModel { (handle: SavedStateHandle) -> PdfViewModel(handle,get()) }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
@@ -77,7 +80,8 @@ val viewModelModule = module {
     single { MyCourseRepository(get(), get(), get(), get(), get(), get(), get(), get()) }
     single { TracksRepository() }
     single { ProfileRepository(get()) }
-    single { CodeChallengeRepository(get()) }
+    single { CodeChallengeRepository(get(),get()) }
+    single { PdfActivityRepository(get()) }
 }
 val preferencesModule = module {
     single { provideSettingsPreferences(androidApplication()) }

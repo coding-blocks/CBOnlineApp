@@ -28,9 +28,12 @@ class CodeChallengeActivity : AppCompatActivity() {
             vm.sectionId = intent.getStringExtra(SECTION_ID)
             vm.contestId = intent.getStringExtra(CONTEST_ID)
             vm.codeId = intent.getStringExtra(CODE_ID)
+            vm.attempId = intent.getStringExtra(RUN_ATTEMPT_ID)
         }
+
         vm.fetchCodeChallenge().observer(this){
             downloadBtn.isVisible = true
+            codeBookmarkBtn.isVisible = true
             title = it?.content?.name
 
             with(it?.content?.details!!){
@@ -65,6 +68,22 @@ class CodeChallengeActivity : AppCompatActivity() {
                     AppCrashlyticsWrapper.log(it)
                 }
             }
+        }
+
+        codeBookmarkBtn.setOnClickListener{view->
+            if (codeBookmarkBtn.isActivated)
+                vm.removeBookmark()
+            else {
+                vm.markBookmark()
+            }
+        }
+
+        vm.bookmark.observer(this){
+            codeBookmarkBtn.isActivated = if (it == null) false else it.bookmarkUid.isNotEmpty()
+        }
+
+        vm.offlineSnackbar.observer(this){
+            codeLayout.showSnackbar(it, Snackbar.LENGTH_SHORT, action = false)
         }
 
         downloadBtn.setOnClickListener {

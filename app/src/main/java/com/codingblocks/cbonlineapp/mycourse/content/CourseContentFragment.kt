@@ -19,7 +19,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.codingblocks.cbonlineapp.PdfActivity
+import com.codingblocks.cbonlineapp.mycourse.document.PdfActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.DownloadStarter
@@ -324,6 +324,9 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                                 viewModel.updateProgress(ccid)
                                 startActivity(
                                     intentFor<PdfActivity>(
+                                        CONTENT_ID to ccid,
+                                        SECTION_ID to sectionId,
+                                        RUN_ATTEMPT_ID to attempt_id,
                                         "fileUrl" to contentDocument.documentPdfLink,
                                         "fileName" to contentDocument.documentName + ".pdf"
                                     )
@@ -368,7 +371,8 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                                         CONTENT_ID to ccid,
                                         SECTION_ID to sectionId,
                                         CONTEST_ID to contentCode.codeContestId.toString(),
-                                        CODE_ID to contentCode.codeUid
+                                        CODE_ID to contentCode.codeUid,
+                                        RUN_ATTEMPT_ID to attempt_id
                                     )
                                 )
                             } else

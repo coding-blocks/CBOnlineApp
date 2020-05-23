@@ -172,7 +172,7 @@
             android:supportsPictureInPicture="true"
             android:theme="@style/NewAppTheme.Dark" />
         <activity
-            android:name=".PdfActivity"
+            android:name=".mycourse.document.PdfActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".mycourse.quiz.QuizActivity"
