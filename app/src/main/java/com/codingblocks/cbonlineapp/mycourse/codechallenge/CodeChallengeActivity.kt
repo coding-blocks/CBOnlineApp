@@ -56,12 +56,8 @@ class CodeChallengeActivity : AppCompatActivity() {
                         vm.fetchCodeChallenge()
                     }
                 }
-                ErrorStatus.UNAUTHORIZED -> {
-                    Components.showConfirmation(this, UNAUTHORIZED) {
-                    }
-                }
                 else -> {
-                    codeLayout.showSnackbar(it, Snackbar.LENGTH_SHORT)
+                    codeLayout.showSnackbar("There was some Error fetching this challenge", Snackbar.LENGTH_SHORT,action = false)
                     AppCrashlyticsWrapper.log(it)
                 }
             }

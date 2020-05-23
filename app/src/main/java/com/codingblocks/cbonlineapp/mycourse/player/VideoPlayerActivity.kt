@@ -718,7 +718,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     }
 
     override fun onStop() {
-        if (::playerFragment.isInitialized) {
+        if (::playerFragment.isInitialized && videoContainer.isVisible) {
             vm.position = playerFragment.player.currentTime
             val duration = playerFragment.player.duration
             val time = playerFragment.player.currentTime
