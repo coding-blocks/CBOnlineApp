@@ -26,10 +26,13 @@ import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
+import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
+import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
+import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +47,7 @@ class MyCourseViewModel(
     var runId by savedStateValue<String>(handle, RUN_ID)
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
+    var leaderboard: MutableLiveData<List<Leaderboard>> = MutableLiveData()
 
     /** MutableLiveData Filters for [SectionContentHolder.SectionContentPair]. */
     var filters: MutableLiveData<String> = MutableLiveData()
@@ -139,6 +143,12 @@ class MyCourseViewModel(
 
         WorkManager.getInstance()
             .enqueue(request)
+    }
+
+    fun getLeaderboard(runId: String) {
+        Clients.api.leaderboardById(runId).enqueue(retrofitCallback { throwable, response ->
+            leaderboard.value = response?.body()
+        })
     }
 
     fun addToCart() = liveData(Dispatchers.IO) {

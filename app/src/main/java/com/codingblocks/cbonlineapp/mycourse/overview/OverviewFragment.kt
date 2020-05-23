@@ -20,28 +20,25 @@ import com.codingblocks.cbonlineapp.dashboard.home.loadData
 import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
-import com.codingblocks.cbonlineapp.mycourse.leaderboard.LeaderboardViewModel
-import com.codingblocks.cbonlineapp.profile.ProfileViewModel
 import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.onlineapi.models.Leaderboard
-import com.codingblocks.onlineapi.models.User
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
 import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.io.File
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
-    private val profileViewModel by sharedViewModel<ProfileViewModel>()
-    private val leaderboardViewModel by sharedViewModel<LeaderboardViewModel>()
     private val leaderBoardListAdapter = LeaderBoardListAdapter()
-    lateinit var currUser: User
+    private val sharedPrefs by inject<PreferenceHelper>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,7 +55,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         viewModel.run?.distinctUntilChanged()?.observer(viewLifecycleOwner) { courseAndRun ->
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
             viewModel.runId = (courseAndRun.run.crUid)
-            leaderboardViewModel.getLeaderboard(courseAndRun.run.crUid)
+            viewModel.getLeaderboard(courseAndRun.run.crUid)
             val progressValue = courseAndRun.getProgress()
             homeProgressTv.text = getString(R.string.progress, progressValue.toInt())
             homeProgressView.setGradientColor(progressValue)
@@ -104,19 +101,15 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             }
         }
 
-        profileViewModel.fetchUser().observer(viewLifecycleOwner) {
-            currUser = it
-        }
-
-        leaderboardViewModel.leaderboard.observer(viewLifecycleOwner) { leaderboard ->
+        viewModel.leaderboard.observer(viewLifecycleOwner) { leaderboard ->
             if (leaderboard.isNullOrEmpty())
                 courseLeaderboardll.isVisible = false
             else {
-                var currUserLeaderboard = Leaderboard(currUser.username)
+                var currUserLeaderboard = Leaderboard(sharedPrefs.SP_USER_NAME)
                 var rank = 0
                 for (user in leaderboard) {
                     rank++
-                    if (user.id == currUser.id) {
+                    if (user.id == sharedPrefs.SP_USER_ID) {
                         currUserLeaderboard = user
                         currUserLeaderboard.id = rank.toString()
                     }
