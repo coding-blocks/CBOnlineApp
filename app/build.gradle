@@ -11,7 +11,7 @@ ext {
     ankoVersion = '0.10.6'
     room_version = "2.2.5"
     koin_version = "2.1.5"
-    markwon_version = "4.3.1"
+    markwon_version = "4.4.0"
     ankoLibs = [
             // commons
             'commons',
