@@ -2,11 +2,13 @@ package com.codingblocks.cbonlineapp.auth.onboarding
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.content.IntentSender
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.InputType
 import android.text.Spannable
 import android.text.SpannableString
+import android.util.Log
 import android.text.style.StyleSpan as StyleSpan1
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +30,9 @@ import com.codingblocks.onlineapi.safeApiCall
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
@@ -44,6 +49,11 @@ class SignInFragment : BaseCBFragment() {
     val db: AppDatabase by inject()
     var map = HashMap<String, String>()
     private lateinit var keyboardVisibilityHelper: KeyboardVisibilityUtil
+    private lateinit var oneTapClient: SignInClient
+    private lateinit var signInRequest: BeginSignInRequest
+    private val TAG = "OneTapSignIn"
+    private val REQ_ONE_TAP = 2  // Can be any integer unique to the Activity
+    private var showOneTapUI = true
 
     private val sharedPrefs by inject<PreferenceHelper>()
 
@@ -51,10 +61,43 @@ class SignInFragment : BaseCBFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_sign_in, container, false)
+    ): View? {
+        oneTapClient = Identity.getSignInClient(requireActivity())
+        signInRequest = BeginSignInRequest.builder()
+            .setPasswordRequestOptions(
+                BeginSignInRequest.PasswordRequestOptions
+                    .builder()
+                    .setSupported(true )
+                    .build())
+            .setGoogleIdTokenRequestOptions(
+                BeginSignInRequest.GoogleIdTokenRequestOptions.Builder()
+                    .setSupported(true)
+                    .setServerClientId("927348658214-vnds7bbrecol7q965ko4ittpb7v7ug4p.apps.googleusercontent.com")
+                    .setFilterByAuthorizedAccounts(true)
+                    .build())
+            .build()
+
+        return inflater.inflate(R.layout.fragment_sign_in, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        oneTapClient.beginSignIn(signInRequest)
+            .addOnSuccessListener(requireActivity()) { result ->
+                try {
+                    startIntentSenderForResult(
+                        result.pendingIntent.intentSender, REQ_ONE_TAP,
+                        null, 0, 0, 0, null)
+                } catch (e: IntentSender.SendIntentException) {
+                    Log.e(TAG, "Couldn't start One Tap UI: ${e.localizedMessage}")
+                }
+            }
+            .addOnFailureListener(requireActivity()) { e ->
+                // No saved credentials found. Launch the One Tap sign-up flow, or
+                // do nothing and continue presenting the signed-out UI.
+                Log.d(TAG, e.localizedMessage)
+            }
 
         errorDrawableTv.setOnClickListener {
             if (errorDrawableTv.text == getString(R.string.use_email)) {
