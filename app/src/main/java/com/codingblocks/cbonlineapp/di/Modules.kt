@@ -42,7 +42,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel { (handle: SavedStateHandle) -> MyCourseViewModel(handle, get()) }
+    viewModel { (handle: SavedStateHandle) -> MyCourseViewModel(handle, get(), get()) }
     viewModel { LeaderboardViewModel() }
     viewModel { NotificationViewModel(get()) }
     viewModel { (handle: SavedStateHandle) -> VideoPlayerViewModel(handle, get(), get(), get()) }
