@@ -78,7 +78,7 @@ class VideoPlayerRepository(
     suspend fun getOtp(videoId: String, attemptId: String, sectionId: String) =
         safeApiCall { Clients.api.getOtp(videoId, sectionId, attemptId) }
 
-    suspend fun markDoubt(bookmark: Bookmark) = safeApiCall { Clients.onlineV2JsonApi.addBookmark(bookmark) }
+    suspend fun addBookmark(bookmark: Bookmark) = safeApiCall { Clients.onlineV2JsonApi.addBookmark(bookmark) }
 
     suspend fun updateBookmark(bookmark: Bookmark) {
         bookmarkDao.insert(BookmarkModel(bookmark.id ?: "",

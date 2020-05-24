@@ -29,7 +29,7 @@ class PdfViewModel(handle: SavedStateHandle,
     fun markBookmark() {
         runIO {
             val bookmark = Bookmark(RunAttempts(attempId!!), LectureContent(contentId!!), Sections(sectionId!!))
-            when (val response = repo.markDoubt(bookmark)) {
+            when (val response = repo.addBookmark(bookmark)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)

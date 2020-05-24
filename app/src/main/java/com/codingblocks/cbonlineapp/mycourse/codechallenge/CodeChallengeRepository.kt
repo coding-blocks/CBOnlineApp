@@ -126,7 +126,7 @@ class CodeChallengeRepository(
             bookmark.createdAt ?: ""))
     }
 
-    suspend fun markDoubt(bookmark: Bookmark) = safeApiCall { Clients.onlineV2JsonApi.addBookmark(bookmark) }
+    suspend fun addBookmark(bookmark: Bookmark) = safeApiCall { Clients.onlineV2JsonApi.addBookmark(bookmark) }
 
     fun deleteBookmark(id: String) = bookmarkDao.deleteBookmark(id)
 
