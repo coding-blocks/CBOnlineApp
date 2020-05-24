@@ -38,7 +38,6 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
     private val leaderBoardListAdapter = LeaderBoardListAdapter()
-    private val sharedPrefs by inject<PreferenceHelper>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -105,11 +104,11 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             if (leaderboard.isNullOrEmpty())
                 courseLeaderboardll.isVisible = false
             else {
-                var currUserLeaderboard = Leaderboard(sharedPrefs.SP_USER_NAME)
+                var currUserLeaderboard = Leaderboard(viewModel.userName)
                 var rank = 0
                 for (user in leaderboard) {
                     rank++
-                    if (user.id == sharedPrefs.SP_USER_ID) {
+                    if (user.id == viewModel.userId) {
                         currUserLeaderboard = user
                         currUserLeaderboard.id = rank.toString()
                     }

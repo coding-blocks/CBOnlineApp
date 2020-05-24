@@ -20,16 +20,16 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
-import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.COURSE_NAME
-import com.codingblocks.cbonlineapp.util.ProgressWorker
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ID
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
-import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Leaderboard
@@ -45,6 +45,9 @@ class MyCourseViewModel(
     var attemptId by savedStateValue<String>(handle, RUN_ATTEMPT_ID)
     var name by savedStateValue<String>(handle, COURSE_NAME)
     var runId by savedStateValue<String>(handle, RUN_ID)
+
+    val userName = PreferenceHelper.USER_NAME
+    val userId = PreferenceHelper.USER_ID
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
     var leaderboard: MutableLiveData<List<Leaderboard>> = MutableLiveData()
@@ -145,11 +148,24 @@ class MyCourseViewModel(
             .enqueue(request)
     }
 
-    fun getLeaderboard(runId: String) {
-        Clients.api.leaderboardById(runId).enqueue(retrofitCallback { throwable, response ->
-            leaderboard.value = response?.body()
-        })
+    fun getLeaderboard(crUid: String?) {
+        runIO {
+            when (val response = crUid?.let { repo.fetchLeaderboard(it) }) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    this.enqueue(retrofitCallback { _, response ->
+                        leaderboard.value = response?.body()
+                    })
+                }
+            }
+        }
     }
+
+//    fun getLeaderboard(runId: String) {
+//        Clients.api.leaderboardById(runId).enqueue(retrofitCallback { throwable, response ->
+//            leaderboard.value = response?.body()
+//        })
+//    }
 
     fun addToCart() = liveData(Dispatchers.IO) {
         when (val response = runId?.let { repo.addToCart(it) }) {

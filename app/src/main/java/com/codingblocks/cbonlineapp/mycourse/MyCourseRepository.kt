@@ -65,7 +65,7 @@ class MyCourseRepository(
             runAttempt.lastAccessedAt ?: "",
             runAttempt.run?.id ?: "",
             runAttempt.certifcate?.url ?: "",
-            runAttempt.runTier?:"PREMIUM"
+            runAttempt.runTier ?: "PREMIUM"
         )
         attemptDao.update(runAttemptModel)
 
@@ -300,6 +300,8 @@ class MyCourseRepository(
         clearCart()
         Clients.api.addToCart(id)
     }
+
+    suspend fun fetchLeaderboard(runId: String) = safeApiCall { Clients.api.leaderboardById(runId) }
 
     suspend fun fetchSections(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.enrolledCourseById(attemptId) }
 
