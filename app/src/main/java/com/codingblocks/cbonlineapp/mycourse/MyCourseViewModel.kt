@@ -39,15 +39,13 @@ import kotlinx.coroutines.Dispatchers
 
 class MyCourseViewModel(
     private val handle: SavedStateHandle,
-    private val repo: MyCourseRepository
+    private val repo: MyCourseRepository,
+    val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
 
     var attemptId by savedStateValue<String>(handle, RUN_ATTEMPT_ID)
     var name by savedStateValue<String>(handle, COURSE_NAME)
     var runId by savedStateValue<String>(handle, RUN_ID)
-
-    val userName = PreferenceHelper.USER_NAME
-    val userId = PreferenceHelper.USER_ID
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
     var leaderboard: MutableLiveData<List<Leaderboard>> = MutableLiveData()
@@ -160,12 +158,6 @@ class MyCourseViewModel(
             }
         }
     }
-
-//    fun getLeaderboard(runId: String) {
-//        Clients.api.leaderboardById(runId).enqueue(retrofitCallback { throwable, response ->
-//            leaderboard.value = response?.body()
-//        })
-//    }
 
     fun addToCart() = liveData(Dispatchers.IO) {
         when (val response = runId?.let { repo.addToCart(it) }) {

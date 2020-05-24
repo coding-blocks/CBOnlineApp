@@ -30,7 +30,6 @@ import kotlinx.android.synthetic.main.item_certificate.*
 import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.io.File
 
@@ -104,11 +103,11 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             if (leaderboard.isNullOrEmpty())
                 courseLeaderboardll.isVisible = false
             else {
-                var currUserLeaderboard = Leaderboard(viewModel.userName)
+                var currUserLeaderboard = Leaderboard("")
                 var rank = 0
                 for (user in leaderboard) {
                     rank++
-                    if (user.id == viewModel.userId) {
+                    if (user.id == viewModel.prefs.SP_USER_ID) {
                         currUserLeaderboard = user
                         currUserLeaderboard.id = rank.toString()
                     }
