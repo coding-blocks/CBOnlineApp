@@ -117,6 +117,16 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
         }
     }
 
+    fun showFab() {
+        if (fab.visibility == View.GONE)
+            fab.animateVisibility(View.VISIBLE)
+    }
+
+    fun hideFab() {
+        if (fab.visibility == View.VISIBLE)
+            fab.animateVisibility(View.GONE)
+    }
+
     override fun onRefresh() {
         viewModel.fetchSections(true)
     }

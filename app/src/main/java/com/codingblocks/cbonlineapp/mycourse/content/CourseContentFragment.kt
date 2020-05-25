@@ -28,6 +28,7 @@ import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.database.ListObject
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
+import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
@@ -217,8 +218,19 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 }
                 consolidatedList.addAll(list)
                 sectionListAdapter.notifyDataSetChanged()
-
                 sectionItemsAdapter.submitList(consolidatedList)
+                rvExpendableView.viewTreeObserver.addOnGlobalLayoutListener {
+                    if (sectionListAdapter.itemCount == 0) {
+                        (activity as MyCourseActivity).hideFab()
+                        rvExpendableView.visibility = View.GONE
+                        textview4_20.visibility = View.VISIBLE
+                    } else {
+                        if ((activity as MyCourseActivity).myCourseTabs.selectedTabPosition == 1)
+                            (activity as MyCourseActivity).showFab()
+                        rvExpendableView.visibility = View.VISIBLE
+                        textview4_20.visibility = View.GONE
+                    }
+                }
             }
             contentShimmer.isVisible = sectionWithContentList.isEmpty()
         }

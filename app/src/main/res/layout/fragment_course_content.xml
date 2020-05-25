@@ -117,13 +117,29 @@
         <include layout="@layout/item_skeleton_content" />
     </com.facebook.shimmer.ShimmerFrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvExpendableView"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_extra_small"
-        android:overScrollMode="never"
-        tools:listitem="@layout/item_section" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvExpendableView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_extra_small"
+            android:overScrollMode="never"
+            android:visibility="visible"
+            tools:listitem="@layout/item_section" />
+
+        <TextView
+            android:id="@+id/textview4_20"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="No content available"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:visibility="gone" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </LinearLayout>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -88,6 +88,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="no_doubts">No Doubts</string>
+    <string name="click_to_add_doubt">Click on + to ask a doubt.</string>
     <string name="go_to_classroom">Go to Classroom</string>
     <string name="doubts_that_you_ask_appear_here">Doubts that you ask appear here</string>
     <string name="reopen_doubt">Reopen Doubt</string>
