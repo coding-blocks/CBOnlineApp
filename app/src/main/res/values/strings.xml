@@ -304,4 +304,5 @@
     <string name="hb_performance">Your Monthly Score</string>
     <string name="ranks">%d Ranks</string>
     <string name="points">%d Points</string>
+    <string name="app_client_id">"927348658214-vnds7bbrecol7q965ko4ittpb7v7ug4p.apps.googleusercontent.com"</string>
 </resources>

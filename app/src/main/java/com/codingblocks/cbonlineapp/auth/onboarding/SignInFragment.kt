@@ -72,7 +72,7 @@ class SignInFragment : BaseCBFragment() {
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.Builder()
                     .setSupported(true)
-                    .setServerClientId("927348658214-vnds7bbrecol7q965ko4ittpb7v7ug4p.apps.googleusercontent.com")
+                    .setServerClientId(getString(R.string.app_client_id))
                     .setFilterByAuthorizedAccounts(true)
                     .build())
             .build()
@@ -128,7 +128,7 @@ class SignInFragment : BaseCBFragment() {
         requestHint()
         proceedBtn.setOnClickListener {
             if (passwordLayout.isVisible) {
-                validateEmailPassWord()
+                validateEmailPassWord(numberLayout.editText?.text.toString(),passwordLayout.editText?.text.toString() )
             } else {
                 loginWithNumber()
             }
@@ -178,10 +178,12 @@ class SignInFragment : BaseCBFragment() {
         }
     }
 
-    private fun validateEmailPassWord() {
+    private fun validateEmailPassWord(username:String,password:String ) {
         map["client"] = "android"
-        map["username"] = numberLayout.editText?.text.toString()
-        map["password"] = passwordLayout.editText?.text.toString()
+//        map["username"] = numberLayout.editText?.text.toString()
+        map["username"] = username
+//        map["password"] = passwordLayout.editText?.text.toString()
+        map["password"] = password
         proceedBtn.isEnabled = false
         GlobalScope.launch {
             when (val response = safeApiCall { Clients.api.getJwtWithEmail(map) }) {
