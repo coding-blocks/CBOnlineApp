@@ -125,7 +125,7 @@ dependencies {
 
     // 3rd party libs
     implementation 'es.voghdev.pdfviewpager:library:1.0.3'
-    implementation 'com.onesignal:OneSignal:3.13.2'
+    implementation 'com.onesignal:OneSignal:3.14.0'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'com.github.aggarwalpulkit596:FabNavigation:1.0'
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.5.Final'
