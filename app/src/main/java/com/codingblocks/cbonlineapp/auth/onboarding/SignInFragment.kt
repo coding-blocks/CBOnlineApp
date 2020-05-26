@@ -34,6 +34,7 @@ import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.phone.SmsRetriever
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_sign_in.*
@@ -94,8 +95,6 @@ class SignInFragment : BaseCBFragment() {
                 }
             }
             .addOnFailureListener(requireActivity()) { e ->
-                // No saved credentials found. Launch the One Tap sign-up flow, or
-                // do nothing and continue presenting the signed-out UI.
                 Log.d(TAG, e.localizedMessage)
             }
 
@@ -271,6 +270,19 @@ class SignInFragment : BaseCBFragment() {
                 formatNumber.setSpan(boldSpan, 0, 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 numberLayout.editText?.setText(formatNumber)
             }
+
+            if (requestCode == REQ_ONE_TAP){
+                try {
+                    val credentials = oneTapClient.getSignInCredentialFromIntent(data)
+                    val username = credentials.id
+                    val password = credentials.password
+                    validateEmailPassWord(username,password!!)
+                }catch (e:ApiException){
+                    Log.e(TAG, "Error Login",e)
+                }
+
+            }
+
         }
     }
 }
