@@ -7,6 +7,10 @@ import android.os.Environment
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
+import androidx.work.workDataOf
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import java.util.concurrent.TimeUnit
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.R
@@ -125,6 +129,19 @@ class SectionDownloadService(val context: Context, private val workerParameters:
             }
             WorkManager.getInstance().pruneWork()
             notificationManager.notify(1, notification.build())
+
+            val videoData = workDataOf(
+                SECTION_ID to sectionId,
+                RUN_ATTEMPT_ID to attemptId
+            )
+
+            val request: OneTimeWorkRequest =
+                OneTimeWorkRequestBuilder<DeleteDownloadedSection>()
+                    .setInputData(videoData)
+                    .setInitialDelay(15, TimeUnit.DAYS)
+                    .build()
+
+            WorkManager.getInstance().enqueue(request)
         }
     }
 

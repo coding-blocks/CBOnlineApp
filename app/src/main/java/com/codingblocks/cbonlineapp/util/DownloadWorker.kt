@@ -9,6 +9,11 @@ import android.os.Environment
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
+import androidx.work.workDataOf
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import java.util.concurrent.TimeUnit
 import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
@@ -217,6 +222,18 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
                 data.notificationBuilder.setOngoing(false)
                 data.notificationBuilder.setAutoCancel(true)
                 notificationManager.notify(data.notificationId, data.notificationBuilder.build())
+
+                val videoData = workDataOf(
+                    CONTENT_ID to videoId
+                )
+
+                val request: OneTimeWorkRequest =
+                    OneTimeWorkRequestBuilder<DeleteDownloadedFiles>()
+                        .setInputData(videoData)
+                        .setInitialDelay(15, TimeUnit.DAYS)
+                        .build()
+
+                WorkManager.getInstance().enqueue(request)
             }
         }
     }
