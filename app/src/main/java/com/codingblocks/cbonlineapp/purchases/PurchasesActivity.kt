@@ -36,15 +36,13 @@ class PurchasesActivity : BaseCBActivity() {
         setContentView(R.layout.activity_purchases)
         setToolbar(purchasesToolbar)
             purchasedCoursesRv.setRv(this, courseListAdapter, true)
-            viewModel.purchasedRuns.observer(this) {list ->
+            viewModel.purchasedRuns.observer(this) { list ->
                 courseListAdapter.submitList(list)
-                if(list.isNotEmpty())
-                {
+                if (list.isNotEmpty()) {
                     purchasedCoursesRv.isVisible = true
                 }
             }
             courseListAdapter.onItemClick = itemClickListener
             purchasesMyCoursesExploreBtn.setOnClickListener { finish() }
-
     }
 }

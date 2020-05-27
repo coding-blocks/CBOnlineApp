@@ -18,9 +18,7 @@ import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.database.AppDatabase
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
 import com.codingblocks.cbonlineapp.util.KeyboardVisibilityUtil
-import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
-import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
@@ -28,7 +26,6 @@ import com.codingblocks.onlineapi.safeApiCall
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
-import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_sign_in.*
@@ -86,52 +83,10 @@ class SignInFragment : BaseCBFragment() {
         proceedBtn.setOnClickListener {
             if (passwordLayout.isVisible) {
                 validateEmailPassWord()
-            } else {
-                loginWithNumber()
             }
         }
         keyboardVisibilityHelper = KeyboardVisibilityUtil(view) {
             proceedBtn.isVisible = it
-        }
-    }
-
-    private fun loginWithNumber() {
-        val numberEditText = numberLayout.editText?.text
-        if (numberEditText.isNullOrEmpty() || numberEditText.length < 10) {
-            signInRoot.showSnackbar("Number is too short", Snackbar.LENGTH_SHORT)
-        } else {
-            val number = if (numberEditText.length > 10) "+91-${numberEditText.takeLast(10)}" else "+91-$numberEditText"
-            map["phone"] = number
-            proceedBtn.isEnabled = false
-            GlobalScope.launch {
-                when (val response = safeApiCall { Clients.api.getOtp(map) }) {
-                    is ResultWrapper.GenericError -> {
-                        runOnUiThread {
-                            proceedBtn.isEnabled = true
-                            signInRoot.showSnackbar(response.error, Snackbar.LENGTH_SHORT)
-                        }
-                    }
-                    is ResultWrapper.Success -> {
-                        if (response.value.isSuccessful) {
-                            activity?.let {
-                                val otpFragment = LoginOtpFragment.newInstance(map["phone"] ?: "")
-                                SmsRetriever.getClient(it).startSmsRetriever() // start retriever
-                                replaceFragmentSafely(
-                                    otpFragment,
-                                    containerViewId = R.id.loginContainer
-                                )
-                                MySMSBroadcastReceiver.register(it, otpFragment) // the new fragment will listen for otp
-                            }
-                        } else {
-                            runOnUiThread {
-                                errorDrawableTv.isVisible = true
-                                signInRoot.showSnackbar("Number Not Verified.Please Try Again !!", Snackbar.LENGTH_SHORT)
-                                proceedBtn.isEnabled = true
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 

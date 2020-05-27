@@ -657,8 +657,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                                     if (it.isEmpty()) {
                                         hideVideoFab()
                                         dialog.dismiss()
-                                    }
-                                    else
+                                    } else
                                         toast(it)
                                 }
                             }
@@ -781,7 +780,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
     }
 
-    fun hideVideoFab(){
+    fun hideVideoFab() {
         noteFabTv.isVisible = false
         doubtFabTv.isVisible = false
         doubtFab.startAnimation(animationUtils.close)

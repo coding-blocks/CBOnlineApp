@@ -101,8 +101,7 @@ class DashboardActivity : BaseCBActivity(),
 
     override fun onStart() {
         super.onStart()
-//        checkForUpdates()
-        fetchToken()
+        checkForUpdates()
     }
 
     private fun setUser() {
@@ -127,7 +126,7 @@ class DashboardActivity : BaseCBActivity(),
         if (data != null && data.isHierarchical) {
             if (data.getQueryParameter("code") != null) {
                 val grantCode = data.getQueryParameter("code") as String
-                vm.fetchToken(grantCode)
+//                vm.fetchToken(grantCode)
             }
         }
     }
@@ -301,10 +300,10 @@ class DashboardActivity : BaseCBActivity(),
         }
     }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        fetchToken()
-    }
+//    override fun onNewIntent(intent: Intent) {
+//        super.onNewIntent(intent)
+//        fetchToken()
+//    }
 
     fun openProfile(view: View) {
         if (vm.isLoggedIn == false) {

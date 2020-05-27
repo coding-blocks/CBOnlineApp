@@ -33,8 +33,8 @@ import com.codingblocks.cbonlineapp.util.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.ResetRunAttempt
-import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.Dispatchers
 
 class MyCourseViewModel(
     private val handle: SavedStateHandle,
@@ -206,7 +206,6 @@ class MyCourseViewModel(
         }
     }
 
-
     private fun getPerformance() {
         runIO {
             val mRank = repo.getHackerBlocksPerformance().value
@@ -223,7 +222,7 @@ class MyCourseViewModel(
                         if (code() != 404)
                             setError(fetchError(code()))
                         else {
-                            //No HB Report
+                            // No HB Report
                         }
                     }
                 }

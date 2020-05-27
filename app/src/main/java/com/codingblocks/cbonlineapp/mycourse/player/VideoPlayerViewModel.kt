@@ -139,7 +139,7 @@ class VideoPlayerViewModel(
 
     fun markBookmark() {
         runIO {
-            val bookmark = Bookmark(RunAttempts(attemptId.value ?: ""), LectureContent(currentContentId ?: ""), Sections(sectionId?:""))
+            val bookmark = Bookmark(RunAttempts(attemptId.value ?: ""), LectureContent(currentContentId ?: ""), Sections(sectionId ?: ""))
             when (val response = repo.markDoubt(bookmark)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {

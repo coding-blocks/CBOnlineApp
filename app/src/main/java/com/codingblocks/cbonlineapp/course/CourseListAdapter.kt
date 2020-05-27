@@ -119,7 +119,7 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                         if (type != "LIST") {
                             course_card_share.setOnClickListener {
                                 context.share("Check out the course *${item.title}* by Coding Blocks!\n\n" +
-                                    item.subtitle + "\n"+
+                                    item.subtitle + "\n" +
                                     "https://online.codingblocks.com/courses/${item.slug}/")
                             }
                             item.instructors?.first()?.photo?.let { courseCardInstructorImg1.loadImage(it) }

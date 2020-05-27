@@ -106,7 +106,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         }
     }
 
-    var endLink:String = ""
+    var endLink: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course)
@@ -139,7 +139,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         viewModel.course.observer(this) { course ->
             endLink = course.slug.toString()
             showTags(course.tags)
-            val tableTheme:TableTheme = TableTheme.create(this).asBuilder()
+            val tableTheme: TableTheme = TableTheme.create(this).asBuilder()
                 .tableBorderColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
                 .build()
             val markWon = Markwon.builder(this)
@@ -304,7 +304,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             share("Check out the course *$title* by Coding Blocks!\n\n" +
                 shortTv.text + "\n\n" +
                 "Major topics covered: \n" +
-                tagsList.joinToString( separator = "\n", limit = 5 ) + "\n\n" +
+                tagsList.joinToString(separator = "\n", limit = 5) + "\n\n" +
                 "https://online.codingblocks.com/courses/$endLink/")
             true
         }

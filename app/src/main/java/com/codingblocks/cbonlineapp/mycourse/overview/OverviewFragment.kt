@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +24,7 @@ import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import java.io.File
+import java.lang.Math.abs
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
 import kotlinx.android.synthetic.main.item_hb_performance.*
@@ -32,7 +32,6 @@ import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.lang.Math.abs
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
@@ -90,8 +89,8 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
             courseAndRun.run.whatsappLink?.let {
-                if(!it.isNullOrEmpty()){
-                setWhatsappCard(it, courseAndRun.runAttempt.premium)}
+                if (!it.isNullOrEmpty()) {
+                setWhatsappCard(it, courseAndRun.runAttempt.premium) }
             }
 
             if (courseAndRun.run.crStart > "1574985600") {
@@ -106,11 +105,11 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             chart1.loadData(it.averageProgress, it.userProgress)
         }
 
-        viewModel.getHackerBlocksPerformance().distinctUntilChanged().observe(viewLifecycleOwner , Observer {
-            if(it!=null) {
+        viewModel.getHackerBlocksPerformance().distinctUntilChanged().observe(viewLifecycleOwner, Observer {
+            if (it != null) {
                 hbRankContainer.isVisible = true
                 currentOverallRank.text = it.currentOverallRank.toString()
-                currentMonthScore.text = requireContext().getString(R.string.points,it.currentMonthScore)
+                currentMonthScore.text = requireContext().getString(R.string.points, it.currentMonthScore)
                 val rankDelta = it.currentOverallRank - it.previousOverallRank
                 val pointsDelta = it.currentMonthScore - it.previousMonthScore
                 previousRank.apply {
@@ -119,7 +118,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
                 previousMonthlyScore.apply {
                     isActivated = pointsDelta >= 0
-                    text = context.getString(R.string.points,pointsDelta)
+                    text = context.getString(R.string.points, pointsDelta)
                 }
             }
         })
@@ -187,7 +186,6 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     }
                 }
             }
-
     }
 
     override fun onDestroy() {

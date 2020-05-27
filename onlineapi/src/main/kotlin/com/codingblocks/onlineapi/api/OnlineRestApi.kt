@@ -4,9 +4,9 @@ import com.codingblocks.onlineapi.models.DoubtStats
 import com.codingblocks.onlineapi.models.Extension
 import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.PerformanceResponse
+import com.codingblocks.onlineapi.models.RankResponse
 import com.codingblocks.onlineapi.models.RatingModel
 import com.codingblocks.onlineapi.models.ResetRunAttempt
-import com.codingblocks.onlineapi.models.RankResponse
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -100,7 +100,7 @@ interface OnlineRestApi {
     @POST("v2/chats/{id}")
     suspend fun getChatId(@Path("id") doubtId: String): Response<JsonObject>
 
-    @POST("jwt/otp")
+    @POST("jwt/otp/v2")
     @FormUrlEncoded
     suspend fun getOtp(@FieldMap params: HashMap<String, String>): Response<JsonObject>
 
@@ -134,5 +134,4 @@ interface OnlineRestApi {
 
     @GET("v2/hb/performance")
     suspend fun getHackerBlocksPerformance(): Response<RankResponse>
-
 }

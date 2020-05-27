@@ -20,7 +20,16 @@ import com.codingblocks.onlineapi.models.QuizSubmission
 import kotlinx.android.synthetic.main.quizlayout.view.*
 import org.jetbrains.anko.AnkoLogger
 
-class ViewPagerAdapter(private var mContext: Context, private var quizId: String, private var qaId: String, private var questionList: SparseArray<String>, submission: List<QuizSubmission>?, private var result: QuizResult?, val listener: QuizInteractor, private var viewModel: QuizViewModel) : PagerAdapter(), AnkoLogger {
+class ViewPagerAdapter(
+    private var mContext: Context,
+    private var quizId: String,
+    private var qaId: String,
+    private var questionList: SparseArray<String>,
+    submission: List<QuizSubmission>?,
+    private var result: QuizResult?,
+    val listener: QuizInteractor,
+    private var viewModel: QuizViewModel
+) : PagerAdapter(), AnkoLogger {
     private lateinit var choiceDataAdapter: QuizChoiceAdapter
     var submissionList: ArrayList<QuizSubmission> = submission as ArrayList<QuizSubmission>
 

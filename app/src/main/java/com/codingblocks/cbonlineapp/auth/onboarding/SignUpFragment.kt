@@ -125,10 +125,7 @@ class SignUpFragment : BaseCBFragment() {
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         replaceFragmentSafely(
-                            LoginOtpFragment.newInstance(
-                                map["mobile"]
-                                    ?: "", id
-                            ), containerViewId = R.id.loginContainer
+                            LoginOtpFragment(), containerViewId = R.id.loginContainer
                         )
                     else
                         runOnUiThread {

@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.auth.onboarding
 
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -11,33 +12,45 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.auth.AuthViewModel
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
+import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import com.google.android.gms.auth.api.phone.SmsRetriever
 import kotlinx.android.synthetic.main.fragment_login_home.*
+import org.jetbrains.anko.design.snackbar
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class LoginHomeFragment : BaseCBFragment() {
+
+    val vm: AuthViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ):
-        View? = inflater.inflate(R.layout.fragment_login_home, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_login_home, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        ccp.registerCarrierNumberEditText(numberedtv)
+        ccp.setTypeFace(Typeface.createFromAsset(requireContext().assets, "fonts/gilroy_bold.ttf"))
         setfirstSpan()
         setSecondSpan()
 
         mobileBtn.setOnClickListener {
-            replaceFragmentSafely(
-                SignInFragment(),
-                tag = "SignIn",
-                containerViewId = R.id.loginContainer
-            )
+            if (ccp.isValidFullNumber) {
+                vm.mobile = numberedtv.text.toString()
+                vm.sendOtp(ccp.selectedCountryCodeWithPlus)
+                val otpFragment = LoginOtpFragment()
+                SmsRetriever.getClient(requireActivity()).startSmsRetriever() // start retriever
+                replaceFragmentSafely(otpFragment, containerViewId = R.id.loginContainer)
+                MySMSBroadcastReceiver.register(requireActivity(), otpFragment) // the new fragment will listen for otp
+            } else {
+                loginHomeRoot.snackbar("Invalid Number !!")
+            }
         }
 
         gmailBtn.setOnClickListener {

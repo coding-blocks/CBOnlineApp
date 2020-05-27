@@ -11,6 +11,7 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.auth.AuthViewModel
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import kotlinx.android.synthetic.main.fragment_social_login.*

@@ -33,7 +33,9 @@ import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CODE
+import com.codingblocks.cbonlineapp.util.CODE_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.CONTEST_ID
 import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.LECTURE
@@ -44,8 +46,6 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.SectionDownloadService
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
-import com.codingblocks.cbonlineapp.util.CONTEST_ID
-import com.codingblocks.cbonlineapp.util.CODE_ID
 import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
