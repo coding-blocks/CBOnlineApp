@@ -6,12 +6,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.auth.AuthViewModel
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver.OnSmsOTPReceivedListener
+import com.codingblocks.cbonlineapp.util.extensions.observer
 import kotlinx.android.synthetic.main.fragment_login_otp.*
+import org.jetbrains.anko.sdk25.coroutines.textChangedListener
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
@@ -27,7 +30,14 @@ class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         numberTv.append(vm.mobile)
+        vm.errorLiveData.observer(viewLifecycleOwner){
+            verifyOtpBtn.isEnabled = true
 
+
+        }
+        otpEdtv.addTextChangedListener {
+            verifyOtpBtn.isEnabled = !(it.isNullOrEmpty() || it.length < 6)
+        }
         verifyOtpBtn.setOnClickListener {
             verifyWithOtp()
         }
@@ -35,6 +45,7 @@ class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
 
     private fun verifyWithOtp() {
         verifyOtpBtn.isEnabled = false
+        vm.verifyOtp(otpEdtv.text.toString())
 //        GlobalScope.launch(Dispatchers.Main) {
 //            when (val response = safeApiCall { Clients.api.getJwt(map) }) {
 //                is ResultWrapper.GenericError -> {
@@ -83,7 +94,7 @@ class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
 
     override fun onSmsOTPReceieved(otp: String) {
         if (otp.isNotEmpty()) {
-            numberLayout.editText?.setText(otp)
+            otpEdtv.setText(otp)
             verifyWithOtp()
         }
     }

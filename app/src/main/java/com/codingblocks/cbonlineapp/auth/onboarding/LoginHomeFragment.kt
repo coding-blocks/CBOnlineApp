@@ -42,7 +42,7 @@ class LoginHomeFragment : BaseCBFragment() {
 
         mobileBtn.setOnClickListener {
             if (ccp.isValidFullNumber) {
-                vm.mobile = numberedtv.text.toString()
+                vm.mobile = numberedtv.text.toString().replace(" ","")
                 vm.sendOtp(ccp.selectedCountryCodeWithPlus)
                 val otpFragment = LoginOtpFragment()
                 SmsRetriever.getClient(requireActivity()).startSmsRetriever() // start retriever

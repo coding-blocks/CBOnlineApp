@@ -9,6 +9,7 @@ import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.CarouselCards
 import com.codingblocks.onlineapi.models.Choice
+import com.codingblocks.onlineapi.models.CodeChallenge
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Company
 import com.codingblocks.onlineapi.models.ContentCodeChallenge
@@ -38,7 +39,6 @@ import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Tags
 import com.codingblocks.onlineapi.models.User
-import com.codingblocks.onlineapi.models.CodeChallenge
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonSetter
 import com.fasterxml.jackson.annotation.Nulls
@@ -49,17 +49,13 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jasminb.jsonapi.ResourceConverter
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
 import com.google.gson.GsonBuilder
-import okhttp3.Authenticator
+import java.util.concurrent.TimeUnit
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.Route
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
-import java.util.concurrent.TimeUnit
 
 object Clients {
     private val om = jacksonObjectMapper()
@@ -67,10 +63,9 @@ object Clients {
         .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)
         .setDefaultSetterInfo(JsonSetter.Value.forValueNulls(Nulls.SKIP))
-        .registerModule(KotlinModule()) //let Jackson know about Kotlin
+        .registerModule(KotlinModule()) // let Jackson know about Kotlin
     var authJwt = ""
     var refreshToken = ""
-
 
     private val onlineApiResourceConverter = ResourceConverter(
         om,
@@ -113,7 +108,7 @@ object Clients {
         CodeChallenge::class.java
     )
 
-    //type resolver
+    // type resolver
     init {
         onlineApiResourceConverter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_INCLUSIONS)
         onlineApiResourceConverter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_TYPE_IN_RELATIONSHIP)
@@ -151,10 +146,9 @@ object Clients {
     private const val DEBUG = "api-online.codingblocks.xyz"
     private const val PROD = "online-api.codingblocks.com"
 
-
     private val onlineV2JsonRetrofit = Retrofit.Builder()
         .client(ClientInterceptor)
-        .baseUrl("https://$PROD/api/v2/")
+        .baseUrl("http://$DEBUG/api/v2/")
         .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
         .addConverterFactory(JacksonConverterFactory.create(om))
         .build()
@@ -168,7 +162,7 @@ object Clients {
 
     private val retrofit = Retrofit.Builder()
         .client(ClientInterceptor)
-        .baseUrl("https://$PROD/api/")
+        .baseUrl("http://$DEBUG/api/")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
     val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)

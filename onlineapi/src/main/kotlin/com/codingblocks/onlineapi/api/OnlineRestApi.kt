@@ -104,6 +104,9 @@ interface OnlineRestApi {
     @FormUrlEncoded
     suspend fun getOtp(@FieldMap params: HashMap<String, String>): Response<JsonObject>
 
+    @POST("jwt/otp/v2/{id}/verify")
+    suspend fun verifyOtp(@Path("id") uniqueId: String, @FieldMap params: HashMap<String, String>): Response<JsonObject>
+
     @POST("jwt/otp/verify")
     @FormUrlEncoded
     suspend fun getJwt(@FieldMap params: Map<String, String>): Response<JsonObject>
@@ -134,4 +137,5 @@ interface OnlineRestApi {
 
     @GET("v2/hb/performance")
     suspend fun getHackerBlocksPerformance(): Response<RankResponse>
+
 }

@@ -4,6 +4,7 @@ import com.codingblocks.onlineapi.models.Applications
 import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.CarouselCards
+import com.codingblocks.onlineapi.models.CodeChallenge
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Company
 import com.codingblocks.onlineapi.models.ContentProgress
@@ -14,7 +15,6 @@ import com.codingblocks.onlineapi.models.Instructor
 import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
-import com.codingblocks.onlineapi.models.CodeChallenge
 import com.codingblocks.onlineapi.models.Player
 import com.codingblocks.onlineapi.models.Professions
 import com.codingblocks.onlineapi.models.Project
@@ -96,14 +96,12 @@ interface OnlineJsonApi {
         @Path("id") id: String
     ): Response<Bookmark>
 
-
     @GET("runs")
     suspend fun getMyCourses(
         @Query("enrolled") enrolled: String = "true",
         @Query("page[offset]") offset: String = "0",
         @Query("include") include: String = "course,run_attempts"
     ): Response<JSONAPIDocument<List<Runs>>>
-
 
     @GET("instructors/{id}")
     suspend fun getInstructor(@Path("id") id: String): Response<Instructor>
@@ -137,7 +135,8 @@ interface OnlineJsonApi {
         @Query("filter[title][\$iLike]") query: String,
         @Query("filter[unlisted]") unlisted: String = "false",
         @Query("page[limit]") page: Int = 100,
-        @Query("include") include: String = "instructors,runs"): Response<List<Course>>
+        @Query("include") include: String = "instructors,runs"
+    ): Response<List<Course>>
 
     @GET("run_attempts/{runid}")
     suspend fun enrolledCourseById(
@@ -175,7 +174,6 @@ interface OnlineJsonApi {
         @Body params: Note
     ): Response<Note>
 
-
     @POST("notes")
     suspend fun createNote(
         @Body params: Note
@@ -208,7 +206,6 @@ interface OnlineJsonApi {
         @Body params: QuizAttempt
     ): Response<QuizAttempt>
 
-
     @PATCH("quiz_attempts/{id}")
     fun updateQuizAttempt(
         @Path("id") attemptId: String,
@@ -220,7 +217,6 @@ interface OnlineJsonApi {
         @Path("questionId") id: String,
         @Query("include") include: String = "choices"
     ): Call<Question>
-
 
     @GET("quiz_attempts/{id}")
     suspend fun getQuizAttemptById(
@@ -287,8 +283,7 @@ interface OnlineJsonApi {
     ): Response<CareerTracks>
 
     @GET("professions")
-    suspend fun getProfessions(
-    ): Response<List<Professions>>
+    suspend fun getProfessions(): Response<List<Professions>>
 
     @POST("career_tracks/recommend")
     @FormUrlEncoded
@@ -336,8 +331,6 @@ interface OnlineJsonApi {
     @GET("code_challenges/{codeId}/content")
     suspend fun getCodeChallenge(
         @Path("codeId") codeId: Int,
-        @Query("contest_id") include: String=""
+        @Query("contest_id") include: String = ""
     ): Response<CodeChallenge>
-
-
 }

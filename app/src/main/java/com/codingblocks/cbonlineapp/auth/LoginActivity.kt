@@ -19,6 +19,7 @@ class LoginActivity : BaseCBActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login2)
+        vm.mobile = ""
         replaceFragmentSafely(LoginHomeFragment(), containerViewId = R.id.loginContainer)
     }
 

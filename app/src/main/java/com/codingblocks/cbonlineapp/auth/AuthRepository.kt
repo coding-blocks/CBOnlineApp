@@ -11,4 +11,6 @@ class AuthRepository(
     suspend fun getToken(grantCode: String) = safeApiCall { Clients.api.getToken(grantCode) }
 
     suspend fun sendOtp(dialCode: String, mobile: String) = safeApiCall { Clients.api.getOtp(hashMapOf("mobile" to mobile, "dialCode" to dialCode)) }
+
+    suspend fun verifyOtp(otp: String, uniqueId: String) = safeApiCall { Clients.api.verifyOtp(uniqueId,hashMapOf("otp" to otp, "client" to "android")) }
 }

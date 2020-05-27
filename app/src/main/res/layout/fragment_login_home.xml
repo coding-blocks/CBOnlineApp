@@ -74,6 +74,7 @@
             android:layout_marginTop="@dimen/margin_medium"
             android:layout_margin="@dimen/margin_extra_large"
             android:text="OR"
+            android:layout_weight="1"
             android:layout_gravity="center"
             android:letterSpacing="0.1"
             android:fontFamily="@font/gilroy_bold"
