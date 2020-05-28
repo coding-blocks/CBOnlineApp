@@ -27,15 +27,15 @@ import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
-import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.ResetRunAttempt
+import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
-import kotlinx.coroutines.Dispatchers
+import retrofit2.awaitResponse
 
 class MyCourseViewModel(
     private val handle: SavedStateHandle,
@@ -151,9 +151,10 @@ class MyCourseViewModel(
             when (val response = crUid?.let { repo.fetchLeaderboard(it) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
-                    this.enqueue(retrofitCallback { _, response ->
-                        leaderboard.value = response?.body()
-                    })
+                    val leaderboardList = awaitResponse().body()
+                    withContext(Dispatchers.Main) {
+                        leaderboard.postValue(leaderboardList)
+                    }
                 }
             }
         }

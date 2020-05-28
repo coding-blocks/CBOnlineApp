@@ -103,15 +103,10 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             if (leaderboard.isNullOrEmpty())
                 courseLeaderboardll.isVisible = false
             else {
-                var currUserLeaderboard = Leaderboard("")
-                var rank = 0
-                for (user in leaderboard) {
-                    rank++
-                    if (user.id == viewModel.prefs.SP_USER_ID) {
-                        currUserLeaderboard = user
-                        currUserLeaderboard.id = rank.toString()
-                    }
-                }
+                val currUserLeaderboard = leaderboard.find {
+                    it.id == viewModel.prefs.SP_USER_ID
+                }!!
+                currUserLeaderboard.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
                 val userList: MutableList<Leaderboard>
                 userList = if (currUserLeaderboard.userName.isNotEmpty())
                     (mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5) as MutableList<Leaderboard>).toMutableList()
