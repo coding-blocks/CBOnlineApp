@@ -47,7 +47,7 @@
                 android:backgroundTint="@color/white"
                 android:fontFamily="@font/gilroy_medium"
                 android:hint="@string/use_email"
-                android:inputType="phone"
+                android:inputType="textEmailAddress"
                 android:paddingStart="0dp"
                 android:textColorHighlight="@color/orangish"
                 android:textColorHint="@color/black"

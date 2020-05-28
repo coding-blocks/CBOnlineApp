@@ -106,9 +106,8 @@ interface OnlineRestApi {
     @POST("jwt/otp/v2/{id}/verify")
     suspend fun verifyOtp(@Path("id") uniqueId: String, @Body params: HashMap<String, Any>): Response<JsonObject>
 
-    @POST("users/verifymobile")
-    @FormUrlEncoded
-    suspend fun verifyMobile(@FieldMap params: Map<String, String>): Response<JsonObject>
+    @PATCH("users/verifymobile")
+    suspend fun verifyMobile(@Body params: Map<String, String>): Response<JsonObject>
 
     @POST("users")
     @FormUrlEncoded

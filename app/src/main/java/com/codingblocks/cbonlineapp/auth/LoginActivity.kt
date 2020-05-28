@@ -24,7 +24,20 @@ class LoginActivity : BaseCBActivity(), AnkoLogger {
         vm.isLoggedIn.observer(this) {
             navigateToActivity()
         }
+
+        vm.account.observer(this) {
+            when (it) {
+                AccountStates.NUMBER_NOT_VERIFIED -> {
+                    showEmailSheet()
+                }
+            }
+        }
         replaceFragmentSafely(LoginHomeFragment(), containerViewId = R.id.loginContainer)
+    }
+
+    private fun showEmailSheet() {
+        val emailBottomSheetFragment = LoginEmailBottomSheet()
+        emailBottomSheetFragment.show(supportFragmentManager, "goodiesRequestFragment")
     }
 
     /**

@@ -2,18 +2,17 @@ package com.codingblocks.cbonlineapp.auth
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.liveData
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
 import java.util.HashMap
-import kotlinx.coroutines.Dispatchers
 import okhttp3.ResponseBody
 import org.json.JSONObject
 
 const val PHONE_NUMBER = "phoneNumber"
 const val ID = "id"
+const val EMAIL = "email"
 
 class AuthViewModel(
     handle: SavedStateHandle,
@@ -21,9 +20,12 @@ class AuthViewModel(
 ) : BaseCBViewModel() {
 
     val isLoggedIn = MutableLiveData<Boolean>()
+    val account = MutableLiveData<AccountStates>()
+
     var mobile by savedStateValue<String>(handle, PHONE_NUMBER)
-    var uniqueId by savedStateValue<String>(handle, ID)
-    var dialCode by savedStateValue<String>(handle, "dialCode")
+    private var uniqueId by savedStateValue<String>(handle, ID)
+    private var dialCode by savedStateValue<String>(handle, "dialCode")
+    var email by savedStateValue<String>(handle, EMAIL)
 
 
     fun fetchToken(grantCode: String) {
@@ -93,6 +95,8 @@ class AuthViewModel(
                         response.value.body()?.let {
                             repo.saveKeys(it)
                             isLoggedIn.postValue(true)
+                            if (!uniqueId.isNullOrEmpty())
+                                repo.verifyMobileUsingClaim(uniqueId!!)
                         }
                     else {
                         response.value.errorBody()?.let { parseErrorBody(it) }
@@ -102,15 +106,38 @@ class AuthViewModel(
         }
     }
 
-    private fun findUser(userMap: HashMap<String, String>) {
+    fun findUser(userMap: HashMap<String, String>, password: String = "") {
         runIO {
             when (val response = repo.findUser(userMap)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
-                        loginUser()
+                        when {
+                            userMap.containsKey("verifiedmobile") -> {
+                                loginUserWithClaim()
+                            }
+                            userMap.containsKey("verifiedemail") -> {
+                                loginWithEmail(email!!, password)
+                            }
+                            userMap.containsKey("email") -> {
+                                loginWithEmail(email!!, password)
+                            }
+                        }
                     else {
-                        if (response.value.code() != 404)
+                        if (response.value.code() == 404)
+                            when {
+                                userMap.containsKey("verifiedmobile") -> {
+                                    account.postValue(AccountStates.NUMBER_NOT_VERIFIED)
+                                }
+                                userMap.containsKey("verifiedemail") -> {
+                                    findUser(hashMapOf("email" to email!!), password)
+                                    account.postValue(AccountStates.EMAIL_NOT_VERIFIED)
+                                }
+                                userMap.containsKey("email") -> {
+                                    account.postValue(AccountStates.DO_NOT_EXIST)
+                                }
+                            }
+                        else
                             response.value.errorBody()?.let { parseError(it) }
                     }
                 }
@@ -118,7 +145,7 @@ class AuthViewModel(
         }
     }
 
-    private fun loginUser() {
+    private fun loginUserWithClaim() {
         runIO {
             when (val response = repo.loginWithClaim(uniqueId!!)) {
                 is ResultWrapper.GenericError -> setError(response.error)
@@ -148,4 +175,10 @@ class AuthViewModel(
         val message = jObjError.getString("message")
         errorLiveData.postValue(message)
     }
+}
+
+enum class AccountStates {
+    DO_NOT_EXIST,
+    NUMBER_NOT_VERIFIED,
+    EMAIL_NOT_VERIFIED
 }

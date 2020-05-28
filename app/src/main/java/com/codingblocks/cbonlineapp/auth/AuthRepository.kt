@@ -38,5 +38,5 @@ class AuthRepository(
 
     suspend fun loginWithClaim(uniqueId: String) = safeApiCall { Clients.api.getJwtWithClaim(uniqueId) }
 
-    suspend fun verifyMobileUsingClaim(uniqueId: String) = safeApiCall { Clients.api.getJwtWithEmail(hashMapOf("claimId" to uniqueId)) }
+    suspend fun verifyMobileUsingClaim(uniqueId: String) = safeApiCall { Clients.api.verifyMobile(hashMapOf("claimId" to uniqueId)) }
 }
