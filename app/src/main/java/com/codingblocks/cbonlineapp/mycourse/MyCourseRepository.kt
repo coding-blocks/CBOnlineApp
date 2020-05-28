@@ -29,6 +29,8 @@ import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.await
+import retrofit2.awaitResponse
 
 class MyCourseRepository(
     private val sectionWithContentsDao: SectionWithContentsDao,
@@ -301,7 +303,7 @@ class MyCourseRepository(
         Clients.api.addToCart(id)
     }
 
-    suspend fun fetchLeaderboard(runId: String) = safeApiCall { Clients.api.leaderboardById(runId) }
+    suspend fun fetchLeaderboard(runId: String) = safeApiCall { Clients.api.leaderboardById(runId).awaitResponse() }
 
     suspend fun fetchSections(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.enrolledCourseById(attemptId) }
 

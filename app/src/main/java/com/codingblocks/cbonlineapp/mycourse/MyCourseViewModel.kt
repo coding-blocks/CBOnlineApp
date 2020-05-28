@@ -33,9 +33,8 @@ import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.ResetRunAttempt
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
-import retrofit2.awaitResponse
 
 class MyCourseViewModel(
     private val handle: SavedStateHandle,
@@ -151,9 +150,12 @@ class MyCourseViewModel(
             when (val response = crUid?.let { repo.fetchLeaderboard(it) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
-                    val leaderboardList = awaitResponse().body()
-                    withContext(Dispatchers.Main) {
-                        leaderboard.postValue(leaderboardList)
+                    if (isSuccessful) {
+                        body()?.let { leaderboardlist ->
+                            leaderboard.postValue(leaderboardlist)
+                        }
+                    } else {
+                        setError(fetchError(code()))
                     }
                 }
             }
