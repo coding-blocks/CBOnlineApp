@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.mycourse.content
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -48,6 +49,7 @@ import com.codingblocks.cbonlineapp.util.extensions.clearDim
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
+import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import java.util.concurrent.TimeUnit
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
@@ -330,12 +332,18 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                         LECTURE ->
                             if (contentLecture.lectureUid.isNotEmpty())
                                 startActivity(
-                                    intentFor<VideoPlayerActivity>(
-                                        CONTENT_ID to ccid,
-                                        SECTION_ID to sectionId
-                                    )
-                                )
-                            else
+                                    if (getPrefs()?.SP_PIP!!) {
+                                        intentFor<VideoPlayerActivity>(
+                                            CONTENT_ID to ccid,
+                                            SECTION_ID to sectionId
+                                        ).addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                                    } else {
+                                        intentFor<VideoPlayerActivity>(
+                                            CONTENT_ID to ccid,
+                                            SECTION_ID to sectionId
+                                        )
+                                    }
+                                )else
                                 checkSection(premium)
                         VIDEO ->
                             if (contentVideo.videoUid.isNotEmpty()) {

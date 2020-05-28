@@ -166,8 +166,6 @@
             android:name=".mycourse.player.VideoPlayerActivity"
             android:taskAffinity=".mycourse.player.VideoPlayerActivity"
             android:parentActivityName=".mycourse.MyCourseActivity"
-            android:autoRemoveFromRecents="true"
-            android:excludeFromRecents="true"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:supportsPictureInPicture="true"
             android:launchMode="singleTask"
