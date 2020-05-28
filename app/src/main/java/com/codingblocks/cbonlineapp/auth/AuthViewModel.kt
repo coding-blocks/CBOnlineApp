@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.auth
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.liveData
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
@@ -19,23 +20,29 @@ class AuthViewModel(
     private val repo: AuthRepository
 ) : BaseCBViewModel() {
 
+    val isLoggedIn = MutableLiveData<Boolean>()
     var mobile by savedStateValue<String>(handle, PHONE_NUMBER)
     var uniqueId by savedStateValue<String>(handle, ID)
+    var dialCode by savedStateValue<String>(handle, "dialCode")
 
-    fun fetchToken(grantCode: String) = liveData<Boolean>(Dispatchers.IO) {
-        when (val response = repo.getToken(grantCode)) {
-            is ResultWrapper.GenericError -> setError(response.error)
-            is ResultWrapper.Success -> {
-                if (response.value.isSuccessful)
-                    response.value.body()?.let {
-                        repo.saveKeys(it)
-                        emit(true)
-                    }
+
+    fun fetchToken(grantCode: String) {
+        runIO {
+            when (val response = repo.getToken(grantCode)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let {
+                            repo.saveKeys(it)
+                            isLoggedIn.postValue(true)
+                        }
+                }
             }
         }
     }
 
     fun sendOtp(dialCode: String) {
+        this.dialCode = dialCode
         runIO {
             when (val response = repo.sendOtp(dialCode, mobile!!)) {
                 is ResultWrapper.GenericError -> setError(response.error)
@@ -57,7 +64,7 @@ class AuthViewModel(
             if (uniqueId.isNullOrEmpty()) {
                 errorLiveData.postValue("There was some error.Please try Again!")
             } else {
-                when (val response = repo.verifyOtp(otp, uniqueId!!)) {
+                when (val response = repo.verifyOtp(otp.toInt(), uniqueId!!)) {
                     is ResultWrapper.GenericError -> setError(response.error)
                     is ResultWrapper.Success -> {
                         if (response.value.isSuccessful)
@@ -65,7 +72,7 @@ class AuthViewModel(
                                 uniqueId = it.get("id").asString
                                 val status = it.get("status")
                                 if (status != null && status.asString == "verified") {
-                                    findUser(hashMapOf("verifiedmobile" to mobile!!))
+                                    findUser(hashMapOf("verifiedmobile" to "$dialCode-$mobile"))
                                 }
                             }
                         else {
@@ -77,17 +84,19 @@ class AuthViewModel(
         }
     }
 
-    fun loginWithEmail(name: String, password: String) = liveData<Boolean>(Dispatchers.IO) {
-        when (val response = repo.loginWithEmail(name, password)) {
-            is ResultWrapper.GenericError -> setError(response.error)
-            is ResultWrapper.Success -> {
-                if (response.value.isSuccessful)
-                    response.value.body()?.let {
-                        repo.saveKeys(it)
-                        emit(true)
+    fun loginWithEmail(name: String, password: String) {
+        runIO {
+            when (val response = repo.loginWithEmail(name, password)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let {
+                            repo.saveKeys(it)
+                            isLoggedIn.postValue(true)
+                        }
+                    else {
+                        response.value.errorBody()?.let { parseErrorBody(it) }
                     }
-                else {
-                    response.value.errorBody()?.let { parseErrorBody(it) }
                 }
             }
         }
@@ -99,11 +108,29 @@ class AuthViewModel(
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
+                        loginUser()
+                    else {
+                        if (response.value.code() != 404)
+                            response.value.errorBody()?.let { parseError(it) }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun loginUser() {
+        runIO {
+            when (val response = repo.loginWithClaim(uniqueId!!)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
                         response.value.body()?.let {
-                            uniqueId = it.get("id").asString
+                            repo.saveKeys(it)
+                            isLoggedIn.postValue(true)
                         }
                     else {
-                        response.value.errorBody()?.let { parseError(it) }
+                        if (response.value.code() != 404)
+                            response.value.errorBody()?.let { parseError(it) }
                     }
                 }
             }

@@ -47,11 +47,7 @@ class SocialLoginFragment : Fragment() {
                 if (url.contains("code=") && !authComplete) {
                     val grantCode = Uri.parse(url).getQueryParameter("code")
                     if (grantCode != null) {
-                        vm.fetchToken(grantCode).observer(viewLifecycleOwner) {
-                            if (it) {
-                                startActivity(DashboardActivity.createDashboardActivityIntent(requireContext(), true))
-                            }
-                        }
+                        vm.fetchToken(grantCode)
                     }
                     authComplete = true
                 } else if (url.contains("error=access_denied")) {

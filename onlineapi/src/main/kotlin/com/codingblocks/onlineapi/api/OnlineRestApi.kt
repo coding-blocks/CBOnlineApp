@@ -7,6 +7,7 @@ import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.RankResponse
 import com.codingblocks.onlineapi.models.RatingModel
 import com.codingblocks.onlineapi.models.ResetRunAttempt
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -100,15 +101,14 @@ interface OnlineRestApi {
 
     @POST("users/find")
     @FormUrlEncoded
-    fun findUser(@FieldMap params: HashMap<String, String>): Response<JsonObject>
+    suspend fun findUser(@FieldMap params: HashMap<String, String>): Response<JsonArray>
 
     @POST("jwt/otp/v2/{id}/verify")
-    @FormUrlEncoded
-    suspend fun verifyOtp(@Path("id") uniqueId: String, @FieldMap params: HashMap<String, String>): Response<JsonObject>
+    suspend fun verifyOtp(@Path("id") uniqueId: String, @Body params: HashMap<String, Any>): Response<JsonObject>
 
-    @POST("jwt/otp/verify")
+    @POST("users/verifymobile")
     @FormUrlEncoded
-    suspend fun getJwt(@FieldMap params: Map<String, String>): Response<JsonObject>
+    suspend fun verifyMobile(@FieldMap params: Map<String, String>): Response<JsonObject>
 
     @POST("users")
     @FormUrlEncoded
@@ -126,6 +126,10 @@ interface OnlineRestApi {
     @POST("jwt/login")
     @FormUrlEncoded
     suspend fun getJwtWithEmail(@FieldMap params: Map<String, String>): Response<JsonObject>
+
+    @POST("jwt/otp/v2/{id}/login")
+    @FormUrlEncoded
+    suspend fun getJwtWithClaim(@Path("id") uniqueId: String,@FieldMap params: Map<String, String> = hashMapOf("client" to "android")): Response<JsonObject>
 
     @POST("v2/run_attempts/purchase")
     @FormUrlEncoded

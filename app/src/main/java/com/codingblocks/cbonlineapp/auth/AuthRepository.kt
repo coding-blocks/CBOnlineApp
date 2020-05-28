@@ -13,7 +13,7 @@ class AuthRepository(
 
     suspend fun sendOtp(dialCode: String, mobile: String) = safeApiCall { Clients.api.getOtp(hashMapOf("mobile" to mobile, "dialCode" to dialCode)) }
 
-    suspend fun verifyOtp(otp: String, uniqueId: String) = safeApiCall { Clients.api.verifyOtp(uniqueId, hashMapOf("otp" to otp, "client" to "android")) }
+    suspend fun verifyOtp(otp: Int, uniqueId: String) = safeApiCall { Clients.api.verifyOtp(uniqueId, hashMapOf("otp" to otp, "client" to "android")) }
 
     suspend fun findUser(userMap: HashMap<String, String>) = safeApiCall { Clients.api.findUser(userMap) }
 
@@ -35,4 +35,8 @@ class AuthRepository(
             "client" to "android"
         ))
     }
+
+    suspend fun loginWithClaim(uniqueId: String) = safeApiCall { Clients.api.getJwtWithClaim(uniqueId) }
+
+    suspend fun verifyMobileUsingClaim(uniqueId: String) = safeApiCall { Clients.api.getJwtWithEmail(hashMapOf("claimId" to uniqueId)) }
 }

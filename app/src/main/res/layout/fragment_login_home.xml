@@ -24,11 +24,23 @@
             android:adjustViewBounds="true"
             android:src="@drawable/login" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_large"
+            android:fontFamily="@font/gilroy_bold"
+            android:textColor="@color/orangish"
+            android:textSize="18sp"
+            android:visibility="gone"
+            android:gravity="bottom|center"
+            android:text="Get Started" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_xl"
             android:gravity="center_vertical">
 
             <com.hbb20.CountryCodePicker
@@ -45,7 +57,6 @@
                 android:id="@+id/numberedtv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:editable="false"
                 android:textSize="16sp"
                 android:backgroundTint="@color/white"
                 android:textColorHint="@color/black"
@@ -65,16 +76,15 @@
             android:id="@+id/mobileBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_medium"
-            android:text="Continue" />
+            android:layout_marginTop="@dimen/margin_medium_small"
+            android:text="@string/proceed" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_medium"
-            android:layout_margin="@dimen/margin_extra_large"
+            android:layout_margin="@dimen/margin_medium"
             android:text="OR"
-            android:layout_weight="1"
+            android:gravity="center"
             android:layout_gravity="center"
             android:letterSpacing="0.1"
             android:fontFamily="@font/gilroy_bold"
@@ -84,17 +94,20 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/socialBtn"
+            android:background="@drawable/button_background_outline"
+            android:fontFamily="@font/gilroy_medium"
+            android:textColor="@color/pastel_red"
+            android:textSize="16sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/fb"
-            android:drawableStart="@drawable/ic_fb"
             android:layout_marginBottom="@dimen/margin_medium"
             android:text="Continue with Email" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            />
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -108,6 +121,7 @@
             android:layout_marginTop="@dimen/margin_large"
             android:fontFamily="@font/gilroy_medium"
             android:textColor="@color/black"
+            android:visibility="gone"
             android:textColorLink="@color/orangish"
             android:textSize="18sp"
             android:gravity="bottom|center"

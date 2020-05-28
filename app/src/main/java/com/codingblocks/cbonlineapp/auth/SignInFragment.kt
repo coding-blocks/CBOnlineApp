@@ -60,26 +60,9 @@ class SignInFragment : BaseCBFragment() {
         val email = numberLayout.editText?.text.toString()
         val password = passwordLayout.editText?.text.toString()
         proceedBtn.isEnabled = false
-        vm.loginWithEmail(email, password).observer(viewLifecycleOwner) {
-            if (it) {
-                navigateToActivity()
-            }
-        }
+        vm.loginWithEmail(email, password)
     }
 
-    /**
-     * Always call finish after setResult or startActivity otherwise you'll lose reference of previous activity
-     */
-    private fun navigateToActivity() {
-        with(requireActivity()) {
-            if (callingActivity == null) {
-                startActivity(DashboardActivity.createDashboardActivityIntent(requireContext(), true))
-            } else {
-                setResult(RESULT_OK)
-            }
-            finish()
-        }
-    }
 
     private fun requestHint() {
         val hintRequest = HintRequest.Builder()
