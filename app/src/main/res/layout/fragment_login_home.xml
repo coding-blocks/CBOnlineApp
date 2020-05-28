@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context="com.codingblocks.cbonlineapp.auth.onboarding.LoginHomeFragment">
+    tools:context="com.codingblocks.cbonlineapp.auth.LoginHomeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -90,37 +90,6 @@
             android:drawableStart="@drawable/ic_fb"
             android:layout_marginBottom="@dimen/margin_medium"
             android:text="Continue with Email" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/fbBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="@dimen/margin_medium"
-                android:layout_weight="1"
-                android:backgroundTint="@color/fb"
-                android:drawableStart="@drawable/ic_fb"
-                android:padding="0dp"
-                android:text="@string/facebook" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/gmailBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginBottom="@dimen/margin_medium"
-                android:layout_weight="1"
-                android:backgroundTint="@color/gmail"
-                android:drawableStart="@drawable/ic_gmail"
-                android:text="@string/google" />
-
-        </LinearLayout>
-
 
         <View
             android:layout_width="match_parent"

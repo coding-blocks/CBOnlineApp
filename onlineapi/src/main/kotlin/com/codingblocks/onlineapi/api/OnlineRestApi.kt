@@ -46,14 +46,8 @@ interface OnlineRestApi {
     @GET("v2/courses/{id}/rating")
     suspend fun getCourseRating(@Path("id") id: String): RatingModel
 
-    @GET("v2/users/me")
-    fun getMe(): Call<JsonObject>
-
     @GET("v2/runs/{runId}/enroll")
     suspend fun enrollTrial(@Path("runId") id: String): Response<JsonObject>
-
-    @GET("v2/jwt/logout")
-    fun logout(): Call<JsonObject>
 
     @GET("v2/runs/{runId}/buy")
     suspend fun addToCart(@Path("runId") id: String): Response<JsonObject>
@@ -104,7 +98,12 @@ interface OnlineRestApi {
     @FormUrlEncoded
     suspend fun getOtp(@FieldMap params: HashMap<String, String>): Response<JsonObject>
 
+    @POST("users/find")
+    @FormUrlEncoded
+    fun findUser(@FieldMap params: HashMap<String, String>): Response<JsonObject>
+
     @POST("jwt/otp/v2/{id}/verify")
+    @FormUrlEncoded
     suspend fun verifyOtp(@Path("id") uniqueId: String, @FieldMap params: HashMap<String, String>): Response<JsonObject>
 
     @POST("jwt/otp/verify")
@@ -137,5 +136,4 @@ interface OnlineRestApi {
 
     @GET("v2/hb/performance")
     suspend fun getHackerBlocksPerformance(): Response<RankResponse>
-
 }

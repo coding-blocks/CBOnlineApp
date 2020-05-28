@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.auth.onboarding
+package com.codingblocks.cbonlineapp.auth
 
 import android.os.Bundle
 import android.view.LayoutInflater

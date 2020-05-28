@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.auth.onboarding
+package com.codingblocks.cbonlineapp.auth
 
 import android.app.Activity
 import android.os.Bundle
@@ -8,13 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.auth.AuthViewModel
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver.OnSmsOTPReceivedListener
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import kotlinx.android.synthetic.main.fragment_login_otp.*
-import org.jetbrains.anko.sdk25.coroutines.textChangedListener
+import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
@@ -30,10 +29,9 @@ class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         numberTv.append(vm.mobile)
-        vm.errorLiveData.observer(viewLifecycleOwner){
+        vm.errorLiveData.observer(viewLifecycleOwner) {
+            otpRoot.snackbar(it.capitalize())
             verifyOtpBtn.isEnabled = true
-
-
         }
         otpEdtv.addTextChangedListener {
             verifyOtpBtn.isEnabled = !(it.isNullOrEmpty() || it.length < 6)

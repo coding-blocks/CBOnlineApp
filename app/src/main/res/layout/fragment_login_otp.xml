@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingStart="@dimen/margin_large"
     android:paddingEnd="@dimen/margin_large"
-    tools:context="com.codingblocks.cbonlineapp.auth.onboarding.LoginOtpFragment">
+    tools:context="com.codingblocks.cbonlineapp.auth.LoginOtpFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

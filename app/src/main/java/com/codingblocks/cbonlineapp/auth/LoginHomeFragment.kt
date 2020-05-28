@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.auth.onboarding
+package com.codingblocks.cbonlineapp.auth
 
 import android.graphics.Color
 import android.graphics.Typeface
@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.auth.AuthViewModel
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
@@ -37,12 +36,12 @@ class LoginHomeFragment : BaseCBFragment() {
         super.onViewCreated(view, savedInstanceState)
         ccp.registerCarrierNumberEditText(numberedtv)
         ccp.setTypeFace(Typeface.createFromAsset(requireContext().assets, "fonts/gilroy_bold.ttf"))
-        setfirstSpan()
+        setFirstSpan()
         setSecondSpan()
 
         mobileBtn.setOnClickListener {
             if (ccp.isValidFullNumber) {
-                vm.mobile = numberedtv.text.toString().replace(" ","")
+                vm.mobile = numberedtv.text.toString().replace(" ", "")
                 vm.sendOtp(ccp.selectedCountryCodeWithPlus)
                 val otpFragment = LoginOtpFragment()
                 SmsRetriever.getClient(requireActivity()).startSmsRetriever() // start retriever
@@ -53,21 +52,13 @@ class LoginHomeFragment : BaseCBFragment() {
             }
         }
 
-        gmailBtn.setOnClickListener {
-            showWebView()
+        socialBtn.setOnClickListener {
+            replaceFragmentSafely(
+                SignInFragment(),
+                tag = "SignIn",
+                containerViewId = R.id.loginContainer
+            )
         }
-
-        fbBtn.setOnClickListener {
-            showWebView()
-        }
-    }
-
-    private fun showWebView() {
-        replaceFragmentSafely(
-            SocialLoginFragment(),
-            tag = "SocialSignIn",
-            containerViewId = R.id.loginContainer
-        )
     }
 
     private fun setSecondSpan() {
@@ -107,7 +98,7 @@ class LoginHomeFragment : BaseCBFragment() {
         }
     }
 
-    private fun setfirstSpan() {
+    private fun setFirstSpan() {
         val wordToSpan = getSpannableStringSecondBold("New here? ", "Create an account")
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
