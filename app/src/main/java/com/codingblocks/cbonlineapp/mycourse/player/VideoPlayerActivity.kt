@@ -48,6 +48,7 @@ import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils.deleteRecursive
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYoutubeVideoId
+import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
@@ -885,13 +886,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             return context.intentFor<VideoPlayerActivity>(
                 CONTENT_ID to contentId,
                 VIDEO_POSITION to position,
-                SECTION_ID to sectionId).singleTop()
-        }
-
-        fun createVideoPlayerActivity(context: Context, contentId: String, sectionId: String, exclude: Boolean): Intent {
-            return context.intentFor<VideoPlayerActivity>(
-                CONTENT_ID to contentId,
-                SECTION_ID to sectionId).singleTop().apply { if (exclude) excludeFromRecents() }
+                SECTION_ID to sectionId).singleTop().apply { if (getPrefs(context).SP_PIP) excludeFromRecents() }
         }
     }
 }

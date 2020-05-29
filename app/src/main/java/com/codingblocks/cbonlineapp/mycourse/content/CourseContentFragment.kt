@@ -31,7 +31,7 @@ import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivity
+import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CODE
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
@@ -333,14 +333,14 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                         LECTURE ->
                             if (contentLecture.lectureUid.isNotEmpty())
                                 startActivity(
-                                    createVideoPlayerActivity(requireContext(), ccid, sectionId, getPrefs(requireContext()).SP_PIP)
+                                    createVideoPlayerActivityIntent(requireContext(), ccid, sectionId)
                                 )
                             else
                                 checkSection(premium)
                         VIDEO ->
                             if (contentVideo.videoUid.isNotEmpty()) {
                                 startActivity(
-                                    createVideoPlayerActivity(requireContext(), ccid, sectionId, getPrefs(requireContext()).SP_PIP)
+                                    createVideoPlayerActivityIntent(requireContext(), ccid, sectionId)
                                 )
                             } else
                                 checkSection(premium)
