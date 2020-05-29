@@ -110,8 +110,7 @@ interface OnlineRestApi {
     suspend fun verifyMobile(@Body params: Map<String, String>): Response<JsonObject>
 
     @POST("users")
-    @FormUrlEncoded
-    suspend fun createUser(@FieldMap params: Map<String, String>): Response<JsonObject>
+    suspend fun createUser(@Body params: Map<String, String>): Response<JsonObject>
 
     @PATCH("users/{id}")
     @FormUrlEncoded

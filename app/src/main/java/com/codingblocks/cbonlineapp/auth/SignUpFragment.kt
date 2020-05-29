@@ -6,9 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
+import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_login_otp.*
 import kotlinx.android.synthetic.main.fragment_sign_up.*
+import kotlinx.android.synthetic.main.fragment_sign_up.backBtn
+import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SignUpFragment : BaseCBFragment() {
@@ -25,6 +29,10 @@ class SignUpFragment : BaseCBFragment() {
         super.onViewCreated(view, savedInstanceState)
         backBtn.setOnClickListener {
             requireActivity().onBackPressed()
+        }
+        vm.errorLiveData.observer(viewLifecycleOwner) {
+            signUpRoot.snackbar(it.capitalize())
+            verifyOtpBtn.isEnabled = true
         }
         emailLayout.editText?.setText(vm.email)
         mobileLayout.editText?.setText("${vm.dialCode}-${vm.mobile}")

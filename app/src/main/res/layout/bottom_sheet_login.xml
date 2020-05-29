@@ -8,6 +8,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
+        android:id="@+id/emailLayout"
         android:layout_height="wrap_content"
         app:errorEnabled="true">
 
@@ -18,6 +19,7 @@
             android:backgroundTint="@color/white"
             android:fontFamily="@font/gilroy_medium"
             android:hint="@string/use_email"
+            android:text="Pulk"
             android:inputType="textEmailAddress"
             android:paddingStart="0dp"
             android:paddingEnd="0dp"

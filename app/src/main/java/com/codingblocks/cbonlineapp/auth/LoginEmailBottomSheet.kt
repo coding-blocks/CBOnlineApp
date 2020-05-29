@@ -1,10 +1,8 @@
 package com.codingblocks.cbonlineapp.auth
 
-import android.app.Activity
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
-import android.util.DisplayMetrics
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +10,12 @@ import androidx.annotation.NonNull
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.bottom_sheet_login.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.util.regex.Pattern
+
 
 class LoginEmailBottomSheet : BottomSheetDialogFragment() {
 
@@ -33,10 +31,15 @@ class LoginEmailBottomSheet : BottomSheetDialogFragment() {
         emailBtn.setOnClickListener {
             val email = emailEdtv.text.toString()
             vm.email = email
-            if (passwordLayout.isVisible) {
-                vm.loginWithEmail(email, passEdtv.text.toString())
-            } else {
-                vm.findUser(hashMapOf("verifiedemail" to email))
+            if(isValidEmail(email)) {
+                emailLayout.error = ""
+                if (passwordLayout.isVisible) {
+                    vm.loginWithEmail(email, passEdtv.text.toString())
+                } else {
+                    vm.findUser(hashMapOf("verifiedemail" to email))
+                }
+            }else{
+                emailLayout.error = "Email is not valid"
             }
         }
 
@@ -45,38 +48,21 @@ class LoginEmailBottomSheet : BottomSheetDialogFragment() {
                 AccountStates.EXITS -> {
                     passwordLayout.isVisible = true
                 }
+                AccountStates.DO_NOT_EXIST -> {
+                    dialog?.dismiss()
+                }
             }
         }
     }
 
+    private fun isValidEmail(email: String): Boolean {
+        val pattern: Pattern = Patterns.EMAIL_ADDRESS
+        return pattern.matcher(email).matches()
+    }
+
     @NonNull
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog: Dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setOnShowListener(DialogInterface.OnShowListener { dialogInterface ->
-            val bottomSheetDialog = dialogInterface as BottomSheetDialog
-            setupFullHeight(bottomSheetDialog)
-        })
-        return dialog
+        return super.onCreateDialog(savedInstanceState)
     }
 
-    private fun setupFullHeight(bottomSheetDialog: BottomSheetDialog) {
-        val sheet = bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)!!
-        val layoutParams = sheet.layoutParams
-        val windowHeight = getWindowHeight()
-        if (layoutParams != null) {
-            layoutParams.height = windowHeight
-        }
-        sheet.layoutParams = layoutParams
-        BottomSheetBehavior.from(sheet).state = BottomSheetBehavior.STATE_HALF_EXPANDED
-    }
-
-    private fun getWindowHeight(): Int { // Calculate window height for fullscreen use
-        val displayMetrics = DisplayMetrics()
-        (context as Activity?)!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
-        return displayMetrics.heightPixels
-    }
-
-    private fun checkValid(textInputEditText: TextInputEditText): Boolean {
-        return textInputEditText.text.toString().isNotEmpty()
-    }
 }
