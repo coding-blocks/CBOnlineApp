@@ -32,7 +32,6 @@ class SignUpFragment : BaseCBFragment() {
         }
         vm.errorLiveData.observer(viewLifecycleOwner) {
             signUpRoot.snackbar(it.capitalize())
-            verifyOtpBtn.isEnabled = true
         }
         emailLayout.editText?.setText(vm.email)
         mobileLayout.editText?.setText("${vm.dialCode}-${vm.mobile}")

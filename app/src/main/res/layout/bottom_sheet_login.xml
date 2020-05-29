@@ -6,9 +6,29 @@
     android:orientation="vertical"
     android:padding="20dp">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gilroy_bold"
+        android:text="Your number is not verified"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/numberTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/margin_xxl"
+        android:fontFamily="@font/gilroy_medium"
+        android:text="Enter email to verify your number"
+        android:textColor="@color/brownish_grey"
+        android:textSize="14sp"
+        android:visibility="visible" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:id="@+id/emailLayout"
+        android:layout_marginTop="@dimen/margin_medium_small"
         android:layout_height="wrap_content"
         app:errorEnabled="true">
 
@@ -18,8 +38,7 @@
             android:layout_height="match_parent"
             android:backgroundTint="@color/white"
             android:fontFamily="@font/gilroy_medium"
-            android:hint="@string/use_email"
-            android:text="Pulk"
+            android:hint="Email address"
             android:inputType="textEmailAddress"
             android:paddingStart="0dp"
             android:paddingEnd="0dp"

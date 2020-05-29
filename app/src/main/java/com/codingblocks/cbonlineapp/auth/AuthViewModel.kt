@@ -69,6 +69,7 @@ class AuthViewModel(
                     is ResultWrapper.Success -> {
                         if (response.value.isSuccessful)
                             response.value.body()?.let {
+                                errorLiveData.postValue(null)
                                 uniqueId = it.get("id").asString
                                 val status = it.get("status")
                                 if (status != null && status.asString == "verified") {
@@ -134,7 +135,7 @@ class AuthViewModel(
                                     account.postValue(AccountStates.DO_NOT_EXIST)
                                 }
                             } else
-                            response.value.errorBody()?.let { parseError(it) }
+                            response.value.errorBody()?.let { parseErrorBody(it) }
                     }
                 }
             }
@@ -185,7 +186,7 @@ class AuthViewModel(
                         }
                     else {
                         if (response.value.code() != 404)
-                            response.value.errorBody()?.let { parseError(it) }
+                            response.value.errorBody()?.let { parseErrorBody(it) }
                     }
                 }
             }
