@@ -24,7 +24,6 @@ import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
-import com.codingblocks.onlineapi.models.Leaderboard
 import java.io.File
 import java.lang.Math.abs
 import kotlinx.android.synthetic.main.fragment_overview.*
@@ -103,22 +102,15 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
             }
             viewModel.getLeaderboard().observer(viewLifecycleOwner) { leaderboard ->
-                if (leaderboard.isNullOrEmpty())
-                    courseLeaderboardll.isVisible = false
-                else {
-                    val currUserLeaderboard = leaderboard.find { it.id == viewModel.prefs.SP_USER_ID }
-                    currUserLeaderboard?.let {
-                        it.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
-                        leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
-                    } ?: run {
-                        courseLeaderboardll.isVisible = false
-                    }
+
+                val currUserLeaderboard = leaderboard.find { it.id == viewModel.prefs.SP_USER_ID }
+                currUserLeaderboard?.let {
+                    courseLeaderboardll.isVisible = true
+                    it.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
+                    leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
                 }
             }
-
-
         }
-
 
         viewModel.performance?.observer(viewLifecycleOwner) {
             homePerformanceTv.text = it.remarks

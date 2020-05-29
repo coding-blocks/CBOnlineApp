@@ -81,6 +81,7 @@ import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
 import java.io.File
+import java.lang.Exception
 import java.util.Objects
 import java.util.concurrent.TimeUnit
 import kotlinx.android.synthetic.main.activity_video_player.*
@@ -878,7 +879,11 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         vm.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
         vm.position = 0L
         if (::playerFragment.isInitialized) {
-            playerFragment.player.stop()
+            try {
+                playerFragment.player.stop()
+            } catch (e: Exception) {
+                // Not reaady
+            }
         }
         if (::youtubePlayer.isInitialized) {
             youtubePlayer.pause()

@@ -14,7 +14,7 @@ class LeaderBoardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
             userNoTv.text = "#$position"
             usernameTv.text = leaderboard.userName
             userRatingTv.text = leaderboard.score.toString()
-            userImgView.loadImage(leaderboard.photo?:"")
+            userImgView.loadImage(leaderboard.photo ?: "")
             if (position == 0) {
                 userNoTv.text = "#" + leaderboard.id
                 leaderboadItemll.setBackgroundColor(ContextCompat.getColor(context, R.color.orangish))
