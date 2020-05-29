@@ -74,14 +74,25 @@ fun ShimmerFrameLayout.showAndStart() {
     startShimmer()
 }
 
-fun Fragment.changeViewState(recyclerView: RecyclerView, internetView: LinearLayout, emptyView: LinearLayout, shimmerView: ShimmerFrameLayout, boolean: Boolean) {
+fun Fragment.changeViewState(
+    recyclerView: RecyclerView,
+    internetView: LinearLayout,
+    emptyView: LinearLayout,
+    shimmerView: ShimmerFrameLayout,
+    boolean: Boolean
+) {
     internetView.isVisible = false
     emptyView.isVisible = boolean
     recyclerView.isVisible = !boolean
     shimmerView.hideAndStop()
 }
 
-fun Fragment.changeViewState(recyclerView: RecyclerView, emptyView: LinearLayout, shimmerView: ShimmerFrameLayout, boolean: Boolean) {
+fun Fragment.changeViewState(
+    recyclerView: RecyclerView,
+    emptyView: LinearLayout,
+    shimmerView: ShimmerFrameLayout,
+    boolean: Boolean
+) {
     emptyView.isVisible = boolean
     recyclerView.isVisible = !boolean
     shimmerView.hideAndStop()
@@ -128,7 +139,7 @@ fun AppCompatActivity.replaceFragmentSafely(
         .beginTransaction()
         .setCustomAnimations(enterAnimation, exitAnimation, popEnterAnimation, popExitAnimation)
         .replace(containerViewId, fragment, tag)
-    if (addToStack) { ft.addToBackStack(tag)}
+    if (addToStack) { ft.addToBackStack(tag) }
     if (!supportFragmentManager.isStateSaved) {
         ft.commit()
     } else if (allowStateLoss) {
@@ -162,7 +173,14 @@ fun <F : Fragment> F.replaceFragmentSafely(
     }
 }
 
-fun RecyclerView.setRv(activity: Context, listAdapter: ListAdapter<out Any, out RecyclerView.ViewHolder>, setDivider: Boolean = false, type: String = "", orientation: Int = RecyclerView.VERTICAL, space: Float = 0f) {
+fun RecyclerView.setRv(
+    activity: Context,
+    listAdapter: ListAdapter<out Any, out RecyclerView.ViewHolder>,
+    setDivider: Boolean = false,
+    type: String = "",
+    orientation: Int = RecyclerView.VERTICAL,
+    space: Float = 0f
+) {
     val dividerItemDecoration = if (type == "thick")
         DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.dividerthick)!!)
     else DividerItemDecorator(ContextCompat.getDrawable(activity, R.drawable.divider)!!)
@@ -178,7 +196,14 @@ private fun Float.toDp(): Float {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, CBOnlineApp.appContext?.displayMetrics)
 }
 
-fun View.showSnackbar(message: String, length: Int = Snackbar.LENGTH_SHORT, anchorView: BottomNavigationView? = null, action: Boolean = true, actionText: String = "Retry", callback: () -> Unit = { }): Snackbar {
+fun View.showSnackbar(
+    message: String,
+    length: Int = Snackbar.LENGTH_SHORT,
+    anchorView: BottomNavigationView? = null,
+    action: Boolean = true,
+    actionText: String = "Retry",
+    callback: () -> Unit = { }
+): Snackbar {
     val snackBarView = Snackbar.make(this, message, length)
     val params = snackBarView.view.layoutParams as ViewGroup.MarginLayoutParams
     params.setMargins(params.leftMargin,

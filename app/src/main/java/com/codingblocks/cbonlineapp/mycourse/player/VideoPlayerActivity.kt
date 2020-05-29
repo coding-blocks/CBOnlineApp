@@ -1,20 +1,20 @@
 package com.codingblocks.cbonlineapp.mycourse.player
 
 import android.animation.LayoutTransition
-import android.content.Context
-import android.content.Intent
 import android.annotation.TargetApi
 import android.app.ActivityManager
 import android.app.PendingIntent
 import android.app.PictureInPictureParams
 import android.app.RemoteAction
 import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.os.Build
 import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Rational
@@ -54,6 +54,7 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
+import com.codingblocks.cbonlineapp.util.extensions.*
 import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
@@ -61,7 +62,6 @@ import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
-import com.codingblocks.cbonlineapp.util.extensions.*
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
 import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
 import com.codingblocks.onlineapi.models.LectureContent
@@ -81,6 +81,7 @@ import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
 import java.io.File
+import java.lang.Exception
 import java.util.Objects
 import java.util.concurrent.TimeUnit
 import kotlinx.android.synthetic.main.activity_video_player.*
@@ -89,7 +90,6 @@ import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import kotlinx.android.synthetic.main.my_fab_menu.*
 import kotlinx.android.synthetic.main.vdo_control_view.*
 import kotlinx.android.synthetic.main.vdo_control_view.view.*
-import kotlinx.android.synthetic.main.vdo_control_view.view.vdo_loader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -609,8 +609,12 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    internal fun updatePictureInPictureActions(@DrawableRes iconId: Int, title: String,
-                                               controlType: Int, requestCode: Int) {
+    internal fun updatePictureInPictureActions(
+        @DrawableRes iconId: Int,
+        title: String,
+        controlType: Int,
+        requestCode: Int
+    ) {
         val actions = ArrayList<RemoteAction>()
 
         val intent = PendingIntent.getBroadcast(this@VideoPlayerActivity,
@@ -750,8 +754,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                                     if (it.isEmpty()) {
                                         hideVideoFab()
                                         dialog.dismiss()
-                                    }
-                                    else
+                                    } else
                                         toast(it)
                                 }
                             }
@@ -876,14 +879,18 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         vm.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
         vm.position = 0L
         if (::playerFragment.isInitialized) {
-            playerFragment.player.stop()
+            try {
+                playerFragment.player.stop()
+            } catch (e: Exception) {
+                // Not reaady
+            }
         }
         if (::youtubePlayer.isInitialized) {
             youtubePlayer.pause()
         }
     }
 
-    fun hideVideoFab(){
+    fun hideVideoFab() {
         noteFabTv.isVisible = false
         doubtFabTv.isVisible = false
         doubtFab.startAnimation(animationUtils.close)

@@ -46,12 +46,23 @@ fun ImageView.loadImage(imgUrl: String, scale: Boolean = false, callback: (loade
         createGlideRequest(Uri.parse(imgUrl), context)
             .listener(SvgSoftwareLayerSetter1())
             .listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
                     callback(false)
                     return false
                 }
 
-                override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
                     callback(true)
                     return false
                 }
@@ -59,7 +70,6 @@ fun ImageView.loadImage(imgUrl: String, scale: Boolean = false, callback: (loade
             .error(createGlideRequest(Uri.parse(imgUrl), context, scale))
             .into(this)
     }
-
 }
 
 class SvgSoftwareLayerSetter1 : RequestListener<Drawable> {
@@ -77,7 +87,13 @@ class SvgSoftwareLayerSetter1 : RequestListener<Drawable> {
         return true
     }
 
-    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+    override fun onResourceReady(
+        resource: Drawable?,
+        model: Any?,
+        target: Target<Drawable>?,
+        dataSource: DataSource?,
+        isFirstResource: Boolean
+    ): Boolean {
         val view = (target as ImageViewTarget<*>).view
         view.setLayerType(ImageView.LAYER_TYPE_SOFTWARE, null)
         return false

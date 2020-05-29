@@ -109,7 +109,7 @@ class CourseViewModel(
             projects.postValue(emptyList())
         }
     }
-    //Todo - Improvise this
+    // Todo - Improvise this
     fun fetchSections(sectionIdList: ArrayList<Sections>) {
         val list = arrayListOf<Sections>()
         if (!sectionIdList.isNullOrEmpty()) {
@@ -118,7 +118,7 @@ class CourseViewModel(
                     async(Dispatchers.IO) { repo.getSection(it.id) } // runs in parallel in background thread
                 }.awaitAll()
                 sectionList.forEach {
-                    when(it){
+                    when (it) {
                         is ResultWrapper.GenericError -> setError(it.error)
                         is ResultWrapper.Success -> with(it.value) {
                             if (isSuccessful) {

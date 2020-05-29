@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +24,8 @@ import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
-import com.codingblocks.onlineapi.models.Leaderboard
+import java.io.File
+import java.lang.Math.abs
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
 import kotlinx.android.synthetic.main.item_hb_performance.*
@@ -33,8 +33,6 @@ import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.io.File
-import java.lang.Math.abs
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
@@ -94,29 +92,23 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
             courseAndRun.run.whatsappLink?.let {
-                if(!it.isNullOrEmpty()){
-                setWhatsappCard(it, courseAndRun.runAttempt.premium)}
+                if (!it.isEmpty()) {
+                    setWhatsappCard(it, courseAndRun.runAttempt.premium)
+                }
             }
 
             if (courseAndRun.run.crStart > "1574985600") {
                 if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium && RUNTIERS.LITE.name != courseAndRun.runAttempt.runTier)
                     setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
             }
-        }
+            viewModel.getLeaderboard().observer(viewLifecycleOwner) { leaderboard ->
 
-        viewModel.getLeaderboard(viewModel.runId).observer(viewLifecycleOwner) { leaderboard ->
-            if (leaderboard.isNullOrEmpty())
-                courseLeaderboardll.isVisible = false
-            else {
-                val currUserLeaderboard: Leaderboard? = leaderboard.find {
-                    it.id == viewModel.prefs.SP_USER_ID
+                val currUserLeaderboard = leaderboard.find { it.id == viewModel.prefs.SP_USER_ID }
+                currUserLeaderboard?.let {
+                    courseLeaderboardll.isVisible = true
+                    it.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
+                    leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
                 }
-                currUserLeaderboard?.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
-                val userList: MutableList<Leaderboard>
-                userList = if (currUserLeaderboard?.userName?.isNotEmpty()!!)
-                    (mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5) as MutableList<Leaderboard>).toMutableList()
-                else leaderboard.subList(0, 5) as MutableList<Leaderboard>
-                leaderBoardListAdapter.submitList(userList)
             }
         }
 
@@ -126,11 +118,11 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             chart1.loadData(it.averageProgress, it.userProgress)
         }
 
-        viewModel.getHackerBlocksPerformance().distinctUntilChanged().observe(viewLifecycleOwner , Observer {
-            if(it!=null) {
+        viewModel.getHackerBlocksPerformance().distinctUntilChanged().observe(viewLifecycleOwner, Observer {
+            if (it != null) {
                 hbRankContainer.isVisible = true
                 currentOverallRank.text = it.currentOverallRank.toString()
-                currentMonthScore.text = requireContext().getString(R.string.points,it.currentMonthScore)
+                currentMonthScore.text = requireContext().getString(R.string.points, it.currentMonthScore)
                 val rankDelta = it.currentOverallRank - it.previousOverallRank
                 val pointsDelta = it.currentMonthScore - it.previousMonthScore
                 previousRank.apply {
@@ -139,7 +131,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
                 previousMonthlyScore.apply {
                     isActivated = pointsDelta >= 0
-                    text = context.getString(R.string.points,pointsDelta)
+                    text = context.getString(R.string.points, pointsDelta)
                 }
             }
         })
@@ -194,20 +186,19 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     }
 
     private fun setWhatsappCard(link: String, premium: Boolean) {
-            whatsappContainer.apply {
-                isVisible = premium
-                setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.setPackage("com.whatsapp")
-                    intent.data = Uri.parse(link)
-                    if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
-                    }
+        whatsappContainer.apply {
+            isVisible = premium
+            setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setPackage("com.whatsapp")
+                intent.data = Uri.parse(link)
+                if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
                 }
             }
-
+        }
     }
 
     override fun onDestroy() {

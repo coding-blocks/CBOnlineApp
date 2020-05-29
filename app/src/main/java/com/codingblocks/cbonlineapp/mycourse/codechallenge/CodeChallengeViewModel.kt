@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.mycourse.codechallenge
 
-
 import androidx.lifecycle.*
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.*
@@ -12,7 +11,8 @@ import kotlinx.coroutines.Dispatchers
 
 class CodeChallengeViewModel(
     handle: SavedStateHandle,
-    private val repo: CodeChallengeRepository) : BaseCBViewModel() {
+    private val repo: CodeChallengeRepository
+) : BaseCBViewModel() {
 
     var sectionId by savedStateValue<String>(handle, SECTION_ID)
     var contentId by savedStateValue<String>(handle, CONTENT_ID)
@@ -26,9 +26,9 @@ class CodeChallengeViewModel(
         when (val response = codeId?.toInt()?.let { repo.fetchCodeChallenge(it, contestId ?: "") }) {
             is ResultWrapper.GenericError -> {
                 setError(response.error)
-                if (codeId?.let { repo.isDownloaded(it) }!!){
+                if (codeId?.let { repo.isDownloaded(it) }!!) {
                     downloadState.postValue(true)
-                    emit(codeId?.let { repo.getOfflineContent(it) } )
+                    emit(codeId?.let { repo.getOfflineContent(it) })
                 }
             }
             is ResultWrapper.Success -> {
@@ -40,9 +40,9 @@ class CodeChallengeViewModel(
                     downloadState.postValue(repo.isDownloaded(codeId!!))
                 } else {
                     setError(fetchError(response.value.code()))
-                    if (codeId?.let { repo.isDownloaded(it) }!!){
+                    if (codeId?.let { repo.isDownloaded(it) }!!) {
                         downloadState.postValue(true)
-                        emit(codeId?.let { repo.getOfflineContent(it) } )
+                        emit(codeId?.let { repo.getOfflineContent(it) })
                     }
                 }
             }
@@ -51,7 +51,7 @@ class CodeChallengeViewModel(
 
     fun saveCode() {
         runIO {
-            codeId?.let { codeId -> codeChallenge?.let {codeContent-> repo.saveCode(codeId, codeContent) } }
+            codeId?.let { codeId -> codeChallenge?.let { codeContent -> repo.saveCode(codeId, codeContent) } }
             downloadState.postValue(true)
         }
     }

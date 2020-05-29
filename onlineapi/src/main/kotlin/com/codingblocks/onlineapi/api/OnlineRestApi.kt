@@ -4,9 +4,10 @@ import com.codingblocks.onlineapi.models.DoubtStats
 import com.codingblocks.onlineapi.models.Extension
 import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.PerformanceResponse
+import com.codingblocks.onlineapi.models.RankResponse
 import com.codingblocks.onlineapi.models.RatingModel
 import com.codingblocks.onlineapi.models.ResetRunAttempt
-import com.codingblocks.onlineapi.models.RankResponse
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -46,14 +47,8 @@ interface OnlineRestApi {
     @GET("v2/courses/{id}/rating")
     suspend fun getCourseRating(@Path("id") id: String): RatingModel
 
-    @GET("v2/users/me")
-    fun getMe(): Call<JsonObject>
-
     @GET("v2/runs/{runId}/enroll")
     suspend fun enrollTrial(@Path("runId") id: String): Response<JsonObject>
-
-    @GET("v2/jwt/logout")
-    fun logout(): Call<JsonObject>
 
     @GET("v2/runs/{runId}/buy")
     suspend fun addToCart(@Path("runId") id: String): Response<JsonObject>
@@ -100,19 +95,22 @@ interface OnlineRestApi {
     @POST("v2/chats/{id}")
     suspend fun getChatId(@Path("id") doubtId: String): Response<JsonObject>
 
-    @POST("jwt/otp")
+    @POST("jwt/otp/v2")
     @FormUrlEncoded
     suspend fun getOtp(@FieldMap params: HashMap<String, String>): Response<JsonObject>
 
-    @POST("jwt/otp/verify")
+    @POST("users/find")
     @FormUrlEncoded
-    suspend fun getJwt(@FieldMap params: Map<String, String>): Response<JsonObject>
+    suspend fun findUser(@FieldMap params: HashMap<String, String>): Response<JsonArray>
+
+    @POST("jwt/otp/v2/{id}/verify")
+    suspend fun verifyOtp(@Path("id") uniqueId: String, @Body params: HashMap<String, Any>): Response<JsonObject>
+
+    @PATCH("users/verifymobile")
+    suspend fun verifyMobile(@Body params: Map<String, String>): Response<JsonObject>
 
     @POST("users")
-    @FormUrlEncoded
-    suspend fun createUser(
-        @FieldMap params: Map<String, String>
-    ): Response<JsonObject>
+    suspend fun createUser(@Body params: Map<String, String>): Response<JsonObject>
 
     @PATCH("users/{id}")
     @FormUrlEncoded
@@ -125,6 +123,13 @@ interface OnlineRestApi {
     @FormUrlEncoded
     suspend fun getJwtWithEmail(@FieldMap params: Map<String, String>): Response<JsonObject>
 
+    @POST("jwt/otp/v2/{id}/login")
+    @FormUrlEncoded
+    suspend fun getJwtWithClaim(
+        @Path("id") uniqueId: String,
+        @FieldMap params: Map<String, String> = hashMapOf("client" to "android")
+    ): Response<JsonObject>
+
     @POST("v2/run_attempts/purchase")
     @FormUrlEncoded
     suspend fun capturePayment(@FieldMap params: Map<String, String>): Response<JsonObject>
@@ -134,5 +139,4 @@ interface OnlineRestApi {
 
     @GET("v2/hb/performance")
     suspend fun getHackerBlocksPerformance(): Response<RankResponse>
-
 }

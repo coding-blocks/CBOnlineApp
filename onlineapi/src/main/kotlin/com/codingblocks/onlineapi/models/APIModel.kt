@@ -10,13 +10,11 @@ import com.github.jasminb.jsonapi.annotations.Type
 import com.google.gson.JsonObject
 import java.io.Serializable
 
-
 open class BaseModel {
     @Id
     var id: String = ""
     var updatedAt: String = ""
 }
-
 
 data class CourseFeatures(
     val icon: String,
@@ -99,17 +97,15 @@ data class Course(
         val goodiesThreshold: Int?,
         val totalContents: Int,
         val tier: String?
-    ) : BaseModel() {
-
-    }
+    ) : BaseModel()
 
     @Type("hbcontents")
     data class CodeChallenge(
         val name: String,
         @Relationship("problem")
-        val content: Problem?=null
+        val content: Problem? = null
 
-    ):BaseModel()
+    ) : BaseModel()
 
     @Type("timelimits")
     data class TimeLimits(
@@ -120,32 +116,32 @@ data class Course(
         val js: String,
         val csharp: String,
         val java: String
-    ):BaseModel()
+    ) : BaseModel()
 
     @Type("details")
     data class CodeDetails(
-        val constraints: String?="None",
-        val explanation: String?="None",
+        val constraints: String? = "None",
+        val explanation: String? = "None",
         @JsonProperty("input_format")
-        val inputFormat: String?="None",
+        val inputFormat: String? = "None",
         @JsonProperty("sample_input")
-        val sampleInput: String?="None",
+        val sampleInput: String? = "None",
         @JsonProperty("output_format")
-        val outputFormat: String?="None",
+        val outputFormat: String? = "None",
         @JsonProperty("sample_output")
-        val sampleOutput: String?="None",
-        val description: String?="None"
+        val sampleOutput: String? = "None",
+        val description: String? = "None"
     ) : BaseModel()
 
     @Type("problems")
     data class Problem(
         val difficulty: String,
         val name: String,
-        val image: String?="",
-        val status: String?="",
-        val details:CodeDetails?=null,
-        val timelimits: TimeLimits?=null
-    ):BaseModel()
+        val image: String? = "",
+        val status: String? = "",
+        val details: CodeDetails? = null,
+        val timelimits: TimeLimits? = null
+    ) : BaseModel()
 
     @Type("run-attempts", "run_attempts")
     data class RunAttempts(
@@ -191,22 +187,26 @@ data class Course(
         @Relationship("resolved_by", "resolved-by")
         val resolvedBy: User? = null
     ) : BaseModel() {
-        constructor(id: String, title: String,
-                    body: String,
-                    discourseTopicId: String,
-                    runAttempt: RunAttempts?,
-                    conversationId: String?,
-                    content: LectureContent?,
-                    status: String,
-                    createdAt: String
+        constructor(
+            id: String,
+            title: String,
+            body: String,
+            discourseTopicId: String,
+            runAttempt: RunAttempts?,
+            conversationId: String?,
+            content: LectureContent?,
+            status: String,
+            createdAt: String
         ) : this(title, body, status, discourseTopicId, conversationId, runAttempt, content, createdAt) {
             super.id = id
         }
 
-        constructor(id: String?, title: String,
-                    body: String,
-                    runAttempt: RunAttempts?,
-                    content: LectureContent?
+        constructor(
+            id: String?,
+            title: String,
+            body: String,
+            runAttempt: RunAttempts?,
+            content: LectureContent?
         ) : this(title = title, body = body, runAttempt = runAttempt, content = content)
 
         constructor(id: String) : this() {
@@ -222,7 +222,6 @@ data class Course(
         @Relationship("doubt")
         val doubt: Doubts? = null
     ) : BaseModel()
-
 
     @Type("sections")
     data class Sections(
@@ -264,8 +263,8 @@ data class Course(
         @Relationship("bookmark")
         val bookmark: Bookmark?
     ) : BaseModel() {
-        constructor(id: String)
-            : this("", 0L, "", null, null, null, null, null, null, null, null, null) {
+        constructor(id: String) :
+            this("", 0L, "", null, null, null, null, null, null, null, null, null) {
             super.id = id
         }
     }
@@ -293,8 +292,8 @@ data class Course(
         @Relationship("content")
         val content: LectureContent? = null
     ) {
-        constructor(status: String, runAttemptId: RunAttempts, contentId: LectureContent, progressId: String?)
-            : this(status = status, runAttempt = runAttemptId, content = contentId, id = progressId)
+        constructor(status: String, runAttemptId: RunAttempts, contentId: LectureContent, progressId: String?) :
+            this(status = status, runAttempt = runAttemptId, content = contentId, id = progressId)
     }
 
     @Type("bookmarks")
@@ -312,8 +311,8 @@ data class Course(
         val sectionId: String? = null,
         val contentId: String? = null
     ) {
-        constructor(runAttemptId: RunAttempts, contentId: LectureContent, sectionId: Sections)
-            : this(null, runAttemptId, contentId, sectionId)
+        constructor(runAttemptId: RunAttempts, contentId: LectureContent, sectionId: Sections) :
+            this(null, runAttemptId, contentId, sectionId)
     }
 
     @Type("quiz-attempts", "quiz_attempts")
@@ -328,13 +327,12 @@ data class Course(
         var runAttempt: RunAttempts? = null,
         var submission: ArrayList<QuizSubmission>? = null
     ) : BaseModel() {
-        constructor(qnaId: ContentQna, runAttemptId: RunAttempts)
-            : this(qna = qnaId, runAttempt = runAttemptId)
+        constructor(qnaId: ContentQna, runAttemptId: RunAttempts) :
+            this(qna = qnaId, runAttempt = runAttemptId)
 
-        constructor(id: String, qnaId: ContentQna)
-            : this(qna = qnaId) {
+        constructor(id: String, qnaId: ContentQna) :
+            this(qna = qnaId) {
             super.id = id
-
         }
     }
 
@@ -349,14 +347,13 @@ data class Course(
         @Relationship("content")
         val content: LectureContent? = null
     ) : BaseModel(), Serializable {
-        constructor(id: String, duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent)
-            : this(duration, null, null, text, runAttemptId, contentId) {
+        constructor(id: String, duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent) :
+            this(duration, null, null, text, runAttemptId, contentId) {
             super.id = id
         }
 
-        constructor(duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent)
-            : this(duration, null, null, text, runAttemptId, contentId)
-
+        constructor(duration: Double, text: String, runAttemptId: RunAttempts, contentId: LectureContent) :
+            this(duration, null, null, text, runAttemptId, contentId)
     }
 
     @Type("users", "user")
@@ -377,12 +374,10 @@ data class Course(
         val branch: String? = ""
     ) : BaseModel()
 
-
     class SectionContent(
         val order: Int,
         val sectionId: String?
     ) : BaseModel()
-
 
 // =======Section Content Models =========
 
@@ -407,8 +402,8 @@ data class Course(
         var qId: Int? = null,
         var name: String? = null
     ) : BaseModel() {
-        constructor(id: String)
-            : this() {
+        constructor(id: String) :
+            this() {
             super.id = id
         }
     }
@@ -514,7 +509,6 @@ data class Course(
 
 // =======Section Content Models =========
 
-
     @Type("quizzes")
     class Quizzes(
         var title: String? = null,
@@ -590,10 +584,8 @@ data class Course(
         var user: User?
     ) : BaseModel()
 
-
     @Type("rating")
     class Rating : BaseModel()
-
 
     @Type("tags")
     class Tags : BaseModel() {
@@ -708,7 +700,3 @@ data class Course(
         @Id
         val id: String?
     )
-
-
-
-

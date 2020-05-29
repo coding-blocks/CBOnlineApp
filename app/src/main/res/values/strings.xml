@@ -307,4 +307,5 @@
     <string name="hb_performance">Your Monthly Score</string>
     <string name="ranks">%d Ranks</string>
     <string name="points">%d Points</string>
+    <string name="policy_text"><![CDATA[By logging in you agree to Coding Blocks’s\n Privacy Policy & Terms of Service]]></string>
 </resources>

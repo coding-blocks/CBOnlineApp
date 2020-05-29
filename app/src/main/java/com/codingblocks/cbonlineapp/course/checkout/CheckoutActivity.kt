@@ -1,7 +1,6 @@
 package com.codingblocks.cbonlineapp.course.checkout
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
@@ -106,9 +105,9 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
     }
 
     override fun onBackPressed() {
-        if(supportFragmentManager.backStackEntryCount>=3) {
+        if (supportFragmentManager.backStackEntryCount >= 3) {
             supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        }else{
+        } else {
             super.onBackPressed()
         }
     }
