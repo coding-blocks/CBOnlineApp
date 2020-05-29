@@ -168,8 +168,11 @@
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".mycourse.player.VideoPlayerActivity"
+            android:parentActivityName=".mycourse.MyCourseActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:supportsPictureInPicture="true"
+            android:launchMode="singleTask"
+            android:resizeableActivity="true"
             android:theme="@style/NewAppTheme.Dark" />
         <activity
             android:name=".PdfActivity"
@@ -237,7 +240,7 @@
         <service
             android:name=".util.EndlessService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
     </application>
 
 </manifest>
