@@ -298,6 +298,9 @@
     <string name="payment_failed">Your payment has failed!</string>
     <string name="internet_connection_error">Please check your internet connection</string>
     <string name="retry">Retry Now</string>
+    <string name="rank">Rank</string>
+    <string name="user">User</string>
+    <string name="score">Score</string>
     <string name="hb_report">Hacker Blocks Report</string>
     <string name="coding_skills">Improve your coding skills</string>
     <string name="current_rank">Your Current Rank</string>

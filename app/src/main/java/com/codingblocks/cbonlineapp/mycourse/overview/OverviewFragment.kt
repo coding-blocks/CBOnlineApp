@@ -24,7 +24,8 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import java.io.File
+import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.onlineapi.models.Leaderboard
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
 import kotlinx.android.synthetic.main.item_hb_performance.*
@@ -32,11 +33,13 @@ import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.io.File
 import java.lang.Math.abs
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
+    private val leaderBoardListAdapter = LeaderBoardListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +52,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        courseLeaderboardRv.setRv(requireContext(), leaderBoardListAdapter)
         viewModel.run?.distinctUntilChanged()?.observer(viewLifecycleOwner) { courseAndRun ->
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
             viewModel.runId = (courseAndRun.run.crUid)
@@ -97,6 +101,22 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             if (courseAndRun.run.crStart > "1574985600") {
                 if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium && RUNTIERS.LITE.name != courseAndRun.runAttempt.runTier)
                     setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
+            }
+        }
+
+        viewModel.getLeaderboard(viewModel.runId).observer(viewLifecycleOwner) { leaderboard ->
+            if (leaderboard.isNullOrEmpty())
+                courseLeaderboardll.isVisible = false
+            else {
+                val currUserLeaderboard: Leaderboard? = leaderboard.find {
+                    it.id == viewModel.prefs.SP_USER_ID
+                }
+                currUserLeaderboard?.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
+                val userList: MutableList<Leaderboard>
+                userList = if (currUserLeaderboard?.userName?.isNotEmpty()!!)
+                    (mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5) as MutableList<Leaderboard>).toMutableList()
+                else leaderboard.subList(0, 5) as MutableList<Leaderboard>
+                leaderBoardListAdapter.submitList(userList)
             }
         }
 

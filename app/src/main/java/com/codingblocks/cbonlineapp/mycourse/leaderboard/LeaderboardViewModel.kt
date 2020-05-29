@@ -9,10 +9,4 @@ import com.codingblocks.onlineapi.models.Leaderboard
 class LeaderboardViewModel : BaseCBViewModel() {
 
     var leaderboard: MutableLiveData<List<Leaderboard>> = MutableLiveData()
-
-    fun getLeaderboard(runId: String) {
-        Clients.api.leaderboardById(runId).enqueue(retrofitCallback { throwable, response ->
-            leaderboard.value = response?.body()
-        })
-    }
 }
