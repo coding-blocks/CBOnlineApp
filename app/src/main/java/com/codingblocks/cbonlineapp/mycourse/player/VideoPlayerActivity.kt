@@ -94,11 +94,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.*
 import org.jetbrains.anko.design.snackbar
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.singleTop
-import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
@@ -889,6 +886,12 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                 CONTENT_ID to contentId,
                 VIDEO_POSITION to position,
                 SECTION_ID to sectionId).singleTop()
+        }
+
+        fun createVideoPlayerActivity(context: Context, contentId: String, sectionId: String, exclude: Boolean): Intent {
+            return context.intentFor<VideoPlayerActivity>(
+                CONTENT_ID to contentId,
+                SECTION_ID to sectionId).singleTop().apply { if (exclude) excludeFromRecents() }
         }
     }
 }

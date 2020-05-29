@@ -31,6 +31,7 @@ import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivity
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CODE
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
@@ -332,26 +333,14 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                         LECTURE ->
                             if (contentLecture.lectureUid.isNotEmpty())
                                 startActivity(
-                                    if (getPrefs()?.SP_PIP!!) {
-                                        intentFor<VideoPlayerActivity>(
-                                            CONTENT_ID to ccid,
-                                            SECTION_ID to sectionId
-                                        ).addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-                                    } else {
-                                        intentFor<VideoPlayerActivity>(
-                                            CONTENT_ID to ccid,
-                                            SECTION_ID to sectionId
-                                        )
-                                    }
-                                )else
+                                    createVideoPlayerActivity(requireContext(), ccid, sectionId, getPrefs(requireContext()).SP_PIP)
+                                )
+                            else
                                 checkSection(premium)
                         VIDEO ->
                             if (contentVideo.videoUid.isNotEmpty()) {
                                 startActivity(
-                                    intentFor<VideoPlayerActivity>(
-                                        CONTENT_ID to ccid,
-                                        SECTION_ID to sectionId
-                                    )
+                                    createVideoPlayerActivity(requireContext(), ccid, sectionId, getPrefs(requireContext()).SP_PIP)
                                 )
                             } else
                                 checkSection(premium)
