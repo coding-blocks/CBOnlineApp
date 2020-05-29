@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.auth
 
-import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
@@ -14,11 +13,9 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver.OnSmsOTPReceivedListener
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_login_home.*
 import kotlinx.android.synthetic.main.fragment_login_otp.*
 import org.jetbrains.anko.design.snackbar
@@ -48,6 +45,9 @@ class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
         }
         verifyOtpBtn.setOnClickListener {
             verifyWithOtp()
+        }
+        backBtn.setOnClickListener {
+            requireActivity().onBackPressed()
         }
     }
 

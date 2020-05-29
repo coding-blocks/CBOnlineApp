@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.auth
 
-import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -12,9 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
@@ -62,7 +59,6 @@ class SignInFragment : BaseCBFragment() {
         proceedBtn.isEnabled = false
         vm.loginWithEmail(email, password)
     }
-
 
     private fun requestHint() {
         val hintRequest = HintRequest.Builder()

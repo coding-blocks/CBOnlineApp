@@ -83,6 +83,9 @@
                     android:hint="@string/email_address"
                     android:inputType="textEmailAddress"
                     android:paddingStart="0dp"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:clickable="false"
                     android:paddingEnd="0dp"
                     android:textColorHighlight="@color/orangish"
                     android:textColorHint="@color/black"
@@ -102,6 +105,9 @@
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/white"
                     android:fontFamily="@font/gilroy_medium"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:clickable="false"
                     android:hint="@string/mobile_number"
                     android:inputType="number"
                     android:paddingStart="0dp"
@@ -117,6 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginBottom="@dimen/margin_large"
                 android:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText

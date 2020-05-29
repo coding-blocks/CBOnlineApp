@@ -13,10 +13,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <ImageView
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_back" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="@dimen/margin_xxxl"
             android:fontFamily="@font/gilroy_bold"
             android:text="Please wait"
             android:textSize="18sp" />
@@ -65,6 +73,7 @@
             android:layout_marginTop="@dimen/margin_medium"
             android:fontFamily="@font/gilroy_medium"
             android:textColor="@color/black"
+            android:layout_marginBottom="@dimen/margin_large"
             android:visibility="visible"
             android:textColorLink="@color/orangish"
             android:textSize="14sp"

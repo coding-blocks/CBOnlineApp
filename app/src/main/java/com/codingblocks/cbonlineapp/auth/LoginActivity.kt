@@ -3,7 +3,6 @@ package com.codingblocks.cbonlineapp.auth
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
@@ -31,10 +30,7 @@ class LoginActivity : BaseCBActivity(), AnkoLogger {
                     showEmailSheet()
                 }
                 AccountStates.DO_NOT_EXIST -> {
-
-                }
-                AccountStates.EMAIL_NOT_VERIFIED -> {
-
+                    replaceFragmentSafely(SignUpFragment(), containerViewId = R.id.loginContainer)
                 }
             }
         }
@@ -57,7 +53,6 @@ class LoginActivity : BaseCBActivity(), AnkoLogger {
             setResult(Activity.RESULT_OK)
         }
         finish()
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

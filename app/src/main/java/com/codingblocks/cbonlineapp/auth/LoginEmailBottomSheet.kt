@@ -33,9 +33,9 @@ class LoginEmailBottomSheet : BottomSheetDialogFragment() {
         emailBtn.setOnClickListener {
             val email = emailEdtv.text.toString()
             vm.email = email
-            if (passwordLayout.isVisible){
-                vm.loginWithEmail(email,passEdtv.text.toString())
-            }else{
+            if (passwordLayout.isVisible) {
+                vm.loginWithEmail(email, passEdtv.text.toString())
+            } else {
                 vm.findUser(hashMapOf("verifiedemail" to email))
             }
         }

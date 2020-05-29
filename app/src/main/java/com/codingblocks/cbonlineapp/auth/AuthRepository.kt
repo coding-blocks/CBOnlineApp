@@ -39,4 +39,14 @@ class AuthRepository(
     suspend fun loginWithClaim(uniqueId: String) = safeApiCall { Clients.api.getJwtWithClaim(uniqueId) }
 
     suspend fun verifyMobileUsingClaim(uniqueId: String) = safeApiCall { Clients.api.verifyMobile(hashMapOf("claimId" to uniqueId)) }
+
+    suspend fun createUser(name: List<String>, username: String, mobile: String, email: String, uniqueId: String) = safeApiCall {
+        Clients.api.createUser(
+            hashMapOf("username" to username,
+                "mobile" to mobile,
+                "firstname" to name[0],
+                "lastname" to name[1],
+                "email" to email,
+                "claimId" to uniqueId))
+    }
 }

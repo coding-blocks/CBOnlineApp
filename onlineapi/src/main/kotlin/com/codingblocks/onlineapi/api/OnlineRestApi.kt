@@ -111,9 +111,7 @@ interface OnlineRestApi {
 
     @POST("users")
     @FormUrlEncoded
-    suspend fun createUser(
-        @FieldMap params: Map<String, String>
-    ): Response<JsonObject>
+    suspend fun createUser(@FieldMap params: Map<String, String>): Response<JsonObject>
 
     @PATCH("users/{id}")
     @FormUrlEncoded
@@ -128,7 +126,10 @@ interface OnlineRestApi {
 
     @POST("jwt/otp/v2/{id}/login")
     @FormUrlEncoded
-    suspend fun getJwtWithClaim(@Path("id") uniqueId: String,@FieldMap params: Map<String, String> = hashMapOf("client" to "android")): Response<JsonObject>
+    suspend fun getJwtWithClaim(
+        @Path("id") uniqueId: String,
+        @FieldMap params: Map<String, String> = hashMapOf("client" to "android")
+    ): Response<JsonObject>
 
     @POST("v2/run_attempts/purchase")
     @FormUrlEncoded

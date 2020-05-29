@@ -27,7 +27,6 @@ class AuthViewModel(
     var dialCode by savedStateValue<String>(handle, "dialCode")
     var email by savedStateValue<String>(handle, EMAIL)
 
-
     fun fetchToken(grantCode: String) {
         runIO {
             when (val response = repo.getToken(grantCode)) {
@@ -121,8 +120,7 @@ class AuthViewModel(
                             userMap.containsKey("email") -> {
                                 account.postValue(AccountStates.EXITS)
                             }
-                        }
-                    else {
+                        } else {
                         if (response.value.code() == 404)
                             when {
                                 userMap.containsKey("verifiedmobile") -> {
@@ -135,8 +133,7 @@ class AuthViewModel(
                                 userMap.containsKey("email") -> {
                                     account.postValue(AccountStates.DO_NOT_EXIST)
                                 }
-                            }
-                        else
+                            } else
                             response.value.errorBody()?.let { parseError(it) }
                     }
                 }
@@ -173,6 +170,26 @@ class AuthViewModel(
         val jObjError = JSONObject(errorBody.string())
         val message = jObjError.getString("message")
         errorLiveData.postValue(message)
+    }
+
+    fun createUser(name: List<String>, username: String) {
+        runIO {
+            when (val response = repo.createUser(name, username, "$dialCode-$mobile", email!!, uniqueId!!)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let {
+                            repo.saveKeys(it)
+                            isLoggedIn.postValue(true)
+                            repo.verifyMobileUsingClaim(uniqueId!!)
+                        }
+                    else {
+                        if (response.value.code() != 404)
+                            response.value.errorBody()?.let { parseError(it) }
+                    }
+                }
+            }
+        }
     }
 }
 
