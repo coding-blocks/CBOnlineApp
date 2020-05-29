@@ -11,11 +11,9 @@ import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.textfield.TextInputEditText
+import java.util.regex.Pattern
 import kotlinx.android.synthetic.main.bottom_sheet_login.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.util.regex.Pattern
-
 
 class LoginEmailBottomSheet : BottomSheetDialogFragment() {
 
@@ -31,14 +29,14 @@ class LoginEmailBottomSheet : BottomSheetDialogFragment() {
         emailBtn.setOnClickListener {
             val email = emailEdtv.text.toString()
             vm.email = email
-            if(isValidEmail(email)) {
+            if (isValidEmail(email)) {
                 emailLayout.error = ""
                 if (passwordLayout.isVisible) {
                     vm.loginWithEmail(email, passEdtv.text.toString())
                 } else {
                     vm.findUser(hashMapOf("verifiedemail" to email))
                 }
-            }else{
+            } else {
                 emailLayout.error = "Email is not valid"
             }
         }
@@ -64,5 +62,4 @@ class LoginEmailBottomSheet : BottomSheetDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return super.onCreateDialog(savedInstanceState)
     }
-
 }

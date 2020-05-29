@@ -92,13 +92,17 @@ class AuthViewModel(
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
+                            errorLiveData.postValue(null)
                             repo.saveKeys(it)
                             isLoggedIn.postValue(true)
                             if (!uniqueId.isNullOrEmpty())
                                 repo.verifyMobileUsingClaim(uniqueId!!)
                         }
                     else {
-                        response.value.errorBody()?.let { parseErrorBody(it) }
+                        if (response.value.code() == 500)
+                            errorLiveData.postValue("Incorrect email or password")
+                        else
+                            response.value.errorBody()?.let { parseErrorBody(it) }
                     }
                 }
             }

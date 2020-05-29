@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.mycourse.content
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -31,7 +30,6 @@ import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeActivity
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CODE
@@ -51,9 +49,9 @@ import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
+import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import java.util.concurrent.TimeUnit
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*

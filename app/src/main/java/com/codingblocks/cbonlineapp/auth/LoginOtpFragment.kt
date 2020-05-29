@@ -18,7 +18,6 @@ import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import kotlinx.android.synthetic.main.fragment_login_home.*
 import kotlinx.android.synthetic.main.fragment_login_otp.*
-import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -37,7 +36,6 @@ class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
         setFirstSpan()
         numberTv.append(vm.mobile)
         vm.errorLiveData.observer(viewLifecycleOwner) {
-            otpRoot.snackbar(it.capitalize())
             verifyOtpBtn.isEnabled = true
         }
         otpEdtv.addTextChangedListener {

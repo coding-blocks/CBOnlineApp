@@ -325,6 +325,8 @@ class MyCourseRepository(
         Clients.api.addToCart(id)
     }
 
+    suspend fun fetchLeaderboard(runId: String) = safeApiCall { Clients.api.leaderboardById(runId) }
+
     suspend fun fetchSections(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.enrolledCourseById(attemptId) }
 
     suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }

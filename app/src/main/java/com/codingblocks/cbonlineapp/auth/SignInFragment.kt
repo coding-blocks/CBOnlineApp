@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
+import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
@@ -42,6 +43,9 @@ class SignInFragment : BaseCBFragment() {
 
         fbBtn.setOnClickListener {
             showWebView()
+        }
+        vm.errorLiveData.observer(viewLifecycleOwner) {
+            proceedBtn.isEnabled = true
         }
     }
 

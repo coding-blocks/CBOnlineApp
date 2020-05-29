@@ -12,7 +12,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_login_otp.*
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 import kotlinx.android.synthetic.main.fragment_sign_up.backBtn
-import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SignUpFragment : BaseCBFragment() {
@@ -31,7 +30,7 @@ class SignUpFragment : BaseCBFragment() {
             requireActivity().onBackPressed()
         }
         vm.errorLiveData.observer(viewLifecycleOwner) {
-            signUpRoot.snackbar(it.capitalize())
+            proceedBtn.isEnabled = true
         }
         emailLayout.editText?.setText(vm.email)
         mobileLayout.editText?.setText("${vm.dialCode}-${vm.mobile}")
