@@ -21,7 +21,6 @@ import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
 import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.onlineapi.models.Leaderboard
@@ -53,7 +52,6 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         viewModel.run?.distinctUntilChanged()?.observer(viewLifecycleOwner) { courseAndRun ->
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
             viewModel.runId = (courseAndRun.run.crUid)
-            viewModel.getLeaderboard(courseAndRun.run.crUid)
             val progressValue = courseAndRun.getProgress()
             homeProgressTv.text = getString(R.string.progress, progressValue.toInt())
             homeProgressView.setGradientColor(progressValue)
@@ -99,16 +97,16 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             }
         }
 
-        viewModel.leaderboard.observer(viewLifecycleOwner) { leaderboard ->
+        viewModel.getLeaderboard(viewModel.runId).observer(viewLifecycleOwner) { leaderboard ->
             if (leaderboard.isNullOrEmpty())
                 courseLeaderboardll.isVisible = false
             else {
-                val currUserLeaderboard = leaderboard.find {
+                val currUserLeaderboard: Leaderboard? = leaderboard.find {
                     it.id == viewModel.prefs.SP_USER_ID
-                }!!
-                currUserLeaderboard.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
+                }
+                currUserLeaderboard?.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
                 val userList: MutableList<Leaderboard>
-                userList = if (currUserLeaderboard.userName.isNotEmpty())
+                userList = if (currUserLeaderboard?.userName?.isNotEmpty()!!)
                     (mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5) as MutableList<Leaderboard>).toMutableList()
                 else leaderboard.subList(0, 5) as MutableList<Leaderboard>
                 leaderBoardListAdapter.submitList(userList)

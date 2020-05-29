@@ -47,7 +47,6 @@ class MyCourseViewModel(
     var runId by savedStateValue<String>(handle, RUN_ID)
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
-    var leaderboard: MutableLiveData<List<Leaderboard>> = MutableLiveData()
 
     /** MutableLiveData Filters for [SectionContentHolder.SectionContentPair]. */
     var filters: MutableLiveData<String> = MutableLiveData()
@@ -145,18 +144,16 @@ class MyCourseViewModel(
             .enqueue(request)
     }
 
-    fun getLeaderboard(crUid: String?) {
-        runIO {
-            when (val response = crUid?.let { repo.fetchLeaderboard(it) }) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> with(response.value) {
-                    if (isSuccessful) {
-                        body()?.let { leaderboardlist ->
-                            leaderboard.postValue(leaderboardlist)
-                        }
-                    } else {
-                        setError(fetchError(code()))
+    fun getLeaderboard(crUid: String?) = liveData(Dispatchers.IO) {
+        when (val response = crUid?.let { repo.fetchLeaderboard(it) }) {
+            is ResultWrapper.GenericError -> setError(response.error)
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful) {
+                    body()?.let {
+                        emit(it)
                     }
+                } else {
+                    setError(fetchError(code()))
                 }
             }
         }
