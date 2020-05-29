@@ -18,6 +18,7 @@ import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.SECTION_ID
@@ -45,16 +46,10 @@ class LibraryViewFragment : BaseCBFragment() {
             override fun onClick(item: BaseModel) {
                 when (item) {
                     is ContentLecture -> startActivity(
-                        intentFor<VideoPlayerActivity>(
-                            CONTENT_ID to item.lectureContentId,
-                            SECTION_ID to item.lectureSectionId
-                        ).singleTop()
+                        createVideoPlayerActivityIntent(requireContext(), item.lectureContentId, item.lectureSectionId)
                     )
                     is BookmarkModel -> startActivity(
-                        intentFor<VideoPlayerActivity>(
-                            CONTENT_ID to item.contentId,
-                            SECTION_ID to item.sectionId
-                        ).singleTop()
+                        createVideoPlayerActivityIntent(requireContext(), item.contentId, item.sectionId)
                     )
 //                    is NotesModel -> startActivity(intentFor<VideoPlayerActivity>(CONTENT_ID to item.contentId, SECTION_ID to item.sectionId).singleTop())
                 }
