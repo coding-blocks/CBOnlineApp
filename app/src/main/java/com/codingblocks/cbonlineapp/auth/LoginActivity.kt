@@ -30,6 +30,12 @@ class LoginActivity : BaseCBActivity(), AnkoLogger {
                 AccountStates.NUMBER_NOT_VERIFIED -> {
                     showEmailSheet()
                 }
+                AccountStates.DO_NOT_EXIST -> {
+
+                }
+                AccountStates.EMAIL_NOT_VERIFIED -> {
+
+                }
             }
         }
         replaceFragmentSafely(LoginHomeFragment(), containerViewId = R.id.loginContainer)

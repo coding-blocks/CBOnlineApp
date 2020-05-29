@@ -9,7 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NonNull
+import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -30,9 +32,20 @@ class LoginEmailBottomSheet : BottomSheetDialogFragment() {
 
         emailBtn.setOnClickListener {
             val email = emailEdtv.text.toString()
-            val password = passEdtv.text.toString()
             vm.email = email
-            vm.findUser(hashMapOf("verifiedemail" to email),password)
+            if (passwordLayout.isVisible){
+                vm.loginWithEmail(email,passEdtv.text.toString())
+            }else{
+                vm.findUser(hashMapOf("verifiedemail" to email))
+            }
+        }
+
+        vm.account.observer(viewLifecycleOwner) {
+            when (it) {
+                AccountStates.EXITS -> {
+                    passwordLayout.isVisible = true
+                }
+            }
         }
     }
 

@@ -24,7 +24,7 @@ class AuthViewModel(
 
     var mobile by savedStateValue<String>(handle, PHONE_NUMBER)
     private var uniqueId by savedStateValue<String>(handle, ID)
-    private var dialCode by savedStateValue<String>(handle, "dialCode")
+    var dialCode by savedStateValue<String>(handle, "dialCode")
     var email by savedStateValue<String>(handle, EMAIL)
 
 
@@ -43,10 +43,9 @@ class AuthViewModel(
         }
     }
 
-    fun sendOtp(dialCode: String) {
-        this.dialCode = dialCode
+    fun sendOtp() {
         runIO {
-            when (val response = repo.sendOtp(dialCode, mobile!!)) {
+            when (val response = repo.sendOtp(dialCode!!, mobile!!)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
@@ -106,7 +105,7 @@ class AuthViewModel(
         }
     }
 
-    fun findUser(userMap: HashMap<String, String>, password: String = "") {
+    fun findUser(userMap: HashMap<String, String>) {
         runIO {
             when (val response = repo.findUser(userMap)) {
                 is ResultWrapper.GenericError -> setError(response.error)
@@ -117,10 +116,10 @@ class AuthViewModel(
                                 loginUserWithClaim()
                             }
                             userMap.containsKey("verifiedemail") -> {
-                                loginWithEmail(email!!, password)
+                                account.postValue(AccountStates.EXITS)
                             }
                             userMap.containsKey("email") -> {
-                                loginWithEmail(email!!, password)
+                                account.postValue(AccountStates.EXITS)
                             }
                         }
                     else {
@@ -130,7 +129,7 @@ class AuthViewModel(
                                     account.postValue(AccountStates.NUMBER_NOT_VERIFIED)
                                 }
                                 userMap.containsKey("verifiedemail") -> {
-                                    findUser(hashMapOf("email" to email!!), password)
+                                    findUser(hashMapOf("email" to email!!))
                                     account.postValue(AccountStates.EMAIL_NOT_VERIFIED)
                                 }
                                 userMap.containsKey("email") -> {
@@ -180,5 +179,6 @@ class AuthViewModel(
 enum class AccountStates {
     DO_NOT_EXIST,
     NUMBER_NOT_VERIFIED,
-    EMAIL_NOT_VERIFIED
+    EMAIL_NOT_VERIFIED,
+    EXITS
 }

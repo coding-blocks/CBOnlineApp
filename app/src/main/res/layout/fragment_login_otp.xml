@@ -56,8 +56,21 @@
                 tools:ignore="RtlSymmetry" />
 
         </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
 
+        <TextView
+            android:id="@+id/resendOtpTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:fontFamily="@font/gilroy_medium"
+            android:textColor="@color/black"
+            android:visibility="visible"
+            android:textColorLink="@color/orangish"
+            android:textSize="14sp"
+            android:gravity="bottom|center"
+            tools:text="Didn't recieve OTP? RESEND" />
+    </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/verifyOtpBtn"

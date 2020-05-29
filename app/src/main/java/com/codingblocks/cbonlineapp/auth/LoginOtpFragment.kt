@@ -1,7 +1,12 @@
 package com.codingblocks.cbonlineapp.auth
 
 import android.app.Activity
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Spannable
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +16,13 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver.OnSmsOTPReceivedListener
+import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import kotlinx.android.synthetic.main.fragment_login_home.*
 import kotlinx.android.synthetic.main.fragment_login_otp.*
 import org.jetbrains.anko.design.snackbar
+import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
@@ -28,6 +37,7 @@ class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setFirstSpan()
         numberTv.append(vm.mobile)
         vm.errorLiveData.observer(viewLifecycleOwner) {
             otpRoot.snackbar(it.capitalize())
@@ -50,6 +60,28 @@ class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
         if (otp.isNotEmpty()) {
             otpEdtv.setText(otp)
             verifyWithOtp()
+        }
+    }
+
+    private fun setFirstSpan() {
+        val wordToSpan = getSpannableStringSecondBold("Didn't recieve OTP?    ", "RESEND")
+        val clickableSpan: ClickableSpan = object : ClickableSpan() {
+            override fun onClick(textView: View) {
+                vm.sendOtp()
+                toast("You will receive Otp on SMS shortly!!")
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+                ds.color = ds.linkColor
+                ds.isUnderlineText = false // set to false to remove underline
+            }
+        }
+        wordToSpan.setSpan(clickableSpan, wordToSpan.length - 6, wordToSpan.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        resendOtpTv.apply {
+            text = wordToSpan
+            movementMethod = LinkMovementMethod.getInstance()
+            highlightColor = Color.TRANSPARENT
         }
     }
 
