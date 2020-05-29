@@ -58,9 +58,9 @@ interface OnlineRestApi {
     suspend fun addToCart(@Path("runId") id: String): Response<JsonObject>
 
     @GET("v2/runs/{runid}/leaderboard")
-    fun leaderboardById(
+    suspend fun leaderboardById(
         @Path("runid") id: String
-    ): Call<List<Leaderboard>>
+    ): Response<List<Leaderboard>>
 
 
     @GET("v2/users/myReferral")
