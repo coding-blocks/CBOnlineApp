@@ -14,6 +14,7 @@ import com.codingblocks.onlineapi.models.Instructor
 import com.codingblocks.onlineapi.models.Jobs
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
+import com.codingblocks.onlineapi.models.CodeChallenge
 import com.codingblocks.onlineapi.models.Player
 import com.codingblocks.onlineapi.models.Professions
 import com.codingblocks.onlineapi.models.Project
@@ -331,6 +332,12 @@ interface OnlineJsonApi {
 
     @PATCH("doubts/{id}")
     suspend fun acknowledgeDoubt(@Path("id") doubtId: String, @Body params: Doubts): Response<List<Doubts>>
+
+    @GET("code_challenges/{codeId}/content")
+    suspend fun getCodeChallenge(
+        @Path("codeId") codeId: Int,
+        @Query("contest_id") include: String=""
+    ): Response<CodeChallenge>
 
 
 }

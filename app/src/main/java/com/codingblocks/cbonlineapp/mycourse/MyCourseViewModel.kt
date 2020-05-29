@@ -19,6 +19,8 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
+import com.codingblocks.cbonlineapp.database.models.CourseRunPair
+import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
@@ -54,9 +56,10 @@ class MyCourseViewModel(
     var content: LiveData<List<SectionContentHolder.SectionContentPair>> = MutableLiveData()
 
     init {
-        getStats()
+        getPerformance()
         content = Transformations.switchMap(DoubleTrigger(complete, filters)) {
             attemptId?.let {
+                getStats()
                 repo.getSectionWithContent(it)
             }
         }
@@ -70,11 +73,11 @@ class MyCourseViewModel(
             handle.set("runStartEnd", value)
         }
 
-    val performance by lazy {
+    val performance: LiveData<RunPerformance>? by lazy {
         attemptId?.let { repo.getRunStats(it) }
     }
 
-    val run by lazy {
+    val run: LiveData<CourseRunPair>? by lazy {
         attemptId?.let { repo.getRunById(it) }
     }
 
@@ -220,23 +223,35 @@ class MyCourseViewModel(
             dm.enqueue(request)
         }
     }
+
+
+    private fun getPerformance() {
+        runIO {
+            val mRank = repo.getHackerBlocksPerformance().value
+            when (val response = repo.getPerformance()) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        body()?.let { response ->
+                            if (mRank?.currentOverallRank != response.currentOverallRank) {
+                                repo.saveRank(response)
+                            }
+                        }
+                    } else {
+                        if (code() != 404)
+                            setError(fetchError(code()))
+                        else {
+                            //No HB Report
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun getHackerBlocksPerformance() = repo.getHackerBlocksPerformance()
 }
 
-//    fun requestApproval() {
-//        Clients.api.requestApproval(attemptId).enqueue(retrofitCallback { throwable, response ->
-//            response.let {
-//                if (it?.isSuccessful == true) {
-//                    mutablePopMessage.value = it.body()?.string()
-//                } else {
-//                    mutablePopMessage.value = it?.errorBody()?.string()
-//                }
-//            }
-//            throwable.let {
-//                mutablePopMessage.value = it?.message
-//            }
-//        })
-//    }
-//
 //    fun fetchExtensions(productId: Int): MutableLiveData<List<ProductExtensionsItem>> {
 //        Clients.api.getExtensions(productId).enqueue(retrofitCallback { throwable, response ->
 //            response?.body().let { list ->

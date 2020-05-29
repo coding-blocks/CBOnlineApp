@@ -6,6 +6,7 @@ import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.RunAttemptDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
 import com.codingblocks.cbonlineapp.database.SectionDao
+import com.codingblocks.cbonlineapp.database.HBRankDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.database.models.ContentCodeChallenge
@@ -19,6 +20,7 @@ import com.codingblocks.cbonlineapp.database.models.RunAttemptModel
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
+import com.codingblocks.cbonlineapp.database.models.HBRankModel
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
@@ -26,6 +28,7 @@ import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.codingblocks.onlineapi.models.RunAttempts
+import com.codingblocks.onlineapi.models.RankResponse
 import com.codingblocks.onlineapi.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -37,6 +40,7 @@ class MyCourseRepository(
     private val courseWithInstructorDao: CourseWithInstructorDao,
     private val runPerformanceDao: RunPerformanceDao,
     private val bookmarkDao: BookmarkDao,
+    private val hbRankDao: HBRankDao,
     private val attemptDao: RunAttemptDao
 ) {
     suspend fun getSectionWithContentNonLive(attemptId: String) = sectionWithContentsDao.getSectionWithContentNonLive(attemptId)
@@ -185,7 +189,7 @@ class MyCourseRepository(
                             contentQna1.updatedAt
                         )
                 }
-                "code_challenge" -> content.codeChallenge?.let { codeChallenge ->
+                "code-challenge" -> content.codeChallenge?.let { codeChallenge ->
                     contentCodeChallenge =
                         ContentCodeChallenge(
                             codeChallenge.id,
@@ -292,6 +296,21 @@ class MyCourseRepository(
         )
     }
 
+    suspend fun saveRank(rank: RankResponse) {
+        hbRankDao.insert(
+            HBRankModel(
+                rank.bestRank,
+                rank.bestRankAchievedOn,
+                rank.currentMonthScore,
+                rank.currentOverallRank,
+                rank.previousMonthScore,
+                rank.previousOverallRank
+            )
+        )
+    }
+
+    fun getHackerBlocksPerformance()  = hbRankDao.getRank()
+
     suspend fun resetProgress(attemptId: ResetRunAttempt) = safeApiCall { Clients.api.resetProgress(attemptId) }
 
     private suspend fun clearCart() = safeApiCall { Clients.api.clearCart() }
@@ -308,4 +327,6 @@ class MyCourseRepository(
     suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
 
     suspend fun requestApproval(attemptId: String) = safeApiCall { Clients.api.requestApproval(attemptId) }
+
+    suspend fun getPerformance() = safeApiCall { Clients.api.getHackerBlocksPerformance() }
 }

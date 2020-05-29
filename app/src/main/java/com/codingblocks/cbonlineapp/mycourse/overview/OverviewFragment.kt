@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
@@ -26,11 +28,13 @@ import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.onlineapi.models.Leaderboard
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
+import kotlinx.android.synthetic.main.item_hb_performance.*
 import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.io.File
+import java.lang.Math.abs
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
@@ -89,7 +93,10 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     }
                 }
             }
-            courseAndRun.run.whatsappLink?.let { setWhatsappCard(it, courseAndRun.runAttempt.premium) }
+            courseAndRun.run.whatsappLink?.let {
+                if(!it.isNullOrEmpty()){
+                setWhatsappCard(it, courseAndRun.runAttempt.premium)}
+            }
 
             if (courseAndRun.run.crStart > "1574985600") {
                 if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium && RUNTIERS.LITE.name != courseAndRun.runAttempt.runTier)
@@ -118,6 +125,24 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             homePercentileTv.text = it.percentile.toString()
             chart1.loadData(it.averageProgress, it.userProgress)
         }
+
+        viewModel.getHackerBlocksPerformance().distinctUntilChanged().observe(viewLifecycleOwner , Observer {
+            if(it!=null) {
+                hbRankContainer.isVisible = true
+                currentOverallRank.text = it.currentOverallRank.toString()
+                currentMonthScore.text = requireContext().getString(R.string.points,it.currentMonthScore)
+                val rankDelta = it.currentOverallRank - it.previousOverallRank
+                val pointsDelta = it.currentMonthScore - it.previousMonthScore
+                previousRank.apply {
+                    isActivated = rankDelta >= 0
+                    text = context.getString(R.string.ranks, abs(rankDelta))
+                }
+                previousMonthlyScore.apply {
+                    isActivated = pointsDelta >= 0
+                    text = context.getString(R.string.points,pointsDelta)
+                }
+            }
+        })
 
         confirmReset.setOnClickListener {
             Components.showConfirmation(requireContext(), "reset") {
@@ -169,19 +194,20 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     }
 
     private fun setWhatsappCard(link: String, premium: Boolean) {
-        whatsappContainer.apply {
-            isVisible = premium
-            setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setPackage("com.whatsapp")
-                intent.data = Uri.parse(link)
-                if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
+            whatsappContainer.apply {
+                isVisible = premium
+                setOnClickListener {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.setPackage("com.whatsapp")
+                    intent.data = Uri.parse(link)
+                    if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-        }
+
     }
 
     override fun onDestroy() {

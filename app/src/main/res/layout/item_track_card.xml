@@ -18,10 +18,10 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/trackLogo"
-            android:layout_centerInParent="true"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
             android:layout_marginStart="@dimen/margin_large"
             android:elevation="2dp"
             android:src="@drawable/ic_course_logo"
@@ -53,10 +53,10 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/trackTitleTv"
                     android:layout_alignStart="@id/trackTitleTv"
+                    android:layout_marginBottom="8dp"
                     android:fontFamily="@font/gilroy_bold"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
-                    android:layout_marginBottom="8dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     android:textStyle="bold"
@@ -71,21 +71,19 @@
                     android:layout_alignTop="@id/course_card_like"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="@dimen/margin_medium_small"
+                    android:layout_marginEnd="@dimen/padding_medium"
                     android:layout_toStartOf="@id/course_card_like"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:layout_marginEnd="@dimen/padding_medium"
-                    android:scaleType="centerCrop"
                     android:contentDescription="@string/share"
                     android:focusable="true"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/ic_share" />
 
                 <ImageButton
-                    android:layout_width="14dp"
                     android:id="@+id/course_card_like"
+                    android:layout_width="14dp"
                     android:layout_height="15dp"
-                    android:scaleType="centerCrop"
-                    android:visibility="gone"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="@dimen/margin_medium_small"
                     android:layout_marginEnd="@dimen/padding_medium"
@@ -93,7 +91,9 @@
                     android:clickable="true"
                     android:contentDescription="@string/like"
                     android:focusable="true"
-                    android:src="@drawable/ic_like" />
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_like"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/trackTitleTv"
@@ -101,11 +101,11 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/course_card_share"
                     android:layout_marginStart="110dp"
-                    android:layout_marginEnd="@dimen/margin_small"
                     android:layout_marginTop="7dp"
+                    android:layout_marginEnd="@dimen/margin_small"
                     android:ellipsize="end"
-                    android:lines="1"
                     android:fontFamily="@font/gilroy_bold"
+                    android:lines="1"
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     tools:text="Android App Development Online" />
@@ -129,8 +129,8 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingStart="@dimen/padding_medium"
                 tools:ignore="RtlSymmetry">
@@ -145,18 +145,24 @@
                     android:text="@string/career_options"
                     android:textSize="12sp" />
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/trackChips"
-
-                    android:layout_marginBottom="@dimen/margin_medium"
-                    app:singleLine="true"
+                <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:scrollbars="none"
                     android:layout_marginStart="@dimen/margin_small"
                     android:layout_marginTop="@dimen/margin_medium"
-                    android:layout_toEndOf="@id/optionTv"
-                    app:chipSpacingHorizontal="5dp"
-                    app:chipSpacingVertical="@dimen/margin_small" />
+                    android:layout_marginBottom="@dimen/margin_medium"
+                    android:layout_toEndOf="@id/optionTv">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/trackChips"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipSpacingHorizontal="5dp"
+                        app:chipSpacingVertical="@dimen/margin_small"
+                        app:singleLine="true" />
+
+                </HorizontalScrollView>
 
 
             </RelativeLayout>

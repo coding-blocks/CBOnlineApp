@@ -6,6 +6,7 @@ import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.RatingModel
 import com.codingblocks.onlineapi.models.ResetRunAttempt
+import com.codingblocks.onlineapi.models.RankResponse
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -61,7 +62,6 @@ interface OnlineRestApi {
     suspend fun leaderboardById(
         @Path("runid") id: String
     ): Response<List<Leaderboard>>
-
 
     @GET("v2/users/myReferral")
     suspend fun myReferral(): Response<JsonObject>
@@ -131,5 +131,8 @@ interface OnlineRestApi {
 
     @POST("v2/hubspot/lead")
     suspend fun generateLead(@Body body: HashMap<String, Any>): Response<JsonObject>
+
+    @GET("v2/hb/performance")
+    suspend fun getHackerBlocksPerformance(): Response<RankResponse>
 
 }

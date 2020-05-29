@@ -177,6 +177,7 @@ class ProfileActivity : BaseCBActivity() {
                         startActivity(intentFor<SplashActivity>().apply {
                             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         })
+                        finishAffinity()
                     }
                 }
             }

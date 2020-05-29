@@ -83,11 +83,12 @@
     <string name="chat_with_ta">Chat with TA</string>
     <string name="comment">Comment</string>
     <string name="doubts">Doubts</string>
-    <string name="my_courses">My Courses</string>
+    <string name="my_courses">MyCourses</string>
     <string name="explore">Explore</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="no_doubts">No Doubts</string>
+    <string name="click_to_add_doubt">Click on + to ask a doubt.</string>
     <string name="go_to_classroom">Go to Classroom</string>
     <string name="doubts_that_you_ask_appear_here">Doubts that you ask appear here</string>
     <string name="reopen_doubt">Reopen Doubt</string>
@@ -285,6 +286,12 @@
     <string name="progress">%d %%</string>
     <string name="completed">%d %% Completed</string>
     <string name="continue_from_where_you_left">Continue from where you left</string>
+    <string name="input_format">Input Format</string>
+    <string name="constraints">Constraints</string>
+    <string name="output_format">Output Format</string>
+    <string name="sample_input">Sample Input</string>
+    <string name="sample_output">Sample Output</string>
+    <string name="explanation">Explanation</string>
     <string name="clear">Remove Product</string>
     <string name="no_notes">No Notes</string>
     <string name="click_on_to_add_a_new_note">Click on + to add a new note.</string>
@@ -294,5 +301,10 @@
     <string name="rank">Rank</string>
     <string name="user">User</string>
     <string name="score">Score</string>
-
+    <string name="hb_report">Hacker Blocks Report</string>
+    <string name="coding_skills">Improve your coding skills</string>
+    <string name="current_rank">Your Current Rank</string>
+    <string name="hb_performance">Your Monthly Score</string>
+    <string name="ranks">%d Ranks</string>
+    <string name="points">%d Points</string>
 </resources>

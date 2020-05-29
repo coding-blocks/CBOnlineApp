@@ -11,7 +11,7 @@ ext {
     ankoVersion = '0.10.6'
     room_version = "2.2.5"
     koin_version = "2.1.5"
-    markwon_version = "4.3.1"
+    markwon_version = "4.4.0"
     ankoLibs = [
             // commons
             'commons',
@@ -39,13 +39,13 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 101000404
+        versionCode 101000500
         // 1 (versioning scheme)
         // 00 (major version)
         // 00 (minor version)
         // 01 (patch version)
         // 01 spare for betas/RCs
-        versionName "1.0.4"
+        versionName "1.0.5"
         signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false
@@ -131,7 +131,7 @@ dependencies {
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.5.Final'
     implementation "com.github.skydoves:progressview:1.0.5"
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    implementation 'com.razorpay:checkout:1.5.17'
+    implementation 'com.razorpay:checkout:1.5.16'
     implementation "io.noties.markwon:core:$markwon_version"
     implementation "io.noties.markwon:ext-tables:$markwon_version"
     implementation "io.noties.markwon:editor:$markwon_version"
