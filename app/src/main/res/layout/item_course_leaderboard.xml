@@ -16,13 +16,13 @@
         android:fontFamily="@font/gilroy_medium"
         android:textSize="16sp" />
 
-    <ImageView
-        android:id="@+id/selectorIv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_progress_selector"
-        android:paddingStart="@dimen/margin_small"
-        android:paddingEnd="@dimen/margin_small"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/userImgView"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/defaultavatar"
+
         />
 
     <TextView

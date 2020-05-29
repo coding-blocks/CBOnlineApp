@@ -93,8 +93,9 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
             courseAndRun.run.whatsappLink?.let {
-                if (!it.isNullOrEmpty()) {
-                setWhatsappCard(it, courseAndRun.runAttempt.premium) }
+                if (!it.isEmpty()) {
+                    setWhatsappCard(it, courseAndRun.runAttempt.premium)
+                }
             }
 
             if (courseAndRun.run.crStart > "1574985600") {
@@ -105,15 +106,13 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 if (leaderboard.isNullOrEmpty())
                     courseLeaderboardll.isVisible = false
                 else {
-                    val currUserLeaderboard: Leaderboard? = leaderboard.find {
-                        it.id == viewModel.prefs.SP_USER_ID
+                    val currUserLeaderboard = leaderboard.find { it.id == viewModel.prefs.SP_USER_ID }
+                    currUserLeaderboard?.let {
+                        it.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
+                        leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
+                    } ?: run {
+                        courseLeaderboardll.isVisible = false
                     }
-                    currUserLeaderboard?.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
-                    val userList: MutableList<Leaderboard>
-                    userList = if (currUserLeaderboard?.userName?.isNotEmpty()!!)
-                        (mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5) as MutableList<Leaderboard>).toMutableList()
-                    else leaderboard.subList(0, 5) as MutableList<Leaderboard>
-                    leaderBoardListAdapter.submitList(userList)
                 }
             }
 
@@ -195,19 +194,19 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     }
 
     private fun setWhatsappCard(link: String, premium: Boolean) {
-            whatsappContainer.apply {
-                isVisible = premium
-                setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.setPackage("com.whatsapp")
-                    intent.data = Uri.parse(link)
-                    if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
-                    }
+        whatsappContainer.apply {
+            isVisible = premium
+            setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setPackage("com.whatsapp")
+                intent.data = Uri.parse(link)
+                if (requireContext().packageManager.resolveActivity(intent, 0) != null) {
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(requireContext(), "Please install whatsApp", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
     }
 
     override fun onDestroy() {
