@@ -86,10 +86,10 @@ interface OnlineRestApi {
     suspend fun requestApproval(@Path("runAttemptId") id: String): Response<ResponseBody>
 
     @GET("v2/runs/products/{id}")
-    fun getExtensions(@Path("id") productId: Int): Call<Extension>
+    suspend fun getExtensions(@Path("id") productId: Int): Response<Extension>
 
     @POST("v2/runs/extensions/{id}/buy")
-    fun buyExtension(@Path("id") extensionId: Int): Call<JsonObject>
+    suspend fun buyExtension(@Path("id") extensionId: Int): Response<JsonObject>
 
     @GET("v2/doubts/stats/{id}")
     suspend fun doubtStats(@Path("id") userId: String): Response<DoubtStats>
