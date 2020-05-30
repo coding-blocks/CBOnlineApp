@@ -1,17 +1,18 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/signUpRoot"
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingStart="@dimen/margin_large"
-    android:paddingEnd="@dimen/margin_large"
-    tools:context="com.codingblocks.cbonlineapp.auth.onboarding.SignUpFragment">
+    android:fillViewport="true"
+    android:scrollbars="none">
 
-    <ScrollView
+    <FrameLayout
+        android:id="@+id/signUpRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none">
-
+        android:paddingStart="@dimen/margin_large"
+        android:paddingEnd="@dimen/margin_large"
+        tools:context="com.codingblocks.cbonlineapp.auth.SignUpFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,6 +80,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/white"
+                    android:clickable="false"
+                    android:editable="false"
+                    android:focusable="false"
                     android:fontFamily="@font/gilroy_medium"
                     android:hint="@string/email_address"
                     android:inputType="textEmailAddress"
@@ -101,6 +105,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/white"
+                    android:clickable="false"
+                    android:editable="false"
+                    android:focusable="false"
                     android:fontFamily="@font/gilroy_medium"
                     android:hint="@string/mobile_number"
                     android:inputType="number"
@@ -117,6 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginBottom="@dimen/margin_large"
                 android:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -137,16 +145,15 @@
 
 
         </LinearLayout>
-    </ScrollView>
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/proceedBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/margin_xl"
+            android:text="@string/proceed"
+            android:textSize="20sp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/proceedBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/margin_xl"
-        android:text="@string/proceed"
-        android:textSize="20sp" />
-
-</FrameLayout>
+    </FrameLayout>
+</ScrollView>

@@ -2,7 +2,6 @@ package com.codingblocks.onlineapi.models
 
 import com.google.gson.annotations.SerializedName
 
-
 data class DoubtStats(
     val avgFirstResponse: Float,
     val avgRating: Float,
@@ -31,7 +30,8 @@ data class RatingModel(
 
 data class Leaderboard(
     @JvmField
-    var userName: String) : BaseModel() {
+    var userName: String
+) : BaseModel() {
     @JvmField
     var collegeName: String? = null
     @JvmField
@@ -39,8 +39,6 @@ data class Leaderboard(
     @JvmField
     var score: Int? = 0
 }
-
-
 
 data class ResetRunAttempt(
     val runAttemptId: String
@@ -219,5 +217,3 @@ data class ProductExtensionsItem(
     @field:SerializedName("emi_min_repeat")
     val emiMinRepeat: Int? = null
 )
-
-

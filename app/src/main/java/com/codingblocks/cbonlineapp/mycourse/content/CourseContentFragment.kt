@@ -30,10 +30,12 @@ import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeActivity
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CODE
+import com.codingblocks.cbonlineapp.util.CODE_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.CONTEST_ID
 import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.LECTURE
@@ -44,11 +46,10 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.SectionDownloadService
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
-import com.codingblocks.cbonlineapp.util.CONTEST_ID
-import com.codingblocks.cbonlineapp.util.CODE_ID
 import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
+import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import java.util.concurrent.TimeUnit
@@ -333,20 +334,14 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                         LECTURE ->
                             if (contentLecture.lectureUid.isNotEmpty())
                                 startActivity(
-                                    intentFor<VideoPlayerActivity>(
-                                        CONTENT_ID to ccid,
-                                        SECTION_ID to sectionId
-                                    )
+                                    createVideoPlayerActivityIntent(requireContext(), ccid, sectionId)
                                 )
                             else
                                 checkSection(premium)
                         VIDEO ->
                             if (contentVideo.videoUid.isNotEmpty()) {
                                 startActivity(
-                                    intentFor<VideoPlayerActivity>(
-                                        CONTENT_ID to ccid,
-                                        SECTION_ID to sectionId
-                                    )
+                                    createVideoPlayerActivityIntent(requireContext(), ccid, sectionId)
                                 )
                             } else
                                 checkSection(premium)

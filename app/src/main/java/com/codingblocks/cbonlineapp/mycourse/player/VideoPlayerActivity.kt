@@ -1,17 +1,29 @@
 package com.codingblocks.cbonlineapp.mycourse.player
 
 import android.animation.LayoutTransition
+import android.annotation.TargetApi
+import android.app.ActivityManager
+import android.app.PendingIntent
+import android.app.PictureInPictureParams
+import android.app.RemoteAction
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.util.Rational
 import android.view.View
 import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
 import android.widget.RelativeLayout
+import androidx.annotation.DrawableRes
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
 import androidx.work.BackoffPolicy
@@ -36,11 +48,13 @@ import com.codingblocks.cbonlineapp.util.DownloadWorker
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils.deleteRecursive
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYoutubeVideoId
+import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
+import com.codingblocks.cbonlineapp.util.extensions.*
 import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
@@ -67,22 +81,22 @@ import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
 import java.io.File
+import java.lang.Exception
 import java.util.Objects
 import java.util.concurrent.TimeUnit
 import kotlinx.android.synthetic.main.activity_video_player.*
+import kotlinx.android.synthetic.main.activity_video_player.youtubePlayerView
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import kotlinx.android.synthetic.main.my_fab_menu.*
+import kotlinx.android.synthetic.main.vdo_control_view.*
 import kotlinx.android.synthetic.main.vdo_control_view.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.*
 import org.jetbrains.anko.design.snackbar
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.singleTop
-import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
@@ -96,6 +110,17 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     private val dialog: BottomSheetDialog by lazy { BottomSheetDialog(this) }
     private val sheetDialog: View by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, null) }
     val tracker = YouTubePlayerTracker()
+    private val ACTION_MEDIA_CONTROL = "media_control"
+    private val EXTRA_CONTROL_TYPE = "control_type"
+    private val CONTROL_TYPE_PLAY = 1
+    private val CONTROL_TYPE_PAUSE = 2
+    private val REQUEST_PLAY = 1
+    private val REQUEST_PAUSE = 2
+    private var hasBeenIntoPIP: Boolean = false
+    private var isCallingFromFinish: Boolean = false
+    private var isYoutubeVideoReady: Boolean = false
+    private var contentable: String = ""
+    private lateinit var mPIPParams: PictureInPictureParams.Builder
 
     private lateinit var playerFragment: VdoPlayerSupportFragment
     private lateinit var videoPlayer: VdoPlayer
@@ -144,6 +169,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             videoFab.isVisible = !contentListView.isVisible
         }
 
+        registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL))
         videoFab.setOnClickListener {
             with(noteFabTv.isVisible) {
                 noteFabTv.isVisible = !this
@@ -204,6 +230,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             vm.attemptId.value = it.attempt_id
             sectionTitle.text = getString(R.string.section_name, it.sectionTitle)
             contentTitle.text = it.title
+            contentable = it.contentable
             if (it.contentable == LECTURE) {
                 vm.currentContentProgress = it.progress
                 vm.isDownloaded = it.contentLecture.isDownloaded
@@ -392,6 +419,10 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
 
         override fun onLoaded(p0: VdoPlayer.VdoInitParams?) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                if (isInPictureInPictureMode) {
+                    playerControlView.isVisible = false
+                }
             videoPlayer.playWhenReady = true
             videoPlayer.playbackSpeed = vm.prefs.SP_PLAYBACK_SPEED
             vm.position?.let { videoPlayer.seekTo(it) }
@@ -511,65 +542,117 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
     }
 
-//    override fun onUserLeaveHint() {
-//        super.onUserLeaveHint()
-//        if (getPrefs().SP_PIP) {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-//                activatePIPMode()
-//        }
-//    }
+    private val mReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(p0: Context?, intent: Intent?) {
+            if (intent!!.action != ACTION_MEDIA_CONTROL) {
+                return
+            }
 
-//    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
-//
-//        if (isInPictureInPictureMode) {
-//            player_tabs.visibility = View.GONE
-//            pagerFrame.visibility = View.GONE
-//
-//            playerControlView?.fitsSystemWindows = true
-//
-//            if (::playerFragment.isInitialized) {
-//                val paramsFragment: RelativeLayout.LayoutParams =
-//                    playerFragment.view?.layoutParams as RelativeLayout.LayoutParams
-//                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-//                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_TOP)
-//                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_START)
-//                paramsFragment.addRule(RelativeLayout.ALIGN_PARENT_END)
-//            }
-//
-//            // hide system windows
-//            showControls(false)
-//        } else {
-//            player_tabs.visibility = View.VISIBLE
-//            pagerFrame.visibility = View.VISIBLE
-//
-//            if (::playerFragment.isInitialized) {
-//                val paramsFragment: RelativeLayout.LayoutParams =
-//                    playerFragment.view?.layoutParams as RelativeLayout.LayoutParams
-//                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-//                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_TOP)
-//                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_START)
-//                paramsFragment.removeRule(RelativeLayout.ALIGN_PARENT_END)
-//            }
-//            playerControlView?.setPadding(0, 0, 0, 0)
-//        }
-//
-//        super.onPictureInPictureModeChanged(isInPictureInPictureMode)
-//    }
+            val controlType = intent.getIntExtra(EXTRA_CONTROL_TYPE, 0)
+            when (controlType) {
+                CONTROL_TYPE_PLAY -> playVideo()
+                CONTROL_TYPE_PAUSE -> pauseVideo()
+            }
+        }
+    }
 
-//    @TargetApi(Build.VERSION_CODES.O)
-//    fun activatePIPMode() {
-//
-//        val display = windowManager.defaultDisplay
-//        val size = Point()
-//        display.getSize(size)
-//        val width = size.x
-//        val height = size.y
-//
-//        val aspectRatio = Rational(width, height)
-//        val mPIPParams = PictureInPictureParams.Builder()
-//        mPIPParams.setAspectRatio(aspectRatio)
-//        enterPictureInPictureMode(mPIPParams.build())
-//    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun playVideo() {
+        if (contentable == LECTURE) {
+            videoPlayer.playWhenReady = true
+        } else {
+            if (isYoutubeVideoReady)
+                youtubePlayer.play()
+            else
+                return
+        }
+        updatePictureInPictureActions(R.drawable.ic_pause, "Pause",
+            CONTROL_TYPE_PAUSE, REQUEST_PAUSE)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun pauseVideo() {
+        if (contentable == LECTURE) {
+            videoPlayer.playWhenReady = false
+        } else {
+            if (isYoutubeVideoReady)
+                youtubePlayer.pause()
+            else
+                return
+        }
+        updatePictureInPictureActions(R.drawable.ic_play, "Play",
+            CONTROL_TYPE_PLAY, REQUEST_PLAY)
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        if (getPrefs().SP_PIP and !isCallingFromFinish) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE))
+                    activatePIPMode()
+        }
+    }
+
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
+
+        if (isInPictureInPictureMode) {
+            showControls(false)
+            hasBeenIntoPIP = true
+            playerControlView.isVisible = false
+        } else {
+            showControls(true)
+            playerControlView.isVisible = true
+        }
+
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    internal fun updatePictureInPictureActions(
+        @DrawableRes iconId: Int,
+        title: String,
+        controlType: Int,
+        requestCode: Int
+    ) {
+        val actions = ArrayList<RemoteAction>()
+
+        val intent = PendingIntent.getBroadcast(this@VideoPlayerActivity,
+            requestCode, Intent(ACTION_MEDIA_CONTROL)
+            .putExtra(EXTRA_CONTROL_TYPE, controlType), 0)
+        val icon = Icon.createWithResource(this@VideoPlayerActivity, iconId)
+        actions.add(RemoteAction(icon, title, title, intent))
+
+        mPIPParams.setActions(actions)
+        setPictureInPictureParams(mPIPParams.build())
+    }
+
+    @TargetApi(Build.VERSION_CODES.O)
+    fun activatePIPMode() {
+
+        val width: Int
+        val height: Int
+        when (contentable) {
+            LECTURE -> {
+                width = playerFragment.requireView().width
+                height = playerFragment.requireView().height
+            }
+            VIDEO -> {
+                width = youtubePlayerView.width
+                height = youtubePlayerView.height
+            }
+            else -> return
+        }
+
+        val aspectRatio = Rational(width, height)
+        mPIPParams = PictureInPictureParams.Builder()
+        mPIPParams.setAspectRatio(aspectRatio)
+
+        updatePictureInPictureActions(R.drawable.ic_pause, "Pause",
+            CONTROL_TYPE_PAUSE, REQUEST_PAUSE)
+
+        enterPictureInPictureMode(mPIPParams.build())
+    }
 
     private fun setUpBottomSheet() {
         dialog.dismissWithAnimation = true
@@ -580,6 +663,19 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             val d = it as BottomSheetDialog
             val sheet = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)!!
             BottomSheetBehavior.from(sheet).setState(BottomSheetBehavior.STATE_EXPANDED)
+        }
+    }
+
+    fun navToLauncherTask(appContext: Context) {
+        val activityManager: ActivityManager = (appContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)!!
+        val appTasks: List<ActivityManager.AppTask> = activityManager.getAppTasks()
+        for (task in appTasks) {
+            val baseIntent: Intent = task.getTaskInfo().baseIntent
+            val categories = baseIntent.categories
+            if (categories != null && categories.contains(Intent.CATEGORY_LAUNCHER)) {
+                task.moveToFront()
+                return
+            }
         }
     }
 
@@ -598,6 +694,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             override fun onReady(player: YouTubePlayer) {
                 youtubePlayer = player
                 youtubePlayer.addListener(tracker)
+                isYoutubeVideoReady = true
                 val id = getYoutubeVideoId(youtubeUrl)
                 player.loadVideo(id, vm.position?.toFloat()?.div(1000) ?: 0f)
             }
@@ -657,8 +754,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                                     if (it.isEmpty()) {
                                         hideVideoFab()
                                         dialog.dismiss()
-                                    }
-                                    else
+                                    } else
                                         toast(it)
                                 }
                             }
@@ -741,6 +837,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         if (::playerFragment.isInitialized) {
             playerFragment.player?.release()
         }
+        unregisterReceiver(mReceiver)
         super.onDestroy()
     }
 
@@ -767,6 +864,14 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         showFullScreen(false)
     }
 
+    override fun finish() {
+        isCallingFromFinish = true
+        if (hasBeenIntoPIP) {
+            navToLauncherTask(applicationContext)
+        }
+        super.finish()
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
@@ -774,14 +879,18 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         vm.sectionId = intent.getStringExtra(SECTION_ID) ?: ""
         vm.position = 0L
         if (::playerFragment.isInitialized) {
-            playerFragment.player.stop()
+            try {
+                playerFragment.player.stop()
+            } catch (e: Exception) {
+                // Not reaady
+            }
         }
         if (::youtubePlayer.isInitialized) {
             youtubePlayer.pause()
         }
     }
 
-    fun hideVideoFab(){
+    fun hideVideoFab() {
         noteFabTv.isVisible = false
         doubtFabTv.isVisible = false
         doubtFab.startAnimation(animationUtils.close)
@@ -800,7 +909,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             return context.intentFor<VideoPlayerActivity>(
                 CONTENT_ID to contentId,
                 VIDEO_POSITION to position,
-                SECTION_ID to sectionId).singleTop()
+                SECTION_ID to sectionId).singleTop().apply { if (getPrefs(context).SP_PIP) excludeFromRecents() }
         }
     }
 }

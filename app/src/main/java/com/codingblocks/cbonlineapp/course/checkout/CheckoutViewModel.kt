@@ -45,7 +45,7 @@ class CheckoutViewModel : BaseCBViewModel() {
             when (val response = safeApiCall { Clients.api.clearCart() }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
-                    if(isSuccessful) {
+                    if (isSuccessful) {
                         // nothing
                     } else {
                         cart.postValue(null)

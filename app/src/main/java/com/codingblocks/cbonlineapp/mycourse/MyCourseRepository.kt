@@ -3,10 +3,10 @@ package com.codingblocks.cbonlineapp.mycourse
 import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
+import com.codingblocks.cbonlineapp.database.HBRankDao
 import com.codingblocks.cbonlineapp.database.RunAttemptDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
 import com.codingblocks.cbonlineapp.database.SectionDao
-import com.codingblocks.cbonlineapp.database.HBRankDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.database.models.ContentCodeChallenge
@@ -16,19 +16,19 @@ import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.ContentQnaModel
 import com.codingblocks.cbonlineapp.database.models.ContentVideo
+import com.codingblocks.cbonlineapp.database.models.HBRankModel
 import com.codingblocks.cbonlineapp.database.models.RunAttemptModel
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
-import com.codingblocks.cbonlineapp.database.models.HBRankModel
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.PerformanceResponse
+import com.codingblocks.onlineapi.models.RankResponse
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 import com.codingblocks.onlineapi.models.RunAttempts
-import com.codingblocks.onlineapi.models.RankResponse
 import com.codingblocks.onlineapi.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -69,7 +69,7 @@ class MyCourseRepository(
             runAttempt.lastAccessedAt ?: "",
             runAttempt.run?.id ?: "",
             runAttempt.certifcate?.url ?: "",
-            runAttempt.runTier?:"PREMIUM"
+            runAttempt.runTier ?: "PREMIUM"
         )
         attemptDao.update(runAttemptModel)
 
@@ -113,7 +113,12 @@ class MyCourseRepository(
         }
     }
 
-    private suspend fun insertContents(contentList: List<LectureContent>, attemptId: String, sectionId: String, name: String?) {
+    private suspend fun insertContents(
+        contentList: List<LectureContent>,
+        attemptId: String,
+        sectionId: String,
+        name: String?
+    ) {
         contentList.forEach { content ->
             var contentDocument =
                 ContentDocument()
@@ -309,7 +314,7 @@ class MyCourseRepository(
         )
     }
 
-    fun getHackerBlocksPerformance()  = hbRankDao.getRank()
+    fun getHackerBlocksPerformance() = hbRankDao.getRank()
 
     suspend fun resetProgress(attemptId: ResetRunAttempt) = safeApiCall { Clients.api.resetProgress(attemptId) }
 
@@ -319,6 +324,8 @@ class MyCourseRepository(
         clearCart()
         Clients.api.addToCart(id)
     }
+
+    suspend fun fetchLeaderboard(runId: String) = safeApiCall { Clients.api.leaderboardById(runId) }
 
     suspend fun fetchSections(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.enrolledCourseById(attemptId) }
 

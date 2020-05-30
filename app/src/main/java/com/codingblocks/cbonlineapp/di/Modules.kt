@@ -7,7 +7,8 @@ import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtRepository
 import com.codingblocks.cbonlineapp.admin.doubts.AdminDoubtsViewModel
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewRepository
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewViewModel
-import com.codingblocks.cbonlineapp.auth.onboarding.AuthViewModel
+import com.codingblocks.cbonlineapp.auth.AuthRepository
+import com.codingblocks.cbonlineapp.auth.AuthViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.course.CourseViewModel
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutViewModel
@@ -44,7 +45,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel { (handle: SavedStateHandle) -> MyCourseViewModel(handle, get()) }
+    viewModel { (handle: SavedStateHandle) -> MyCourseViewModel(handle, get(), get()) }
     viewModel { LeaderboardViewModel() }
     viewModel { NotificationViewModel(get()) }
     viewModel { (handle: SavedStateHandle) -> VideoPlayerViewModel(handle, get(), get(), get()) }
@@ -61,8 +62,8 @@ val viewModelModule = module {
     viewModel { CheckoutViewModel() }
     viewModel { TrackViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
-    viewModel { (AuthViewModel(get())) }
-    viewModel { (handle: SavedStateHandle) -> CodeChallengeViewModel(handle,get()) }
+    viewModel { (handle: SavedStateHandle) -> AuthViewModel(handle, get()) }
+    viewModel { (handle: SavedStateHandle) -> CodeChallengeViewModel(handle, get()) }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
@@ -78,6 +79,7 @@ val viewModelModule = module {
     single { TracksRepository() }
     single { ProfileRepository(get()) }
     single { CodeChallengeRepository(get()) }
+    single { AuthRepository(get()) }
 }
 val preferencesModule = module {
     single { provideSettingsPreferences(androidApplication()) }
@@ -190,7 +192,7 @@ val databaseModule = module {
     }
 
     factory {
-        val database :AppDatabase = get ()
+        val database: AppDatabase = get()
         database.hbRankDao()
     }
 }

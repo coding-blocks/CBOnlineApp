@@ -136,7 +136,10 @@ fun ProgressView.setGradientColor(progress: Double) {
     }
 }
 
-fun LineChart.loadData(averageProgress: java.util.ArrayList<ProgressItem>, userProgress: java.util.ArrayList<ProgressItem>) {
+fun LineChart.loadData(
+    averageProgress: java.util.ArrayList<ProgressItem>,
+    userProgress: java.util.ArrayList<ProgressItem>
+) {
     val values: ArrayList<Entry> = ArrayList()
     averageProgress.forEachIndexed { index, progressItem ->
         values.add(Entry(index.toFloat(), progressItem.progress.toFloat()))

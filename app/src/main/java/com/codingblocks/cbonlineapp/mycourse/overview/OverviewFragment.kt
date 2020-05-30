@@ -27,6 +27,8 @@ import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import java.io.File
+import java.lang.Math.abs
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
 import kotlinx.android.synthetic.main.item_extension_pack.*
@@ -36,14 +38,13 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.io.File
-import java.lang.Math.abs
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
     private val extensionListAdapter = ExtensionListAdapter()
-
+    private val leaderBoardListAdapter = LeaderBoardListAdapter()
+  
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,6 +57,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         courseExtensionsRv.setRv(requireContext(), extensionListAdapter)
+        courseLeaderboardRv.setRv(requireContext(), leaderBoardListAdapter)
         viewModel.run?.distinctUntilChanged()?.observer(viewLifecycleOwner) { courseAndRun ->
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
             viewModel.runId = (courseAndRun.run.crUid)
@@ -98,7 +100,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
             courseAndRun.run.whatsappLink?.let {
-                if (!it.isNullOrEmpty()) {
+                if (!it.isEmpty()) {
                     setWhatsappCard(it, courseAndRun.runAttempt.premium)
                 }
             }
@@ -106,6 +108,15 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             if (courseAndRun.run.crStart > "1574985600") {
                 if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium && RUNTIERS.LITE.name != courseAndRun.runAttempt.runTier)
                     setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
+            }
+            viewModel.getLeaderboard().observer(viewLifecycleOwner) { leaderboard ->
+
+                val currUserLeaderboard = leaderboard.find { it.id == viewModel.prefs.SP_USER_ID }
+                currUserLeaderboard?.let {
+                    courseLeaderboardll.isVisible = true
+                    it.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
+                    leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
+                }
             }
         }
 
@@ -210,7 +221,6 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
         }
-
     }
 
     override fun onDestroy() {
