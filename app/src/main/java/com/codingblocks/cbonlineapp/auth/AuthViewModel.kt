@@ -171,9 +171,9 @@ class AuthViewModel(
         errorLiveData.postValue(message)
     }
 
-    private fun parseError(errorBody: ResponseBody) {
+    private fun parseError(errorBody: ResponseBody,key:String ="message") {
         val jObjError = JSONObject(errorBody.string())
-        val message = jObjError.getString("message")
+        val message = jObjError.getString(key)
         errorLiveData.postValue(message)
     }
 
@@ -190,7 +190,7 @@ class AuthViewModel(
                         }
                     else {
                         if (response.value.code() != 404)
-                            response.value.errorBody()?.let { parseErrorBody(it) }
+                            response.value.errorBody()?.let { parseError(it,"description") }
                     }
                 }
             }

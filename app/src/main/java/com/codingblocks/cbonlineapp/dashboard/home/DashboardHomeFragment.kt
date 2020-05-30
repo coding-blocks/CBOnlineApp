@@ -79,10 +79,11 @@ class DashboardHomeFragment : BaseCBFragment() {
             vm.fetchTopRunWithStats().observe(viewLifecycleOwner, Observer { coursePair ->
                 dashboardProgressContainer.isVisible = coursePair != null
                 dashboardEmptyProgress.isVisible = coursePair == null
+                dashboardHomeShimmer.hideAndStop()
+                dashboardHome.isVisible = true
                 if (coursePair != null) {
                     vm.getStats(coursePair.runAttempt.attemptId)
-                    dashboardHomeShimmer.hideAndStop()
-                    dashboardHome.isVisible = true
+
                     homeCourseLogoImg.loadImage(coursePair.course.logo)
                     coursePair.getProgress().let { progress ->
                         homeProgressTv.text = getString(R.string.progress, progress.toInt())

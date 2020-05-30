@@ -223,6 +223,9 @@ class DashboardViewModel(
             is ResultWrapper.GenericError -> {
                 if (response.code in 101..103)
                     emitSource(homeRepo.getTopRun())
+                else{
+                    emitSource(MutableLiveData(null))
+                }
                 setError(response.error)
             }
             is ResultWrapper.Success -> with(response.value) {
