@@ -326,5 +326,9 @@ class MyCourseRepository(
 
     suspend fun requestApproval(attemptId: String) = safeApiCall { Clients.api.requestApproval(attemptId) }
 
+    suspend fun getExtensions(productId: Int) = safeApiCall { Clients.api.getExtensions(productId) }
+
+    suspend fun buyExtension(extensionId: Int) = safeApiCall { Clients.api.buyExtension(extensionId) }
+
     suspend fun getPerformance() = safeApiCall { Clients.api.getHackerBlocksPerformance() }
 }

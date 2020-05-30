@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <RadioButton
+        android:id="@+id/extensionItem"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
+        android:fontFamily="@font/gilroy_semibold"
+        android:textSize="16sp"
+        tools:text="@string/revision_pack" />
+
+    <TextView
+        android:id="@+id/extensionItemAmount"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.3"
+        android:fontFamily="@font/gilroy_semibold"
+        android:gravity="end"
+        android:textColor="@color/orangish"
+        android:textSize="17sp"
+        tools:text="@string/revision_pack_amount" />
+</LinearLayout>

@@ -4,7 +4,9 @@ import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -32,6 +34,7 @@ import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
+import com.codingblocks.onlineapi.models.ProductExtensionsItem
 import com.codingblocks.onlineapi.models.ResetRunAttempt
 import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
@@ -46,6 +49,8 @@ class MyCourseViewModel(
     var runId by savedStateValue<String>(handle, RUN_ID)
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
+    var extensions: MutableLiveData<List<ProductExtensionsItem>> = MutableLiveData()
+    var purchase: MutableLiveData<Boolean> = MutableLiveData()
 
     /** MutableLiveData Filters for [SectionContentHolder.SectionContentPair]. */
     var filters: MutableLiveData<String> = MutableLiveData()
@@ -105,6 +110,38 @@ class MyCourseViewModel(
                         body()?.let { response ->
                             attemptId?.let { repo.saveStats(response, it) }
                         }
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun fetchExtensions(productId: String?) {
+        runIO {
+            when (val response = productId?.let { repo.getExtensions(Integer.parseInt(it)) }) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        body()?.let {
+                            extensions.postValue(it.productExtensions)
+                        }
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun buyExtension(extensionId: Int?) {
+        runIO {
+            when (val response = extensionId?.let { repo.buyExtension(it) }) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        purchase.postValue(true)
                     } else {
                         setError(fetchError(code()))
                     }
