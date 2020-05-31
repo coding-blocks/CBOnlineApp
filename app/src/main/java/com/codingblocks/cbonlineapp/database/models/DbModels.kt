@@ -136,6 +136,16 @@ data class BookmarkModel(
 ) : BaseModel()
 
 @Entity
+data class DownloadModel(
+    @PrimaryKey
+    val videoId: String,
+    val sectionId: String,
+    val attemptId: String,
+    val contentId: String,
+    val date: String
+) : BaseModel()
+
+@Entity
 data class JobsModel(
     @PrimaryKey
     val uid: String,

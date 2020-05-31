@@ -155,6 +155,11 @@ val databaseModule = module {
 
     factory {
         val database: AppDatabase = get()
+        database.downloadsDao()
+    }
+
+    factory {
+        val database: AppDatabase = get()
         database.sectionWithContentsDao()
     }
     factory {

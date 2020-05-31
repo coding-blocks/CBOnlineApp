@@ -34,6 +34,11 @@ import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.util.Components
 import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
+import com.codingblocks.cbonlineapp.util.DELETE_DOWNLOADED_VIDEO
+import com.codingblocks.cbonlineapp.util.DeleteDownloadedFiles
+import java.util.concurrent.TimeUnit
+import com.google.common.util.concurrent.ListenableFuture
+import androidx.work.*
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -85,6 +90,7 @@ class DashboardActivity : BaseCBActivity(),
         toggle.syncState()
         dashboardNavigation.setNavigationItemSelectedListener(this)
         dashboardBottomNav.setOnNavigationItemSelectedListener(this)
+        checkDownloadDataWM()
         initializeUI(vm.isLoggedIn ?: false)
         vm.errorLiveData.observer(this) { error ->
             when (error) {
@@ -263,6 +269,26 @@ class DashboardActivity : BaseCBActivity(),
             setView(view)
             setCancelable(true)
             show()
+        }
+    }
+
+    private fun checkDownloadDataWM(){
+        val wm = WorkManager.getInstance()
+
+        //Will get if Auto delete downloaded video request is already started or not
+        val future: ListenableFuture<List<WorkInfo>> = wm.getWorkInfosByTag(DELETE_DOWNLOADED_VIDEO)
+        val list: List<WorkInfo> = future.get()
+
+        //Request to delete video files which expired after 15 days
+        val request: PeriodicWorkRequest =
+            PeriodicWorkRequestBuilder<DeleteDownloadedFiles>(1, TimeUnit.DAYS)
+                .addTag(DELETE_DOWNLOADED_VIDEO)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                .build()
+
+        //If found empty then it is not started or cancelled for whatever reason, will add request to start it
+        if(list.isEmpty()){
+            wm.enqueue(request)
         }
     }
 
