@@ -32,6 +32,7 @@ class DeleteDownloadedFiles(context: Context, private val workerParameters: Work
             )
             MediaUtils.deleteRecursive(folderFile)
             contentDao.updateContentWithVideoId(item.videoId, 0)
+            downloadsDao.delete(item)
         }
         return Result.success()
     }
