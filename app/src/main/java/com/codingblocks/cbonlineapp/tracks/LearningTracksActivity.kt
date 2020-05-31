@@ -69,7 +69,6 @@ class LearningTracksActivity : BaseCBActivity() {
             activityLearningShimmer.hideAndStop()
         }
 
-
         needHelp.setOnClickListener {
             showHelpDialog(type = "Track") { b: Boolean, name: String, number: String ->
                 vm.generateLead(name, number)

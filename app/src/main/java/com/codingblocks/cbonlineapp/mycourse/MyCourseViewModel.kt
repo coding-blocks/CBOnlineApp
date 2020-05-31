@@ -24,6 +24,7 @@ import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
@@ -32,13 +33,15 @@ import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
+import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.ResetRunAttempt
-import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.Dispatchers
 
 class MyCourseViewModel(
     private val handle: SavedStateHandle,
-    private val repo: MyCourseRepository
+    private val repo: MyCourseRepository,
+    val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
 
     var attemptId by savedStateValue<String>(handle, RUN_ATTEMPT_ID)
@@ -144,6 +147,24 @@ class MyCourseViewModel(
             .enqueue(request)
     }
 
+    fun getLeaderboard() = liveData(Dispatchers.IO) {
+        when (val response = repo.fetchLeaderboard(runId!!)) {
+            is ResultWrapper.GenericError -> setError(response.error)
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful) {
+                    body()?.let {
+                        emit(it)
+                    }
+                } else {
+                    if (code() == 404)
+                    emit(emptyList<Leaderboard>())
+                    else
+                        setError(fetchError(code()))
+                }
+            }
+        }
+    }
+
     fun addToCart() = liveData(Dispatchers.IO) {
         when (val response = runId?.let { repo.addToCart(it) }) {
             is ResultWrapper.GenericError -> setError(response.error)
@@ -206,7 +227,6 @@ class MyCourseViewModel(
         }
     }
 
-
     private fun getPerformance() {
         runIO {
             val mRank = repo.getHackerBlocksPerformance().value
@@ -223,7 +243,7 @@ class MyCourseViewModel(
                         if (code() != 404)
                             setError(fetchError(code()))
                         else {
-                            //No HB Report
+                            // No HB Report
                         }
                     }
                 }

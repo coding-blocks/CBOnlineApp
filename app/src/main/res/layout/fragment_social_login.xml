@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.codingblocks.cbonlineapp.auth.onboarding.SocialLoginFragment">
+    tools:context="com.codingblocks.cbonlineapp.auth.SocialLoginFragment">
 
     <WebView
         android:id="@+id/webview"

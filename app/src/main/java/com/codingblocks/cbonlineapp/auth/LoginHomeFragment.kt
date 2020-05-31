@@ -1,6 +1,7 @@
-package com.codingblocks.cbonlineapp.auth.onboarding
+package com.codingblocks.cbonlineapp.auth
 
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -12,49 +13,53 @@ import android.view.View
 import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
+import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
+import com.google.android.gms.auth.api.phone.SmsRetriever
 import kotlinx.android.synthetic.main.fragment_login_home.*
+import org.jetbrains.anko.design.snackbar
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class LoginHomeFragment : BaseCBFragment() {
+
+    val vm: AuthViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ):
-        View? = inflater.inflate(R.layout.fragment_login_home, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_login_home, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setfirstSpan()
+        ccp.registerCarrierNumberEditText(numberedtv)
+        ccp.setTypeFace(Typeface.createFromAsset(requireContext().assets, "fonts/gilroy_bold.ttf"))
+        setFirstSpan()
         setSecondSpan()
 
         mobileBtn.setOnClickListener {
+            if (ccp.isValidFullNumber) {
+                vm.mobile = numberedtv.text.toString().replace(" ", "")
+                vm.dialCode = ccp.selectedCountryCodeWithPlus
+                vm.sendOtp()
+                val otpFragment = LoginOtpFragment()
+                SmsRetriever.getClient(requireActivity()).startSmsRetriever() // start retriever
+                replaceFragmentSafely(otpFragment, containerViewId = R.id.loginContainer)
+                MySMSBroadcastReceiver.register(requireActivity(), otpFragment) // the new fragment will listen for otp
+            } else {
+                loginHomeRoot.snackbar("Invalid Number !!")
+            }
+        }
+
+        socialBtn.setOnClickListener {
             replaceFragmentSafely(
                 SignInFragment(),
                 tag = "SignIn",
                 containerViewId = R.id.loginContainer
             )
         }
-
-        gmailBtn.setOnClickListener {
-            showWebView()
-        }
-
-        fbBtn.setOnClickListener {
-            showWebView()
-        }
-    }
-
-    private fun showWebView() {
-        replaceFragmentSafely(
-            SocialLoginFragment(),
-            tag = "SocialSignIn",
-            containerViewId = R.id.loginContainer
-        )
     }
 
     private fun setSecondSpan() {
@@ -94,7 +99,7 @@ class LoginHomeFragment : BaseCBFragment() {
         }
     }
 
-    private fun setfirstSpan() {
+    private fun setFirstSpan() {
         val wordToSpan = getSpannableStringSecondBold("New here? ", "Create an account")
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {

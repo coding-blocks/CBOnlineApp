@@ -1,12 +1,12 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/signInRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingStart="@dimen/margin_large"
     android:paddingEnd="@dimen/margin_large"
-    android:id="@+id/signInRoot"
-    tools:context="com.codingblocks.cbonlineapp.auth.onboarding.SignInFragment">
+    tools:context="com.codingblocks.cbonlineapp.auth.SignInFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
             android:fontFamily="@font/gilroy_bold"
-            android:text="@string/enter_mobile_number_for_verification"
+            android:text="@string/email_title"
             android:textSize="18sp" />
 
         <TextView
@@ -28,59 +28,38 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/gilroy_medium"
-            android:text="@string/number_desc"
+            android:text="@string/email_desc"
             android:textColor="@color/brownish_grey"
             android:textSize="16sp"
             android:visibility="visible" />
 
-        <RelativeLayout
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/numberLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="65dp">
+            android:layout_marginTop="65dp"
+            app:errorEnabled="true">
 
-            <TextView
-                android:id="@+id/errorDrawableTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/numberLayout"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="end|top"
-                android:layout_marginBottom="28dp"
-                android:elevation="1dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:focusable="true"
-                android:fontFamily="@font/gilroy_bold"
-                android:text="@string/use_email"
-                android:textColor="@color/orangish"
-                android:visibility="visible" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/numberLayout"
+            <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:errorEnabled="true">
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/gilroy_medium"
+                android:hint="@string/use_email"
+                android:inputType="textEmailAddress"
+                android:paddingStart="0dp"
+                android:textColorHighlight="@color/orangish"
+                android:textColorHint="@color/black"
+                android:textSize="16sp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:backgroundTint="@color/white"
-                    android:fontFamily="@font/gilroy_medium"
-                    android:hint="@string/mobile_number"
-                    android:inputType="phone"
-                    android:paddingStart="0dp"
-                    android:textColorHighlight="@color/orangish"
-                    android:textColorHint="@color/black"
-                    android:textSize="16sp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-        </RelativeLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             app:endIconMode="password_toggle"
             app:errorEnabled="true">
 
@@ -98,17 +77,51 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/proceedBtn"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="@string/proceed"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_extra_large"
+            android:text="OR"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:letterSpacing="0.1"
+            android:fontFamily="@font/gilroy_bold"
+            android:textColor="@color/darkTwo"
+            android:textSize="20sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/fbBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:layout_weight="1"
+            android:backgroundTint="@color/fb"
+            android:drawableStart="@drawable/ic_fb"
+            android:padding="0dp"
+            android:text="@string/facebook" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/gmailBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:layout_weight="1"
+            android:backgroundTint="@color/gmail"
+            android:drawableStart="@drawable/ic_gmail"
+            android:text="@string/google" />
+
+
 
     </LinearLayout>
 
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/proceedBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/margin_xl"
-        android:text="@string/proceed"
-        android:textSize="20sp" />
-
-</FrameLayout>
+</ScrollView>

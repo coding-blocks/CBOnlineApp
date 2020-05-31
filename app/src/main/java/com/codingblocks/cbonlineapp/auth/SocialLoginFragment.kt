@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.auth.onboarding
+package com.codingblocks.cbonlineapp.auth
 
 import android.net.Uri
 import android.os.Bundle
@@ -11,8 +11,6 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import com.codingblocks.cbonlineapp.BuildConfig
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import kotlinx.android.synthetic.main.fragment_social_login.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -47,11 +45,7 @@ class SocialLoginFragment : Fragment() {
                 if (url.contains("code=") && !authComplete) {
                     val grantCode = Uri.parse(url).getQueryParameter("code")
                     if (grantCode != null) {
-                        vm.fetchToken(grantCode).observer(viewLifecycleOwner) {
-                            if (it) {
-                                startActivity(DashboardActivity.createDashboardActivityIntent(requireContext(), true))
-                            }
-                        }
+                        vm.fetchToken(grantCode)
                     }
                     authComplete = true
                 } else if (url.contains("error=access_denied")) {

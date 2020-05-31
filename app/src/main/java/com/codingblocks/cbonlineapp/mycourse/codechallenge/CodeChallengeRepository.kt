@@ -14,13 +14,14 @@ import com.codingblocks.onlineapi.models.TimeLimits
 import com.codingblocks.onlineapi.safeApiCall
 
 class CodeChallengeRepository(
-    private val codeDao: CodeChallengeDao) {
+    private val codeDao: CodeChallengeDao
+) {
     suspend fun fetchCodeChallenge(codeId: Int, contestId: String) = safeApiCall { Clients.onlineV2JsonApi.getCodeChallenge(codeId, contestId) }
 
     suspend fun getOfflineContent(codeId: String): CodeChallenge? {
         val model: CodeChallengeModel = codeDao.getCodeChallengeById(codeId)
 
-        val challenge = with(model){
+        val challenge = with(model) {
             CodeChallenge(
                 title,
                 Problem(
@@ -28,7 +29,7 @@ class CodeChallengeRepository(
                     title,
                     content?.image,
                     content?.status,
-                    with(content?.details!!){
+                    with(content?.details!!) {
                         CodeDetails(
                             constraints,
                             explanation,
@@ -39,7 +40,7 @@ class CodeChallengeRepository(
                             description
                         )
                     },
-                    with(content.timeLimits){
+                    with(content.timeLimits) {
                         TimeLimits(
                             cpp,
                             c,
@@ -63,15 +64,15 @@ class CodeChallengeRepository(
     suspend fun saveCode(codeId: String, codeChallenge: CodeChallenge) {
         val newCode: CodeChallengeModel = codeId.let {
 
-            with(codeChallenge.content!!){
+            with(codeChallenge.content!!) {
                 CodeChallengeModel(
                     it,
                     this.difficulty,
                     name,
-                    with(details!!){
+                    with(details!!) {
                         ProblemModel(
                             name,
-                            image?:"",
+                            image ?: "",
                             status ?: "",
                             CodeDetailsModel(
                                 constraints ?: "",
@@ -83,11 +84,11 @@ class CodeChallengeRepository(
                                 description ?: ""
                             ),
 
-                            with(timelimits!!){
+                            with(timelimits!!) {
                                 TimeLimitsModel(
                                     cpp,
                                     c,
-                                    py2 ,
+                                    py2,
                                     py3,
                                     js,
                                     csharp,
@@ -99,7 +100,6 @@ class CodeChallengeRepository(
                 )
             }
         }
-
 
         val oldModel: CodeChallengeModel? = codeId.let { codeDao.getCodeChallengeById(it) }
         if (oldModel != null && !oldModel.sameAndEqual(newCode)) {

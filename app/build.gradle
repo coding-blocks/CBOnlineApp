@@ -11,7 +11,7 @@ ext {
     ankoVersion = '0.10.6'
     room_version = "2.2.5"
     koin_version = "2.1.5"
-    markwon_version = "4.3.1"
+    markwon_version = "4.4.0"
     ankoLibs = [
             // commons
             'commons',
@@ -39,13 +39,13 @@ android {
         applicationId "com.codingblocks.cbonlineapp"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 101000500
+        versionCode 101000600
         // 1 (versioning scheme)
         // 00 (major version)
         // 00 (minor version)
         // 01 (patch version)
         // 01 spare for betas/RCs
-        versionName "1.0.5"
+        versionName "1.0.6"
         signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled false
@@ -141,6 +141,8 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.4.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation 'com.hbb20:ccp:2.4.0'
+
 
 
     // Image view libraries

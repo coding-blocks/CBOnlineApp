@@ -17,10 +17,8 @@ import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
@@ -31,8 +29,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jetbrains.anko.singleTop
-import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class LibraryViewFragment : BaseCBFragment() {
@@ -45,16 +41,10 @@ class LibraryViewFragment : BaseCBFragment() {
             override fun onClick(item: BaseModel) {
                 when (item) {
                     is ContentLecture -> startActivity(
-                        intentFor<VideoPlayerActivity>(
-                            CONTENT_ID to item.lectureContentId,
-                            SECTION_ID to item.lectureSectionId
-                        ).singleTop()
+                        createVideoPlayerActivityIntent(requireContext(), item.lectureContentId, item.lectureSectionId)
                     )
                     is BookmarkModel -> startActivity(
-                        intentFor<VideoPlayerActivity>(
-                            CONTENT_ID to item.contentId,
-                            SECTION_ID to item.sectionId
-                        ).singleTop()
+                        createVideoPlayerActivityIntent(requireContext(), item.contentId, item.sectionId)
                     )
 //                    is NotesModel -> startActivity(intentFor<VideoPlayerActivity>(CONTENT_ID to item.contentId, SECTION_ID to item.sectionId).singleTop())
                 }
