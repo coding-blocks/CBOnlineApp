@@ -114,6 +114,8 @@ class DashboardHomeFragment : BaseCBFragment() {
                 recentlyPlayedContainer.isVisible = it.isNotEmpty()
                 recentlyPlayedAdapter.submitList(it)
             }
+
+            vm.fetchWishlist()
         } else {
             dashboardHomeShimmer.hideAndStop()
             dashboardHome.isVisible = false

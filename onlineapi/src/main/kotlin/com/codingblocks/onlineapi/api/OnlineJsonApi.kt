@@ -1,30 +1,6 @@
 package com.codingblocks.onlineapi.api
 
-import com.codingblocks.onlineapi.models.Applications
-import com.codingblocks.onlineapi.models.Bookmark
-import com.codingblocks.onlineapi.models.CareerTracks
-import com.codingblocks.onlineapi.models.CarouselCards
-import com.codingblocks.onlineapi.models.CodeChallenge
-import com.codingblocks.onlineapi.models.Comment
-import com.codingblocks.onlineapi.models.Company
-import com.codingblocks.onlineapi.models.ContentProgress
-import com.codingblocks.onlineapi.models.Course
-import com.codingblocks.onlineapi.models.DoubtLeaderBoard
-import com.codingblocks.onlineapi.models.Doubts
-import com.codingblocks.onlineapi.models.Instructor
-import com.codingblocks.onlineapi.models.Jobs
-import com.codingblocks.onlineapi.models.LectureContent
-import com.codingblocks.onlineapi.models.Note
-import com.codingblocks.onlineapi.models.Player
-import com.codingblocks.onlineapi.models.Professions
-import com.codingblocks.onlineapi.models.Project
-import com.codingblocks.onlineapi.models.Question
-import com.codingblocks.onlineapi.models.QuizAttempt
-import com.codingblocks.onlineapi.models.Quizzes
-import com.codingblocks.onlineapi.models.RunAttempts
-import com.codingblocks.onlineapi.models.Runs
-import com.codingblocks.onlineapi.models.Sections
-import com.codingblocks.onlineapi.models.User
+import com.codingblocks.onlineapi.models.*
 import com.github.jasminb.jsonapi.JSONAPIDocument
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -333,4 +309,11 @@ interface OnlineJsonApi {
         @Path("codeId") codeId: Int,
         @Query("contest_id") include: String = ""
     ): Response<CodeChallenge>
+
+    @GET("user_course_wishlists")
+    suspend fun getWishlist(
+        @Query("exclude") exclude: String = "course.*",
+        @Query("include") include: String = "course",
+        @Query("page[limit]") page: String = "2"
+    ): Response<Wishlist>
 }

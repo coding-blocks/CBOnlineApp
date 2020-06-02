@@ -28,6 +28,12 @@ data class Project(
     val image: String = ""
 ) : BaseModel()
 
+@Type("user_course_wishlists")
+data class Wishlist(
+    @Relationship("course")
+    val course: List<Course>? = null
+) : BaseModel()
+
 @Type("courses", "course")
 data class Course(
     val title: String = "",

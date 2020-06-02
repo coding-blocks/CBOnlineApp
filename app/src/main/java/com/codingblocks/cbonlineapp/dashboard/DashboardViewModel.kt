@@ -1,5 +1,7 @@
 package com.codingblocks.cbonlineapp.dashboard
 
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -313,4 +315,24 @@ class DashboardViewModel(
     }
 
     fun getPerformance(attemptId: String) = homeRepo.getRunStats(attemptId)
+
+    fun fetchWishlist(){
+        runIO {
+            when (val response = repo.fetchWishlist()) {
+                is ResultWrapper.GenericError -> {
+                    setError(response.error)
+                    Log.e("TAG", "fetchWishlist: ${response.error}")
+                }
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        Log.e("TAG", "fetchWishlist: Got Result Properly")
+                        Log.e("TAG", "fetchWishlist:${response.value.body().toString()}")
+                    } else {
+                        setError(fetchError(response.value.code()))
+                        Log.e("TAG", "fetchWishlist: ${response.value.code()}")
+                    }
+                }
+            }
+        }
+    }
 }
