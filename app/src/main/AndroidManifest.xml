@@ -26,12 +26,9 @@
         android:theme="@style/NewAppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="q">
-        <activity android:name=".campaign.SpinWinActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".campaign.CampaignActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".dashboard.DashboardActivity">
         </activity>
         <activity
             android:name=".mycourse.codechallenge.CodeChallengeActivity"
@@ -127,12 +124,12 @@
                     android:host="app.codingblocks.com"
                     android:scheme="https" />
             </intent-filter>
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".course.CourseActivity"

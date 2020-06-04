@@ -13,6 +13,7 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
+import com.codingblocks.cbonlineapp.campaign.CampaignActivity
 import com.codingblocks.cbonlineapp.course.CourseActivity
 import com.codingblocks.cbonlineapp.course.CourseListAdapter
 import com.codingblocks.cbonlineapp.course.ItemClickListener
@@ -85,7 +86,9 @@ class DashboardExploreFragment : BaseCBFragment() {
         vm.fetchRecommendedCourses(0, 4)
         vm.fetchRecommendedCourses(4, 4)
         vm.fetchTracks()
-
+        campaignView.setOnClickListener {
+            startActivity(CampaignActivity.createCampaignActivityIntent(requireContext()))
+        }
         dashboardPopularRv.setRv(requireContext(), coursePopularListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
         courseSuggestedRv.setRv(requireContext(), courseCardListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
         dashboardTracksRv.setRv(requireContext(), tracksListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
