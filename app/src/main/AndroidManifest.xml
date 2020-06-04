@@ -19,17 +19,24 @@
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/NewAppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="q">
+        <activity android:name=".campaign.SpinWinActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
+            android:name=".mycourse.codechallenge.CodeChallengeActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".mycourse.MyCourseActivity"
-            android:name=".mycourse.codechallenge.CodeChallengeActivity" />
+            android:parentActivityName=".mycourse.MyCourseActivity" />
         <activity
             android:name=".tracks.TrackActivity"
             android:parentActivityName=".tracks.LearningTracksActivity" />
@@ -70,7 +77,6 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
-
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -87,8 +93,8 @@
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".course.checkout.CheckoutActivity"
-            android:screenOrientation="portrait"
             android:parentActivityName=".dashboard.DashboardActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".URLRouterActivity"
@@ -121,12 +127,12 @@
                     android:host="app.codingblocks.com"
                     android:scheme="https" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".course.CourseActivity"
@@ -168,11 +174,11 @@
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".mycourse.player.VideoPlayerActivity"
-            android:parentActivityName=".mycourse.MyCourseActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:supportsPictureInPicture="true"
             android:launchMode="singleTask"
+            android:parentActivityName=".mycourse.MyCourseActivity"
             android:resizeableActivity="true"
+            android:supportsPictureInPicture="true"
             android:theme="@style/NewAppTheme.Dark" />
         <activity
             android:name=".PdfActivity"
@@ -226,16 +232,16 @@
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:enabled="true"
-            android:name=".util.StartReceiver">
+            android:name=".util.StartReceiver"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".util.CertificateDownloadReceiver"
+        <receiver
+            android:name=".util.CertificateDownloadReceiver"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
 
         <service
             android:name=".util.EndlessService"

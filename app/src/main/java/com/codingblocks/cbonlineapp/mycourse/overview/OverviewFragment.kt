@@ -52,6 +52,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         super.onViewCreated(view, savedInstanceState)
         courseLeaderboardRv.setRv(requireContext(), leaderBoardListAdapter)
         viewModel.run?.distinctUntilChanged()?.observer(viewLifecycleOwner) { courseAndRun ->
+            viewModel.premiumRun = courseAndRun.runAttempt.premium
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
             viewModel.runId = (courseAndRun.run.crUid)
             val progressValue = courseAndRun.getProgress()

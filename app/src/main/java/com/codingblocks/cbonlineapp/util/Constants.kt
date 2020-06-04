@@ -30,6 +30,8 @@ const val LOGO_TRANSITION_NAME = "logo_transition"
 
 const val ROLE_ID = "roleId"
 
+const val PREMIUM = "premium"
+
 const val RUN_ID = "runId"
 
 const val TYPE = "type"
