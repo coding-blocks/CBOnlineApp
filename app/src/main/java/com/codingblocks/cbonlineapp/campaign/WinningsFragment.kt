@@ -33,9 +33,6 @@ class WinningsFragment : BaseCBFragment() {
             adapter = leaderBoardListAdapter
         }
         vm.myWinnings.observer(this) {
-            emptyView.isVisible = it.size == 0
-            winningsRv.isVisible = it.size > 0
-
             leaderBoardListAdapter.submitList(it)
         }
     }

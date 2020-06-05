@@ -11,7 +11,6 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.ShareUtils
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import kotlinx.android.synthetic.main.dialog_result.view.*
-import kotlinx.android.synthetic.main.dialog_share.view.*
 import kotlinx.android.synthetic.main.dialog_share.view.fb
 import kotlinx.android.synthetic.main.dialog_share.view.twitter
 import kotlinx.android.synthetic.main.dialog_share.view.whatsapp
@@ -44,12 +43,13 @@ class HomeFragment : BaseCBFragment(), AnkoLogger {
         val runnable = Runnable {
             vm.fetchSpins()
             try {
-                vm.spinResponse.value?.let {
-                    showDialog(it.size, it.title, it.description)
+                vm.spinResponse.value?.let { res ->
                     imageView.animate()
-                        .rotationBy(it.rotation.toFloat())
+                        .rotationBy(res.rotation.toFloat())
                         .setDuration(1000)
                         .setInterpolator(LinearInterpolator()).start()
+                    showDialog(res.size, res.title, res.description)
+
                 }
             } catch (e: Exception) {
 
