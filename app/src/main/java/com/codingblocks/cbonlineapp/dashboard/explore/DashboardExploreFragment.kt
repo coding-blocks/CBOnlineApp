@@ -15,8 +15,8 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.campaign.CampaignActivity
 import com.codingblocks.cbonlineapp.course.CourseActivity
-import com.codingblocks.cbonlineapp.course.CourseListAdapter
-import com.codingblocks.cbonlineapp.course.ItemClickListener
+import com.codingblocks.cbonlineapp.course.adapter.CourseListAdapter
+import com.codingblocks.cbonlineapp.course.adapter.ItemClickListener
 import com.codingblocks.cbonlineapp.course.SearchCourseActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity

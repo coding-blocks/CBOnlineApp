@@ -122,9 +122,10 @@ interface OnlineJsonApi {
 
     @GET("courses")
     suspend fun getAllCourses(
+        @Query("page[offset]") offset: String,
+        @Query("page[limit]") limit: String = "20",
         @Query("exclude") query: String = "ratings,instructors.*,jobs,runs.*",
         @Query("filter[unlisted]") unlisted: String = "false",
-        @Query("page[offset]") offset: String,
         @Query("include") include: String = "instructors,runs",
         @Query("sort") sort: String = "difficulty"
     ): Response<JSONAPIDocument<List<Course>>>
