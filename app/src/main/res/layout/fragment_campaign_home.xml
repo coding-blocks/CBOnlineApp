@@ -42,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
+            android:id="@+id/spinCountTv"
             android:fontFamily="@font/gilroy_bold"
             android:text="00"
             android:textAlignment="center"
@@ -67,6 +68,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/spinBtn"
+        android:enabled="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

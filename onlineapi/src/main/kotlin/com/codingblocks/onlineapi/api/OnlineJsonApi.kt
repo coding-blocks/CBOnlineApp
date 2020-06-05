@@ -24,6 +24,7 @@ import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
+import com.codingblocks.onlineapi.models.Spins
 import com.codingblocks.onlineapi.models.User
 import com.github.jasminb.jsonapi.JSONAPIDocument
 import okhttp3.ResponseBody
@@ -334,4 +335,12 @@ interface OnlineJsonApi {
         @Path("codeId") codeId: Int,
         @Query("contest_id") include: String = ""
     ): Response<CodeChallenge>
+
+    @GET("spins")
+    suspend fun getWinnings(
+        @Query("page[offset]") offset: String,
+        @Query("page[limit]") limit: String = "10",
+        @Query("exclude") query: String = "spin_prize.*",
+        @Query("include") include: String = "spin_prize,user"
+        ): Response<JSONAPIDocument<List<Spins>>>
 }

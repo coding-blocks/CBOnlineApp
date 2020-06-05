@@ -33,7 +33,7 @@ class CampaignActivity : BaseCBActivity() {
             add(RulesFragment(), getString(R.string.rules))
 
         }
-
+        vm.fetchSpins()
         campaignPager.apply {
             setPagingEnabled(true)
             adapter = pagerAdapter
