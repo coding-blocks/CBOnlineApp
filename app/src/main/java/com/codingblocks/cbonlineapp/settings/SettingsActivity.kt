@@ -3,16 +3,13 @@ package com.codingblocks.cbonlineapp.settings
 import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
+import android.util.Log
 import android.widget.SeekBar
 import androidx.lifecycle.lifecycleScope
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.MediaUtils
-import com.codingblocks.cbonlineapp.util.extensions.folderSize
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
-import com.codingblocks.cbonlineapp.util.extensions.readableFileSize
-import com.codingblocks.cbonlineapp.util.extensions.setToolbar
-import com.codingblocks.cbonlineapp.util.extensions.showDialog
+import com.codingblocks.cbonlineapp.util.extensions.*
 import java.io.File
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.coroutines.Dispatchers
@@ -102,6 +99,10 @@ class SettingsActivity : BaseCBActivity() {
                 it
             ).readableFileSize()
         })
+        val usedSpace : Double = file?.let { folderSize(it) }!!.toDouble() / 1048576
+        Log.v("usedSpace","Used Space is $usedSpace")
+        storageProgress.max = bytesAvailable.toInt() / 1048576
+        storageProgress.progress = usedSpace.toInt()
     }
 
     private fun setSeekbarProgress(progress: Int) {
