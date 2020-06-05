@@ -9,11 +9,9 @@ import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
-import com.codingblocks.cbonlineapp.course.adapter.CourseDataSource
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
-import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Spins
 import kotlinx.coroutines.Dispatchers
 
@@ -27,8 +25,9 @@ class CampaignViewModel(
     private var spinsLeft by savedStateValue<Int>(handle, SPINS_LEFT)
     var spinsLiveData = MutableLiveData<Int>(spinsLeft)
 
-    private var myWinnings: LiveData<PagedList<Spins>>
+    var myWinnings: LiveData<PagedList<Spins>>
     private var leaderboard: LiveData<PagedList<Spins>>
+    lateinit var dataSource: DataSource<String, Spins>
 
     init {
         val config = PagedList.Config.Builder()
@@ -70,31 +69,26 @@ class CampaignViewModel(
             }
             is ResultWrapper.Success -> with(response.value) {
                 if (response.value.isSuccessful)
-                    fetchSpins()
-                response.value.body()?.let {
-                    emit(it)
-                }
+                    response.value.body()?.let {
+                        emit(it)
+                    }
             }
         }
     }
 
 
-
-
-
     fun getLeaderboard(): LiveData<PagedList<Spins>> = leaderboard
-
-    fun getWinnings(): LiveData<PagedList<Spins>> = myWinnings
 
     private fun initializedPagedListBuilder(config: PagedList.Config):
         LivePagedListBuilder<String, Spins> {
 
         val dataSourceFactory = object : DataSource.Factory<String, Spins>() {
             override fun create(): DataSource<String, Spins> {
-                return CampaignDataSource(viewModelScope)
+                dataSource = CampaignDataSource(viewModelScope)
+                return dataSource
             }
         }
-        return LivePagedListBuilder<String, Spins>(dataSourceFactory, config)
+        return LivePagedListBuilder(dataSourceFactory, config)
 
     }
 

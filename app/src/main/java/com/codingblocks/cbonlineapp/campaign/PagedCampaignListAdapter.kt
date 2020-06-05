@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.campaign
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -45,13 +46,22 @@ class PagedCampaignListAdapter : PagedListAdapter<Spins, CampaignViewHolder>(obj
 class CampaignViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(item: Spins) = with(itemView) {
-        subTitleTv.text = item.spinPrize.description
-        titleTv.text = item.spinPrize.title
-        imgView.loadImage(item.spinPrize.img)
-        if (item.used) {
-            item.usedAt.timeAgo()
-        } else {
-            item.validTill?.timeAgo()
+        subTitleTv.text = item.spinPrize?.description
+        titleTv.text = item.spinPrize?.title
+        imgView.loadImage(item.spinPrize?.img ?: "")
+        item.usedAt?.let {
+            timeTv.text = "Used ${item.usedAt?.timeAgo()}"
+        } ?: run {
+            timeTv.text = "Won ${item.validTill?.timeAgo()}"
         }
+        couponCard
+        item.prizeRemarksExtra?.couponCreated?.let {
+            couponCard.isVisible = true
+            codeTv.text = it
+            timeTv.text = "Valid till ${item.prizeRemarksExtra!!.validEnd?.timeAgo()}"
+        } ?: run {
+            couponCard.isVisible = false
+        }
+
     }
 }

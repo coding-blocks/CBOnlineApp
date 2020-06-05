@@ -340,7 +340,9 @@ interface OnlineJsonApi {
     suspend fun getWinnings(
         @Query("page[offset]") offset: String,
         @Query("page[limit]") limit: String = "10",
-        @Query("exclude") query: String = "spin_prize.*",
-        @Query("include") include: String = "spin_prize,user"
-        ): Response<JSONAPIDocument<List<Spins>>>
+        @Query("filter[used]") filter1: String = "true",
+        @Query("filter[won]") filter2: String = "true",
+        @Query("sort") sort: String = "-used_at",
+        @Query("include") include: String = "spin_prize"
+    ): Response<JSONAPIDocument<List<Spins>>>
 }

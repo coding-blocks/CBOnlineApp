@@ -12,7 +12,7 @@
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/notificationToolbar"
+            android:id="@+id/campaignToolbar"
             style="@style/ToolBarStyleDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,8 +73,7 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="bottom"
         android:background="@color/dark"
-        android:clickable="true"
-        android:focusable="true"
+
         android:gravity="center_vertical">
 
         <TextView
@@ -94,6 +93,10 @@
             android:fontFamily="@font/gilroy_bold"
             android:gravity="center"
             android:text="Earn Now"
+            android:clickable="true"
+            android:id="@+id/earnMore"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
             android:textColor="@color/white"
             android:textSize="18sp" />
 

@@ -22,7 +22,6 @@ class CampaignDataSource(private val scope: CoroutineScope) :
                             val winnings = it.get()
                             val currentOffSet = getMeta(it.meta, "currentOffset").toString()
                             val nextOffSet = getMeta(it.meta, "nextOffset").toString()
-
                             callback.onResult(winnings ?: listOf(), currentOffSet, nextOffSet)
                         }
                 }

@@ -32,19 +32,24 @@
             android:fontFamily="@font/gilroy_medium"
             android:textColor="@color/yellow"
             android:textSize="16sp"
+            android:textAlignment="center"
             tools:text="You Won" />
 
         <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
             android:id="@+id/subTitleTv"
             android:layout_width="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:textAlignment="center"
             android:fontFamily="@font/gilroy_bold"
             android:textSize="20sp"
             tools:text="Faang @70% off" />
 
         <LinearLayout
             android:visibility="gone"
+            android:id="@+id/couponCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -74,6 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:textAlignment="center"
             android:fontFamily="@font/gilroy_medium"
             android:textSize="14sp"
             tools:text="Won 2 Days ago" />

@@ -35,7 +35,12 @@ class HomeFragment : BaseCBFragment(), AnkoLogger {
         }
 
         val runnable = Runnable {
-            imageView.animate().cancel()
+            vm.fetchSpins()
+            try {
+                imageView.animate().cancel()
+            } catch (e: Exception) {
+
+            }
             spinBtn.isEnabled = true
         }
 
