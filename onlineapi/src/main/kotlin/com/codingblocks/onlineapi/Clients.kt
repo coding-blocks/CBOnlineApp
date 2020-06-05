@@ -39,6 +39,7 @@ import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Tags
 import com.codingblocks.onlineapi.models.User
+import com.codingblocks.onlineapi.models.Wishlist
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonSetter
 import com.fasterxml.jackson.annotation.Nulls
@@ -105,7 +106,8 @@ object Clients {
         CareerTracks::class.java,
         Project::class.java,
         Player::class.java,
-        CodeChallenge::class.java
+        CodeChallenge::class.java,
+        Wishlist::class.java
     )
 
     // type resolver

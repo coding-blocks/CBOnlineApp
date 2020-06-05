@@ -31,6 +31,9 @@
             android:parentActivityName=".mycourse.MyCourseActivity"
             android:name=".mycourse.codechallenge.CodeChallengeActivity" />
         <activity
+            android:name=".dashboard.home.WishlistActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
+        <activity
             android:name=".tracks.TrackActivity"
             android:parentActivityName=".tracks.LearningTracksActivity" />
         <activity

@@ -14,6 +14,14 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
+import android.content.Intent
+import androidx.core.view.ViewCompat
+import androidx.core.app.ActivityOptionsCompat
+import com.codingblocks.cbonlineapp.course.CourseActivity
+import com.codingblocks.cbonlineapp.util.COURSE_ID
+import com.codingblocks.cbonlineapp.util.COURSE_LOGO
+import de.hdodenhof.circleimageview.CircleImageView
+import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
@@ -36,12 +44,31 @@ class DashboardHomeFragment : BaseCBFragment() {
     private val vm: DashboardViewModel by sharedViewModel()
 
     private val recentlyPlayedAdapter = RecentlyPlayedAdapter()
+    private val wishlistAdapter = WishListAdapter()
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
             override fun onClick(sectionId: String, contentId: String, postition: Long) {
                 startActivity(VideoPlayerActivity.createVideoPlayerActivityIntent(requireContext(), contentId, sectionId, postition))
             }
+        }
+    }
+
+    private val wishListItemClickListener: WishListItemClickListener by lazy {
+        object : WishListItemClickListener {
+            override fun onClick(id: String, name: String, logo: CircleImageView) {
+                val intent = Intent(requireContext(), CourseActivity::class.java)
+                intent.putExtra(COURSE_ID, id)
+                intent.putExtra(COURSE_LOGO, name)
+                intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
+
+                val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    requireActivity(),
+                    logo,
+                    ViewCompat.getTransitionName(logo)!!)
+                startActivity(intent, options.toBundle())
+            }
+
         }
     }
 
@@ -59,12 +86,17 @@ class DashboardHomeFragment : BaseCBFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recentPlayedRv.setRv(requireContext(), recentlyPlayedAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
+        wishRv.setRv(requireContext(), wishlistAdapter, orientation = RecyclerView.HORIZONTAL, space = 20f)
         recentlyPlayedAdapter.onItemClick = itemClickListener
+        wishlistAdapter.onItemClick = wishListItemClickListener
         exploreBtn.setOnClickListener { requireActivity().dashboardBottomNav.selectedItemId = R.id.dashboard_explore }
         exploreBtn2.setOnClickListener { requireActivity().dashboardBottomNav.selectedItemId = R.id.dashboard_explore }
         loginBtn.setOnClickListener {
             startActivity(intentFor<LoginActivity>())
             requireActivity().finish()
+        }
+        viewAllTv.setOnClickListener{
+            startActivity(intentFor<WishlistActivity>())
         }
     }
 
@@ -83,6 +115,7 @@ class DashboardHomeFragment : BaseCBFragment() {
                 dashboardHome.isVisible = true
                 if (coursePair != null) {
                     vm.getStats(coursePair.runAttempt.attemptId)
+                    vm.fetchWishList()
 
                     homeCourseLogoImg.loadImage(coursePair.course.logo)
                     coursePair.getProgress().let { progress ->
@@ -115,7 +148,11 @@ class DashboardHomeFragment : BaseCBFragment() {
                 recentlyPlayedAdapter.submitList(it)
             }
 
-            vm.fetchWishlist()
+            vm.wishlist.observer(this){wishlist->
+                noWishListLayout.isVisible = !wishlist.isNotEmpty()
+                wishlistHolder.isVisible = wishlist.isNotEmpty()
+                wishlistAdapter.submitList(wishlist)
+            }
         } else {
             dashboardHomeShimmer.hideAndStop()
             dashboardHome.isVisible = false

@@ -20,6 +20,7 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.onlineapi.ErrorStatus
+import com.codingblocks.onlineapi.models.Course
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_course.courseToolbar
 import kotlinx.android.synthetic.main.activity_track.appbar
@@ -61,6 +62,10 @@ class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
                         ViewCompat.getTransitionName(logo)!!
                     )
                 startActivity(intent, options.toBundle())
+            }
+
+            override fun onWishListClickListener(course: Course, position: Int) {
+                TODO("Not yet implemented")
             }
         }
     }

@@ -256,8 +256,8 @@
                     android:textColor="@color/brownish_grey"
                     android:textSize="13sp" />
 
-
                 <TextView
+                    android:id="@+id/viewAllTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/wishImg"
@@ -280,7 +280,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/wishSubTv"
-                    android:layout_marginStart="18dp"
                     android:layout_marginTop="@dimen/margin_small"
                     android:layout_marginBottom="@dimen/margin_9xl"
                     android:orientation="horizontal"
@@ -291,6 +290,7 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/noWishListLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_xl"

@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.BuildConfig
@@ -39,6 +40,7 @@ import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.onlineapi.ErrorStatus
+import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Tags
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
@@ -54,6 +56,7 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import org.jetbrains.anko.toolbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChangedListener {
@@ -102,6 +105,14 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                         ViewCompat.getTransitionName(logo)!!
                     )
                 startActivity(intent, options.toBundle())
+            }
+
+            override fun onWishListClickListener(course: Course, position: Int) {
+                if (!course.isWishlist!!){
+                    viewModel.addToWishlist(course, position)
+                }else{
+                    viewModel.removeFromWishlist(course)
+                }
             }
         }
     }
@@ -176,6 +187,9 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 }
             }
             instructorAdapter.submitList(course.instructors)
+            if (course.isWishlist!!){
+                courseToolbar.menu.get(0).icon = getDrawable(R.drawable.ic_like)
+            }
         }
 
         viewModel.projects.observer(this) { projects ->
@@ -310,6 +324,16 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         }
         android.R.id.home -> {
             onBackPressed()
+            true
+        }
+        R.id.wishlist ->{
+            if (viewModel.course.value?.isWishlist!!){
+                item.icon = getDrawable(R.drawable.ic_like_empty)
+                viewModel.removeFromWishlist()
+            }else{
+                item.icon = getDrawable(R.drawable.ic_like)
+                viewModel.addToWishlist()
+            }
             true
         }
         else -> super.onOptionsItemSelected(item)

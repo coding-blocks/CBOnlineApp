@@ -26,6 +26,7 @@ import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.onlineapi.models.Course
 import kotlinx.android.synthetic.main.activity_course.courseSuggestedRv
 import kotlinx.android.synthetic.main.fragment_dashboard_explore.*
 import kotlinx.coroutines.Dispatchers
@@ -57,6 +58,14 @@ class DashboardExploreFragment : BaseCBFragment() {
                     ViewCompat.getTransitionName(logo)!!)
                 startActivity(intent, options.toBundle())
             }
+
+            override fun onWishListClickListener(course: Course,position: Int) {
+                if (!course.isWishlist!!){
+                    vm.addToWishlist(course, if (courseCardListAdapter.currentList[position] == course) 0 else 4,position)
+                }else{
+                    vm.removeFromWishlist(course)
+                }
+            }
         }
     }
     private val trackItemClickList: ItemClickListener by lazy {
@@ -72,6 +81,10 @@ class DashboardExploreFragment : BaseCBFragment() {
                     logo,
                     ViewCompat.getTransitionName(logo)!!)
                 startActivity(intent, options.toBundle())
+            }
+
+            override fun onWishListClickListener(course: Course,position: Int) {
+
             }
         }
     }

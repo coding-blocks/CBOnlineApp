@@ -1,7 +1,5 @@
 package com.codingblocks.cbonlineapp.dashboard
 
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -29,6 +27,8 @@ import com.codingblocks.onlineapi.getMeta
 import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Player
+import com.codingblocks.onlineapi.models.Wishlist
+import com.codingblocks.onlineapi.models.User
 import com.onesignal.OneSignal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -146,15 +146,36 @@ class DashboardViewModel(
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
-                        if (offset == 0)
-                            suggestedCourses.postValue(body())
-                        else
-                            trendingCourses.postValue(body())
+                        checkIfWishlisted(body(), offset)
                     } else {
                         setError(fetchError(code()))
                     }
                 }
             }
+        }
+    }
+
+    fun checkIfWishlisted(course: List<Course>?, offset: Int){
+        runIO {
+            course?.forEach {singleCousrse->
+                when (val response = exploreRepo.checkIfWishlisted(singleCousrse.id)) {
+                    is ResultWrapper.GenericError -> setError(response.error)
+                    is ResultWrapper.Success -> with(response.value) {
+                        if (isSuccessful) {
+                            if (response.value.body()?.id!=null){
+                                singleCousrse.isWishlist = true
+                                singleCousrse.userWishlistId = response.value.body()?.id
+                            }
+                        } else {
+                            setError(fetchError(code()))
+                        }
+                    }
+                }
+            }
+            if (offset == 0)
+                suggestedCourses.postValue(course)
+            else
+                trendingCourses.postValue(course)
         }
     }
 
@@ -316,20 +337,55 @@ class DashboardViewModel(
 
     fun getPerformance(attemptId: String) = homeRepo.getRunStats(attemptId)
 
-    fun fetchWishlist(){
+    var wishlist = MutableLiveData<List<Wishlist>>()
+    fun fetchWishList(){
         runIO {
-            when (val response = repo.fetchWishlist()) {
+            when (val response = homeRepo.fetchWishlist()) {
                 is ResultWrapper.GenericError -> {
                     setError(response.error)
-                    Log.e("TAG", "fetchWishlist: ${response.error}")
                 }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        Log.e("TAG", "fetchWishlist: Got Result Properly")
-                        Log.e("TAG", "fetchWishlist:${response.value.body().toString()}")
+                        wishlist.postValue(response.value.body())
                     } else {
                         setError(fetchError(response.value.code()))
-                        Log.e("TAG", "fetchWishlist: ${response.value.code()}")
+                    }
+                }
+            }
+        }
+    }
+
+    fun addToWishlist(course: Course, offset: Int, position: Int){
+        val wishlist = Wishlist(course, User(prefs.SP_USER_ID))
+        val newList = if (offset == 0) suggestedCourses.value else trendingCourses.value
+        runIO {
+            when (val response = homeRepo.addToWishlist(wishlist)) {
+                is ResultWrapper.GenericError -> {
+                    setError(response.error)
+                }
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        newList?.get(position)?.userWishlistId = response.value.body()?.id
+                        newList?.get(position)?.isWishlist = true
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+            if (offset == 0) suggestedCourses.postValue(newList) else trendingCourses.postValue(newList)
+        }
+    }
+
+    fun removeFromWishlist(course: Course){
+        runIO {
+            when (val response = homeRepo.removeFromWishlist(course.userWishlistId?:"")) {
+                is ResultWrapper.GenericError -> {
+                    setError(response.error)
+                }
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                    } else {
+                        setError(fetchError(response.value.code()))
                     }
                 }
             }

@@ -99,6 +99,4 @@ class DashboardDoubtsRepository(
     }
 
     fun getRunAttempt(id: String) = runAttemptDao.getRunAttempt(id)
-
-    suspend fun fetchWishlist() = safeApiCall { Clients.onlineV2JsonApi.getWishlist() }
 }

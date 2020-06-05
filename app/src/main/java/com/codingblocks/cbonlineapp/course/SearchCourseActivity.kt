@@ -14,6 +14,7 @@ import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.onlineapi.models.Course
 import kotlinx.android.synthetic.main.activity_search_course.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -39,6 +40,10 @@ class SearchCourseActivity : BaseCBActivity() {
                         ViewCompat.getTransitionName(logo)!!
                     )
                 startActivity(intent, options.toBundle())
+            }
+
+            override fun onWishListClickListener(course: Course, position: Int) {
+                TODO("Not yet implemented")
             }
         }
     }

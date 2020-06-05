@@ -17,6 +17,7 @@ import com.codingblocks.cbonlineapp.util.PROFESSIONAL
 import com.codingblocks.cbonlineapp.util.STUDENT
 import com.codingblocks.cbonlineapp.util.extensions.*
 import com.codingblocks.onlineapi.ErrorStatus
+import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Professions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.activity_learning_tracks.*
@@ -47,6 +48,10 @@ class LearningTracksActivity : BaseCBActivity() {
                         ViewCompat.getTransitionName(logo)!!
                     )
                 startActivity(intent, options.toBundle())
+            }
+
+            override fun onWishListClickListener(course: Course, position: Int) {
+                TODO("Not yet implemented")
             }
         }
     }

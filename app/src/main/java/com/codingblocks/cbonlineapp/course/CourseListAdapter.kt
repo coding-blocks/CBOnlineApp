@@ -77,6 +77,16 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                     item.id, item.logo, courseLogo
                 )
             }
+            if (type != "LIST" && type != "TRACKS") {
+                course_card_like.isActivated = item.isWishlist!!
+                course_card_like.setOnClickListener {
+                    itemClickListener?.onWishListClickListener(
+                        item,
+                        adapterPosition
+                    )
+                    course_card_like.isActivated = !item.isWishlist!!
+                }
+            }
             if (type == "TRACKS") {
                 item.projects?.take(5)?.forEach {
                     projectTitle.isVisible = true
@@ -170,4 +180,5 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
 
 interface ItemClickListener {
     fun onClick(id: String, name: String, logo: ImageView)
+    fun onWishListClickListener(course: Course, position: Int)
 }

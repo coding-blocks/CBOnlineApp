@@ -28,11 +28,13 @@ data class Project(
     val image: String = ""
 ) : BaseModel()
 
-@Type("user_course_wishlists")
-data class Wishlist(
-    @Relationship("course")
-    val course: List<Course>? = null
-) : BaseModel()
+    @Type("user_course_wishlists")
+    data class Wishlist(
+        @Relationship("course")
+        val course: Course? = null,
+        @Relationship("user")
+        val user: User? = null
+    ) : BaseModel()
 
 @Type("courses", "course")
 data class Course(
@@ -48,6 +50,8 @@ data class Course(
     val slug: String? = "",
     val coverImage: String? = "",
     val faq: String?,
+    var isWishlist: Boolean? = false,
+    var userWishlistId: String?,
     val coursefeatures: ArrayList<CourseFeatures>?,
     @Relationship("instructors")
     val instructors: ArrayList<Instructor>?,
@@ -364,21 +368,26 @@ data class Course(
 
     @Type("users", "user")
     data class User(
-        val email: String?,
-        val firstname: String,
-        val lastReadNotification: String?,
-        val lastname: String,
-        val oneauthId: String?,
-        val photo: String?,
-        val verifiedemail: String?,
-        val verifiedmobile: String?,
-        val username: String = "",
-        val roleId: Int = 0,
+        val email: String? = "",
+        val firstname: String? = "",
+        val lastReadNotification: String? = "",
+        val lastname: String?="",
+        val oneauthId: String?= "",
+        val photo: String? = "",
+        val verifiedemail: String? = "",
+        val verifiedmobile: String? = "",
+        val username: String? = "",
+        val roleId: Int? = 0,
         val graduationyear: String? = "",
         val college: String? = "",
         val mobile: String? = "",
         val branch: String? = ""
-    ) : BaseModel()
+    ) : BaseModel() {
+        constructor(id: String) :
+            this("", "", "", "", "", "", "", "", "", 0, "", "") {
+            super.id = id
+        }
+    }
 
     class SectionContent(
         val order: Int,

@@ -10,6 +10,7 @@ import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.Player
 import com.codingblocks.onlineapi.models.User
+import com.codingblocks.onlineapi.models.Wishlist
 import com.codingblocks.onlineapi.safeApiCall
 
 class DashboardHomeRepository(
@@ -27,7 +28,7 @@ class DashboardHomeRepository(
                 SP_USER_IMAGE = photo ?: "empty"
                 SP_USER_NAME = "$firstname $lastname"
                 SP_NAME = "$username"
-                SP_ROLE_ID = roleId
+                SP_ROLE_ID = roleId?:0
                 SP_ADMIN = roleId == 1 || roleId == 3
             }
         }
@@ -55,4 +56,7 @@ class DashboardHomeRepository(
     suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
     suspend fun fetchUser() = safeApiCall { Clients.onlineV2JsonApi.getMe() }
     suspend fun refreshToken() = safeApiCall { Clients.api.refreshToken(prefs.SP_JWT_REFRESH_TOKEN) }
+    suspend fun fetchWishlist() = safeApiCall { Clients.onlineV2JsonApi.getWishlist() }
+    suspend fun addToWishlist(wishList: Wishlist) = safeApiCall { Clients.onlineV2JsonApi.addToWishlist(wishList) }
+    suspend fun removeFromWishlist(id: String) = safeApiCall { Clients.onlineV2JsonApi.removeFromWishlist(id) }
 }

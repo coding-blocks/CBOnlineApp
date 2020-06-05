@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:icon="@drawable/ic_like"
+        android:id="@+id/wishlist"
+        android:icon="@drawable/ic_like_empty"
         android:title="@string/like"
         app:showAsAction="always" />
 
