@@ -1,5 +1,8 @@
 package com.codingblocks.cbonlineapp.campaign
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +16,9 @@ import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
 import com.codingblocks.onlineapi.models.Spins
 import kotlinx.android.synthetic.main.item_winnings.view.*
+import org.jetbrains.anko.toast
 
-class PagedCampaignListAdapter : PagedListAdapter<Spins, CampaignViewHolder>(object : DiffUtil.ItemCallback<Spins>() {
+class PagedCampaignListAdapter : PagedListAdapter<Spins, PagedCampaignListAdapter.CampaignViewHolder>(object : DiffUtil.ItemCallback<Spins>() {
     override fun areItemsTheSame(oldItem: Spins, newItem: Spins): Boolean {
         return oldItem.id == newItem.id
     }
@@ -24,12 +28,14 @@ class PagedCampaignListAdapter : PagedListAdapter<Spins, CampaignViewHolder>(obj
     }
 }
 ) {
+    private lateinit var myClipboard: ClipboardManager
 
     init {
         setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CampaignViewHolder {
+        myClipboard = parent.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         return CampaignViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_winnings, parent, false)
         )
     }
@@ -41,27 +47,33 @@ class PagedCampaignListAdapter : PagedListAdapter<Spins, CampaignViewHolder>(obj
     override fun onBindViewHolder(holder: CampaignViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
     }
-}
 
-class CampaignViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class CampaignViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(item: Spins) = with(itemView) {
-        subTitleTv.text = item.spinPrize?.description
-        titleTv.text = item.spinPrize?.title
-        imgView.loadImage(item.spinPrize?.img ?: "")
-        item.usedAt?.let {
-            timeTv.text = "Used ${item.usedAt?.timeAgo()}"
-        } ?: run {
+        fun bind(item: Spins) = with(itemView) {
+            subTitleTv.text = item.spinPrize?.title
+            imgView.loadImage(item.spinPrize?.img ?: "")
+//        item.usedAt?.let {
+//            timeTv.text = "Used ${item.usedAt?.timeAgo()}"
+//        } ?: run {
             timeTv.text = "Won ${item.validTill?.timeAgo()}"
-        }
-        couponCard
-        item.prizeRemarksExtra?.couponCreated?.let {
-            couponCard.isVisible = true
-            codeTv.text = it
-            timeTv.text = "Valid till ${item.prizeRemarksExtra!!.validEnd?.timeAgo()}"
-        } ?: run {
-            couponCard.isVisible = false
-        }
+            item.prizeRemarksExtra?.couponCreated?.let { referral ->
+                codeTv.text = referral
 
+                copy_clipboard.setOnClickListener {
+                    val myClip = ClipData.newPlainText("referral", referral)
+                    myClipboard.setPrimaryClip(myClip)
+                    context.toast("Copied to Clipboard")
+                }
+                couponCard.isVisible = true
+                timeTv.text = "Valid till ${item.prizeRemarksExtra!!.validEnd?.timeAgo()}"
+            } ?: run {
+                couponCard.isVisible = false
+            }
+
+
+        }
     }
 }
+
+

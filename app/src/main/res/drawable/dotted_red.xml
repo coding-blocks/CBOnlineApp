@@ -7,10 +7,10 @@
                 android:dashWidth="5dp"
                 android:dashGap="5dp" />
             <padding
-                android:bottom="@dimen/margin_extra_small"
-                android:left="@dimen/margin_medium"
-                android:right="@dimen/margin_medium"
-                android:top="@dimen/margin_extra_small" />
+                android:bottom="5dp"
+                android:left="10dp"
+                android:right="10dp"
+                android:top="5dp" />
         </shape>
     </item>
 </layer-list>

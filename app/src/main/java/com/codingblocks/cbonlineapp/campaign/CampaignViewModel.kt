@@ -11,11 +11,14 @@ import androidx.paging.PagedList
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
+import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.models.Spins
+import com.codingblocks.onlineapi.safeApiCall
 import kotlinx.coroutines.Dispatchers
 
 const val SPINS_LEFT = "spinsLeft"
+const val REFERRAL = "referral"
 
 class CampaignViewModel(
     handle: SavedStateHandle,
@@ -24,6 +27,7 @@ class CampaignViewModel(
 
     private var spinsLeft by savedStateValue<Int>(handle, SPINS_LEFT)
     var spinsLiveData = MutableLiveData<Int>(spinsLeft)
+    var referral by savedStateValue<String>(handle, REFERRAL)
 
     var myWinnings: LiveData<PagedList<Spins>>
     private var leaderboard: LiveData<PagedList<Spins>>
@@ -36,6 +40,7 @@ class CampaignViewModel(
             .build()
         myWinnings = initializedPagedListBuilder(config).build()
         leaderboard = initializedPagedListBuilder(config).build()
+        fetchReferralCode()
 
     }
 
@@ -72,6 +77,18 @@ class CampaignViewModel(
                     response.value.body()?.let {
                         emit(it)
                     }
+            }
+        }
+    }
+
+    fun fetchReferralCode() {
+        runIO {
+            when (val response = safeApiCall { Clients.api.myReferral() }) {
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        referral = body()?.get("code")?.asString
+                    }
+                }
             }
         }
     }

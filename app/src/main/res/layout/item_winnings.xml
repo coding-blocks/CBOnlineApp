@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <ImageView
             android:id="@+id/imgView"
@@ -30,40 +30,40 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/gilroy_medium"
-            android:textColor="@color/yellow"
-            android:textSize="16sp"
+            android:text="You Won"
             android:textAlignment="center"
-            tools:text="You Won" />
+            android:textColor="@color/yellow"
+            android:textSize="16sp" />
 
         <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
             android:id="@+id/subTitleTv"
             android:layout_width="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:textAlignment="center"
+            android:ellipsize="end"
             android:fontFamily="@font/gilroy_bold"
+            android:maxLines="2"
+            android:textAlignment="center"
             android:textSize="20sp"
             tools:text="Faang @70% off" />
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/couponCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
                 android:id="@+id/codeTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:background="@drawable/dotted_red"
                 android:fontFamily="@font/gilroy_bold"
-                android:layout_margin="10dp"
-
+                android:text="SPN2OOHF1FBS"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
 
             <ImageView
                 android:id="@+id/copy_clipboard"
@@ -79,8 +79,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textAlignment="center"
             android:fontFamily="@font/gilroy_medium"
+            android:textAlignment="center"
             android:textSize="14sp"
             tools:text="Won 2 Days ago" />
 
