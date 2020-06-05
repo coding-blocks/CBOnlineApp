@@ -53,10 +53,7 @@ class PagedCampaignListAdapter : PagedListAdapter<Spins, PagedCampaignListAdapte
         fun bind(item: Spins) = with(itemView) {
             subTitleTv.text = item.spinPrize?.title
             imgView.loadImage(item.spinPrize?.img ?: "")
-//        item.usedAt?.let {
-//            timeTv.text = "Used ${item.usedAt?.timeAgo()}"
-//        } ?: run {
-            timeTv.text = "Won ${item.validTill?.timeAgo()}"
+            timeTv.text = "Won ${item.usedAt?.timeAgo()}"
             item.prizeRemarksExtra?.couponCreated?.let { referral ->
                 codeTv.text = referral
 

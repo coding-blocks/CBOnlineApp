@@ -152,13 +152,13 @@ class DashboardActivity : BaseCBActivity(),
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 createShortcut()
             }
-            dashboardBottomNav.selectedItemId = R.id.dashboard_home
+//            dashboardBottomNav.selectedItemId = R.id.dashboard_home
         } else {
             dashboardNavigation.getHeaderView(0).apply {
                 findViewById<TextView>(R.id.navUsernameTv).text = "Login/Signup"
             }
-            dashboardBottomNav.selectedItemId = R.id.dashboard_explore
         }
+        dashboardBottomNav.selectedItemId = R.id.dashboard_explore
 
         dashboardAppBarLayout.bringToFront()
     }

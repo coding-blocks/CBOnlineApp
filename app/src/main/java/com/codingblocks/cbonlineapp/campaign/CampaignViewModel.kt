@@ -3,7 +3,6 @@ package com.codingblocks.cbonlineapp.campaign
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
@@ -13,9 +12,9 @@ import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
 import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
+import com.codingblocks.onlineapi.models.SpinResponse
 import com.codingblocks.onlineapi.models.Spins
 import com.codingblocks.onlineapi.safeApiCall
-import kotlinx.coroutines.Dispatchers
 
 const val SPINS_LEFT = "spinsLeft"
 const val REFERRAL = "referral"
@@ -28,6 +27,7 @@ class CampaignViewModel(
     private var spinsLeft by savedStateValue<Int>(handle, SPINS_LEFT)
     var spinsLiveData = MutableLiveData<Int>(spinsLeft)
     var referral by savedStateValue<String>(handle, REFERRAL)
+    var spinResponse = MutableLiveData<SpinResponse>()
 
     var myWinnings: LiveData<PagedList<Spins>>
     private var leaderboard: LiveData<PagedList<Spins>>
@@ -67,16 +67,18 @@ class CampaignViewModel(
         }
     }
 
-    fun drawSpin() = liveData(Dispatchers.IO) {
-        when (val response = repo.drawSpin()) {
-            is ResultWrapper.GenericError -> {
-                setError(response.error)
-            }
-            is ResultWrapper.Success -> with(response.value) {
-                if (response.value.isSuccessful)
-                    response.value.body()?.let {
-                        emit(it)
-                    }
+    fun drawSpin() {
+        runIO {
+            when (val response = repo.drawSpin()) {
+                is ResultWrapper.GenericError -> {
+                    setError(response.error)
+                }
+                is ResultWrapper.Success -> with(response.value) {
+                    if (response.value.isSuccessful)
+                        response.value.body()?.let {
+                            spinResponse.postValue(it)
+                        }
+                }
             }
         }
     }
