@@ -21,9 +21,7 @@ class SearchCourseActivity : BaseCBActivity() {
 
     private val viewModel by viewModel<CourseViewModel>()
     private val courseCardListAdapter = CourseListAdapter("LIST")
-    val dialog by lazy {
-        CourseSearchFragment()
-    }
+    val dialog: CourseSearchFragment by lazy { CourseSearchFragment() }
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
             override fun onClick(id: String, name: String, logo: ImageView) {

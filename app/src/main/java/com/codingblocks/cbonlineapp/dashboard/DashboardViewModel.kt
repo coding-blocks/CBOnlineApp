@@ -275,6 +275,10 @@ class DashboardViewModel(
         }
     }
 
+    val activePremiumRuns: LiveData<List<CourseInstructorPair>> by lazy {
+        myCourseRepo.getPremiumActiveRuns()
+    }
+
     private fun fetchDoubts() {
         runIO {
             if (!attemptId.value.isNullOrEmpty())

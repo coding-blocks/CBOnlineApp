@@ -146,7 +146,7 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
         }
 
         if (vm.isLoggedIn == true) {
-            vm.allRuns.observer(viewLifecycleOwner) {
+            vm.activePremiumRuns.observer(viewLifecycleOwner) {
                 if (it.isNotEmpty()) {
                     vm.attemptId.value = it.first().courseRun.runAttempt.attemptId
                     list.clear()

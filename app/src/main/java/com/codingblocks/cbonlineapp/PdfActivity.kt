@@ -33,7 +33,7 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
         setContentView(R.layout.activity_pdf)
 
         url = intent.getStringExtra("fileUrl")
-        fileName = intent.getStringExtra("fileName")
+        fileName = intent.getStringExtra("fileName").replace(" ","_")
 
         if (url.isNullOrEmpty() || fileName.isNullOrEmpty()) {
             Toast.makeText(this, "Error fetching document", Toast.LENGTH_SHORT).show()

@@ -49,10 +49,8 @@ import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
-import java.util.concurrent.TimeUnit
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
@@ -60,6 +58,19 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.util.concurrent.TimeUnit
+
+/*
+ *   Payment issues
+ *   multi select quizzes
+ *   pdf not issue
+ *   challenge can't be done
+ *   webinar - make,
+ *   make more category
+ *   expired,upgrade and pause-unpause
+ *   only course, free course
+ *
+ */
 
 const val SECTION_DOWNLOAD = "sectionDownload"
 

@@ -29,6 +29,9 @@ class CampaignActivity : BaseCBActivity() {
         myCampaignTabs.setupWithViewPager(campaignPager)
         pagerAdapter.apply {
             add(HomeFragment(), getString(R.string.spin_wheel))
+            add(WinningsFragment(), getString(R.string.winnings))
+            add(RulesFragment(), getString(R.string.rules))
+
         }
 
         campaignPager.apply {

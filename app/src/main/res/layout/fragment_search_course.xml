@@ -28,7 +28,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_large"
-            android:background="@null"
             android:drawableEnd="@drawable/ic_search"
             android:fontFamily="@font/gilroy_bold"
             android:hint="@string/what_do_you_want_to_learn"

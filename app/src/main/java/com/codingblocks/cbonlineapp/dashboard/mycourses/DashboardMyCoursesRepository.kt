@@ -132,10 +132,16 @@ class DashboardMyCoursesRepository(
         return when (query) {
             "Recently Accessed" -> courseWithInstructorDao.getRecentRuns()
             "Expired Courses" -> courseWithInstructorDao.getExpiredRuns(System.currentTimeMillis() / 1000)
+            "Active" -> courseWithInstructorDao.getAllActiveRuns(System.currentTimeMillis() / 1000)
+            "Free Trials" -> courseWithInstructorDao.getTrialRuns()
+            "Premium" -> courseWithInstructorDao.getPremiumRuns()
             else -> courseWithInstructorDao.getMyRuns()
         }
     }
 
     fun getPurchasedRuns() = courseWithInstructorDao.getPurchasesRuns()
-    fun getActiveRuns() = courseWithInstructorDao.getActiveRuns(System.currentTimeMillis() / 1000)
+
+    fun getPremiumActiveRuns() = courseWithInstructorDao.getPremiumActiveRuns(System.currentTimeMillis() / 1000)
+
+    fun getActiveRuns() = courseWithInstructorDao.getAllActiveRuns(System.currentTimeMillis() / 1000)
 }
