@@ -35,7 +35,7 @@ class CampaignViewModel(
 
     init {
         val config = PagedList.Config.Builder()
-            .setPageSize(9)
+            .setPageSize(10)
             .setEnablePlaceholders(true)
             .build()
         leaderBoard = initializedPagedListBuilder(config).build()
@@ -78,6 +78,9 @@ class CampaignViewModel(
                         response.value.body()?.let {
                             spinResponse = it
                         }
+                    else{
+                        setError(fetchError(response.value.code()))
+                    }
                 }
             }
         }
@@ -110,6 +113,8 @@ class CampaignViewModel(
                         response.value.body()?.let {
                             myWinnings.postValue(it.get())
                         }
+                    }else{
+                        setError(fetchError(response.value.code()))
                     }
                 }
             }

@@ -22,13 +22,13 @@
         android:paddingBottom="@dimen/margin_large">
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/vdo_ffwd"
+            android:id="@+id/resultAnimation"
             android:layout_width="260dp"
             android:layout_height="220dp"
             android:scaleType="centerInside"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/lose" />
+            />
 
         <TextView
             android:id="@+id/titleTv"

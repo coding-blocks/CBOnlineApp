@@ -45,7 +45,12 @@ class LeaderBoardPagedListAdapter : PagedListAdapter<Spins, LeaderBoardPagedList
             usernameTv.text = "${item.user?.firstname} ${item.user?.lastname}"
             subTitleTv.text = item.spinPrize?.title ?: ""
             imgView.loadImage(item.spinPrize?.img ?: "")
-            userImgView.loadImage(item.user?.photo ?: "")
+            if (item.user?.photo.isNullOrEmpty()){
+                userImgView.setImageResource(R.drawable.defaultavatar)
+            }
+            else{
+                userImgView.loadImage(item.user?.photo ?: "")
+            }
         }
     }
 }

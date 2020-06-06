@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import kotlinx.android.synthetic.main.fragment_campaign_winnigs.*
+import kotlinx.android.synthetic.main.fragment_campaign_leaderboard.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class LeaderBoardFragment : BaseCBFragment() {
@@ -23,17 +21,17 @@ class LeaderBoardFragment : BaseCBFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_campaign_winnigs, container, false)
+        return inflater.inflate(R.layout.fragment_campaign_leaderboard, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        winningsRv.apply {
+        leaderboardRv.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = leaderBoardListAdapter
         }
-        vm.getLeaderBoard().observer(thisLifecycleOwner){
+        vm.getLeaderBoard().observer(thisLifecycleOwner) {
             leaderBoardListAdapter.submitList(it)
         }
     }

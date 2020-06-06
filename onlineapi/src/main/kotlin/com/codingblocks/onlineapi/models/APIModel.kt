@@ -359,9 +359,9 @@ data class Note(
 @Type("users", "user")
 data class User(
     val email: String?,
-    val firstname: String,
+    val firstname: String? ="",
     val lastReadNotification: String?,
-    val lastname: String,
+    val lastname: String? ="",
     val oneauthId: String?,
     val photo: String?,
     val verifiedemail: String?,
