@@ -99,6 +99,10 @@
     <string name="recently_accessed">Recently Accessed</string>
     <string name="wishlisted_courses">Wishlisted Courses</string>
     <string name="all_courses">All Courses</string>
+    <string name="free_trials">Free Trials</string>
+    <string name="active">Active</string>
+    <string name="premium">Premium</string>
+
     <string name="expired_courses">Expired Courses</string>
     <string name="buy_extension">Buy Extension</string>
     <string name="doubt_resolved_title">Your doubt has been marked Resolved</string>
@@ -308,4 +312,8 @@
     <string name="ranks">%d Ranks</string>
     <string name="points">%d Points</string>
     <string name="policy_text"><![CDATA[By logging in you agree to Coding Blocks’s\n Privacy Policy & Terms of Service]]></string>
+    <string name="spin_wheel">Spin Wheel</string>
+    <string name="winnings">Winnings</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="rules">Rules</string>
 </resources>

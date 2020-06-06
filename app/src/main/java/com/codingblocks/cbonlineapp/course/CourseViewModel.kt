@@ -1,12 +1,17 @@
 package com.codingblocks.cbonlineapp.course
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.baseclasses.STATE
+import com.codingblocks.cbonlineapp.course.adapter.CourseDataSource
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
-import com.codingblocks.onlineapi.getMeta
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Project
 import com.codingblocks.onlineapi.models.Sections
@@ -55,25 +60,18 @@ class CourseViewModel(
         fetchAllCourses()
     }
 
-    fun fetchAllCourses(offset: String = "0") {
+    fun fetchAllCourses() {
         runIO {
-            when (val response = repo.getAllCourses(offset)) {
+            when (val response = repo.getAllCourses("0")) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
-                            val currentOffSet = getMeta(it.meta, "currentOffset").toString()
-                            val nextOffSet = getMeta(it.meta, "nextOffset").toString()
-                            if (currentOffSet != nextOffSet && nextOffSet != "null") {
-                                fetchAllCourses(nextOffSet)
-                                it.get()?.let { it1 -> allCourse.addAll(it1) }
-                                if (isLoggedIn){
-                                    checkIfWishlisted(allCourse)
-                                }else{
-                                    suggestedCourses.postValue(allCourse)
-                                }
-                            } else {
-                                setError(fetchError(code()))
+                            it.get()?.let { it1 -> allCourse.addAll(it1) }
+                            if (isLoggedIn){
+                                checkIfWishlisted(allCourse)
+                            }else{
+                                suggestedCourses.postValue(allCourse)
                             }
                         }
                 }
@@ -122,6 +120,7 @@ class CourseViewModel(
             projects.postValue(emptyList())
         }
     }
+
     // Todo - Improvise this
     fun fetchSections(sectionIdList: ArrayList<Sections>) {
         val list = arrayListOf<Sections>()
@@ -191,7 +190,7 @@ class CourseViewModel(
         }
     }
 
-    fun addToCart(id: String) {
+    private fun addToCart(id: String) {
         runIO {
             when (val response = repo.addToCart(id)) {
                 is ResultWrapper.GenericError -> {
@@ -208,6 +207,32 @@ class CourseViewModel(
                 }
             }
         }
+    }
+
+    /**
+     * Paged Course List
+     */
+    private var courseLiveData  : LiveData<PagedList<Course>>
+
+    init {
+        val config = PagedList.Config.Builder()
+            .setPageSize(9)
+            .setEnablePlaceholders(true)
+            .build()
+        courseLiveData  = initializedPagedListBuilder(config).build()
+    }
+
+    fun getCourses():LiveData<PagedList<Course>> = courseLiveData
+
+    private fun initializedPagedListBuilder(config: PagedList.Config):
+        LivePagedListBuilder<String, Course> {
+
+        val dataSourceFactory = object : DataSource.Factory<String, Course>() {
+            override fun create(): DataSource<String, Course> {
+                return CourseDataSource(viewModelScope)
+            }
+        }
+        return LivePagedListBuilder<String, Course>(dataSourceFactory, config)
     }
 
     fun checkIfWishlisted(allCourse: List<Course>?){

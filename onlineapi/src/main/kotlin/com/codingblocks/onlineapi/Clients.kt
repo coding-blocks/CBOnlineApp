@@ -37,6 +37,8 @@ import com.codingblocks.onlineapi.models.Rating
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
+import com.codingblocks.onlineapi.models.SpinPrize
+import com.codingblocks.onlineapi.models.Spins
 import com.codingblocks.onlineapi.models.Tags
 import com.codingblocks.onlineapi.models.User
 import com.codingblocks.onlineapi.models.Wishlist
@@ -107,6 +109,8 @@ object Clients {
         Project::class.java,
         Player::class.java,
         CodeChallenge::class.java,
+        SpinPrize::class.java,
+        Spins::class.java,
         Wishlist::class.java
     )
 

@@ -30,12 +30,9 @@ class CheckoutPersonalDetailsFragment : BaseCBFragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vm.getCart()
-        viewLifecycleOwnerLiveData.observer(viewLifecycleOwner) {
-            info { it.lifecycle.currentState.name }
-        }
         if (vm.map["stateId"] != null)
             checkoutBtn.isEnabled = true
-        vm.cart.observer(viewLifecycleOwner) {
+        vm.cart.observer(thisLifecycleOwner) {
             finalPriceTv.text = "${getString(R.string.rupee_sign)} ${it["totalAmount"].asString}"
         }
         val json = loadJsonObjectFromAsset(requireContext(), "csvjson.json") as JSONArray?

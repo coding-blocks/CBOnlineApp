@@ -7,6 +7,7 @@ import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.RankResponse
 import com.codingblocks.onlineapi.models.RatingModel
 import com.codingblocks.onlineapi.models.ResetRunAttempt
+import com.codingblocks.onlineapi.models.SpinResponse
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
@@ -139,4 +140,10 @@ interface OnlineRestApi {
 
     @GET("v2/hb/performance")
     suspend fun getHackerBlocksPerformance(): Response<RankResponse>
+
+    @GET("v2/spins/stats")
+    suspend fun spinStats(): Response<JsonObject>
+
+    @POST("v2/spins/draw")
+    suspend fun drawSpin(): Response<SpinResponse>
 }

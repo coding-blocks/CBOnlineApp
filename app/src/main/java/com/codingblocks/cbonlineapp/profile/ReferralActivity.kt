@@ -29,12 +29,12 @@ class ReferralActivity : BaseCBActivity() {
         setContentView(R.layout.activity_referral)
         setToolbar(referralToolbar)
 
-        copy_clipboard.setOnClickListener(View.OnClickListener {
+        copy_clipboard.setOnClickListener {
             val text = referralTv?.text
             val myClip = ClipData.newPlainText("referral", text)
             myClipboard.setPrimaryClip(myClip)
             toast("Copied to clipboad")
-        })
+        }
 
         GlobalScope.launch {
             when (val response = safeApiCall { Clients.api.myReferral() }) {
@@ -62,7 +62,4 @@ class ReferralActivity : BaseCBActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
 }

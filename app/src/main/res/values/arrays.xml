@@ -2,18 +2,20 @@
 <resources>
     <integer-array name="course_type_img">
         <item>@drawable/ic_recent</item>
-        <!--        <item>@drawable/ic_wishlisted</item>-->
-        <!--        <item>@drawable/ic_tracks</item>-->
         <item>@drawable/ic_expired</item>
+        <item>@drawable/ic_lock</item>
         <item>@drawable/ic_courses</item>
+        <item>@drawable/ic_star_unfilled</item>
+        <item>@drawable/ic_recent</item>
     </integer-array>
 
     <string-array name="course_type">
         <item>@string/recently_accessed</item>
-        <!--        <item>@string/wishlisted_courses</item>-->
-        <!--        <item>@string/learning_tracks</item>-->
         <item>@string/expired_courses</item>
+        <item>@string/free_trials</item>
         <item>@string/all_courses</item>
+        <item>@string/premium</item>
+        <item>@string/active</item>
     </string-array>
 
     <integer-array name="tourslide">

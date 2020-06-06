@@ -31,31 +31,29 @@ class URLRouterActivity : BaseCBActivity() {
         if (key.isNotEmpty() && !JWTUtils.isExpired(key)) {
             Clients.authJwt = sharedPrefs.SP_JWT_TOKEN_KEY
             Clients.refreshToken = sharedPrefs.SP_JWT_REFRESH_TOKEN
-            intent?.data?.let { uri ->
-
-                if (TextUtils.isEmpty(uri.host)) fallBack(uri, true)
-                if (!uri.host!!.contains("online.codingblocks.com")) fallBack(uri, true)
-
-                val pathSegments = uri.pathSegments
-                if (pathSegments.size < 1) {
-                    fallBack(uri, true)
-                    finish()
-                    return
-                }
-
-                when (pathSegments[0]) {
-                    "classroom" -> openRouter(uri)
-                    "courses" -> openRouter(uri)
-                    "player" -> openRouter(uri)
-                    "app" -> openRouter(uri)
-                    else -> fallBack(uri, true)
-                }
-                finish()
-            }
-                ?: finish()
-        } else {
-            fallBack(Uri.EMPTY, false)
         }
+        intent?.data?.let { uri ->
+
+            if (TextUtils.isEmpty(uri.host)) fallBack(uri, true)
+            if (!uri.host!!.contains("online.codingblocks.com")) fallBack(uri, true)
+
+            val pathSegments = uri.pathSegments
+            if (pathSegments.size < 1) {
+                fallBack(uri, true)
+                finish()
+                return
+            }
+
+            when (pathSegments[0]) {
+                "classroom" -> openRouter(uri)
+                "courses" -> openRouter(uri)
+                "player" -> openRouter(uri)
+                "app" -> openRouter(uri)
+                else -> fallBack(uri, true)
+            }
+            finish()
+        }
+            ?: finish()
     }
 
     private fun openRouter(uri: Uri) {

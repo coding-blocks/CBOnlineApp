@@ -9,6 +9,8 @@ import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewRepository
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewViewModel
 import com.codingblocks.cbonlineapp.auth.AuthRepository
 import com.codingblocks.cbonlineapp.auth.AuthViewModel
+import com.codingblocks.cbonlineapp.campaign.CampaignRepository
+import com.codingblocks.cbonlineapp.campaign.CampaignViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.course.CourseViewModel
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutViewModel
@@ -29,7 +31,6 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeRepository
 import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeViewModel
-import com.codingblocks.cbonlineapp.mycourse.leaderboard.LeaderboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerRepository
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizRepository
@@ -41,6 +42,7 @@ import com.codingblocks.cbonlineapp.settings.SettingsViewModel
 import com.codingblocks.cbonlineapp.tracks.TrackViewModel
 import com.codingblocks.cbonlineapp.tracks.TracksRepository
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
+import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -48,7 +50,6 @@ import org.koin.dsl.module
 val viewModelModule = module {
 
     viewModel { (handle: SavedStateHandle) -> MyCourseViewModel(handle, get(), get()) }
-    viewModel { LeaderboardViewModel() }
     viewModel { NotificationViewModel(get()) }
     viewModel { (handle: SavedStateHandle) -> VideoPlayerViewModel(handle, get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
@@ -67,6 +68,7 @@ val viewModelModule = module {
     viewModel { WishlistViewModel(get()) }
     viewModel { (handle: SavedStateHandle) -> AuthViewModel(handle, get()) }
     viewModel { (handle: SavedStateHandle) -> CodeChallengeViewModel(handle, get()) }
+    viewModel { (handle: SavedStateHandle) -> CampaignViewModel(handle, get()) }
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
@@ -84,9 +86,14 @@ val viewModelModule = module {
     single { CodeChallengeRepository(get()) }
     single { AuthRepository(get()) }
     single { WishlistRepository(get()) }
+    single { CampaignRepository(get()) }
 }
 val preferencesModule = module {
     single { provideSettingsPreferences(androidApplication()) }
+}
+
+val firebaseModule = module {
+    single { FirebaseFirestore.getInstance() }
 }
 
 fun provideSettingsPreferences(app: Application): PreferenceHelper = PreferenceHelper.getPrefs(app)
