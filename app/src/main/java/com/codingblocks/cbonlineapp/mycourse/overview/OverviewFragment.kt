@@ -51,7 +51,8 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         courseLeaderboardRv.setRv(requireContext(), leaderBoardListAdapter)
-        viewModel.run?.distinctUntilChanged()?.observer(viewLifecycleOwner) { courseAndRun ->
+        viewModel.run?.distinctUntilChanged()?.observer(thisLifecycleOwner) { courseAndRun ->
+            viewModel.premiumRun = courseAndRun.runAttempt.premium
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
             viewModel.runId = (courseAndRun.run.crUid)
             val progressValue = courseAndRun.getProgress()
@@ -101,7 +102,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 if (courseAndRun.run.crPrice > 10.toString() && courseAndRun.runAttempt.premium && RUNTIERS.LITE.name != courseAndRun.runAttempt.runTier)
                     setGoodiesCard(courseAndRun.run.goodiesThreshold, progressValue)
             }
-            viewModel.getLeaderboard().observer(viewLifecycleOwner) { leaderboard ->
+            viewModel.getLeaderboard().observer(thisLifecycleOwner) { leaderboard ->
 
                 val currUserLeaderboard = leaderboard.find { it.id == viewModel.prefs.SP_USER_ID }
                 currUserLeaderboard?.let {
@@ -112,13 +113,13 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             }
         }
 
-        viewModel.performance?.observer(viewLifecycleOwner) {
+        viewModel.performance?.observer(thisLifecycleOwner) {
             homePerformanceTv.text = it.remarks
             homePercentileTv.text = it.percentile.toString()
             chart1.loadData(it.averageProgress, it.userProgress)
         }
 
-        viewModel.getHackerBlocksPerformance().distinctUntilChanged().observe(viewLifecycleOwner, Observer {
+        viewModel.getHackerBlocksPerformance().distinctUntilChanged().observe(thisLifecycleOwner, Observer {
             if (it != null) {
                 hbRankContainer.isVisible = true
                 currentOverallRank.text = it.currentOverallRank.toString()
@@ -139,7 +140,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         confirmReset.setOnClickListener {
             Components.showConfirmation(requireContext(), "reset") {
                 if (it) {
-                    viewModel.resetProgress.observer(viewLifecycleOwner) {
+                    viewModel.resetProgress.observer(thisLifecycleOwner) {
                         requireActivity().finish()
                     }
                 }

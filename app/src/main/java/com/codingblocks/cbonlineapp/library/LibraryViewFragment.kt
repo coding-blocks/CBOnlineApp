@@ -67,7 +67,7 @@ class LibraryViewFragment : BaseCBFragment() {
         when (vm.type) {
             getString(R.string.notes) -> {
                 libraryListAdapter = LibraryListAdapter(LibraryTypes.NOTE)
-                vm.fetchNotes().observe(viewLifecycleOwner) {
+                vm.fetchNotes().observe(thisLifecycleOwner) {
                     if (it.isNullOrEmpty()) {
                         libraryListAdapter.submitList(emptyList())
                     } else {
@@ -79,7 +79,7 @@ class LibraryViewFragment : BaseCBFragment() {
             getString(R.string.announcements) -> vm.fetchNotes()
             getString(R.string.bookmarks) -> {
                 libraryListAdapter = LibraryListAdapter(LibraryTypes.BOOKMARK)
-                vm.fetchBookmarks().observe(viewLifecycleOwner) {
+                vm.fetchBookmarks().observe(thisLifecycleOwner) {
                     if (it.isNullOrEmpty()) {
                         libraryListAdapter.submitList(emptyList())
                     } else {
@@ -90,7 +90,7 @@ class LibraryViewFragment : BaseCBFragment() {
             }
             else -> {
                 libraryListAdapter = LibraryListAdapter(LibraryTypes.DOWNLOADS)
-                vm.fetchDownloads().observe(viewLifecycleOwner) {
+                vm.fetchDownloads().observe(thisLifecycleOwner) {
                     if (it.isNullOrEmpty()) {
                         libraryListAdapter.submitList(emptyList())
                     } else {

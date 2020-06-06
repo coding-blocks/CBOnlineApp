@@ -50,7 +50,7 @@ class CheckoutPaymentFragment : BaseCBFragment() {
             payBtn.isEnabled = false
             vm.updateCart()
         }
-        vm.errorLiveData.observer(viewLifecycleOwner) {
+        vm.errorLiveData.observer(thisLifecycleOwner) {
             if (it.contains("coupon")) {
                 vm.map.remove("coupon")
                 if (it.contains("credits")) {
@@ -70,7 +70,7 @@ class CheckoutPaymentFragment : BaseCBFragment() {
                 }
             }
         }
-        vm.cart.observer(viewLifecycleOwner) { json ->
+        vm.cart.observer(thisLifecycleOwner) { json ->
             vm.map.remove("applyCredits")
             vm.map.remove("coupon")
             vm.map.remove("coupon_id")

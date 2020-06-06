@@ -49,7 +49,7 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
         prevBtn.setOnClickListener(this)
         questionBtn.setOnClickListener(this)
 
-        vm.quizDetails.observer(viewLifecycleOwner) {
+        vm.quizDetails.observer(thisLifecycleOwner) {
             it.questions?.let { list ->
                 setUpQuestionBottomSheet(list.size)
                 setupMutableBottomSheetData(list.size)
@@ -62,7 +62,7 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
             }
         }
 
-        vm.quizAttempt.observer(viewLifecycleOwner) {
+        vm.quizAttempt.observer(thisLifecycleOwner) {
             mAdapter = ViewPagerAdapter(
                 requireContext(),
                 vm.quiz.qnaUid,
@@ -115,7 +115,7 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
                 false
             ) as AppCompatButton
 
-            vm.bottomSheetQuizData.value?.get(i)?.observer(viewLifecycleOwner) {
+            vm.bottomSheetQuizData.value?.get(i)?.observer(thisLifecycleOwner) {
                 numberBtn.backgroundTintList =
                     ColorStateList.valueOf(getColor(requireContext(), R.color.freshGreen))
                 numberBtn.textColor = getColor(requireContext(), R.color.freshGreen)

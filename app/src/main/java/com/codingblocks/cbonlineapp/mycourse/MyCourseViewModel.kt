@@ -19,11 +19,13 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
+import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.database.models.CourseRunPair
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
+import com.codingblocks.cbonlineapp.util.PREMIUM
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.ProgressWorker
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
@@ -31,6 +33,7 @@ import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
+import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Leaderboard
@@ -47,6 +50,7 @@ class MyCourseViewModel(
     var attemptId by savedStateValue<String>(handle, RUN_ATTEMPT_ID)
     var name by savedStateValue<String>(handle, COURSE_NAME)
     var runId by savedStateValue<String>(handle, RUN_ID)
+    var premiumRun by savedStateValue<Boolean>(handle, PREMIUM)
 
     var progress: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -56,6 +60,8 @@ class MyCourseViewModel(
     var content: LiveData<List<SectionContentHolder.SectionContentPair>> = MutableLiveData()
 
     init {
+        Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
+        Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
         getPerformance()
         content = Transformations.switchMap(DoubleTrigger(complete, filters)) {
             attemptId?.let {

@@ -29,7 +29,7 @@ class SignUpFragment : BaseCBFragment() {
         backBtn.setOnClickListener {
             requireActivity().onBackPressed()
         }
-        vm.errorLiveData.observer(viewLifecycleOwner) {
+        vm.errorLiveData.observer(thisLifecycleOwner) {
             proceedBtn.isEnabled = true
         }
         emailLayout.editText?.setText(vm.email)

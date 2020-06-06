@@ -33,7 +33,7 @@ class CheckoutOrderDetailsFragment : BaseCBFragment(), AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkoutShimmer.showShimmer(true)
-        vm.cart.observe(viewLifecycleOwner) {
+        vm.cart.observe(thisLifecycleOwner) {
             checkoutShimmer.hideAndStop()
             if (it == null) {
                 emptyCart.isVisible = true

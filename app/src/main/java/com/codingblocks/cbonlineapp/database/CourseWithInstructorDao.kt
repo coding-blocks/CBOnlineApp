@@ -55,6 +55,15 @@ interface CourseWithInstructorDao {
     SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
  	   INNER JOIN RunModel r ON r.crUid = rA.runId
        INNER JOIN CourseModel c ON c.cid = r.crCourseId
+       WHERE rA.premium = 1 AND rA.`end` > :currenttimeSec
+       ORDER BY rA.lastAccessedAt DESC
+    """)
+    fun getAllActiveRuns(currenttimeSec: Long): LiveData<List<CourseInstructorPair>>
+
+    @Query("""
+    SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
+ 	   INNER JOIN RunModel r ON r.crUid = rA.runId
+       INNER JOIN CourseModel c ON c.cid = r.crCourseId
        ORDER BY rA.lastAccessedAt DESC LIMIT 5
     """)
     fun getRecentRuns(): LiveData<List<CourseInstructorPair>>
@@ -82,4 +91,31 @@ interface CourseWithInstructorDao {
        WHERE rA.attemptId = :id ORDER BY rA.lastAccessedAt DESC LIMIT 1
     """)
     fun getRunById(id: String): LiveData<CourseRunPair>
+
+    @Query("""
+    SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
+ 	   INNER JOIN RunModel r ON r.crUid = rA.runId
+       INNER JOIN CourseModel c ON c.cid = r.crCourseId
+       WHERE rA.premium = 1 AND rA.runTier != "LITE"
+       ORDER BY rA.lastAccessedAt DESC
+    """)
+    fun getPremiumRuns(): LiveData<List<CourseInstructorPair>>
+
+    @Query("""
+    SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
+ 	   INNER JOIN RunModel r ON r.crUid = rA.runId
+       INNER JOIN CourseModel c ON c.cid = r.crCourseId
+       WHERE rA.premium = 0
+       ORDER BY rA.lastAccessedAt DESC
+    """)
+    fun getTrialRuns(): LiveData<List<CourseInstructorPair>>
+
+    @Query("""
+    SELECT rA.*,r.*,c.* FROM  RunAttemptModel rA
+ 	   INNER JOIN RunModel r ON r.crUid = rA.runId
+       INNER JOIN CourseModel c ON c.cid = r.crCourseId
+       WHERE rA.premium = 1 AND rA.`end` > :currenttimeSec AND rA.runTier != "LITE"
+       ORDER BY rA.lastAccessedAt DESC
+    """)
+    fun getPremiumActiveRuns(currenttimeSec: Long): LiveData<List<CourseInstructorPair>>
 }

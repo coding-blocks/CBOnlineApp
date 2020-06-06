@@ -24,6 +24,7 @@ import com.codingblocks.onlineapi.models.Quizzes
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
+import com.codingblocks.onlineapi.models.Spins
 import com.codingblocks.onlineapi.models.User
 import com.github.jasminb.jsonapi.JSONAPIDocument
 import okhttp3.ResponseBody
@@ -122,16 +123,17 @@ interface OnlineJsonApi {
 
     @GET("courses")
     suspend fun getAllCourses(
+        @Query("page[offset]") offset: String,
+        @Query("page[limit]") limit: String = "20",
         @Query("exclude") query: String = "ratings,instructors.*,jobs,runs.*",
         @Query("filter[unlisted]") unlisted: String = "false",
-        @Query("page[offset]") offset: String,
         @Query("include") include: String = "instructors,runs",
         @Query("sort") sort: String = "difficulty"
     ): Response<JSONAPIDocument<List<Course>>>
 
     @GET("courses")
     suspend fun findCourses(
-        @Query("exclude") exclude: String = "ratings,instructors.*",
+        @Query("exclude") exclude: String = "ratings,instructors.*,jobs",
         @Query("filter[title][\$iLike]") query: String,
         @Query("filter[unlisted]") unlisted: String = "false",
         @Query("page[limit]") page: Int = 100,
@@ -333,4 +335,21 @@ interface OnlineJsonApi {
         @Path("codeId") codeId: Int,
         @Query("contest_id") include: String = ""
     ): Response<CodeChallenge>
+
+    @GET("spins")
+    suspend fun getWinnings(
+        @Query("page[limit]") page: Int = 100,
+        @Query("filter[used]") filter1: String = "true",
+        @Query("filter[won]") filter2: String = "true",
+        @Query("sort") sort: String = "-used_at",
+        @Query("include") include: String = "spin_prize"
+    ): Response<JSONAPIDocument<List<Spins>>>
+
+    @GET("spins/winners")
+    suspend fun getCampaignLeaderBoard(
+        @Query("page[offset]") offset: String?,
+        @Query("page[limit]") limit: String? = "10",
+        @Query("exclude") exclude: String = "spin_prize.*",
+        @Query("include") include: String = "user,spin_prize"
+    ): Response<JSONAPIDocument<List<Spins>>>
 }

@@ -113,7 +113,7 @@ class AdminDoubtsFragment : BaseCBFragment(), TabLayout.OnTabSelectedListener {
             setRv(requireContext(), doubtsAdapter)
         }
 
-        viewModel.listDoubtsResponse.observer(viewLifecycleOwner) {
+        viewModel.listDoubtsResponse.observer(thisLifecycleOwner) {
             if (it.isNullOrEmpty()) {
                 if (adminTabLayout.selectedTabPosition == 0) {
                     emptyMessageTv.text = getString(R.string.empty_live_doubt)
@@ -126,7 +126,7 @@ class AdminDoubtsFragment : BaseCBFragment(), TabLayout.OnTabSelectedListener {
             changeViewState(adminDoubtRv, internetll, emptyll, doubtShimmer, it.isEmpty())
         }
 
-        viewModel.errorLiveData.observer(viewLifecycleOwner) {
+        viewModel.errorLiveData.observer(thisLifecycleOwner) {
             when (it) {
                 ErrorStatus.NO_CONNECTION -> {
                     showEmptyView(internetll, emptyll, doubtShimmer)
@@ -144,7 +144,7 @@ class AdminDoubtsFragment : BaseCBFragment(), TabLayout.OnTabSelectedListener {
             }
         }
 
-        viewModel.barMessage.observer(viewLifecycleOwner) {
+        viewModel.barMessage.observer(thisLifecycleOwner) {
 //            root.showSnackbar(it, Snackbar.LENGTH_INDEFINITE, bottomNavAdmin, false)
         }
 
@@ -154,14 +154,14 @@ class AdminDoubtsFragment : BaseCBFragment(), TabLayout.OnTabSelectedListener {
             onDiscussClick = discussClickListener
             onResolveClick = resolveClickListener
         }
-        viewModel.nextOffSet.observer(viewLifecycleOwner) { offSet ->
+        viewModel.nextOffSet.observer(thisLifecycleOwner) { offSet ->
             nextBtn.isEnabled = offSet != -1
             nextBtn.setOnClickListener {
                 viewModel.fetchLiveDoubts(offSet)
             }
         }
 
-        viewModel.prevOffSet.observer(viewLifecycleOwner) { offSet ->
+        viewModel.prevOffSet.observer(thisLifecycleOwner) { offSet ->
             prevBtn.isEnabled = offSet != -1
             prevBtn.setOnClickListener {
                 viewModel.fetchLiveDoubts(offSet)

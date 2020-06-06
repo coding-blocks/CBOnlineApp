@@ -76,7 +76,7 @@ class DashboardHomeFragment : BaseCBFragment() {
     override fun onResume() {
         super.onResume()
         if (vm.isLoggedIn == true) {
-            vm.fetchTopRunWithStats().observe(viewLifecycleOwner, Observer { coursePair ->
+            vm.fetchTopRunWithStats().observe(thisLifecycleOwner, Observer { coursePair ->
                 dashboardProgressContainer.isVisible = coursePair != null
                 dashboardEmptyProgress.isVisible = coursePair == null
                 dashboardHomeShimmer.hideAndStop()
@@ -102,7 +102,7 @@ class DashboardHomeFragment : BaseCBFragment() {
                             ))
                         }
                     }
-                    vm.getPerformance(coursePair.runAttempt.attemptId).observer(viewLifecycleOwner) {
+                    vm.getPerformance(coursePair.runAttempt.attemptId).observer(thisLifecycleOwner) {
                         homePerformanceTv.text = it.remarks
                         homePercentileTv.text = it.percentile.toString()
                         chart1.loadData(it.averageProgress, it.userProgress)
@@ -110,7 +110,7 @@ class DashboardHomeFragment : BaseCBFragment() {
                 }
             })
 
-            vm.fetchRecentlyPlayed().observer(viewLifecycleOwner) {
+            vm.fetchRecentlyPlayed().observer(thisLifecycleOwner) {
                 recentlyPlayedContainer.isVisible = it.isNotEmpty()
                 recentlyPlayedAdapter.submitList(it)
             }
