@@ -67,7 +67,7 @@ class CampaignActivity : BaseCBActivity() {
             setPagingEnabled(true)
             adapter = pagerAdapter
             currentItem = 0
-            offscreenPageLimit = 0
+            offscreenPageLimit = 2
         }
 
 
@@ -80,9 +80,9 @@ class CampaignActivity : BaseCBActivity() {
     private fun showDialog() {
         val dialog = AlertDialog.Builder(this).create()
         val view = layoutInflater.inflate(R.layout.dialog_share, null)
-        val msg = "Signup using this link to get 500 credits in your wallet and stand a chance of winning amazing prizes this Summer using my referral code: https://cb.lk/join/${vm.referral}"
+        val msg = "Signup using this link to get 500 credits in your wallet and stand a chance of winning amazing prizes this Summer using my referral code: https://cb.lk/join/${vm.referral?:""}"
         view.apply {
-            view.referralTv.append(vm.referral)
+            view.referralTv.append(vm.referral?:"")
             fb.setOnClickListener {
                 ShareUtils.shareToFacebook(msg, this@CampaignActivity)
                 dialog.dismiss()

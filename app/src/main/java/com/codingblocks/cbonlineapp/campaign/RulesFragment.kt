@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.extensions.observer
+import io.noties.markwon.Markwon
+import kotlinx.android.synthetic.main.fragment_campaign_rules.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class RulesFragment : BaseCBFragment() {
@@ -23,8 +25,11 @@ class RulesFragment : BaseCBFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val markWon = Markwon.create(requireContext())
         vm.fetchRules().observer(thisLifecycleOwner) {
-
+            val text = it.getString("Rules")!!.replace("_b", "\n",true)
+            markWon.setMarkdown(rulesTv, text)
         }
     }
 }
+

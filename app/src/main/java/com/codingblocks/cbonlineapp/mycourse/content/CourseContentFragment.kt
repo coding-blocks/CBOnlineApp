@@ -69,7 +69,6 @@ import java.util.concurrent.TimeUnit
  *   make more category
  *   expired,upgrade and pause-unpause
  *   only course, free course
- *
  */
 
 const val SECTION_DOWNLOAD = "sectionDownload"
