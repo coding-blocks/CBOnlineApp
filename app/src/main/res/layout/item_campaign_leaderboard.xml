@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="0dp"
+
+    app:strokeColor="@color/veryLightPink"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:padding="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/userImgView"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/defaultavatar" />
+
+            <TextView
+                android:id="@+id/usernameTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/gilroy_bold"
+                android:maxLines="2"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                tools:text="Pulkit Aggarwal" />
+
+        </LinearLayout>
+
+        <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+            android:id="@+id/titleTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="WON"
+            android:textAlignment="center"
+            android:textSize="22sp" />
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imgView"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_performance" />
+
+            <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+                android:id="@+id/subTitleTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/gilroy_bold"
+                android:maxLines="2"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                tools:text="Faang @70% off" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

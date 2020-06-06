@@ -14,7 +14,7 @@ class CampaignRepository(private val firestore: FirebaseFirestore) {
     suspend fun getMyWinnings() = safeApiCall { Clients.onlineV2JsonApi.getWinnings() }
     suspend fun getReferral() = safeApiCall { Clients.api.myReferral() }
 
-    suspend fun getRules(): DocumentSnapshot = firestore.collection("Campaign").document("spinnwin").get(Source.CACHE).await()
+    suspend fun getRules(): DocumentSnapshot = firestore.collection("Campaign").document("spinnwin").get().await()
 
 
 }

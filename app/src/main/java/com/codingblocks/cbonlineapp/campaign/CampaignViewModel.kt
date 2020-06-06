@@ -28,7 +28,7 @@ class CampaignViewModel(
     private var spinsLeft by savedStateValue<Int>(handle, SPINS_LEFT)
     var spinsLiveData = MutableLiveData<Int>(spinsLeft)
     var referral by savedStateValue<String>(handle, REFERRAL)
-    var spinResponse = MutableLiveData<SpinResponse>()
+    var spinResponse : SpinResponse? = null
 
     var myWinnings = MutableLiveData<List<Spins>>()
     private var leaderBoard: LiveData<PagedList<Spins>>
@@ -76,7 +76,7 @@ class CampaignViewModel(
                 is ResultWrapper.Success -> with(response.value) {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
-                            spinResponse.postValue(it)
+                            spinResponse = it
                         }
                 }
             }

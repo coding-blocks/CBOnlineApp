@@ -44,7 +44,8 @@ class HomeFragment : BaseCBFragment(), AnkoLogger {
             vm.fetchSpins()
             vm.fetchWinnings()
             try {
-                vm.spinResponse.value?.let { res ->
+
+                vm.spinResponse?.let { res ->
                     imageView.animate()
                         .rotationBy(res.rotation.toFloat())
                         .setDuration(1000)

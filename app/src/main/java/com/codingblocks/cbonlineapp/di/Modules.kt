@@ -29,7 +29,6 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeRepository
 import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeViewModel
-import com.codingblocks.cbonlineapp.mycourse.leaderboard.LeaderboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerRepository
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizRepository
@@ -49,7 +48,6 @@ import org.koin.dsl.module
 val viewModelModule = module {
 
     viewModel { (handle: SavedStateHandle) -> MyCourseViewModel(handle, get(), get()) }
-    viewModel { LeaderboardViewModel() }
     viewModel { NotificationViewModel(get()) }
     viewModel { (handle: SavedStateHandle) -> VideoPlayerViewModel(handle, get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }

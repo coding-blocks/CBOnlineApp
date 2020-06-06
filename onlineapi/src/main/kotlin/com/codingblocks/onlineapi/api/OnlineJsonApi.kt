@@ -345,11 +345,11 @@ interface OnlineJsonApi {
         @Query("include") include: String = "spin_prize"
     ): Response<JSONAPIDocument<List<Spins>>>
 
-    @GET("spins")
+    @GET("spins/winners")
     suspend fun getCampaignLeaderBoard(
         @Query("page[offset]") offset: String?,
         @Query("page[limit]") limit: String? = "10",
-        @Query("sort") sort: String = "-used_at",
-        @Query("include") include: String = "spin_prize"
+        @Query("exclude") exclude: String = "spin_prize.*",
+        @Query("include") include: String = "user,spin_prize"
     ): Response<JSONAPIDocument<List<Spins>>>
 }

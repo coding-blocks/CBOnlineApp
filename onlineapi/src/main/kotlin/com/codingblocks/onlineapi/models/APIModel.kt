@@ -709,7 +709,9 @@ data class Spins(
     val won: Boolean,
     val prizeRemarksExtra: PrizeContent?,
     @Relationship("spin-prize")
-    val spinPrize: SpinPrize?
+    val spinPrize: SpinPrize?,
+    @Relationship("user")
+    val user: User?
 ) : BaseModel()
 
 @Type("spin_prizes")
