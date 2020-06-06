@@ -136,4 +136,5 @@ class HomeFragment : BaseCBFragment(), AnkoLogger {
         }
     }
 
+
 }

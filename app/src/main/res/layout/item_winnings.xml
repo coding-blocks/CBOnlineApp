@@ -62,16 +62,18 @@
                 android:id="@+id/codeTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:background="@drawable/dotted_red"
                 android:fontFamily="@font/gilroy_bold"
                 android:text="SPN2OOHF1FBS"
+                android:ellipsize="end"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
             <ImageView
+                android:layout_weight="1"
                 android:id="@+id/copy_clipboard"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_content_copy"
                 android:tint="@color/neon_red" />

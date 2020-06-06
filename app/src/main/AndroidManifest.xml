@@ -28,6 +28,7 @@
         tools:targetApi="q">
         <activity android:name=".campaign.CampaignActivity"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:parentActivityName=".dashboard.DashboardActivity">
         </activity>
         <activity

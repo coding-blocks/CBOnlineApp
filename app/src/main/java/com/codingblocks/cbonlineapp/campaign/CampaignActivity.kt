@@ -1,6 +1,8 @@
 package com.codingblocks.cbonlineapp.campaign
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -18,9 +20,11 @@ import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.onlineapi.ErrorStatus
+import kotlinx.android.synthetic.main.activity_referral.*
 import kotlinx.android.synthetic.main.activity_spin_win.*
 import kotlinx.android.synthetic.main.dialog_share.view.*
 import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 
@@ -34,6 +38,9 @@ class CampaignActivity : BaseCBActivity() {
             // Handle the Intent
 
         }
+    }
+    private val myClipboard: ClipboardManager by lazy {
+        getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,6 +105,12 @@ class CampaignActivity : BaseCBActivity() {
                 ShareUtils.shareToTwitter(msg, this@CampaignActivity)
                 dialog.dismiss()
 
+            }
+            copy_clipboard.setOnClickListener {
+                    val text = referralTv?.text
+                    val myClip = ClipData.newPlainText("referral", text)
+                    myClipboard.setPrimaryClip(myClip)
+                    toast("Copied to clipboard")
             }
         }
         dialog.apply {
