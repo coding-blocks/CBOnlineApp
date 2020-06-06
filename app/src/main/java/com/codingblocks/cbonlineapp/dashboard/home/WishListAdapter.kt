@@ -1,6 +1,5 @@
 package com.codingblocks.cbonlineapp.dashboard.home
 
-import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.database.models.WishlistModel
 import com.codingblocks.cbonlineapp.util.extensions.*
-import com.codingblocks.onlineapi.models.Wishlist
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.item_course_card.view.*
 import kotlinx.android.synthetic.main.item_course_card_secondary.view.chip
@@ -22,13 +21,13 @@ import kotlinx.android.synthetic.main.item_course_card_secondary.view.course_car
 import kotlinx.android.synthetic.main.item_course_card_secondary.view.course_card_share
 import kotlinx.android.synthetic.main.item_course_card_secondary.view.ratingTv
 
-class WishListAdapter(val type: String = "") : ListAdapter<Wishlist, WishListItemViewHolder>(
-    object : DiffUtil.ItemCallback<Wishlist>() {
-        override fun areItemsTheSame(oldItem: Wishlist, newItem: Wishlist): Boolean {
-            return oldItem.id == newItem.id
+class WishListAdapter(val type: String = "") : ListAdapter<WishlistModel, WishListItemViewHolder>(
+    object : DiffUtil.ItemCallback<WishlistModel>() {
+        override fun areItemsTheSame(oldItem: WishlistModel, newItem: WishlistModel): Boolean {
+            return oldItem.wishlistId == newItem.wishlistId
         }
 
-        override fun areContentsTheSame(oldItem: Wishlist, newItem: Wishlist): Boolean {
+        override fun areContentsTheSame(oldItem: WishlistModel, newItem: WishlistModel): Boolean {
             return oldItem.sameAndEqual(newItem)
         }
     }) {
@@ -54,8 +53,8 @@ class WishListAdapter(val type: String = "") : ListAdapter<Wishlist, WishListIte
 class WishListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var itemClickListener: WishListItemClickListener? = null
 
-    fun bind(item: Wishlist, type: Int) = with(itemView) {
-        with(item.course!!){
+    fun bind(item: WishlistModel, type: Int) = with(itemView) {
+        with(item.course){
             courseLogo.loadImage(logo)
             ViewCompat.setTransitionName(courseLogo, title)
             val ratingText = getSpannableSring("${rating}/5.0", ", ${reviewCount} ratings")
@@ -63,7 +62,7 @@ class WishListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
             courseCardTitleTv.text = title
             setOnClickListener {
                 itemClickListener?.onClick(
-                    id, logo, courseLogo
+                    cid, logo, courseLogo
                 )
             }
 
@@ -74,23 +73,10 @@ class WishListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
                 else -> "Beginner"
             }
 
-            if (type == 0){
-                if (!item.course?.instructors.isNullOrEmpty())
-                    courseCardInstructorsTv.text = getSpannableStringSecondBold("Instructor: ", item.course?.instructors?.first()?.name ?: "")
-                else
-                    courseCardInstructorsTv.isVisible = false
-                var list = item.course?.runs?.filter { run -> !run.unlisted && run.enrollmentEnd.greater() && !run.enrollmentStart.greater() }?.sortedWith(compareBy { run -> run.price })
-                if (list.isNullOrEmpty()) {
-                    list = item.course?.runs?.sortedWith(compareBy { run -> run.price })
-                }
-                val price = list?.first()?.price
-                if (price == null)
-                    courseCardPriceTv.isVisible = false
-                courseCardPriceTv.text = if (price == "0") "FREE" else "₹ $price"
-                if (list?.first()?.mrp == null)
-                    courseCardMrpTv.isVisible = false
-                courseCardMrpTv.text = "₹ " + list?.first()?.mrp
-                courseCardMrpTv.paintFlags = courseCardPriceTv.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            if(type == 0){
+                courseCardInstructorsTv.isVisible = false
+                courseCardMrpTv.isVisible = false
+                courseCardPriceTv.isVisible = false
             }else{
                 courseCover.loadImage(coverImage?:"")
                 course_card_like.isVisible = false

@@ -18,6 +18,7 @@ import com.codingblocks.cbonlineapp.course.CourseListAdapter
 import com.codingblocks.cbonlineapp.course.ItemClickListener
 import com.codingblocks.cbonlineapp.course.SearchCourseActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
+import com.codingblocks.cbonlineapp.dashboard.LOGGED_IN
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.tracks.TrackActivity
 import com.codingblocks.cbonlineapp.tracks.TracksListAdapter
@@ -51,6 +52,7 @@ class DashboardExploreFragment : BaseCBFragment() {
                 intent.putExtra(COURSE_ID, id)
                 intent.putExtra(COURSE_LOGO, name)
                 intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
+                intent.putExtra(LOGGED_IN, vm.isLoggedIn)
 
                 val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     requireActivity(),
@@ -60,10 +62,12 @@ class DashboardExploreFragment : BaseCBFragment() {
             }
 
             override fun onWishListClickListener(course: Course,position: Int) {
-                if (!course.isWishlist!!){
-                    vm.addToWishlist(course, if (courseCardListAdapter.currentList[position] == course) 0 else 4,position)
-                }else{
-                    vm.removeFromWishlist(course)
+                if (vm.isLoggedIn == true){
+                    if (!course.isWishlist!!){
+                        vm.addToWishlist(course, if (courseCardListAdapter.currentList[position] == course) 0 else 4,position)
+                    }else{
+                        vm.removeFromWishlist(course)
+                    }
                 }
             }
         }

@@ -339,7 +339,7 @@ interface OnlineJsonApi {
     suspend fun getWishlist(
         @Query("exclude") exclude: String = "course.*",
         @Query("include") include: String = "course",
-        @Query("page[limit]") page: String = "3"
+        @Query("page[limit]") page: String = "100"
     ): Response<List<Wishlist>>
 
     @POST("user_course_wishlists")

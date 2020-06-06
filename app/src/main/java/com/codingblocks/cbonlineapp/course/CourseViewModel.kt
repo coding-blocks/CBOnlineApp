@@ -22,11 +22,13 @@ class CourseViewModel(
     val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
     lateinit var id: String
+    var isLoggedIn: Boolean = false
     var course = MutableLiveData<Course>()
     var suggestedCourses = MutableLiveData<List<Course>>()
     val findCourses = MutableLiveData<List<Course>>()
     val projects = MutableLiveData<List<Project>>()
     val sections = MutableLiveData<List<Sections>>()
+    val wishlistUpdated = MutableLiveData<Boolean>()
     private val allCourse = arrayListOf<Course>()
 
     var image: MutableLiveData<String> = MutableLiveData()
@@ -40,7 +42,10 @@ class CourseViewModel(
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
-                        checkIfWishlisted(body())
+                        if (isLoggedIn)
+                            checkIfCourseWishlisted(body())
+                        else
+                            course.postValue(body())
                     } else {
                         setError(fetchError(code()))
                     }
@@ -62,7 +67,11 @@ class CourseViewModel(
                             if (currentOffSet != nextOffSet && nextOffSet != "null") {
                                 fetchAllCourses(nextOffSet)
                                 it.get()?.let { it1 -> allCourse.addAll(it1) }
-                                suggestedCourses.postValue(allCourse)
+                                if (isLoggedIn){
+                                    checkIfWishlisted(allCourse)
+                                }else{
+                                    suggestedCourses.postValue(allCourse)
+                                }
                             } else {
                                 setError(fetchError(code()))
                             }
@@ -201,7 +210,28 @@ class CourseViewModel(
         }
     }
 
-    fun checkIfWishlisted(courseSingle: Course?){
+    fun checkIfWishlisted(allCourse: List<Course>?){
+        runIO {
+            allCourse?.forEach {courseSingle->
+                when (val response = repo.checkIfWishlisted(courseSingle.id?:"")) {
+                    is ResultWrapper.GenericError -> setError(response.error)
+                    is ResultWrapper.Success -> with(response.value) {
+                        if (isSuccessful) {
+                            if (response.value.body()?.id!=null){
+                                courseSingle.isWishlist = true
+                                courseSingle.userWishlistId = response.value.body()?.id
+                            }
+                        } else {
+                            setError(fetchError(code()))
+                        }
+                    }
+                }
+            }
+            suggestedCourses.postValue(allCourse)
+        }
+    }
+
+    fun checkIfCourseWishlisted(courseSingle: Course?){
         runIO {
             when (val response = repo.checkIfWishlisted(courseSingle?.id?:"")) {
                 is ResultWrapper.GenericError -> setError(response.error)
@@ -210,19 +240,22 @@ class CourseViewModel(
                         if (response.value.body()?.id!=null){
                             courseSingle?.isWishlist = true
                             courseSingle?.userWishlistId = response.value.body()?.id
+                        }else{
+                            courseSingle?.isWishlist = false
+                            courseSingle?.userWishlistId = response.value.body()?.id
                         }
                         course.postValue(courseSingle)
                     } else {
-                        setError(com.codingblocks.onlineapi.fetchError(code()))
+                        setError(fetchError(code()))
                     }
                 }
             }
+
         }
     }
 
-    fun addToWishlist(){
-        val wishlist = Wishlist(course.value, User(prefs.SP_USER_ID))
-        val cNew = course.value
+    fun addToWishlist(courseSingle: Course = course.value!!){
+        val wishlist = Wishlist(courseSingle, User(prefs.SP_USER_ID))
         runIO {
             when (val response = repo.addToWishlist(wishlist)) {
                 is ResultWrapper.GenericError -> {
@@ -230,14 +263,14 @@ class CourseViewModel(
                 }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        cNew?.userWishlistId = response.value.body()?.id
-                        cNew?.isWishlist = true
+                        courseSingle.userWishlistId = response.value.body()?.id
+                        courseSingle.isWishlist = true
+                        wishlistUpdated.postValue(true)
                     } else {
                         setError(fetchError(response.value.code()))
                     }
                 }
             }
-            course.postValue(cNew)
         }
     }
 
@@ -249,32 +282,13 @@ class CourseViewModel(
                 }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
+                        repo.removeFromWishlist(courseSingle)
+                        wishlistUpdated.postValue(true)
                     } else {
                         setError(fetchError(response.value.code()))
                     }
                 }
             }
-        }
-    }
-
-    fun addToWishlist(course: Course, position: Int){
-        val wishlist = Wishlist(course, User(prefs.SP_USER_ID))
-        val newList = suggestedCourses.value
-        runIO {
-            when (val response = repo.addToWishlist(wishlist)) {
-                is ResultWrapper.GenericError -> {
-                    setError(response.error)
-                }
-                is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful) {
-                        newList?.get(position)?.userWishlistId = response.value.body()?.id
-                        newList?.get(position)?.isWishlist = true
-                    } else {
-                        setError(fetchError(response.value.code()))
-                    }
-                }
-            }
-            suggestedCourses.postValue(newList)
         }
     }
 }

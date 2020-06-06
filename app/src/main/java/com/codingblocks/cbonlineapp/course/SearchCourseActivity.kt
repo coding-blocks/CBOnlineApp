@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
+import com.codingblocks.cbonlineapp.dashboard.LOGGED_IN
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
@@ -32,6 +33,7 @@ class SearchCourseActivity : BaseCBActivity() {
                 intent.putExtra(COURSE_ID, id)
                 intent.putExtra(COURSE_LOGO, name)
                 intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
+                intent.putExtra(LOGGED_IN, viewModel.isLoggedIn)
 
                 val options: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(

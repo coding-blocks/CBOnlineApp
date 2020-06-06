@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -27,6 +28,7 @@ import com.codingblocks.cbonlineapp.course.batches.CourseTierFragment
 import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
+import com.codingblocks.cbonlineapp.dashboard.LOGGED_IN
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.Components
@@ -67,6 +69,9 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     private val courseLogoImage by lazy {
         intent.getStringExtra(LOGO_TRANSITION_NAME)
     }
+    private val isLoggedIn by lazy {
+        intent.getBooleanExtra(LOGGED_IN, false)
+    }
 
     private val courseLogoUrl by lazy {
         intent.getStringExtra(COURSE_LOGO)
@@ -97,6 +102,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 intent.putExtra(COURSE_ID, id)
                 intent.putExtra(COURSE_LOGO, name)
                 intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
+                intent.putExtra(LOGGED_IN, isLoggedIn)
 
                 val options: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -108,10 +114,12 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             }
 
             override fun onWishListClickListener(course: Course, position: Int) {
-                if (!course.isWishlist!!){
-                    viewModel.addToWishlist(course, position)
-                }else{
-                    viewModel.removeFromWishlist(course)
+                if (isLoggedIn){
+                    if (!course.isWishlist!!){
+                        viewModel.addToWishlist(course)
+                    }else{
+                        viewModel.removeFromWishlist(course)
+                    }
                 }
             }
         }
@@ -124,6 +132,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         supportPostponeEnterTransition()
         setToolbar(courseToolbar)
         viewModel.id = courseId
+        viewModel.isLoggedIn = isLoggedIn
         viewModel.fetchCourse()
 
         courseProjectsRv.setRv(this@CourseActivity, projectAdapter, true)
@@ -203,6 +212,13 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
 
         viewModel.suggestedCourses.observer(this) { courses ->
             courseCardListAdapter.submitList(courses)
+        }
+
+        viewModel.wishlistUpdated.observer(this){
+            if (isLoggedIn){
+                viewModel.checkIfCourseWishlisted(viewModel.course.value)
+                viewModel.checkIfWishlisted(viewModel.suggestedCourses.value)
+            }
         }
 
         viewModel.errorLiveData.observer(this) {
@@ -327,12 +343,14 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             true
         }
         R.id.wishlist ->{
-            if (viewModel.course.value?.isWishlist!!){
-                item.icon = getDrawable(R.drawable.ic_like_empty)
-                viewModel.removeFromWishlist()
-            }else{
-                item.icon = getDrawable(R.drawable.ic_like)
-                viewModel.addToWishlist()
+            if (isLoggedIn){
+                if (viewModel.course.value?.isWishlist!!){
+                    item.icon = getDrawable(R.drawable.ic_like_empty)
+                    viewModel.removeFromWishlist()
+                }else{
+                    item.icon = getDrawable(R.drawable.ic_like)
+                    viewModel.addToWishlist()
+                }
             }
             true
         }

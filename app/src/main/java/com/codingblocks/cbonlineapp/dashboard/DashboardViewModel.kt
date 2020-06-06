@@ -43,6 +43,9 @@ class DashboardViewModel(
     val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
     var isLoggedIn: Boolean? by savedStateValue(handle, LOGGED_IN)
+    var suggestedCourses = MutableLiveData<List<Course>>()
+    var trendingCourses = MutableLiveData<List<Course>>()
+
 
     init {
         Clients.refreshToken = homeRepo.prefs.SP_JWT_REFRESH_TOKEN
@@ -138,15 +141,20 @@ class DashboardViewModel(
         }
     }
 
-    var suggestedCourses = MutableLiveData<List<Course>>()
-    var trendingCourses = MutableLiveData<List<Course>>()
     fun fetchRecommendedCourses(offset: Int, page: Int) {
         runIO {
             when (val response = exploreRepo.getSuggestedCourses(offset, page)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
-                        checkIfWishlisted(body(), offset)
+                        if (isLoggedIn == true){
+                            checkIfWishlisted(body()!!, offset)
+                        }else{
+                            if (offset == 0)
+                                suggestedCourses.postValue(body())
+                            else
+                                trendingCourses.postValue(body())
+                        }
                     } else {
                         setError(fetchError(code()))
                     }
@@ -156,20 +164,14 @@ class DashboardViewModel(
     }
 
     fun checkIfWishlisted(course: List<Course>?, offset: Int){
+        if (course.isNullOrEmpty())
+            return
         runIO {
-            course?.forEach {singleCousrse->
-                when (val response = exploreRepo.checkIfWishlisted(singleCousrse.id)) {
-                    is ResultWrapper.GenericError -> setError(response.error)
-                    is ResultWrapper.Success -> with(response.value) {
-                        if (isSuccessful) {
-                            if (response.value.body()?.id!=null){
-                                singleCousrse.isWishlist = true
-                                singleCousrse.userWishlistId = response.value.body()?.id
-                            }
-                        } else {
-                            setError(fetchError(code()))
-                        }
-                    }
+            course.forEach { singleCousrse->
+                val repoCourse = homeRepo.getWishlistsByCourse(singleCousrse.id)
+                if (repoCourse!=null){
+                    singleCousrse.isWishlist = true
+                    singleCousrse.userWishlistId = repoCourse.wishlistId
                 }
             }
             if (offset == 0)
@@ -337,7 +339,7 @@ class DashboardViewModel(
 
     fun getPerformance(attemptId: String) = homeRepo.getRunStats(attemptId)
 
-    var wishlist = MutableLiveData<List<Wishlist>>()
+    var wishlist = homeRepo.getWishlistThree()
     fun fetchWishList(){
         runIO {
             when (val response = homeRepo.fetchWishlist()) {
@@ -346,7 +348,7 @@ class DashboardViewModel(
                 }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        wishlist.postValue(response.value.body())
+                        homeRepo.saveWishlist(response.value.body())
                     } else {
                         setError(fetchError(response.value.code()))
                     }
@@ -357,7 +359,6 @@ class DashboardViewModel(
 
     fun addToWishlist(course: Course, offset: Int, position: Int){
         val wishlist = Wishlist(course, User(prefs.SP_USER_ID))
-        val newList = if (offset == 0) suggestedCourses.value else trendingCourses.value
         runIO {
             when (val response = homeRepo.addToWishlist(wishlist)) {
                 is ResultWrapper.GenericError -> {
@@ -365,25 +366,23 @@ class DashboardViewModel(
                 }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        newList?.get(position)?.userWishlistId = response.value.body()?.id
-                        newList?.get(position)?.isWishlist = true
+                        wishlist.id = response.value.body()!!.id
+                        homeRepo.addWishlist(wishlist)
                     } else {
                         setError(fetchError(response.value.code()))
                     }
                 }
             }
-            if (offset == 0) suggestedCourses.postValue(newList) else trendingCourses.postValue(newList)
         }
     }
 
     fun removeFromWishlist(course: Course){
         runIO {
             when (val response = homeRepo.removeFromWishlist(course.userWishlistId?:"")) {
-                is ResultWrapper.GenericError -> {
-                    setError(response.error)
-                }
+                is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
+                        homeRepo.removeFromWishlist(course)
                     } else {
                         setError(fetchError(response.value.code()))
                     }

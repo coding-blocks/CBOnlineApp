@@ -84,7 +84,6 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseListA
                         item,
                         adapterPosition
                     )
-                    course_card_like.isActivated = !item.isWishlist!!
                 }
             }
             if (type == "TRACKS") {

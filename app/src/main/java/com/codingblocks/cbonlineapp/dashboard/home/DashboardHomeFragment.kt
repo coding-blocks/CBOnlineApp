@@ -18,6 +18,7 @@ import android.content.Intent
 import androidx.core.view.ViewCompat
 import androidx.core.app.ActivityOptionsCompat
 import com.codingblocks.cbonlineapp.course.CourseActivity
+import com.codingblocks.cbonlineapp.dashboard.LOGGED_IN
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import de.hdodenhof.circleimageview.CircleImageView
@@ -61,6 +62,7 @@ class DashboardHomeFragment : BaseCBFragment() {
                 intent.putExtra(COURSE_ID, id)
                 intent.putExtra(COURSE_LOGO, name)
                 intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
+                intent.putExtra(LOGGED_IN, vm.isLoggedIn)
 
                 val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     requireActivity(),
@@ -86,7 +88,7 @@ class DashboardHomeFragment : BaseCBFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recentPlayedRv.setRv(requireContext(), recentlyPlayedAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
-        wishRv.setRv(requireContext(), wishlistAdapter, orientation = RecyclerView.HORIZONTAL, space = 20f)
+        wishRv.setRv(requireContext(), wishlistAdapter, orientation = RecyclerView.HORIZONTAL, space = 0f)
         recentlyPlayedAdapter.onItemClick = itemClickListener
         wishlistAdapter.onItemClick = wishListItemClickListener
         exploreBtn.setOnClickListener { requireActivity().dashboardBottomNav.selectedItemId = R.id.dashboard_explore }
@@ -96,7 +98,20 @@ class DashboardHomeFragment : BaseCBFragment() {
             requireActivity().finish()
         }
         viewAllTv.setOnClickListener{
-            startActivity(intentFor<WishlistActivity>())
+            val intent = Intent(requireContext(), WishlistActivity::class.java)
+            intent.putExtra(LOGGED_IN, vm.isLoggedIn)
+            startActivity(intent)
+        }
+        if (vm.isLoggedIn == true){
+            vm.fetchWishList()
+        }
+
+        vm.wishlist.observer(viewLifecycleOwner){wishlist->
+            vm.fetchRecommendedCourses(0,4)
+            vm.fetchRecommendedCourses(4,4)
+            noWishListLayout.isVisible = !wishlist.isNotEmpty()
+            wishlistHolder.isVisible = wishlist.isNotEmpty()
+            wishlistAdapter.submitList(wishlist)
         }
     }
 
@@ -115,7 +130,6 @@ class DashboardHomeFragment : BaseCBFragment() {
                 dashboardHome.isVisible = true
                 if (coursePair != null) {
                     vm.getStats(coursePair.runAttempt.attemptId)
-                    vm.fetchWishList()
 
                     homeCourseLogoImg.loadImage(coursePair.course.logo)
                     coursePair.getProgress().let { progress ->
@@ -148,11 +162,6 @@ class DashboardHomeFragment : BaseCBFragment() {
                 recentlyPlayedAdapter.submitList(it)
             }
 
-            vm.wishlist.observer(this){wishlist->
-                noWishListLayout.isVisible = !wishlist.isNotEmpty()
-                wishlistHolder.isVisible = wishlist.isNotEmpty()
-                wishlistAdapter.submitList(wishlist)
-            }
         } else {
             dashboardHomeShimmer.hideAndStop()
             dashboardHome.isVisible = false

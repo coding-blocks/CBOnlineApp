@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.CourseActivity
 import com.codingblocks.cbonlineapp.course.ItemClickListener
+import com.codingblocks.cbonlineapp.dashboard.LOGGED_IN
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
@@ -25,6 +26,7 @@ class WishlistActivity : AppCompatActivity()  {
 
     val wishlistViewModel: WishlistViewModel by stateViewModel()
     private val wishlistAdapter = WishListAdapter("LIST")
+    private var isLoggedIn = false
 
     private val itemClickListener: WishListItemClickListener by lazy {
         object : WishListItemClickListener {
@@ -33,6 +35,7 @@ class WishlistActivity : AppCompatActivity()  {
                 intent.putExtra(COURSE_ID, id)
                 intent.putExtra(COURSE_LOGO, name)
                 intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
+                intent.putExtra(LOGGED_IN, isLoggedIn)
 
                 val options: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -49,14 +52,14 @@ class WishlistActivity : AppCompatActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wishlist)
+        isLoggedIn = intent.getBooleanExtra(LOGGED_IN, false)
         wishlistRv.setRv(this, wishlistAdapter, orientation = RecyclerView.VERTICAL, space = 28f)
-        wishlistViewModel.fetchWishList()
         wishlistAdapter.onItemClick = itemClickListener
-        wishlistViewModel.wishlist.observer(this){wishlist->
-            wishlistShimmerLayout.isVisible = !wishlist.isNullOrEmpty()
+        wishlistViewModel.wishlist().observer(this){wishlist->
+            wishlistShimmerLayout.stopShimmer()
+            wishlistShimmerLayout.isVisible = wishlist.isNullOrEmpty()
             noWishListLayout.isVisible = wishlist.isNullOrEmpty()
             wishlistAdapter.submitList(wishlist)
         }
-        wishlistShimmerLayout.stopShimmer()
     }
 }

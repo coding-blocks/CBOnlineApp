@@ -24,13 +24,15 @@ import com.codingblocks.cbonlineapp.database.models.RunModel
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
+import com.codingblocks.cbonlineapp.database.models.WishlistModel
 
 @Database(
     entities = [CourseModel::class, SectionModel::class, ContentModel::class, InstructorModel::class, Notification::class,
         CourseWithInstructor::class, DoubtsModel::class, NotesModel::class, RunModel::class,
         JobsModel::class, SectionContentHolder.SectionWithContent::class, BookmarkModel::class,
-        CommentModel::class, RunAttemptModel::class, RunPerformance::class, PlayerState::class, CodeChallengeModel::class, HBRankModel::class
-    ], exportSchema = true, version = 30
+        CommentModel::class, RunAttemptModel::class, RunPerformance::class, PlayerState::class, CodeChallengeModel::class, HBRankModel::class,
+        WishlistModel::class
+    ], exportSchema = true, version = 31
 )
 @TypeConverters(TimestampConverter::class, CourseIdList::class, ProgressItemConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -74,4 +76,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun codeChallengeDao(): CodeChallengeDao
 
     abstract fun hbRankDao(): HBRankDao
+
+    abstract fun wishlistDao(): WishlistDao
 }

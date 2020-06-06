@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.onlineapi.models.Course
+import com.codingblocks.onlineapi.models.User
 import java.sql.Date
 
 @Entity
@@ -178,6 +179,16 @@ data class CodeChallengeModel(
     val title: String,
     @Embedded
     val content: ProblemModel? = null
+)
+
+@Entity
+data class WishlistModel(
+    @PrimaryKey
+    val wishlistId: String,
+    @Embedded
+    val course: CourseModel,
+    @Embedded
+    val user: User? = null
 )
 
 @Entity
