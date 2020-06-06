@@ -180,7 +180,7 @@ dependencies {
     //Firebase
     implementation 'com.google.firebase:firebase-common-ktx:19.3.0'
     implementation 'com.google.firebase:firebase-core:17.3.0'
-    implementation 'com.google.firebase:firebase-messaging:20.1.2'
+    implementation 'com.google.firebase:firebase-messaging:20.2.0'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.4.0'
     implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.5'
