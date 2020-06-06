@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.campaign
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
@@ -10,11 +11,11 @@ import androidx.paging.PagedList
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
-import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
+import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.SpinResponse
 import com.codingblocks.onlineapi.models.Spins
-import com.codingblocks.onlineapi.safeApiCall
+import kotlinx.coroutines.Dispatchers
 
 const val SPINS_LEFT = "spinsLeft"
 const val REFERRAL = "referral"
@@ -29,17 +30,15 @@ class CampaignViewModel(
     var referral by savedStateValue<String>(handle, REFERRAL)
     var spinResponse = MutableLiveData<SpinResponse>()
 
-    var myWinnings: LiveData<PagedList<Spins>>
-    private var leaderboard: LiveData<PagedList<Spins>>
-    lateinit var dataSource: DataSource<String, Spins>
+    var myWinnings = MutableLiveData<List<Spins>>()
+    private var leaderBoard: LiveData<PagedList<Spins>>
 
     init {
         val config = PagedList.Config.Builder()
             .setPageSize(9)
             .setEnablePlaceholders(true)
             .build()
-        myWinnings = initializedPagedListBuilder(config).build()
-        leaderboard = initializedPagedListBuilder(config).build()
+        leaderBoard = initializedPagedListBuilder(config).build()
         fetchReferralCode()
 
     }
@@ -60,6 +59,7 @@ class CampaignViewModel(
                             spinsLiveData.postValue(spinsLeft)
                         }
                     else {
+                        setError(fetchError(response.value.code()))
                         spinsLiveData.postValue(spinsLeft)
                     }
                 }
@@ -83,9 +83,12 @@ class CampaignViewModel(
         }
     }
 
-    fun fetchReferralCode() {
+    private fun fetchReferralCode() {
         runIO {
-            when (val response = safeApiCall { Clients.api.myReferral() }) {
+            when (val response = repo.getReferral()) {
+                is ResultWrapper.GenericError -> {
+                    setError(response.error)
+                }
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
                         referral = body()?.get("code")?.asString
@@ -95,16 +98,38 @@ class CampaignViewModel(
         }
     }
 
+    fun fetchWinnings() {
+        runIO {
+            when (val response = repo.getMyWinnings()) {
+                is ResultWrapper.GenericError -> {
+                    myWinnings.postValue(emptyList())
+                    setError(response.error)
+                }
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        response.value.body()?.let {
+                            myWinnings.postValue(it.get())
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-    fun getLeaderboard(): LiveData<PagedList<Spins>> = leaderboard
+
+    fun fetchRules() = liveData(Dispatchers.IO) {
+        emit(repo.getRules())
+    }
+
+
+    fun getLeaderBoard(): LiveData<PagedList<Spins>> = leaderBoard
 
     private fun initializedPagedListBuilder(config: PagedList.Config):
         LivePagedListBuilder<String, Spins> {
 
         val dataSourceFactory = object : DataSource.Factory<String, Spins>() {
             override fun create(): DataSource<String, Spins> {
-                dataSource = CampaignDataSource(viewModelScope)
-                return dataSource
+                return CampaignDataSource(viewModelScope)
             }
         }
         return LivePagedListBuilder(dataSourceFactory, config)

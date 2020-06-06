@@ -64,7 +64,7 @@ class RunFragment : BaseCBFragment() {
 
         val runKey: String? = arguments?.getString("run")
         if (!runKey.isNullOrEmpty()) {
-            viewModel.course.distinctUntilChanged().observer(viewLifecycleOwner) { course ->
+            viewModel.course.distinctUntilChanged().observer(thisLifecycleOwner) { course ->
                 val list = course.activeRuns?.groupBy { it.start }?.get(runKey)?.sortedBy { it.price }
                 runListAdapter.submitList(list)
             }

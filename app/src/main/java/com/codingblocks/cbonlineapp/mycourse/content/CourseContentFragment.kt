@@ -171,15 +171,15 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
 
     private fun attachObservers() {
 
-        viewModel.progress.observer(viewLifecycleOwner) {
+        viewModel.progress.observer(thisLifecycleOwner) {
             swiperefresh.isRefreshing = it
         }
 
-//        viewModel.computedData.observe(viewLifecycleOwner, Observer {
+//        viewModel.computedData.observe(thisLifecycleOwner, Observer {
 //                    info { it }
 //        })
 
-        viewModel.content.observer(viewLifecycleOwner) { sectionWithContentList ->
+        viewModel.content.observer(thisLifecycleOwner) { sectionWithContentList ->
             sectionitem.clear()
             val consolidatedList = ArrayList<ListObject>()
             sectionWithContentList.forEach { sectionContent ->
@@ -406,7 +406,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 ) {
                     if (it) {
                         dialog.show()
-                        viewModel.addToCart().observer(viewLifecycleOwner) {
+                        viewModel.addToCart().observer(thisLifecycleOwner) {
                             dialog.hide()
                             requireContext().startActivity<CheckoutActivity>()
                         }

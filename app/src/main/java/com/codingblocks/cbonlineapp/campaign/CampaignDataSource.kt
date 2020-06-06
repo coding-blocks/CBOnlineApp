@@ -15,7 +15,7 @@ class CampaignDataSource(private val scope: CoroutineScope) :
 
     override fun loadInitial(params: LoadInitialParams<String>, callback: LoadInitialCallback<String, Spins>) {
         scope.launch {
-            when (val response = safeApiCall { Clients.onlineV2JsonApi.getWinnings("0", "9") }) {
+            when (val response = safeApiCall { Clients.onlineV2JsonApi.getCampaignLeaderBoard("0", "10") }) {
                 is ResultWrapper.Success -> with(response.value) {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
@@ -32,7 +32,7 @@ class CampaignDataSource(private val scope: CoroutineScope) :
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, Spins>) {
         scope.launch {
-            when (val response = safeApiCall { Clients.onlineV2JsonApi.getWinnings(params.key, "9") }) {
+            when (val response = safeApiCall { Clients.onlineV2JsonApi.getCampaignLeaderBoard(params.key, "10") }) {
                 is ResultWrapper.Success -> with(response.value) {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {

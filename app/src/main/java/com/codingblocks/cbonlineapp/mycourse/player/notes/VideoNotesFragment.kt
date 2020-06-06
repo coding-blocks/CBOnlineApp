@@ -75,7 +75,7 @@ class VideoNotesFragment : BaseCBFragment(), AnkoLogger {
         super.onViewCreated(view, savedInstanceState)
         playerNotesRv.setRv(requireContext(), notesListAdapter, false)
 
-        viewModel.notes.observer(viewLifecycleOwner) {
+        viewModel.notes.observer(thisLifecycleOwner) {
             notesListAdapter.submitList(it)
             showEmptyView(it.isNullOrEmpty())
         }

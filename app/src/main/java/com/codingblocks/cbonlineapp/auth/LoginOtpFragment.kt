@@ -35,7 +35,7 @@ class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
         super.onViewCreated(view, savedInstanceState)
         setFirstSpan()
         numberTv.append(vm.mobile)
-        vm.errorLiveData.observer(viewLifecycleOwner) {
+        vm.errorLiveData.observer(thisLifecycleOwner) {
             verifyOtpBtn.isEnabled = true
         }
         otpEdtv.addTextChangedListener {

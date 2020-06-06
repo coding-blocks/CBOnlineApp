@@ -15,7 +15,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class WinningsFragment : BaseCBFragment() {
 
     private val vm by sharedViewModel<CampaignViewModel>()
-    private val leaderBoardListAdapter = PagedCampaignListAdapter()
+    private val leaderBoardListAdapter = WinningsListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,7 +32,10 @@ class WinningsFragment : BaseCBFragment() {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = leaderBoardListAdapter
         }
+        vm.fetchWinnings()
         vm.myWinnings.observer(this) {
+            emptyView.isVisible = it.isEmpty()
+            winningsRv.isVisible = it.isNotEmpty()
             leaderBoardListAdapter.submitList(it)
         }
     }

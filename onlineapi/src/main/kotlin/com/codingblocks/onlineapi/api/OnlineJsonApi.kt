@@ -133,7 +133,7 @@ interface OnlineJsonApi {
 
     @GET("courses")
     suspend fun findCourses(
-        @Query("exclude") exclude: String = "ratings,instructors.*",
+        @Query("exclude") exclude: String = "ratings,instructors.*,jobs",
         @Query("filter[title][\$iLike]") query: String,
         @Query("filter[unlisted]") unlisted: String = "false",
         @Query("page[limit]") page: Int = 100,
@@ -338,10 +338,16 @@ interface OnlineJsonApi {
 
     @GET("spins")
     suspend fun getWinnings(
-        @Query("page[offset]") offset: String,
-        @Query("page[limit]") limit: String = "10",
         @Query("filter[used]") filter1: String = "true",
         @Query("filter[won]") filter2: String = "true",
+        @Query("sort") sort: String = "-used_at",
+        @Query("include") include: String = "spin_prize"
+    ): Response<JSONAPIDocument<List<Spins>>>
+
+    @GET("spins")
+    suspend fun getCampaignLeaderBoard(
+        @Query("page[offset]") offset: String?,
+        @Query("page[limit]") limit: String? = "10",
         @Query("sort") sort: String = "-used_at",
         @Query("include") include: String = "spin_prize"
     ): Response<JSONAPIDocument<List<Spins>>>

@@ -50,7 +50,7 @@ class DashboardLibraryFragment : BaseCBFragment() {
         super.onViewCreated(view, savedInstanceState)
         if (viewModel.isLoggedIn == true) {
             dashboardCoursesRv.setRv(requireContext(), courseListAdapter, true)
-            viewModel.allRuns.observer(viewLifecycleOwner) {
+            viewModel.allRuns.observer(thisLifecycleOwner) {
                 courseListAdapter.submitList(it)
                 changeViewState(dashboardCoursesRv, emptyLl, dashboardCourseShimmer, it.isEmpty())
             }

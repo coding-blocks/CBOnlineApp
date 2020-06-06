@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.loadImage
@@ -18,7 +18,7 @@ import com.codingblocks.onlineapi.models.Spins
 import kotlinx.android.synthetic.main.item_winnings.view.*
 import org.jetbrains.anko.toast
 
-class PagedCampaignListAdapter : PagedListAdapter<Spins, PagedCampaignListAdapter.CampaignViewHolder>(object : DiffUtil.ItemCallback<Spins>() {
+class WinningsListAdapter : ListAdapter<Spins, WinningsListAdapter.CampaignViewHolder>(object : DiffUtil.ItemCallback<Spins>() {
     override fun areItemsTheSame(oldItem: Spins, newItem: Spins): Boolean {
         return oldItem.id == newItem.id
     }

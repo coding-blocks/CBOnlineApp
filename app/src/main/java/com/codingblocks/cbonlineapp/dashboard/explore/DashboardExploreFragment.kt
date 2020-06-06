@@ -93,21 +93,21 @@ class DashboardExploreFragment : BaseCBFragment() {
         courseSuggestedRv.setRv(requireContext(), courseCardListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
         dashboardTracksRv.setRv(requireContext(), tracksListAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
 
-        vm.suggestedCourses.observe(viewLifecycleOwner) { courses ->
+        vm.suggestedCourses.observe(thisLifecycleOwner) { courses ->
             if (courses.isNotEmpty()) {
                 courseCardListAdapter.submitList(courses)
                 dashboardPopularShimmer.hideAndStop()
                 dashboardPopularRv.isVisible = true
             }
         }
-        vm.trendingCourses.observe(viewLifecycleOwner) { courses ->
+        vm.trendingCourses.observe(thisLifecycleOwner) { courses ->
             if (courses.isNotEmpty()) {
                 coursePopularListAdapter.submitList(courses)
                 dashboardSuggestedShimmer.hideAndStop()
                 courseSuggestedRv.isVisible = true
             }
         }
-        vm.tracks.observe(viewLifecycleOwner) { tracks ->
+        vm.tracks.observe(thisLifecycleOwner) { tracks ->
             if (tracks.isNotEmpty()) {
                 tracksListAdapter.submitList(tracks)
                 dashboardTrackShimmer.hideAndStop()

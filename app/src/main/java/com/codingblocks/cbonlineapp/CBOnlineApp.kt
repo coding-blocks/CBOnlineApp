@@ -11,6 +11,7 @@ import com.codingblocks.cbonlineapp.campaign.CampaignActivity
 import com.codingblocks.cbonlineapp.course.CourseActivity
 import com.codingblocks.cbonlineapp.course.SearchCourseActivity
 import com.codingblocks.cbonlineapp.di.databaseModule
+import com.codingblocks.cbonlineapp.di.firebaseModule
 import com.codingblocks.cbonlineapp.di.preferencesModule
 import com.codingblocks.cbonlineapp.di.viewModelModule
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
@@ -78,7 +79,7 @@ class CBOnlineApp : Application() {
         }
         startKoin {
             androidContext(this@CBOnlineApp)
-            modules(listOf(viewModelModule,
+            modules(listOf(viewModelModule, firebaseModule,
                 databaseModule, preferencesModule))
         }
 

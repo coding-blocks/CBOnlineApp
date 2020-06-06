@@ -33,7 +33,7 @@ class HomeFragment : BaseCBFragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        vm.spinsLiveData.observer(viewLifecycleOwner) {
+        vm.spinsLiveData.observer(thisLifecycleOwner) {
             spinBtn.isEnabled = it > 0
             val with3digits = String.format("%02d", it)
 
@@ -42,6 +42,7 @@ class HomeFragment : BaseCBFragment(), AnkoLogger {
 
         val runnable = Runnable {
             vm.fetchSpins()
+            vm.fetchWinnings()
             try {
                 vm.spinResponse.value?.let { res ->
                     imageView.animate()

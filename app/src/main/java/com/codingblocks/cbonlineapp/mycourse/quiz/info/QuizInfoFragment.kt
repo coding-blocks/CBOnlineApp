@@ -24,7 +24,7 @@ class QuizInfoFragment : BaseCBFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        vm.quizDetails.observer(viewLifecycleOwner) {
+        vm.quizDetails.observer(thisLifecycleOwner) {
             it
             quizType.text = "MCQ"
             quizMarks.text = "${it.questions!!.size * 10}"

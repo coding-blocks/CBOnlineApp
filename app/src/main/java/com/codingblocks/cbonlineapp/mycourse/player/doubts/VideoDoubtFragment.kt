@@ -79,7 +79,7 @@ class VideoDoubtFragment : BaseCBFragment(), AnkoLogger {
 
         playerDoubtRv.setRv(requireContext(), doubtListAdapter, true, "thick")
 
-        viewModel.doubts.observer(viewLifecycleOwner) {
+        viewModel.doubts.observer(thisLifecycleOwner) {
             doubtListAdapter.submitList(it)
             showEmptyView(it.isNullOrEmpty())
         }

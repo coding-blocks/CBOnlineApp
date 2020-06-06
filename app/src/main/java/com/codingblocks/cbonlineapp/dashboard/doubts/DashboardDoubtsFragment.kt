@@ -120,7 +120,7 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
             dialog.show()
         }
 
-        vm.type.observer(viewLifecycleOwner) {
+        vm.type.observer(thisLifecycleOwner) {
             when (it) {
                 LIVE -> {
                     liveDoubtBtn.isActivated = true
@@ -146,7 +146,7 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
         }
 
         if (vm.isLoggedIn == true) {
-            vm.activePremiumRuns.observer(viewLifecycleOwner) {
+            vm.activePremiumRuns.observer(thisLifecycleOwner) {
                 if (it.isNotEmpty()) {
                     vm.attemptId.value = it.first().courseRun.runAttempt.attemptId
                     list.clear()
@@ -161,7 +161,7 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
                     }
                 }
             }
-            vm.doubts.observe(viewLifecycleOwner, Observer {
+            vm.doubts.observe(thisLifecycleOwner, Observer {
                 doubtListAdapter.submitList(it)
                 changeViewState(
                     dashboardDoubtRv,
@@ -177,7 +177,7 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
         }
 
         dashboardDoubtRv.setRv(requireContext(), doubtListAdapter, true, "thick")
-//        vm.errorLiveData.observer(viewLifecycleOwner) {
+//        vm.errorLiveData.observer(thisLifecycleOwner) {
 //            when (it) {
 //                ErrorStatus.NO_CONNECTION -> {
 // //                    dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav)
@@ -200,7 +200,7 @@ class DashboardDoubtsFragment : BaseCBFragment(), AnkoLogger {
 //                showEmptyView(emptyView = emptyLl, shimmerView = dashboardDoubtShimmer)
 //        }
 
-//        viewModel.barMessage.observer(viewLifecycleOwner) {
+//        viewModel.barMessage.observer(thisLifecycleOwner) {
 //            dashboardDoubtRoot.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav, false)
 //        }
 

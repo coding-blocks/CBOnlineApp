@@ -41,6 +41,7 @@ import com.codingblocks.cbonlineapp.settings.SettingsViewModel
 import com.codingblocks.cbonlineapp.tracks.TrackViewModel
 import com.codingblocks.cbonlineapp.tracks.TracksRepository
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
+import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -83,10 +84,14 @@ val viewModelModule = module {
     single { ProfileRepository(get()) }
     single { CodeChallengeRepository(get()) }
     single { AuthRepository(get()) }
-    single { CampaignRepository() }
+    single { CampaignRepository(get()) }
 }
 val preferencesModule = module {
     single { provideSettingsPreferences(androidApplication()) }
+}
+
+val firebaseModule = module {
+    single { FirebaseFirestore.getInstance() }
 }
 
 fun provideSettingsPreferences(app: Application): PreferenceHelper = PreferenceHelper.getPrefs(app)
