@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/gilroy_medium"
-            android:text="For every friend who signup with your code gets an extra spin.\nYou get an extra spin after their successful participation!"
+            android:text="For every friend who signup with your code you will get an extra spin after their successful participation."
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textColor="@color/white"

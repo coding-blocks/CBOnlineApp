@@ -16,7 +16,6 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver.OnSmsOTPReceivedListener
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import kotlinx.android.synthetic.main.fragment_login_home.*
 import kotlinx.android.synthetic.main.fragment_login_otp.*
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -49,15 +48,20 @@ class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
         }
     }
 
-    private fun verifyWithOtp() {
+    private fun verifyWithOtp(otp: String = "") {
         verifyOtpBtn.isEnabled = false
-        vm.verifyOtp(otpEdtv.text.toString())
+        if (otp.isEmpty())
+            vm.verifyOtp(otpEdtv.text.toString())
+        else {
+            vm.verifyOtp(otp)
+        }
     }
 
     override fun onSmsOTPReceieved(otp: String) {
         if (otp.isNotEmpty()) {
-            otpEdtv.setText(otp)
-            verifyWithOtp()
+            if (otpEdtv != null)
+                otpEdtv.setText(otp)
+            verifyWithOtp(otp)
         }
     }
 

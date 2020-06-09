@@ -725,5 +725,4 @@ data class PrizeContent(
     val couponCreated: String?,
     val validEnd: String?
 )
-/*"coupon-created":"SPN2ANGQMT72","coupon-percentage":"50","user-id":21457,"valid-start":"2020-06-03T16:27:33.332Z","valid-end":"2020-06-04T16:27:33.334Z"*/
 

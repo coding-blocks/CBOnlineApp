@@ -118,8 +118,8 @@ object Clients {
         onlineApiResourceConverter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_TYPE_IN_RELATIONSHIP)
     }
 
-    private const val connectTimeout = 5
-    private const val readTimeout = 5
+    private const val connectTimeout = 15
+    private const val readTimeout = 15
     private val logging = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.NONE
     }

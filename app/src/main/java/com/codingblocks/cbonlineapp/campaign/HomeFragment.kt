@@ -53,10 +53,10 @@ class HomeFragment : BaseCBFragment(), AnkoLogger {
                     showDialog(res.size, res.title, res.description)
 
                 }
+                spinBtn.isEnabled = true
             } catch (e: Exception) {
 
             }
-            spinBtn.isEnabled = true
         }
 
         spinBtn.setOnClickListener {
