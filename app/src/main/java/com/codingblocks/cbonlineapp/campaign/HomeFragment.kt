@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AlertDialog
+import com.bumptech.glide.Glide
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
+import com.codingblocks.cbonlineapp.util.GlideApp
 import com.codingblocks.cbonlineapp.util.ShareUtils
+import com.codingblocks.cbonlineapp.util.extensions.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import kotlinx.android.synthetic.main.dialog_result.view.*
 import kotlinx.android.synthetic.main.dialog_share.view.fb
@@ -33,6 +36,9 @@ class HomeFragment : BaseCBFragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        GlideApp.with(requireContext())
+            .load(R.drawable.wheel)
+            .into(imageView)
         vm.spinsLiveData.observer(thisLifecycleOwner) {
             spinBtn.isEnabled = it > 0
             val with3digits = String.format("%02d", it)
