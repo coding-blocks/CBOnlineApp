@@ -11,9 +11,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
-import com.codingblocks.cbonlineapp.database.DownloadsDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
-import com.codingblocks.cbonlineapp.database.models.DownloadModel
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder.DownloadableContent
 import com.codingblocks.onlineapi.Clients
 import com.google.gson.JsonObject
@@ -43,8 +41,6 @@ class SectionDownloadService(val context: Context, private val workerParameters:
     }
     private val contentDao: ContentDao by inject()
     private val sectionWithContentsDao: SectionWithContentsDao by inject()
-    private val downloadDao: DownloadsDao by inject()
-    lateinit var downloadModel: DownloadModel
     lateinit var sectionId: String
     lateinit var attemptId: String
     private lateinit var notification: NotificationCompat.Builder
@@ -53,7 +49,6 @@ class SectionDownloadService(val context: Context, private val workerParameters:
         attemptId = workerParameters.inputData.getString(RUN_ATTEMPT_ID) ?: ""
         sectionId = workerParameters.inputData.getString(SECTION_ID) ?: ""
         downloadList.clear()
-        downloadListDao.clear()
         val list = withContext(Dispatchers.IO) { sectionWithContentsDao.getVideoIdsWithSectionId(sectionId, attemptId) }
 
         return if (list.isNotEmpty()) downloadSection(list) else Result.failure()
@@ -85,15 +80,7 @@ class SectionDownloadService(val context: Context, private val workerParameters:
             }
             if (response.isSuccessful) {
                 response.body()?.let {
-                    downloadModel = DownloadModel(
-                        content.videoId,
-                        sectionId,
-                        attemptId,
-                        content.contentId,
-                        DateUtils.getCalculatedDate(15)
-                    )
                     downloadList[content.videoId] = (content)
-                    downloadListDao[content.videoId] = (downloadModel)
                     val mOtp = it.get("otp").asString
                     val mPlaybackInfo = it.get("playbackInfo").asString
                     initializeDownload(mOtp, mPlaybackInfo, content.videoId)
@@ -123,7 +110,6 @@ class SectionDownloadService(val context: Context, private val workerParameters:
         GlobalScope.launch(Dispatchers.IO) {
             downloadList[videoId]?.isDownloaded = true
             contentDao.updateContent(data?.contentId ?: "", 1)
-            downloadListDao[videoId]?.let {videoData-> downloadDao.insert(videoData) }
         }
         notification.apply {
             setProgress(downloadList.size, downloadList.filterValues { it.isDownloaded }.size, false)
@@ -152,7 +138,6 @@ class SectionDownloadService(val context: Context, private val workerParameters:
 
     companion object {
         private val downloadList = hashMapOf<String, DownloadableContent>()
-        private val downloadListDao = hashMapOf<String, DownloadModel>()
     }
 
     private fun initializeDownload(mOtp: String, mPlaybackInfo: String, videoId: String) {

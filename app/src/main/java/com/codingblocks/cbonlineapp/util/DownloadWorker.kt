@@ -12,9 +12,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
-import com.codingblocks.cbonlineapp.database.DownloadsDao
 import com.codingblocks.cbonlineapp.database.models.DownloadData
-import com.codingblocks.cbonlineapp.database.models.DownloadModel
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.onlineapi.Clients
 import com.google.gson.JsonObject
@@ -44,8 +42,6 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
     }
 
     private val contentDao: ContentDao by inject()
-    private val downloadDao: DownloadsDao by inject()
-    lateinit var downloadModel: DownloadModel
 
 //    override fun onStopped() {
 //        super.onStopped()
@@ -80,14 +76,6 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
                 setOngoing(false) // THIS is the important line
                 setAutoCancel(false)
             }
-        )
-
-        downloadModel = DownloadModel(
-            videoId,
-            sectionId,
-            attemptId,
-            contentId,
-            DateUtils.getCalculatedDate(15)
         )
 
         notificationManager.notify(downloadData.notificationId, downloadData.notificationBuilder.build())
@@ -213,7 +201,6 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
             if (data != null) {
                 GlobalScope.launch(Dispatchers.IO) {
                     contentDao.updateContent(data.contentId, 1)
-                    downloadDao.insert(downloadModel)
                 }
                 val intent = Intent(applicationContext, VideoPlayerActivity::class.java)
                 intent.putExtra(CONTENT_ID, data.contentId)
