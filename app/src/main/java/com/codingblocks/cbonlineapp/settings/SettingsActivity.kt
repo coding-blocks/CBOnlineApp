@@ -99,7 +99,8 @@ class SettingsActivity : BaseCBActivity() {
                 it
             ).readableFileSize()
         })
-        val usedSpace : Double = file?.let { folderSize(it) }!!.toDouble() / 1048576
+
+        val usedSpace : Double = ((file?.let { folderSize(it) }?.toDouble()?.div(1048576) ?: 0.0))
         Log.v("usedSpace","Used Space is $usedSpace")
         storageProgress.max = bytesAvailable.toInt() / 1048576
         storageProgress.progress = usedSpace.toInt()
