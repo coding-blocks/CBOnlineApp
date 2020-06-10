@@ -29,6 +29,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
+                android:visibility="gone"
                 app:cardCornerRadius="@dimen/corner_radius">
 
                 <LinearLayout
@@ -62,6 +63,19 @@
 
 
             </com.google.android.material.card.MaterialCardView>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:id="@+id/campaignView"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_banner" />
 
 
             <LinearLayout
@@ -122,12 +136,12 @@
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/dashboardPopularShimmer"
                 android:layout_width="match_parent"
-                app:shimmer_auto_start="true"
-                app:shimmer_tilt="50"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small">
+                android:layout_marginTop="@dimen/margin_small"
+                app:shimmer_auto_start="true"
+                app:shimmer_tilt="50">
 
-                <include layout="@layout/item_skeleton_card_popular"/>
+                <include layout="@layout/item_skeleton_card_popular" />
 
             </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -204,20 +218,20 @@
                 android:layout_marginTop="@dimen/margin_small"
                 android:nestedScrollingEnabled="false"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="4"
-                android:visibility="gone"
                 tools:listitem="@layout/item_track" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/dashboardTrackShimmer"
                 android:layout_width="match_parent"
-                app:shimmer_auto_start="true"
-                app:shimmer_tilt="50"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small">
+                android:layout_marginTop="@dimen/margin_small"
+                app:shimmer_auto_start="true"
+                app:shimmer_tilt="50">
 
-                <include layout="@layout/item_skeleton_track"/>
+                <include layout="@layout/item_skeleton_track" />
 
             </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -295,8 +309,8 @@
                 android:layout_marginBottom="@dimen/margin_xl"
                 android:nestedScrollingEnabled="false"
                 android:orientation="horizontal"
-                android:visibility="gone"
                 android:overScrollMode="never"
+                android:visibility="gone"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="4"
                 tools:listitem="@layout/item_course_card" />
@@ -304,12 +318,12 @@
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/dashboardSuggestedShimmer"
                 android:layout_width="match_parent"
-                app:shimmer_auto_start="true"
-                app:shimmer_tilt="50"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small">
+                android:layout_marginTop="@dimen/margin_small"
+                app:shimmer_auto_start="true"
+                app:shimmer_tilt="50">
 
-                <include layout="@layout/item_skeleton_card_popular"/>
+                <include layout="@layout/item_skeleton_card_popular" />
 
             </com.facebook.shimmer.ShimmerFrameLayout>
 

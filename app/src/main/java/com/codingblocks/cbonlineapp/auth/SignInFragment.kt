@@ -44,7 +44,7 @@ class SignInFragment : BaseCBFragment() {
         fbBtn.setOnClickListener {
             showWebView()
         }
-        vm.errorLiveData.observer(viewLifecycleOwner) {
+        vm.errorLiveData.observer(thisLifecycleOwner) {
             proceedBtn.isEnabled = true
         }
     }

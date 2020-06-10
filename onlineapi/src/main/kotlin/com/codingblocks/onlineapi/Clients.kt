@@ -37,6 +37,8 @@ import com.codingblocks.onlineapi.models.Rating
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
+import com.codingblocks.onlineapi.models.SpinPrize
+import com.codingblocks.onlineapi.models.Spins
 import com.codingblocks.onlineapi.models.Tags
 import com.codingblocks.onlineapi.models.User
 import com.fasterxml.jackson.annotation.JsonInclude
@@ -105,7 +107,9 @@ object Clients {
         CareerTracks::class.java,
         Project::class.java,
         Player::class.java,
-        CodeChallenge::class.java
+        CodeChallenge::class.java,
+        SpinPrize::class.java,
+        Spins::class.java
     )
 
     // type resolver
@@ -114,8 +118,8 @@ object Clients {
         onlineApiResourceConverter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_TYPE_IN_RELATIONSHIP)
     }
 
-    private const val connectTimeout = 5
-    private const val readTimeout = 5
+    private const val connectTimeout = 15
+    private const val readTimeout = 15
     private val logging = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.NONE
     }

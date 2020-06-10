@@ -42,7 +42,7 @@ class AdminOverviewFragment : BaseCBFragment() {
 
         adminLeaderboardRv.setRv(requireContext(), leaderBoardListAdapter)
 
-        viewModel.doubtStats.observer(viewLifecycleOwner) {
+        viewModel.doubtStats.observer(thisLifecycleOwner) {
             doubtResolvedTv.text = it.totalResolvedDoubts.toString()
             userRatingTv.text = it.avgRating.toString()
             cbRatingTv.text = it.cbRating.toString()
@@ -51,11 +51,11 @@ class AdminOverviewFragment : BaseCBFragment() {
             resolutionTv.text = it.avgResolution.toString()
         }
 
-        viewModel.listLeaderboard.observer(viewLifecycleOwner) {
+        viewModel.listLeaderboard.observer(thisLifecycleOwner) {
             leaderBoardListAdapter.submitList(it)
         }
 
-        viewModel.errorLiveData.observer(viewLifecycleOwner) {
+        viewModel.errorLiveData.observer(thisLifecycleOwner) {
             when (it) {
                 ErrorStatus.UNAUTHORIZED -> {
                     Components.showConfirmation(requireContext(), UNAUTHORIZED) {
@@ -70,14 +70,14 @@ class AdminOverviewFragment : BaseCBFragment() {
             }
         }
 
-        viewModel.nextOffSet.observer(viewLifecycleOwner) { offSet ->
+        viewModel.nextOffSet.observer(thisLifecycleOwner) { offSet ->
             nextBtn.isEnabled = offSet != -1
             nextBtn.setOnClickListener {
                 viewModel.fetchLeaderBoard(offSet)
             }
         }
 
-        viewModel.prevOffSet.observer(viewLifecycleOwner) { offSet ->
+        viewModel.prevOffSet.observer(thisLifecycleOwner) { offSet ->
             prevBtn.isEnabled = offSet != -1
             prevBtn.setOnClickListener {
                 viewModel.fetchLeaderBoard(offSet)

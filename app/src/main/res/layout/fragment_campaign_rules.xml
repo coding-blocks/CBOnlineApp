@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/rulesTv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="12dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:lineSpacingExtra="4dp"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+</LinearLayout>

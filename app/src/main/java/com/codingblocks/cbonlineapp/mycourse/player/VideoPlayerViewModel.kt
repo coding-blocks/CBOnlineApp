@@ -27,6 +27,7 @@ import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
 import com.codingblocks.cbonlineapp.util.savedStateValue
+import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Bookmark
@@ -35,8 +36,8 @@ import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.Sections
-import java.util.concurrent.TimeUnit
 import org.json.JSONObject
+import java.util.concurrent.TimeUnit
 
 const val VIDEO_POSITION = "videoPos"
 
@@ -46,6 +47,12 @@ class VideoPlayerViewModel(
     private val repoDoubts: DashboardDoubtsRepository,
     val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
+
+    init {
+        Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
+        Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
+    }
+
     var currentOrientation: Int = 0
     var sectionId by savedStateValue<String>(handle, SECTION_ID)
     var attemptId = MutableLiveData<String>()
@@ -139,7 +146,8 @@ class VideoPlayerViewModel(
 
     fun markBookmark() {
         runIO {
-            val bookmark = Bookmark(RunAttempts(attemptId.value ?: ""), LectureContent(currentContentId ?: ""), Sections(sectionId ?: ""))
+            val bookmark = Bookmark(RunAttempts(attemptId.value ?: ""), LectureContent(currentContentId
+                ?: ""), Sections(sectionId ?: ""))
             when (val response = repo.markDoubt(bookmark)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {

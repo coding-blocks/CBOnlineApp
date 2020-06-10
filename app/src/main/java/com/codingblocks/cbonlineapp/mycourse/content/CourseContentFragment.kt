@@ -28,6 +28,7 @@ import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.database.ListObject
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
+import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
@@ -49,10 +50,8 @@ import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
-import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
-import java.util.concurrent.TimeUnit
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
@@ -60,6 +59,18 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.util.concurrent.TimeUnit
+
+/*
+ *   Payment issues
+ *   multi select quizzes
+ *   pdf not issue
+ *   challenge can't be done
+ *   webinar - make,
+ *   make more category
+ *   expired,upgrade and pause-unpause
+ *   only course, free course
+ */
 
 const val SECTION_DOWNLOAD = "sectionDownload"
 
@@ -160,15 +171,15 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
 
     private fun attachObservers() {
 
-        viewModel.progress.observer(viewLifecycleOwner) {
+        viewModel.progress.observer(thisLifecycleOwner) {
             swiperefresh.isRefreshing = it
         }
 
-//        viewModel.computedData.observe(viewLifecycleOwner, Observer {
+//        viewModel.computedData.observe(thisLifecycleOwner, Observer {
 //                    info { it }
 //        })
 
-        viewModel.content.observer(viewLifecycleOwner) { sectionWithContentList ->
+        viewModel.content.observer(thisLifecycleOwner) { sectionWithContentList ->
             sectionitem.clear()
             val consolidatedList = ArrayList<ListObject>()
             sectionWithContentList.forEach { sectionContent ->
@@ -223,6 +234,19 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 sectionListAdapter.notifyDataSetChanged()
 
                 sectionItemsAdapter.submitList(consolidatedList)
+
+                rvExpendableView.viewTreeObserver.addOnGlobalLayoutListener {
+                    if (sectionListAdapter.itemCount == 0) {
+                        (activity as MyCourseActivity).hideFab()
+                        rvExpendableView.visibility = View.GONE
+                        textview4_20.visibility = View.VISIBLE
+                    } else {
+                        if ((activity as MyCourseActivity).myCourseTabs.selectedTabPosition == 1)
+                            (activity as MyCourseActivity).showFab()
+                        rvExpendableView.visibility = View.VISIBLE
+                        textview4_20.visibility = View.GONE
+                    }
+                }
             }
             contentShimmer.isVisible = sectionWithContentList.isEmpty()
         }
@@ -395,7 +419,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 ) {
                     if (it) {
                         dialog.show()
-                        viewModel.addToCart().observer(viewLifecycleOwner) {
+                        viewModel.addToCart().observer(thisLifecycleOwner) {
                             dialog.hide()
                             requireContext().startActivity<CheckoutActivity>()
                         }

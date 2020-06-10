@@ -81,7 +81,7 @@ class DashboardActivity : BaseCBActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        vm.isLoggedIn = intent?.getBooleanExtra(LOGGED_IN, false)
+        vm.isLoggedIn = intent?.getBooleanExtra(LOGGED_IN, vm.prefs.SP_ACCESS_TOKEN_KEY.isNotEmpty())
 
         setToolbar(dashboardToolbar, hasUpEnabled = false, homeButtonEnabled = false, title = getString(R.string.dashboard))
         val toggle = ActionBarDrawerToggle(this, dashboardDrawer, dashboardToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -158,13 +158,13 @@ class DashboardActivity : BaseCBActivity(),
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 createShortcut()
             }
-            dashboardBottomNav.selectedItemId = R.id.dashboard_home
+//            dashboardBottomNav.selectedItemId = R.id.dashboard_home
         } else {
             dashboardNavigation.getHeaderView(0).apply {
                 findViewById<TextView>(R.id.navUsernameTv).text = "Login/Signup"
             }
-            dashboardBottomNav.selectedItemId = R.id.dashboard_explore
         }
+        dashboardBottomNav.selectedItemId = R.id.dashboard_explore
 
         dashboardAppBarLayout.bringToFront()
     }

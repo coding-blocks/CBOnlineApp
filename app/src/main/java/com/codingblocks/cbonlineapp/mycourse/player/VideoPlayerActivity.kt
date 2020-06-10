@@ -54,8 +54,8 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
-import com.codingblocks.cbonlineapp.util.extensions.*
 import com.codingblocks.cbonlineapp.util.extensions.getDistinct
+import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
@@ -80,24 +80,26 @@ import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
-import java.io.File
-import java.lang.Exception
-import java.util.Objects
-import java.util.concurrent.TimeUnit
 import kotlinx.android.synthetic.main.activity_video_player.*
-import kotlinx.android.synthetic.main.activity_video_player.youtubePlayerView
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import kotlinx.android.synthetic.main.my_fab_menu.*
-import kotlinx.android.synthetic.main.vdo_control_view.*
 import kotlinx.android.synthetic.main.vdo_control_view.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.design.snackbar
+import org.jetbrains.anko.excludeFromRecents
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
+import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
+import java.io.File
+import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     VdoPlayer.InitializationListener, VdoPlayerControls.FullscreenActionListener,
@@ -339,7 +341,11 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         showControls(true)
         vm.getOtpProgress.observer(this) {
             if (it && ::videoPlayer.isInitialized) {
-                videoPlayer.load(getVdoParams())
+                try {
+                    videoPlayer.load(getVdoParams())
+                } catch (e: Exception) {
+                    toast("Player not ready please try again!!")
+                }
             } else
                 toast("there was some error with starting feed, try again")
         }

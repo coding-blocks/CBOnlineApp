@@ -50,24 +50,6 @@ class DashboardViewModel(
     /**
      * Home Fragment
      */
-//    fun fetchToken(grantCode: String) {
-//        runIO {
-//            when (val response = homeRepo.getToken(grantCode)) {
-//                is ResultWrapper.GenericError -> setError(response.error)
-//                is ResultWrapper.Success -> {
-//                    if (response.value.isSuccessful)
-//                        response.value.body()?.let {
-//                            val jwt = it.asJsonObject.get("jwt").asString
-//                            val rt = it.asJsonObject.get("refresh_token").asString
-//                            homeRepo.prefs.SP_JWT_TOKEN_KEY = jwt
-//                            homeRepo.prefs.SP_JWT_REFRESH_TOKEN = rt
-//                            Clients.authJwt = jwt
-//                            Clients.refreshToken = rt
-//                        }
-//                }
-//            }
-//        }
-//    }
 
     fun refreshToken() {
         runIO {
@@ -223,6 +205,9 @@ class DashboardViewModel(
             is ResultWrapper.GenericError -> {
                 if (response.code in 101..103)
                     emitSource(homeRepo.getTopRun())
+                else{
+                    emitSource(MutableLiveData(null))
+                }
                 setError(response.error)
             }
             is ResultWrapper.Success -> with(response.value) {
@@ -270,6 +255,10 @@ class DashboardViewModel(
             fetchDoubts()
             repo.getDoubtsByCourseRun(it.first, it.second ?: "")
         }
+    }
+
+    val activePremiumRuns: LiveData<List<CourseInstructorPair>> by lazy {
+        myCourseRepo.getPremiumActiveRuns()
     }
 
     private fun fetchDoubts() {
