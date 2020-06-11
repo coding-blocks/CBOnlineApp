@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import kotlinx.android.synthetic.main.fragment_quiz_result.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,7 +48,7 @@ class QuizResultFragment : BaseCBFragment() {
         correctBackground.color = ColorStateList.valueOf(Color.parseColor("#90ce87"))
 
         coroutineScope.launch {
-            val response = withContext(Dispatchers.IO) { Clients.onlineV2JsonApi.getQuizAttemptById(quizAttemptId) }
+            val response = withContext(Dispatchers.IO) { CBOnlineLib.onlineV2JsonApi.getQuizAttemptById(quizAttemptId) }
             val questions = response?.body()?.result?.questions
             val totalQuestions = questions?.size
             var correctQuestions = 0

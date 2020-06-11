@@ -14,7 +14,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.models.DownloadData
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.offline.DownloadOptions
@@ -65,7 +65,7 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
             notificationManager.notify(downloadData.notificationId, downloadData.notificationBuilder.build())
 
             GlobalScope.launch {
-                val response: Response<JsonObject> = withContext(Dispatchers.IO) { Clients.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
+                val response: Response<JsonObject> = withContext(Dispatchers.IO) { CBOnlineLib.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
                 if (response.isSuccessful) {
                     response.body()?.let {
                         downloadList.add(downloadData)

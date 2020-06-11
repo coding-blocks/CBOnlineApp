@@ -11,7 +11,7 @@ import androidx.viewpager.widget.PagerAdapter
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.OnItemClickListener
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.models.Choice
 import com.codingblocks.onlineapi.models.ContentQna
 import com.codingblocks.onlineapi.models.QuizAttempt
@@ -46,7 +46,7 @@ class ViewPagerAdapter(
         if (pos == questionList.size() - 1 && result == null) {
             view.submitButton.visibility = View.VISIBLE
         }
-        Clients.onlineV2JsonApi.getQuestionById(questionList[pos]
+        CBOnlineLib.onlineV2JsonApi.getQuestionById(questionList[pos]
             ?: "").enqueue(retrofitCallback { _, response ->
             response?.body().let { question ->
                 view.questionTitle.text = "Q${pos + 1}. ${question?.title}"
@@ -87,7 +87,7 @@ class ViewPagerAdapter(
                             submissionList.add(quizSubmission)
                             quizAttempt.submission?.addAll(submissionList)
 
-                            Clients.onlineV2JsonApi.updateQuizAttempt(qaId, quizAttempt).enqueue(retrofitCallback { _, _ ->
+                            CBOnlineLib.onlineV2JsonApi.updateQuizAttempt(qaId, quizAttempt).enqueue(retrofitCallback { _, _ ->
                             })
                         }
                     }

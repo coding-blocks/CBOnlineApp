@@ -1,7 +1,7 @@
 package com.codingblocks.cbonlineapp.course.adapter
 
 import androidx.paging.PageKeyedDataSource
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.getMeta
 import com.codingblocks.onlineapi.models.Course
@@ -15,7 +15,7 @@ class CourseDataSource(private val scope: CoroutineScope) :
 
     override fun loadInitial(params: LoadInitialParams<String>, callback: LoadInitialCallback<String, Course>) {
         scope.launch {
-            when (val response = safeApiCall { Clients.onlineV2JsonApi.getAllCourses("0","9") }) {
+            when (val response = safeApiCall { CBOnlineLib.onlineV2JsonApi.getAllCourses("0","9") }) {
                 is ResultWrapper.Success -> with(response.value) {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
@@ -33,7 +33,7 @@ class CourseDataSource(private val scope: CoroutineScope) :
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, Course>) {
         scope.launch {
-            when (val response = safeApiCall { Clients.onlineV2JsonApi.getAllCourses(params.key, "9") }) {
+            when (val response = safeApiCall { CBOnlineLib.onlineV2JsonApi.getAllCourses(params.key, "9") }) {
                 is ResultWrapper.Success -> with(response.value) {
                     if (response.value.isSuccessful)
                         response.value.body()?.let {

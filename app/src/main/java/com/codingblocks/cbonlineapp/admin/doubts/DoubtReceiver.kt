@@ -16,7 +16,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.util.ADMIN_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.extensions.isotomillisecond
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.safeApiCall
 import kotlinx.coroutines.Dispatchers
@@ -44,7 +44,7 @@ class DoubtReceiver : BroadcastReceiver() {
         notificationMgr = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         GlobalScope.launch {
-            when (val response = safeApiCall(Dispatchers.IO) { Clients.onlineV2JsonApi.getLiveDoubts() }) {
+            when (val response = safeApiCall(Dispatchers.IO) { CBOnlineLib.onlineV2JsonApi.getLiveDoubts() }) {
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful)
                         if (!body()?.get().isNullOrEmpty()) {

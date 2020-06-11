@@ -5,7 +5,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.database.NotesDao
 import com.codingblocks.cbonlineapp.util.extensions.deserializeNoteFromJson
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.models.Note
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -21,11 +21,11 @@ class NotesWorker(context: Context, private val workerParameters: WorkerParamete
         val doubtJson = workerParameters.inputData.getString("DOUBT")
         val response = if (noteId.isNullOrEmpty()) {
             val note: Note = noteJson?.deserializeNoteFromJson()!!
-            withContext(Dispatchers.IO) { Clients.onlineV2JsonApi.updateNoteById(note.id ?: "", note) }
+            withContext(Dispatchers.IO) { CBOnlineLib.onlineV2JsonApi.updateNoteById(note.id ?: "", note) }
         } else if (noteJson.isNullOrEmpty()) {
-            withContext(Dispatchers.IO) { Clients.onlineV2JsonApi.deleteNoteById(noteId ?: "") }
+            withContext(Dispatchers.IO) { CBOnlineLib.onlineV2JsonApi.deleteNoteById(noteId ?: "") }
         } else {
-            withContext(Dispatchers.IO) { Clients.onlineV2JsonApi.createDoubt(doubtJson?.deserializeNoteFromJson()!!) }
+            withContext(Dispatchers.IO) { CBOnlineLib.onlineV2JsonApi.createDoubt(doubtJson?.deserializeNoteFromJson()!!) }
         }
 
         if (response.isSuccessful) {

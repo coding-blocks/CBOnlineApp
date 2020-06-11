@@ -18,17 +18,9 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.tracks.TrackActivity
-import com.codingblocks.cbonlineapp.util.ADMIN_CHANNEL_ID
-import com.codingblocks.cbonlineapp.util.AppSignatureHelper
-import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.COURSE_ID
-import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
-import com.codingblocks.cbonlineapp.util.NotificationOpenedHandler
-import com.codingblocks.cbonlineapp.util.NotificationReceivedHandler
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.RUN_ID
-import com.codingblocks.cbonlineapp.util.SECTION_ID
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.cbonlineapp.util.*
+import com.codingblocks.onlineapi.CBOnlineCommunicator
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.onesignal.OneSignal
 import com.squareup.picasso.Picasso
@@ -52,12 +44,24 @@ class CBOnlineApp : Application() {
         super.onCreate()
         appContext = applicationContext
         mInstance = this
+        val prefs = PreferenceHelper.getPrefs(this)
+
+        CBOnlineLib.initialize(object: CBOnlineCommunicator {
+
+            override var authJwt: String
+                get() = prefs.SP_JWT_TOKEN_KEY
+                set(value) { prefs.SP_JWT_TOKEN_KEY = value }
+            override var refreshToken: String
+                get() = prefs.SP_JWT_REFRESH_TOKEN
+                set(value) { prefs.SP_JWT_REFRESH_TOKEN  = value }
+
+        })
 
         if (BuildConfig.DEBUG) {
             AppSignatureHelper(this).appSignatures.forEach {
                 Log.d("APPSIG", it)
             }
-            Clients.setHttpLogging(true)
+            CBOnlineLib.httpLogging = true
         }
 
         // Create Notification Channel

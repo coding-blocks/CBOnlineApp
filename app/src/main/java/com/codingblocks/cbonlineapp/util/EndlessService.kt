@@ -18,7 +18,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper.log
 import com.codingblocks.cbonlineapp.util.extensions.isotomillisecond
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.safeApiCall
 import java.util.Locale
@@ -110,7 +110,7 @@ class EndlessService : Service() {
     }
 
     private suspend fun pingFakeServer() {
-        when (val response = safeApiCall(Dispatchers.IO) { Clients.onlineV2JsonApi.getLiveDoubts() }) {
+        when (val response = safeApiCall(Dispatchers.IO) { CBOnlineLib.onlineV2JsonApi.getLiveDoubts() }) {
             is ResultWrapper.Success -> with(response.value) {
                 if (isSuccessful)
                     if (!body()?.get().isNullOrEmpty()) {

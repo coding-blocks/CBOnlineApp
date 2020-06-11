@@ -22,7 +22,7 @@ import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.PerformanceResponse
@@ -103,7 +103,7 @@ class MyCourseRepository(
     }
 
     private suspend fun getSectionContent(sectionId: String, runAttemptId: String, name: String?) {
-        when (val response = safeApiCall { Clients.onlineV2JsonApi.getSectionContents(sectionId) }) {
+        when (val response = safeApiCall { CBOnlineLib.onlineV2JsonApi.getSectionContents(sectionId) }) {
             is ResultWrapper.Success -> {
                 if (response.value.isSuccessful)
                     response.value.body()?.let {
@@ -316,22 +316,22 @@ class MyCourseRepository(
 
     fun getHackerBlocksPerformance() = hbRankDao.getRank()
 
-    suspend fun resetProgress(attemptId: ResetRunAttempt) = safeApiCall { Clients.api.resetProgress(attemptId) }
+    suspend fun resetProgress(attemptId: ResetRunAttempt) = safeApiCall { CBOnlineLib.api.resetProgress(attemptId) }
 
-    private suspend fun clearCart() = safeApiCall { Clients.api.clearCart() }
+    private suspend fun clearCart() = safeApiCall { CBOnlineLib.api.clearCart() }
 
     suspend fun addToCart(id: String) = safeApiCall {
         clearCart()
-        Clients.api.addToCart(id)
+        CBOnlineLib.api.addToCart(id)
     }
 
-    suspend fun fetchLeaderboard(runId: String) = safeApiCall { Clients.api.leaderboardById(runId) }
+    suspend fun fetchLeaderboard(runId: String) = safeApiCall { CBOnlineLib.api.leaderboardById(runId) }
 
-    suspend fun fetchSections(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.enrolledCourseById(attemptId) }
+    suspend fun fetchSections(attemptId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.enrolledCourseById(attemptId) }
 
-    suspend fun getStats(id: String) = safeApiCall { Clients.api.getMyStats(id) }
+    suspend fun getStats(id: String) = safeApiCall { CBOnlineLib.api.getMyStats(id) }
 
-    suspend fun requestApproval(attemptId: String) = safeApiCall { Clients.api.requestApproval(attemptId) }
+    suspend fun requestApproval(attemptId: String) = safeApiCall { CBOnlineLib.api.requestApproval(attemptId) }
 
-    suspend fun getPerformance() = safeApiCall { Clients.api.getHackerBlocksPerformance() }
+    suspend fun getPerformance() = safeApiCall { CBOnlineLib.api.getHackerBlocksPerformance() }
 }

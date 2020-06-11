@@ -20,7 +20,7 @@ import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.getMeta
@@ -42,11 +42,6 @@ class DashboardViewModel(
 ) : BaseCBViewModel() {
     var isLoggedIn: Boolean? by savedStateValue(handle, LOGGED_IN)
 
-    init {
-        Clients.refreshToken = homeRepo.prefs.SP_JWT_REFRESH_TOKEN
-        Clients.authJwt = homeRepo.prefs.SP_JWT_TOKEN_KEY
-    }
-
     /**
      * Home Fragment
      */
@@ -62,8 +57,6 @@ class DashboardViewModel(
                             val rt = it.asJsonObject.get("refresh_token").asString
                             homeRepo.prefs.SP_JWT_TOKEN_KEY = jwt
                             homeRepo.prefs.SP_JWT_REFRESH_TOKEN = rt
-                            Clients.authJwt = jwt
-                            Clients.refreshToken = rt
                         }
                     else {
                         setError(fetchError(response.value.code()))

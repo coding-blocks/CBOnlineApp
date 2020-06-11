@@ -33,7 +33,7 @@ import com.codingblocks.cbonlineapp.util.RUN_ID
 import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.savedStateValue
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Leaderboard
@@ -60,8 +60,6 @@ class MyCourseViewModel(
     var content: LiveData<List<SectionContentHolder.SectionContentPair>> = MutableLiveData()
 
     init {
-        Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
-        Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
         getPerformance()
         content = Transformations.switchMap(DoubleTrigger(complete, filters)) {
             attemptId?.let {
@@ -261,7 +259,7 @@ class MyCourseViewModel(
 }
 
 //    fun fetchExtensions(productId: Int): MutableLiveData<List<ProductExtensionsItem>> {
-//        Clients.api.getExtensions(productId).enqueue(retrofitCallback { throwable, response ->
+//        CBOnlineLib.api.getExtensions(productId).enqueue(retrofitCallback { throwable, response ->
 //            response?.body().let { list ->
 //                if (response?.isSuccessful == true) {
 //                    extensions.postValue(list?.productExtensions)

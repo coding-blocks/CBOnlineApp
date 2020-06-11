@@ -10,7 +10,7 @@ import com.codingblocks.cbonlineapp.database.models.CommentModel
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.RESOLVED
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.models.Comment
 import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.LectureContent
@@ -24,9 +24,9 @@ class DashboardDoubtsRepository(
     private val runAttemptDao: RunAttemptDao
 ) {
 
-    suspend fun fetchDoubtsByCourseRun(id: String) = safeApiCall { Clients.onlineV2JsonApi.getDoubtByAttemptId(id) }
+    suspend fun fetchDoubtsByCourseRun(id: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getDoubtByAttemptId(id) }
 
-    suspend fun fetchCommentsByDoubtId(id: String) = safeApiCall { Clients.onlineV2JsonApi.getCommentsById(id) }
+    suspend fun fetchCommentsByDoubtId(id: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getCommentsById(id) }
 
     suspend fun insertDoubts(doubts: List<Doubts>) {
         doubts.forEach {
@@ -46,7 +46,7 @@ class DashboardDoubtsRepository(
 
     suspend fun resolveDoubt(doubt: DoubtsModel) =
         safeApiCall {
-            Clients.onlineV2JsonApi.resolveDoubt(doubt.dbtUid,
+            CBOnlineLib.onlineV2JsonApi.resolveDoubt(doubt.dbtUid,
                 Doubts(
                     id = doubt.dbtUid,
                     title = doubt.title,
@@ -83,7 +83,7 @@ class DashboardDoubtsRepository(
     fun getDoubtById(id: String) = doubtsDao.getDoubtById(id)
     fun getCommentsById(id: String) = commentsDao.getComments(id)
     fun getRuns() = runDao.getActiveRuns(System.currentTimeMillis() / 1000).distinctUntilChanged()
-    suspend fun createComment(comment: Comment) = safeApiCall { Clients.onlineV2JsonApi.createComment(comment) }
+    suspend fun createComment(comment: Comment) = safeApiCall { CBOnlineLib.onlineV2JsonApi.createComment(comment) }
     suspend fun insertComment(it: Comment) {
         commentsDao.insert(CommentModel(
             it.id,

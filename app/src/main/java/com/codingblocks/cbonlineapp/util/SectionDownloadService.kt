@@ -13,7 +13,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder.DownloadableContent
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.offline.DownloadOptions
@@ -76,7 +76,7 @@ class SectionDownloadService(val context: Context, private val workerParameters:
     private suspend fun startDownload(list: List<DownloadableContent>) {
         list.forEach { content ->
             val response: Response<JsonObject> = withContext(Dispatchers.IO) {
-                Clients.api.getOtp(content.videoId, content.sectionId, attemptId ?: "", true)
+                CBOnlineLib.api.getOtp(content.videoId, content.sectionId, attemptId ?: "", true)
             }
             if (response.isSuccessful) {
                 response.body()?.let {

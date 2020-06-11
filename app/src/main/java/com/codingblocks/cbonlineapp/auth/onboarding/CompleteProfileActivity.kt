@@ -11,7 +11,7 @@ import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.KeyboardVisibilityUtil
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.safeApiCall
 import com.google.android.material.snackbar.Snackbar
@@ -98,7 +98,7 @@ class CompleteProfileActivity : BaseCBActivity() {
             proceedBtn.isEnabled = false
 
             GlobalScope.launch {
-                when (val response = safeApiCall { Clients.api.updateUser(id.toString(), map) }) {
+                when (val response = safeApiCall { CBOnlineLib.api.updateUser(id.toString(), map) }) {
                     is ResultWrapper.GenericError -> {
                         runOnUiThread {
                             proceedBtn.isEnabled = true

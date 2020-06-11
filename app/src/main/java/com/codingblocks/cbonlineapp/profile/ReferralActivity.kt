@@ -9,7 +9,7 @@ import android.view.View
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.safeApiCall
 import kotlinx.android.synthetic.main.activity_referral.*
@@ -37,7 +37,7 @@ class ReferralActivity : BaseCBActivity() {
         }
 
         GlobalScope.launch {
-            when (val response = safeApiCall { Clients.api.myReferral() }) {
+            when (val response = safeApiCall { CBOnlineLib.api.myReferral() }) {
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
                         runOnUiThread {

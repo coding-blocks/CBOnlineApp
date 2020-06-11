@@ -3,7 +3,7 @@ package com.codingblocks.cbonlineapp.course.checkout
 import androidx.lifecycle.MutableLiveData
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.safeApiCall
@@ -26,7 +26,7 @@ class CheckoutViewModel : BaseCBViewModel() {
 
     fun getCart() {
         runIO {
-            when (val response = safeApiCall { Clients.api.getCart() }) {
+            when (val response = safeApiCall { CBOnlineLib.api.getCart() }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
@@ -42,7 +42,7 @@ class CheckoutViewModel : BaseCBViewModel() {
 
     fun clearCart() {
         runIO {
-            when (val response = safeApiCall { Clients.api.clearCart() }) {
+            when (val response = safeApiCall { CBOnlineLib.api.clearCart() }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
@@ -58,7 +58,7 @@ class CheckoutViewModel : BaseCBViewModel() {
 
     fun updateCart() {
         runIO {
-            when (val response = safeApiCall { Clients.api.updateCart(map) }) {
+            when (val response = safeApiCall { CBOnlineLib.api.updateCart(map) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
@@ -82,7 +82,7 @@ class CheckoutViewModel : BaseCBViewModel() {
 
     fun capturePayment(function: (status: Boolean) -> Unit) {
         runIO {
-            when (val response = safeApiCall { Clients.api.capturePayment(paymentMap) }) {
+            when (val response = safeApiCall { CBOnlineLib.api.capturePayment(paymentMap) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {

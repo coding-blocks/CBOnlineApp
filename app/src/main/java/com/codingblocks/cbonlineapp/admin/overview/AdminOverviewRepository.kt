@@ -1,6 +1,6 @@
 package com.codingblocks.cbonlineapp.admin.overview
 
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.models.DoubtLeaderBoard
 import com.codingblocks.onlineapi.models.DoubtStats
@@ -11,10 +11,10 @@ import retrofit2.Response
 class AdminOverviewRepository {
 
     suspend fun getDoubtStats(userId: String): ResultWrapper<Response<DoubtStats>> {
-        return safeApiCall { Clients.api.doubtStats(userId) }
+        return safeApiCall { CBOnlineLib.api.doubtStats(userId) }
     }
 
     suspend fun getLeaderBoard(offSet: Int): ResultWrapper<Response<JSONAPIDocument<List<DoubtLeaderBoard>>>> {
-        return safeApiCall { Clients.onlineV2JsonApi.getLeaderBoard(offset = offSet) }
+        return safeApiCall { CBOnlineLib.onlineV2JsonApi.getLeaderBoard(offset = offSet) }
     }
 }

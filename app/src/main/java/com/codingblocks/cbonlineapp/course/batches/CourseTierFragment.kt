@@ -15,13 +15,13 @@ import com.codingblocks.cbonlineapp.course.CourseViewModel
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.extensions.getDateForRun
 import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.codingblocks.onlineapi.Clients.gson
 import com.codingblocks.onlineapi.models.Comparision
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 import kotlinx.android.synthetic.main.bottom_sheet_comparsion.view.*
@@ -82,7 +82,7 @@ class CourseTierFragment : BottomSheetDialogFragment() {
         val sheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_comparsion, null)
         val json = FileUtils.loadJsonObjectFromAsset(requireContext(), "comparision.json") as JSONArray?
         val listType: Type = object : TypeToken<List<Comparision>>() {}.type
-        val list: List<Comparision> = gson.fromJson(json.toString(), listType)
+        val list: List<Comparision> = Gson().fromJson(json.toString(), listType)
         val sheetAdapter = BatchComparisonAdapter(list)
         sheetDialog.compareBatchRv.adapter = sheetAdapter
         comparisionDialog.dismissWithAnimation = true

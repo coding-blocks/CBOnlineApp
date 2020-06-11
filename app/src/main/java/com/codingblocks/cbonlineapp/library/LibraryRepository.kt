@@ -6,7 +6,7 @@ import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.LibraryDao
 import com.codingblocks.cbonlineapp.database.NotesDao
 import com.codingblocks.cbonlineapp.database.models.NotesModel
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.safeApiCall
 
@@ -17,7 +17,7 @@ class LibraryRepository(
     private val bookmarkDao: BookmarkDao
 ) {
 
-    suspend fun fetchCourseNotes(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.getNotesByAttemptId(attemptId) }
+    suspend fun fetchCourseNotes(attemptId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getNotesByAttemptId(attemptId) }
 
     suspend fun insertNotes(notes: List<Note>) {
         notes.forEach {
@@ -38,13 +38,13 @@ class LibraryRepository(
 
     fun getBookmarks(attemptId: String) = libraryDao.getBookmarks(attemptId).distinctUntilChanged()
 
-    suspend fun fetchCourseBookmark(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.getBookmarksByAttemptId(id = attemptId) }
+    suspend fun fetchCourseBookmark(attemptId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getBookmarksByAttemptId(id = attemptId) }
 
     fun getDownloads(attemptId: String) = libraryDao.getDownloads(attemptId)
 
-    suspend fun deleteNote(noteId: String) = safeApiCall { Clients.onlineV2JsonApi.deleteNoteById(noteId) }
+    suspend fun deleteNote(noteId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.deleteNoteById(noteId) }
 
-    suspend fun removeBookmark(bookmarkUid: String) = safeApiCall { Clients.onlineV2JsonApi.deleteBookmark(bookmarkUid) }
+    suspend fun removeBookmark(bookmarkUid: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.deleteBookmark(bookmarkUid) }
 
     fun deleteBookmark(id: String) = bookmarkDao.deleteBookmark(id)
 
