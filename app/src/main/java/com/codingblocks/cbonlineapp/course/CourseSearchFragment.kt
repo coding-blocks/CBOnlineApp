@@ -72,10 +72,6 @@ class CourseSearchFragment : BottomSheetDialogFragment() {
                     ViewCompat.getTransitionName(logo)!!)
                 startActivity(intent, options.toBundle())
             }
-
-            override fun onWishListClickListener(course: Course, position: Int) {
-                TODO("Not yet implemented")
-            }
         }
     }
 

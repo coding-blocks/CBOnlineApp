@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.database.models.WishlistModel
 import com.codingblocks.cbonlineapp.util.extensions.*
+import com.codingblocks.onlineapi.models.Wishlist
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.item_course_card.view.*
 import kotlinx.android.synthetic.main.item_course_card_secondary.view.chip
@@ -21,13 +21,13 @@ import kotlinx.android.synthetic.main.item_course_card_secondary.view.course_car
 import kotlinx.android.synthetic.main.item_course_card_secondary.view.course_card_share
 import kotlinx.android.synthetic.main.item_course_card_secondary.view.ratingTv
 
-class WishListAdapter(val type: String = "") : ListAdapter<WishlistModel, WishListItemViewHolder>(
-    object : DiffUtil.ItemCallback<WishlistModel>() {
-        override fun areItemsTheSame(oldItem: WishlistModel, newItem: WishlistModel): Boolean {
-            return oldItem.wishlistId == newItem.wishlistId
+class WishListAdapter(val type: String = "") : ListAdapter<Wishlist, WishListItemViewHolder>(
+    object : DiffUtil.ItemCallback<Wishlist>() {
+        override fun areItemsTheSame(oldItem: Wishlist, newItem: Wishlist): Boolean {
+            return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: WishlistModel, newItem: WishlistModel): Boolean {
+        override fun areContentsTheSame(oldItem: Wishlist, newItem: Wishlist): Boolean {
             return oldItem.sameAndEqual(newItem)
         }
     }) {
@@ -53,8 +53,8 @@ class WishListAdapter(val type: String = "") : ListAdapter<WishlistModel, WishLi
 class WishListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var itemClickListener: WishListItemClickListener? = null
 
-    fun bind(item: WishlistModel, type: Int) = with(itemView) {
-        with(item.course){
+    fun bind(item: Wishlist, type: Int) = with(itemView) {
+        with(item.course!!){
             courseLogo.loadImage(logo)
             ViewCompat.setTransitionName(courseLogo, title)
             val ratingText = getSpannableSring("${rating}/5.0", ", ${reviewCount} ratings")
@@ -62,7 +62,7 @@ class WishListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
             courseCardTitleTv.text = title
             setOnClickListener {
                 itemClickListener?.onClick(
-                    cid, logo, courseLogo
+                    id, logo, courseLogo
                 )
             }
 

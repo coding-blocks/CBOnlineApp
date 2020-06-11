@@ -45,6 +45,8 @@ class DashboardViewModel(
     var isLoggedIn: Boolean? by savedStateValue(handle, LOGGED_IN)
     var suggestedCourses = MutableLiveData<List<Course>>()
     var trendingCourses = MutableLiveData<List<Course>>()
+    var wishlist = MutableLiveData<List<Wishlist>>()
+    var snackbar = MutableLiveData<String>()
 
 
     init {
@@ -146,14 +148,20 @@ class DashboardViewModel(
     }
 
     fun checkIfWishlisted(course: List<Course>?, offset: Int){
-        if (course.isNullOrEmpty())
-            return
         runIO {
-            course.forEach { singleCousrse->
-                val repoCourse = homeRepo.getWishlistsByCourse(singleCousrse.id)
-                if (repoCourse!=null){
-                    singleCousrse.isWishlist = true
-                    singleCousrse.userWishlistId = repoCourse.wishlistId
+            course?.forEach { courseSingle->
+                when (val response = homeRepo.checkIfWishlisted(courseSingle.id ?:"")) {
+                    is ResultWrapper.GenericError -> setError(response.error)
+                    is ResultWrapper.Success -> with(response.value) {
+                        if (isSuccessful) {
+                            if (response.value.body()?.id!=null){
+                                courseSingle.isWishlist = true
+                                courseSingle.userWishlistId = response.value.body()?.id
+                            }
+                        } else {
+                            setError(fetchError(code()))
+                        }
+                    }
                 }
             }
             if (offset == 0)
@@ -325,7 +333,6 @@ class DashboardViewModel(
 
     fun getPerformance(attemptId: String) = homeRepo.getRunStats(attemptId)
 
-    var wishlist = homeRepo.getWishlistThree()
     fun fetchWishList(){
         runIO {
             when (val response = homeRepo.fetchWishlist()) {
@@ -334,7 +341,7 @@ class DashboardViewModel(
                 }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        homeRepo.saveWishlist(response.value.body())
+                        wishlist.postValue(response.value.body())
                     } else {
                         setError(fetchError(response.value.code()))
                     }
@@ -343,7 +350,7 @@ class DashboardViewModel(
         }
     }
 
-    fun addToWishlist(course: Course, offset: Int, position: Int){
+    fun addToWishlist(course: Course){
         val wishlist = Wishlist(course, User(prefs.SP_USER_ID))
         runIO {
             when (val response = homeRepo.addToWishlist(wishlist)) {
@@ -352,8 +359,8 @@ class DashboardViewModel(
                 }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        wishlist.id = response.value.body()!!.id
-                        homeRepo.addWishlist(wishlist)
+                        updateList(course, response.value.body()?.id?:"", true)
+                        snackbar.postValue("${course.title} added to Wishlist")
                     } else {
                         setError(fetchError(response.value.code()))
                     }
@@ -368,12 +375,32 @@ class DashboardViewModel(
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        homeRepo.removeFromWishlist(course)
+                        updateList(course, response.value.body()?.id?:"", false)
+                        snackbar.postValue("${course.title} removed from Wishlist")
                     } else {
                         setError(fetchError(response.value.code()))
                     }
                 }
             }
         }
+    }
+
+    fun updateList(course: Course, wishlistId : String, added: Boolean){
+        val trending = trendingCourses.value
+        val suggested = suggestedCourses.value
+        trending?.forEach {singleCourse->
+            if (singleCourse.id == course.id){
+                singleCourse.isWishlist = added
+                singleCourse.userWishlistId = wishlistId
+            }
+        }
+        suggested?.forEach {singleCourse->
+            if (singleCourse.id == course.id){
+                singleCourse.isWishlist = added
+                singleCourse.userWishlistId = wishlistId
+            }
+        }
+        trendingCourses.postValue(trending)
+        suggestedCourses.postValue(suggested)
     }
 }

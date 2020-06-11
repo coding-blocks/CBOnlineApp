@@ -102,17 +102,6 @@ class DashboardHomeFragment : BaseCBFragment() {
             intent.putExtra(LOGGED_IN, vm.isLoggedIn)
             startActivity(intent)
         }
-        if (vm.isLoggedIn == true){
-            vm.fetchWishList()
-        }
-
-        vm.wishlist.observer(viewLifecycleOwner){wishlist->
-            vm.fetchRecommendedCourses(0,4)
-            vm.fetchRecommendedCourses(4,4)
-            noWishListLayout.isVisible = !wishlist.isNotEmpty()
-            wishlistHolder.isVisible = wishlist.isNotEmpty()
-            wishlistAdapter.submitList(wishlist)
-        }
     }
 
     override fun onDestroyView() {
@@ -160,6 +149,13 @@ class DashboardHomeFragment : BaseCBFragment() {
             vm.fetchRecentlyPlayed().observer(thisLifecycleOwner) {
                 recentlyPlayedContainer.isVisible = it.isNotEmpty()
                 recentlyPlayedAdapter.submitList(it)
+            }
+
+            vm.fetchWishList()
+            vm.wishlist.observer(viewLifecycleOwner){wishlist->
+                noWishListLayout.isVisible = !wishlist.isNotEmpty()
+                wishlistHolder.isVisible = wishlist.isNotEmpty()
+                wishlistAdapter.submitList(wishlist)
             }
 
         } else {

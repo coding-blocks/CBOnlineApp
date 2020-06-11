@@ -63,10 +63,6 @@ class TrackActivity : BaseCBActivity(), AppBarLayout.OnOffsetChangedListener {
                     )
                 startActivity(intent, options.toBundle())
             }
-
-            override fun onWishListClickListener(course: Course, position: Int) {
-                TODO("Not yet implemented")
-            }
         }
     }
 

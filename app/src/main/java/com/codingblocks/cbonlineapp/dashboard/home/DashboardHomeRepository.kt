@@ -3,10 +3,8 @@ package com.codingblocks.cbonlineapp.dashboard.home
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.PlayerDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
-import com.codingblocks.cbonlineapp.database.WishlistDao
 import com.codingblocks.cbonlineapp.database.models.CourseModel
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
-import com.codingblocks.cbonlineapp.database.models.WishlistModel
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.onlineapi.Clients
@@ -21,8 +19,7 @@ class DashboardHomeRepository(
     private val courseWithInstructorDao: CourseWithInstructorDao,
     private val runPerformanceDao: RunPerformanceDao,
     val prefs: PreferenceHelper,
-    val playerDao: PlayerDao,
-    val wishlistDao: WishlistDao
+    val playerDao: PlayerDao
 ) {
     fun insertUser(user: User) {
         with(user) {
@@ -50,70 +47,6 @@ class DashboardHomeRepository(
         )
     }
 
-    suspend fun saveWishlist(wishlist: List<Wishlist>?){
-        wishlistDao.deleteAll()
-        val models: ArrayList<WishlistModel> = ArrayList()
-        wishlist!!.forEach {model->
-            models.add(WishlistModel(
-                model.id,
-                with(model.course!!){
-                    CourseModel(
-                        id,
-                        title,
-                        subtitle,
-                        logo,
-                        summary,
-                        promoVideo ?: "",
-                        difficulty,
-                        reviewCount,
-                        rating,
-                        slug,
-                        coverImage ?: "",
-                        categoryId ?: -1
-                    )
-                }
-
-                , model.user
-            ))
-        }
-        wishlistDao.insertAll(models)
-    }
-
-    suspend fun addWishlist(wishList: Wishlist) {
-        val model = WishlistModel(
-            wishList.id,
-            with(wishList.course!!){
-                CourseModel(
-                    id,
-                    title,
-                    subtitle,
-                    logo,
-                    summary,
-                    promoVideo?:"",
-                    difficulty,
-                    reviewCount,
-                    rating,
-                    slug,
-                    coverImage?:"",
-                    categoryId?:-1
-                )
-            }
-            , wishList.user
-        )
-        if (wishlistDao.getWishlistsByCourse(wishList.course!!.id)!=null){
-            wishlistDao.update(model)
-        }else{
-            wishlistDao.insertNew(model)
-        }
-    }
-
-    suspend fun getWishlistsByCourse(id: String) = wishlistDao.getWishlistsByCourse(id)
-
-    suspend fun removeFromWishlist(course: Course){
-        wishlistDao.deleteCourseID(course.id)
-    }
-
-    fun getWishlistThree() = wishlistDao.getWishlistThree()
     fun getTopRun() = courseWithInstructorDao.getTopRun().getDistinct()
     fun getTopRunById(id: String) = courseWithInstructorDao.getRunById(id).getDistinct()
     fun getRunStats(it: String) = runPerformanceDao.getPerformance(it)
@@ -127,4 +60,5 @@ class DashboardHomeRepository(
     suspend fun fetchWishlist() = safeApiCall { Clients.onlineV2JsonApi.getWishlist() }
     suspend fun addToWishlist(wishList: Wishlist) = safeApiCall { Clients.onlineV2JsonApi.addToWishlist(wishList) }
     suspend fun removeFromWishlist(id: String) = safeApiCall { Clients.onlineV2JsonApi.removeFromWishlist(id) }
+    suspend fun checkIfWishlisted(s: String) = safeApiCall { Clients.onlineV2JsonApi.checkIfWishlisted(s) }
 }

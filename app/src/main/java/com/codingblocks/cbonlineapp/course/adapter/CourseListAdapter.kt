@@ -13,6 +13,7 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseViewH
     }
 
     var onItemClick: ItemClickListener? = null
+    var wishlistListener: WishlistListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
         return CourseViewHolder(
@@ -36,6 +37,7 @@ class CourseListAdapter(val type: String = "") : ListAdapter<Course, CourseViewH
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
         holder.bind(getItem(position),type)
         holder.itemClickListener = onItemClick
+        holder.wishlistListener = wishlistListener
     }
 }
 

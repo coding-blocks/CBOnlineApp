@@ -74,7 +74,7 @@
             android:contentDescription="@string/like"
             android:focusable="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/like_state" />
+            android:src="@drawable/ic_like" />
 
         <TextView
             android:ellipsize="end"

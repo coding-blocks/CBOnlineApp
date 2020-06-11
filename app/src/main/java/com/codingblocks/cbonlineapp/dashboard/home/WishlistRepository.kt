@@ -1,9 +1,8 @@
 package com.codingblocks.cbonlineapp.dashboard.home
 
-import com.codingblocks.cbonlineapp.database.WishlistDao
+import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.safeApiCall
 
-class WishlistRepository(
-    val wishlistDao: WishlistDao
-) {
-    fun fetchWishlist() = wishlistDao.getAllWishlists()
+class WishlistRepository() {
+    suspend fun fetchWishlist()  = safeApiCall { Clients.onlineV2JsonApi.getWishlist("course.*","course","100") }
 }

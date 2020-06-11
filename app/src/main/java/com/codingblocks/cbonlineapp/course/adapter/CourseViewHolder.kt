@@ -28,6 +28,7 @@ import org.jetbrains.anko.share
 
 class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var itemClickListener: ItemClickListener? = null
+    var wishlistListener: WishlistListener? = null
 
     fun bind(item: Course, type: String) = with(itemView) {
         courseLogo.loadImage(item.logo)
@@ -41,9 +42,8 @@ class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             )
         }
         if (type != "LIST" && type != "TRACKS") {
-            course_card_like.isActivated = item.isWishlist!!
             course_card_like.setOnClickListener {
-                itemClickListener?.onWishListClickListener(
+                wishlistListener?.onWishListClickListener(
                     item,
                     adapterPosition
                 )

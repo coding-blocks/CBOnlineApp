@@ -5,5 +5,4 @@ import com.codingblocks.onlineapi.models.Course
 
 interface ItemClickListener {
     fun onClick(id: String, name: String, logo: ImageView)
-    fun onWishListClickListener(course: Course, position: Int)
 }

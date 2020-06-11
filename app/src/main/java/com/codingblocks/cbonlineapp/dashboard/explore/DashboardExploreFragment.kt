@@ -18,6 +18,7 @@ import com.codingblocks.cbonlineapp.course.CourseActivity
 import com.codingblocks.cbonlineapp.course.adapter.CourseListAdapter
 import com.codingblocks.cbonlineapp.course.adapter.ItemClickListener
 import com.codingblocks.cbonlineapp.course.SearchCourseActivity
+import com.codingblocks.cbonlineapp.course.adapter.WishlistListener
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.dashboard.LOGGED_IN
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
@@ -27,9 +28,13 @@ import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
+import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.models.Course
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_course.courseSuggestedRv
+import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard_explore.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -61,18 +66,24 @@ class DashboardExploreFragment : BaseCBFragment() {
                     ViewCompat.getTransitionName(logo)!!)
                 startActivity(intent, options.toBundle())
             }
+        }
+    }
 
-            override fun onWishListClickListener(course: Course,position: Int) {
+    private val wishlistListener: WishlistListener by lazy {
+        object : WishlistListener{
+            override fun onWishListClickListener(course: Course, position: Int) {
                 if (vm.isLoggedIn == true){
                     if (!course.isWishlist!!){
-                        vm.addToWishlist(course, if (courseCardListAdapter.currentList[position] == course) 0 else 4,position)
+                        vm.addToWishlist(course)
                     }else{
                         vm.removeFromWishlist(course)
                     }
                 }
             }
+
         }
     }
+
     private val trackItemClickList: ItemClickListener by lazy {
         object : ItemClickListener {
             override fun onClick(id: String, name: String, logo: ImageView) {
@@ -86,10 +97,6 @@ class DashboardExploreFragment : BaseCBFragment() {
                     logo,
                     ViewCompat.getTransitionName(logo)!!)
                 startActivity(intent, options.toBundle())
-            }
-
-            override fun onWishListClickListener(course: Course,position: Int) {
-
             }
         }
     }
@@ -131,9 +138,14 @@ class DashboardExploreFragment : BaseCBFragment() {
                 dashboardTracksRv.isVisible = true
             }
         }
+        vm.snackbar.observer(thisLifecycleOwner){
+            swipeToRefresh.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav, false)
+        }
 
         courseCardListAdapter.onItemClick = itemClickListener
         coursePopularListAdapter.onItemClick = itemClickListener
+        courseCardListAdapter.wishlistListener = wishlistListener
+        coursePopularListAdapter.wishlistListener = wishlistListener
         tracksListAdapter.onItemClick = trackItemClickList
 
         allCourseCardTv.setOnClickListener {

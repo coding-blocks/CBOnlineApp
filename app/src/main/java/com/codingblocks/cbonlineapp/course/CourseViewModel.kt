@@ -34,6 +34,7 @@ class CourseViewModel(
     val projects = MutableLiveData<List<Project>>()
     val sections = MutableLiveData<List<Sections>>()
     val wishlistUpdated = MutableLiveData<Boolean>()
+    val snackbar = MutableLiveData<String>()
     private val allCourse = arrayListOf<Course>()
 
     var image: MutableLiveData<String> = MutableLiveData()
@@ -288,6 +289,7 @@ class CourseViewModel(
                 }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
+                        snackbar.postValue("${courseSingle.title} added to Wishlist")
                         courseSingle.userWishlistId = response.value.body()?.id
                         courseSingle.isWishlist = true
                         wishlistUpdated.postValue(true)
@@ -307,7 +309,7 @@ class CourseViewModel(
                 }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        repo.removeFromWishlist(courseSingle)
+                        snackbar.postValue("${courseSingle.title} removed from Wishlist")
                         wishlistUpdated.postValue(true)
                     } else {
                         setError(fetchError(response.value.code()))

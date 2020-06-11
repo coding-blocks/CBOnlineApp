@@ -54,7 +54,8 @@ class WishlistActivity : AppCompatActivity()  {
         isLoggedIn = intent.getBooleanExtra(LOGGED_IN, false)
         wishlistRv.setRv(this, wishlistAdapter, orientation = RecyclerView.VERTICAL, space = 28f)
         wishlistAdapter.onItemClick = itemClickListener
-        wishlistViewModel.wishlist().observer(this){wishlist->
+        wishlistViewModel.fetchWishList()
+        wishlistViewModel.wishlist.observer(this){wishlist->
             wishlistShimmerLayout.stopShimmer()
             wishlistShimmerLayout.isVisible = wishlist.isNullOrEmpty()
             noWishListLayout.isVisible = wishlist.isNullOrEmpty()

@@ -26,6 +26,7 @@ import com.codingblocks.cbonlineapp.baseclasses.STATE
 import com.codingblocks.cbonlineapp.commons.InstructorListAdapter
 import com.codingblocks.cbonlineapp.course.adapter.CourseListAdapter
 import com.codingblocks.cbonlineapp.course.adapter.ItemClickListener
+import com.codingblocks.cbonlineapp.course.adapter.WishlistListener
 import com.codingblocks.cbonlineapp.course.batches.CourseTierFragment
 import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
@@ -56,6 +57,7 @@ import io.noties.markwon.ext.tables.TablePlugin
 import io.noties.markwon.ext.tables.TableTheme
 import kotlinx.android.synthetic.main.activity_course.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
@@ -114,7 +116,11 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                     )
                 startActivity(intent, options.toBundle())
             }
+        }
+    }
 
+    private val wishlistListener: WishlistListener by lazy {
+        object : WishlistListener{
             override fun onWishListClickListener(course: Course, position: Int) {
                 if (isLoggedIn){
                     if (!course.isWishlist!!){
@@ -124,6 +130,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                     }
                 }
             }
+
         }
     }
 
@@ -223,6 +230,10 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             }
         }
 
+        viewModel.snackbar.observer(this){
+            courseActivity.snackbar(it)
+        }
+
         viewModel.errorLiveData.observer(this) {
             when (it) {
                 ErrorStatus.NO_CONNECTION -> {
@@ -248,6 +259,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         appbar.addOnOffsetChangedListener(this)
 
         courseCardListAdapter.onItemClick = itemClickListener
+        courseCardListAdapter.wishlistListener = wishlistListener
 
         viewModel.addedToCartProgress.observer(this) {
             when (it!!) {

@@ -1,17 +1,11 @@
 package com.codingblocks.cbonlineapp.course
 
-import com.codingblocks.cbonlineapp.database.WishlistDao
-import com.codingblocks.cbonlineapp.database.models.CourseModel
-import com.codingblocks.cbonlineapp.database.models.WishlistModel
 import com.codingblocks.onlineapi.Clients
-import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Wishlist
 import com.codingblocks.onlineapi.safeApiCall
 import org.jetbrains.anko.AnkoLogger
 
-class CourseRepository(
-    val wishlistDao: WishlistDao
-) : AnkoLogger {
+class CourseRepository() : AnkoLogger {
 
     suspend fun getRating(id: String) = Clients.api.getCourseRating(id)
 
@@ -40,36 +34,4 @@ class CourseRepository(
     suspend fun removeFromWishlist(id: String) = safeApiCall { Clients.onlineV2JsonApi.removeFromWishlist(id) }
 
     suspend fun addToWishlist(wishList: Wishlist) = safeApiCall { Clients.onlineV2JsonApi.addToWishlist(wishList) }
-
-    suspend fun addWishlist(wishList: Wishlist) {
-        val model = WishlistModel(
-            wishList.id,
-            with(wishList.course!!){
-                CourseModel(
-                    id,
-                    title,
-                    subtitle,
-                    logo,
-                    summary,
-                    promoVideo?:"",
-                    difficulty,
-                    reviewCount,
-                    rating,
-                    slug,
-                    coverImage?:"",
-                    categoryId?:-1
-                )
-            }
-            , wishList.user
-        )
-        if (wishlistDao.getWishlistsByCourse(wishList.course!!.id)!=null){
-            wishlistDao.update(model)
-        }else{
-            wishlistDao.insertNew(model)
-        }
-    }
-
-    suspend fun removeFromWishlist(course: Course){
-        wishlistDao.deleteCourseID(course.id)
-    }
 }

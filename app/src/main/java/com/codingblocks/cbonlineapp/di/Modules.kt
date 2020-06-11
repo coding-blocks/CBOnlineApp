@@ -72,11 +72,11 @@ val viewModelModule = module {
 
     single { AdminDoubtRepository() }
     single { AdminOverviewRepository() }
-    single { CourseRepository(get()) }
+    single { CourseRepository() }
     single { DashboardDoubtsRepository(get(), get(), get(), get()) }
     single { DashboardMyCoursesRepository(get(), get(), get(), get(), get()) }
     single { LibraryRepository(get(), get(), get(), get()) }
-    single { DashboardHomeRepository(get(), get(), get(), get(), get()) }
+    single { DashboardHomeRepository(get(), get(), get(), get()) }
     single { VideoPlayerRepository(get(), get(), get(), get(), get()) }
     single { QuizRepository(get()) }
     single { JobRepository(get()) }
@@ -85,7 +85,7 @@ val viewModelModule = module {
     single { ProfileRepository(get()) }
     single { CodeChallengeRepository(get()) }
     single { AuthRepository(get()) }
-    single { WishlistRepository(get()) }
+    single { WishlistRepository() }
     single { CampaignRepository(get()) }
 }
 val preferencesModule = module {
@@ -205,9 +205,5 @@ val databaseModule = module {
     factory {
         val database: AppDatabase = get()
         database.hbRankDao()
-    }
-    factory {
-        val database: AppDatabase = get()
-        database.wishlistDao()
     }
 }
