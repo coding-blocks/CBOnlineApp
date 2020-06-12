@@ -193,6 +193,7 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
         }
         notificationManager.notify(1, notification.build())
         if (downloadList.filterValues { !it.isDownloaded }.isEmpty()) {
+            //Todo - Make a separate notification
             stopForeground(true)
             stopSelf()
         }

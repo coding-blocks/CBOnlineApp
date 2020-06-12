@@ -1,5 +1,7 @@
 package com.codingblocks.cbonlineapp.mycourse.content
 
+import android.app.ActivityManager
+import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -56,6 +58,7 @@ import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.support.v4.intentFor
+import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.concurrent.TimeUnit
 
@@ -277,7 +280,11 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
     }
 
     override fun startSectionDownlod(sectionId: String) {
-        SectionService.startService(requireContext(), sectionId, viewModel.attemptId!!)
+        if (isMyServiceRunning(SectionService::class.java)) {
+            toast("One Section download is in progress")
+        } else {
+            SectionService.startService(requireContext(), sectionId, viewModel.attemptId!!)
+        }
 
 //        val constraints = if (getPrefs(requireContext()).SP_WIFI)
 //            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
@@ -435,5 +442,15 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                 }
             }
         }
+    }
+
+    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
     }
 }
