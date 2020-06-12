@@ -12,7 +12,7 @@ import androidx.lifecycle.observe
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_checkout_order_details.*
 import org.jetbrains.anko.AnkoLogger
@@ -65,7 +65,7 @@ class CheckoutOrderDetailsFragment : BaseCBFragment(), AnkoLogger {
                     }
                     vm.map["invoice_id"] = get("invoice_id").asString
                     subTotalTv.text = "${getString(R.string.rupee_sign)} $price"
-                    totalTv.text = "${getString(R.string.rupee_sign)} ${price!! - credits!!}"
+                    totalTv.text = "${getString(R.string.rupee_sign)} ${price!! - credits}"
                     taxesTv.text = "${getString(R.string.rupee_sign)} ${get("tax")?.asDouble?.div(100)}"
                     orderBtn.setOnClickListener {
                         replaceFragmentSafely(

@@ -1,9 +1,11 @@
-package com.codingblocks.cbonlineapp.util
+package com.codingblocks.cbonlineapp.workers
 
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.database.ContentDao
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.models.ContentProgress
 import com.codingblocks.onlineapi.models.LectureContent

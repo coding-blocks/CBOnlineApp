@@ -39,6 +39,7 @@ class InstructorListAdapter : ListAdapter<Instructor, InstructorListAdapter.Item
             markWon.setMarkdown(instructorDescTv, markdown)
 //            instructorTextView.text = "${instructor.sub}, Coding Blocks"
             instructorEmailTv.text = instructor.email
+
             Picasso.get().load(instructor.photo).placeholder(R.drawable.defaultavatar).fit().into(instructorImg)
             setOnClickListener {
                 itemView.context.email(instructor.email.toString())

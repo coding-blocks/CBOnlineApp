@@ -21,8 +21,8 @@ import com.codingblocks.cbonlineapp.dashboard.home.loadData
 import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
-import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.CustomDialog
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import java.io.File
 import java.lang.Math.abs
@@ -138,7 +138,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         })
 
         confirmReset.setOnClickListener {
-            Components.showConfirmation(requireContext(), "reset") {
+            CustomDialog.showConfirmation(requireContext(), "reset") {
                 if (it) {
                     viewModel.resetProgress.observer(thisLifecycleOwner) {
                         requireActivity().finish()

@@ -7,6 +7,7 @@ import android.widget.SeekBar
 import androidx.lifecycle.lifecycleScope
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
+import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.extensions.folderSize
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
@@ -62,7 +63,7 @@ class SettingsActivity : BaseCBActivity() {
                                 val folderFile = File(file, "/${content.contentLecture.lectureId}")
 
                                 withContext(Dispatchers.IO) {
-                                    MediaUtils.deleteRecursive(folderFile)
+                                    FileUtils.deleteRecursive(folderFile)
                                 }
                                 runOnUiThread { updateSpaceStats() }
                             }

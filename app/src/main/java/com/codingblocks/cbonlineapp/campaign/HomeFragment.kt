@@ -6,13 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AlertDialog
-import com.bumptech.glide.Glide
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.util.GlideApp
 import com.codingblocks.cbonlineapp.util.ShareUtils
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.glide.GlideApp
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.dialog_result.view.*
 import kotlinx.android.synthetic.main.dialog_share.view.fb
 import kotlinx.android.synthetic.main.dialog_share.view.twitter

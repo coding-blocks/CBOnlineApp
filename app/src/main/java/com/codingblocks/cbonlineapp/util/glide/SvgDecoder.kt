@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.util
+package com.codingblocks.cbonlineapp.util.glide
 
 import com.bumptech.glide.load.Options
 import com.bumptech.glide.load.ResourceDecoder

@@ -1,19 +1,26 @@
-package com.codingblocks.cbonlineapp.util
+package com.codingblocks.cbonlineapp.workers
 
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Environment
-import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
+import androidx.work.CoroutineWorker
+import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.models.DownloadData
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
+import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
+import com.codingblocks.cbonlineapp.util.TITLE
+import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
@@ -28,57 +35,70 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.android.ext.android.inject
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import retrofit2.Response
 
-class DownloadService : Service(), VdoDownloadManager.EventListener {
+class DownloadWorker(context: Context, private val workerParameters: WorkerParameters) :
+    CoroutineWorker(context, workerParameters),
+    KoinComponent,
+    VdoDownloadManager.EventListener {
 
-    private val downloadList = mutableListOf<DownloadData>()
-    private var notificationId = 0
+    private val notificationManager: NotificationManager by lazy {
+        applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    }
 
     private val contentDao: ContentDao by inject()
 
-    private val notificationManager: NotificationManager by lazy {
-        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    }
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent != null) {
-            val downloadData = DownloadData(
-                intent.getStringExtra(SECTION_ID),
-                intent.getStringExtra(VIDEO_ID),
-                intent.getStringExtra(RUN_ATTEMPT_ID),
-                intent.getStringExtra(CONTENT_ID),
-                notificationId++,
-                NotificationCompat.Builder(this, DOWNLOAD_CHANNEL_ID).apply {
-                    setSmallIcon(R.drawable.ic_file_download)
-                    setContentTitle(intent.getStringExtra(TITLE))
-                    setOnlyAlertOnce(true)
-                    setLargeIcon(BitmapFactory.decodeResource(this@DownloadService.resources, R.mipmap.ic_launcher))
-                    setContentText("Waiting to Download")
-                    setProgress(100, 0, false)
-                    color = resources.getColor(R.color.colorPrimaryDark)
-                    setOngoing(true) // THIS is the important line
-                    setAutoCancel(false)
-                }
-            )
-            notificationManager.notify(downloadData.notificationId, downloadData.notificationBuilder.build())
-
-            GlobalScope.launch {
-                val response: Response<JsonObject> = withContext(Dispatchers.IO) { CBOnlineLib.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        downloadList.add(downloadData)
-                        val mOtp = it.get("otp").asString
-                        val mPlaybackInfo = it.get("playbackInfo").asString
-                        initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
-                    }
-                } else {
-                    notificationManager.cancel(downloadData.notificationId)
-                }
-            }
+    override suspend fun doWork(): Result {
+        val contentId = workerParameters.inputData.getString(CONTENT_ID) ?: ""
+        val attemptId = workerParameters.inputData.getString(RUN_ATTEMPT_ID) ?: ""
+        val videoId = workerParameters.inputData.getString(VIDEO_ID) ?: ""
+        val sectionId = workerParameters.inputData.getString(SECTION_ID) ?: ""
+        val title = workerParameters.inputData.getString(TITLE) ?: ""
+        if (downloadList.containsKey(videoId)) {
+            return Result.success()
         }
-        return START_STICKY
+        val downloadData = DownloadData(
+            sectionId,
+            videoId,
+            attemptId,
+            contentId,
+            notificationId++,
+            NotificationCompat.Builder(applicationContext, DOWNLOAD_CHANNEL_ID).apply {
+                setSmallIcon(R.drawable.ic_file_download)
+                setContentTitle(title)
+                setOnlyAlertOnce(true)
+                setLargeIcon(BitmapFactory.decodeResource(applicationContext.resources, R.mipmap.ic_launcher))
+                setContentText("Waiting to Download")
+                setProgress(100, 0, false)
+                color = ContextCompat.getColor(applicationContext,R.color.colorPrimaryDark)
+                setOngoing(false) // THIS is the important line
+                setAutoCancel(false)
+            }
+        )
+
+        notificationManager.notify(downloadData.notificationId, downloadData.notificationBuilder.build())
+        val response: Response<JsonObject>
+        response = withContext(Dispatchers.IO) { CBOnlineLib.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
+        if (response.isSuccessful) {
+            response.body()?.let {
+                downloadList[videoId] = (downloadData)
+                val mOtp = it.get("otp").asString
+                val mPlaybackInfo = it.get("playbackInfo").asString
+                initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
+            }
+            return Result.success()
+        } else {
+            for (data in downloadList) {
+                notificationManager.cancel(data.value.notificationId)
+            }
+            if (response.code() in (500..599)) {
+                // try again if there is a server error
+                return Result.retry()
+            }
+            return Result.failure()
+        }
     }
 
     private fun initializeDownload(mOtp: String, mPlaybackInfo: String, videoId: String) {
@@ -93,7 +113,7 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
                     val selectionIndices = intArrayOf(0, 1)
                     val downloadSelections = DownloadSelections(options, selectionIndices)
                     val file =
-                        this@DownloadService.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+                        applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
                     val folderFile = File(file, "/$videoId")
                     if (!folderFile.exists()) {
                         folderFile.mkdir()
@@ -104,7 +124,7 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
                     // enqueue request to VdoDownloadManager for download
                     try {
                         vdoDownloadManager.enqueue(request)
-                        vdoDownloadManager.addEventListener(this@DownloadService)
+                        vdoDownloadManager.addEventListener(this@DownloadWorker)
                     } catch (e: IllegalArgumentException) {
                     } catch (e: IllegalStateException) {
                     }
@@ -117,17 +137,6 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
             })
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
-    }
-
-    override fun onDestroy() {
-        for (data in downloadList) {
-            notificationManager.cancel(data.notificationId)
-        }
-        super.onDestroy()
-    }
-
     private fun sendNotification(data: DownloadData, downloadPercent: Int) {
         data.notificationBuilder.setProgress(100, downloadPercent, false)
         data.notificationBuilder.setContentText("Downloaded $downloadPercent %")
@@ -136,17 +145,10 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
 
     private fun findDataWithId(videoId: String): DownloadData? {
         for (data in downloadList) {
-            if (videoId == data.videoId)
-                return data
+            if (videoId == data.key)
+                return data.value
         }
         return null
-    }
-
-    override fun onTaskRemoved(rootIntent: Intent?) {
-        for (data in downloadList) {
-            notificationManager.cancel(data.notificationId)
-        }
-        super.onTaskRemoved(rootIntent)
     }
 
     // VdoDownloadManager Events
@@ -167,8 +169,25 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
             if (data != null) {
                 notificationManager.cancel(data.notificationId)
                 data.notificationBuilder.setOngoing(false)
-                data.notificationBuilder.setContentText("Download Failed")
+                data.notificationBuilder.setContentText("Download Failed.Retrying")
+                GlobalScope.launch(Dispatchers.IO) {
+                    contentDao.updateContent(data.contentId, 0)
+                }
+                retryDownload(data)
                 notificationManager.notify(data.notificationId, data.notificationBuilder.build())
+            }
+        }
+    }
+
+    private fun retryDownload(downloadData: DownloadData) {
+        GlobalScope.launch {
+            val response: Response<JsonObject> = withContext(Dispatchers.IO) { CBOnlineLib.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    val mOtp = it.get("otp").asString
+                    val mPlaybackInfo = it.get("playbackInfo").asString
+                    initializeDownload(mOtp, mPlaybackInfo, downloadData.videoId)
+                }
             }
         }
     }
@@ -180,18 +199,16 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
         if (videoId != null) {
             val data = findDataWithId(videoId)
             if (data != null) {
-                GlobalScope.launch {
+                GlobalScope.launch(Dispatchers.IO) {
                     contentDao.updateContent(data.contentId, 1)
                 }
-                val intent = Intent(this, VideoPlayerActivity::class.java)
-                intent.putExtra(VIDEO_ID, data.videoId)
-                intent.putExtra(RUN_ATTEMPT_ID, data.attemptId)
+                val intent = Intent(applicationContext, VideoPlayerActivity::class.java)
                 intent.putExtra(CONTENT_ID, data.contentId)
-                intent.putExtra(DOWNLOADED, true)
+                intent.putExtra(SECTION_ID, data.sectionId)
 
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 val pendingIntent = PendingIntent.getActivity(
-                    this, 0 /* Request code */, intent,
+                    applicationContext, 0 /* Request code */, intent,
                     PendingIntent.FLAG_ONE_SHOT
                 )
                 notificationManager.cancel(data.notificationId)
@@ -203,5 +220,11 @@ class DownloadService : Service(), VdoDownloadManager.EventListener {
                 notificationManager.notify(data.notificationId, data.notificationBuilder.build())
             }
         }
+    }
+
+    companion object {
+        @JvmStatic
+        var notificationId = 0
+        private val downloadList = hashMapOf<String, DownloadData>()
     }
 }

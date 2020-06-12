@@ -10,14 +10,14 @@ import android.os.Environment
 import android.widget.LinearLayout
 import android.widget.Toast
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
-import com.codingblocks.cbonlineapp.util.DownloadBroadcastReceiver
 import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.receivers.DownloadBroadcastReceiver
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import es.voghdev.pdfviewpager.library.PDFViewPager
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter
-import java.io.File
 import kotlinx.android.synthetic.main.activity_pdf.*
 import org.jetbrains.anko.AnkoLogger
+import java.io.File
 
 class PdfActivity : BaseCBActivity(), AnkoLogger {
     lateinit var pdfViewPager: PDFViewPager
@@ -31,9 +31,9 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pdf)
-
+        //TODO - remove this
         url = intent.getStringExtra("fileUrl")
-        fileName = intent.getStringExtra("fileName").replace(" ","_")
+        fileName = intent.getStringExtra("fileName").replace(" ", "_")
 
         if (url.isNullOrEmpty() || fileName.isNullOrEmpty()) {
             Toast.makeText(this, "Error fetching document", Toast.LENGTH_SHORT).show()

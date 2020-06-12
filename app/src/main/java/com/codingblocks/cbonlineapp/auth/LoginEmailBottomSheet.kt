@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.regex.Pattern
 import kotlinx.android.synthetic.main.bottom_sheet_login.*
@@ -48,6 +48,9 @@ class LoginEmailBottomSheet : BottomSheetDialogFragment() {
                 }
                 AccountStates.DO_NOT_EXIST -> {
                     dialog?.dismiss()
+                }
+                else -> {
+                    //Todo - handle this
                 }
             }
         }

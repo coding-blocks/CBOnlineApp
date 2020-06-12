@@ -93,11 +93,11 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         if (FileUtils.checkIfCannotDownload(itemView.context)) {
             FileUtils.showIfCleanDialog(itemView.context, object : OnCleanDialogListener {
                 override fun onComplete() {
-                    downloadFile(it)
+                    downloadFile()
                 }
             })
         } else {
-            downloadFile(it)
+            downloadFile()
         }
     }
 
@@ -111,13 +111,13 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                     "/${contentModel.contentLecture.lectureId}"
 
                 )
-                MediaUtils.deleteRecursive(folderFile)
+                FileUtils.deleteRecursive(folderFile)
             }
             noButton { it.dismiss() }
         }.show()
     }
 
-    private fun downloadFile(downloadBtn: ImageView) {
+    private fun downloadFile() {
         if (MediaUtils.checkPermission(itemView.context)) {
             starterListener?.startDownload(
                 contentModel.contentLecture.lectureId,
@@ -126,7 +126,6 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                 contentModel.attempt_id,
                 contentModel.sectionId
             )
-//            (downloadBtn.background as AnimationDrawable).start()
         }
     }
 }

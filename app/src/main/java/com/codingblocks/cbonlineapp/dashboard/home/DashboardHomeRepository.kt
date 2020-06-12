@@ -5,7 +5,7 @@ import com.codingblocks.cbonlineapp.database.PlayerDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
-import com.codingblocks.cbonlineapp.util.extensions.getDistinct
+import com.codingblocks.cbonlineapp.util.livedata.getDistinct
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.Player

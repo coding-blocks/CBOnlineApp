@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.util
+package com.codingblocks.cbonlineapp.util.receivers
 
 import android.app.DownloadManager
 import android.content.BroadcastReceiver

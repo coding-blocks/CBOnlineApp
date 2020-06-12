@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.util
+package com.codingblocks.cbonlineapp.util.glide
 
 import android.content.Context
 import android.graphics.drawable.PictureDrawable

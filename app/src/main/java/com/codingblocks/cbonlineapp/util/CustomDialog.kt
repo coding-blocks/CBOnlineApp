@@ -14,8 +14,8 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.singleTop
 
-object Components {
-    fun showConfirmation(context: Context, type: String, callback: (state: Boolean) -> Unit = { status: Boolean -> }) {
+object CustomDialog {
+    fun showConfirmation(context: Context, type: String, callback: (state: Boolean) -> Unit = { }) {
         val confirmDialog = AlertDialog.Builder(context).create()
         val updateView = context.layoutInflater.inflate(R.layout.custom_dialog, null)
         when (type) {

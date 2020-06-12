@@ -19,12 +19,12 @@ class CodeChallengeRepository(
     suspend fun fetchCodeChallenge(codeId: Int, contestId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getCodeChallenge(codeId, contestId) }
 
     suspend fun getOfflineContent(codeId: String): CodeChallenge? {
-        val model: CodeChallengeModel = codeDao.getCodeChallengeById(codeId)
+        val model: CodeChallengeModel? = codeDao.getCodeChallengeById(codeId)
 
-        val challenge = with(model) {
+        val challenge = with(model!!) {
             CodeChallenge(
-                title,
-                Problem(
+                name = title,
+                content = Problem(
                     difficulty,
                     title,
                     content?.image,

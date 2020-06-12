@@ -316,4 +316,5 @@
     <string name="winnings">Winnings</string>
     <string name="leaderboard">Leaderboard</string>
     <string name="rules">Rules</string>
+    <string name="logged_in">Logged in successfully !!</string>
 </resources>

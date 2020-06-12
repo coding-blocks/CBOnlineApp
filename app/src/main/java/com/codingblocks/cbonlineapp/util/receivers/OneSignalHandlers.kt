@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.util
+package com.codingblocks.cbonlineapp.util.receivers
 
 import cn.campusapp.router.Router
 import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
@@ -7,6 +7,8 @@ import com.codingblocks.cbonlineapp.dashboard.DoubtCommentActivity
 import com.codingblocks.cbonlineapp.database.DoubtsDao
 import com.codingblocks.cbonlineapp.database.NotificationDao
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
+import com.codingblocks.cbonlineapp.util.DOUBT_ID
+import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.otherwise
 import com.codingblocks.onlineapi.models.Doubts

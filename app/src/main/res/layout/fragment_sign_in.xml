@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingStart="@dimen/margin_large"
+    android:scrollbars="none"
     android:paddingEnd="@dimen/margin_large"
     tools:context="com.codingblocks.cbonlineapp.auth.SignInFragment">
 

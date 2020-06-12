@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.util
+package com.codingblocks.cbonlineapp.workers
 
 import android.app.NotificationManager
 import android.content.Context
@@ -13,6 +13,9 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder.DownloadableContent
+import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
+import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
+import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.google.gson.JsonObject
 import com.vdocipher.aegis.media.ErrorDescription
@@ -76,7 +79,7 @@ class SectionDownloadService(val context: Context, private val workerParameters:
     private suspend fun startDownload(list: List<DownloadableContent>) {
         list.forEach { content ->
             val response: Response<JsonObject> = withContext(Dispatchers.IO) {
-                CBOnlineLib.api.getOtp(content.videoId, content.sectionId, attemptId ?: "", true)
+                CBOnlineLib.api.getOtp(content.videoId, content.sectionId, attemptId, true)
             }
             if (response.isSuccessful) {
                 response.body()?.let {

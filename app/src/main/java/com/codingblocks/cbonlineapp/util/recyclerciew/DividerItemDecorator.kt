@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.util
+package com.codingblocks.cbonlineapp.util.recyclerciew
 
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable

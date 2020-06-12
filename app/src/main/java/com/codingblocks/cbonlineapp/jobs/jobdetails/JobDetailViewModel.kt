@@ -46,7 +46,7 @@ class JobDetailViewModel(
     fun fetchJob(jobId: String) {
         CBOnlineLib.onlineV2JsonApi.getJobById(
             jobId
-        ).enqueue(retrofitCallback { throwable, response ->
+        ).enqueue(retrofitCallback { _, response ->
             response?.body().let {
                 if (response?.isSuccessful == true) {
                     response.body()?.run {
@@ -69,10 +69,10 @@ class JobDetailViewModel(
                                 inactiveLiveData.value = inactive
                                 Companies(
                                     id,
-                                    name ?: "",
-                                    logo ?: "",
-                                    description ?: "",
-                                    website ?: ""
+                                    name,
+                                    logo,
+                                    description,
+                                    website
                                 )
                             },
                             courses ?: arrayListOf<Course>()
@@ -90,7 +90,7 @@ class JobDetailViewModel(
     }
 
     fun applyJob(application: Applications) {
-        CBOnlineLib.onlineV2JsonApi.applyJob(application).enqueue(retrofitCallback { throwable, response ->
+        CBOnlineLib.onlineV2JsonApi.applyJob(application).enqueue(retrofitCallback { _, response ->
             if (response?.isSuccessful == true) {
                 eligibleLiveData.value = mInstance.getString(R.string.applied)
             }

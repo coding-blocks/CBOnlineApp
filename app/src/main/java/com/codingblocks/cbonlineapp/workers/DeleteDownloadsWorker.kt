@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.util
+package com.codingblocks.cbonlineapp.workers
 
 import android.content.Context
 import android.os.Environment
@@ -6,12 +6,14 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.models.ContentModel
+import com.codingblocks.cbonlineapp.util.FileUtils
+import com.codingblocks.cbonlineapp.util.MediaUtils
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.io.File
 import java.util.*
 
-class DeleteDownloadedFiles(context: Context, private val workerParameters: WorkerParameters) :
+class DeleteDownloadsWorker(context: Context, private val workerParameters: WorkerParameters) :
     CoroutineWorker(context, workerParameters), KoinComponent {
 
     val contentDao: ContentDao by inject()
@@ -27,7 +29,7 @@ class DeleteDownloadedFiles(context: Context, private val workerParameters: Work
             //Difference is number of days between expiring date and today.
             val diff = (expiringDate.time - Date().time)/(24 * 60 * 60 * 1000)
             if (diff<=0){
-                MediaUtils.deleteRecursive(folderFile)
+                FileUtils.deleteRecursive(folderFile)
                 contentDao.updateContentWithVideoId(item.contentLecture.lectureId, 0)
             }
         }

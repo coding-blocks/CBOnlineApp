@@ -190,7 +190,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/NewAppTheme.Dark" />
 
-        <receiver android:name=".util.DownloadBroadcastReceiver">
+        <receiver android:name=".util.receivers.DownloadBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
@@ -232,14 +232,14 @@
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".util.StartReceiver"
+            android:name=".util.receivers.StartReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".util.CertificateDownloadReceiver"
+            android:name=".util.receivers.CertificateDownloadReceiver"
             android:enabled="true"
             android:exported="false" />
 

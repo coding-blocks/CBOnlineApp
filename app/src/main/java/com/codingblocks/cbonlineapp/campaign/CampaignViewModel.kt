@@ -54,7 +54,6 @@ class CampaignViewModel(
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
                             val availableSpins = it.get("availableSpins").asInt
-                            val usedSpins = it.get("totalUsedSpins").asInt
                             spinsLeft = availableSpins
                             spinsLiveData.postValue(spinsLeft)
                         }

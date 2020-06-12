@@ -3,7 +3,6 @@ package com.codingblocks.cbonlineapp
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Context
 import android.util.Log
 import cn.campusapp.router.Router
 import cn.campusapp.router.router.IActivityRouteTableInitializer
@@ -19,6 +18,9 @@ import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.tracks.TrackActivity
 import com.codingblocks.cbonlineapp.util.*
+import com.codingblocks.cbonlineapp.util.misc.AppSignatureHelper
+import com.codingblocks.cbonlineapp.util.receivers.NotificationOpenedHandler
+import com.codingblocks.cbonlineapp.util.receivers.NotificationReceivedHandler
 import com.codingblocks.onlineapi.CBOnlineCommunicator
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -32,17 +34,11 @@ class CBOnlineApp : Application() {
 
     companion object {
         lateinit var mInstance: CBOnlineApp
-
-        @JvmStatic
-        var appContext: Context? = null
-            private set
     }
 
     override fun onCreate() {
-        // Set your custom UncaughtExceptionHandler
         Thread.setDefaultUncaughtExceptionHandler(CrashHandler(applicationContext))
         super.onCreate()
-        appContext = applicationContext
         mInstance = this
         val prefs = PreferenceHelper.getPrefs(this)
 
@@ -86,8 +82,6 @@ class CBOnlineApp : Application() {
             modules(listOf(viewModelModule, firebaseModule,
                 databaseModule, preferencesModule))
         }
-
-        Picasso.setSingletonInstance(Picasso.Builder(this).build())
 
         // OneSignal Initialization
         OneSignal.startInit(this)

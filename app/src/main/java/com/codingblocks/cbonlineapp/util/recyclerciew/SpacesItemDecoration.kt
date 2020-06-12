@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.util.extensions
+package com.codingblocks.cbonlineapp.util.recyclerciew
 
 import android.graphics.Rect
 import android.view.View

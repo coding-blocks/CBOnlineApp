@@ -41,7 +41,7 @@ class QuizViewModel(private val repo: QuizRepository) : BaseCBViewModel() {
                     }
                 }
             }
-            when (val response = quiz?.qnaUid?.let { repo.getQuizAttempts(qnaId = it) }) {
+            when (val response = quiz.qnaUid.let { repo.getQuizAttempts(qnaId = it) }) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {

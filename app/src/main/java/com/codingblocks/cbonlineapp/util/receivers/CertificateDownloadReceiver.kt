@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.util
+package com.codingblocks.cbonlineapp.util.receivers
 
 import android.app.DownloadManager
 import android.content.ActivityNotFoundException
@@ -10,6 +10,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.widget.Toast
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import java.io.File
 
 class CertificateDownloadReceiver : BroadcastReceiver() {
@@ -40,13 +41,13 @@ class CertificateDownloadReceiver : BroadcastReceiver() {
                 var downloadUri = Uri.parse(downloadPath)
                 if (downloadUri != null) {
                     if (ContentResolver.SCHEME_FILE == downloadUri.scheme) {
-                        val file = File(downloadUri.path)
+                        val file = File(checkNotNull(downloadUri.path))
                         downloadUri = FileProvider.getUriForFile(context, context.packageName + ".provider", file)
                     }
                     val intent = Intent(Intent.ACTION_VIEW).apply {
                         setDataAndType(downloadUri, "application/pdf")
                         flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
                     }
                     try {
                         context.startActivity(intent)

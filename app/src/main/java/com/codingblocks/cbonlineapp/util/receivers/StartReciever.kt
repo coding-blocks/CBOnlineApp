@@ -1,9 +1,13 @@
-package com.codingblocks.cbonlineapp.util
+package com.codingblocks.cbonlineapp.util.receivers
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.codingblocks.cbonlineapp.util.Actions
+import com.codingblocks.cbonlineapp.util.EndlessService
+import com.codingblocks.cbonlineapp.util.ServiceState
+import com.codingblocks.cbonlineapp.util.getServiceState
 
 class StartReceiver : BroadcastReceiver() {
 
