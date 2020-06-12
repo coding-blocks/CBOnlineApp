@@ -16,6 +16,7 @@ import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
+import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.onlineapi.CBOnlineLib
@@ -72,8 +73,7 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
     var sectionName: String? = null
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         if (intent.action == ACTION_STOP) {
-            stopForeground(true)
-            stopSelf()
+            stopServiceManually()
             notificationManager.cancel(NOTIFICATION_ID)
         } else {
             downloadList.clear()
@@ -105,8 +105,14 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
             val pStopSelf = PendingIntent.getService(this, 0, stopSelf, /*Stop Service*/PendingIntent.FLAG_CANCEL_CURRENT)
             notification.addAction(R.drawable.ic_pause_white_24dp, "Cancel", pStopSelf)
             startForeground(1, notification.build())
-
+        }else{
+            stopServiceManually()
         }
+    }
+
+    private fun stopServiceManually() {
+        stopForeground(true)
+        stopSelf()
     }
 
     private suspend fun startDownload(list: List<SectionContentHolder.DownloadableContent>) {
@@ -177,7 +183,9 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
     }
 
     override fun onFailed(videoId: String, p1: DownloadStatus?) {
+        val folderFile = File(applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath), "/${videoId}")
         downloadList.remove(videoId)
+        FileUtils.deleteRecursive(folderFile)
     }
 
     override fun onQueued(p0: String?, p1: DownloadStatus?) {
@@ -186,9 +194,9 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
     override fun onCompleted(videoId: String, p1: DownloadStatus?) {
         val data = downloadList[videoId]
         GlobalScope.launch(Dispatchers.IO) {
-            downloadList[videoId]?.isDownloaded = true
             contentDao.updateContent(data?.contentId ?: "", 1)
         }
+        downloadList[videoId]?.isDownloaded = true
         notification.apply {
             setProgress(downloadList.size, downloadList.filterValues { it.isDownloaded }.size, false)
             setStyle(NotificationCompat.BigTextStyle().bigText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded"))
@@ -196,8 +204,7 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
         notificationManager.notify(1, notification.build())
         if (downloadList.filterValues { !it.isDownloaded }.isEmpty()) {
             createCompletionNotification()
-            stopForeground(true)
-            stopSelf()
+            stopServiceManually()
         }
     }
 
