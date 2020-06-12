@@ -11,7 +11,6 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.work.WorkManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
@@ -70,6 +69,7 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
 
     var sectionId: String? = null
     var attemptId: String? = null
+    var sectionName: String? = null
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         if (intent.action == ACTION_STOP) {
             stopForeground(true)
@@ -89,9 +89,10 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
 
     private suspend fun createNotification(sectionList: List<SectionContentHolder.DownloadableContent>) {
         if (sectionList.isNotEmpty()) {
+            sectionName = sectionList.first().name
             notification = NotificationCompat.Builder(applicationContext, DOWNLOAD_CHANNEL_ID).apply {
                 setSmallIcon(R.drawable.ic_file_download)
-                setContentTitle("Downloading Section")
+                setContentTitle("Downloading $sectionName")
                 setOnlyAlertOnce(true)
                 setLargeIcon(BitmapFactory.decodeResource(applicationContext.resources, R.mipmap.ic_launcher))
                 setStyle(NotificationCompat.BigTextStyle().bigText("0 out of ${sectionList.size} downloaded"))
@@ -175,7 +176,8 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
     override fun onDeleted(p0: String?) {
     }
 
-    override fun onFailed(p0: String?, p1: DownloadStatus?) {
+    override fun onFailed(videoId: String, p1: DownloadStatus?) {
+        downloadList.remove(videoId)
     }
 
     override fun onQueued(p0: String?, p1: DownloadStatus?) {
@@ -193,10 +195,21 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
         }
         notificationManager.notify(1, notification.build())
         if (downloadList.filterValues { !it.isDownloaded }.isEmpty()) {
-            //Todo - Make a separate notification
+            createCompletionNotification()
             stopForeground(true)
             stopSelf()
         }
+    }
+
+    private fun createCompletionNotification() {
+        notification = NotificationCompat.Builder(applicationContext, DOWNLOAD_CHANNEL_ID).apply {
+            setSmallIcon(R.drawable.ic_file_download)
+            setContentTitle("Downloaded $sectionName")
+            setOnlyAlertOnce(true)
+            setLargeIcon(BitmapFactory.decodeResource(applicationContext.resources, R.mipmap.ic_launcher))
+            setStyle(NotificationCompat.BigTextStyle().bigText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded"))
+        }
+        notificationManager.notify(2, notification.build())
     }
 
 }

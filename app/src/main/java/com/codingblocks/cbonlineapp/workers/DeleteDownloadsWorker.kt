@@ -24,8 +24,10 @@ class DeleteDownloadsWorker(context: Context, private val workerParameters: Work
         list.forEach {item->
             val folderFile = File(applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath), "/${item.contentLecture.lectureId}")
             val fileDate = Date(folderFile.lastModified())
-            val expiringDate = Date(fileDate.time + 15)
-
+            val calendar = Calendar.getInstance()
+            calendar.time = Date(fileDate.time)
+            calendar.add(Calendar.DATE, 14)
+            val expiringDate = calendar.time
             //Difference is number of days between expiring date and today.
             val diff = (expiringDate.time - Date().time)/(24 * 60 * 60 * 1000)
             if (diff<=0){
