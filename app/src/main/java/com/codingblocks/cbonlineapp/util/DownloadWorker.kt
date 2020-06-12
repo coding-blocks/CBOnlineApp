@@ -41,7 +41,7 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
         applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
-    val contentDao: ContentDao by inject()
+    private val contentDao: ContentDao by inject()
 
 //    override fun onStopped() {
 //        super.onStopped()
@@ -77,6 +77,7 @@ class DownloadWorker(context: Context, private val workerParameters: WorkerParam
                 setAutoCancel(false)
             }
         )
+
         notificationManager.notify(downloadData.notificationId, downloadData.notificationBuilder.build())
         val response: Response<JsonObject>
         response = withContext(Dispatchers.IO) { CBOnlineLib.api.getOtp(downloadData.videoId, downloadData.sectionId, downloadData.attemptId, true) }
