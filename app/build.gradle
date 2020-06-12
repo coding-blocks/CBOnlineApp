@@ -10,7 +10,7 @@ apply plugin: 'com.google.firebase.firebase-perf'
 ext {
     ankoVersion = '0.10.6'
     room_version = "2.2.5"
-    koin_version = "2.1.5"
+    koin_version = "2.1.6"
     markwon_version = "4.4.0"
     ankoLibs = [
             // commons
