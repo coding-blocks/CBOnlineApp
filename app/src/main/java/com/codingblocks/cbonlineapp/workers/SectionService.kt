@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
+import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionContentHolder
 import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.FileUtils
@@ -71,6 +72,7 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
     var sectionId: String? = null
     var attemptId: String? = null
     var sectionName: String? = null
+
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         if (intent.action == ACTION_STOP) {
             stopServiceManually()
@@ -105,7 +107,7 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
             val pStopSelf = PendingIntent.getService(this, 0, stopSelf, /*Stop Service*/PendingIntent.FLAG_CANCEL_CURRENT)
             notification.addAction(R.drawable.ic_pause_white_24dp, "Cancel", pStopSelf)
             startForeground(1, notification.build())
-        }else{
+        } else {
             stopServiceManually()
         }
     }
@@ -133,38 +135,34 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
 
     private fun initializeDownload(mOtp: String, mPlaybackInfo: String, videoId: String) {
         val optionsDownloader = OptionsDownloader()
-        // assuming we have otp and playbackInfo
-        optionsDownloader.downloadOptionsWithOtp(
-            mOtp,
-            mPlaybackInfo,
-            object : OptionsDownloader.Callback {
-                override fun onOptionsReceived(options: DownloadOptions) {
-                    // we have received the available download options
-                    val selectionIndices = intArrayOf(0, 1)
-                    val downloadSelections = DownloadSelections(options, selectionIndices)
-                    val file =
-                        applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
-                    val folderFile = File(file, "/$videoId")
-                    if (!folderFile.exists()) {
-                        folderFile.mkdir()
-                    }
-                    val request =
-                        DownloadRequest.Builder(downloadSelections, folderFile.absolutePath).build()
-                    val vdoDownloadManager = VdoDownloadManager.getInstance(applicationContext)
-                    // enqueue request to VdoDownloadManager for download
-                    try {
-                        vdoDownloadManager.enqueue(request)
-                        vdoDownloadManager.addEventListener(this@SectionService)
-                    } catch (e: IllegalArgumentException) {
-                    } catch (e: IllegalStateException) {
-                    }
+        optionsDownloader.downloadOptionsWithOtp(mOtp, mPlaybackInfo, object : OptionsDownloader.Callback {
+            override fun onOptionsReceived(options: DownloadOptions) {
+                // we have received the available download options
+                val selectionIndices = intArrayOf(0, 1)
+                val downloadSelections = DownloadSelections(options, selectionIndices)
+                val file = applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath)
+                val folderFile = File(file, "/$videoId")
+                if (!folderFile.exists()) {
+                    folderFile.mkdir()
                 }
+                val request =
+                    DownloadRequest.Builder(downloadSelections, folderFile.absolutePath).build()
+                val vdoDownloadManager = VdoDownloadManager.getInstance(applicationContext)
+                // enqueue request to VdoDownloadManager for download
+                try {
+                    vdoDownloadManager.enqueue(request)
+                    vdoDownloadManager.addEventListener(this@SectionService)
+                } catch (e: IllegalArgumentException) {
 
-                override fun onOptionsNotReceived(errDesc: ErrorDescription) {
-                    // there was an error downloading the available options
-                    Log.e("Service Error", "onOptionsNotReceived : $errDesc")
+                } catch (e: IllegalStateException) {
+
                 }
-            })
+            }
+
+            override fun onOptionsNotReceived(errDesc: ErrorDescription) {
+                Log.e("Service Error", "onOptionsNotReceived : $errDesc")
+            }
+        })
     }
 
 
@@ -172,6 +170,7 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
         return null
     }
 
+    /** This function will be invoked when the progress of any download changes*/
     override fun onChanged(p0: String?, p1: DownloadStatus?) {
         notification.apply {
             setStyle(NotificationCompat.BigTextStyle().bigText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded( Current ${p1?.downloadPercent}% )"))
@@ -182,6 +181,10 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
     override fun onDeleted(p0: String?) {
     }
 
+    /**
+     * This function will be invoked when the download fails
+     * it will remove the files when may have been downloaded and got corrupted
+     */
     override fun onFailed(videoId: String, p1: DownloadStatus?) {
         val folderFile = File(applicationContext.getExternalFilesDir(Environment.getDataDirectory().absolutePath), "/${videoId}")
         downloadList.remove(videoId)
@@ -191,6 +194,9 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
     override fun onQueued(p0: String?, p1: DownloadStatus?) {
     }
 
+    /**
+     * Updates the [ContentModel] along with updating the notification.
+     */
     override fun onCompleted(videoId: String, p1: DownloadStatus?) {
         val data = downloadList[videoId]
         GlobalScope.launch(Dispatchers.IO) {
@@ -208,6 +214,7 @@ class SectionService : Service(), VdoDownloadManager.EventListener {
         }
     }
 
+    /** Creates a new notification after completion of the task*/
     private fun createCompletionNotification() {
         notification = NotificationCompat.Builder(applicationContext, DOWNLOAD_CHANNEL_ID).apply {
             setSmallIcon(R.drawable.ic_file_download)
