@@ -36,10 +36,10 @@ import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
-import com.codingblocks.cbonlineapp.util.glide.loadImage
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.glide.loadImage
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Tags
 import com.google.android.material.appbar.AppBarLayout
@@ -198,9 +198,11 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                     showOffline()
                 }
                 ErrorStatus.UNAUTHORIZED -> {
-                    CustomDialog.showConfirmation(this, UNAUTHORIZED) {
-                        if (it) {
+                    CustomDialog.showConfirmation(this, UNAUTHORIZED) { result ->
+                        if (result) {
                             startForResult(intentFor<LoginActivity>())
+                        } else {
+                            finish()
                         }
                     }
                 }

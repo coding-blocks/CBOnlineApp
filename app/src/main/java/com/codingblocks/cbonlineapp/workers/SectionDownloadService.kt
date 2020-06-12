@@ -94,7 +94,7 @@ class SectionDownloadService(val context: Context, private val workerParameters:
 
     override fun onChanged(p0: String?, p1: DownloadStatus?) {
         notification.apply {
-            setContentText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded(Current ${p1?.downloadPercent}% )")
+            setContentText("${downloadList.filterValues { it.isDownloaded }.size} out of ${downloadList.size} downloaded( Current ${p1?.downloadPercent}% )")
         }
         notificationManager.notify(1, notification.build())
     }
@@ -126,7 +126,6 @@ class SectionDownloadService(val context: Context, private val workerParameters:
                 setOngoing(false)
                 setAutoCancel(true)
             }
-            WorkManager.getInstance().pruneWork()
             notificationManager.notify(1, notification.build())
         }
     }

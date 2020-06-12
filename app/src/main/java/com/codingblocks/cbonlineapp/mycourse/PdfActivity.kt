@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp
+package com.codingblocks.cbonlineapp.mycourse
 
 import android.app.DownloadManager
 import android.content.Context
@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.widget.LinearLayout
 import android.widget.Toast
+import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.receivers.DownloadBroadcastReceiver

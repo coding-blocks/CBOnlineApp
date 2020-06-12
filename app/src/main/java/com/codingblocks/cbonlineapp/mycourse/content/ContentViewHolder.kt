@@ -31,7 +31,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_content, parent, false)) {
 
     var starterListener: DownloadStarter? = null
-    lateinit var contentModel: ContentModel
+    private lateinit var contentModel: ContentModel
 
     /**
      * Items might be null if they are not paged in yet. PagedListAdapter will re-bind the

@@ -317,4 +317,6 @@
     <string name="leaderboard">Leaderboard</string>
     <string name="rules">Rules</string>
     <string name="logged_in">Logged in successfully !!</string>
+    <string name="requested">Requested</string>
+    <string name="download_share"><![CDATA[Download & Share]]></string>
 </resources>

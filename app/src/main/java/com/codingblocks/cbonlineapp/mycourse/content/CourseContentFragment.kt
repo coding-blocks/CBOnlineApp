@@ -16,10 +16,8 @@ import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.codingblocks.cbonlineapp.PdfActivity
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.DownloadStarter
@@ -30,6 +28,7 @@ import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
+import com.codingblocks.cbonlineapp.mycourse.PdfActivity
 import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
@@ -38,26 +37,25 @@ import com.codingblocks.cbonlineapp.util.CODE_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.CONTEST_ID
 import com.codingblocks.cbonlineapp.util.DOCUMENT
-import com.codingblocks.cbonlineapp.workers.DownloadWorker
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
 import com.codingblocks.cbonlineapp.util.QNA
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
-import com.codingblocks.cbonlineapp.workers.SectionDownloadService
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
+import com.codingblocks.cbonlineapp.util.livedata.observer
+import com.codingblocks.cbonlineapp.workers.DownloadWorker
+import com.codingblocks.cbonlineapp.workers.SectionService
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.support.v4.intentFor
-import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.concurrent.TimeUnit
 
@@ -113,11 +111,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
             }
         }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ):
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = inflater.inflate(R.layout.fragment_course_content, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -283,36 +277,38 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
     }
 
     override fun startSectionDownlod(sectionId: String) {
-        val constraints = if (getPrefs(requireContext()).SP_WIFI)
-            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
-        else
-            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val videoData = workDataOf(
-            SECTION_ID to sectionId,
-            RUN_ATTEMPT_ID to viewModel.attemptId
-        )
+        SectionService.startService(requireContext(), sectionId, viewModel.attemptId!!)
 
-        val request: OneTimeWorkRequest =
-            OneTimeWorkRequestBuilder<SectionDownloadService>()
-                .setConstraints(constraints)
-                .addTag(SECTION_DOWNLOAD)
-                .setInputData(videoData)
-                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
-                .build()
-        val pendingRequest = WorkManager.getInstance().getWorkInfosByTag(SECTION_DOWNLOAD).get()
-
-        pendingRequest.let { workList ->
-            if (workList.size == 0) {
-                WorkManager.getInstance().enqueue(request)
-            } else if (workList.size == 1 && workList[0].state == WorkInfo.State.RUNNING) {
-                toast("Section Download in Progress")
-            } else if (workList[0].state == WorkInfo.State.FAILED) {
-                WorkManager.getInstance().pruneWork()
-                WorkManager.getInstance().enqueue(request)
-            } else {
-                toast("Cannot Start Download !!!")
-            }
-        }
+//        val constraints = if (getPrefs(requireContext()).SP_WIFI)
+//            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
+//        else
+//            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+//        val videoData = workDataOf(
+//            SECTION_ID to sectionId,
+//            RUN_ATTEMPT_ID to viewModel.attemptId
+//        )
+//
+//        val request: OneTimeWorkRequest =
+//            OneTimeWorkRequestBuilder<SectionDownloadService>()
+//                .setConstraints(constraints)
+//                .addTag(SECTION_DOWNLOAD)
+//                .setInputData(videoData)
+//                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+//                .build()
+//        val pendingRequest = WorkManager.getInstance().getWorkInfosByTag(SECTION_DOWNLOAD).get()
+//        SectionService.startService(requireContext(), sectionId,viewModel.attemptId!!)
+//        pendingRequest.let { workList ->
+//            if (workList.size == 0) {
+//                WorkManager.getInstance().enqueue(request)
+//            } else if (workList.size == 1 && workList[0].state == WorkInfo.State.RUNNING) {
+//                toast("Section Download in Progress")
+//            } else if (workList[0].state == WorkInfo.State.FAILED) {
+//                WorkManager.getInstance().pruneWork()
+//                WorkManager.getInstance().enqueue(request)
+//            } else {
+//                toast("Cannot Start Download !!!")
+//            }
+//        }
     }
 
     private fun popUpWindowSection(): PopupWindow {

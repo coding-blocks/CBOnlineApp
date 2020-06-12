@@ -25,7 +25,6 @@ import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import java.io.File
-import java.lang.Math.abs
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
 import kotlinx.android.synthetic.main.item_hb_performance.*
@@ -44,8 +43,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.fragment_overview, container, false)
-        return view
+        return inflater.inflate(R.layout.fragment_overview, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,7 +69,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
             if (progressTv.isActivated && mentorApprovalTv.isActivated && courseAndRun.runAttempt.certificateApproved) {
                 requestCertificateBtn.apply {
                     isEnabled = true
-                    text = "Download & Share"
+                    text = getString(R.string.download_share)
                     setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                     setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share, 0)
                     setOnClickListener {
@@ -85,7 +83,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                     setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
                     setOnClickListener {
                         isEnabled = false
-                        text = "Requested"
+                        text = getString(R.string.requested)
                         setTextColor(ContextCompat.getColor(requireContext(), R.color.brownish_grey))
                         setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, 0, 0)
                         viewModel.requestMentorApproval()
@@ -93,7 +91,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
             courseAndRun.run.whatsappLink?.let {
-                if (!it.isEmpty()) {
+                if (it.isNotEmpty()) {
                     setWhatsappCard(it, courseAndRun.runAttempt.premium)
                 }
             }
@@ -128,7 +126,7 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 val pointsDelta = it.currentMonthScore - it.previousMonthScore
                 previousRank.apply {
                     isActivated = rankDelta >= 0
-                    text = context.getString(R.string.ranks, abs(rankDelta))
+                    text = context.getString(R.string.ranks, kotlin.math.abs(rankDelta))
                 }
                 previousMonthlyScore.apply {
                     isActivated = pointsDelta >= 0
@@ -200,10 +198,5 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
         }
-    }
-
-    override fun onDestroy() {
-//        requireActivity().unregisterReceiver(receiver)
-        super.onDestroy()
     }
 }
