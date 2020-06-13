@@ -14,7 +14,7 @@ Application is available here:
 
 <a href='https://play.google.com/store/apps/details?id=com.codingblocks.cbonlineapp'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="80"/></a>
 
-[![Downloads Badge](https://img.shields.io/endpoint?logo=google-play&url=https://api-playstore.rajkumaar.co.in/downloads?id=com.codingblocks.cbonlineapp&color=success)](http://bit.ly/amritarepo) [![Rating Badge](https://img.shields.io/endpoint?logo=google-play&url=https://api-playstore.rajkumaar.co.in/rating?id=com.codingblocks.cbonlineapp&color=success)](http://bit.ly/amritarepo) 
+[![Downloads Badge](https://img.shields.io/endpoint?logo=google-play&url=https://api-playstore.rajkumaar.co.in/downloads?id=com.codingblocks.cbonlineapp&color=success)](https://play.google.com/store/apps/details?id=com.codingblocks.cbonlineapp) [![Rating Badge](https://img.shields.io/endpoint?logo=google-play&url=https://api-playstore.rajkumaar.co.in/rating?id=com.codingblocks.cbonlineapp&color=success)](https://play.google.com/store/apps/details?id=com.codingblocks.cbonlineapp) 
 
 </div>
 
