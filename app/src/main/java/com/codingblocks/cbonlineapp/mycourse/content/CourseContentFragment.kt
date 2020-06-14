@@ -13,13 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.work.BackoffPolicy
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.DownloadStarter
@@ -40,19 +33,16 @@ import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.CONTEST_ID
 import com.codingblocks.cbonlineapp.util.DOCUMENT
 import com.codingblocks.cbonlineapp.util.LECTURE
-import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
 import com.codingblocks.cbonlineapp.util.QNA
-import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO
-import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.applyDim
 import com.codingblocks.cbonlineapp.util.extensions.clearDim
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.livedata.observer
-import com.codingblocks.cbonlineapp.workers.DownloadWorker
-import com.codingblocks.cbonlineapp.workers.SectionService
+import com.codingblocks.cbonlineapp.workers.DownloadService
+import com.codingblocks.cbonlineapp.workers.SectionDownloadService
 import kotlinx.android.synthetic.main.activity_my_course.*
 import kotlinx.android.synthetic.main.fragment_course_content.*
 import org.jetbrains.anko.AnkoLogger
@@ -60,7 +50,6 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.util.concurrent.TimeUnit
 
 /*
  *   Payment issues
@@ -256,34 +245,36 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
         attemptId: String,
         sectionId: String
     ) {
-        val constraints = if (getPrefs(requireContext()).SP_WIFI)
-            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
-        else
-            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val videoData = workDataOf(
-            VIDEO_ID to videoId,
-            "title" to title,
-            SECTION_ID to sectionId,
-            RUN_ATTEMPT_ID to attemptId,
-            CONTENT_ID to contentId
-        )
+//        val constraints = if (getPrefs(requireContext()).SP_WIFI)
+//            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
+//        else
+//            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+//        val videoData = workDataOf(
+//            VIDEO_ID to videoId,
+//            "title" to title,
+//            SECTION_ID to sectionId,
+//            RUN_ATTEMPT_ID to attemptId,
+//            CONTENT_ID to contentId
+//        )
 
-        val request: OneTimeWorkRequest =
-            OneTimeWorkRequestBuilder<DownloadWorker>()
-                .setConstraints(constraints)
-                .setInputData(videoData)
-                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
-                .build()
+        DownloadService.startService(requireContext(), sectionId, attemptId, videoId, contentId, title)
 
-        WorkManager.getInstance()
-            .enqueue(request)
+//        val request: OneTimeWorkRequest =
+//            OneTimeWorkRequestBuilder<DownloadWorker>()
+//                .setConstraints(constraints)
+//                .setInputData(videoData)
+//                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+//                .build()
+//
+//        WorkManager.getInstance()
+//            .enqueue(request)
     }
 
     override fun startSectionDownlod(sectionId: String) {
-        if (isMyServiceRunning(SectionService::class.java)) {
+        if (isMyServiceRunning(SectionDownloadService::class.java)) {
             toast("One Section download is in progress")
         } else {
-            SectionService.startService(requireContext(), sectionId, viewModel.attemptId!!)
+            SectionDownloadService.startService(requireContext(), sectionId, viewModel.attemptId!!)
         }
 
 //        val constraints = if (getPrefs(requireContext()).SP_WIFI)

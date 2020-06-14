@@ -3,8 +3,6 @@ package com.codingblocks.cbonlineapp.dashboard
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ShortcutInfo
-import android.content.pm.ShortcutManager
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -42,7 +40,6 @@ import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.extensions.slideDown
 import com.codingblocks.cbonlineapp.util.extensions.slideUp
-import com.codingblocks.cbonlineapp.workers.SectionService
 import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView

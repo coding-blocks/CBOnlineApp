@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.util
+package com.codingblocks.cbonlineapp.util.extensions
 
 import androidx.lifecycle.SavedStateHandle
 import kotlin.properties.ReadWriteProperty

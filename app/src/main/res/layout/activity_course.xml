@@ -345,8 +345,7 @@
                     android:layout_marginTop="@dimen/margin_large"
                     android:id="@+id/goodiesImg"
                     android:layout_marginEnd="@dimen/margin_large"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/wildcraft" />
+                    android:adjustViewBounds="true" />
 
                 <TextView
                     android:layout_width="wrap_content"

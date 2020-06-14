@@ -14,9 +14,7 @@ import com.codingblocks.cbonlineapp.admin.doubts.DoubtReceiver
 import com.codingblocks.cbonlineapp.admin.overview.AdminOverviewFragment
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
-import com.codingblocks.cbonlineapp.util.Actions
 import com.codingblocks.cbonlineapp.util.CustomDialog
-import com.codingblocks.cbonlineapp.util.EndlessService
 import com.codingblocks.cbonlineapp.util.KeyboardVisibilityUtil
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
@@ -68,35 +66,6 @@ class AdminActivity : BaseCBActivity(), FragmentChangeListener {
         }
     }
 
-    private fun startMyService() {
-        Intent(this, EndlessService::class.java).also {
-            it.action = Actions.START.name
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                log("Starting the service in >=26 Mode")
-                startForegroundService(it)
-                return
-            }
-            log("Starting the service in < 26 Mode")
-            startService(it)
-        }
-    }
-
-    private fun setupAlarm() {
-        val alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        val i = Intent(this, DoubtReceiver::class.java)
-
-        val alarmIntent = PendingIntent.getBroadcast(
-            this, 0, i, PendingIntent.FLAG_ONE_SHOT
-        )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmMgr.setAndAllowWhileIdle(
-                AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime(),
-                alarmIntent
-            )
-        }
-    }
 
     private fun initializeUI() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -25,7 +25,7 @@ import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.livedata.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.livedata.getDistinct
-import com.codingblocks.cbonlineapp.util.savedStateValue
+import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
 import com.codingblocks.cbonlineapp.workers.DeleteDownloadsWorker
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError

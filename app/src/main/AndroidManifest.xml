@@ -232,26 +232,20 @@
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".util.receivers.StartReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <receiver
             android:name=".util.receivers.CertificateDownloadReceiver"
             android:enabled="true"
             android:exported="false" />
 
         <service
-            android:name=".workers.SectionService"
+            android:name=".workers.SectionDownloadService"
             android:enabled="true"
             android:exported="false" />
 
         <service
-            android:name=".util.EndlessService"
+            android:name=".workers.DownloadService"
             android:enabled="true"
             android:exported="false" />
+
     </application>
 
 </manifest>

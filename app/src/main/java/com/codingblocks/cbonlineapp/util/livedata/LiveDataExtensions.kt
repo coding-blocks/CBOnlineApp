@@ -101,9 +101,4 @@ inline fun <T> LiveData<List<T>>.filterList(crossinline predicate: (T?) -> Boole
     return mutableLiveData
 }
 
-class DoubleTrigger<A, B>(a: LiveData<A>, b: LiveData<B>) : MediatorLiveData<Pair<A?, B?>>() {
-    init {
-        addSource(a) { value = it to b.value }
-        addSource(b) { value = a.value to it }
-    }
-}
+
