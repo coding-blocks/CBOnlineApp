@@ -28,7 +28,6 @@ import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.models.Course
@@ -134,7 +133,7 @@ class DashboardExploreFragment : BaseCBFragment() {
                 dashboardTracksRv.isVisible = true
             }
         }
-        vm.toastMutable.observer(thisLifecycleOwner){
+        vm.toastMutable.observe(thisLifecycleOwner){
             toast(it)
         }
 
