@@ -64,6 +64,10 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener {
     private val notificationManager by lazy {
         applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
+    private val vdoDownloadManager by lazy {
+        VdoDownloadManager.getInstance(applicationContext)
+    }
+
     private lateinit var notification: NotificationCompat.Builder
 
     private val contentDao: ContentDao by inject()
@@ -112,6 +116,7 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener {
     }
 
     private fun stopServiceManually() {
+        vdoDownloadManager.removeEventListener(this)
         stopForeground(true)
         stopSelf()
     }
@@ -146,7 +151,6 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener {
                 }
                 val request =
                     DownloadRequest.Builder(downloadSelections, folderFile.absolutePath).build()
-                val vdoDownloadManager = VdoDownloadManager.getInstance(applicationContext)
                 // enqueue request to VdoDownloadManager for download
                 try {
                     vdoDownloadManager.enqueue(request)
@@ -208,7 +212,6 @@ class SectionDownloadService : Service(), VdoDownloadManager.EventListener {
         }
         notificationManager.notify(1, notification.build())
         if (downloadList.filterValues { !it.isDownloaded }.isEmpty()) {
-            createCompletionNotification()
             stopServiceManually()
         }
     }
