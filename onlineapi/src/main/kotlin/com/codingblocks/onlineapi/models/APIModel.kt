@@ -50,8 +50,6 @@ data class Course(
     val slug: String? = "",
     val coverImage: String? = "",
     val faq: String?,
-    var isWishlist: Boolean? = false,
-    var userWishlistId: String?,
     val coursefeatures: ArrayList<CourseFeatures>?,
     @Relationship("instructors")
     val instructors: ArrayList<Instructor>?,

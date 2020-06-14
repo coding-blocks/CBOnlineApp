@@ -69,11 +69,7 @@ class CourseViewModel(
                     if (response.value.isSuccessful)
                         response.value.body()?.let {
                             it.get()?.let { it1 -> allCourse.addAll(it1) }
-                            if (isLoggedIn){
-                                checkIfWishlisted(allCourse)
-                            }else{
-                                suggestedCourses.postValue(allCourse)
-                            }
+                            suggestedCourses.postValue(allCourse)
                         }
                 }
             }
@@ -236,24 +232,26 @@ class CourseViewModel(
         return LivePagedListBuilder<String, Course>(dataSourceFactory, config)
     }
 
-    fun checkIfWishlisted(allCourse: List<Course>?){
+    fun changeWishlistStatus(courseSingle: Course? = course.value, mainCourse: Boolean = false){
         runIO {
-            allCourse?.forEach {courseSingle->
-                when (val response = repo.checkIfWishlisted(courseSingle.id?:"")) {
-                    is ResultWrapper.GenericError -> setError(response.error)
-                    is ResultWrapper.Success -> with(response.value) {
-                        if (isSuccessful) {
-                            if (response.value.body()?.id!=null){
-                                courseSingle.isWishlist = true
-                                courseSingle.userWishlistId = response.value.body()?.id
-                            }
-                        } else {
-                            setError(fetchError(code()))
+            when (val response = repo.checkIfWishlisted(courseSingle?.id?:"")) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        val isWishlisted = response.value.body()?.id!=null
+                        if (mainCourse){
+                            wishlistUpdated.postValue(!isWishlisted)
                         }
+                        if (isWishlisted){
+                            removeFromWishlist(response.value.body()?.id)
+                        }else{
+                            courseSingle?.let { addToWishlist(it) }
+                        }
+                    } else {
+                        setError(fetchError(code()))
                     }
                 }
             }
-            suggestedCourses.postValue(allCourse)
         }
     }
 
@@ -263,13 +261,7 @@ class CourseViewModel(
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
-                        if (response.value.body()?.id!=null){
-                            courseSingle?.isWishlist = true
-                            courseSingle?.userWishlistId = response.value.body()?.id
-                        }else{
-                            courseSingle?.isWishlist = false
-                            courseSingle?.userWishlistId = response.value.body()?.id
-                        }
+                        wishlistUpdated.postValue(response.value.body()?.id!=null)
                         course.postValue(courseSingle)
                     } else {
                         setError(fetchError(code()))
@@ -284,15 +276,10 @@ class CourseViewModel(
         val wishlist = Wishlist(courseSingle, User(prefs.SP_USER_ID))
         runIO {
             when (val response = repo.addToWishlist(wishlist)) {
-                is ResultWrapper.GenericError -> {
-                    setError(response.error)
-                }
+                is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         snackbar.postValue("${courseSingle.title} added to Wishlist")
-                        courseSingle.userWishlistId = response.value.body()?.id
-                        courseSingle.isWishlist = true
-                        wishlistUpdated.postValue(true)
                     } else {
                         setError(fetchError(response.value.code()))
                     }
@@ -301,16 +288,15 @@ class CourseViewModel(
         }
     }
 
-    fun removeFromWishlist(courseSingle: Course = course.value!!){
+    fun removeFromWishlist(courseSingle: String?){
         runIO {
-            when (val response = repo.removeFromWishlist(courseSingle.userWishlistId?:"")) {
+            when (val response = repo.removeFromWishlist(courseSingle?:"")) {
                 is ResultWrapper.GenericError -> {
                     setError(response.error)
                 }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        snackbar.postValue("${courseSingle.title} removed from Wishlist")
-                        wishlistUpdated.postValue(true)
+                        snackbar.postValue("Course removed from Wishlist")
                     } else {
                         setError(fetchError(response.value.code()))
                     }

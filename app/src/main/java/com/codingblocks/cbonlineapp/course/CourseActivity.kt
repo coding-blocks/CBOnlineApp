@@ -62,7 +62,6 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
-import org.jetbrains.anko.toolbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChangedListener {
@@ -120,17 +119,12 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     }
 
     private val wishlistListener: WishlistListener by lazy {
-        object : WishlistListener{
+        object : WishlistListener {
             override fun onWishListClickListener(course: Course, position: Int) {
-                if (isLoggedIn){
-                    if (!course.isWishlist!!){
-                        viewModel.addToWishlist(course)
-                    }else{
-                        viewModel.removeFromWishlist(course)
-                    }
+                if (isLoggedIn) {
+                    viewModel.changeWishlistStatus(course)
                 }
             }
-
         }
     }
 
@@ -205,9 +199,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 }
             }
             instructorAdapter.submitList(course.instructors)
-            if (course.isWishlist!!){
-                courseToolbar.menu.get(0).icon = getDrawable(R.drawable.ic_like)
-            }
         }
 
         viewModel.projects.observer(this) { projects ->
@@ -223,10 +214,16 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             courseCardListAdapter.submitList(courses)
         }
 
-        viewModel.wishlistUpdated.observer(this){
-            if (isLoggedIn){
-                viewModel.checkIfCourseWishlisted(viewModel.course.value)
-                viewModel.checkIfWishlisted(viewModel.suggestedCourses.value)
+        viewModel.wishlistUpdated.observer(this) {
+            if (isLoggedIn) {
+                if (courseToolbar.menu.size()>0){
+                    courseToolbar.menu.get(0).icon = getDrawable(
+                        if (it)
+                            R.drawable.ic_like
+                        else
+                            R.drawable.ic_like_empty
+                    )
+                }
             }
         }
 
@@ -358,13 +355,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         }
         R.id.wishlist ->{
             if (isLoggedIn){
-                if (viewModel.course.value?.isWishlist!!){
-                    item.icon = getDrawable(R.drawable.ic_like_empty)
-                    viewModel.removeFromWishlist()
-                }else{
-                    item.icon = getDrawable(R.drawable.ic_like)
-                    viewModel.addToWishlist()
-                }
+                viewModel.changeWishlistStatus(mainCourse = true)
             }
             true
         }

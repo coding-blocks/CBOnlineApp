@@ -46,7 +46,7 @@ class DashboardViewModel(
     var suggestedCourses = MutableLiveData<List<Course>>()
     var trendingCourses = MutableLiveData<List<Course>>()
     var wishlist = MutableLiveData<List<Wishlist>>()
-    var snackbar = MutableLiveData<String>()
+    var toastMutable = MutableLiveData<String>()
 
 
     init {
@@ -131,43 +131,15 @@ class DashboardViewModel(
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
-                        if (isLoggedIn == true){
-                            checkIfWishlisted(body()!!, offset)
-                        }else{
-                            if (offset == 0)
-                                suggestedCourses.postValue(body())
-                            else
-                                trendingCourses.postValue(body())
-                        }
+                        if (offset == 0)
+                            suggestedCourses.postValue(body())
+                        else
+                            trendingCourses.postValue(body())
                     } else {
                         setError(fetchError(code()))
                     }
                 }
             }
-        }
-    }
-
-    fun checkIfWishlisted(course: List<Course>?, offset: Int){
-        runIO {
-            course?.forEach { courseSingle->
-                when (val response = homeRepo.checkIfWishlisted(courseSingle.id ?:"")) {
-                    is ResultWrapper.GenericError -> setError(response.error)
-                    is ResultWrapper.Success -> with(response.value) {
-                        if (isSuccessful) {
-                            if (response.value.body()?.id!=null){
-                                courseSingle.isWishlist = true
-                                courseSingle.userWishlistId = response.value.body()?.id
-                            }
-                        } else {
-                            setError(fetchError(code()))
-                        }
-                    }
-                }
-            }
-            if (offset == 0)
-                suggestedCourses.postValue(course)
-            else
-                trendingCourses.postValue(course)
         }
     }
 
@@ -336,9 +308,7 @@ class DashboardViewModel(
     fun fetchWishList(){
         runIO {
             when (val response = homeRepo.fetchWishlist()) {
-                is ResultWrapper.GenericError -> {
-                    setError(response.error)
-                }
+                is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         wishlist.postValue(response.value.body())
@@ -350,33 +320,33 @@ class DashboardViewModel(
         }
     }
 
+    fun changeWishlistStatus(courseSingle: Course){
+        runIO {
+            when (val response = homeRepo.checkIfWishlisted(courseSingle.id)) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> with(response.value) {
+                    if (isSuccessful) {
+                        if (response.value.body()?.id!=null){
+                            removeFromWishlist(response.value.body()?.id)
+                        }else{
+                            addToWishlist(courseSingle)
+                        }
+                    } else {
+                        setError(fetchError(code()))
+                    }
+                }
+            }
+        }
+    }
+
     fun addToWishlist(course: Course){
         val wishlist = Wishlist(course, User(prefs.SP_USER_ID))
         runIO {
             when (val response = homeRepo.addToWishlist(wishlist)) {
-                is ResultWrapper.GenericError -> {
-                    setError(response.error)
-                }
-                is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful) {
-                        updateList(course, response.value.body()?.id?:"", true)
-                        snackbar.postValue("${course.title} added to Wishlist")
-                    } else {
-                        setError(fetchError(response.value.code()))
-                    }
-                }
-            }
-        }
-    }
-
-    fun removeFromWishlist(course: Course){
-        runIO {
-            when (val response = homeRepo.removeFromWishlist(course.userWishlistId?:"")) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        updateList(course, response.value.body()?.id?:"", false)
-                        snackbar.postValue("${course.title} removed from Wishlist")
+                        toastMutable.postValue("Course added to Wishlist")
                     } else {
                         setError(fetchError(response.value.code()))
                     }
@@ -385,22 +355,18 @@ class DashboardViewModel(
         }
     }
 
-    fun updateList(course: Course, wishlistId : String, added: Boolean){
-        val trending = trendingCourses.value
-        val suggested = suggestedCourses.value
-        trending?.forEach {singleCourse->
-            if (singleCourse.id == course.id){
-                singleCourse.isWishlist = added
-                singleCourse.userWishlistId = wishlistId
+    fun removeFromWishlist(id: String?){
+        runIO {
+            when (val response = homeRepo.removeFromWishlist(id?:"")) {
+                is ResultWrapper.GenericError -> setError(response.error)
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        toastMutable.postValue("Course removed from Wishlist")
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
             }
         }
-        suggested?.forEach {singleCourse->
-            if (singleCourse.id == course.id){
-                singleCourse.isWishlist = added
-                singleCourse.userWishlistId = wishlistId
-            }
-        }
-        trendingCourses.postValue(trending)
-        suggestedCourses.postValue(suggested)
     }
 }

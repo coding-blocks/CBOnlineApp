@@ -41,6 +41,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.support.v4.startActivity
+import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DashboardExploreFragment : BaseCBFragment() {
@@ -73,14 +74,9 @@ class DashboardExploreFragment : BaseCBFragment() {
         object : WishlistListener{
             override fun onWishListClickListener(course: Course, position: Int) {
                 if (vm.isLoggedIn == true){
-                    if (!course.isWishlist!!){
-                        vm.addToWishlist(course)
-                    }else{
-                        vm.removeFromWishlist(course)
-                    }
+                    vm.changeWishlistStatus(course)
                 }
             }
-
         }
     }
 
@@ -138,8 +134,8 @@ class DashboardExploreFragment : BaseCBFragment() {
                 dashboardTracksRv.isVisible = true
             }
         }
-        vm.snackbar.observer(thisLifecycleOwner){
-            swipeToRefresh.showSnackbar(it, Snackbar.LENGTH_SHORT, dashboardBottomNav, false)
+        vm.toastMutable.observer(thisLifecycleOwner){
+            toast(it)
         }
 
         courseCardListAdapter.onItemClick = itemClickListener
