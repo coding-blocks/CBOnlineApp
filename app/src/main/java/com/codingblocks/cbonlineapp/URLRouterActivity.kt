@@ -27,7 +27,6 @@ class URLRouterActivity : BaseCBActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val key = sharedPrefs.SP_JWT_TOKEN_KEY
         intent?.data?.let { uri ->
 
             if (TextUtils.isEmpty(uri.host)) fallBack(uri, true)

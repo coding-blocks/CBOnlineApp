@@ -49,7 +49,7 @@ class QuizResultFragment : BaseCBFragment() {
 
         coroutineScope.launch {
             val response = withContext(Dispatchers.IO) { CBOnlineLib.onlineV2JsonApi.getQuizAttemptById(quizAttemptId) }
-            val questions = response?.body()?.result?.questions
+            val questions = response.body()?.result?.questions
             val totalQuestions = questions?.size
             var correctQuestions = 0
             questions?.forEach { question ->

@@ -15,6 +15,4 @@ class SettingsViewModel(
         withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
             contentDao.getDownloads(true)
         }
-
-    fun updateContent(section_id: String, lectureContentId: String, s: String) = "Nothing"
 }

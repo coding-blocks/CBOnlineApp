@@ -8,7 +8,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.activity_login2.*
 import org.jetbrains.anko.AnkoLogger
@@ -37,6 +37,9 @@ class LoginActivity : BaseCBActivity(), AnkoLogger {
                 AccountStates.DO_NOT_EXIST -> {
                     replaceFragmentSafely(SignUpFragment(), containerViewId = R.id.loginContainer)
                 }
+                else -> {
+                    //Todo - handle this
+                }
             }
         }
         replaceFragmentSafely(LoginHomeFragment(), containerViewId = R.id.loginContainer)
@@ -60,16 +63,6 @@ class LoginActivity : BaseCBActivity(), AnkoLogger {
         finish()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        val frg: Fragment? = supportFragmentManager.findFragmentByTag("SignIn")
-        when (requestCode) {
-            CREDENTIAL_PICKER_REQUEST ->
-                if (resultCode == Activity.RESULT_OK && data != null) {
-                    frg?.onActivityResult(requestCode, resultCode, data)
-                }
-        }
-    }
 
     override fun onBackPressed() {
         val count = supportFragmentManager.backStackEntryCount

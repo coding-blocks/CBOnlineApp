@@ -11,7 +11,7 @@ import android.os.SystemClock
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.codingblocks.cbonlineapp.CBOnlineApp
-import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.appContext
+import com.codingblocks.cbonlineapp.CBOnlineApp.Companion.mInstance
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.admin.AdminActivity
 import com.codingblocks.cbonlineapp.util.ADMIN_CHANNEL_ID
@@ -61,9 +61,9 @@ class DoubtReceiver : BroadcastReceiver() {
     }
 
     private fun showNotification(context: Context) {
-        val intent = Intent(CBOnlineApp.appContext, AdminActivity::class.java)
+        val intent = Intent(mInstance, AdminActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
-            appContext, 0 /* Request code */, intent,
+            mInstance, 0 /* Request code */, intent,
             PendingIntent.FLAG_ONE_SHOT
         )
         val notification = NotificationCompat.Builder(context, ADMIN_CHANNEL_ID).apply {

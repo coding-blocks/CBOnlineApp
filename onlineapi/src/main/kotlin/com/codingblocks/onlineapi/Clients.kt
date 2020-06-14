@@ -12,6 +12,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jasminb.jsonapi.ResourceConverter
 import com.github.jasminb.jsonapi.retrofit.JSONAPIConverterFactory
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
@@ -28,7 +29,7 @@ class Clients internal constructor(
         private const val LOCAL = "192.168.1.13:3000"
         private const val DEBUG = "api-online.codingblocks.xyz"
         private const val PROD = "online-api.codingblocks.com"
-
+        private const val URL = "online-api.codingblocks.com"
         const val CONNECT_TIMEOUT = 15
         const val READ_TIMEOUT = 15
     }
@@ -106,7 +107,7 @@ class Clients internal constructor(
         else -> false
     }
 
-    private val ClientInterceptor = OkHttpClient.Builder()
+    private val clientInterceptor = OkHttpClient.Builder()
         .connectTimeout(CONNECT_TIMEOUT.toLong(), TimeUnit.SECONDS)
         .readTimeout(READ_TIMEOUT.toLong(), TimeUnit.SECONDS)
         .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
@@ -121,8 +122,8 @@ class Clients internal constructor(
         .build()
 
     private val onlineV2JsonRetrofit = Retrofit.Builder()
-        .client(ClientInterceptor)
-        .baseUrl("http://$PROD/api/v2/")
+        .client(clientInterceptor)
+        .baseUrl("http://$DEBUG/api/v2/")
         .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
         .addConverterFactory(JacksonConverterFactory.create(om))
         .build()
@@ -130,13 +131,13 @@ class Clients internal constructor(
         get() = onlineV2JsonRetrofit
             .create(OnlineJsonApi::class.java)
 
-    var gson = GsonBuilder()
+    var gson: Gson = GsonBuilder()
         .setLenient()
         .create()
 
     private val retrofit = Retrofit.Builder()
-        .client(ClientInterceptor)
-        .baseUrl("http://$PROD/api/")
+        .client(clientInterceptor)
+        .baseUrl("http://$DEBUG/api/")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
     val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)

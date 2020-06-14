@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:paddingTop="@dimen/dashboard_toolbar_comp"
     tools:context="com.codingblocks.cbonlineapp.dashboard.explore.DashboardExploreFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="@dimen/dashboard_toolbar_comp"
         android:overScrollMode="never">
 
 
@@ -29,7 +29,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:cardCornerRadius="@dimen/corner_radius">
 
                 <LinearLayout
@@ -65,6 +65,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <ImageView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:id="@+id/campaignView"
                 android:layout_height="wrap_content"
