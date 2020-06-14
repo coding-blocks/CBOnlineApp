@@ -34,16 +34,17 @@ import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
 import com.codingblocks.cbonlineapp.dashboard.LOGGED_IN
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
-import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.glide.GlideApp
+import com.codingblocks.cbonlineapp.util.glide.loadImage
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Tags
@@ -91,10 +92,9 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     private lateinit var youtubePlayerInit: YouTubePlayer.OnInitializedListener
     private var youtubePlayer: YouTubePlayer? = null
 
-    val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val intent = result.data
-            // Handle the Intent
+            toast(getString(R.string.logged_in))
         }
     }
 
@@ -158,7 +158,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 }
             }
         }
-
+        GlideApp.with(this).load(R.drawable.wildcraft).into(goodiesImg)
         viewModel.course.observer(this) { course ->
             endLink = course.slug.toString()
             showTags(course.tags)
@@ -237,9 +237,11 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                     showOffline()
                 }
                 ErrorStatus.UNAUTHORIZED -> {
-                    Components.showConfirmation(this, UNAUTHORIZED) {
-                        if (it) {
+                    CustomDialog.showConfirmation(this, UNAUTHORIZED) { result ->
+                        if (result) {
                             startForResult(intentFor<LoginActivity>())
+                        } else {
+                            finish()
                         }
                     }
                 }

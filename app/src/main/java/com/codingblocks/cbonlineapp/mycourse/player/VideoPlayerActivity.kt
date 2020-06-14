@@ -24,6 +24,7 @@ import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
 import android.widget.RelativeLayout
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
 import androidx.work.BackoffPolicy
@@ -44,9 +45,8 @@ import com.codingblocks.cbonlineapp.mycourse.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.player.notes.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.Animations
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
-import com.codingblocks.cbonlineapp.util.DownloadWorker
+import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.LECTURE
-import com.codingblocks.cbonlineapp.util.MediaUtils.deleteRecursive
 import com.codingblocks.cbonlineapp.util.MediaUtils.getYoutubeVideoId
 import com.codingblocks.cbonlineapp.util.PreferenceHelper.Companion.getPrefs
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
@@ -54,16 +54,17 @@ import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.TITLE
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
-import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
-import com.codingblocks.cbonlineapp.util.extensions.observer
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.codingblocks.cbonlineapp.util.livedata.getDistinct
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
 import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
+import com.codingblocks.cbonlineapp.workers.DownloadWorker
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
@@ -184,7 +185,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
                     } else {
-                        fabMenu.setBackgroundColor(resources.getColor(R.color.white_transparent))
+                        fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity, R.color.white_transparent))
                     }
                 } else {
                     doubtFab.startAnimation(animationUtils.open)
@@ -193,7 +194,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         fabMenu.setBackgroundColor(getColor(R.color.black_95))
                     } else {
-                        fabMenu.setBackgroundColor(resources.getColor(R.color.black_95))
+                        fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity,R.color.black_95))
                     }
                 }
             }
@@ -212,7 +213,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         noteFab.setOnClickListener {
             updateSheet("")
         }
-        bookmarkBtn.setOnClickListener { view ->
+        bookmarkBtn.setOnClickListener {
             if (bookmarkBtn.isActivated)
                 vm.removeBookmark()
             else {
@@ -495,7 +496,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         val dir = File(getExternalFilesDir(Environment.getDataDirectory().absolutePath), contentId)
         GlobalScope.launch(Dispatchers.Main) {
             progressDialog.show()
-            withContext(Dispatchers.IO) { deleteRecursive(dir) }
+            withContext(Dispatchers.IO) { FileUtils.deleteRecursive(dir) }
             delay(3000)
             vm.updateDownload(0, contentId)
             progressDialog.dismiss()
@@ -663,8 +664,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     private fun setUpBottomSheet() {
         dialog.dismissWithAnimation = true
         dialog.setContentView(sheetDialog)
-        Objects.requireNonNull(dialog.window)
-            ?.setSoftInputMode(SOFT_INPUT_STATE_VISIBLE)
+        Objects.requireNonNull(dialog.window)?.setSoftInputMode(SOFT_INPUT_STATE_VISIBLE)
         dialog.setOnShowListener {
             val d = it as BottomSheetDialog
             val sheet = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)!!
@@ -672,11 +672,11 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
     }
 
-    fun navToLauncherTask(appContext: Context) {
-        val activityManager: ActivityManager = (appContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)!!
-        val appTasks: List<ActivityManager.AppTask> = activityManager.getAppTasks()
+    private fun navToLauncherTask(appContext: Context) {
+        val activityManager: ActivityManager = (appContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
+        val appTasks: List<ActivityManager.AppTask> = activityManager.appTasks
         for (task in appTasks) {
-            val baseIntent: Intent = task.getTaskInfo().baseIntent
+            val baseIntent: Intent = task.taskInfo.baseIntent
             val categories = baseIntent.categories
             if (categories != null && categories.contains(Intent.CATEGORY_LAUNCHER)) {
                 task.moveToFront()
@@ -697,12 +697,12 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                 checkProgress(second.toLong(), tracker.videoDuration.toLong())
             }
 
-            override fun onReady(player: YouTubePlayer) {
-                youtubePlayer = player
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                youtubePlayer = youTubePlayer
                 youtubePlayer.addListener(tracker)
                 isYoutubeVideoReady = true
                 val id = getYoutubeVideoId(youtubeUrl)
-                player.loadVideo(id, vm.position?.toFloat()?.div(1000) ?: 0f)
+                youTubePlayer.loadVideo(id, vm.position?.toFloat()?.div(1000) ?: 0f)
             }
         })
     }
@@ -905,7 +905,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
         } else {
-            fabMenu.setBackgroundColor(resources.getColor(R.color.white_transparent))
+            fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity,R.color.white_transparent))
         }
     }
 

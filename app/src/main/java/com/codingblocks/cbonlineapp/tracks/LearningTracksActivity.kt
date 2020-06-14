@@ -16,6 +16,9 @@ import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.PROFESSIONAL
 import com.codingblocks.cbonlineapp.util.STUDENT
 import com.codingblocks.cbonlineapp.util.extensions.*
+import com.codingblocks.cbonlineapp.util.livedata.nonNull
+import com.codingblocks.cbonlineapp.util.livedata.observeOnce
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Professions
@@ -71,7 +74,7 @@ class LearningTracksActivity : BaseCBActivity() {
         }
 
         needHelp.setOnClickListener {
-            showHelpDialog(type = "Track") { b: Boolean, name: String, number: String ->
+            showHelpDialog { _: Boolean, name: String, number: String ->
                 vm.generateLead(name, number)
                 root.showSnackbar("Your response has been submitted successfully", action = false)
             }

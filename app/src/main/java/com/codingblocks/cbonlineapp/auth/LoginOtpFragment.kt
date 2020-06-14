@@ -13,10 +13,9 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.util.MySMSBroadcastReceiver.OnSmsOTPReceivedListener
+import com.codingblocks.cbonlineapp.util.receivers.MySMSBroadcastReceiver.OnSmsOTPReceivedListener
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
-import com.codingblocks.cbonlineapp.util.extensions.observer
-import kotlinx.android.synthetic.main.fragment_login_home.*
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.fragment_login_otp.*
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -49,15 +48,20 @@ class LoginOtpFragment : BaseCBFragment(), OnSmsOTPReceivedListener {
         }
     }
 
-    private fun verifyWithOtp() {
-        verifyOtpBtn.isEnabled = false
-        vm.verifyOtp(otpEdtv.text.toString())
+    private fun verifyWithOtp(otp: String = "") {
+        verifyOtpBtn?.isEnabled = false
+        if (otp.isEmpty())
+            vm.verifyOtp(otpEdtv.text.toString())
+        else {
+            vm.verifyOtp(otp)
+        }
     }
 
     override fun onSmsOTPReceieved(otp: String) {
         if (otp.isNotEmpty()) {
-            otpEdtv.setText(otp)
-            verifyWithOtp()
+            if (otpEdtv != null)
+                otpEdtv.setText(otp)
+            verifyWithOtp(otp)
         }
     }
 

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import com.codingblocks.cbonlineapp.util.extensions.timeAgo
 import com.codingblocks.onlineapi.models.Spins

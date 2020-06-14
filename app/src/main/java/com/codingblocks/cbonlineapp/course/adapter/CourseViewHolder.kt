@@ -11,7 +11,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableStringSecondBold
 import com.codingblocks.cbonlineapp.util.extensions.greater
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.onlineapi.models.Course
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.item_course_card.view.*

@@ -20,14 +20,13 @@ import com.codingblocks.cbonlineapp.mycourse.player.notes.NotesWorker
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
-import com.codingblocks.cbonlineapp.util.ProgressWorker
+import com.codingblocks.cbonlineapp.workers.ProgressWorker
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
-import com.codingblocks.cbonlineapp.util.savedStateValue
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Bookmark
@@ -47,11 +46,6 @@ class VideoPlayerViewModel(
     private val repoDoubts: DashboardDoubtsRepository,
     val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
-
-    init {
-        Clients.refreshToken = prefs.SP_JWT_REFRESH_TOKEN
-        Clients.authJwt = prefs.SP_JWT_TOKEN_KEY
-    }
 
     var currentOrientation: Int = 0
     var sectionId by savedStateValue<String>(handle, SECTION_ID)
@@ -152,9 +146,9 @@ class VideoPlayerViewModel(
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
-                        response.value.body()?.let { bookmark ->
+                        response.value.body()?.let { result ->
                             offlineSnackbar.postValue(("Bookmark Added Successfully !"))
-                            repo.updateBookmark(bookmark)
+                            repo.updateBookmark(result)
                         }
                     else {
                         setError(fetchError(response.value.code()))
@@ -295,7 +289,7 @@ class VideoPlayerViewModel(
                         fetchDoubts()
                     } else {
                         try {
-                            val jObjError = JSONObject(response.value.errorBody()?.string())
+                            val jObjError = JSONObject(response.value.errorBody()?.string()!!)
                             val msg = (jObjError.getJSONArray("errors")[0] as JSONObject).getString("detail")
                             function(msg)
                         } catch (e: Exception) {

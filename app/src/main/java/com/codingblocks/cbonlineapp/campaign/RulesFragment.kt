@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_campaign_rules.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel

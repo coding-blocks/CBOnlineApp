@@ -9,7 +9,8 @@ import androidx.appcompat.app.AlertDialog
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.ShareUtils
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.glide.GlideApp
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.dialog_result.view.*
 import kotlinx.android.synthetic.main.dialog_share.view.fb
 import kotlinx.android.synthetic.main.dialog_share.view.twitter
@@ -33,6 +34,9 @@ class HomeFragment : BaseCBFragment(), AnkoLogger {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        GlideApp.with(requireContext())
+            .load(R.drawable.wheel)
+            .into(imageView)
         vm.spinsLiveData.observer(thisLifecycleOwner) {
             spinBtn.isEnabled = it > 0
             val with3digits = String.format("%02d", it)
@@ -53,10 +57,10 @@ class HomeFragment : BaseCBFragment(), AnkoLogger {
                     showDialog(res.size, res.title, res.description)
 
                 }
+                spinBtn.isEnabled = true
             } catch (e: Exception) {
 
             }
-            spinBtn.isEnabled = true
         }
 
         spinBtn.setOnClickListener {

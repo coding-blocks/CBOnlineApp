@@ -16,7 +16,7 @@ import com.codingblocks.cbonlineapp.course.adapter.PagedCourseListAdapter
 import com.codingblocks.cbonlineapp.dashboard.LOGGED_IN
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
-import com.codingblocks.cbonlineapp.util.DividerItemDecorator
+import com.codingblocks.cbonlineapp.util.recyclerciew.DividerItemDecorator
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.onlineapi.models.Course

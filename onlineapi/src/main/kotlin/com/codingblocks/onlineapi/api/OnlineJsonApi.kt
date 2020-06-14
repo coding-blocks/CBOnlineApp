@@ -339,7 +339,7 @@ interface OnlineJsonApi {
 
     @GET("spins")
     suspend fun getWinnings(
-        @Query("page[limit]") page: Int = 100,
+        @Query("exclude") exclude: String = "spin_prize.*,user",
         @Query("filter[used]") filter1: String = "true",
         @Query("filter[won]") filter2: String = "true",
         @Query("sort") sort: String = "-used_at",

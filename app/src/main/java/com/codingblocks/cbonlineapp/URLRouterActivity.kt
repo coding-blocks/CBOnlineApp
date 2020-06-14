@@ -10,7 +10,7 @@ import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.otherwise
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import org.koin.android.ext.android.inject
 
 class URLRouterActivity : BaseCBActivity() {
@@ -27,11 +27,6 @@ class URLRouterActivity : BaseCBActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val key = sharedPrefs.SP_JWT_TOKEN_KEY
-        if (key.isNotEmpty() && !JWTUtils.isExpired(key)) {
-            Clients.authJwt = sharedPrefs.SP_JWT_TOKEN_KEY
-            Clients.refreshToken = sharedPrefs.SP_JWT_REFRESH_TOKEN
-        }
         intent?.data?.let { uri ->
 
             if (TextUtils.isEmpty(uri.host)) fallBack(uri, true)

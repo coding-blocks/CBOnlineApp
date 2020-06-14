@@ -8,7 +8,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizFragment
 import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.onlineapi.models.QuizAttempt

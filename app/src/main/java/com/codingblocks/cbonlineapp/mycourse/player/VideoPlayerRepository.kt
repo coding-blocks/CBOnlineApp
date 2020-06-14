@@ -9,7 +9,7 @@ import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.database.models.BookmarkModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.database.models.PlayerState
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.Doubts
 import com.codingblocks.onlineapi.models.Note
@@ -22,13 +22,13 @@ class VideoPlayerRepository(
     private val sectionDao: SectionWithContentsDao,
     private val playerDao: PlayerDao
 ) {
-    suspend fun fetchCourseNotes(attemptId: String) = safeApiCall { Clients.onlineV2JsonApi.getNotesByAttemptId(attemptId) }
+    suspend fun fetchCourseNotes(attemptId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getNotesByAttemptId(attemptId) }
 
-    suspend fun deleteNote(noteId: String) = safeApiCall { Clients.onlineV2JsonApi.deleteNoteById(noteId) }
+    suspend fun deleteNote(noteId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.deleteNoteById(noteId) }
 
     fun deleteNoteFromDb(noteId: String) = notesDao.deleteNoteByID(noteId)
 
-    suspend fun addNote(note: Note) = safeApiCall { Clients.onlineV2JsonApi.createNote(note) }
+    suspend fun addNote(note: Note) = safeApiCall { CBOnlineLib.onlineV2JsonApi.createNote(note) }
 
     fun getContent(ccid: String) = contentDao.getContentLive(ccid).distinctUntilChanged()
 
@@ -73,12 +73,12 @@ class VideoPlayerRepository(
 
     fun getNotes(attemptId: String) = notesDao.getNotes(attemptId)
 
-    suspend fun updateNote(note: Note) = safeApiCall { Clients.onlineV2JsonApi.updateNoteById(note.id, note) }
+    suspend fun updateNote(note: Note) = safeApiCall { CBOnlineLib.onlineV2JsonApi.updateNoteById(note.id, note) }
 
     suspend fun getOtp(videoId: String, attemptId: String, sectionId: String) =
-        safeApiCall { Clients.api.getOtp(videoId, sectionId, attemptId) }
+        safeApiCall { CBOnlineLib.api.getOtp(videoId, sectionId, attemptId) }
 
-    suspend fun markDoubt(bookmark: Bookmark) = safeApiCall { Clients.onlineV2JsonApi.addBookmark(bookmark) }
+    suspend fun markDoubt(bookmark: Bookmark) = safeApiCall { CBOnlineLib.onlineV2JsonApi.addBookmark(bookmark) }
 
     suspend fun updateBookmark(bookmark: Bookmark) {
         bookmarkDao.insert(BookmarkModel(bookmark.id ?: "",
@@ -90,11 +90,11 @@ class VideoPlayerRepository(
 
     fun getContents(attemptId: String, sectionId: String) = sectionDao.getNextContent(attemptId, sectionId).distinctUntilChanged()
 
-    suspend fun removeBookmark(bookmarkUid: String) = safeApiCall { Clients.onlineV2JsonApi.deleteBookmark(bookmarkUid) }
+    suspend fun removeBookmark(bookmarkUid: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.deleteBookmark(bookmarkUid) }
 
     fun deleteBookmark(id: String) = bookmarkDao.deleteBookmark(id)
 
-    suspend fun addDoubt(doubt: Doubts) = safeApiCall { Clients.onlineV2JsonApi.createDoubt(doubt) }
+    suspend fun addDoubt(doubt: Doubts) = safeApiCall { CBOnlineLib.onlineV2JsonApi.createDoubt(doubt) }
 
     fun getBookmark(contentId: String) = bookmarkDao.getBookmarkById(contentId)
 

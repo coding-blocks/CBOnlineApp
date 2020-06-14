@@ -6,13 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.glide.loadImage
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.onlineapi.ErrorStatus
-import kotlinx.android.synthetic.main.activity_admin.*
 import kotlinx.android.synthetic.main.admin_overview_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -58,7 +57,7 @@ class AdminOverviewFragment : BaseCBFragment() {
         viewModel.errorLiveData.observer(thisLifecycleOwner) {
             when (it) {
                 ErrorStatus.UNAUTHORIZED -> {
-                    Components.showConfirmation(requireContext(), UNAUTHORIZED) {
+                    CustomDialog.showConfirmation(requireContext(), UNAUTHORIZED) {
                         requireActivity().finish()
                     }
                 }

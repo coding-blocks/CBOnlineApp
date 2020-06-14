@@ -1,13 +1,18 @@
 package com.codingblocks.cbonlineapp.mycourse
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.invoke
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
+import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.content.CourseContentFragment
@@ -15,15 +20,15 @@ import com.codingblocks.cbonlineapp.mycourse.library.CourseLibraryFragment
 import com.codingblocks.cbonlineapp.mycourse.overview.OverviewFragment
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
-import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.extensions.animateVisibility
-import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.codingblocks.cbonlineapp.util.extensions.pageChangeCallback
+import com.codingblocks.cbonlineapp.util.livedata.observer
+import com.codingblocks.cbonlineapp.util.livedata.pageChangeCallback
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.onlineapi.ErrorStatus
@@ -40,6 +45,11 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
     private val viewModel: MyCourseViewModel by stateViewModel()
     private val pagerAdapter by lazy { TabLayoutAdapter(supportFragmentManager) }
 
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            toast(getString(R.string.logged_in))
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_course)
@@ -78,7 +88,14 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
                     }
                 }
                 ErrorStatus.UNAUTHORIZED -> {
-                    Components.showConfirmation(this, UNAUTHORIZED) {
+                    CustomDialog.showConfirmation(this, UNAUTHORIZED) {
+                        CustomDialog.showConfirmation(this, UNAUTHORIZED) { result ->
+                            if (result) {
+                                startForResult(intentFor<LoginActivity>())
+                            } else {
+                                finish()
+                            }
+                        }
                     }
                 }
                 else -> {
@@ -104,7 +121,7 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
             currentItem = 0
             offscreenPageLimit = 2
             addOnPageChangeListener(
-                pageChangeCallback { pos, fl, i2 ->
+                pageChangeCallback { pos, _, _ ->
                     if (pos == 1) {
                         fab.animateVisibility(View.VISIBLE)
                     } else {

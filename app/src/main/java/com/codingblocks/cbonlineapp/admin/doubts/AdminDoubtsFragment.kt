@@ -9,11 +9,11 @@ import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.FragmentChangeListener
-import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showEmptyView
@@ -21,7 +21,6 @@ import com.codingblocks.cbonlineapp.util.extensions.showShimmer
 import com.codingblocks.onlineapi.ErrorStatus
 import com.codingblocks.onlineapi.models.Doubts
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.activity_admin.*
 import kotlinx.android.synthetic.main.doubts_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -132,7 +131,7 @@ class AdminDoubtsFragment : BaseCBFragment(), TabLayout.OnTabSelectedListener {
                     showEmptyView(internetll, emptyll, doubtShimmer)
                 }
                 ErrorStatus.UNAUTHORIZED -> {
-                    Components.showConfirmation(requireContext(), UNAUTHORIZED) {
+                    CustomDialog.showConfirmation(requireContext(), UNAUTHORIZED) {
                         requireActivity().finish()
                     }
                 }

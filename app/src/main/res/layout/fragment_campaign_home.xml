@@ -16,7 +16,7 @@
         android:text="This Summer, Spin the wheel with us and win assured prizes to spring up the learning spree"
         android:textAlignment="center"
         android:textColor="#EB2B40"
-        android:textSize="19sp" />
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
             android:text="Spins Left "
             android:textAlignment="viewStart"
             android:textColor="@color/dark"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/spinCountTv"
@@ -47,7 +47,7 @@
             android:text="00"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="18sp"
             app:backgroundTint="#EB2B40"
             app:cornerRadius="5dp" />
 
@@ -68,11 +68,11 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/spinBtn"
-        android:enabled="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/margin_medium_small"
+        android:enabled="false"
         android:fontFamily="@font/gilroy_bold"
         android:paddingStart="20dp"
         android:paddingTop="10dp"
@@ -85,35 +85,36 @@
 
 
     <RelativeLayout
-        android:gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:gravity="bottom">
 
         <ImageView
-            android:layout_below="@id/imageView"
-            android:layout_centerHorizontal="true"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
+            android:layout_below="@id/imageView"
+            android:layout_centerHorizontal="true"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_stand" />
 
         <ImageView
-            android:layout_centerHorizontal="true"
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/wheel" />
+
+            />
 
 
         <ImageView
-            android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/ic_ticker" />
 

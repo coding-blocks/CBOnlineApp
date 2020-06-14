@@ -6,6 +6,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
+import androidx.work.BackoffPolicy
+import androidx.work.PeriodicWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
@@ -15,24 +20,27 @@ import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.database.models.CourseRunPair
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.util.ALL
+import com.codingblocks.cbonlineapp.util.DELETE_DOWNLOADED_VIDEO
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
-import com.codingblocks.cbonlineapp.util.extensions.DoubleTrigger
-import com.codingblocks.cbonlineapp.util.extensions.getDistinct
 import com.codingblocks.cbonlineapp.util.extensions.runIO
-import com.codingblocks.cbonlineapp.util.savedStateValue
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.cbonlineapp.util.livedata.DoubleTrigger
+import com.codingblocks.cbonlineapp.util.livedata.getDistinct
+import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
+import com.codingblocks.cbonlineapp.workers.DeleteDownloadsWorker
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.getMeta
 import com.codingblocks.onlineapi.models.CareerTracks
 import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Player
+import com.google.common.util.concurrent.ListenableFuture
 import com.codingblocks.onlineapi.models.Wishlist
 import com.codingblocks.onlineapi.models.User
 import com.onesignal.OneSignal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 
 class DashboardViewModel(
     handle: SavedStateHandle,
@@ -42,17 +50,11 @@ class DashboardViewModel(
     private val repo: DashboardDoubtsRepository,
     val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
-    var isLoggedIn: Boolean? by savedStateValue(handle, LOGGED_IN)
-    var suggestedCourses = MutableLiveData<List<Course>>()
-    var trendingCourses = MutableLiveData<List<Course>>()
-    var wishlist = MutableLiveData<List<Wishlist>>()
-    var toastMutable = MutableLiveData<String>()
-
-
     init {
-        Clients.refreshToken = homeRepo.prefs.SP_JWT_REFRESH_TOKEN
-        Clients.authJwt = homeRepo.prefs.SP_JWT_TOKEN_KEY
+        checkDownloadDataWM()
     }
+
+    var isLoggedIn: Boolean? by savedStateValue(handle, LOGGED_IN)
 
     /**
      * Home Fragment
@@ -69,8 +71,6 @@ class DashboardViewModel(
                             val rt = it.asJsonObject.get("refresh_token").asString
                             homeRepo.prefs.SP_JWT_TOKEN_KEY = jwt
                             homeRepo.prefs.SP_JWT_REFRESH_TOKEN = rt
-                            Clients.authJwt = jwt
-                            Clients.refreshToken = rt
                         }
                     else {
                         setError(fetchError(response.value.code()))
@@ -125,6 +125,8 @@ class DashboardViewModel(
         }
     }
 
+    var suggestedCourses = MutableLiveData<List<Course>>()
+    var trendingCourses = MutableLiveData<List<Course>>()
     fun fetchRecommendedCourses(offset: Int, page: Int) {
         runIO {
             when (val response = exploreRepo.getSuggestedCourses(offset, page)) {
@@ -156,6 +158,27 @@ class DashboardViewModel(
                     }
                 }
             }
+        }
+    }
+
+    /** Function to execute [DeleteDownloadsWorker]*/
+    private fun checkDownloadDataWM() {
+        val wm = WorkManager.getInstance()
+
+        //Will get if Auto delete downloaded video request is already started or not
+        val future: ListenableFuture<List<WorkInfo>> = wm.getWorkInfosByTag(DELETE_DOWNLOADED_VIDEO)
+        val list: List<WorkInfo> = future.get()
+
+        //Request to delete video files which expired after 15 days
+        val request: PeriodicWorkRequest =
+            PeriodicWorkRequestBuilder<DeleteDownloadsWorker>(1, TimeUnit.DAYS)
+                .addTag(DELETE_DOWNLOADED_VIDEO)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                .build()
+
+        //If found empty then it is not started or cancelled for whatever reason, will add request to start it
+        if (list.isEmpty()) {
+            wm.enqueue(request)
         }
     }
 
@@ -210,7 +233,7 @@ class DashboardViewModel(
             is ResultWrapper.GenericError -> {
                 if (response.code in 101..103)
                     emitSource(homeRepo.getTopRun())
-                else{
+                else {
                     emitSource(MutableLiveData(null))
                 }
                 setError(response.error)
@@ -305,6 +328,8 @@ class DashboardViewModel(
 
     fun getPerformance(attemptId: String) = homeRepo.getRunStats(attemptId)
 
+    var wishlist = MutableLiveData<List<Wishlist>>()
+    var toastMutable = MutableLiveData<String>()
     fun fetchWishList(){
         runIO {
             when (val response = homeRepo.fetchWishlist()) {

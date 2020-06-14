@@ -10,7 +10,7 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.extensions.retrofitCallback
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import kotlinx.android.synthetic.main.activity_chat.*
 import org.koin.android.ext.android.inject
 
@@ -37,7 +37,7 @@ class ChatActivity : BaseCBActivity() {
             allowFileAccess = true
             allowFileAccessFromFileURLs = true
         }
-        Clients.api.getSignature().enqueue(retrofitCallback { _, response ->
+        CBOnlineLib.api.getSignature().enqueue(retrofitCallback { _, response ->
             val signature = response?.body()?.get("signature")
             val userId = prefs.SP_USER_ID
             val userName = prefs.SP_USER_NAME

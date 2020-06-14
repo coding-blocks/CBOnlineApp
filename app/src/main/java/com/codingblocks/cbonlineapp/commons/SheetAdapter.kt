@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.util.glide.loadImage
 import kotlinx.android.synthetic.main.item_bottomsheet.view.*
 
 class SheetAdapter(val items: ArrayList<SheetItem>, initialSelectedItem: Int = 0) : BaseAdapter() {
@@ -24,7 +25,7 @@ class SheetAdapter(val items: ArrayList<SheetItem>, initialSelectedItem: Int = 0
         if (position == selectedItem) {
             view.textView.apply {
                 text = sheetItem.name
-                setTextColor(resources.getColor(R.color.orangish))
+                setTextColor(ContextCompat.getColor(context, R.color.orangish))
                 var drawable: Drawable
                 if (sheetItem.image.isNotEmpty()) {
                     view.imgView.apply {
@@ -34,7 +35,7 @@ class SheetAdapter(val items: ArrayList<SheetItem>, initialSelectedItem: Int = 0
                 } else {
                     drawable = context.getDrawable(sheetItem.icon)!!
                     drawable = DrawableCompat.wrap(drawable)
-                    DrawableCompat.setTint(drawable, resources.getColor(R.color.orangish))
+                    DrawableCompat.setTint(drawable, ContextCompat.getColor(context, R.color.orangish))
                     DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_IN)
                     setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
                 }
@@ -42,7 +43,7 @@ class SheetAdapter(val items: ArrayList<SheetItem>, initialSelectedItem: Int = 0
         } else {
             view.textView.apply {
                 text = sheetItem.name
-                setTextColor(resources.getColor(R.color.black))
+                setTextColor(ContextCompat.getColor(context, R.color.black))
                 var drawable: Drawable
                 if (sheetItem.image.isNotEmpty()) {
                     view.imgView.apply {
@@ -52,7 +53,7 @@ class SheetAdapter(val items: ArrayList<SheetItem>, initialSelectedItem: Int = 0
                 } else {
                     drawable = context.getDrawable(sheetItem.icon)!!
                     drawable = DrawableCompat.wrap(drawable)
-                    DrawableCompat.setTint(drawable, resources.getColor(R.color.black))
+                    DrawableCompat.setTint(drawable, ContextCompat.getColor(context, R.color.black))
                     DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_IN)
                     setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
                 }

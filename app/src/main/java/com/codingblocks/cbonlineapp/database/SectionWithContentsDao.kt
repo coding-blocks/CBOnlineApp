@@ -21,7 +21,7 @@ interface SectionWithContentsDao {
     suspend fun insert(join: SectionWithContent)
 
     @Query("""
-        SELECT c.ccid as contentId,s.csid as sectionId,c.lectureId as videoId FROM  SectionModel s
+        SELECT c.ccid as contentId,s.csid as sectionId,c.lectureId as videoId,s.name FROM  SectionModel s
 	    INNER JOIN SectionWithContent sc ON sc."section_id" = s."csid"
 	    INNER JOIN ContentModel c ON c."ccid" = sc."content_id"
 	    WHERE s.attemptId = :attemptId AND s.csid = :sectionId AND c.contentable = "lecture"AND isDownloaded = 0 

@@ -14,7 +14,7 @@ import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog

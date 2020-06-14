@@ -24,8 +24,8 @@ import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import de.hdodenhof.circleimageview.CircleImageView
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.glide.loadImage
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.onlineapi.models.ProgressItem
 import com.github.mikephil.charting.charts.LineChart

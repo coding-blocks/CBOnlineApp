@@ -3,8 +3,6 @@ package com.codingblocks.cbonlineapp.dashboard
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ShortcutInfo
-import android.content.pm.ShortcutManager
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -14,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -31,12 +30,12 @@ import com.codingblocks.cbonlineapp.purchases.PurchasesActivity
 import com.codingblocks.cbonlineapp.settings.AboutActivity
 import com.codingblocks.cbonlineapp.settings.SettingsActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
-import com.codingblocks.cbonlineapp.util.Components
+import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.JWTUtils
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.colouriseToolbar
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.glide.loadImage
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.extensions.slideDown
@@ -89,7 +88,7 @@ class DashboardActivity : BaseCBActivity(),
         vm.errorLiveData.observer(this) { error ->
             when (error) {
                 ErrorStatus.UNAUTHORIZED -> {
-                    Components.showConfirmation(this, UNAUTHORIZED) {
+                    CustomDialog.showConfirmation(this, UNAUTHORIZED) {
                         if (it) {
                             startActivity(intentFor<LoginActivity>())
                         }
@@ -119,16 +118,6 @@ class DashboardActivity : BaseCBActivity(),
                 findViewById<TextView>(R.id.navUsernameTv).text = ("Hello ${vm.prefs.SP_USER_NAME}")
             }
         })
-    }
-
-    private fun fetchToken() {
-        val data = intent.data
-        if (data != null && data.isHierarchical) {
-            if (data.getQueryParameter("code") != null) {
-                val grantCode = data.getQueryParameter("code") as String
-//                vm.fetchToken(grantCode)
-            }
-        }
     }
 
     private fun initializeUI(loggedIn: Boolean) {
@@ -166,8 +155,8 @@ class DashboardActivity : BaseCBActivity(),
     @TargetApi(25)
     fun createShortcut() {
 
-        val sM = getSystemService(ShortcutManager::class.java)
-        val shortcutList: MutableList<ShortcutInfo> = ArrayList()
+//        val sM = getSystemService(ShortcutManager::class.java)
+//        val shortcutList: MutableList<ShortcutInfo> = ArrayList()
 
 //        vm.courses.observeOnce {
 //
@@ -300,10 +289,6 @@ class DashboardActivity : BaseCBActivity(),
         }
     }
 
-//    override fun onNewIntent(intent: Intent) {
-//        super.onNewIntent(intent)
-//        fetchToken()
-//    }
 
     fun openProfile(view: View) {
         if (vm.isLoggedIn == false) {
@@ -357,12 +342,12 @@ class DashboardActivity : BaseCBActivity(),
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             } else {
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, resources.getColor(R.color.white))
+                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, ContextCompat.getColor(this,R.color.white))
             }
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
         } else {
-            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, resources.getColor(R.color.black))
+            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, ContextCompat.getColor(this,R.color.black))
         }
 
         dashboardToolbarSecondary.post {

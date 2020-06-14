@@ -41,9 +41,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.DividerItemDecorator
+import com.codingblocks.cbonlineapp.util.recyclerciew.DividerItemDecorator
 import com.codingblocks.cbonlineapp.util.REOPENED
 import com.codingblocks.cbonlineapp.util.RESOLVED
+import com.codingblocks.cbonlineapp.util.recyclerciew.SpacesItemDecoration
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -193,7 +194,7 @@ fun RecyclerView.setRv(
 }
 
 private fun Float.toDp(): Float {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, CBOnlineApp.appContext?.displayMetrics)
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, CBOnlineApp.mInstance.displayMetrics)
 }
 
 fun View.showSnackbar(
@@ -363,7 +364,6 @@ fun View.animateVisibility(visible: Int) {
 }
 
 fun Toolbar.colouriseToolbar(context: Context, @DrawableRes toolbarDrawable: Int, @ColorInt foregroundColor: Int) {
-    if (this == null) return
     background = AppCompatResources.getDrawable(context, toolbarDrawable)
     setTitleTextColor(foregroundColor)
     setSubtitleTextColor(foregroundColor)
@@ -439,9 +439,8 @@ fun <T : RecyclerView.ViewHolder> T.listen(event: (position: Int, type: Int) -> 
 }
 
 fun Context.showHelpDialog(
-    type: String,
     cancelable: Boolean = true,
-    callback: (state: Boolean, name: String, number: String) -> Unit = { b: Boolean, s: String, s1: String -> }
+    callback: (state: Boolean, name: String, number: String) -> Unit
 ) {
 
     val dialog = AlertDialog.Builder(this).create()

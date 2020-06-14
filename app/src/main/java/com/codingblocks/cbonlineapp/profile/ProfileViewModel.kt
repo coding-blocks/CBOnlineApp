@@ -3,7 +3,7 @@ package com.codingblocks.cbonlineapp.profile
 import androidx.lifecycle.MutableLiveData
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
-import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.User
@@ -69,8 +69,6 @@ class ProfileViewModel(private val repo: ProfileRepository) : BaseCBViewModel() 
                             val rt = it.asJsonObject.get("refresh_token").asString
                             repo.prefs.SP_JWT_TOKEN_KEY = jwt
                             repo.prefs.SP_JWT_REFRESH_TOKEN = rt
-                            Clients.authJwt = jwt
-                            Clients.refreshToken = rt
                         }
                 }
             }
