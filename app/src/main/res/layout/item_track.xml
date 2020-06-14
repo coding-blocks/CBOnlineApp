@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_medium_small"
         android:fontFamily="@font/gilroy_bold"
-        android:textColor="@color/black"
+        android:textColor="@color/head"
         android:textSize="16sp"
         android:ellipsize="end"
         android:maxLines="2"
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:fontFamily="@font/gilroy_medium"
-        android:textColor="@color/brownish_grey"
+        android:textColor="@color/subHead"
         android:textSize="12sp"
         tools:text="4 Courses" />
 

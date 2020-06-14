@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_extra_small"
             android:fontFamily="@font/gilroy_medium"
-            android:textColor="@color/black"
+            android:textColor="@color/subHead"
             android:textSize="14sp"
             tools:text="Introduction to Python" />
 
@@ -47,7 +47,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
         android:fontFamily="@font/gilroy_medium"
-        android:textColor="@color/brownish_grey"
+        android:textColor="@color/subHead"
         android:textSize="12sp"
         tools:text="4 hours ago" />
 

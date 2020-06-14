@@ -21,7 +21,7 @@
             app:cardElevation="0dp"
             app:strokeColor="@color/veryLightPink"
             app:strokeWidth="1dp"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="@color/cardBackground"
             app:cardCornerRadius="10dp">
 
             <RelativeLayout
@@ -43,6 +43,7 @@
                     android:layout_below="@+id/performanceImg"
                     android:fontFamily="@font/gilroy_bold"
                     android:textSize="16sp"
+                    android:textColor="@color/head"
                     tools:text="Average" />
 
                 <TextView
@@ -52,6 +53,7 @@
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/gilroy_medium"
                     android:text="@string/your_performance"
+                    android:textColor="@color/subHead"
                     android:textSize="14sp" />
 
             </RelativeLayout>
@@ -64,7 +66,7 @@
             android:layout_marginStart="@dimen/margin_medium"
             app:strokeColor="@color/veryLightPink"
             app:strokeWidth="1dp"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="@color/cardBackground"
             app:cardCornerRadius="10dp">
 
             <RelativeLayout
@@ -84,6 +86,7 @@
                     android:layout_marginTop="4dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/leaderboardImg"
+                    android:textColor="@color/head"
                     android:fontFamily="@font/gilroy_bold"
                     android:textSize="16sp"
                     tools:text="233/450" />
@@ -95,6 +98,7 @@
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/gilroy_medium"
                     android:text="@string/percentile"
+                    android:textColor="@color/subHead"
                     android:textSize="14sp" />
 
             </RelativeLayout>

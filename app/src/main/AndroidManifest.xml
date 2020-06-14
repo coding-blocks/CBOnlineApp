@@ -29,6 +29,7 @@
         <activity android:name=".campaign.CampaignActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
+            android:configChanges="uiMode"
             android:parentActivityName=".dashboard.DashboardActivity">
         </activity>
         <activity

@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/course_progress"
-                    android:textColor="@color/black"
+                    android:textColor="@color/head"
                     android:textSize="18sp" />
 
                 <TextView
@@ -151,7 +151,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/gilroy_bold"
                         android:text="@string/course_leaderboard"
-                        android:textColor="@color/black"
+                        android:textColor="@color/head"
                         android:textSize="16sp" />
 
                     <TextView
@@ -220,7 +220,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/gilroy_bold"
                         android:text="@string/course_leaderboard"
-                        android:textColor="@color/black"
+                        android:textColor="@color/head"
                         android:textSize="16sp" />
 
                     <TextView
@@ -229,7 +229,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/gilroy_medium"
                         android:text="@string/leaderboard_desc"
-                        android:textColor="@color/brownish_grey"
+                        android:textColor="@color/subHead"
                         android:textSize="13sp" />
 
                 </LinearLayout>
@@ -250,7 +250,7 @@
                     android:layout_weight="0.2"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/rank"
-                    android:textColor="@color/black"
+                    android:textColor="@color/head"
                     android:textSize="16sp" />
 
                 <TextView
@@ -259,7 +259,7 @@
                     android:layout_weight="0.6"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/user"
-                    android:textColor="@color/black"
+                    android:textColor="@color/head"
                     android:textSize="16sp" />
 
                 <TextView
@@ -269,7 +269,7 @@
                     android:layout_weight="0.2"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/score"
-                    android:textColor="@color/black"
+                    android:textColor="@color/head"
                     android:textSize="16sp" />
 
             </LinearLayout>

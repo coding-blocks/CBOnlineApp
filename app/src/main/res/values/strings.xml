@@ -316,4 +316,9 @@
     <string name="winnings">Winnings</string>
     <string name="leaderboard">Leaderboard</string>
     <string name="rules">Rules</string>
+    <string name="enable_dark_mode">Enable Dark Mode</string>
+    <string name="allow_picture_in_picture_mode">Allow Picture in Picture Mode</string>
+    <string name="download_via_wi_fi_only">Download via Wi-Fi only</string>
+    <string name="available_storage">Available Storage</string>
+    <string name="delete_all_downloads">Delete all downloads</string>
 </resources>

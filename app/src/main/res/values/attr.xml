@@ -10,4 +10,11 @@
         <attr name="endColor" format="reference|color" />
 
     </declare-styleable>
+
+    <style name="DarkTheme" parent="NewAppTheme">
+        
+        <item name="background">@color/dark</item>
+        <item name="android:textColor">@color/white</item>
+        
+    </style>
 </resources>

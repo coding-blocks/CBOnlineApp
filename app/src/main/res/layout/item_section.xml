@@ -27,7 +27,7 @@
         android:ellipsize="end"
         android:fontFamily="@font/gilroy_bold"
         android:lines="1"
-        android:textColor="@color/black"
+        android:textColor="@color/head"
         android:textSize="18sp"
         tools:text="1.Introduction to Android Development" />
 
@@ -41,7 +41,7 @@
         android:layout_toEndOf="@id/lectures"
         android:fontFamily="@font/gilroy_medium"
         android:maxLines="1"
-        android:textColor="@color/brownish_grey"
+        android:textColor="@color/subHead"
         android:textSize="14sp"
         tools:text="30 Mins" />
 
@@ -54,7 +54,7 @@
         android:layout_marginTop="4dp"
         android:fontFamily="@font/gilroy_medium"
         android:maxLines="1"
-        android:textColor="@color/brownish_grey"
+        android:textColor="@color/subHead"
         android:textSize="14sp"
         tools:text="3 Lectures" />
 
@@ -71,7 +71,7 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/download_states"
-        android:tint="@color/black"
+        android:tint="@color/head"
         android:visibility="gone" />
 
     <View

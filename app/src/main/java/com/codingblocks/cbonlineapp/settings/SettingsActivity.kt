@@ -88,9 +88,13 @@ class SettingsActivity : BaseCBActivity() {
         setSeekbarProgress(seekbarLimit.progress)
 
         pipSwitch.isChecked = getPrefs().SP_PIP
-
+        darkMode.isChecked = getPrefs().SP_DARK_MODE
         pipSwitch.setOnClickListener {
             getPrefs().SP_PIP = pipSwitch.isChecked
+        }
+
+        darkMode.setOnClickListener {
+            getPrefs().SP_DARK_MODE = darkMode.isChecked
         }
     }
 

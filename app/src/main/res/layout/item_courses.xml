@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gilroy_bold"
-            android:textColor="@color/black"
+            android:textColor="@color/head"
             android:textSize="18sp"
             android:ellipsize="end"
             android:lines="1"
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/gilroy_medium"
-            android:textColor="@color/black"
+            android:textColor="@color/subHead"
             android:textSize="14sp"
             android:ellipsize="end"
             android:lines="1"
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/gilroy_bold"
-                android:textColor="@color/black"
+                android:textColor="@color/head"
                 android:textSize="14sp"
                 tools:text="100%" />
 

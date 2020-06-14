@@ -37,9 +37,9 @@
             android:paddingTop="@dimen/margin_extra_small"
             android:paddingStart="@dimen/margin_medium"
             android:paddingEnd="@dimen/margin_medium"
-            app:tabIndicatorColor="@color/black"
+            app:tabIndicatorColor="@color/subHead"
             app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/dark"
+            app:tabSelectedTextColor="@color/head"
             app:tabTextAppearance="@style/AppTabTextAppearance">
 
             <com.google.android.material.tabs.TabItem

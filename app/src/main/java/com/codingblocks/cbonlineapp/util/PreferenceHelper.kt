@@ -97,6 +97,12 @@ class PreferenceHelper private constructor() {
             prefs?.save(PIP, value)
         }
 
+    var SP_DARK_MODE: Boolean
+        get() = prefs?.getBoolean(DARK_MODE, DARK_MODE_DEFAULT) ?: DARK_MODE_DEFAULT
+        set(value) {
+            prefs?.save(DARK_MODE, value)
+        }
+
     var SP_COURSE_FILTER_TYPE: Int
         get() = prefs?.getInt("COURSE_FILTER_TYPE", COURSE_FILTER_TYPE) ?: COURSE_FILTER_TYPE
         set(value) {
@@ -131,6 +137,8 @@ class PreferenceHelper private constructor() {
         const val PLAYBACK_SPEED_DEFAULT = 1f
 
         const val PIP = "pip"
+        const val DARK_MODE = "darkMode"
+        const val DARK_MODE_DEFAULT = true
         const val PIP_DEFAULT = false
         private var prefs: SharedPreferences? = null
         private var instance: PreferenceHelper = PreferenceHelper()

@@ -14,10 +14,7 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
-import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
-import com.codingblocks.cbonlineapp.util.extensions.observer
-import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.*
 import com.codingblocks.onlineapi.models.ProgressItem
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
@@ -175,10 +172,13 @@ fun LineChart.loadData(
     this.apply {
         this.data = data
         setTouchEnabled(false)
+        axisRight.textColor = getColor(context, R.color.head)
         axisRight.setDrawGridLines(false)
         axisLeft.setDrawGridLines(true)
+        axisLeft.textColor = getColor(context, R.color.head)
         xAxis.setDrawGridLines(true)
         notifyDataSetChanged()
+        xAxis.textColor = getColor(context, R.color.head)
         xAxis.labelCount = 10
         invalidate()
     }

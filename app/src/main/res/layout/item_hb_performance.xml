@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/gilroy_bold"
             android:text="@string/hb_report"
-            android:textColor="@color/black"
+            android:textColor="@color/head"
             android:textSize="18sp" />
     </LinearLayout>
 
@@ -37,7 +37,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@color/cardBackground"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
                 app:strokeColor="@color/veryLightPink"
@@ -60,6 +60,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/rankImage"
                         android:layout_marginTop="4dp"
+                        android:textColor="@color/head"
                         android:fontFamily="@font/gilroy_bold"
                         android:textSize="16sp"
                         tools:text="412633" />
@@ -70,6 +71,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/currentOverallRank"
                         android:layout_marginTop="4dp"
+                        android:textColor="@color/subHead"
                         android:fontFamily="@font/gilroy_medium"
                         android:text="@string/current_rank"
                         android:textSize="14sp" />
@@ -94,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_medium"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@color/cardBackground"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
                 app:strokeColor="@color/veryLightPink"
@@ -117,6 +119,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/leaderboardImg"
                         android:layout_marginTop="4dp"
+                        android:textColor="@color/head"
                         android:fontFamily="@font/gilroy_bold"
                         android:textSize="16sp"
                         tools:text="123 Points" />
@@ -127,6 +130,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/currentMonthScore"
                         android:layout_marginTop="4dp"
+                        android:textColor="@color/subHead"
                         android:fontFamily="@font/gilroy_medium"
                         android:text="@string/hb_performance"
                         android:textSize="14sp" />

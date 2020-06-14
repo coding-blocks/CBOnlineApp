@@ -22,6 +22,7 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:lines="1"
+            android:textColor="@color/head"
             android:fontFamily="@font/gilroy_bold"
             android:textSize="16sp"
             tools:text="This is the title of the doubt " />
@@ -34,7 +35,7 @@
             android:layout_marginStart="@dimen/margin_extra_small"
             android:layout_marginEnd="4dp"
             android:fontFamily="@font/gilroy_medium"
-            android:textColor="@color/brownish_grey"
+            android:textColor="@color/subHead"
             android:textSize="12sp"
             tools:text="4 hours ago" />
     </LinearLayout>
@@ -44,6 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:textColor="@color/head"
         android:fontFamily="@font/gilroy_medium"
         android:textSize="16sp"
         app:trimLength="100"
@@ -55,7 +57,7 @@
         android:layout_marginTop="12dp"
         android:visibility="gone"
         android:fontFamily="@font/gilroy_medium"
-        android:textColor="@color/brownish_grey"
+        android:textColor="@color/subHead"
         android:textSize="14sp"
         tools:text="View 23 comments" />
 

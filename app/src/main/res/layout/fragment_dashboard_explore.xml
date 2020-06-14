@@ -103,7 +103,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/gilroy_bold"
                         android:text="@string/popular_courses"
-                        android:textColor="@color/black"
+                        android:textColor="@color/head"
                         android:textSize="16sp" />
 
                     <TextView
@@ -114,7 +114,7 @@
                         android:fontFamily="@font/gilroy_medium"
                         android:gravity="center"
                         android:text="@string/popular_desc"
-                        android:textColor="@color/brownish_grey"
+                        android:textColor="@color/subHead"
                         android:textSize="13sp" />
 
                 </LinearLayout>
@@ -177,7 +177,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/gilroy_bold"
                         android:text="@string/learning_tracks"
-                        android:textColor="@color/black"
+                        android:textColor="@color/head"
                         android:textSize="16sp" />
 
                     <TextView
@@ -188,7 +188,7 @@
                         android:fontFamily="@font/gilroy_medium"
                         android:gravity="center"
                         android:text="@string/track_desc"
-                        android:textColor="@color/brownish_grey"
+                        android:textColor="@color/subHead"
                         android:textSize="13sp" />
 
                 </LinearLayout>
@@ -267,7 +267,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/gilroy_bold"
                         android:text="@string/trending_now"
-                        android:textColor="@color/black"
+                        android:textColor="@color/head"
                         android:textSize="16sp" />
 
                     <TextView
@@ -278,7 +278,7 @@
                         android:fontFamily="@font/gilroy_medium"
                         android:gravity="center"
                         android:text="@string/trending_desc"
-                        android:textColor="@color/brownish_grey"
+                        android:textColor="@color/subHead"
                         android:textSize="13sp" />
 
                 </LinearLayout>

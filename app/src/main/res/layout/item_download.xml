@@ -28,6 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:textColor="@color/head"
             android:fontFamily="@font/gilroy_bold"
             android:textSize="16sp"
             tools:text="This is the title of the doubt " />
@@ -38,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/gilroy_medium"
-            android:textColor="@color/brownish_grey"
+            android:textColor="@color/subHead"
             android:textSize="14sp"
             tools:text="Duration : 60 minutes | 60MB" />
 

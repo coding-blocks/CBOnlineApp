@@ -69,6 +69,7 @@
                 android:drawablePadding="10dp"
                 android:fontFamily="@font/gilroy_bold"
                 android:gravity="center"
+                android:textColor="@color/black"
                 android:text="@string/thresholdcompletion"
                 android:textSize="16sp" />
 
@@ -81,6 +82,7 @@
                 android:drawablePadding="10dp"
                 android:fontFamily="@font/gilroy_bold"
                 android:gravity="center"
+                android:textColor="@color/black"
                 android:text="@string/mentorapproval"
                 android:textSize="16sp" />
 

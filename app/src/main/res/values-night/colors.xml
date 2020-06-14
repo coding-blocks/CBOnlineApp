@@ -15,7 +15,6 @@
     <color name="algae_green">#25d366</color>
 
     <color name="dark_grey">#222222</color>
-    <color name="light_grey">#292c33</color>
     <color name="neon_red">#ff003a</color>
     <color name="light_transparent">#16000000</color>
 
@@ -39,7 +38,7 @@
     <color name="black_95">#f3333333</color>
     <color name="bottomNavSelected">#F2734C</color>
     <color name="yellow">#FFD81F</color>
-    <color name="head">@color/black</color>
-    <color name="subHead">@color/brownish_grey</color>
-    <color name="cardBackground">@color/white</color>
+    <color name="head">@color/white</color>
+    <color name="subHead">@color/battleship_gray</color>
+    <color name="cardBackground">@color/dark</color>
 </resources>

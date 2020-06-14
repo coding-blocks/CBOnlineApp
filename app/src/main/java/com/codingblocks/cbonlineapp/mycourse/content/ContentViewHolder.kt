@@ -47,7 +47,7 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                 title.textColor = getColor(context, R.color.freshGreen)
             } else {
                 contentType.isActivated = false
-                title.textColor = getColor(context, R.color.black)
+                title.textColor = getColor(context, R.color.head)
             }
             setOnClickListener {
                 onItemClick?.invoke(contentModel)

@@ -34,7 +34,7 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/ripple"
             android:fontFamily="@font/gilroy_bold"
-            android:text="Download via Wi-Fi only"
+            android:text="@string/download_via_wi_fi_only"
             android:textSize="18sp"
             app:theme="@style/ColorSwitchStyle" />
 
@@ -51,9 +51,26 @@
             android:layout_height="wrap_content"
             android:background="@drawable/ripple"
             android:fontFamily="@font/gilroy_bold"
-            android:text="Allow Picture in Picture Mode"
+            android:text="@string/allow_picture_in_picture_mode"
             android:textSize="18sp"
-            app:theme="@style/ColorSwitchStyle"></Switch>
+            app:theme="@style/ColorSwitchStyle" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="#eeeeee" />
+
+        <Switch
+            android:id="@+id/darkMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="@string/enable_dark_mode"
+            android:textSize="18sp"
+            app:theme="@style/ColorSwitchStyle" />
 
         <View
             android:layout_width="match_parent"
@@ -68,7 +85,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/ripple"
             android:fontFamily="@font/gilroy_bold"
-            android:text="Delete all downloads"
+            android:text="@string/delete_all_downloads"
             android:textColor="@color/black"
             android:textSize="18sp" />
 
@@ -83,7 +100,7 @@
             android:fontFamily="@font/gilroy_bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Available Storage" />
+            android:text="@string/available_storage" />
 
         <ProgressBar
             style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"

@@ -47,7 +47,7 @@
                     android:layout_toEndOf="@id/homeCourseLogoImg"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/course_progress"
-                    android:textColor="@color/black"
+                    android:textColor="@color/head"
                     android:textSize="18sp" />
 
                 <TextView
@@ -113,7 +113,7 @@
                     android:layout_height="160dp"
                     android:layout_below="@id/graph"
                     android:layout_marginStart="@dimen/margin_large"
-                    android:layout_marginEnd="@dimen/margin_large" />
+                    android:layout_marginEnd="@dimen/margin_large"/>
             </RelativeLayout>
 
             <LinearLayout
@@ -136,7 +136,7 @@
                     android:layout_marginTop="@dimen/margin_large"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/dashboard"
-                    android:textColor="@color/black"
+                    android:textColor="@color/head"
                     android:textSize="18sp" />
 
                 <TextView
@@ -146,7 +146,7 @@
                     android:fontFamily="@font/gilroy_medium"
                     android:text="@string/dashboard_empty_progress"
                     android:textAlignment="center"
-                    android:textColor="@color/brownish_grey" />
+                    android:textColor="@color/subHead" />
 
                 <View
                     android:layout_width="200dp"
@@ -194,7 +194,7 @@
                     android:drawablePadding="10dp"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/continue_from_where_you_left"
-                    android:textColor="@color/black"
+                    android:textColor="@color/head"
                     android:textSize="16sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -238,7 +238,7 @@
                     android:layout_toEndOf="@id/wishImg"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/my_wishlist"
-                    android:textColor="@color/black"
+                    android:textColor="@color/head"
                     android:textSize="16sp" />
 
                 <TextView
@@ -252,7 +252,7 @@
                     android:fontFamily="@font/gilroy_medium"
                     android:gravity="center"
                     android:text="@string/wishlisted_desc"
-                    android:textColor="@color/brownish_grey"
+                    android:textColor="@color/subHead"
                     android:textSize="13sp" />
 
 
@@ -308,7 +308,7 @@
                     android:layout_marginTop="@dimen/margin_large"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/my_wishlist"
-                    android:textColor="@color/black"
+                    android:textColor="@color/head"
                     android:textSize="18sp" />
 
                 <TextView
@@ -318,7 +318,7 @@
                     android:fontFamily="@font/gilroy_medium"
                     android:text="@string/dashboard_empty_wish"
                     android:textAlignment="center"
-                    android:textColor="@color/brownish_grey" />
+                    android:textColor="@color/subHead" />
 
                 <View
                     android:layout_width="200dp"
@@ -367,7 +367,7 @@
                 android:layout_marginTop="@dimen/margin_large"
                 android:fontFamily="@font/gilroy_bold"
                 android:text="@string/dashboard"
-                android:textColor="@color/black"
+                android:textColor="@color/head"
                 android:textSize="18sp" />
 
             <TextView
@@ -377,7 +377,7 @@
                 android:fontFamily="@font/gilroy_medium"
                 android:text="@string/my_dashboard_logged_out"
                 android:textAlignment="center"
-                android:textColor="@color/brownish_grey" />
+                android:textColor="@color/subHead" />
 
             <View
                 android:layout_width="200dp"
