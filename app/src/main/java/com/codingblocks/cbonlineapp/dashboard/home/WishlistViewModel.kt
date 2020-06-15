@@ -1,32 +1,33 @@
 package com.codingblocks.cbonlineapp.dashboard.home
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
-import com.codingblocks.cbonlineapp.util.extensions.runIO
-import com.codingblocks.onlineapi.ResultWrapper
-import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Wishlist
-import kotlinx.coroutines.Dispatchers
 
-class WishlistViewModel(
-    private val repo: WishlistRepository
-) : BaseCBViewModel() {
+class WishlistViewModel() : BaseCBViewModel() {
 
-    var wishlist = MutableLiveData<List<Wishlist>>()
-    fun fetchWishList() {
-        runIO {
-            when (val response = repo.fetchWishlist()) {
-                is ResultWrapper.GenericError -> {
-                    setError(response.error)
-                }
-                is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful) {
-                        wishlist.postValue(response.value.body())
-                    } else {
-                        setError(fetchError(response.value.code()))
-                    }
-                }
+    private var wishlist : LiveData<PagedList<Wishlist>>
+    init {
+        val config = PagedList.Config.Builder()
+            .setPageSize(10)
+            .setEnablePlaceholders(true)
+            .build()
+        wishlist = initializedPagedListBuilder(config).build()
+    }
+    fun fetchWishList():LiveData<PagedList<Wishlist>> = wishlist
+
+    private fun initializedPagedListBuilder(config: PagedList.Config):
+        LivePagedListBuilder<String, Wishlist> {
+
+        val dataSourceFactory = object : DataSource.Factory<String, Wishlist>() {
+            override fun create(): DataSource<String, Wishlist> {
+                return WishlistDataSource(viewModelScope)
             }
         }
+        return LivePagedListBuilder(dataSourceFactory, config)
     }
 }

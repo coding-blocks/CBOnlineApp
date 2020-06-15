@@ -356,10 +356,11 @@ interface OnlineJsonApi {
 
     @GET("user_course_wishlists")
     suspend fun getWishlist(
+        @Query("page[offset]") offset: String? = "0",
         @Query("exclude") exclude: String = "course.*",
         @Query("include") include: String = "course",
         @Query("page[limit]") page: String = "3"
-    ): Response<List<Wishlist>>
+    ): Response<JSONAPIDocument<List<Wishlist>>>
 
     @POST("user_course_wishlists")
     suspend fun addToWishlist(@Body params: Wishlist) : Response<Wishlist>

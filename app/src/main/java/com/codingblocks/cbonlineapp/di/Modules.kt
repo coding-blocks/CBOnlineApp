@@ -18,7 +18,6 @@ import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsViewModel
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
-import com.codingblocks.cbonlineapp.dashboard.home.WishlistRepository
 import com.codingblocks.cbonlineapp.dashboard.home.WishlistViewModel
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
 import com.codingblocks.cbonlineapp.database.AppDatabase
@@ -65,7 +64,7 @@ val viewModelModule = module {
     viewModel { CheckoutViewModel() }
     viewModel { TrackViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
-    viewModel { WishlistViewModel(get()) }
+    viewModel { WishlistViewModel() }
     viewModel { (handle: SavedStateHandle) -> AuthViewModel(handle, get()) }
     viewModel { (handle: SavedStateHandle) -> CodeChallengeViewModel(handle, get()) }
     viewModel { (handle: SavedStateHandle) -> CampaignViewModel(handle, get()) }
@@ -85,7 +84,6 @@ val viewModelModule = module {
     single { ProfileRepository(get()) }
     single { CodeChallengeRepository(get()) }
     single { AuthRepository(get()) }
-    single { WishlistRepository() }
     single { CampaignRepository(get()) }
 }
 val preferencesModule = module {

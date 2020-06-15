@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -31,7 +30,6 @@ import com.codingblocks.cbonlineapp.course.batches.CourseTierFragment
 import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
-import com.codingblocks.cbonlineapp.dashboard.LOGGED_IN
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.CustomDialog
@@ -41,12 +39,12 @@ import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.extensions.getLoadingDialog
 import com.codingblocks.cbonlineapp.util.extensions.getSpannableSring
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.glide.GlideApp
 import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.onlineapi.ErrorStatus
-import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Tags
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
@@ -73,10 +71,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
     private val courseLogoImage by lazy {
         intent.getStringExtra(LOGO_TRANSITION_NAME)
     }
-    private val isLoggedIn by lazy {
-        intent.getBooleanExtra(LOGGED_IN, false)
-    }
-
     private val courseLogoUrl by lazy {
         intent.getStringExtra(COURSE_LOGO)
     }
@@ -105,7 +99,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
                 intent.putExtra(COURSE_ID, id)
                 intent.putExtra(COURSE_LOGO, name)
                 intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
-                intent.putExtra(LOGGED_IN, isLoggedIn)
 
                 val options: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -120,9 +113,9 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
 
     private val wishlistListener: WishlistListener by lazy {
         object : WishlistListener {
-            override fun onWishListClickListener(course: Course, position: Int) {
-                if (isLoggedIn) {
-                    viewModel.changeWishlistStatus(course)
+            override fun onWishListClickListener(id: String, position: Int) {
+                if (getPrefs().SP_JWT_TOKEN_KEY.isNotEmpty()) {
+                    viewModel.changeWishlistStatus(id)
                 }
             }
         }
@@ -135,7 +128,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         supportPostponeEnterTransition()
         setToolbar(courseToolbar)
         viewModel.id = courseId
-        viewModel.isLoggedIn = isLoggedIn
         viewModel.fetchCourse()
 
         courseProjectsRv.setRv(this@CourseActivity, projectAdapter, true)
@@ -215,7 +207,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
         }
 
         viewModel.wishlistUpdated.observer(this) {
-            if (isLoggedIn) {
+            if (getPrefs().SP_JWT_TOKEN_KEY.isNotEmpty()) {
                 if (courseToolbar.menu.size()>0){
                     courseToolbar.menu.get(0).icon = getDrawable(
                         if (it)
@@ -356,7 +348,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             true
         }
         R.id.wishlist ->{
-            if (isLoggedIn){
+            if (getPrefs().SP_JWT_TOKEN_KEY.isNotEmpty()){
                 viewModel.changeWishlistStatus(mainCourse = true)
             }
             true

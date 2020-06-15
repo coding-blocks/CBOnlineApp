@@ -27,7 +27,6 @@ class CourseViewModel(
     val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
     lateinit var id: String
-    var isLoggedIn: Boolean = false
     var course = MutableLiveData<Course>()
     var suggestedCourses = MutableLiveData<List<Course>>()
     val findCourses = MutableLiveData<List<Course>>()
@@ -48,7 +47,7 @@ class CourseViewModel(
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
-                        if (isLoggedIn)
+                        if (prefs.SP_JWT_TOKEN_KEY.isNotEmpty())
                             checkIfCourseWishlisted(body())
                         else
                             course.postValue(body())
@@ -232,9 +231,9 @@ class CourseViewModel(
         return LivePagedListBuilder<String, Course>(dataSourceFactory, config)
     }
 
-    fun changeWishlistStatus(courseSingle: Course? = course.value, mainCourse: Boolean = false){
+    fun changeWishlistStatus(id: String? = course.value?.id, mainCourse: Boolean = false){
         runIO {
-            when (val response = repo.checkIfWishlisted(courseSingle?.id?:"")) {
+            when (val response = repo.checkIfWishlisted(id?:"")) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
@@ -245,7 +244,7 @@ class CourseViewModel(
                         if (isWishlisted){
                             removeFromWishlist(response.value.body()?.id)
                         }else{
-                            courseSingle?.let { addToWishlist(it) }
+                            addToWishlist(id)
                         }
                     } else {
                         setError(fetchError(code()))
@@ -272,14 +271,14 @@ class CourseViewModel(
         }
     }
 
-    fun addToWishlist(courseSingle: Course = course.value!!){
-        val wishlist = Wishlist(courseSingle, User(prefs.SP_USER_ID))
+    fun addToWishlist(id: String? = course.value?.id){
+        val wishlist = Wishlist(Course(id!!), User(prefs.SP_USER_ID))
         runIO {
             when (val response = repo.addToWishlist(wishlist)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        snackbar.postValue("${courseSingle.title} added to Wishlist")
+                        snackbar.postValue("Course added to Wishlist")
                     } else {
                         setError(fetchError(response.value.code()))
                     }

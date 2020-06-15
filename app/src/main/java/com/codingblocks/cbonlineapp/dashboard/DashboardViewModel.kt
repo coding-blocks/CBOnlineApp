@@ -336,7 +336,7 @@ class DashboardViewModel(
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        wishlist.postValue(response.value.body())
+                        wishlist.postValue(response.value.body()?.get())
                     } else {
                         setError(fetchError(response.value.code()))
                     }
@@ -345,16 +345,16 @@ class DashboardViewModel(
         }
     }
 
-    fun changeWishlistStatus(courseSingle: Course){
+    fun changeWishlistStatus(id: String){
         runIO {
-            when (val response = homeRepo.checkIfWishlisted(courseSingle.id)) {
+            when (val response = homeRepo.checkIfWishlisted(id)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
                         if (response.value.body()?.id!=null){
                             removeFromWishlist(response.value.body()?.id)
                         }else{
-                            addToWishlist(courseSingle)
+                            addToWishlist(id)
                         }
                     } else {
                         setError(fetchError(code()))
@@ -364,8 +364,8 @@ class DashboardViewModel(
         }
     }
 
-    fun addToWishlist(course: Course){
-        val wishlist = Wishlist(course, User(prefs.SP_USER_ID))
+    fun addToWishlist(id: String){
+        val wishlist = Wishlist(Course(id), User(prefs.SP_USER_ID))
         runIO {
             when (val response = homeRepo.addToWishlist(wishlist)) {
                 is ResultWrapper.GenericError -> setError(response.error)

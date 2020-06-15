@@ -30,7 +30,7 @@ class DashboardHomeRepository(
                 SP_USER_IMAGE = photo ?: "empty"
                 SP_USER_NAME = "$firstname $lastname"
                 SP_NAME = "$username"
-                SP_ROLE_ID = roleId?:0
+                SP_ROLE_ID = roleId
                 SP_ADMIN = roleId == 1 || roleId == 3
             }
         }

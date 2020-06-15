@@ -64,7 +64,6 @@ class CourseSearchFragment : BottomSheetDialogFragment() {
                 intent.putExtra(COURSE_ID, id)
                 intent.putExtra(COURSE_LOGO, name)
                 intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
-                intent.putExtra(LOGGED_IN, viewModel.isLoggedIn)
 
                 val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     requireActivity(),

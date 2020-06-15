@@ -18,6 +18,7 @@ import android.content.Intent
 import androidx.core.view.ViewCompat
 import androidx.core.app.ActivityOptionsCompat
 import com.codingblocks.cbonlineapp.course.CourseActivity
+import com.codingblocks.cbonlineapp.course.adapter.WishlistListener
 import com.codingblocks.cbonlineapp.dashboard.LOGGED_IN
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
@@ -55,6 +56,17 @@ class DashboardHomeFragment : BaseCBFragment() {
         }
     }
 
+    private val wishlistListener: WishlistListener by lazy {
+        object : WishlistListener {
+            override fun onWishListClickListener(id: String, position: Int) {
+                if (vm.isLoggedIn == true){
+                    vm.changeWishlistStatus(id)
+                }
+            }
+        }
+    }
+
+
     private val wishListItemClickListener: WishListItemClickListener by lazy {
         object : WishListItemClickListener {
             override fun onClick(id: String, name: String, logo: CircleImageView) {
@@ -91,6 +103,7 @@ class DashboardHomeFragment : BaseCBFragment() {
         wishRv.setRv(requireContext(), wishlistAdapter, orientation = RecyclerView.HORIZONTAL, space = 0f)
         recentlyPlayedAdapter.onItemClick = itemClickListener
         wishlistAdapter.onItemClick = wishListItemClickListener
+        wishlistAdapter.wishlistListener = wishlistListener
         exploreBtn.setOnClickListener { requireActivity().dashboardBottomNav.selectedItemId = R.id.dashboard_explore }
         exploreBtn2.setOnClickListener { requireActivity().dashboardBottomNav.selectedItemId = R.id.dashboard_explore }
         loginBtn.setOnClickListener {
@@ -98,9 +111,7 @@ class DashboardHomeFragment : BaseCBFragment() {
             requireActivity().finish()
         }
         viewAllTv.setOnClickListener{
-            val intent = Intent(requireContext(), WishlistActivity::class.java)
-            intent.putExtra(LOGGED_IN, vm.isLoggedIn)
-            startActivity(intent)
+            startActivity(Intent(requireContext(), WishlistActivity::class.java))
         }
     }
 

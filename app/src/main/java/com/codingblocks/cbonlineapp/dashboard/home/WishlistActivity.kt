@@ -6,14 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.CourseActivity
-import com.codingblocks.cbonlineapp.dashboard.LOGGED_IN
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
-import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_wishlist.*
@@ -22,8 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.stateViewModel
 class WishlistActivity : AppCompatActivity()  {
 
     val wishlistViewModel: WishlistViewModel by stateViewModel()
-    private val wishlistAdapter = WishListAdapter("LIST")
-    private var isLoggedIn = false
+    private val wishlistAdapter = WishlistPagedAdapter("LIST")
 
     private val itemClickListener: WishListItemClickListener by lazy {
         object : WishListItemClickListener {
@@ -32,7 +29,6 @@ class WishlistActivity : AppCompatActivity()  {
                 intent.putExtra(COURSE_ID, id)
                 intent.putExtra(COURSE_LOGO, name)
                 intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
-                intent.putExtra(LOGGED_IN, isLoggedIn)
 
                 val options: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -44,19 +40,17 @@ class WishlistActivity : AppCompatActivity()  {
             }
         }
     }
-
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wishlist)
-        isLoggedIn = intent.getBooleanExtra(LOGGED_IN, false)
-        wishlistRv.setRv(this, wishlistAdapter, orientation = RecyclerView.VERTICAL, space = 28f)
+        wishlistRv.apply {
+            adapter = wishlistAdapter
+            layoutManager = LinearLayoutManager(applicationContext)
+        }
         wishlistAdapter.onItemClick = itemClickListener
-        wishlistViewModel.fetchWishList()
-        wishlistViewModel.wishlist.observer(this){wishlist->
-            wishlistShimmerLayout.stopShimmer()
-            wishlistShimmerLayout.isVisible = wishlist.isNullOrEmpty()
-            noWishListLayout.isVisible = wishlist.isNullOrEmpty()
+        wishlistViewModel.fetchWishList().observer(this){wishlist->
+            wishlistShimmerLayout.isVisible = false
             wishlistAdapter.submitList(wishlist)
         }
     }

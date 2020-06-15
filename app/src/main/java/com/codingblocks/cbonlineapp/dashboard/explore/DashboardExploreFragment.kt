@@ -71,9 +71,9 @@ class DashboardExploreFragment : BaseCBFragment() {
 
     private val wishlistListener: WishlistListener by lazy {
         object : WishlistListener{
-            override fun onWishListClickListener(course: Course, position: Int) {
+            override fun onWishListClickListener(id: String, position: Int) {
                 if (vm.isLoggedIn == true){
-                    vm.changeWishlistStatus(course)
+                    vm.changeWishlistStatus(id)
                 }
             }
         }

@@ -9,18 +9,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.course.adapter.WishlistListener
 import com.codingblocks.cbonlineapp.util.extensions.*
 import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.onlineapi.models.Wishlist
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.item_course_card.view.*
-import kotlinx.android.synthetic.main.item_course_card_secondary.view.chip
-import kotlinx.android.synthetic.main.item_course_card_secondary.view.courseCardTitleTv
-import kotlinx.android.synthetic.main.item_course_card_secondary.view.courseCover
-import kotlinx.android.synthetic.main.item_course_card_secondary.view.courseLogo
-import kotlinx.android.synthetic.main.item_course_card_secondary.view.course_card_like
-import kotlinx.android.synthetic.main.item_course_card_secondary.view.course_card_share
-import kotlinx.android.synthetic.main.item_course_card_secondary.view.ratingTv
+import kotlinx.android.synthetic.main.item_course_card_list.view.*
+import kotlinx.android.synthetic.main.item_course_wishlist.view.*
+import kotlinx.android.synthetic.main.item_course_wishlist.view.chip
+import kotlinx.android.synthetic.main.item_course_wishlist.view.courseCardTitleTv
+import kotlinx.android.synthetic.main.item_course_wishlist.view.courseLogo
+import kotlinx.android.synthetic.main.item_course_wishlist.view.ratingTv
+import org.jetbrains.anko.share
 
 class WishListAdapter(val type: String = "") : ListAdapter<Wishlist, WishListItemViewHolder>(
     object : DiffUtil.ItemCallback<Wishlist>() {
@@ -34,6 +34,7 @@ class WishListAdapter(val type: String = "") : ListAdapter<Wishlist, WishListIte
     }) {
 
     var onItemClick: WishListItemClickListener? = null
+    var wishlistListener: WishlistListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WishListItemViewHolder {
 
@@ -41,24 +42,26 @@ class WishListAdapter(val type: String = "") : ListAdapter<Wishlist, WishListIte
             "LIST"-> WishListItemViewHolder(LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_course_card_list, parent, false))
             else-> WishListItemViewHolder(LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_course_card_secondary, parent, false))
+                    .inflate(R.layout.item_course_wishlist, parent, false))
         }
     }
 
     override fun onBindViewHolder(holder: WishListItemViewHolder, position: Int) {
         holder.bind(getItem(position), if (type == "LIST") 0 else 1)
         holder.itemClickListener = onItemClick
+        holder.wishlistListener = wishlistListener
     }
 }
 
 class WishListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var itemClickListener: WishListItemClickListener? = null
+    var wishlistListener: WishlistListener? = null
 
     fun bind(item: Wishlist, type: Int) = with(itemView) {
         with(item.course!!){
             courseLogo.loadImage(logo)
             ViewCompat.setTransitionName(courseLogo, title)
-            val ratingText = getSpannableSring("${rating}/5.0", ", ${reviewCount} ratings")
+            val ratingText = getSpannableSring("${rating}/5.0","")
             ratingTv.text = ratingText
             courseCardTitleTv.text = title
             setOnClickListener {
@@ -80,8 +83,18 @@ class WishListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
                 courseCardPriceTv.isVisible = false
             }else{
                 courseCover.loadImage(coverImage?:"")
-                course_card_like.isVisible = false
-                course_card_share.isVisible = false
+                course_card_share.setOnClickListener {
+                    context.share("Check out the course *${title}* by Coding Blocks!\n\n" +
+                        subtitle + "\n" +
+                        "https://online.codingblocks.com/courses/${slug}/")
+                }
+                course_card_like.setOnClickListener {
+                    wishlistListener?.onWishListClickListener(
+                        id,
+                        adapterPosition
+                    )
+                }
+                ratingBar.rating = rating
             }
         }
     }
