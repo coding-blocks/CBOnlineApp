@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/gilroy_bold"
-                android:textColor="@color/black"
+                android:textColor="@color/head"
                 android:textSize="18sp"
                 tools:text="Web Development" />
 
@@ -53,7 +53,7 @@
                 android:drawablePadding="0dp"
                 android:paddingTop="3dp"
                 android:paddingBottom="3dp"
-                android:textColor="@color/brownish_grey"
+                android:textColor="@color/subHead"
                 android:textSize="12sp"
                 app:cornerRadius="20dp"
                 tools:text="Beginner" />
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/gilroy_medium"
-            android:textColor="@color/black"
+            android:textColor="@color/head"
             android:textSize="14sp"
             tools:text="Mentor: Arnav Gupta" />
 
@@ -84,7 +84,7 @@
                 android:layout_gravity="fill_vertical"
                 android:maxLines="2"
                 android:fontFamily="@font/gilroy_medium"
-                android:textColor="@color/black"
+                android:textColor="@color/subHead"
                 android:textSize="12sp"
                 android:drawableStart="@drawable/ic_start_black"
                 android:drawablePadding="5dp"
@@ -104,11 +104,10 @@
                 android:id="@+id/courseCardMrpTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/gilroy_bold"
                 android:gravity="bottom"
-                android:textColor="@color/brownish_grey"
+                android:textColor="@color/subHead"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 tools:text="12999" />

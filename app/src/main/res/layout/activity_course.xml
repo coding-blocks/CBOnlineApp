@@ -110,8 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/toolbar_bg"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -187,7 +186,7 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/summary"
-                    android:textColor="@color/black"
+                    android:textColor="@color/head"
                     android:textSize="20sp" />
 
                 <com.codingblocks.cbonlineapp.util.widgets.ExpandableTextView
@@ -199,7 +198,7 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     android:fontFamily="@font/gilroy_medium"
                     android:lineSpacingExtra="4dp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/subHead"
                     android:textSize="16sp"
                     app:trimLength="200" />
 
@@ -212,7 +211,7 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/major_topics_covered"
-                    android:textColor="#333333"
+                    android:textColor="@color/head"
                     android:textSize="20sp" />
 
                 <com.google.android.material.chip.ChipGroup
@@ -248,7 +247,7 @@
                         android:drawableTint="@color/orangish"
                         android:fontFamily="@font/gilroy_bold"
                         android:text="@string/course_content"
-                        android:textColor="#333333"
+                        android:textColor="@color/head"
                         android:textSize="20sp" />
 
                     <TextView
@@ -284,7 +283,6 @@
                     android:layout_marginTop="@dimen/margin_medium"
                     android:background="@drawable/dividerthick" />
 
-
                 <TextView
                     android:id="@+id/projectsTv"
                     android:layout_width="wrap_content"
@@ -294,7 +292,7 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/projects"
-                    android:textColor="#333333"
+                    android:textColor="@color/head"
                     android:textSize="20sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -356,7 +354,7 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/course_includes"
-                    android:textColor="@color/black"
+                    android:textColor="@color/head"
                     android:textSize="20sp" />
 
 
@@ -381,7 +379,7 @@
                         android:fontFamily="@font/gilroy_medium"
                         android:text="@string/lectures_text"
                         android:textAlignment="viewStart"
-                        android:textColor="@color/black"
+                        android:textColor="@color/head"
                         android:textSize="14sp" />
 
                     <ImageView
@@ -397,7 +395,7 @@
                         android:fontFamily="@font/gilroy_medium"
                         android:text="@string/mentor_support"
                         android:textAlignment="viewStart"
-                        android:textColor="@color/black"
+                        android:textColor="@color/head"
                         android:textSize="14sp" />
 
 
@@ -424,7 +422,7 @@
                         android:fontFamily="@font/gilroy_medium"
                         android:text="@string/revise"
                         android:textAlignment="viewStart"
-                        android:textColor="@color/black"
+                        android:textColor="@color/head"
                         android:textSize="14sp" />
 
                     <ImageView
@@ -440,7 +438,7 @@
                         android:fontFamily="@font/gilroy_medium"
                         android:text="@string/completion_certificate"
                         android:textAlignment="viewStart"
-                        android:textColor="@color/black"
+                        android:textColor="@color/head"
                         android:textSize="14sp" />
 
 
@@ -456,7 +454,7 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/frequently_asked_questions"
-                    android:textColor="@color/black"
+                    android:textColor="@color/head"
                     android:textSize="20sp"
                     android:visibility="gone" />
 
@@ -469,7 +467,7 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     android:fontFamily="@font/gilroy_medium"
                     android:lineSpacingExtra="4dp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/subHead"
                     android:textSize="16sp"
                     android:visibility="gone"
                     app:trimLength="200" />
@@ -489,7 +487,7 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     android:fontFamily="@font/gilroy_bold"
                     android:text="@string/recommended_for_you"
-                    android:textColor="#333333"
+                    android:textColor="@color/head"
                     android:textSize="20sp" />
 
                 <androidx.recyclerview.widget.RecyclerView

@@ -47,6 +47,8 @@
                 android:id="@+id/ccp"
                 app:ccp_textSize="16sp"
                 app:ccp_showFlag="true"
+                app:ccp_contentColor="@color/head"
+                app:ccpDialog_textColor="@color/head"
                 app:ccp_autoDetectCountry="true"
                 android:layout_width="wrap_content"
                 app:ccp_showNameCode="false"
@@ -58,8 +60,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:backgroundTint="@color/white"
-                android:textColorHint="@color/black"
+                android:backgroundTint="@color/head"
+                android:textColorHint="@color/subHead"
+                android:textColor="@color/head"
                 android:fontFamily="@font/gilroy_medium"
                 android:hint="Enter your mobile number"
                 android:inputType="phone"
@@ -88,7 +91,7 @@
             android:layout_gravity="center"
             android:letterSpacing="0.1"
             android:fontFamily="@font/gilroy_bold"
-            android:textColor="@color/darkTwo"
+            android:textColor="@color/head"
             android:textSize="20sp" />
 
 
@@ -137,7 +140,7 @@
             android:gravity="center"
             android:layout_marginBottom="@dimen/margin_large"
             android:fontFamily="@font/gilroy_medium"
-            android:textColor="@color/brownish_grey"
+            android:textColor="@color/subHead"
             android:textColorLink="@color/brownish_grey"
             tools:text="@string/policy_text" />
     </LinearLayout>

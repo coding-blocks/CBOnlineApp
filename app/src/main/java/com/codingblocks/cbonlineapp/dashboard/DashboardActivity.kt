@@ -70,8 +70,6 @@ class DashboardActivity : BaseCBActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (getPrefs().SP_DARK_MODE)
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         setContentView(R.layout.activity_dashboard)
         vm.isLoggedIn = intent?.getBooleanExtra(LOGGED_IN, vm.prefs.SP_ACCESS_TOKEN_KEY.isNotEmpty())
 
@@ -352,14 +350,14 @@ class DashboardActivity : BaseCBActivity(),
         supportActionBar?.title = title
         if (pos == 0 || pos == 2)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
+                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.head))
             } else {
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, resources.getColor(R.color.white))
+                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, resources.getColor(R.color.head))
             }
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.black))
+            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.head))
         } else {
-            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, resources.getColor(R.color.black))
+            dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, resources.getColor(R.color.head))
         }
 
         dashboardToolbarSecondary.post {

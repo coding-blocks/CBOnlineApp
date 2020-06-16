@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
             android:fontFamily="@font/gilroy_bold"
+            android:textColor="@color/head"
             android:text="@string/email_title"
             android:textSize="18sp" />
 
@@ -29,7 +30,7 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/gilroy_medium"
             android:text="@string/email_desc"
-            android:textColor="@color/brownish_grey"
+            android:textColor="@color/subHead"
             android:textSize="16sp"
             android:visibility="visible" />
 
@@ -39,16 +40,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="65dp"
+            android:background="@color/editBoxColor"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="@color/white"
                 android:fontFamily="@font/gilroy_medium"
                 android:hint="@string/use_email"
                 android:inputType="textEmailAddress"
                 android:paddingStart="0dp"
+                android:background="@color/editBoxColor"
                 android:textColorHighlight="@color/orangish"
                 android:textColorHint="@color/black"
                 android:textSize="16sp" />
@@ -60,19 +62,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
+            android:background="@color/editBoxColor"
             app:endIconMode="password_toggle"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="@color/white"
                 android:fontFamily="@font/gilroy_medium"
                 android:hint="@string/password"
+                android:background="@color/editBoxColor"
                 android:inputType="textPassword"
                 android:paddingStart="0dp"
                 android:textColorHighlight="@color/orangish"
-                android:textColorHint="@color/black"
+                android:textColorHint="@color/head"
                 android:textSize="16sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -95,7 +98,7 @@
             android:layout_gravity="center"
             android:letterSpacing="0.1"
             android:fontFamily="@font/gilroy_bold"
-            android:textColor="@color/darkTwo"
+            android:textColor="@color/head"
             android:textSize="20sp" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -119,9 +122,6 @@
             android:drawableStart="@drawable/ic_gmail"
             android:text="@string/google" />
 
-
-
     </LinearLayout>
-
 
 </ScrollView>

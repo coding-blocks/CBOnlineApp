@@ -23,6 +23,6 @@
         android:lineSpacingExtra="4dp"
         android:fontFamily="@font/gilroy_medium"
         android:layout_marginTop="4dp"
-        android:textColor="@color/black"
+        android:textColor="@color/subHead"
         tools:text="A task manager with features like 'mark as done', 'cear done tasks' and sorting tasks by their status." />
 </LinearLayout>

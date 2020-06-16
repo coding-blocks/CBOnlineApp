@@ -39,7 +39,7 @@
                 android:drawablePadding="10dp"
                 android:fontFamily="@font/gilroy_medium"
                 android:text="@string/just_fill_in_your_details_and_our_edu_counsellor_will_get_back_to_you"
-                android:textColor="@color/brownish_grey"
+                android:textColor="@color/subHead"
                 android:textSize="14sp" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -47,12 +47,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
+                android:background="@color/editBoxColor"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:backgroundTint="@color/white"
+                    android:background="@color/editBoxColor"
                     android:fontFamily="@font/gilroy_medium"
                     android:hint="@string/full_name"
                     android:inputType="textPersonName"
@@ -69,12 +70,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_medium_small"
+                android:background="@color/editBoxColor"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:backgroundTint="@color/white"
+                    android:background="@color/editBoxColor"
                     android:fontFamily="@font/gilroy_medium"
                     android:hint="@string/mobile_number"
                     android:inputType="number"

@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/root"
     tools:context="com.codingblocks.cbonlineapp.tracks.LearningTracksActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -28,7 +28,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:visibility="visible">
-        <include layout="@layout/item_skeleton_learning_tracks"></include>
+
+        <include layout="@layout/item_skeleton_learning_tracks" />
     </com.facebook.shimmer.ShimmerFrameLayout>
 
     <LinearLayout
@@ -50,8 +51,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/gilroy_medium"
                 android:text="@string/i_am_a"
-
-                android:textColor="@color/black"
+                android:textColor="@color/head"
                 android:textSize="16sp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/gilroy_medium"
                 android:text="@string/i_want_to_become"
-                android:textColor="@color/black"
+                android:textColor="@color/head"
                 android:textSize="16sp" />
 
 
@@ -183,7 +183,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/gilroy_bold"
                         android:text="@string/learning_tracks"
-                        android:textColor="@color/black"
+                        android:textColor="@color/head"
                         android:textSize="16sp" />
 
                     <TextView
@@ -194,7 +194,7 @@
                         android:fontFamily="@font/gilroy_medium"
                         android:gravity="center"
                         android:text="@string/track_desc"
-                        android:textColor="@color/brownish_grey"
+                        android:textColor="@color/subHead"
                         android:textSize="13sp" />
 
                 </LinearLayout>

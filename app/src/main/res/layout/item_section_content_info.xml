@@ -20,7 +20,7 @@
         android:layout_marginStart="@dimen/margin_medium"
         android:layout_weight="1"
         android:fontFamily="@font/gilroy_medium"
-        android:textColor="@color/black"
+        android:textColor="@color/head"
         android:textSize="14sp" />
 
 

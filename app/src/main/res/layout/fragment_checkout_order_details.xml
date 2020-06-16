@@ -20,7 +20,7 @@
             android:layout_marginTop="@dimen/margin_large"
             android:fontFamily="@font/gilroy_bold"
             android:text="1. Verify Order Details"
-            android:textColor="@color/black"
+            android:textColor="@color/head"
             android:textSize="18sp" />
 
         <View
@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/gilroy_bold"
-                    android:textColor="@color/black"
+                    android:textColor="@color/head"
                     android:textSize="18sp"
                     tools:text="Competitive Programming" />
 
@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
                     android:fontFamily="@font/gilroy_medium"
-                    android:textColor="@color/brownish_grey"
+                    android:textColor="@color/subHead"
                     android:textSize="14sp"
                     tools:text="Batch : January 2020" />
 
@@ -91,7 +91,7 @@
                         android:layout_marginStart="8dp"
                         android:fontFamily="@font/gilroy_bold"
                         android:text="@string/rupee_sign"
-                        android:textColor="@color/brownish_grey"
+                        android:textColor="@color/subHead"
                         tools:text="9499" />
 
                     <TextView
@@ -100,7 +100,7 @@
                         android:layout_marginStart="8dp"
                         android:fontFamily="@font/gilroy_bold"
                         android:text="+ 18% Tax"
-                        android:textColor="@color/black"
+                        android:textColor="@color/subHead"
                         android:textSize="14sp" />
 
                 </LinearLayout>
@@ -128,7 +128,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/gilroy_medium"
                 android:text="Subtotal"
-                android:textColor="@color/black"
+                android:textColor="@color/head"
                 android:textSize="16sp" />
 
             <TextView
@@ -138,7 +138,7 @@
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/gilroy_medium"
                 android:text="@string/rupee_sign"
-                android:textColor="@color/black"
+                android:textColor="@color/subHead"
                 android:textSize="16sp"
                 tools:text="9499 " />
 
@@ -157,7 +157,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/gilroy_medium"
                 android:text="Credits used"
-                android:textColor="@color/black"
+                android:textColor="@color/head"
                 android:textSize="16sp" />
 
             <TextView
@@ -167,7 +167,7 @@
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/gilroy_medium"
                 android:text="@string/rupee_sign"
-                android:textColor="@color/black"
+                android:textColor="@color/subHead"
                 android:textSize="16sp"
                 tools:text="9499 " />
 
@@ -187,7 +187,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/gilroy_medium"
                 android:text="Total"
-                android:textColor="@color/black"
+                android:textColor="@color/head"
                 android:textSize="16sp" />
 
             <TextView
@@ -197,7 +197,7 @@
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/gilroy_medium"
                 android:text="@string/rupee_sign"
-                android:textColor="@color/black"
+                android:textColor="@color/subHead"
                 android:textSize="16sp"
                 tools:text="9499 " />
 
@@ -216,7 +216,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/gilroy_medium"
                 android:text="Taxes"
-                android:textColor="@color/black"
+                android:textColor="@color/head"
                 android:textSize="16sp" />
 
             <TextView
@@ -226,7 +226,7 @@
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/gilroy_medium"
                 android:text="@string/rupee_sign"
-                android:textColor="@color/black"
+                android:textColor="@color/subHead"
                 android:textSize="16sp"
                 tools:text="499 " />
 
@@ -254,7 +254,7 @@
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/gilroy_medium"
                 android:text="0.00"
-                android:textColor="@color/black"
+                android:textColor="@color/subHead"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -281,7 +281,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/gilroy_medium"
                 android:text="Final Amount"
-                android:textColor="@color/black"
+                android:textColor="@color/head"
                 android:textSize="16sp" />
 
             <TextView
@@ -292,7 +292,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/gilroy_bold"
                 android:text="@string/rupee_sign"
-                android:textColor="@color/black"
+                android:textColor="@color/head"
                 android:textSize="18sp"
                 tools:text="9499 " />
 
@@ -352,7 +352,7 @@
             android:layout_marginTop="@dimen/margin_large"
             android:fontFamily="@font/gilroy_bold"
             android:text="@string/nothing_here"
-            android:textColor="@color/black"
+            android:textColor="@color/head"
             android:textSize="18sp" />
 
         <TextView
@@ -362,7 +362,7 @@
             android:fontFamily="@font/gilroy_medium"
             android:text="@string/empty_cart_desc"
             android:textAlignment="center"
-            android:textColor="@color/brownish_grey" />
+            android:textColor="@color/subHead" />
 
         <View
             android:layout_width="200dp"

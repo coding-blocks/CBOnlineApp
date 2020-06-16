@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    app:cardBackgroundColor="@color/cardBackground"
     app:cardCornerRadius="15dp"
     app:cardElevation="4dp">
 
@@ -21,6 +22,7 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:textColor="@color/head"
             tools:text="don't understand when to take (head != NULL) or (head->next != NULL)" />
 
         <com.codingblocks.cbonlineapp.util.widgets.ExpandableTextView
@@ -30,6 +32,7 @@
             android:layout_marginTop="8dp"
             android:textSize="14sp"
             app:trimLength="100"
+            android:textColor="@color/subHead"
             tools:text="pls explain meaning of head!=NULL and head->next!=NULL and the difference." />
 
         <com.google.android.material.button.MaterialButton

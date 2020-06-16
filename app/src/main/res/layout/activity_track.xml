@@ -174,7 +174,7 @@
                         android:drawablePadding="10dp"
                         android:fontFamily="@font/gilroy_medium"
                         android:text="@string/certified_desc"
-                        android:textColor="@color/black"
+                        android:textColor="@color/subHead"
                         android:textSize="14sp" />
 
                 </LinearLayout>

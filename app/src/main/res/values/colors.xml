@@ -42,4 +42,7 @@
     <color name="head">@color/black</color>
     <color name="subHead">@color/brownish_grey</color>
     <color name="cardBackground">@color/white</color>
+    <color name="toolbar_bg_color">@color/veryLightPink</color>
+    <color name="drawable_color">#333</color>
+    <color name="editBoxColor">@color/white</color>
 </resources>

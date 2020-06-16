@@ -74,7 +74,7 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
                     subTitle.setTextColor(getColor(context, R.color.orangish))
                     premiumImg.isVisible = false
                 } else {
-                    subTitle.setTextColor(getColor(context, R.color.black))
+                    subTitle.setTextColor(getColor(context, R.color.head))
                     premiumImg.isVisible = true
                 }
                 subTitle.text = i.title
@@ -101,7 +101,7 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
 
                 itemView.arrow.startAnimation(arrowAnimation)
             } else {
-                title.setTextColor(ll.context.resources.getColor(R.color.black))
+                title.setTextColor(ll.context.resources.getColor(R.color.head))
                 ll.visibility = View.GONE
                 arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                     0.5f)

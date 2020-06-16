@@ -41,4 +41,7 @@
     <color name="head">@color/white</color>
     <color name="subHead">@color/battleship_gray</color>
     <color name="cardBackground">@color/dark</color>
+    <color name="toolbar_bg_color">@color/dark_grey</color>
+    <color name="drawable_color">#D3D3D3</color>
+    <color name="editBoxColor">#121212</color>
 </resources>

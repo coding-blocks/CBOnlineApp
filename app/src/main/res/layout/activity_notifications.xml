@@ -17,19 +17,17 @@
         android:id="@+id/notificationRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:visibility="visible" />
 
     <TextView
         android:id="@+id/emptyTv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:gravity="center"
         android:fontFamily="@font/gilroy_bold"
         android:text="You're all caught up !!!"
         android:textColor="@color/salmon"
         android:textSize="26sp"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
 </LinearLayout>
