@@ -8,6 +8,7 @@ import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
@@ -92,7 +93,7 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
 
         private fun showOrHide(ll: View, title: TextView) {
             if (ll.visibility == View.GONE) {
-                title.setTextColor(ll.context.resources.getColor(R.color.orangish))
+                title.setTextColor(ContextCompat.getColor(ll.context, R.color.orangish))
                 ll.visibility = View.VISIBLE
                 arrowAnimation = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                     0.5f)
@@ -101,7 +102,7 @@ class CourseSectionListAdapter : ListAdapter<Sections, CourseSectionListAdapter.
 
                 itemView.arrow.startAnimation(arrowAnimation)
             } else {
-                title.setTextColor(ll.context.resources.getColor(R.color.head))
+                title.setTextColor(ContextCompat.getColor(ll.context, R.color.orangish))
                 ll.visibility = View.GONE
                 arrowAnimation = RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                     0.5f)

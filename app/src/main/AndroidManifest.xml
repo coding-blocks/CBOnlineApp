@@ -26,12 +26,12 @@
         android:theme="@style/NewAppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="q">
-        <activity android:name=".campaign.CampaignActivity"
+        <activity
+            android:name=".campaign.CampaignActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:configChanges="uiMode"
-            android:parentActivityName=".dashboard.DashboardActivity">
-        </activity>
+            android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".mycourse.codechallenge.CodeChallengeActivity"
             android:launchMode="singleTop"
@@ -182,7 +182,7 @@
             android:supportsPictureInPicture="true"
             android:theme="@style/NewAppTheme.Dark" />
         <activity
-            android:name=".PdfActivity"
+            android:name=".mycourse.PdfActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".mycourse.quiz.QuizActivity"
@@ -191,7 +191,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/NewAppTheme.Dark" />
 
-        <receiver android:name=".util.DownloadBroadcastReceiver">
+        <receiver android:name=".util.receivers.DownloadBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
@@ -233,21 +233,20 @@
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".util.StartReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".util.CertificateDownloadReceiver"
+            android:name=".util.receivers.CertificateDownloadReceiver"
             android:enabled="true"
             android:exported="false" />
 
         <service
-            android:name=".util.EndlessService"
+            android:name=".workers.SectionDownloadService"
             android:enabled="true"
             android:exported="false" />
+
+        <service
+            android:name=".workers.DownloadService"
+            android:enabled="true"
+            android:exported="false" />
+
     </application>
 
 </manifest>

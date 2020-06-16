@@ -114,7 +114,7 @@ class PreferenceHelper private constructor() {
     }
 
     companion object {
-        const val PREFS_FILENAME = "com.codingblocks.cbonline.prefs"
+        private const val PREFS_FILENAME = "com.codingblocks.cbonline.prefs"
         const val ACCESS_TOKEN = "access_token"
         const val JWT_TOKEN = "jwt_token"
         const val REFRESH_TOKEN = "refresh_token"
@@ -157,7 +157,7 @@ class PreferenceHelper private constructor() {
             val oldPrefsMap =
                 context.getSharedPreferences("com.codingblocks.cbonlineapp.prefs", MODE_PRIVATE).all
             val newPrefsMap =
-                context.getSharedPreferences("com.codingblocks.cbonline.prefs", MODE_PRIVATE)
+                context.getSharedPreferences(PREFS_FILENAME, MODE_PRIVATE)
 
             for (entry in oldPrefsMap) {
                 val current = entry.value

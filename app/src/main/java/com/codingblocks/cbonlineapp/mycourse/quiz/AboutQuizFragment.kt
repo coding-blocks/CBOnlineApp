@@ -9,7 +9,7 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.mycourse.quiz.info.QuizInfoFragment
 import com.codingblocks.cbonlineapp.mycourse.quiz.submissions.QuizSubmissionsFragment
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_about_quiz.*
 import org.jetbrains.anko.AnkoLogger

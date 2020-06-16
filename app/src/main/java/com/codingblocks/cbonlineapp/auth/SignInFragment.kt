@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.util.CREDENTIAL_PICKER_REQUEST
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
@@ -64,29 +64,4 @@ class SignInFragment : BaseCBFragment() {
         vm.loginWithEmail(email, password)
     }
 
-    private fun requestHint() {
-        val hintRequest = HintRequest.Builder()
-            .setPhoneNumberIdentifierSupported(true)
-            .build()
-        val credentialsClient = Credentials.getClient(requireActivity())
-        val intent = credentialsClient.getHintPickerIntent(hintRequest)
-        startIntentSenderForResult(
-            intent.intentSender,
-            CREDENTIAL_PICKER_REQUEST,
-            null, 0, 0, 0, null
-        )
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (data != null) {
-            val cred: Credential? = data.getParcelableExtra(Credential.EXTRA_KEY)
-            if (cred != null) {
-                val unformattedPhone = cred.id
-                val formatNumber = SpannableString(unformattedPhone)
-                val boldSpan = StyleSpan1(Typeface.BOLD) // Span to make text bold
-                formatNumber.setSpan(boldSpan, 0, 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                numberLayout.editText?.setText(formatNumber)
-            }
-        }
-    }
 }

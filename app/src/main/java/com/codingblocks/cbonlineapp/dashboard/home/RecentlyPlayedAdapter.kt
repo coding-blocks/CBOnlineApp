@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.models.PlayerState
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
 import kotlinx.android.synthetic.main.item_continue_card.view.*
 

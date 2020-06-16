@@ -14,7 +14,7 @@ class CrashHandler(val context: Context) : Thread.UncaughtExceptionHandler, Koin
 
     private val sharedPrefs: PreferenceHelper by inject()
 
-    private val defaultUEH: Thread.UncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
+    private val defaultUEH: Thread.UncaughtExceptionHandler? = Thread.getDefaultUncaughtExceptionHandler()
     private var notificationManager: NotificationManager?
     override fun uncaughtException(t: Thread, e: Throwable) {
         if (notificationManager != null) {
@@ -33,7 +33,7 @@ class CrashHandler(val context: Context) : Thread.UncaughtExceptionHandler, Koin
             }
         }
         notificationManager = null
-        defaultUEH.uncaughtException(t, e)
+        defaultUEH?.uncaughtException(t, e)
     }
 
     init {

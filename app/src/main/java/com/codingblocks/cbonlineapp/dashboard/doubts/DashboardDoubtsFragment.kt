@@ -24,7 +24,7 @@ import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.REOPENED
 import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.cbonlineapp.util.extensions.changeViewState
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog

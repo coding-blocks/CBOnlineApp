@@ -18,6 +18,7 @@ import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
+import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
@@ -176,7 +177,7 @@ class LibraryViewFragment : BaseCBFragment() {
         )
         GlobalScope.launch(Dispatchers.Main) {
             progressDialog.show()
-            withContext(Dispatchers.IO) { MediaUtils.deleteRecursive(dir) }
+            withContext(Dispatchers.IO) { FileUtils.deleteRecursive(dir) }
             delay(3000)
             vm.updateDownload(0, lectureId)
             progressDialog.dismiss()

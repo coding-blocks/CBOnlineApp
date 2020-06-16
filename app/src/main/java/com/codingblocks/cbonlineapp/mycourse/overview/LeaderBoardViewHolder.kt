@@ -4,7 +4,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.extensions.loadImage
+import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.onlineapi.models.Leaderboard
 import kotlinx.android.synthetic.main.item_course_leaderboard.view.*
 

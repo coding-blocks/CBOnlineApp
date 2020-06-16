@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.fragment_campaign_leaderboard.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 

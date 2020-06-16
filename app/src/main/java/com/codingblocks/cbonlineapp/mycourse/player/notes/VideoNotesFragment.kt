@@ -15,7 +15,7 @@ import com.codingblocks.cbonlineapp.library.EditNoteClickListener
 import com.codingblocks.cbonlineapp.library.ItemClickListener
 import com.codingblocks.cbonlineapp.library.LibraryListAdapter
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.google.android.material.snackbar.Snackbar
@@ -60,7 +60,7 @@ class VideoNotesFragment : BaseCBFragment(), AnkoLogger {
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
-            override fun onClick(model: BaseModel) {
+            override fun onClick(item: BaseModel) {
             }
         }
     }

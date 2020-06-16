@@ -4,11 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.util.extensions.runIO
-import com.codingblocks.cbonlineapp.util.savedStateValue
+import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
-import java.util.HashMap
 import okhttp3.ResponseBody
 import org.json.JSONObject
+import java.util.*
 
 const val PHONE_NUMBER = "phoneNumber"
 const val ID = "id"
@@ -171,9 +171,13 @@ class AuthViewModel(
         errorLiveData.postValue(message)
     }
 
-    private fun parseError(errorBody: ResponseBody,key:String ="message") {
+    private fun parseError(errorBody: ResponseBody, key: String = "message") {
         val jObjError = JSONObject(errorBody.string())
-        val message = jObjError.getString(key)
+        val message = if (jObjError.has(key)) {
+            jObjError.getString(key)
+        } else {
+            "Please Try Again"
+        }
         errorLiveData.postValue(message)
     }
 
@@ -190,7 +194,7 @@ class AuthViewModel(
                         }
                     else {
                         if (response.value.code() != 404)
-                            response.value.errorBody()?.let { parseError(it,"description") }
+                            response.value.errorBody()?.let { parseError(it, "description") }
                     }
                 }
             }

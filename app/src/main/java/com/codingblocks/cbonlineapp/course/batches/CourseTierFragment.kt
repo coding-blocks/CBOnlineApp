@@ -14,7 +14,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.course.CourseViewModel
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.extensions.getDateForRun
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.onlineapi.models.Comparision
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog

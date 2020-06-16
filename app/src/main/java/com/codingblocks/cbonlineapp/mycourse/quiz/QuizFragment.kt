@@ -14,8 +14,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.viewpager.widget.ViewPager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.util.Components
-import com.codingblocks.cbonlineapp.util.extensions.observer
+import com.codingblocks.cbonlineapp.util.CustomDialog
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.bottom_question_sheet.*
@@ -131,7 +131,7 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
     }
 
     private fun confirmSubmitQuiz() {
-        Components.showConfirmation(requireContext(), "quiz") {
+        CustomDialog.showConfirmation(requireContext(), "quiz") {
             submitQuiz()
         }
     }
