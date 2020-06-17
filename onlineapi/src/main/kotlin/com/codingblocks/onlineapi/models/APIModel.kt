@@ -321,7 +321,6 @@ data class QuizAttempt(
     var result: QuizResult? = null,
     val status: String? = "DRAFT",
     @Relationship("qna")
-    @JvmField
     var qna: ContentQna? = null,
     @Relationship("run-attempt")
     var runAttempt: RunAttempts? = null,
@@ -359,9 +358,9 @@ data class Note(
 @Type("users", "user")
 data class User(
     val email: String?,
-    val firstname: String? ="",
+    val firstname: String? = "",
     val lastReadNotification: String?,
-    val lastname: String? ="",
+    val lastname: String? = "",
     val oneauthId: String?,
     val photo: String?,
     val verifiedemail: String?,

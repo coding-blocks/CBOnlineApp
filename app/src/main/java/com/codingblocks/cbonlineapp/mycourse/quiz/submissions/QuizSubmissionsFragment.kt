@@ -46,7 +46,7 @@ class QuizSubmissionsFragment : BaseCBFragment() {
 
         quizAttemptRv.setRv(requireContext(), quizSubmissionListAdapter, true)
 
-        vm.quizAttempts.observer(thisLifecycleOwner) {
+        vm.fetchQuizAttempts().observer(thisLifecycleOwner) {
             quizSubmissionListAdapter.submitList(it)
         }
         quizSubmissionListAdapter.apply {

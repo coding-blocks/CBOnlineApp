@@ -26,7 +26,7 @@ import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.PdfActivity
 import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
-import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
+import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity.Companion.createQuizActivityIntent
 import com.codingblocks.cbonlineapp.util.CODE
 import com.codingblocks.cbonlineapp.util.CODE_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
@@ -364,12 +364,8 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
                         QNA ->
                             if (contentQna.qnaUid.isNotEmpty()) {
                                 viewModel.updateProgress(ccid)
-                                startActivity(
-                                    intentFor<QuizActivity>(
-                                        CONTENT_ID to ccid,
-                                        SECTION_ID to sectionId
-                                    )
-                                )
+                                startActivity(createQuizActivityIntent(requireContext(), ccid, sectionId))
+
                             } else
                                 checkSection(premium)
                         CODE ->
@@ -389,6 +385,7 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
             }
         }
     }
+
 
     private fun checkSection(premium: Boolean) {
         when {

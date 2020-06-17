@@ -49,7 +49,7 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
         prevBtn.setOnClickListener(this)
         questionBtn.setOnClickListener(this)
 
-        vm.quizDetails.observer(thisLifecycleOwner) {
+        vm.fetchQuiz().observer(thisLifecycleOwner) {
             it.questions?.let { list ->
                 setUpQuestionBottomSheet(list.size)
                 setupMutableBottomSheetData(list.size)
@@ -65,8 +65,8 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
         vm.quizAttempt.observer(thisLifecycleOwner) {
             mAdapter = ViewPagerAdapter(
                 requireContext(),
-                vm.quiz.qnaUid,
-                vm.quizAttemptId,
+                vm.quizId!!,
+                vm.quizAttemptId!!,
                 questionList,
                 it?.submission,
                 it?.result,
@@ -166,7 +166,7 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
     private fun submitQuiz() {
         vm.submitQuiz {
             replaceFragmentSafely(
-                QuizResultFragment.newInstance(vm.quizAttemptId),
+                QuizResultFragment.newInstance(vm.quizAttemptId!!),
                 "result",
                 containerViewId = R.id.quizContainer,
                 addToStack = true

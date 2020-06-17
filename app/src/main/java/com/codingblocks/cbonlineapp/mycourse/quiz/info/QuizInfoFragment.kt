@@ -19,12 +19,11 @@ class QuizInfoFragment : BaseCBFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ):
-        View? = inflater.inflate(R.layout.fragment_quiz_info, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_quiz_info, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        vm.quizDetails.observer(thisLifecycleOwner) {
+        vm.fetchQuiz().observer(thisLifecycleOwner) {
             quizType.text = "MCQ"
             quizMarks.text = "${it.questions!!.size * 10}"
             quizQuestion.text = "${it.questions!!.size}"

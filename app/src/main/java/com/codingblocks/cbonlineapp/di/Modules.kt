@@ -59,7 +59,7 @@ val viewModelModule = module {
     viewModel { CourseViewModel(get()) }
     viewModel { (handle: SavedStateHandle) -> LibraryViewModel(handle, get(), get()) }
     viewModel { (handle: SavedStateHandle) -> DashboardViewModel(handle, get(), get(), get(), get(), get()) }
-    viewModel { QuizViewModel(get()) }
+    viewModel { (handle: SavedStateHandle) -> QuizViewModel(handle,get()) }
     viewModel { CheckoutViewModel() }
     viewModel { TrackViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
