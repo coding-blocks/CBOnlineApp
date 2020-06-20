@@ -8,7 +8,6 @@ import androidx.room.PrimaryKey
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.onlineapi.models.Course
-import com.codingblocks.onlineapi.models.User
 import java.sql.Date
 
 @Entity

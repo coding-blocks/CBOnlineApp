@@ -17,9 +17,9 @@ import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import android.content.Intent
 import androidx.core.view.ViewCompat
 import androidx.core.app.ActivityOptionsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.codingblocks.cbonlineapp.course.CourseActivity
 import com.codingblocks.cbonlineapp.course.adapter.WishlistListener
-import com.codingblocks.cbonlineapp.dashboard.LOGGED_IN
 import com.codingblocks.cbonlineapp.util.COURSE_ID
 import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import de.hdodenhof.circleimageview.CircleImageView
@@ -46,7 +46,7 @@ class DashboardHomeFragment : BaseCBFragment() {
     private val vm: DashboardViewModel by sharedViewModel()
 
     private val recentlyPlayedAdapter = RecentlyPlayedAdapter()
-    private val wishlistAdapter = WishListAdapter()
+    private val wishlistAdapter = WishlistPagedAdapter()
 
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
@@ -58,14 +58,13 @@ class DashboardHomeFragment : BaseCBFragment() {
 
     private val wishlistListener: WishlistListener by lazy {
         object : WishlistListener {
-            override fun onWishListClickListener(id: String, position: Int) {
+            override fun onWishListClickListener(id: String) {
                 if (vm.isLoggedIn == true){
                     vm.changeWishlistStatus(id)
                 }
             }
         }
     }
-
 
     private val wishListItemClickListener: WishListItemClickListener by lazy {
         object : WishListItemClickListener {
@@ -74,7 +73,6 @@ class DashboardHomeFragment : BaseCBFragment() {
                 intent.putExtra(COURSE_ID, id)
                 intent.putExtra(COURSE_LOGO, name)
                 intent.putExtra(LOGO_TRANSITION_NAME, ViewCompat.getTransitionName(logo))
-                intent.putExtra(LOGGED_IN, vm.isLoggedIn)
 
                 val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     requireActivity(),
@@ -100,7 +98,10 @@ class DashboardHomeFragment : BaseCBFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recentPlayedRv.setRv(requireContext(), recentlyPlayedAdapter, orientation = RecyclerView.HORIZONTAL, space = 28f)
-        wishRv.setRv(requireContext(), wishlistAdapter, orientation = RecyclerView.HORIZONTAL, space = 0f)
+        wishRv.apply {
+            adapter = wishlistAdapter
+            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        }
         recentlyPlayedAdapter.onItemClick = itemClickListener
         wishlistAdapter.onItemClick = wishListItemClickListener
         wishlistAdapter.wishlistListener = wishlistListener
@@ -162,10 +163,9 @@ class DashboardHomeFragment : BaseCBFragment() {
                 recentlyPlayedAdapter.submitList(it)
             }
 
-            vm.fetchWishList()
-            vm.wishlist.observer(viewLifecycleOwner){wishlist->
-                noWishListLayout.isVisible = !wishlist.isNotEmpty()
-                wishlistHolder.isVisible = wishlist.isNotEmpty()
+            vm.fetchWishList().observer(viewLifecycleOwner){wishlist->
+                noWishListLayout.isVisible = vm.isEmpty
+                wishlistHolder.isVisible = !vm.isEmpty
                 wishlistAdapter.submitList(wishlist)
             }
 

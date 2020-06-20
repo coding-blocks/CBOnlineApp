@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.dashboard.home
 
+import android.util.Log
 import androidx.paging.PageKeyedDataSource
 import com.codingblocks.onlineapi.*
 import com.codingblocks.onlineapi.models.Wishlist
@@ -7,12 +8,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
-class WishlistDataSource (private val scope: CoroutineScope) :
-    PageKeyedDataSource<String, Wishlist>(){
+class WishlistDataSource(private val scope: CoroutineScope, private val pageSize: String) :
+    PageKeyedDataSource<String, Wishlist>() {
 
     override fun loadInitial(params: LoadInitialParams<String>, callback: LoadInitialCallback<String, Wishlist>) {
         scope.launch {
-            when (val response = safeApiCall { CBOnlineLib.onlineV2JsonApi.getWishlist(page="10") }) {
+            when (val response = safeApiCall { CBOnlineLib.onlineV2JsonApi.getWishlist(page = pageSize) }) {
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful)
                         body()?.let {
@@ -28,14 +29,14 @@ class WishlistDataSource (private val scope: CoroutineScope) :
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, Wishlist>) {
         scope.launch {
-            when (val response = safeApiCall { CBOnlineLib.onlineV2JsonApi.getWishlist(offset = params.key, page = "10") }) {
+            when (val response = safeApiCall { CBOnlineLib.onlineV2JsonApi.getWishlist(offset = params.key, page = pageSize) }) {
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful)
                         body()?.let {
                             val wishlist = it.get()
                             val currentOffSet = getMeta(it.meta, "currentOffset").toString()
                             val nextOffSet = getMeta(it.meta, "nextOffset").toString()
-                            if (nextOffSet!=currentOffSet && nextOffSet!="null") {
+                            if (nextOffSet != currentOffSet && nextOffSet != "null") {
                                 callback.onResult(wishlist ?: listOf(), nextOffSet)
                             }
                         }

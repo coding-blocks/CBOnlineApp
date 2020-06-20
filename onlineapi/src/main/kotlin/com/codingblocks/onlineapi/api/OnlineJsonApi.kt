@@ -363,7 +363,7 @@ interface OnlineJsonApi {
     ): Response<JSONAPIDocument<List<Wishlist>>>
 
     @POST("user_course_wishlists")
-    suspend fun addToWishlist(@Body params: Wishlist) : Response<Wishlist>
+    suspend fun addWishlist(@Body params: Wishlist) : Response<Wishlist>
 
     @GET("courses/{id}/relationships/user_course_wishlist")
     suspend fun checkIfWishlisted(
@@ -371,7 +371,7 @@ interface OnlineJsonApi {
     ) : Response<Wishlist>
 
     @DELETE("user_course_wishlists/{id}")
-    suspend fun removeFromWishlist(
+    suspend fun removeWishlist(
         @Path("id") id: String
     ) : Response<Wishlist>
 }

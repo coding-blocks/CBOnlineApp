@@ -25,7 +25,7 @@ class WishlistViewModel() : BaseCBViewModel() {
 
         val dataSourceFactory = object : DataSource.Factory<String, Wishlist>() {
             override fun create(): DataSource<String, Wishlist> {
-                return WishlistDataSource(viewModelScope)
+                return WishlistDataSource(viewModelScope,"10")
             }
         }
         return LivePagedListBuilder(dataSourceFactory, config)

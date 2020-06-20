@@ -58,8 +58,7 @@ class DashboardHomeRepository(
     suspend fun getStats(id: String) = safeApiCall { CBOnlineLib.api.getMyStats(id) }
     suspend fun fetchUser() = safeApiCall { CBOnlineLib.onlineV2JsonApi.getMe() }
     suspend fun refreshToken() = safeApiCall { CBOnlineLib.api.refreshToken(prefs.SP_JWT_REFRESH_TOKEN) }
-    suspend fun fetchWishlist() = safeApiCall { CBOnlineLib.onlineV2JsonApi.getWishlist() }
-    suspend fun addToWishlist(wishList: Wishlist) = safeApiCall { CBOnlineLib.onlineV2JsonApi.addToWishlist(wishList) }
-    suspend fun removeFromWishlist(id: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.removeFromWishlist(id) }
-    suspend fun checkIfWishlisted(s: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted(s) }
+    suspend fun addWishlist(wishList: Wishlist) = safeApiCall { CBOnlineLib.onlineV2JsonApi.addWishlist(wishList) }
+    suspend fun removeWishlist(id: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.removeWishlist(id) }
+    suspend fun checkWishlisted(s: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted(s) }
 }

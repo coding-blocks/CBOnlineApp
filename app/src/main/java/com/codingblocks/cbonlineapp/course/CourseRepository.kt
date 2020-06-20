@@ -31,7 +31,7 @@ class CourseRepository() : AnkoLogger {
 
     suspend fun checkIfWishlisted(id: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted(id) }
 
-    suspend fun removeFromWishlist(id: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.removeFromWishlist(id) }
+    suspend fun removeWishlist(id: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.removeWishlist(id) }
 
-    suspend fun addToWishlist(wishList: Wishlist) = safeApiCall { CBOnlineLib.onlineV2JsonApi.addToWishlist(wishList) }
+    suspend fun addWishlist(wishList: Wishlist) = safeApiCall { CBOnlineLib.onlineV2JsonApi.addWishlist(wishList) }
 }

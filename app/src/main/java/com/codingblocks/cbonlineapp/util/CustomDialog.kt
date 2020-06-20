@@ -80,6 +80,11 @@ object CustomDialog {
                 updateView.description.text =
                     "You have been logged out of this account.Please login again to Continue"
             }
+            LOGIN->{
+                updateView.okBtn.text = "Log In"
+                updateView.description.text =
+                    "Please login to use this feature."
+            }
         }
         updateView.okBtn.setOnClickListener {
             confirmDialog.dismiss()

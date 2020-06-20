@@ -72,6 +72,8 @@ const val ADMIN_CHANNEL_ID = "adminChannel"
 
 const val UNAUTHORIZED = "Unauthorized"
 
+const val LOGIN = "Login"
+
 const val LIVE = "LIVE"
 
 const val RESOLVED = "RESOLVED"

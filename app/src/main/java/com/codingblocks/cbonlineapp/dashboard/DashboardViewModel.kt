@@ -6,6 +6,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import androidx.work.BackoffPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
@@ -15,6 +19,7 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.course.CourseRepository
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeRepository
+import com.codingblocks.cbonlineapp.dashboard.home.WishlistDataSource
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesRepository
 import com.codingblocks.cbonlineapp.database.models.CourseInstructorPair
 import com.codingblocks.cbonlineapp.database.models.CourseRunPair
@@ -50,8 +55,14 @@ class DashboardViewModel(
     private val repo: DashboardDoubtsRepository,
     val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
+    private var wishlist : LiveData<PagedList<Wishlist>>
     init {
         checkDownloadDataWM()
+        val config = PagedList.Config.Builder()
+            .setPageSize(3)
+            .setEnablePlaceholders(true)
+            .build()
+        wishlist = initializedPagedListBuilder(config).build()
     }
 
     var isLoggedIn: Boolean? by savedStateValue(handle, LOGGED_IN)
@@ -328,33 +339,36 @@ class DashboardViewModel(
 
     fun getPerformance(attemptId: String) = homeRepo.getRunStats(attemptId)
 
-    var wishlist = MutableLiveData<List<Wishlist>>()
     var toastMutable = MutableLiveData<String>()
-    fun fetchWishList(){
-        runIO {
-            when (val response = homeRepo.fetchWishlist()) {
-                is ResultWrapper.GenericError -> setError(response.error)
-                is ResultWrapper.Success -> {
-                    if (response.value.isSuccessful) {
-                        wishlist.postValue(response.value.body()?.get())
-                    } else {
-                        setError(fetchError(response.value.code()))
-                    }
-                }
+    var isEmpty = false
+    fun fetchWishList() = wishlist
+
+    private fun initializedPagedListBuilder(config: PagedList.Config):
+        LivePagedListBuilder<String, Wishlist> {
+
+        val dataSourceFactory = object : DataSource.Factory<String, Wishlist>() {
+            override fun create(): DataSource<String, Wishlist> {
+                return WishlistDataSource(viewModelScope,"3")
             }
         }
+        return LivePagedListBuilder(dataSourceFactory, config).setBoundaryCallback(object : PagedList.BoundaryCallback<Wishlist>() {
+            override fun onZeroItemsLoaded() {
+                super.onZeroItemsLoaded()
+                isEmpty = true
+            }
+        })
     }
 
     fun changeWishlistStatus(id: String){
         runIO {
-            when (val response = homeRepo.checkIfWishlisted(id)) {
+            when (val response = homeRepo.checkWishlisted(id)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> with(response.value) {
                     if (isSuccessful) {
                         if (response.value.body()?.id!=null){
-                            removeFromWishlist(response.value.body()?.id)
+                            response.value.body()?.let { removeWishlist(it.id) }
                         }else{
-                            addToWishlist(id)
+                            addWishlist(id)
                         }
                     } else {
                         setError(fetchError(code()))
@@ -364,10 +378,10 @@ class DashboardViewModel(
         }
     }
 
-    fun addToWishlist(id: String){
-        val wishlist = Wishlist(Course(id), User(prefs.SP_USER_ID))
+    fun addWishlist(id: String){
+        val wishlist = Wishlist(Course(id))
         runIO {
-            when (val response = homeRepo.addToWishlist(wishlist)) {
+            when (val response = homeRepo.addWishlist(wishlist)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
@@ -380,9 +394,9 @@ class DashboardViewModel(
         }
     }
 
-    fun removeFromWishlist(id: String?){
+    fun removeWishlist(id: String){
         runIO {
-            when (val response = homeRepo.removeFromWishlist(id?:"")) {
+            when (val response = homeRepo.removeWishlist(id)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {

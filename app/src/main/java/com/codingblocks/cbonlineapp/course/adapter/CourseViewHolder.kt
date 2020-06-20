@@ -43,10 +43,7 @@ class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
         if (type != "LIST" && type != "TRACKS") {
             course_card_like.setOnClickListener {
-                wishlistListener?.onWishListClickListener(
-                    item.id,
-                    adapterPosition
-                )
+                wishlistListener?.onWishListClickListener(item.id)
             }
         }
         if (type == "TRACKS") {

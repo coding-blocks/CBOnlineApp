@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/wishlist"
-        android:icon="@drawable/ic_like_empty"
+        android:icon="@drawable/ic_like"
         android:title="@string/like"
         app:showAsAction="always" />
 

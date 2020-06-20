@@ -113,7 +113,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
 
     private val wishlistListener: WishlistListener by lazy {
         object : WishlistListener {
-            override fun onWishListClickListener(id: String, position: Int) {
+            override fun onWishListClickListener(id: String) {
                 if (getPrefs().SP_JWT_TOKEN_KEY.isNotEmpty()) {
                     viewModel.changeWishlistStatus(id)
                 }
@@ -204,19 +204,6 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
 
         viewModel.suggestedCourses.observer(this) { courses ->
             courseCardListAdapter.submitList(courses)
-        }
-
-        viewModel.wishlistUpdated.observer(this) {
-            if (getPrefs().SP_JWT_TOKEN_KEY.isNotEmpty()) {
-                if (courseToolbar.menu.size()>0){
-                    courseToolbar.menu.get(0).icon = getDrawable(
-                        if (it)
-                            R.drawable.ic_like
-                        else
-                            R.drawable.ic_like_empty
-                    )
-                }
-            }
         }
 
         viewModel.snackbar.observer(this){
@@ -348,9 +335,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             true
         }
         R.id.wishlist ->{
-            if (getPrefs().SP_JWT_TOKEN_KEY.isNotEmpty()){
-                viewModel.changeWishlistStatus(mainCourse = true)
-            }
+            viewModel.course.value?.id?.let { viewModel.changeWishlistStatus(it) }
             true
         }
         else -> super.onOptionsItemSelected(item)
