@@ -3,17 +3,14 @@ package com.codingblocks.cbonlineapp.dashboard.home
 import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.PlayerDao
 import com.codingblocks.cbonlineapp.database.RunPerformanceDao
-import com.codingblocks.cbonlineapp.database.models.CourseModel
 import com.codingblocks.cbonlineapp.database.models.RunPerformance
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
 import com.codingblocks.cbonlineapp.util.livedata.getDistinct
 import com.codingblocks.onlineapi.CBOnlineLib
-import com.codingblocks.onlineapi.Clients
 import com.codingblocks.onlineapi.models.PerformanceResponse
 import com.codingblocks.onlineapi.models.Player
 import com.codingblocks.onlineapi.models.User
 import com.codingblocks.onlineapi.models.Wishlist
-import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.safeApiCall
 
 class DashboardHomeRepository(

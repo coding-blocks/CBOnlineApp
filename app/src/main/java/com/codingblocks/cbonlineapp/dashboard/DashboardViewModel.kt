@@ -40,7 +40,6 @@ import com.codingblocks.onlineapi.models.Course
 import com.codingblocks.onlineapi.models.Player
 import com.google.common.util.concurrent.ListenableFuture
 import com.codingblocks.onlineapi.models.Wishlist
-import com.codingblocks.onlineapi.models.User
 import com.onesignal.OneSignal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
