@@ -1,9 +1,5 @@
 <resources>
 
-    <attr name="divider" format="reference" />
-    <attr name="background" format="reference" />
-
-
     <style name="NewAppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/white_transparency</item>
@@ -22,23 +18,11 @@
         <item name="background">@color/light_grey</item>
         <item name="divider">@color/divider</item>
         <item name="radioButtonStyle">@style/MyRadioButtonStyle</item>
-        <!--        <item name="chipStyle">@style/ThinChip</item>-->
-        <!--        <item name="materialButtonStyle">@style/MaterialButton</item>-->
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
-        <!-- enable window content transitions -->
         <item name="android:windowActivityTransitions">true</item>
-        <!-- specify enter and exit transitions -->
         <item name="android:windowEnterTransition">@transition/explode</item>
         <item name="android:windowExitTransition">@transition/explode</item>
         <item name="android:lineSpacingExtra">4dp</item>
-    </style>
-
-    <style name="NewAppTheme.Dark" parent="NewAppTheme">
-        <item name="background">@color/dark</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="divider">@color/divider</item>
-        <item name="toolbarStyle">@style/ToolBarStyleDark</item>
-        <item name="appBarLayoutStyle">@style/ToolBarStyleDark</item>
     </style>
 
     <style name="ToolBarStyle" parent="Widget.MaterialComponents.Toolbar">
@@ -46,237 +30,10 @@
         <item name="titleTextAppearance">@style/Toolbar.TitleText</item>
         <item name="titleTextColor">@color/black</item>
         <item name="contentInsetStartWithNavigation">0dp</item>
-
-    </style>
-
-    <style name="ToolBarStyleDark" parent="Widget.MaterialComponents.Toolbar">
-        <item name="android:background">@drawable/toolbar_bg_dark</item>
-        <item name="titleTextAppearance">@style/Toolbar.TitleText</item>
-        <item name="titleTextColor">@color/white</item>
-        <item name="navigationIcon">@drawable/ic_back_white</item>
-        <item name="contentInsetStartWithNavigation">0dp</item>
-    </style>
-
-    <style name="ToolBarStyleDarkBorderless" parent="ToolBarStyleDark">
-        <item name="android:background">@drawable/toolbar_bg_borderless</item>
-    </style>
-
-
-    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">18sp</item>
-        <item name="android:fontFamily">@font/gilroy_bold</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
         <item name="color">@color/black</item>
     </style>
-
-    <style name="ButtonStyle" parent="Widget.AppCompat.Button">
-        <item name="android:textColor">@color/white</item>
-        <item name="textAllCaps">false</item>
-        <item name="android:fontFamily">@font/gilroy_bold</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:paddingStart">20dp</item>
-        <item name="android:paddingEnd">20dp</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
-        <item name="android:stateListAnimator">@null</item>
-        <item name="android:background">@drawable/button_background_states</item>
-    </style>
-
-    <style name="SecondaryButtonStyle" parent="Widget.AppCompat.Button">
-        <item name="android:textColor">@color/orangish</item>
-        <item name="textAllCaps">false</item>
-        <item name="android:fontFamily">@font/gilroy_bold</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:paddingStart">20dp</item>
-        <item name="android:paddingEnd">20dp</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
-        <item name="android:stateListAnimator">@null</item>
-        <item name="android:background">@drawable/button_background_outline</item>
-    </style>
-
-    <style name="ButtonStyleChip" parent="Widget.AppCompat.Button">
-        <item name="android:textColor">@color/button_dark_text</item>
-        <item name="textAllCaps">false</item>
-        <item name="android:fontFamily">@font/gilroy_medium</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:background">@drawable/button_states</item>
-        <item name="android:minWidth">0dp</item>
-        <item name="android:minHeight">0dp</item>
-        <item name="android:paddingStart">12dp</item>
-        <item name="android:paddingEnd">12dp</item>
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
-        <item name="android:drawablePadding">10dp</item>
-        <item name="android:stateListAnimator">@null</item>
-    </style>
-
-    <style name="CustomOutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="backgroundTint">#f3f3f3</item>
-        <item name="cornerRadius">@dimen/button_corner_radius</item>
-        <item name="android:paddingEnd">@dimen/padding_medium</item>
-        <item name="android:paddingStart">@dimen/padding_medium</item>
-        <item name="android:paddingTop">@dimen/margin_medium_small</item>
-        <item name="android:paddingBottom">@dimen/margin_medium_small</item>
-        <item name="textAllCaps">false</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/brownish_grey</item>
-        <item name="android:textAlignment">textStart</item>
-        <item name="fontFamily">@font/gilroy_medium</item>
-    </style>
-
-    <style name="sheetStyle" parent="@style/Theme.Design.Light.BottomSheetDialog">
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowSoftInputMode">adjustPan</item>
-        <item name="bottomSheetStyle">@style/BottomSheet</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-
-    </style>
-
-    <style name="BottomSheet" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/rounded_dialog</item>
-
-    </style>
-
-    <style name="NavigationDrawerStyle">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/head</item>
-        <item name="android:fontFamily">@font/gilroy_medium</item>
-    </style>
-
-    <style name="AppTabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/head</item>
-        <item name="textAllCaps">false</item>
-        <item name="android:fontFamily">@font/gilroy_bold</item>
-    </style>
-
-    <style name="ChipTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/head</item>
-        <item name="textAllCaps">false</item>
-        <item name="android:fontFamily">@font/gilroy_medium</item>
-    </style>
-
-
-    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/AppModalStyle</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowSoftInputMode">adjustResize</item>
-    </style>
-
-    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/rounded_dialog</item>
-
-    </style>
-
-    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowBackground">@drawable/background_splash</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
-
-
-    <style name="ColorSwitchStyle">
-        <item name="colorControlActivated">@color/colorPrimary</item>
-        <item name="colorSwitchThumbNormal">@color/white</item>
-        <item name="android:colorForeground">@color/battleship_gray</item>
-    </style>
-
-    <style name="VdoMediaButton">
-        <item name="android:background">?android:attr/selectableItemBackground</item>
-        <item name="android:layout_width">54dp</item>
-        <item name="android:layout_height">40dp</item>
-    </style>
-
-    <style name="ThinChip" parent="Widget.MaterialComponents.Chip.Action">
-        <item name="android:textAppearance">@style/chipText</item>
-        <item name="chipSurfaceColor">@color/white_transparent</item>
-
-        <item name="android:textColor">@color/white</item>
-        <item name="chipMinTouchTargetSize">0dp</item>
-        <item name="textEndPadding">@dimen/margin_extra_small</item>
-        <item name="textStartPadding">@dimen/margin_extra_small</item>
-        <item name="chipEndPadding">0dp</item>
-        <item name="chipStartPadding">0dp</item>
-        <!--        <item name="strokeWidth">2dp</item>-->
-        <!--        <item name="strokeColor">@color/white</item>-->
-        <!--        <item name="android:strokeColor">@color/white</item>-->
-        <!--        <item name="android:strokeWidth">1dp</item>-->
-    </style>
-
-    <style name="chipText" parent="TextAppearance.MaterialComponents.Chip">
-        <item name="android:textSize">12sp</item>
-        <item name="android:fontFamily">@font/my_font_family</item>
-    </style>
-
-    <style name="ThinChipSecondary" parent="ThinChip">
-        <item name="android:textColor">@color/head</item>
-        <item name="chipStrokeColor">#c4c4c4</item>
-        <item name="chipStrokeWidth">1dp</item>
-    </style>
-
-    <style name="CustomRatingBar" parent="@android:style/Widget.RatingBar">
-        <item name="android:progressDrawable">@drawable/custom_rating</item>
-        <item name="android:minHeight">10dp</item>
-        <item name="android:maxHeight">13dp</item>
-    </style>
-
-    <style name="MyRadioButtonStyle" parent="@android:style/Widget.CompoundButton.RadioButton">
-        <item name="android:button">@drawable/custom_btn_radio</item>
-        <item name="android:padding">4dp</item>
-    </style>
-
-    <style name="ButtonStyleChipSmall" parent="ButtonStyleChip">
-        <item name="fontFamily">@font/gilroy_medium</item>
-        <item name="android:background">@drawable/bck_rounded</item>
-        <item name="android:drawablePadding">0dp</item>
-        <item name="android:paddingTop">3dp</item>
-        <item name="android:paddingBottom">3dp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">12sp</item>
-        <item name="cornerRadius">20dp</item>
-    </style>
-
-    <style name="CustomMaterialDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="materialAlertDialogTitleTextStyle">@style/MyTitle_MaterialAlertDialog.MaterialComponents.Title.Text</item>
-    </style>
-    <style name="MyTitle_MaterialAlertDialog.MaterialComponents.Title.Text" parent="@style/MaterialAlertDialog.MaterialComponents.Title.Text">
-        <item name="fontFamily">@font/gilroy_semibold</item>
-    </style>
-
-    <style name="BottomNavigationViewTextStyle">
-        <item name="fontFamily">@font/gilroy_medium</item>
-        <item name="fontSize">10sp</item>
-    </style>
-
-    <style name="BottomNavigationViewInActiveTextStyle">
-        <item name="fontFamily">@font/gilroy_medium</item>
-        <item name="fontSize">10sp</item>
-    </style>
-
-    <style name="BottomNavigationTextApperance">
-        <item name="android:ellipsize">end</item>
-    </style>
-
-    <style name="CardShapeApperance">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">10dp</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-        <item name="cornerSizeTopRight">10dp</item>
-    </style>
-
-    <style name="roundedImageView">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">4dp</item>
-    </style>
-
-
 </resources>

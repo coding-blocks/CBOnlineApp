@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
 import android.widget.SeekBar
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
@@ -96,6 +97,11 @@ class SettingsActivity : BaseCBActivity() {
 
         darkMode.setOnClickListener {
             getPrefs().SP_DARK_MODE = darkMode.isChecked
+            if (darkMode.isChecked){
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }else{
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            }
         }
     }
 

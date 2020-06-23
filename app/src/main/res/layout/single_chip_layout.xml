@@ -7,5 +7,5 @@
     android:layout_alignTop="@id/chip2"
     android:text="C++ Developer"
     app:chipBackgroundColor="@color/white_transparent"
-    android:textColor="@color/black"
+    android:textColor="@color/head"
     app:chipStrokeColor="#c4c4c4" />

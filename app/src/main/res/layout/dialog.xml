@@ -44,7 +44,7 @@
                 android:layout_marginEnd="@dimen/margin_xl"
                 android:fontFamily="@font/gilroy_medium"
                 android:textAlignment="center"
-                android:textColor="@color/black"
+                android:textColor="@color/head"
                 android:textSize="14sp" />
 
             <LinearLayout

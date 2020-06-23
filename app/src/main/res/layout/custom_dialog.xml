@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.cardview.widget.CardView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:card_view="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                 android:layout_marginEnd="8dp"
                 android:text="Confirmation"
                 android:fontFamily="@font/gilroy_bold"
-                android:textColor="@color/black"
+                android:textColor="@color/head"
                 android:textSize="18sp" />
 
             <TextView
@@ -44,7 +44,7 @@
                 android:fontFamily="@font/gilroy_bold"
                 android:lineSpacingExtra="2sp"
                 android:textAlignment="center"
-                android:textColor="@color/brownish_grey"
+                android:textColor="@color/subHead"
                 android:textSize="16sp" />
 
             <LinearLayout
@@ -69,7 +69,7 @@
                     android:shadowColor="#ced0d2"
                     android:text="Cancel"
                     android:textAllCaps="false"
-                    android:textColor="#ced0d2"
+                    android:textColor="@color/subHead"
                     android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatButton

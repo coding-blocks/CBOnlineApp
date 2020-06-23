@@ -175,6 +175,7 @@ fun LineChart.loadData(
     this.apply {
         this.data = data
         setTouchEnabled(false)
+        legend.textColor = getColor(context, R.color.head)
         axisRight.textColor = getColor(context, R.color.head)
         axisRight.setDrawGridLines(false)
         axisLeft.setDrawGridLines(true)

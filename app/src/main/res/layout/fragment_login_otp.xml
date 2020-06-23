@@ -37,7 +37,7 @@
             android:layout_marginEnd="@dimen/margin_xxl"
             android:fontFamily="@font/gilroy_medium"
             android:text="We will auto verify the OTP sent to "
-            android:textColor="@color/brownish_grey"
+            android:textColor="@color/subHead"
             android:textSize="14sp"
             android:visibility="visible" />
 
@@ -45,12 +45,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="65dp"
+            android:background="@color/editBoxColor"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="@color/white"
                 android:fontFamily="@font/gilroy_medium"
                 android:inputType="phone"
                 android:id="@+id/otpEdtv"
@@ -58,6 +58,7 @@
                 android:letterSpacing="1.5"
                 android:maxLength="6"
                 android:paddingStart="0dp"
+                android:background="@color/editBoxColor"
                 android:textColorHighlight="@color/orangish"
                 android:textColorHint="@color/black"
                 android:textSize="16sp"
@@ -72,7 +73,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/margin_medium"
             android:fontFamily="@font/gilroy_medium"
-            android:textColor="@color/black"
+            android:textColor="@color/subHead"
             android:layout_marginBottom="@dimen/margin_xl"
             android:visibility="visible"
             android:textColorLink="@color/orangish"

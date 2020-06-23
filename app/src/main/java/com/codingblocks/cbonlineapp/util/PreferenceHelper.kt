@@ -138,7 +138,7 @@ class PreferenceHelper private constructor() {
 
         const val PIP = "pip"
         const val DARK_MODE = "darkMode"
-        const val DARK_MODE_DEFAULT = true
+        const val DARK_MODE_DEFAULT = false
         const val PIP_DEFAULT = false
         private var prefs: SharedPreferences? = null
         private var instance: PreferenceHelper = PreferenceHelper()

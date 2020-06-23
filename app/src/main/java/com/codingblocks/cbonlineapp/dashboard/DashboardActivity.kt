@@ -341,9 +341,9 @@ class DashboardActivity : BaseCBActivity(),
         supportActionBar?.title = title
         if (pos == 0 || pos == 2)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.head))
+                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, getColor(R.color.white))
             } else {
-                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, ContextCompat.getColor(this,R.color.head))
+                dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg_dark, ContextCompat.getColor(this,R.color.white))
             }
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             dashboardToolbar.colouriseToolbar(this@DashboardActivity, R.drawable.toolbar_bg, getColor(R.color.head))

@@ -21,7 +21,7 @@
             <corners android:radius="@dimen/button_corner_radius" />
 
             <!-- fill the inside in the color you want (could also be a gradient again if you want to, just change solid to gradient and enter angle, start, maybe center, and end color) -->
-            <solid android:color="@color/white" />
+            <solid android:color="@color/dialogBoxBackground" />
 
             <padding
                 android:bottom="@dimen/button_padding_small"

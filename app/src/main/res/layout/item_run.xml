@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gilroy_bold"
-            android:textColor="@color/black"
+            android:textColor="@color/head"
             android:textSize="19sp"
             tools:text="9499" />
 
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:fontFamily="@font/gilroy_bold"
-            android:textColor="@color/brown_grey"
+            android:textColor="@color/subHead"
             android:textSize="15sp"
             tools:text="9499" />
     </LinearLayout>

@@ -45,4 +45,5 @@
     <color name="toolbar_bg_color">@color/veryLightPink</color>
     <color name="drawable_color">#333</color>
     <color name="editBoxColor">@color/white</color>
+    <color name="dialogBoxBackground">#343433</color>
 </resources>
