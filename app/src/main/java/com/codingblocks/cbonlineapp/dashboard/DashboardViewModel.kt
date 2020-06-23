@@ -339,7 +339,7 @@ class DashboardViewModel(
     fun getPerformance(attemptId: String) = homeRepo.getRunStats(attemptId)
 
     var toastMutable = MutableLiveData<String>()
-    var isEmpty = false
+    var isWishlistEmpty = false
     fun fetchWishList() = wishlist
 
     private fun initializedPagedListBuilder(config: PagedList.Config):
@@ -353,7 +353,7 @@ class DashboardViewModel(
         return LivePagedListBuilder(dataSourceFactory, config).setBoundaryCallback(object : PagedList.BoundaryCallback<Wishlist>() {
             override fun onZeroItemsLoaded() {
                 super.onZeroItemsLoaded()
-                isEmpty = true
+                isWishlistEmpty = true
             }
         })
     }

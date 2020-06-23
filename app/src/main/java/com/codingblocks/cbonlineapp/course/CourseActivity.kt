@@ -343,7 +343,7 @@ class CourseActivity : BaseCBActivity(), AnkoLogger, AppBarLayout.OnOffsetChange
             true
         }
         R.id.wishlist ->{
-            viewModel.course.value?.id?.let { viewModel.changeWishlistStatus(it) }
+            viewModel.changeWishlistStatus(courseId)
             true
         }
         else -> super.onOptionsItemSelected(item)

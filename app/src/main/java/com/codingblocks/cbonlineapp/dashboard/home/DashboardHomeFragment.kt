@@ -164,8 +164,8 @@ class DashboardHomeFragment : BaseCBFragment() {
             }
 
             vm.fetchWishList().observer(viewLifecycleOwner){wishlist->
-                noWishListLayout.isVisible = vm.isEmpty
-                wishlistHolder.isVisible = !vm.isEmpty
+                noWishListLayout.isVisible = vm.isWishlistEmpty
+                wishlistHolder.isVisible = !vm.isWishlistEmpty
                 wishlistAdapter.submitList(wishlist)
             }
 
