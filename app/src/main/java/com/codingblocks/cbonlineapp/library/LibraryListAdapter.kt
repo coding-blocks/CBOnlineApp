@@ -82,6 +82,7 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
                     tracker?.let {
                         val item = getItem(position) as NotesModel
                         bind(item, it.isSelected(item.nttUid))
+                        itemClickListener = onItemClick
                     }
                 }
             }
@@ -108,6 +109,8 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
     }
 
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var itemClickListener: ItemClickListener? = null
+
         fun bind(item: NotesModel, isActivated: Boolean = false) = with(itemView) {
 
             noteTitleTv.text = item.contentTitle
@@ -115,6 +118,9 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
             noteTimeTv.text = item.createdAt.timeAgo()
             selectionImg.isVisible = isActivated
             noteTimeTv.isVisible = !isActivated
+            setOnClickListener {
+                itemClickListener?.onClick(item)
+            }
         }
 
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> =
