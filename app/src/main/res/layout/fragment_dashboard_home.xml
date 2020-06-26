@@ -219,7 +219,8 @@
                 android:id="@+id/wishlistHolder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
+                android:paddingTop="@dimen/margin_large"
+                android:paddingBottom="@dimen/margin_large"
                 android:visibility="gone">
 
                 <ImageView
@@ -291,8 +292,9 @@
                 android:id="@+id/noWishListLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_xl"
-                android:layout_marginBottom="@dimen/margin_large"
+                android:paddingTop="@dimen/margin_xl"
+                android:paddingBottom="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_large"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:visibility="visible">

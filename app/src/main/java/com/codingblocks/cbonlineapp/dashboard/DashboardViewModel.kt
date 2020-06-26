@@ -54,14 +54,9 @@ class DashboardViewModel(
     private val repo: DashboardDoubtsRepository,
     val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
-    private var wishlist : LiveData<PagedList<Wishlist>>
+    lateinit var wishlist : LiveData<PagedList<Wishlist>>
     init {
         checkDownloadDataWM()
-        val config = PagedList.Config.Builder()
-            .setPageSize(3)
-            .setEnablePlaceholders(true)
-            .build()
-        wishlist = initializedPagedListBuilder(config).build()
     }
 
     var isLoggedIn: Boolean? by savedStateValue(handle, LOGGED_IN)
@@ -340,7 +335,14 @@ class DashboardViewModel(
 
     var toastMutable = MutableLiveData<String>()
     var isWishlistEmpty = false
-    fun fetchWishList() = wishlist
+    fun fetchWishList(): LiveData<PagedList<Wishlist>>{
+        val config = PagedList.Config.Builder()
+            .setPageSize(3)
+            .setEnablePlaceholders(true)
+            .build()
+        wishlist = initializedPagedListBuilder(config).build()
+        return wishlist
+    }
 
     private fun initializedPagedListBuilder(config: PagedList.Config):
         LivePagedListBuilder<String, Wishlist> {

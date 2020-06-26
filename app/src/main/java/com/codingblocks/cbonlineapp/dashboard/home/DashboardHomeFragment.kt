@@ -15,9 +15,11 @@ import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
 import android.content.Intent
+import android.util.TypedValue
 import androidx.core.view.ViewCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.course.CourseActivity
 import com.codingblocks.cbonlineapp.course.adapter.WishlistListener
 import com.codingblocks.cbonlineapp.util.COURSE_ID
@@ -28,6 +30,8 @@ import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.toDp
+import com.codingblocks.cbonlineapp.util.recyclerciew.SpacesItemDecoration
 import com.codingblocks.onlineapi.models.ProgressItem
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
@@ -38,6 +42,7 @@ import com.skydoves.progressview.ProgressView
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard_home.*
 import kotlinx.android.synthetic.main.item_performance.*
+import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -101,6 +106,7 @@ class DashboardHomeFragment : BaseCBFragment() {
         wishRv.apply {
             adapter = wishlistAdapter
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            addItemDecoration(SpacesItemDecoration(28f.toDp()))
         }
         recentlyPlayedAdapter.onItemClick = itemClickListener
         wishlistAdapter.onItemClick = wishListItemClickListener

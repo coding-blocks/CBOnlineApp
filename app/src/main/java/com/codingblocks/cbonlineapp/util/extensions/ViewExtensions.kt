@@ -193,7 +193,7 @@ fun RecyclerView.setRv(
     adapter = listAdapter
 }
 
-private fun Float.toDp(): Float {
+public fun Float.toDp(): Float {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, CBOnlineApp.mInstance.displayMetrics)
 }
 
