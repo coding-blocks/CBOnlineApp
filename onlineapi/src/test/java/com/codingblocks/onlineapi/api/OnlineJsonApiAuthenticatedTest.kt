@@ -3,6 +3,8 @@ package com.codingblocks.onlineapi.api
 import com.codingblocks.onlineapi.CBOnlineCommunicator
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.Clients
+import com.codingblocks.onlineapi.models.Course
+import com.codingblocks.onlineapi.models.Wishlist
 import junit.framework.Assert.assertNotNull
 import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.runBlocking
@@ -50,9 +52,20 @@ class OnlineJsonApiAuthenticatedTest {
 
     @Test
     fun `GET wishlist`() {
-        val wishlist = runBlocking { CBOnlineLib.onlineV2JsonApi.getWishlist().body()?.get() }
-        assertNotNull(wishlist)
-        assertTrue(wishlist!!.isNotEmpty())
+        val wishlistAdd = runBlocking { CBOnlineLib.onlineV2JsonApi.addWishlist(Wishlist(Course("103"))).body() }
+        assertNotNull(wishlistAdd)
+        assertTrue(wishlistAdd!=null)
+
+        val wishlistGet = runBlocking { CBOnlineLib.onlineV2JsonApi.getWishlist().body()?.get() }
+        assertNotNull(wishlistGet)
+        assertTrue(wishlistGet!!.isNotEmpty())
+
+        val wishlistCheck = runBlocking { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted("103").body() }
+        assertNotNull(wishlistCheck)
+        assertTrue(wishlistCheck!=null)
+
+        val wishlistRemove = runBlocking { CBOnlineLib.onlineV2JsonApi.removeWishlist("103").body() }
+        assertTrue(wishlistRemove==null)
     }
 
 }
