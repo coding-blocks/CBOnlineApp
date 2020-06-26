@@ -83,6 +83,9 @@ class ContentViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                             else
                                 context.toast("Cannot Download")
                         }
+                        else{
+                            deletFile()
+                        }
                     }
                 }
             }
