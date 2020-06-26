@@ -118,7 +118,8 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
             noteTimeTv.text = item.createdAt.timeAgo()
             selectionImg.isVisible = isActivated
             noteTimeTv.isVisible = !isActivated
-            setOnClickListener {
+            editNote.isVisible = !isActivated
+            editNote.setOnClickListener {
                 itemClickListener?.onClick(item)
             }
         }
