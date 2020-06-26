@@ -47,4 +47,12 @@ class OnlineJsonApiAuthenticatedTest {
         assertNotNull(runAttempt)
         assertTrue(runAttempt!!.id == "80179")
     }
+
+    @Test
+    fun `GET wishlist`() {
+        val wishlist = runBlocking { CBOnlineLib.onlineV2JsonApi.getWishlist().body()?.get() }
+        assertNotNull(wishlist)
+        assertTrue(wishlist!!.isNotEmpty())
+    }
+
 }
