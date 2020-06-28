@@ -57,16 +57,24 @@ class OnlineJsonApiAuthenticatedTest {
         assertNotNull(wishlistAdd)
         assertTrue(wishlistAdd?.course?.id=="89")
 
-        val wishlistGet = runBlocking { CBOnlineLib.onlineV2JsonApi.getWishlist().body()?.get() }
+        //per page limit is set to 3 by default, so it is increased to 100 for all wishlist courses
+        val wishlistGet = runBlocking { CBOnlineLib.onlineV2JsonApi.getWishlist(page = "100").body()?.get() }
         assertNotNull(wishlistGet)
-        assertTrue(wishlistGet!!.isNotEmpty())
+        var found = false
+        for (item in wishlistGet!!)
+            if (item.course?.id=="89"){
+                found = true
+                break
+            }
+        assertTrue(found)
 
         val wishlistCheck = runBlocking { CBOnlineLib.onlineV2JsonApi.checkIfWishlisted("89").body() }
         assertNotNull(wishlistCheck)
-        assertTrue(wishlistCheck!=null)
+        assertTrue(wishlistCheck?.id!=null)
 
-        val wishlistRemove = runBlocking { CBOnlineLib.onlineV2JsonApi.removeWishlist("89").body() }
-        assertTrue(wishlistRemove==null)
+        val id = wishlistCheck?.id
+        val wishlistRemove = runBlocking { CBOnlineLib.onlineV2JsonApi.removeWishlist(id?:"").code() }
+        assertTrue(wishlistRemove==204)
     }
 
 }
