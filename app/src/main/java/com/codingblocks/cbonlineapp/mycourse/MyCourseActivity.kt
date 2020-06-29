@@ -14,10 +14,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
-import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
-import com.codingblocks.cbonlineapp.mycourse.content.CourseContentFragment
-import com.codingblocks.cbonlineapp.mycourse.library.CourseLibraryFragment
-import com.codingblocks.cbonlineapp.mycourse.overview.OverviewFragment
+import com.codingblocks.cbonlineapp.dashboard.ViewPager2Adapter
 import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.CustomDialog
@@ -27,12 +24,14 @@ import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.extensions.animateVisibility
-import com.codingblocks.cbonlineapp.util.livedata.observer
-import com.codingblocks.cbonlineapp.util.livedata.pageChangeCallback
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
+import com.codingblocks.cbonlineapp.util.livedata.observer
+import com.codingblocks.cbonlineapp.util.livedata.pageChangeCallback
 import com.codingblocks.onlineapi.ErrorStatus
+import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_my_course.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
@@ -40,16 +39,18 @@ import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
+
 class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefreshListener {
 
     private val viewModel: MyCourseViewModel by stateViewModel()
-    private val pagerAdapter by lazy { TabLayoutAdapter(supportFragmentManager) }
+    private val pagerAdapter: ViewPager2Adapter by lazy { ViewPager2Adapter(this) }
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             toast(getString(R.string.logged_in))
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_course)
@@ -88,18 +89,16 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
                     }
                 }
                 ErrorStatus.UNAUTHORIZED -> {
-                    CustomDialog.showConfirmation(this, UNAUTHORIZED) {
-                        CustomDialog.showConfirmation(this, UNAUTHORIZED) { result ->
-                            if (result) {
-                                startForResult(intentFor<LoginActivity>())
-                            } else {
-                                finish()
-                            }
+                    CustomDialog.showConfirmation(this, UNAUTHORIZED) { result ->
+                        if (result) {
+                            startForResult(intentFor<LoginActivity>())
+                        } else {
+                            finish()
                         }
                     }
+
                 }
                 else -> {
-                    myCourseRoot.showSnackbar(it, Snackbar.LENGTH_SHORT)
                     AppCrashlyticsWrapper.log(it)
                 }
             }
@@ -108,30 +107,33 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
     }
 
     private fun setupViewPager() {
-        myCourseTabs.setupWithViewPager(course_pager)
-        pagerAdapter.apply {
-            add(OverviewFragment(), getString(R.string.dashboard))
-            add(CourseContentFragment(), getString(R.string.curriculum))
-            add(CourseLibraryFragment(), getString(R.string.library))
-        }
 
-        course_pager.apply {
-            setPagingEnabled(true)
+        pagerAdapter.apply {
+            add(ViewPager2Adapter.FragmentName.COURSE_OVERVIEW)
+            add(ViewPager2Adapter.FragmentName.COURSE_CURRICULUM)
+            add(ViewPager2Adapter.FragmentName.COURSE_LIBRARY)
+            add(ViewPager2Adapter.FragmentName.COURSE_MISC)
+        }
+        coursePager.apply {
+            isUserInputEnabled = false
             adapter = pagerAdapter
-            currentItem = 0
-            offscreenPageLimit = 2
-            addOnPageChangeListener(
-                pageChangeCallback { pos, _, _ ->
-                    if (pos == 1) {
-                        fab.animateVisibility(View.VISIBLE)
-                    } else {
-                        if (fab.visibility == View.VISIBLE) {
-                            fab.animateVisibility(View.GONE)
-                        }
+            offscreenPageLimit = 3
+            pageChangeCallback { pos, _, _ ->
+                if (pos == 1) {
+                    fab.animateVisibility(View.VISIBLE)
+                } else {
+                    if (fab.visibility == View.VISIBLE) {
+                        fab.animateVisibility(View.GONE)
                     }
                 }
-            )
+            }
         }
+        val badge: BadgeDrawable? = myCourseTabs.getTabAt(3)?.orCreateBadge
+        badge?.isVisible = true
+        TabLayoutMediator(myCourseTabs, coursePager) { tab, position ->
+            tab.text = resources.getStringArray(R.array.tab_titles)[position]
+            coursePager.setCurrentItem(tab.position, true)
+        }.attach()
     }
 
     fun showFab() {
