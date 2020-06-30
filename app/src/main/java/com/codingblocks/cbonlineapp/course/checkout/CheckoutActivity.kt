@@ -21,7 +21,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -49,17 +48,17 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener, AnkoLo
                 playAnimation()
             }
             vm.addOrder().observeOnce {
-                info { it }
+                if (it!!.getAsJsonObject("razorpayPayment").has("order_id")) {
+                    showRazorPayCheckoutForm(it)
+                } else {
+                    GlobalScope.launch {
+                        delay(3000)
+                        startActivity(DashboardActivity.createDashboardActivityIntent(this@CheckoutActivity, true))
+                        finish()
+                    }
+                }
             }
-//            if (vm.isFree) {
-//                vm.capturePayment {
-//                    GlobalScope.launch {
-//                        delay(3000)
-//                        startActivity(DashboardActivity.createDashboardActivityIntent(this@CheckoutActivity, true))
-//                        finish()
-//                    }
-//                }
-//            }
+
         }
     }
 
@@ -85,17 +84,23 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener, AnkoLo
         try {
             val options = JSONObject()
             options.put("name", "Coding Blocks")
-            options.put("description", json.get("productName")?.asString) // Use products name
-            options.put("currency", "INR")
-            options.put(
-                "order_id",
-                json.get("razorpay_order_id")?.asString
-            ) // razorpay_order_id from API
             options.put("image", "https://codingblocks.com/assets/images/cb/cblogo.png")
-            options.put(
-                "amount",
-                json.get("final_price")?.asString
-            ) // Amount in paise from carts API after applying coupon and everything
+            json.getAsJsonObject("razorpayPayment").let {
+                options.put("order_id", it["order_id"].asString) // razorpay_order_id from API
+                options.put("amount", it["amount"].asString) // Amount in paise from carts API after applying coupon and everything
+            }
+            json.getAsJsonObject("transaction").let {
+                options.put("currency", it["currency"].asString)
+            }
+            json.getAsJsonObject("organization").let {
+                checkout.setKeyID(it["razorpayKey"].asString)
+            }
+            //Prefil user info
+            json.getAsJsonObject("user").let {
+                options.put("prefill.name", it["firstname"].asString)
+                options.put("prefill.email", it["email"].asString)
+                options.put("prefill.contact", it["mobile_number"].asString)
+            }
             checkout.open(this, options)
         } catch (e: Exception) {
             Log.e("CheckoutFragment.kt", "Error in starting Razorpay Checkout", e)
