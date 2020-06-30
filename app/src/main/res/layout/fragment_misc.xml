@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/pauseCourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableStart="@drawable/ic_pause"
+        android:drawableEnd="@drawable/ic_dropright_big"
+        android:drawablePadding="20dp"
+        android:drawableTint="@color/orangish"
+        android:focusable="true"
+        android:fontFamily="@font/gilroy_semibold"
+        android:padding="20dp"
+        android:text="@string/pause_course"
+        android:textColor="@color/orangish"
+        android:textSize="18sp" />
+
+
+    <TextView
+        android:id="@+id/upgradeCourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableStart="@drawable/ic_upgrade"
+        android:drawableEnd="@drawable/ic_dropright_big"
+        android:drawablePadding="28dp"
+        android:drawableTint="@color/orangish"
+        android:focusable="true"
+        android:fontFamily="@font/gilroy_semibold"
+        android:padding="20dp"
+        android:text="@string/upgrade_course"
+        android:textColor="@color/orangish"
+        android:textSize="18sp" />
+
+
+
+</LinearLayout>

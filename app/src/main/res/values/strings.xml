@@ -319,4 +319,6 @@
     <string name="logged_in">Logged in successfully !!</string>
     <string name="requested">Requested</string>
     <string name="download_share"><![CDATA[Download & Share]]></string>
+    <string name="pause_course">Pause Course</string>
+    <string name="upgrade_course">Upgrade Course</string>
 </resources>

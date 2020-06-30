@@ -1,15 +1,18 @@
 package com.codingblocks.cbonlineapp.course.checkout
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.DashboardActivity
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
+import com.codingblocks.cbonlineapp.util.livedata.observeOnce
+import com.codingblocks.cbonlineapp.util.livedata.observer
+import com.google.gson.JsonObject
 import com.razorpay.Checkout
 import com.razorpay.PaymentData
 import com.razorpay.PaymentResultWithDataListener
@@ -17,10 +20,13 @@ import kotlinx.android.synthetic.main.activity_checkout.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
+import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
+class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener, AnkoLogger {
 
     private val vm by viewModel<CheckoutViewModel>()
 
@@ -42,15 +48,18 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
                 isVisible = true
                 playAnimation()
             }
-            if (vm.isFree) {
-                vm.capturePayment {
-                    GlobalScope.launch {
-                        delay(3000)
-                        startActivity(DashboardActivity.createDashboardActivityIntent(this@CheckoutActivity, true))
-                        finish()
-                    }
-                }
+            vm.addOrder().observeOnce {
+                info { it }
             }
+//            if (vm.isFree) {
+//                vm.capturePayment {
+//                    GlobalScope.launch {
+//                        delay(3000)
+//                        startActivity(DashboardActivity.createDashboardActivityIntent(this@CheckoutActivity, true))
+//                        finish()
+//                    }
+//                }
+//            }
         }
     }
 
@@ -60,6 +69,36 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener {
             true
         } else {
             super.onOptionsItemSelected(item)
+        }
+    }
+
+    /** Call this function at the last step after applying coupon and everything.
+    Razorpay will automatically call either of the methods on CheckoutActivity.kt
+
+    override fun onPaymentSuccess(p0: String?)  - p0: is razorpay_payment_id that needs to be sent to capture payment API
+
+    override fun onPaymentError(p0: Int, p1: String?) - Show retry payment or payment declined.
+
+     */
+    private fun showRazorPayCheckoutForm(json: JsonObject) {
+        val checkout = Checkout()
+        try {
+            val options = JSONObject()
+            options.put("name", "Coding Blocks")
+            options.put("description", json.get("productName")?.asString) // Use products name
+            options.put("currency", "INR")
+            options.put(
+                "order_id",
+                json.get("razorpay_order_id")?.asString
+            ) // razorpay_order_id from API
+            options.put("image", "https://codingblocks.com/assets/images/cb/cblogo.png")
+            options.put(
+                "amount",
+                json.get("final_price")?.asString
+            ) // Amount in paise from carts API after applying coupon and everything
+            checkout.open(this, options)
+        } catch (e: Exception) {
+            Log.e("CheckoutFragment.kt", "Error in starting Razorpay Checkout", e)
         }
     }
 
