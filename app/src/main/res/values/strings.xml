@@ -321,4 +321,6 @@
     <string name="download_share"><![CDATA[Download & Share]]></string>
     <string name="pause_course">Pause Course</string>
     <string name="upgrade_course">Upgrade Course</string>
+    <string name="no_take_me_back">No, Take me back</string>
+    <string name="pause_now">Pause Now</string>
 </resources>

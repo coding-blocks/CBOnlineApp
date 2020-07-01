@@ -24,7 +24,7 @@
         <item name="radioButtonStyle">@style/MyRadioButtonStyle</item>
         <!--        <item name="chipStyle">@style/ThinChip</item>-->
         <!--        <item name="materialButtonStyle">@style/MaterialButton</item>-->
-        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+<!--        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>-->
         <!-- enable window content transitions -->
         <item name="android:windowActivityTransitions">true</item>
         <!-- specify enter and exit transitions -->
@@ -164,12 +164,12 @@
 
     <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/AppModalStyle</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowSoftInputMode">adjustResize</item>
+<!--        <item name="android:windowIsFloating">false</item>-->
+<!--        <item name="android:windowSoftInputMode">adjustResize</item>-->
     </style>
 
     <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/rounded_dialog</item>
+        <item name="android:background">@android:color/transparent</item>
 
     </style>
 

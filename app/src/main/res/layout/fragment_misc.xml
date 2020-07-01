@@ -16,7 +16,7 @@
         android:drawableTint="@color/orangish"
         android:focusable="true"
         android:fontFamily="@font/gilroy_semibold"
-        android:padding="20dp"
+        android:padding="@dimen/margin_large"
         android:text="@string/pause_course"
         android:textColor="@color/orangish"
         android:textSize="18sp" />
@@ -34,7 +34,7 @@
         android:drawableTint="@color/orangish"
         android:focusable="true"
         android:fontFamily="@font/gilroy_semibold"
-        android:padding="20dp"
+        android:padding="@dimen/margin_large"
         android:text="@string/upgrade_course"
         android:textColor="@color/orangish"
         android:textSize="18sp" />
