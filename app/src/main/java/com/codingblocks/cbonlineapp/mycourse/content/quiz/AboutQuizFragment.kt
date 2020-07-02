@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.quiz
+package com.codingblocks.cbonlineapp.mycourse.content.quiz
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
-import com.codingblocks.cbonlineapp.mycourse.quiz.info.QuizInfoFragment
-import com.codingblocks.cbonlineapp.mycourse.quiz.submissions.QuizSubmissionsFragment
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.info.QuizInfoFragment
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.submissions.QuizSubmissionsFragment
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import kotlinx.android.synthetic.main.fragment_about_quiz.*
@@ -45,7 +45,7 @@ class AboutQuizFragment : BaseCBFragment(), AnkoLogger {
                 runOnUiThread {
                     quizStartBtn.isEnabled = true
                     replaceFragmentSafely(
-                        QuizFragment(),
+                            QuizFragment(),
                         "quiz",
                         containerViewId = R.id.quizContainer,
                         addToStack = true

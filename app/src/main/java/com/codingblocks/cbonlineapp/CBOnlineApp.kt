@@ -14,7 +14,7 @@ import com.codingblocks.cbonlineapp.di.firebaseModule
 import com.codingblocks.cbonlineapp.di.preferencesModule
 import com.codingblocks.cbonlineapp.di.viewModelModule
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.tracks.LearningTracksActivity
 import com.codingblocks.cbonlineapp.tracks.TrackActivity
 import com.codingblocks.cbonlineapp.util.*

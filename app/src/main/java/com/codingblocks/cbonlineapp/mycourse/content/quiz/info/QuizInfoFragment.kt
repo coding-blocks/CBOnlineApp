@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.quiz.info
+package com.codingblocks.cbonlineapp.mycourse.content.quiz.info
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizViewModel
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.fragment_quiz_info.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel

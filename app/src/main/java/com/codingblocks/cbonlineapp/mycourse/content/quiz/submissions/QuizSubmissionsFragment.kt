@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.quiz.submissions
+package com.codingblocks.cbonlineapp.mycourse.content.quiz.submissions
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
-import com.codingblocks.cbonlineapp.mycourse.quiz.QuizFragment
-import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizFragment
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizViewModel
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.replaceFragmentSafely
 import com.codingblocks.cbonlineapp.util.extensions.setRv
@@ -26,7 +26,7 @@ class QuizSubmissionsFragment : BaseCBFragment() {
                 vm.quizAttempt.value = quizAttempt
                 vm.quizAttemptId = quizAttempt.id
                 replaceFragmentSafely(
-                    QuizFragment(),
+                        QuizFragment(),
                     "quiz",
                     containerViewId = R.id.quizContainer,
                     addToStack = true

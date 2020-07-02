@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.player
+package com.codingblocks.cbonlineapp.mycourse.content.player
 
 import android.animation.LayoutTransition
 import android.annotation.TargetApi
@@ -41,8 +41,8 @@ import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.library.EditNoteClickListener
-import com.codingblocks.cbonlineapp.mycourse.player.doubts.VideoDoubtFragment
-import com.codingblocks.cbonlineapp.mycourse.player.notes.VideoNotesFragment
+import com.codingblocks.cbonlineapp.mycourse.content.player.doubts.VideoDoubtFragment
+import com.codingblocks.cbonlineapp.mycourse.content.player.notes.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.Animations
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.FileUtils
@@ -154,7 +154,8 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             sectionItemsAdapter.submitList(it.contents.filter { it.contentable == VIDEO || it.contentable == LECTURE }.sortedBy { it.order }, vm.currentContentId!!)
         }
         sectionItemsAdapter.onItemClick = {
-            startActivity(createVideoPlayerActivityIntent(this, it.ccid, vm.sectionId ?: ""))
+            startActivity(createVideoPlayerActivityIntent(this, it.ccid, vm.sectionId
+                ?: ""))
         }
 
         rootLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)

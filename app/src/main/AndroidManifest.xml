@@ -174,7 +174,7 @@
             android:name=".settings.AboutActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
-            android:name=".mycourse.player.VideoPlayerActivity"
+            android:name=".mycourse.content.player.VideoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask"
             android:parentActivityName=".mycourse.MyCourseActivity"
@@ -182,10 +182,10 @@
             android:supportsPictureInPicture="true"
             android:theme="@style/NewAppTheme.Dark" />
         <activity
-            android:name=".mycourse.PdfActivity"
+            android:name=".mycourse.content.PdfActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".mycourse.quiz.QuizActivity"
+            android:name=".mycourse.content.quiz.QuizActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".mycourse.MyCourseActivity"
             android:screenOrientation="portrait"

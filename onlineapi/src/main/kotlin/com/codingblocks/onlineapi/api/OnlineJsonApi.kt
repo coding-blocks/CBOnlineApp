@@ -140,9 +140,19 @@ interface OnlineJsonApi {
         @Query("include") include: String = "instructors,runs"
     ): Response<List<Course>>
 
-    @GET("run_attempts/{runid}")
+    @GET("run_attempts/{id}")
     suspend fun enrolledCourseById(
-        @Path("runid") id: String
+        @Path("id") id: String
+    ): Response<RunAttempts>
+
+    @PATCH("run_attempts/{id}/pause")
+    suspend fun pauseCourse(
+        @Path("id") id: String
+    ): Response<RunAttempts>
+
+    @PATCH("run_attempts/{id}/unpause")
+    suspend fun unPauseCourse(
+        @Path("id") id: String
     ): Response<RunAttempts>
 
     @GET("sections/{sectionId}/relationships/contents")

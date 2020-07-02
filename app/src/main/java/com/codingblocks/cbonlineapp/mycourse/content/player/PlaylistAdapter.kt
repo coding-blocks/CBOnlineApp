@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.player
+package com.codingblocks.cbonlineapp.mycourse.content.player
 
 import android.view.LayoutInflater
 import android.view.View

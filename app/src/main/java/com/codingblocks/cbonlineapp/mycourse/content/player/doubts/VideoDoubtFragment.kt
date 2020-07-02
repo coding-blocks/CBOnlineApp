@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.player.doubts
+package com.codingblocks.cbonlineapp.mycourse.content.player.doubts
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +14,7 @@ import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtListAdapter
 import com.codingblocks.cbonlineapp.dashboard.doubts.DoubtCommentClickListener
 import com.codingblocks.cbonlineapp.dashboard.doubts.ResolveDoubtClickListener
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerViewModel
 import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.DOUBT_ID
 import com.codingblocks.cbonlineapp.util.livedata.observer

@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.activity.invoke
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingblocks.cbonlineapp.R
@@ -15,19 +17,20 @@ import com.codingblocks.cbonlineapp.analytics.AppCrashlyticsWrapper
 import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
 import com.codingblocks.cbonlineapp.dashboard.ViewPager2Adapter
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
-import com.codingblocks.cbonlineapp.util.CustomDialog
+import com.codingblocks.cbonlineapp.util.DIALOG_TYPE
 import com.codingblocks.cbonlineapp.util.LECTURE
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
-import com.codingblocks.cbonlineapp.util.UNAUTHORIZED
+import com.codingblocks.cbonlineapp.util.TAB_POS
 import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.extensions.animateVisibility
 import com.codingblocks.cbonlineapp.util.extensions.setToolbar
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.livedata.pageChangeCallback
+import com.codingblocks.cbonlineapp.util.showConfirmDialog
 import com.codingblocks.onlineapi.ErrorStatus
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.snackbar.Snackbar
@@ -44,10 +47,15 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
 
     private val viewModel: MyCourseViewModel by stateViewModel()
     private val pagerAdapter: ViewPager2Adapter by lazy { ViewPager2Adapter(this) }
+    private var confirmDialog: AlertDialog? = null
+
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
+            confirmDialog?.dismiss()
             toast(getString(R.string.logged_in))
+            viewModel.fetchSections()
+            viewModel.getStats()
         }
     }
 
@@ -89,14 +97,13 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
                     }
                 }
                 ErrorStatus.UNAUTHORIZED -> {
-                    CustomDialog.showConfirmation(this, UNAUTHORIZED) { result ->
-                        if (result) {
-                            startForResult(intentFor<LoginActivity>())
-                        } else {
-                            finish()
+                    if (confirmDialog == null)
+                        confirmDialog = showConfirmDialog(DIALOG_TYPE.UNAUTHORIZED) {
+                            cancelable = false
+                            positiveBtnClickListener { startForResult(intentFor<LoginActivity>()) }
+                            negativeBtnClickListener { finish() }
                         }
-                    }
-
+                    confirmDialog?.show()
                 }
                 else -> {
                     AppCrashlyticsWrapper.log(it)
@@ -134,6 +141,10 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
             tab.text = resources.getStringArray(R.array.tab_titles)[position]
             coursePager.setCurrentItem(tab.position, true)
         }.attach()
+        //TODO(#1): Fix this hack
+        Handler().postDelayed({
+            coursePager.setCurrentItem(intent.getIntExtra(TAB_POS, 0), true)
+        }, 100)
     }
 
     fun showFab() {
@@ -152,8 +163,8 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
 
     companion object {
 
-        fun createMyCourseActivityIntent(context: Context, attemptId: String, name: String = ""): Intent {
-            return context.intentFor<MyCourseActivity>(COURSE_NAME to name, RUN_ATTEMPT_ID to attemptId).singleTop()
+        fun createMyCourseActivityIntent(context: Context, attemptId: String, name: String = "", pos: Int = 0): Intent {
+            return context.intentFor<MyCourseActivity>(COURSE_NAME to name, RUN_ATTEMPT_ID to attemptId, TAB_POS to pos).singleTop()
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.player.notes
+package com.codingblocks.cbonlineapp.mycourse.content.player.notes
 
 import android.content.Context
 import androidx.work.CoroutineWorker

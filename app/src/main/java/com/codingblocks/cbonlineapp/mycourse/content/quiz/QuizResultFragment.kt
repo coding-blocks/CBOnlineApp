@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.quiz
+package com.codingblocks.cbonlineapp.mycourse.content.quiz
 
 import android.content.res.ColorStateList
 import android.graphics.Color

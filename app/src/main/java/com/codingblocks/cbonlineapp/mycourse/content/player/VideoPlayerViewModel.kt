@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.player
+package com.codingblocks.cbonlineapp.mycourse.content.player
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -16,7 +16,7 @@ import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsRepository
 import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
-import com.codingblocks.cbonlineapp.mycourse.player.notes.NotesWorker
+import com.codingblocks.cbonlineapp.mycourse.content.player.notes.NotesWorker
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
@@ -41,10 +41,10 @@ import java.util.concurrent.TimeUnit
 const val VIDEO_POSITION = "videoPos"
 
 class VideoPlayerViewModel(
-    handle: SavedStateHandle,
-    private val repo: VideoPlayerRepository,
-    private val repoDoubts: DashboardDoubtsRepository,
-    val prefs: PreferenceHelper
+        handle: SavedStateHandle,
+        private val repo: VideoPlayerRepository,
+        private val repoDoubts: DashboardDoubtsRepository,
+        val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
 
     var currentOrientation: Int = 0

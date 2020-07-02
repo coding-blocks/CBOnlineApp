@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.quiz
+package com.codingblocks.cbonlineapp.mycourse.content.quiz
 
 import android.content.Context
 import android.util.SparseArray
@@ -21,14 +21,14 @@ import kotlinx.android.synthetic.main.quizlayout.view.*
 import org.jetbrains.anko.AnkoLogger
 
 class ViewPagerAdapter(
-    private var mContext: Context,
-    private var quizId: String,
-    private var qaId: String,
-    private var questionList: SparseArray<String>,
-    submission: List<QuizSubmission>?,
-    private var result: QuizResult?,
-    val listener: QuizInteractor,
-    private var viewModel: QuizViewModel
+        private var mContext: Context,
+        private var quizId: String,
+        private var qaId: String,
+        private var questionList: SparseArray<String>,
+        submission: List<QuizSubmission>?,
+        private var result: QuizResult?,
+        val listener: QuizInteractor,
+        private var viewModel: QuizViewModel
 ) : PagerAdapter(), AnkoLogger {
     private lateinit var choiceDataAdapter: QuizChoiceAdapter
     var submissionList: ArrayList<QuizSubmission> = submission as ArrayList<QuizSubmission>
@@ -77,7 +77,7 @@ class ViewPagerAdapter(
                             submissionList.forEach { quizSumbission ->
                                 if (quizSumbission.id == questionList[pos]) {
                                     quizSumbission.markedChoices = arrayOf(question.choices?.get(position)?.id
-                                        ?: "")
+                                            ?: "")
                                 }
                             }
                             val quizAttempt = QuizAttempt(qaId, ContentQna(quizId))

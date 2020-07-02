@@ -20,7 +20,6 @@ import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.dashboard.home.loadData
 import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
 import com.codingblocks.cbonlineapp.util.CustomDialog
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv

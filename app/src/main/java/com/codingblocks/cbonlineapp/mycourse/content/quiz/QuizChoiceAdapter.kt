@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.quiz
+package com.codingblocks.cbonlineapp.mycourse.content.quiz
 
 import android.view.LayoutInflater
 import android.view.View

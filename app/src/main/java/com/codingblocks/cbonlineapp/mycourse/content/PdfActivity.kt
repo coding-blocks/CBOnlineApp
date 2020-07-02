@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse
+package com.codingblocks.cbonlineapp.mycourse.content
 
 import android.app.DownloadManager
 import android.content.Context

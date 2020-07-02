@@ -334,4 +334,10 @@ class MyCourseRepository(
     suspend fun requestApproval(attemptId: String) = safeApiCall { CBOnlineLib.api.requestApproval(attemptId) }
 
     suspend fun getPerformance() = safeApiCall { CBOnlineLib.api.getHackerBlocksPerformance() }
+
+    suspend fun pauseCourse(id: String?) = safeApiCall {
+        checkNotNull(id) { "RunAttempt Id cannot be null" }
+        CBOnlineLib.onlineV2JsonApi.pauseCourse(id)
+    }
+
 }

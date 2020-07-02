@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.quiz.submissions
+package com.codingblocks.cbonlineapp.mycourse.content.quiz.submissions
 
 import android.view.LayoutInflater
 import android.view.View
@@ -16,8 +16,8 @@ class QuizSubmissionListAdapter : ListAdapter<QuizAttempt, QuizSubmissionListAda
     var onItemClick: ItemClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_quiz_attempt, parent, false)
+                LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_quiz_attempt, parent, false)
         )
     }
 

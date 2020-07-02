@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.player
+package com.codingblocks.cbonlineapp.mycourse.content.player
 
 import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.database.BookmarkDao

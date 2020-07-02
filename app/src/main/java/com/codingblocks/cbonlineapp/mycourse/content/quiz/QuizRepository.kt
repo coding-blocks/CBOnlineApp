@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.quiz
+package com.codingblocks.cbonlineapp.mycourse.content.quiz
 
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.onlineapi.CBOnlineLib

@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.quiz
+package com.codingblocks.cbonlineapp.mycourse.content.quiz
 
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -64,14 +64,14 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
 
         vm.quizAttempt.observer(thisLifecycleOwner) {
             mAdapter = ViewPagerAdapter(
-                requireContext(),
-                vm.quiz.qnaUid,
-                vm.quizAttemptId,
-                questionList,
-                it?.submission,
-                it?.result,
-                this,
-                vm
+                    requireContext(),
+                    vm.quiz.qnaUid,
+                    vm.quizAttemptId,
+                    questionList,
+                    it?.submission,
+                    it?.result,
+                    this,
+                    vm
             )
             quizViewPager.adapter = mAdapter
             quizViewPager.currentItem = 0
@@ -166,7 +166,7 @@ class QuizFragment : BaseCBFragment(), AnkoLogger, ViewPager.OnPageChangeListene
     private fun submitQuiz() {
         vm.submitQuiz {
             replaceFragmentSafely(
-                QuizResultFragment.newInstance(vm.quizAttemptId),
+                    QuizResultFragment.newInstance(vm.quizAttemptId),
                 "result",
                 containerViewId = R.id.quizContainer,
                 addToStack = true

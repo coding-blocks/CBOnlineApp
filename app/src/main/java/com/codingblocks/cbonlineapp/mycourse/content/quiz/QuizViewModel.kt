@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.quiz
+package com.codingblocks.cbonlineapp.mycourse.content.quiz
 
 import androidx.lifecycle.MutableLiveData
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel

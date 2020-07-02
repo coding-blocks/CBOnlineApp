@@ -13,7 +13,7 @@ import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
-import com.codingblocks.cbonlineapp.mycourse.player.notes.NotesWorker
+import com.codingblocks.cbonlineapp.mycourse.content.player.notes.NotesWorker
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.TYPE

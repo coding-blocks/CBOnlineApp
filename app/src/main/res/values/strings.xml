@@ -323,4 +323,6 @@
     <string name="upgrade_course">Upgrade Course</string>
     <string name="no_take_me_back">No, Take me back</string>
     <string name="pause_now">Pause Now</string>
+    <string name="login_desc">You have been logged out of this account.Please login again to Continue</string>
+    <string name="log_in">Log In</string>
 </resources>

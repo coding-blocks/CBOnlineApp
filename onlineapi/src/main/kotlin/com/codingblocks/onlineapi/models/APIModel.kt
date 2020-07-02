@@ -157,7 +157,10 @@ data class RunAttempts(
     val run: Runs? = null,
     @Relationship("certificate")
     val certifcate: Certificate? = null,
-    val runTier: String? = null
+    val runTier: String? = null,
+    val paused: Boolean = false,
+    val pauseTimeLeft: String? = null,
+    val lastPausedLeft: String? = null
 ) : BaseModel() {
     constructor(id: String) : this() {
         super.id = id
@@ -359,9 +362,9 @@ data class Note(
 @Type("users", "user")
 data class User(
     val email: String?,
-    val firstname: String? ="",
+    val firstname: String? = "",
     val lastReadNotification: String?,
-    val lastname: String? ="",
+    val lastname: String? = "",
     val oneauthId: String?,
     val photo: String?,
     val verifiedemail: String?,

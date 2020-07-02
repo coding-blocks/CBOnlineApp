@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.goodies
+package com.codingblocks.cbonlineapp.mycourse.overview
 
 import android.app.Activity
 import android.app.Dialog

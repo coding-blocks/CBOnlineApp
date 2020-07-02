@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.misc
+package com.codingblocks.cbonlineapp.commons
 
 import android.app.Dialog
 import android.os.Bundle
