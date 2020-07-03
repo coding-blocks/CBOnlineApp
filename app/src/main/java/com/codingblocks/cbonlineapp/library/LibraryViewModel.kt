@@ -11,6 +11,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel
+import com.codingblocks.cbonlineapp.database.models.CourseRunPair
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.mycourse.content.player.notes.NotesWorker
@@ -36,6 +37,9 @@ class LibraryViewModel(
     var type: String? by savedStateValue(handle, TYPE)
     var name: String? by savedStateValue(handle, COURSE_NAME)
 
+    val run: LiveData<CourseRunPair>? by lazy {
+        attemptId?.let { repo.getRunById(it) }
+    }
     fun fetchNotes(): LiveData<List<NotesModel>> {
         val notes = repo.getNotes(attemptId!!)
         runIO {
@@ -95,12 +99,11 @@ class LibraryViewModel(
 
     private fun startWorkerRequest(noteId: String = "", noteModel: Note? = null) {
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val progressData: Data
-        if (noteId.isEmpty()) {
-            progressData = workDataOf("NOTE" to noteModel?.serializeToJson())
+        val progressData: Data = if (noteId.isEmpty()) {
+            workDataOf("NOTE" to noteModel?.serializeToJson())
 //            offlineSnackbar.postValue("Note will be updated once you connect to Network")
         } else {
-            progressData = workDataOf("NOTE_ID" to noteId)
+            workDataOf("NOTE_ID" to noteId)
 //            offlineSnackbar.postValue("Note will be Deleted once you connect to Network")
         }
         val request: OneTimeWorkRequest =

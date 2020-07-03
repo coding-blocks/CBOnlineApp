@@ -3,6 +3,7 @@ package com.codingblocks.cbonlineapp.library
 import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.ContentDao
+import com.codingblocks.cbonlineapp.database.CourseWithInstructorDao
 import com.codingblocks.cbonlineapp.database.LibraryDao
 import com.codingblocks.cbonlineapp.database.NotesDao
 import com.codingblocks.cbonlineapp.database.models.NotesModel
@@ -14,7 +15,8 @@ class LibraryRepository(
     private val notesDao: NotesDao,
     private val contentDao: ContentDao,
     private val libraryDao: LibraryDao,
-    private val bookmarkDao: BookmarkDao
+    private val bookmarkDao: BookmarkDao,
+    private val courseWithInstructorDao: CourseWithInstructorDao
 ) {
 
     suspend fun fetchCourseNotes(attemptId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getNotesByAttemptId(attemptId) }
@@ -51,4 +53,7 @@ class LibraryRepository(
     fun deleteNoteFromDb(noteId: String) = notesDao.deleteNoteByID(noteId)
 
     suspend fun updateDownload(status: Int, lectureId: String) = contentDao.updateContentWithVideoId(lectureId, status)
+
+    fun getRunById(attemptId: String) = courseWithInstructorDao.getRunById(attemptId)
+
 }

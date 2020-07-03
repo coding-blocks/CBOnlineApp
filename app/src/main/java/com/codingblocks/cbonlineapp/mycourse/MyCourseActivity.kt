@@ -122,10 +122,9 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
             add(ViewPager2Adapter.FragmentName.COURSE_MISC)
         }
         coursePager.apply {
-            isUserInputEnabled = false
             adapter = pagerAdapter
             offscreenPageLimit = 3
-            pageChangeCallback { pos, _, _ ->
+            registerOnPageChangeCallback(pageChangeCallback { pos, _, _ ->
                 if (pos == 1) {
                     fab.animateVisibility(View.VISIBLE)
                 } else {
@@ -133,7 +132,7 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
                         fab.animateVisibility(View.GONE)
                     }
                 }
-            }
+            })
         }
         val badge: BadgeDrawable? = myCourseTabs.getTabAt(3)?.orCreateBadge
         badge?.isVisible = true
