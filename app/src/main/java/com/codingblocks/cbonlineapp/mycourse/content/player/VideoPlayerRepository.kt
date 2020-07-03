@@ -1,14 +1,19 @@
 package com.codingblocks.cbonlineapp.mycourse.content.player
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
 import com.codingblocks.cbonlineapp.database.BookmarkDao
 import com.codingblocks.cbonlineapp.database.ContentDao
+import com.codingblocks.cbonlineapp.database.DoubtsDao
 import com.codingblocks.cbonlineapp.database.NotesDao
 import com.codingblocks.cbonlineapp.database.PlayerDao
 import com.codingblocks.cbonlineapp.database.SectionWithContentsDao
 import com.codingblocks.cbonlineapp.database.models.BookmarkModel
+import com.codingblocks.cbonlineapp.database.models.DoubtsModel
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.database.models.PlayerState
+import com.codingblocks.cbonlineapp.util.LIVE
+import com.codingblocks.cbonlineapp.util.RESOLVED
 import com.codingblocks.onlineapi.CBOnlineLib
 import com.codingblocks.onlineapi.models.Bookmark
 import com.codingblocks.onlineapi.models.Doubts
@@ -20,9 +25,20 @@ class VideoPlayerRepository(
     private val contentDao: ContentDao,
     private val bookmarkDao: BookmarkDao,
     private val sectionDao: SectionWithContentsDao,
-    private val playerDao: PlayerDao
+    private val playerDao: PlayerDao,
+    private val doubtsDao: DoubtsDao
 ) {
     suspend fun fetchCourseContentNotes(attemptId: String,contentId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getNotesForContent(attemptId,contentId) }
+
+    suspend fun fetchCourseContentDoubts(attemptId: String,contentId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getDoubtsForContent(attemptId,contentId) }
+
+    fun getDoubtsByCourseRun(type: String?, pair: Pair<String?, String?>): LiveData<List<DoubtsModel>> {
+        return when (type) {
+            LIVE -> doubtsDao.getLiveDoubtsForContent(pair.first!!,pair.second!!)
+            RESOLVED -> doubtsDao.getResolveDoubtsForContent(pair.first!!,pair.second!!)
+            else -> doubtsDao.getDoubtsForContent(pair.first!!,pair.second!!).distinctUntilChanged()
+        }
+    }
 
     suspend fun deleteNote(noteId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.deleteNoteById(noteId) }
 

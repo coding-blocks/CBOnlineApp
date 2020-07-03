@@ -63,10 +63,7 @@ class VideoPlayerViewModel(
     var getOtpProgress: MutableLiveData<Boolean> = MutableLiveData()
     var isDownloaded = false
 
-    val doubts = Transformations.distinctUntilChanged(attemptId).switchMap {
-        fetchDoubts()
-        repoDoubts.getDoubtsByCourseRun(LIVE, it)
-    }
+
 
     val runAttempts = Transformations.distinctUntilChanged(attemptId).switchMap {
         repoDoubts.getRunAttempt(it)
@@ -89,6 +86,15 @@ class VideoPlayerViewModel(
             MutableLiveData(emptyList())
     }
 
+    val doubts = Transformations.distinctUntilChanged(DoubleTrigger(currentContentIdLive, attemptId)).switchMap {
+        if (it.second != null)
+            fetchDoubts(it.first)
+        if (it.first != null && it.second != null)
+            repo.getDoubtsByCourseRun(LIVE, it)
+        else
+            MutableLiveData(emptyList())
+    }
+
     val contentList = Transformations.switchMap(attemptId) { attemptId ->
         sectionId?.let { sectionId -> repo.getContents(attemptId, sectionId) }
     }
@@ -100,7 +106,7 @@ class VideoPlayerViewModel(
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        fetchDoubts()
+                        fetchDoubts(currentContentId)
                     } else {
                         setError(fetchError(response.value.code()))
                     }
@@ -109,9 +115,9 @@ class VideoPlayerViewModel(
         }
     }
 
-    private fun fetchDoubts() {
+    private fun fetchDoubts(contentId: String?) {
         runIO {
-            when (val response = repoDoubts.fetchDoubtsByCourseRun(attemptId.value ?: "")) {
+            when (val response = repo.fetchCourseContentDoubts(attemptId.value!!,contentId!!)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
@@ -291,7 +297,7 @@ class VideoPlayerViewModel(
                     if (response.value.isSuccessful) {
                         offlineSnackbar.postValue(("Doubt Created Successfully !"))
                         function("")
-                        fetchDoubts()
+                        fetchDoubts(currentContentId)
                     } else {
                         try {
                             val jObjError = JSONObject(response.value.errorBody()?.string()!!)
