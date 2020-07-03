@@ -122,6 +122,7 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
             add(ViewPager2Adapter.FragmentName.COURSE_MISC)
         }
         coursePager.apply {
+            isUserInputEnabled = false
             adapter = pagerAdapter
             offscreenPageLimit = 3
             registerOnPageChangeCallback(pageChangeCallback { pos, _, _ ->
