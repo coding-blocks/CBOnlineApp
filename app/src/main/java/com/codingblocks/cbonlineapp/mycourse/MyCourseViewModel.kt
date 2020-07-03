@@ -260,6 +260,19 @@ class MyCourseViewModel(
             }
         }
     }
+
+    fun unPauseCourse() = liveData {
+        when (val response = repo.unPauseCourse(attemptId)) {
+            is ResultWrapper.GenericError -> setError(response.error)
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful) {
+                    emit(true)
+                }else{
+                    errorLiveData.postValue("There was some error")
+                }
+            }
+        }
+    }
 }
 
 //    fun fetchExtensions(productId: Int): MutableLiveData<List<ProductExtensionsItem>> {

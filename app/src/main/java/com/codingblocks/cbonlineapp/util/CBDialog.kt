@@ -63,19 +63,36 @@ class CBDialog(context: Context, type: DIALOG_TYPE?) : BaseCBDialogHelper() {
 inline fun Activity.showConfirmDialog(type: DIALOG_TYPE?, func: CBDialog.() -> Unit = {}): AlertDialog =
     CBDialog(this, type).apply {
         when (type) {
+
             DIALOG_TYPE.UNAUTHORIZED -> {
                 positiveBtn.text = getString(R.string.log_in)
                 desc.text = getString(R.string.login_desc)
             }
+            DIALOG_TYPE.PAUSED -> {
+                positiveBtn.text = "Yes, Un-Pause"
+            }
+            null -> TODO()
         }
         func()
     }.create()
 
 inline fun Fragment.showConfirmDialog(type: DIALOG_TYPE?, func: CBDialog.() -> Unit): AlertDialog =
     CBDialog(this.requireContext(), type).apply {
+        when (type) {
+
+            DIALOG_TYPE.UNAUTHORIZED -> {
+                positiveBtn.text = getString(R.string.log_in)
+                desc.text = getString(R.string.login_desc)
+            }
+            DIALOG_TYPE.PAUSED -> {
+                positiveBtn.text = "Yes, Un-Pause"
+            }
+            null -> TODO()
+        }
         func()
     }.create()
 
 enum class DIALOG_TYPE {
-    UNAUTHORIZED
+    UNAUTHORIZED,
+    PAUSED
 }

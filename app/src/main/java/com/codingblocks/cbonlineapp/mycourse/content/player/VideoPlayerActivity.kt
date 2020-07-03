@@ -20,7 +20,6 @@ import android.os.Environment
 import android.util.Rational
 import android.view.View
 import android.view.WindowManager
-import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
 import android.widget.RelativeLayout
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
@@ -41,6 +40,8 @@ import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.library.EditNoteClickListener
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoBottomSheet.*
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoBottomSheet.Companion.VideoSheetType
 import com.codingblocks.cbonlineapp.mycourse.content.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.content.player.notes.VideoNotesFragment
 import com.codingblocks.cbonlineapp.util.Animations
@@ -56,7 +57,6 @@ import com.codingblocks.cbonlineapp.util.VIDEO
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.getPrefs
 import com.codingblocks.cbonlineapp.util.extensions.openChrome
-import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
@@ -65,11 +65,6 @@ import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
 import com.codingblocks.cbonlineapp.util.widgets.VdoPlayerControls
 import com.codingblocks.cbonlineapp.workers.DownloadWorker
-import com.codingblocks.onlineapi.models.LectureContent
-import com.codingblocks.onlineapi.models.Note
-import com.codingblocks.onlineapi.models.RunAttempts
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -82,7 +77,6 @@ import com.vdocipher.aegis.player.VdoPlayer
 import com.vdocipher.aegis.player.VdoPlayer.PlayerHost.VIDEO_STRETCH_MODE_MAINTAIN_ASPECT_RATIO
 import com.vdocipher.aegis.player.VdoPlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_video_player.*
-import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import kotlinx.android.synthetic.main.my_fab_menu.*
 import kotlinx.android.synthetic.main.vdo_control_view.view.*
 import kotlinx.coroutines.Dispatchers
@@ -98,20 +92,16 @@ import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 import java.io.File
-import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     VdoPlayer.InitializationListener, VdoPlayerControls.FullscreenActionListener,
-    VdoPlayerControls.ControllerVisibilityListener, YouTubePlayerFullScreenListener {
+    VdoPlayerControls.ControllerVisibilityListener, YouTubePlayerFullScreenListener, View.OnClickListener {
 
     private val vm: VideoPlayerViewModel by stateViewModel()
 
     private val animationUtils by lazy { Animations(this) }
     private val progressDialog by lazy { ProgressDialog.progressDialog(this) }
-    private val dialog: BottomSheetDialog by lazy { BottomSheetDialog(this) }
-    private val sheetDialog: View by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, null) }
     val tracker = YouTubePlayerTracker()
     private val ACTION_MEDIA_CONTROL = "media_control"
     private val EXTRA_CONTROL_TYPE = "control_type"
@@ -138,7 +128,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             vm.sectionId = intent.getStringExtra(SECTION_ID)
             vm.position = intent.getLongExtra(VIDEO_POSITION, 0)
         }
-        setUpBottomSheet()
         setupViewPager()
         setupUI()
     }
@@ -195,7 +184,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         fabMenu.setBackgroundColor(getColor(R.color.black_95))
                     } else {
-                        fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity,R.color.black_95))
+                        fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity, R.color.black_95))
                     }
                 }
             }
@@ -203,7 +192,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         doubtFab.setOnClickListener {
             vm.runAttempts.observer(this) {
                 if (it.premium && RUNTIERS.LITE.name != it.runTier)
-                    updateSheet("DOUBT")
+                    showDoubtSheet()
                 else {
                     toast("Doubt Support is only available for PREMIUM+ Runs.")
                     openChrome(BuildConfig.DISCUSS_URL + contentTitle.text.toString().replace(" ", "-"))
@@ -212,7 +201,17 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
 
         noteFab.setOnClickListener {
-            updateSheet("")
+            val notePos: Double? =
+                if (youtubePlayerView.isVisible)
+                    (tracker.currentSecond.div(1000)).toDouble()
+                else
+                    (videoPlayer.currentTime.div(1000)).toDouble()
+
+            val newNote = NotesModel(
+                duration = notePos ?: 0.0,
+                contentTitle = contentTitle.text.toString()
+            )
+            showNoteSheet(VideoSheetType.NOTE_CREATE, newNote)
         }
         bookmarkBtn.setOnClickListener {
             if (bookmarkBtn.isActivated)
@@ -662,16 +661,6 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         enterPictureInPictureMode(mPIPParams.build())
     }
 
-    private fun setUpBottomSheet() {
-        dialog.dismissWithAnimation = true
-        dialog.setContentView(sheetDialog)
-        Objects.requireNonNull(dialog.window)?.setSoftInputMode(SOFT_INPUT_STATE_VISIBLE)
-        dialog.setOnShowListener {
-            val d = it as BottomSheetDialog
-            val sheet = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)!!
-            BottomSheetBehavior.from(sheet).setState(BottomSheetBehavior.STATE_EXPANDED)
-        }
-    }
 
     private fun navToLauncherTask(appContext: Context) {
         val activityManager: ActivityManager = (appContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
@@ -718,109 +707,25 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     }
 
     override fun onClick(note: NotesModel) {
-        updateSheet("EDIT", note)
+        showNoteSheet(VideoSheetType.NOTE_EDIT, note)
     }
 
-    private fun updateSheet(type: String, model: Any? = null) {
-        when (type) {
-            "EDIT" -> {
-                val notes = model as NotesModel
-                sheetDialog.apply {
-                    bottomSheetTitleTv.text = getString(R.string.edit_note)
-                    doubtTitleTv.isVisible = false
+    private fun showNoteSheet(type: VideoSheetType, note: NotesModel? = null) {
+        val args = Bundle()
+        args.putSerializable("type", type)
+        args.putSerializable("item", note)
+        val noteSheet = VideoBottomSheet()
+        noteSheet.arguments = args
+        noteSheet.show(supportFragmentManager, noteSheet.tag)
+    }
 
-                    bottoSheetDescTv.setText(notes.text)
-                    bottomSheetInfoTv.text = "${notes.contentTitle} | ${notes.duration.secToTime()}"
-                    bottomSheetCancelBtn.setOnClickListener {
-                        dialog.dismiss()
-                    }
-                    bottomSheetSaveBtn.setOnClickListener {
-                        vm.updateNote(notes.apply {
-                            text = sheetDialog.bottoSheetDescTv.text.toString()
-                        })
-                        dialog.dismiss()
-                    }
-                }
-            }
-            "DOUBT" -> {
-                sheetDialog.apply {
-                    bottomSheetTitleTv.text = getString(R.string.ask_doubt)
-                    doubtTitleTv.isVisible = true
-                    bottoSheetDescTv.apply {
-                        setText("")
-                        hint = "Description of Doubt"
-                    }
-                    bottomSheetInfoTv.text = "${contentTitle.text}"
-                    bottomSheetCancelBtn.setOnClickListener {
-                        dialog.dismiss()
-                    }
-                    bottomSheetSaveBtn.apply {
-                        setOnClickListener {
-                            vm.createDoubt(sheetDialog.doubtTitleTv.text.toString(), sheetDialog.bottoSheetDescTv.text.toString()) {
-                                runOnUiThread {
-                                    if (it.isEmpty()) {
-                                        hideVideoFab()
-                                        dialog.dismiss()
-                                    } else
-                                        toast(it)
-                                }
-                            }
-                        }
-                        text = "Post"
-                    }
-                }
-            }
-            else -> {
-                sheetDialog.apply {
-                    bottomSheetTitleTv.text = getString(R.string.add_note)
-                    doubtTitleTv.isVisible = false
-                    bottoSheetDescTv.setText("")
-                    bottomSheetInfoTv.text =
-                        if (::youtubePlayer.isInitialized)
-                            "${contentTitle.text} | ${(tracker.currentSecond.div(1000)).toDouble().secToTime()}"
-                        else
-                            "${contentTitle.text} | ${(playerFragment.player.currentTime.div(1000)).toDouble().secToTime()}"
+    private fun showDoubtSheet() {
+        val doubtSheet = VideoBottomSheet()
+        val args = Bundle()
+        args.putSerializable("type", VideoSheetType.DOUBT_CREATE)
+        doubtSheet.arguments = args
+        doubtSheet.show(supportFragmentManager, doubtSheet.tag)
 
-                    bottomSheetCancelBtn.setOnClickListener {
-                        dialog.dismiss()
-                    }
-                    bottoSheetDescTv.apply {
-                        setText("")
-                        hint = "Add a note here"
-                    }
-                    bottomSheetSaveBtn.apply {
-
-                        val notePos: Double? =
-                            if (youtubePlayerView.isVisible)
-                                (tracker.currentSecond.div(1000)).toDouble()
-                            else
-                                (videoPlayer.currentTime.div(1000)).toDouble()
-                        setOnClickListener {
-                            val desc = sheetDialog.bottoSheetDescTv.text.toString()
-                            if (desc.isEmpty()) {
-                                toast("Note cannot be empty!!")
-                            } else {
-                                val note = Note(
-                                    notePos
-                                        ?: 0.0,
-                                    desc,
-                                    RunAttempts(
-                                        vm.attemptId.value
-                                            ?: ""
-                                    ),
-                                    LectureContent(vm.currentContentId ?: "")
-                                )
-                                vm.createNote(note)
-                                hideVideoFab()
-                                dialog.dismiss()
-                            }
-                        }
-                        text = "Save"
-                    }
-                }
-            }
-        }
-        dialog.show()
     }
 
     override fun onStop() {
@@ -906,7 +811,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             fabMenu.setBackgroundColor(getColor(R.color.white_transparent))
         } else {
-            fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity,R.color.white_transparent))
+            fabMenu.setBackgroundColor(ContextCompat.getColor(this@VideoPlayerActivity, R.color.white_transparent))
         }
     }
 
@@ -918,5 +823,9 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                 VIDEO_POSITION to position,
                 SECTION_ID to sectionId).singleTop().apply { if (getPrefs(context).SP_PIP) excludeFromRecents() }
         }
+    }
+
+    override fun onClick(v: View?) {
+
     }
 }

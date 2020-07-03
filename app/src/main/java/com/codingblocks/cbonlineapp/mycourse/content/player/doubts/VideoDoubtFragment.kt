@@ -19,25 +19,21 @@ import com.codingblocks.cbonlineapp.util.CONVERSATION_ID
 import com.codingblocks.cbonlineapp.util.DOUBT_ID
 import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.fragment_video_doubt.*
-import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
+import org.koin.androidx.viewmodel.compat.SharedViewModelCompat.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class VideoDoubtFragment : BaseCBFragment(), AnkoLogger {
+class VideoDoubtFragment : BaseCBFragment() {
 
-    private val viewModel by sharedViewModel<VideoPlayerViewModel>()
+    private val viewModel:VideoPlayerViewModel by sharedViewModel()
     private val doubtListAdapter = DashboardDoubtListAdapter()
 
     private val resolveClickListener: ResolveDoubtClickListener by lazy {
         object : ResolveDoubtClickListener {
             override fun onClick(doubt: DoubtsModel) {
-//                if (doubt.status == RESOLVED) {
-//                    requireContext().showDialog(RESOLVED)
-//                } else {
-//                    requireContext().showDialog(REOPENED)
-//                }
                 viewModel.resolveDoubt(doubt)
             }
         }
@@ -67,11 +63,7 @@ class VideoDoubtFragment : BaseCBFragment(), AnkoLogger {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ):
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
         View? = inflater.inflate(R.layout.fragment_video_doubt, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

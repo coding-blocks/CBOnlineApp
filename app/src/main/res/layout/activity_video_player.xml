@@ -2,8 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/playerRoot"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark">
 
@@ -43,9 +43,9 @@
             android:id="@+id/youtubePlayerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:showYouTubeButton="false"
+            android:visibility="gone"
             app:handleNetworkEvents="false"
-            android:visibility="gone" />
+            app:showYouTubeButton="false" />
 
         <FrameLayout
             android:id="@+id/videoContentContainer"
@@ -190,59 +190,6 @@
                         android:overScrollMode="never"
                         tools:itemCount="2"
                         tools:listitem="@layout/item_content" />
-
-                    <!--                    <View-->
-                    <!--                        android:layout_width="match_parent"-->
-                    <!--                        android:layout_height="1dp"-->
-                    <!--                        android:layout_marginStart="@dimen/margin_large"-->
-                    <!--                        android:layout_marginTop="@dimen/margin_small"-->
-                    <!--                        android:layout_marginEnd="@dimen/margin_large"-->
-                    <!--                        android:background="@color/dark" />-->
-
-
-                    <!--                    <LinearLayout-->
-                    <!--                        android:layout_width="match_parent"-->
-                    <!--                        android:layout_height="0dp"-->
-                    <!--                        android:layout_weight=".3"-->
-                    <!--                        android:paddingStart="@dimen/margin_large"-->
-                    <!--                        android:paddingEnd="@dimen/margin_large">-->
-
-                    <!--                        <TextView-->
-                    <!--                            android:id="@+id/prevBtn"-->
-                    <!--                            android:layout_width="wrap_content"-->
-                    <!--                            android:layout_height="wrap_content"-->
-                    <!--                            android:layout_gravity="center"-->
-                    <!--                            android:drawableStart="@drawable/ic_dropright"-->
-                    <!--                            android:drawablePadding="10dp"-->
-                    <!--                            android:drawableTint="@color/orangish"-->
-                    <!--                            android:fontFamily="@font/gilroy_medium"-->
-                    <!--                            android:paddingTop="@dimen/margin_medium"-->
-                    <!--                            android:paddingBottom="@dimen/margin_medium"-->
-                    <!--                            android:text="@string/previous"-->
-                    <!--                            android:textColor="@color/orangish"-->
-                    <!--                            android:textSize="16sp" />-->
-
-                    <!--                        <View-->
-                    <!--                            android:layout_width="0dp"-->
-                    <!--                            android:layout_height="0dp"-->
-                    <!--                            android:layout_weight="1" />-->
-
-                    <!--                        <TextView-->
-                    <!--                            android:id="@+id/nextBtn"-->
-                    <!--                            android:layout_width="wrap_content"-->
-                    <!--                            android:layout_height="wrap_content"-->
-                    <!--                            android:layout_gravity="center"-->
-                    <!--                            android:drawableEnd="@drawable/ic_dropright"-->
-                    <!--                            android:drawablePadding="10dp"-->
-                    <!--                            android:drawableTint="@color/orangish"-->
-                    <!--                            android:fontFamily="@font/gilroy_medium"-->
-                    <!--                            android:gravity="end"-->
-                    <!--                            android:paddingTop="@dimen/margin_medium"-->
-                    <!--                            android:paddingBottom="@dimen/margin_medium"-->
-                    <!--                            android:text="@string/next"-->
-                    <!--                            android:textColor="@color/orangish"-->
-                    <!--                            android:textSize="16sp" />-->
-                    <!--                    </LinearLayout>-->
 
                 </LinearLayout>
             </LinearLayout>

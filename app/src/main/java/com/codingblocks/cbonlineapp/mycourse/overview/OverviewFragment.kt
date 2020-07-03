@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
@@ -21,9 +22,11 @@ import com.codingblocks.cbonlineapp.dashboard.home.loadData
 import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.util.CustomDialog
-import com.codingblocks.cbonlineapp.util.livedata.observer
+import com.codingblocks.cbonlineapp.util.DIALOG_TYPE
 import com.codingblocks.cbonlineapp.util.extensions.setRv
-import java.io.File
+import com.codingblocks.cbonlineapp.util.livedata.observeOnce
+import com.codingblocks.cbonlineapp.util.livedata.observer
+import com.codingblocks.cbonlineapp.util.showConfirmDialog
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
 import kotlinx.android.synthetic.main.item_hb_performance.*
@@ -31,17 +34,14 @@ import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.io.File
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
     private val leaderBoardListAdapter = LeaderBoardListAdapter()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_overview, container, false)
     }
 
@@ -49,6 +49,9 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
         super.onViewCreated(view, savedInstanceState)
         courseLeaderboardRv.setRv(requireContext(), leaderBoardListAdapter)
         viewModel.run?.distinctUntilChanged()?.observer(thisLifecycleOwner) { courseAndRun ->
+            if (courseAndRun.runAttempt.paused) {
+                showPauseDialog(courseAndRun.runAttempt.pauseTimeLeft)
+            }
             viewModel.premiumRun = courseAndRun.runAttempt.premium
             viewModel.runStartEnd = Pair(courseAndRun.runAttempt.end.toLong() * 1000, courseAndRun.run.crStart.toLong())
             viewModel.runId = (courseAndRun.run.crUid)
@@ -105,7 +108,8 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 currUserLeaderboard?.let {
                     courseLeaderboardll.isVisible = true
                     it.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
-                    leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
+                    if (leaderboard.size > 5)
+                        leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
                 }
             }
         }
@@ -143,6 +147,22 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
                 }
             }
         }
+    }
+
+    private fun showPauseDialog(pauseTimeLeft: String?) {
+        var confirmDialog: AlertDialog? = null
+        if (confirmDialog == null)
+            confirmDialog = showConfirmDialog(DIALOG_TYPE.PAUSED) {
+                cancelable = false
+                positiveBtnClickListener {
+                    viewModel.unPauseCourse().observeOnce {
+                        dialog?.dismiss()
+                    }
+                    negativeBtnClickListener { requireActivity().finish() }
+                }
+            }
+        confirmDialog.show()
+
     }
 
     private fun downloadCertificate(context: Context, certificateUrl: String, name: String) {

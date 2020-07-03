@@ -134,9 +134,6 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
             noteVDescriptionTv.text = item.text
             noteVTimeTv.text = item.createdAt.timeAgo()
             noteVCreateTv.text = item.duration.secToTime()
-//            noteVDeleteImg.setOnClickListener {
-//                deleteClickListener?.onClick(item.nttUid, adapterPosition, itemView)
-//            }
             noteVEditImg.setOnClickListener {
                 editClickListener?.onClick(item)
             }
@@ -212,7 +209,7 @@ class DiffCallback : DiffUtil.ItemCallback<BaseModel>() {
 }
 
 interface DeleteNoteClickListener {
-    fun onClick(noteId: String, position: Int, view: View)
+    fun onClick(noteId: String, position: Int)
 }
 
 interface EditNoteClickListener {

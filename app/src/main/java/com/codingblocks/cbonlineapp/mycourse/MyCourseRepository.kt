@@ -69,7 +69,10 @@ class MyCourseRepository(
             runAttempt.lastAccessedAt ?: "",
             runAttempt.run?.id ?: "",
             runAttempt.certifcate?.url ?: "",
-            runAttempt.runTier ?: "PREMIUM"
+            runAttempt.runTier ?: "PREMIUM",
+            runAttempt.paused,
+            runAttempt.pauseTimeLeft,
+            runAttempt.lastPausedLeft
         )
         attemptDao.update(runAttemptModel)
 
@@ -338,6 +341,11 @@ class MyCourseRepository(
     suspend fun pauseCourse(id: String?) = safeApiCall {
         checkNotNull(id) { "RunAttempt Id cannot be null" }
         CBOnlineLib.onlineV2JsonApi.pauseCourse(id)
+    }
+
+    suspend fun unPauseCourse(id: String?) = safeApiCall {
+        checkNotNull(id) { "RunAttempt Id cannot be null" }
+        CBOnlineLib.onlineV2JsonApi.unPauseCourse(id)
     }
 
 }

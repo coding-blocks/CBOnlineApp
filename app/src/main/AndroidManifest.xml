@@ -30,7 +30,7 @@
             android:name=".campaign.CampaignActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".dashboard.DashboardActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".mycourse.codechallenge.CodeChallengeActivity"
             android:launchMode="singleTop"
