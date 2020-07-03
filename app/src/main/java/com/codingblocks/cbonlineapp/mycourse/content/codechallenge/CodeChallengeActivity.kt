@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.codechallenge
+package com.codingblocks.cbonlineapp.mycourse.content.codechallenge
 
 import android.os.Bundle
 import android.widget.TextView

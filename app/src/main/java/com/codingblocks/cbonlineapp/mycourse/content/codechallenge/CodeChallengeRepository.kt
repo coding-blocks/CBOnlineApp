@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.codechallenge
+package com.codingblocks.cbonlineapp.mycourse.content.codechallenge
 
 import com.codingblocks.cbonlineapp.database.CodeChallengeDao
 import com.codingblocks.cbonlineapp.database.models.CodeChallengeModel

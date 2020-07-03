@@ -27,8 +27,8 @@ import com.codingblocks.cbonlineapp.library.LibraryRepository
 import com.codingblocks.cbonlineapp.library.LibraryViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeRepository
-import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeRepository
+import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeViewModel
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerRepository
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerViewModel
 import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizRepository

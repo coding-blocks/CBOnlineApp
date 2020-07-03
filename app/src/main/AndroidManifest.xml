@@ -32,7 +32,7 @@
             android:parentActivityName=".dashboard.DashboardActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mycourse.codechallenge.CodeChallengeActivity"
+            android:name=".mycourse.content.codechallenge.CodeChallengeActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".mycourse.MyCourseActivity" />
         <activity

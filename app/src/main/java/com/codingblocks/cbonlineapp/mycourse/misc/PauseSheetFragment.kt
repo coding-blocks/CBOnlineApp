@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.course_pause_fragment.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class PauseFragment : BottomSheetDialogFragment() {
+class PauseSheetFragment : BottomSheetDialogFragment() {
 
     val vm: MyCourseViewModel by sharedViewModel()
 
@@ -47,7 +47,6 @@ class PauseFragment : BottomSheetDialogFragment() {
 
         }
         pauseCourseBtn.setOnClickListener {
-            //Pause Course
             vm.pauseCourse().observeOnce { res ->
                 if (res) {
                     requireActivity().finish()
@@ -56,8 +55,6 @@ class PauseFragment : BottomSheetDialogFragment() {
                 }
             }
         }
-
-        pauseDescriptionTv.text
     }
 
 

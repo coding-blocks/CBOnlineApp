@@ -22,7 +22,7 @@ class VideoPlayerRepository(
     private val sectionDao: SectionWithContentsDao,
     private val playerDao: PlayerDao
 ) {
-    suspend fun fetchCourseNotes(attemptId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getNotesByAttemptId(attemptId) }
+    suspend fun fetchCourseContentNotes(attemptId: String,contentId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getNotesForContent(attemptId,contentId) }
 
     suspend fun deleteNote(noteId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.deleteNoteById(noteId) }
 
@@ -71,7 +71,7 @@ class VideoPlayerRepository(
         notesDao.insert(model)
     }
 
-    fun getNotes(attemptId: String) = notesDao.getNotes(attemptId)
+    fun getNotes(pair: Pair<String?, String?>) = notesDao.getNotesForContent(pair.second!!,pair.first!!)
 
     suspend fun updateNote(note: Note) = safeApiCall { CBOnlineLib.onlineV2JsonApi.updateNoteById(note.id, note) }
 
@@ -107,4 +107,5 @@ class VideoPlayerRepository(
     fun deletePlayerState(attemptId: String) {
         playerDao.deleteById(attemptId)
     }
+
 }

@@ -40,7 +40,6 @@ import com.codingblocks.cbonlineapp.commons.TabLayoutAdapter
 import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
 import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.library.EditNoteClickListener
-import com.codingblocks.cbonlineapp.mycourse.content.player.VideoBottomSheet.*
 import com.codingblocks.cbonlineapp.mycourse.content.player.VideoBottomSheet.Companion.VideoSheetType
 import com.codingblocks.cbonlineapp.mycourse.content.player.doubts.VideoDoubtFragment
 import com.codingblocks.cbonlineapp.mycourse.content.player.notes.VideoNotesFragment
@@ -102,13 +101,8 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
 
     private val animationUtils by lazy { Animations(this) }
     private val progressDialog by lazy { ProgressDialog.progressDialog(this) }
+
     val tracker = YouTubePlayerTracker()
-    private val ACTION_MEDIA_CONTROL = "media_control"
-    private val EXTRA_CONTROL_TYPE = "control_type"
-    private val CONTROL_TYPE_PLAY = 1
-    private val CONTROL_TYPE_PAUSE = 2
-    private val REQUEST_PLAY = 1
-    private val REQUEST_PAUSE = 2
     private var hasBeenIntoPIP: Boolean = false
     private var isCallingFromFinish: Boolean = false
     private var isYoutubeVideoReady: Boolean = false
@@ -118,6 +112,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     private lateinit var playerFragment: VdoPlayerSupportFragment
     private lateinit var videoPlayer: VdoPlayer
     private lateinit var youtubePlayer: YouTubePlayer
+
     private val sectionItemsAdapter = PlaylistAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -823,9 +818,16 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
                 VIDEO_POSITION to position,
                 SECTION_ID to sectionId).singleTop().apply { if (getPrefs(context).SP_PIP) excludeFromRecents() }
         }
+
+        private val ACTION_MEDIA_CONTROL = "media_control"
+        private val EXTRA_CONTROL_TYPE = "control_type"
+        private val CONTROL_TYPE_PLAY = 1
+        private val CONTROL_TYPE_PAUSE = 2
+        private val REQUEST_PLAY = 1
+        private val REQUEST_PAUSE = 2
     }
 
-    override fun onClick(v: View?) {
+    override fun onClick(v: View) {
 
     }
 }

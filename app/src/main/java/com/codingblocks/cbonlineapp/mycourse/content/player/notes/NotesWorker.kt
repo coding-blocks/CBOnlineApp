@@ -33,11 +33,15 @@ class NotesWorker(context: Context, private val workerParameters: WorkerParamete
         }
 
         if (response.isSuccessful) {
-            if (noteId.isNullOrEmpty()) {
-                notesDao.updateBody(response.body()?.id ?: "", (response.body() as Note).text)
-            } else if (noteJson.isNullOrEmpty()) {
-                noteId.let { notesDao.deleteNoteByID(it) }
-            } else {
+            when {
+                noteId.isNullOrEmpty() -> {
+                    notesDao.updateBody(response.body()?.id ?: "", (response.body() as Note).text)
+                }
+                noteJson.isNullOrEmpty() -> {
+                    noteId.let { notesDao.deleteNoteByID(it) }
+                }
+                else -> {
+                }
             }
             return Result.success()
         } else {

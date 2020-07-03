@@ -1,4 +1,4 @@
-package com.codingblocks.cbonlineapp.mycourse.codechallenge
+package com.codingblocks.cbonlineapp.mycourse.content.codechallenge
 
 import androidx.lifecycle.*
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBViewModel

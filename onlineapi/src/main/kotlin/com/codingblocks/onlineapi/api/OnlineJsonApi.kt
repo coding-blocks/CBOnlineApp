@@ -165,6 +165,12 @@ interface OnlineJsonApi {
         @Path("runAttemptId") id: String
     ): Response<List<Note>>
 
+    @GET("notes")
+    suspend fun getNotesForContent(
+        @Query("filter[runAttemptId]") attemptId: String,
+        @Query("filter[contentId]") contentId: String
+        ): Response<List<Note>>
+
     @GET("bookmarks")
     suspend fun getBookmarksByAttemptId(
         @Query("exclude") query: String = "section.*,content.*",

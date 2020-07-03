@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.core.view.isVisible
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.RoundedBottomSheetDialogFragment
@@ -13,6 +14,7 @@ import com.codingblocks.cbonlineapp.util.extensions.secToTime
 import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
 import com.codingblocks.onlineapi.models.RunAttempts
+import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.bottom_sheet_note.*
 import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
 import org.jetbrains.anko.support.v4.runOnUiThread
@@ -81,6 +83,7 @@ class VideoBottomSheet : RoundedBottomSheetDialogFragment(), View.OnClickListene
 
             }
             VideoSheetType.DOUBT_CREATE -> {
+                view.bottomSheetInfoTv.text = "${requireActivity().findViewById<TextView>(R.id.contentTitle).text}"
                 bottomSheetSaveBtn.apply {
                     text = getString(R.string.post)
                     setOnClickListener(this@VideoBottomSheet)

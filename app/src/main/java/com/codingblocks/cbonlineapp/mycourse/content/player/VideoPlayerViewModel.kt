@@ -20,13 +20,14 @@ import com.codingblocks.cbonlineapp.mycourse.content.player.notes.NotesWorker
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.LIVE
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
-import com.codingblocks.cbonlineapp.workers.ProgressWorker
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.SECTION_ID
 import com.codingblocks.cbonlineapp.util.VIDEO_ID
 import com.codingblocks.cbonlineapp.util.extensions.runIO
-import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
 import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
+import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
+import com.codingblocks.cbonlineapp.util.livedata.DoubleTrigger
+import com.codingblocks.cbonlineapp.workers.ProgressWorker
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Bookmark
@@ -41,10 +42,10 @@ import java.util.concurrent.TimeUnit
 const val VIDEO_POSITION = "videoPos"
 
 class VideoPlayerViewModel(
-        handle: SavedStateHandle,
-        private val repo: VideoPlayerRepository,
-        private val repoDoubts: DashboardDoubtsRepository,
-        val prefs: PreferenceHelper
+    handle: SavedStateHandle,
+    private val repo: VideoPlayerRepository,
+    private val repoDoubts: DashboardDoubtsRepository,
+    val prefs: PreferenceHelper
 ) : BaseCBViewModel() {
 
     var currentOrientation: Int = 0
@@ -79,9 +80,13 @@ class VideoPlayerViewModel(
         repo.getBookmark(it)
     }
 
-    val notes = Transformations.distinctUntilChanged(attemptId).switchMap {
-        fetchNotes()
-        repo.getNotes(it)
+    val notes = Transformations.distinctUntilChanged(DoubleTrigger(currentContentIdLive, attemptId)).switchMap {
+        if (it.second != null)
+            fetchNotes(it.first)
+        if (it.first != null && it.second != null)
+            repo.getNotes(it)
+        else
+            MutableLiveData(emptyList())
     }
 
     val contentList = Transformations.switchMap(attemptId) { attemptId ->
@@ -121,9 +126,9 @@ class VideoPlayerViewModel(
         }
     }
 
-    private fun fetchNotes() {
+    private fun fetchNotes(contentId: String?) {
         runIO {
-            when (val response = repo.fetchCourseNotes(attemptId.value ?: "")) {
+            when (val response = repo.fetchCourseContentNotes(attemptId.value!!, contentId!!)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful)
@@ -227,7 +232,7 @@ class VideoPlayerViewModel(
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         offlineSnackbar.postValue(("Note Created Successfully !"))
-                        fetchNotes()
+                        fetchNotes(currentContentId)
                     } else {
                         setError(fetchError(response.value.code()))
                     }
