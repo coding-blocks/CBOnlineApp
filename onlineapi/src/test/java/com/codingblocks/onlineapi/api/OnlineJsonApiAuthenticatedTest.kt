@@ -50,8 +50,8 @@ class OnlineJsonApiAuthenticatedTest {
 
     @Test
     fun `GET fetchNotes`(){
-        val courses = runBlocking { CBOnlineLib.onlineV2JsonApi.getMyCourses().body()?.get() }
-        val notes = runBlocking { CBOnlineLib.onlineV2JsonApi.getNotesByAttemptId(courses!!.first().id).body() }
+        //TODO(Add Attempt id here)
+        val notes = runBlocking { CBOnlineLib.onlineV2JsonApi.getNotesByAttemptId("").body() }
         assertNotNull(notes)
         assertTrue(notes!!.isNotEmpty())
     }
