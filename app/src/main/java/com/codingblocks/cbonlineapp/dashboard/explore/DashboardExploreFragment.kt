@@ -31,6 +31,7 @@ import com.codingblocks.cbonlineapp.util.COURSE_LOGO
 import com.codingblocks.cbonlineapp.util.LOGO_TRANSITION_NAME
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.extensions.setRv
+import com.codingblocks.cbonlineapp.util.extensions.showSnackbar
 import kotlinx.android.synthetic.main.activity_course.courseSuggestedRv
 import kotlinx.android.synthetic.main.app_bar_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard_explore.*
@@ -40,7 +41,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.support.v4.intentFor
 import org.jetbrains.anko.support.v4.startActivity
-import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DashboardExploreFragment : BaseCBFragment() {
@@ -138,8 +138,8 @@ class DashboardExploreFragment : BaseCBFragment() {
                 dashboardTracksRv.isVisible = true
             }
         }
-        vm.toastMutable.observe(thisLifecycleOwner){
-            toast(it)
+        vm.snackbar.observe(thisLifecycleOwner){
+            swipeToRefresh.showSnackbar(it, anchorView = activity?.dashboardBottomNav, action = false)
         }
 
         courseCardListAdapter.onItemClick = itemClickListener

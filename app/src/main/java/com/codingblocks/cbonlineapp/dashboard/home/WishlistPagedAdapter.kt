@@ -1,5 +1,6 @@
 package com.codingblocks.cbonlineapp.dashboard.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ import kotlinx.android.synthetic.main.item_course_wishlist.view.*
 class WishlistPagedAdapter(val type: String = "") : PagedListAdapter<Wishlist, WishListPagedItemViewHolder>(
     object : DiffUtil.ItemCallback<Wishlist>() {
         override fun areItemsTheSame(oldItem: Wishlist, newItem: Wishlist): Boolean {
+            Log.e("TAG", "areItemsTheSame: ${newItem.id}")
             return oldItem.id == newItem.id
         }
 

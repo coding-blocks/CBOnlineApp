@@ -57,6 +57,7 @@ class DashboardViewModel(
     lateinit var wishlist : LiveData<PagedList<Wishlist>>
     init {
         checkDownloadDataWM()
+        fetchWishList()
     }
 
     var isLoggedIn: Boolean? by savedStateValue(handle, LOGGED_IN)
@@ -333,9 +334,10 @@ class DashboardViewModel(
 
     fun getPerformance(attemptId: String) = homeRepo.getRunStats(attemptId)
 
-    var toastMutable = MutableLiveData<String>()
+    var snackbar = MutableLiveData<String>()
     var isWishlistEmpty = false
     fun fetchWishList(): LiveData<PagedList<Wishlist>>{
+        isWishlistEmpty = false
         val config = PagedList.Config.Builder()
             .setPageSize(3)
             .setEnablePlaceholders(true)
@@ -380,13 +382,14 @@ class DashboardViewModel(
     }
 
     fun addWishlist(id: String){
-        val wishlist = Wishlist(Course(id))
+        val course = Wishlist(Course(id))
         runIO {
-            when (val response = homeRepo.addWishlist(wishlist)) {
+            when (val response = homeRepo.addWishlist(course)) {
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        toastMutable.postValue("Course added to Wishlist")
+                        snackbar.postValue("Course added to Wishlist")
+                        fetchWishList()
                     } else {
                         setError(fetchError(response.value.code()))
                     }
@@ -401,7 +404,8 @@ class DashboardViewModel(
                 is ResultWrapper.GenericError -> setError(response.error)
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        toastMutable.postValue("Course removed from Wishlist")
+                        snackbar.postValue("Course removed from Wishlist")
+                        fetchWishList()
                     } else {
                         setError(fetchError(response.value.code()))
                     }
