@@ -22,9 +22,8 @@ import com.codingblocks.cbonlineapp.dashboard.home.setGradientColor
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
 import com.codingblocks.cbonlineapp.mycourse.goodies.GoodiesRequestFragment
 import com.codingblocks.cbonlineapp.util.CustomDialog
-import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.extensions.setRv
-import java.io.File
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.item_certificate.*
 import kotlinx.android.synthetic.main.item_hb_performance.*
@@ -32,6 +31,7 @@ import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.io.File
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
@@ -104,9 +104,11 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
                 val currUserLeaderboard = leaderboard.find { it.id == viewModel.prefs.SP_USER_ID }
                 currUserLeaderboard?.let {
-                    courseLeaderboardll.isVisible = true
-                    it.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
-                    leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
+                    if (leaderboard.size > 5) {
+                        leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
+                        courseLeaderboardll.isVisible = true
+                        it.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
+                    }
                 }
             }
         }
