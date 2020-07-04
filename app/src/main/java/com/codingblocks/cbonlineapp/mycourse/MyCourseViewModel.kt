@@ -253,6 +253,7 @@ class MyCourseViewModel(
             is ResultWrapper.GenericError -> setError(response.error)
             is ResultWrapper.Success -> with(response.value) {
                 if (isSuccessful) {
+                    body()?.let { repo.updateRunAttempt(it) }
                     emit(true)
                 }else{
                     errorLiveData.postValue("There was some error")
@@ -266,6 +267,7 @@ class MyCourseViewModel(
             is ResultWrapper.GenericError -> setError(response.error)
             is ResultWrapper.Success -> with(response.value) {
                 if (isSuccessful) {
+                    body()?.let { repo.updateRunAttempt(it) }
                     emit(true)
                 }else{
                     errorLiveData.postValue("There was some error")

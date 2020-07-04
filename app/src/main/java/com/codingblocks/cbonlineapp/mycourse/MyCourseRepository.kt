@@ -348,4 +348,8 @@ class MyCourseRepository(
         CBOnlineLib.onlineV2JsonApi.unPauseCourse(id)
     }
 
+    suspend fun updateRunAttempt(runAttempt: RunAttempts) {
+        attemptDao.updatePause(runAttempt.id, runAttempt.paused, runAttempt.pauseTimeLeft, runAttempt.lastPausedLeft)
+    }
+
 }
