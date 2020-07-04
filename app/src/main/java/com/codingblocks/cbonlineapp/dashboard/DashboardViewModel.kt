@@ -348,7 +348,6 @@ class DashboardViewModel(
 
     private fun initializedPagedListBuilder(config: PagedList.Config):
         LivePagedListBuilder<String, Wishlist> {
-
         val dataSourceFactory = object : DataSource.Factory<String, Wishlist>() {
             override fun create(): DataSource<String, Wishlist> {
                 return WishlistDataSource(viewModelScope,"3")
@@ -389,7 +388,6 @@ class DashboardViewModel(
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         snackbar.postValue("Course added to Wishlist")
-                        fetchWishList()
                     } else {
                         setError(fetchError(response.value.code()))
                     }
@@ -405,7 +403,8 @@ class DashboardViewModel(
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
                         snackbar.postValue("Course removed from Wishlist")
-                        fetchWishList()
+                        if(::wishlist.isInitialized)
+                            wishlist.value?.dataSource?.invalidate()
                     } else {
                         setError(fetchError(response.value.code()))
                     }
