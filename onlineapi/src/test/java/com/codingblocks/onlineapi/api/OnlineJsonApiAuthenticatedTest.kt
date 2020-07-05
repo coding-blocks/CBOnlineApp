@@ -47,4 +47,12 @@ class OnlineJsonApiAuthenticatedTest {
         assertNotNull(runAttempt)
         assertTrue(runAttempt!!.id == "80179")
     }
+
+    @Test
+    fun `GET fetchNotes`(){
+        //TODO(Add Attempt id here)
+        val notes = runBlocking { CBOnlineLib.onlineV2JsonApi.getNotesByAttemptId("").body() }
+        assertNotNull(notes)
+        assertTrue(notes!!.isNotEmpty())
+    }
 }

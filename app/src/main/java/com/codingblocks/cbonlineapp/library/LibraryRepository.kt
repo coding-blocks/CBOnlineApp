@@ -51,4 +51,9 @@ class LibraryRepository(
     fun deleteNoteFromDb(noteId: String) = notesDao.deleteNoteByID(noteId)
 
     suspend fun updateDownload(status: Int, lectureId: String) = contentDao.updateContentWithVideoId(lectureId, status)
+
+    suspend fun updateNote(note: Note) = safeApiCall { CBOnlineLib.onlineV2JsonApi.updateNoteById(note.id, note) }
+
+    fun updateNoteInDb(newNote: Note) = notesDao.updateBody(newNote.id, newNote.text)
+
 }

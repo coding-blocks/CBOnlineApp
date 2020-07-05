@@ -22,7 +22,9 @@ import com.codingblocks.cbonlineapp.util.extensions.serializeToJson
 import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
+import com.codingblocks.onlineapi.models.LectureContent
 import com.codingblocks.onlineapi.models.Note
+import com.codingblocks.onlineapi.models.RunAttempts
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -125,6 +127,28 @@ class LibraryViewModel(
                 is ResultWrapper.Success -> {
                     if (response.value.code() == 204) {
                         repo.deleteBookmark(id)
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun updateNote(note: NotesModel) {
+        val newNote = Note(note.nttUid, note.duration, note.text, RunAttempts(note.runAttemptId), LectureContent(note.contentId))
+        runIO {
+            when (val response = repo.updateNote(newNote)) {
+                is ResultWrapper.GenericError -> {
+                    if (response.code in 100..103)
+                        startWorkerRequest(noteModel = newNote)
+                    else {
+                        setError(response.error)
+                    }
+                }
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        repo.updateNoteInDb(newNote)
                     } else {
                         setError(fetchError(response.value.code()))
                     }
