@@ -47,15 +47,14 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener, AnkoLo
                 isVisible = true
                 playAnimation()
             }
-            vm.addOrder().observeOnce {
-                if (it!!.getAsJsonObject("razorpayPayment").has("order_id")) {
-                    showRazorPayCheckoutForm(it)
+            vm.addOrder().observeOnce { json ->
+                if (json!!.has("razorpayPayment")) {
+                    showRazorPayCheckoutForm(json)
                 } else {
-                    GlobalScope.launch {
-                        delay(3000)
-                        startActivity(DashboardActivity.createDashboardActivityIntent(this@CheckoutActivity, true))
-                        finish()
+                    json.getAsJsonObject("transaction").let {
+                        vm.paymentMap["txnId"] = it["id"].asString
                     }
+                    confirmPayment()
                 }
             }
 
@@ -90,6 +89,7 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener, AnkoLo
                 options.put("amount", it["amount"].asString) // Amount in paise from carts API after applying coupon and everything
             }
             json.getAsJsonObject("transaction").let {
+                vm.paymentMap["txnId"] = it["id"].asString
                 options.put("currency", it["currency"].asString)
             }
             json.getAsJsonObject("organization").let {
@@ -110,6 +110,10 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener, AnkoLo
     override fun onPaymentError(code: Int, description: String?, p2: PaymentData?) {
         when (code) {
             Checkout.NETWORK_ERROR -> {
+                payment.apply {
+                    isVisible = false
+                    cancelAnimation()
+                }
                 showOffline()
             }
             Checkout.PAYMENT_CANCELED -> {
@@ -128,17 +132,25 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener, AnkoLo
         }
     }
 
-    override fun onPaymentSuccess(p0: String?, p1: PaymentData?) {
+    override fun onPaymentSuccess(p0: String, payment: PaymentData) {
         // To change body of created functions use File | Settings | File Templates.
         /** Make Network call to capture payment.
          *  Body : {
          *       razorpay_payment_id: payment_ksdnvsdlv,
          *       razorpay_order_id: order_ijkdbsn,
          *       txnId: 192721,
-         *       amount: 2394723 (paise)
+         *       amount: 2394723 (paise),
+         *       razorpay_signature:sign
          *  }
          */
-        vm.paymentMap["razorpay_payment_id"] = (p0)!!
+        vm.paymentMap["razorpay_payment_id"] = payment.paymentId
+        vm.paymentMap["razorpay_order_id"] = payment.orderId
+        vm.paymentMap["razorpay_signature"] = payment.signature
+        confirmPayment()
+
+    }
+
+    private fun confirmPayment() {
         vm.capturePayment {
             GlobalScope.launch {
                 delay(3000)

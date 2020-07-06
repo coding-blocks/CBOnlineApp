@@ -8,7 +8,7 @@
     <LinearLayout
         android:id="@+id/rootPayment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingStart="@dimen/margin_large"
         android:paddingEnd="@dimen/margin_large">
@@ -246,13 +246,14 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content"
+            android:minHeight="120dp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="bottom"
+            android:layout_marginTop="@dimen/margin_large"
             android:background="@drawable/divider" />
 
         <LinearLayout
