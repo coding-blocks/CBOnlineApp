@@ -82,8 +82,7 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener, AnkoLo
         val checkout = Checkout()
         try {
             val options = JSONObject()
-            options.put("name", "Coding Blocks")
-            options.put("image", "https://codingblocks.com/assets/images/cb/cblogo.png")
+
             json.getAsJsonObject("razorpayPayment").let {
                 options.put("order_id", it["order_id"].asString) // razorpay_order_id from API
                 options.put("amount", it["amount"].asString) // Amount in paise from carts API after applying coupon and everything
@@ -93,6 +92,8 @@ class CheckoutActivity : BaseCBActivity(), PaymentResultWithDataListener, AnkoLo
                 options.put("currency", it["currency"].asString)
             }
             json.getAsJsonObject("organization").let {
+                options.put("name", it["name"].asString)
+                options.put("image", it["logo"].asString)
                 checkout.setKeyID(it["razorpayKey"].asString)
             }
             //Prefil user info
