@@ -56,4 +56,9 @@ class LibraryRepository(
 
     fun getRunById(attemptId: String) = courseWithInstructorDao.getRunById(attemptId)
 
+
+    suspend fun updateNote(note: Note) = safeApiCall { CBOnlineLib.onlineV2JsonApi.updateNoteById(note.id, note) }
+
+    fun updateNoteInDb(newNote: Note) = notesDao.updateBody(newNote.id, newNote.text)
+
 }
