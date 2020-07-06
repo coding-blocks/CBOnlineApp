@@ -30,9 +30,9 @@
             android:name=".campaign.CampaignActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".dashboard.DashboardActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".mycourse.codechallenge.CodeChallengeActivity"
+            android:name=".mycourse.content.codechallenge.CodeChallengeActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".mycourse.MyCourseActivity" />
         <activity
@@ -91,6 +91,7 @@
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
             android:name=".course.checkout.CheckoutActivity"
+            android:launchMode="singleTask"
             android:parentActivityName=".dashboard.DashboardActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
@@ -173,7 +174,7 @@
             android:name=".settings.AboutActivity"
             android:parentActivityName=".dashboard.DashboardActivity" />
         <activity
-            android:name=".mycourse.player.VideoPlayerActivity"
+            android:name=".mycourse.content.player.VideoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask"
             android:parentActivityName=".mycourse.MyCourseActivity"
@@ -181,10 +182,10 @@
             android:supportsPictureInPicture="true"
             android:theme="@style/NewAppTheme.Dark" />
         <activity
-            android:name=".mycourse.PdfActivity"
+            android:name=".mycourse.content.PdfActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".mycourse.quiz.QuizActivity"
+            android:name=".mycourse.content.quiz.QuizActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".mycourse.MyCourseActivity"
             android:screenOrientation="portrait"
@@ -213,10 +214,6 @@
         <meta-data
             android:name="android.app.shortcuts"
             android:resource="@xml/shortcut" />
-        <meta-data
-            android:name="com.razorpay.ApiKey"
-            android:value="rzp_live_I5IJibPxZuZfWT" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

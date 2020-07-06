@@ -146,4 +146,7 @@ interface OnlineRestApi {
 
     @POST("v2/spins/draw")
     suspend fun drawSpin(): Response<SpinResponse>
+
+    @POST("v2/runs/addOrder")
+    suspend fun addOrder(): Response<JsonObject>
 }

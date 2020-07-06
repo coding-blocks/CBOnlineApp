@@ -14,7 +14,7 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.database.ContentDao
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.DownloadData
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.DOWNLOAD_CHANNEL_ID
 import com.codingblocks.cbonlineapp.util.FileUtils

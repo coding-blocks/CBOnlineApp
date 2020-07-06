@@ -3,11 +3,19 @@ package com.codingblocks.cbonlineapp.dashboard
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.codingblocks.cbonlineapp.campaign.HomeFragment
+import com.codingblocks.cbonlineapp.campaign.LeaderBoardFragment
+import com.codingblocks.cbonlineapp.campaign.RulesFragment
+import com.codingblocks.cbonlineapp.campaign.WinningsFragment
 import com.codingblocks.cbonlineapp.dashboard.doubts.DashboardDoubtsFragment
 import com.codingblocks.cbonlineapp.dashboard.explore.DashboardExploreFragment
 import com.codingblocks.cbonlineapp.dashboard.home.DashboardHomeFragment
 import com.codingblocks.cbonlineapp.dashboard.library.DashboardLibraryFragment
 import com.codingblocks.cbonlineapp.dashboard.mycourses.DashboardMyCoursesFragment
+import com.codingblocks.cbonlineapp.mycourse.content.CourseContentFragment
+import com.codingblocks.cbonlineapp.mycourse.library.CourseLibraryFragment
+import com.codingblocks.cbonlineapp.mycourse.misc.CourseMiscFragment
+import com.codingblocks.cbonlineapp.mycourse.overview.OverviewFragment
 
 class ViewPager2Adapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
     private val fragmentList: MutableList<FragmentName> = mutableListOf()
@@ -23,6 +31,15 @@ class ViewPager2Adapter(activity: FragmentActivity) : FragmentStateAdapter(activ
             FragmentName.HOME -> DashboardHomeFragment()
             FragmentName.DOUBTS -> DashboardDoubtsFragment()
             FragmentName.LIBRARY -> DashboardLibraryFragment()
+            FragmentName.COURSE_OVERVIEW -> OverviewFragment()
+            FragmentName.COURSE_CURRICULUM -> CourseContentFragment()
+            FragmentName.COURSE_LIBRARY -> CourseLibraryFragment()
+            FragmentName.COURSE_MISC -> CourseMiscFragment()
+            FragmentName.CAMPAIGN_HOME -> HomeFragment()
+            FragmentName.CAMPAIGN_RULES -> RulesFragment()
+            FragmentName.CAMPAIGN_LEADERBOARD -> LeaderBoardFragment()
+            FragmentName.CAMPAIGN_WINNING -> WinningsFragment()
+
         }
     }
 
@@ -60,6 +77,14 @@ class ViewPager2Adapter(activity: FragmentActivity) : FragmentStateAdapter(activ
         COURSES,
         HOME,
         DOUBTS,
-        LIBRARY
+        LIBRARY,
+        COURSE_OVERVIEW,
+        COURSE_CURRICULUM,
+        COURSE_LIBRARY,
+        COURSE_MISC,
+        CAMPAIGN_HOME,
+        CAMPAIGN_WINNING,
+        CAMPAIGN_LEADERBOARD,
+        CAMPAIGN_RULES
     }
 }

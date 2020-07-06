@@ -18,7 +18,7 @@ import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.extensions.setRv

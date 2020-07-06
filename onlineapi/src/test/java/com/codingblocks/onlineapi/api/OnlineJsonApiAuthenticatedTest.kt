@@ -55,4 +55,18 @@ class OnlineJsonApiAuthenticatedTest {
         assertNotNull(notes)
         assertTrue(notes!!.isNotEmpty())
     }
+
+    @Test
+    fun `PATCH pauseCourse`() {
+        val runAttempt = runBlocking { CBOnlineLib.onlineV2JsonApi.pauseCourse("80179").body() }
+        assertNotNull(runAttempt)
+        assertTrue(runAttempt!!.paused)
+    }
+
+    @Test
+    fun `PATCH unPauseCourse`() {
+        val runAttempt = runBlocking { CBOnlineLib.onlineV2JsonApi.unPauseCourse("80179").body() }
+        assertNotNull(runAttempt)
+        assert(!runAttempt!!.paused)
+    }
 }

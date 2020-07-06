@@ -13,7 +13,7 @@ import com.codingblocks.cbonlineapp.auth.LoginActivity
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.dashboard.DashboardViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity
 import com.codingblocks.cbonlineapp.util.extensions.hideAndStop
 import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.cbonlineapp.util.livedata.observer

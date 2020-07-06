@@ -27,12 +27,12 @@ import com.codingblocks.cbonlineapp.library.LibraryRepository
 import com.codingblocks.cbonlineapp.library.LibraryViewModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseRepository
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeRepository
-import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeViewModel
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerRepository
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerViewModel
-import com.codingblocks.cbonlineapp.mycourse.quiz.QuizRepository
-import com.codingblocks.cbonlineapp.mycourse.quiz.QuizViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeRepository
+import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerRepository
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerViewModel
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizRepository
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizViewModel
 import com.codingblocks.cbonlineapp.notifications.NotificationViewModel
 import com.codingblocks.cbonlineapp.profile.ProfileRepository
 import com.codingblocks.cbonlineapp.profile.ProfileViewModel
@@ -72,9 +72,9 @@ val viewModelModule = module {
     single { CourseRepository() }
     single { DashboardDoubtsRepository(get(), get(), get(), get()) }
     single { DashboardMyCoursesRepository(get(), get(), get(), get(), get()) }
-    single { LibraryRepository(get(), get(), get(), get()) }
+    single { LibraryRepository(get(), get(), get(), get(),get()) }
     single { DashboardHomeRepository(get(), get(), get(), get()) }
-    single { VideoPlayerRepository(get(), get(), get(), get(), get()) }
+    single { VideoPlayerRepository(get(), get(), get(), get(), get(),get()) }
     single { QuizRepository(get()) }
     single { JobRepository(get()) }
     single { MyCourseRepository(get(), get(), get(), get(), get(), get(), get(), get()) }

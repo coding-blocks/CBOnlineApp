@@ -23,10 +23,9 @@ import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.mycourse.PdfActivity
-import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeActivity
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
-import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
+import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeActivity
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CODE
 import com.codingblocks.cbonlineapp.util.CODE_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID

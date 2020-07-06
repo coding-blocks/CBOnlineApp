@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/pauseCourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableStart="@drawable/ic_pause_course"
+        android:drawableEnd="@drawable/ic_dropright_big"
+        android:drawablePadding="20dp"
+        android:drawableTint="@color/orangish"
+        android:focusable="true"
+        android:fontFamily="@font/gilroy_semibold"
+        android:paddingStart="@dimen/margin_large"
+        android:paddingTop="@dimen/margin_medium"
+        android:paddingEnd="@dimen/margin_large"
+        android:paddingBottom="@dimen/margin_medium"
+        android:text="@string/pause_course"
+        android:textColor="@color/orangish"
+        android:textSize="18sp" />
+
+
+    <TextView
+        android:id="@+id/upgradeCourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableStart="@drawable/ic_upgrade"
+        android:drawableEnd="@drawable/ic_dropright_big"
+        android:drawablePadding="28dp"
+        android:drawableTint="@color/orangish"
+        android:focusable="true"
+        android:fontFamily="@font/gilroy_semibold"
+        android:paddingStart="@dimen/margin_large"
+        android:paddingTop="@dimen/margin_medium"
+        android:paddingEnd="@dimen/margin_large"
+        android:paddingBottom="@dimen/margin_medium"
+        android:text="@string/upgrade_course"
+        android:textColor="@color/orangish"
+        android:textSize="18sp" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:background="@drawable/divider" />
+
+    <LinearLayout
+        android:id="@+id/extensionContainer"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="Buy Extension"
+            android:textSize="18sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:background="@drawable/divider" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/rateCourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableStart="@drawable/ic_rate"
+        android:drawablePadding="28dp"
+        android:focusable="true"
+        android:fontFamily="@font/gilroy_semibold"
+        android:paddingStart="@dimen/margin_large"
+        android:paddingTop="@dimen/margin_medium"
+        android:paddingEnd="@dimen/margin_large"
+        android:paddingBottom="@dimen/margin_medium"
+        android:text="@string/rate_course"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/shareCourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableStart="@drawable/ic_share"
+        android:drawablePadding="28dp"
+        android:drawableTint="@color/black"
+        android:focusable="true"
+        android:fontFamily="@font/gilroy_semibold"
+        android:paddingStart="@dimen/margin_large"
+        android:paddingTop="@dimen/margin_medium"
+        android:paddingEnd="@dimen/margin_large"
+        android:paddingBottom="@dimen/margin_medium"
+        android:text="@string/share_course"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/aboutCourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableStart="@drawable/ic_info"
+        android:drawablePadding="28dp"
+        android:drawableTint="@color/black"
+        android:focusable="true"
+        android:fontFamily="@font/gilroy_semibold"
+        android:paddingStart="@dimen/margin_large"
+        android:paddingTop="@dimen/margin_medium"
+        android:paddingEnd="@dimen/margin_large"
+        android:paddingBottom="@dimen/margin_medium"
+        android:text="@string/about_course"
+        android:textSize="18sp" />
+
+
+</LinearLayout>

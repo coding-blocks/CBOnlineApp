@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".mycourse.quiz.AboutQuizFragment">
+    tools:context=".mycourse.content.quiz.AboutQuizFragment">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/quizTabs"
