@@ -106,10 +106,11 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
                 val currUserLeaderboard = leaderboard.find { it.id == viewModel.prefs.SP_USER_ID }
                 currUserLeaderboard?.let {
-                    courseLeaderboardll.isVisible = true
                     it.id = (leaderboard.indexOf(currUserLeaderboard) + 1).toString()
-                    if (leaderboard.size > 5)
+                    if (leaderboard.size > 5) {
+                        courseLeaderboardll.isVisible = true
                         leaderBoardListAdapter.submitList(mutableListOf(currUserLeaderboard) + leaderboard.subList(0, 5))
+                    }
                 }
             }
         }

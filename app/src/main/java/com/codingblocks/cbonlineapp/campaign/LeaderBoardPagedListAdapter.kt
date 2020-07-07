@@ -7,8 +7,8 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.codingblocks.cbonlineapp.R
-import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.cbonlineapp.util.extensions.sameAndEqual
+import com.codingblocks.cbonlineapp.util.glide.loadImage
 import com.codingblocks.onlineapi.models.Spins
 import kotlinx.android.synthetic.main.item_campaign_leaderboard.view.*
 
@@ -45,10 +45,9 @@ class LeaderBoardPagedListAdapter : PagedListAdapter<Spins, LeaderBoardPagedList
             usernameTv.text = "${item.user?.firstname} ${item.user?.lastname}"
             subTitleTv.text = item.spinPrize?.title ?: ""
             imgView.loadImage(item.spinPrize?.img ?: "")
-            if (item.user?.photo.isNullOrEmpty()){
+            if (item.user?.photo.isNullOrEmpty()) {
                 userImgView.setImageResource(R.drawable.defaultavatar)
-            }
-            else{
+            } else {
                 userImgView.loadImage(item.user?.photo ?: "")
             }
         }
