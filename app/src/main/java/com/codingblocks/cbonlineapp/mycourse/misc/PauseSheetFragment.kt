@@ -9,15 +9,21 @@ import android.widget.FrameLayout
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import com.codingblocks.cbonlineapp.R
+import com.codingblocks.cbonlineapp.course.batches.RUNTIERS
+import com.codingblocks.cbonlineapp.course.checkout.CheckoutActivity
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.util.extensions.timeAgo
+import com.codingblocks.cbonlineapp.util.DIALOG_TYPE
 import com.codingblocks.cbonlineapp.util.livedata.observeOnce
 import com.codingblocks.cbonlineapp.util.livedata.observer
+import com.codingblocks.cbonlineapp.util.showConfirmDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.course_pause_fragment.*
+import org.jetbrains.anko.startActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.ocpsoft.prettytime.PrettyTime
+import java.util.*
 
 
 class PauseSheetFragment : BottomSheetDialogFragment() {
@@ -44,27 +50,43 @@ class PauseSheetFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         pauseCancelBtn.setOnClickListener {
-            dialog?.dismiss()
+            dismiss()
         }
-        vm.run?.observer(viewLifecycleOwner) { courseRunPair ->
+        vm.getRunAttempt().observer(viewLifecycleOwner) { runAttempt ->
             pauseDescriptionTv.text = buildSpannedString {
                 append(getString(R.string.pause_desc))
-                bold {
-                    append(getString(R.string.pause_time_left, courseRunPair.runAttempt.lastPausedLeft?.timeAgo()))
+                runAttempt.pauseTimeLeft?.let {
+                    bold {
+                        val time = PrettyTime().format(Date(System.currentTimeMillis() + it.toLong()))
+                        append(getString(R.string.pause_time_left, time))
+                    }
                 }
             }
-
-        }
-        pauseCourseBtn.setOnClickListener {
-            vm.pauseCourse().observeOnce { res ->
-                if (res) {
-                    requireActivity().finish()
+            pauseCourseBtn.setOnClickListener {
+                if (!runAttempt.premium) {
+                    showConfirmDialog(DIALOG_TYPE.PURCHASE) {
+                        positiveBtnClickListener {
+                            dialog?.dismiss()
+                            vm.addToCart().observeOnce {
+                                this@PauseSheetFragment.dismiss()
+                                requireContext().startActivity<CheckoutActivity>()
+                            }
+                        }
+                    }.show()
+                } else if (runAttempt.premium && runAttempt.runTier != RUNTIERS.LITE.name) {
+                    if (runAttempt.pauseTimeLeft.toString() != "0")
+                        vm.pauseCourse().observeOnce { res ->
+                            if (res) {
+                                requireActivity().finish()
+                            } else {
+                                dismiss()
+                            }
+                        }
                 } else {
-                    dialog?.dismiss()
+                    val upgradeCourse = UpgradeSheetFragment()
+                    upgradeCourse.show(childFragmentManager, upgradeCourse.tag)
                 }
             }
         }
     }
-
-
 }

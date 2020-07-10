@@ -119,7 +119,7 @@ class MyCourseActivity : BaseCBActivity(), AnkoLogger, SwipeRefreshLayout.OnRefr
             add(ViewPager2Adapter.FragmentName.COURSE_OVERVIEW)
             add(ViewPager2Adapter.FragmentName.COURSE_CURRICULUM)
             add(ViewPager2Adapter.FragmentName.COURSE_LIBRARY)
-//            add(ViewPager2Adapter.FragmentName.COURSE_MISC)
+            add(ViewPager2Adapter.FragmentName.COURSE_MISC)
         }
         coursePager.apply {
             isUserInputEnabled = false
