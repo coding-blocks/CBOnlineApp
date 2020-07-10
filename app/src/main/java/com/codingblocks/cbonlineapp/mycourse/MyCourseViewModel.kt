@@ -255,7 +255,7 @@ class MyCourseViewModel(
                 if (isSuccessful) {
                     body()?.let { repo.updateRunAttempt(it) }
                     emit(true)
-                }else{
+                } else {
                     errorLiveData.postValue("There was some error")
                 }
             }
@@ -269,12 +269,14 @@ class MyCourseViewModel(
                 if (isSuccessful) {
                     body()?.let { repo.updateRunAttempt(it) }
                     emit(true)
-                }else{
+                } else {
                     errorLiveData.postValue("There was some error")
                 }
             }
         }
     }
+
+    fun getRunAttempt() = repo.getRunAttempt(attemptId!!)
 }
 
 //    fun fetchExtensions(productId: Int): MutableLiveData<List<ProductExtensionsItem>> {

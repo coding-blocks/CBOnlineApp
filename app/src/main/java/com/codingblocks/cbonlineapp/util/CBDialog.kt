@@ -55,6 +55,28 @@ class CBDialog(context: Context, type: DIALOG_TYPE?) : BaseCBDialogHelper() {
             if (dismiss)
                 dialog?.dismiss()
         }
+
+    fun setContent(type: DIALOG_TYPE?) {
+        dialogView.context.run {
+            when (type) {
+                DIALOG_TYPE.UNAUTHORIZED -> {
+                    positiveBtn.text = getString(R.string.log_in)
+                    desc.text = getString(R.string.login_desc)
+                }
+                DIALOG_TYPE.PAUSED -> {
+                    positiveBtn.text = "Yes, Un-Pause"
+                }
+                DIALOG_TYPE.PURCHASE -> {
+                    cancelable = true
+                    positiveBtn.text = getText(R.string.buy_now)
+                    desc.text = getText(R.string.purchase)
+                    negativeBtnClickListener { dialog?.dismiss() }
+                }
+
+                null -> TODO()
+            }
+        }
+    }
 }
 
 /*
@@ -62,37 +84,18 @@ class CBDialog(context: Context, type: DIALOG_TYPE?) : BaseCBDialogHelper() {
  */
 inline fun Activity.showConfirmDialog(type: DIALOG_TYPE?, func: CBDialog.() -> Unit = {}): AlertDialog =
     CBDialog(this, type).apply {
-        when (type) {
-
-            DIALOG_TYPE.UNAUTHORIZED -> {
-                positiveBtn.text = getString(R.string.log_in)
-                desc.text = getString(R.string.login_desc)
-            }
-            DIALOG_TYPE.PAUSED -> {
-                positiveBtn.text = "Yes, Un-Pause"
-            }
-            null -> TODO()
-        }
+        setContent(type)
         func()
     }.create()
 
 inline fun Fragment.showConfirmDialog(type: DIALOG_TYPE?, func: CBDialog.() -> Unit): AlertDialog =
     CBDialog(this.requireContext(), type).apply {
-        when (type) {
-
-            DIALOG_TYPE.UNAUTHORIZED -> {
-                positiveBtn.text = getString(R.string.log_in)
-                desc.text = getString(R.string.login_desc)
-            }
-            DIALOG_TYPE.PAUSED -> {
-                positiveBtn.text = "Yes, Un-Pause"
-            }
-            null -> TODO()
-        }
+        setContent(type)
         func()
     }.create()
 
 enum class DIALOG_TYPE {
     UNAUTHORIZED,
-    PAUSED
+    PAUSED,
+    PURCHASE
 }

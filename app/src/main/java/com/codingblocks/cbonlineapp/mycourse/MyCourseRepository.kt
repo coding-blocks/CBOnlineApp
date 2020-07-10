@@ -352,4 +352,6 @@ class MyCourseRepository(
         attemptDao.updatePause(runAttempt.id, runAttempt.paused, runAttempt.pauseTimeLeft, runAttempt.lastPausedLeft)
     }
 
+    fun getRunAttempt(id: String) = attemptDao.getRunAttempt(id)
+
 }

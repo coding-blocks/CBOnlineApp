@@ -34,13 +34,15 @@ import kotlinx.android.synthetic.main.item_performance.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.support.v4.toast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.ocpsoft.prettytime.PrettyTime
 import java.io.File
+import java.util.*
 
 class OverviewFragment : BaseCBFragment(), AnkoLogger {
 
     private val viewModel by sharedViewModel<MyCourseViewModel>()
     private val leaderBoardListAdapter = LeaderBoardListAdapter()
-
+    var confirmDialog: AlertDialog? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_overview, container, false)
     }
@@ -151,18 +153,19 @@ class OverviewFragment : BaseCBFragment(), AnkoLogger {
     }
 
     private fun showPauseDialog(pauseTimeLeft: String?) {
-        var confirmDialog: AlertDialog? = null
         if (confirmDialog == null)
             confirmDialog = showConfirmDialog(DIALOG_TYPE.PAUSED) {
                 cancelable = false
+                val time = PrettyTime().format(Date(System.currentTimeMillis() + pauseTimeLeft!!.toLong()))
+                desc.text = getString(R.string.pause_time_left, time)
                 positiveBtnClickListener {
                     viewModel.unPauseCourse().observeOnce {
                         dialog?.dismiss()
                     }
-                    negativeBtnClickListener { requireActivity().finish() }
                 }
+                negativeBtnClickListener { requireActivity().finish() }
             }
-        confirmDialog.show()
+        confirmDialog?.show()
 
     }
 
