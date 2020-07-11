@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.commons.RoundedBottomSheetDialogFragment
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
+import com.codingblocks.cbonlineapp.util.livedata.observeOnce
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class UpgradeSheetFragment : RoundedBottomSheetDialogFragment() {
@@ -20,6 +21,10 @@ class UpgradeSheetFragment : RoundedBottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        vm.run?.observeOnce {
+            vm.getUpgradePack(it.course.cid).observeOnce {
 
+            }
+        }
     }
 }

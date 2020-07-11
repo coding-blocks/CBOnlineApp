@@ -354,4 +354,14 @@ class MyCourseRepository(
 
     fun getRunAttempt(id: String) = attemptDao.getRunAttempt(id)
 
+    suspend fun getUpgradePack(courseId: String, attemptId: String, runTier: String = "LITE") =
+        safeApiCall {
+            CBOnlineLib.onlineV2JsonApi.upgradePacks(
+                courseId = courseId,
+                runTier = runTier,
+                attemptId = attemptId
+            )
+        }
+
+
 }

@@ -1,6 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-</LinearLayout>
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@drawable/background_purple"
+        app:layout_constraintBottom_toBottomOf="@+id/upgradeDesc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_upgrade_big"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gradientTextView" />
+
+    <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+        android:id="@+id/gradientTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:layout_marginTop="28dp"
+        android:fontFamily="@font/gilroy_bold"
+        android:text="@string/upgrade_now"
+        android:textSize="24sp"
+        app:endColor="@color/tealgreen"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:startColor="@color/kiwigreen" />
+
+    <TextView
+        android:id="@+id/upgradeDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:paddingBottom="28dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="28dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:text="@string/this_is_a_premium_feature_upgrade_now_toaccess_it"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/upgradeTierTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/gradientTextView"
+        app:layout_constraintTop_toBottomOf="@+id/gradientTextView" />
+
+
+
+        <com.codingblocks.cbonlineapp.util.widgets.GradientTextView
+            android:id="@+id/upgradeTierTv"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/margin_large"
+            android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/upgradeDesc"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/ic_premium"
+            android:drawablePadding="4dp"
+            android:fontFamily="@font/gilroy_bold"
+            android:textColor="@color/orangish"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Premium" />
+
+        <TextView
+            android:id="@+id/pauseCancelBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="28dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:fontFamily="@font/gilroy_medium"
+            android:text="@string/view_all_features"
+            android:textColor="@color/orangish"
+            app:layout_constraintBottom_toBottomOf="@+id/upgradeTierTv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/upgradeTierTv" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/upgradeTierTv" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="28dp"
+            android:drawableStart="@drawable/ic_certificate_black"
+            android:drawablePadding="16dp"
+            android:drawableTint="@color/brownish_grey"
+            android:fontFamily="@font/gilroy_medium"
+            android:gravity="center_vertical"
+            android:text="Certificate of\nAchievement"
+            android:textColor="@color/brownish_grey"
+            app:layout_constraintEnd_toStartOf="@+id/textView3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="28dp"
+            android:drawableStart="@drawable/ic_jobs"
+            android:drawablePadding="16dp"
+            android:drawableTint="@color/brownish_grey"
+            android:fontFamily="@font/gilroy_medium"
+            android:gravity="center_vertical"
+            android:text="Placement\nSupport"
+            android:textColor="@color/brownish_grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@id/divider" />
+
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="28dp"
+            android:drawableStart="@drawable/ic_doubt"
+            android:drawablePadding="16dp"
+            android:drawableTint="@color/brownish_grey"
+            android:fontFamily="@font/gilroy_medium"
+            android:gravity="center_vertical"
+            android:text="Instant Doubt\nResolution (TA)"
+            android:textColor="@color/brownish_grey"
+            app:layout_constraintEnd_toStartOf="@+id/textView3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="28dp"
+            android:drawableStart="@drawable/ic_goodies"
+            android:drawablePadding="16dp"
+            android:drawableTint="@color/brownish_grey"
+            android:fontFamily="@font/gilroy_medium"
+            android:gravity="center_vertical"
+            android:text="Goodies &amp;\nSwags"
+            android:textColor="@color/brownish_grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@id/textView3" />
+
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView4" />
+
+    <TextView
+        android:id="@+id/upgradePriceTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="28dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:fontFamily="@font/gilroy_bold"
+        android:textColor="@color/orangish"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        tools:text="2999" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pauseCourseBtn"
+            style="@style/ButtonStyleChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="28dp"
+            android:background="@drawable/button_background"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:text="@string/upgrade_now"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/upgradePriceTv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/upgradePriceTv" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

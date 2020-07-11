@@ -25,6 +25,7 @@ import com.codingblocks.onlineapi.models.RunAttempts
 import com.codingblocks.onlineapi.models.Runs
 import com.codingblocks.onlineapi.models.Sections
 import com.codingblocks.onlineapi.models.Spins
+import com.codingblocks.onlineapi.models.UpgradePack
 import com.codingblocks.onlineapi.models.User
 import com.github.jasminb.jsonapi.JSONAPIDocument
 import okhttp3.ResponseBody
@@ -155,6 +156,13 @@ interface OnlineJsonApi {
         @Path("id") id: String
     ): Response<RunAttempts>
 
+    @GET("upgrade_packs")
+    suspend fun upgradePacks(
+        @Query("filter[courseId]") courseId: String,
+        @Query("filter[from]") runTier: String,
+        @Query("fromRunAttemptId") attemptId: String
+    ): Response<ArrayList<UpgradePack>>
+
     @GET("sections/{sectionId}/relationships/contents")
     suspend fun getSectionContents(
         @Path("sectionId") sectionId: String
@@ -169,7 +177,7 @@ interface OnlineJsonApi {
     suspend fun getNotesForContent(
         @Query("filter[runAttemptId]") attemptId: String,
         @Query("filter[contentId]") contentId: String
-        ): Response<List<Note>>
+    ): Response<List<Note>>
 
 
     @GET("doubts")

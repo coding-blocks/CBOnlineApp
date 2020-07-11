@@ -342,9 +342,7 @@
                         android:layout_marginTop="@dimen/margin_medium_small"
                         android:fontFamily="@font/gilroy_bold"
                         android:text="@string/claim_goodies"
-                        android:textSize="18sp"
-                        app:endColor="#f7c332"
-                        app:startColor="#fa8733" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/goodiesTv"

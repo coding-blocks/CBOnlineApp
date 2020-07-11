@@ -334,4 +334,7 @@
     <string name="update">Update</string>
     <string name="notes_info">%s | %s</string>
     <string name="post">Post</string>
+    <string name="upgrade_now">Upgrade Now</string>
+    <string name="this_is_a_premium_feature_upgrade_now_toaccess_it">This is a premium feature. Upgrade now toaccess it!</string>
+    <string name="view_all_features">View all features</string>
 </resources>

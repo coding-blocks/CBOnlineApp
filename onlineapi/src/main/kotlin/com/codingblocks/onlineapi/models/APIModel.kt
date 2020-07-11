@@ -411,6 +411,17 @@ class ContentQna(
     }
 }
 
+@Type("upgrade_packs")
+class UpgradePack(
+    val title: String,
+    val from:String,
+    val description: String,
+    val to:String,
+    val price:Long,
+    val productId:String,
+    val toRunId:String
+) : BaseModel()
+
 @Type("csv")
 class ContentCsv : BaseModel() {
     @JvmField
