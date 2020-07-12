@@ -278,8 +278,8 @@ class MyCourseViewModel(
 
     fun getRunAttempt() = repo.getRunAttempt(attemptId!!)
 
-    fun getUpgradePack(courseId: String)= liveData(Dispatchers.IO) {
-        when (val response = repo.getUpgradePack(courseId,attemptId!!)) {
+    fun getUpgradePack(courseId: String) = liveData(Dispatchers.IO) {
+        when (val response = repo.getUpgradePack(courseId, attemptId!!)) {
             is ResultWrapper.GenericError -> setError(response.error)
             is ResultWrapper.Success -> with(response.value) {
                 if (isSuccessful && !body().isNullOrEmpty()) {
@@ -289,6 +289,10 @@ class MyCourseViewModel(
                 }
             }
         }
+    }
+
+    fun upgradeCourse() = liveData {
+        emit(true)
     }
 
 }

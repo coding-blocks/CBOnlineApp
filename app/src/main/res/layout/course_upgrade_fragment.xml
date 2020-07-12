@@ -75,7 +75,7 @@
             tools:text="Premium" />
 
         <TextView
-            android:id="@+id/pauseCancelBtn"
+            android:id="@+id/compareBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -196,7 +196,7 @@
         tools:text="2999" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/pauseCourseBtn"
+            android:id="@+id/upgradeCourseBtn"
             style="@style/ButtonStyleChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
