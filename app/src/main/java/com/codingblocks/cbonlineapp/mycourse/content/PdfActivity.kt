@@ -39,7 +39,7 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
         setContentView(R.layout.activity_pdf)
         //TODO - remove this
         url = intent.getStringExtra("fileUrl")
-        fileName = intent.getStringExtra("fileName").replace(" ", "_")
+        fileName = intent.getStringExtra("fileName")
 
         if (url.isNullOrEmpty() || fileName.isNullOrEmpty()) {
             val contentID = intent.getStringExtra(CONTENT_ID)
@@ -50,9 +50,41 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
                 libraryDao.getPDF(contentID).observer(this){ pdfModel->
                     url = pdfModel.documentPdfLink
                     fileName = pdfModel.documentName
+                    checkFile()
                 }
             }
+        }else{
+            checkFile()
         }
+
+        intentFilter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+        val downloadManager =
+            this@PdfActivity.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+
+        receiver = object : DownloadBroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                super.onReceive(context, intent)
+                val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+                val file = File("$path/$fileName")
+
+                downloadManager.addCompletedDownload(
+                    fileName,
+                    " ",
+                    false,
+                    "application/pdf",
+                    path,
+                    file.length(),
+                    true
+                )
+                showpdf(file)
+            }
+        }
+
+        this@PdfActivity.registerReceiver(receiver, intentFilter)
+    }
+
+    private fun checkFile(){
+        fileName?.replace(" ", "_")
 
         if (MediaUtils.checkPermission(this)) {
             path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -83,30 +115,6 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
             }
         }
 
-        intentFilter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
-        val downloadManager =
-            this@PdfActivity.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-
-        receiver = object : DownloadBroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                super.onReceive(context, intent)
-                val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-                val file = File("$path/$fileName")
-
-                downloadManager.addCompletedDownload(
-                    fileName,
-                    " ",
-                    false,
-                    "application/pdf",
-                    path,
-                    file.length(),
-                    true
-                )
-                showpdf(file)
-            }
-        }
-
-        this@PdfActivity.registerReceiver(receiver, intentFilter)
     }
 
     private fun showpdf(downloadedFile: File) {
