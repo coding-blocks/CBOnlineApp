@@ -133,7 +133,12 @@ data class BookmarkModel(
     var sectionId: String = "",
     var createdAt: String = "",
     var sectionName: String = "",
-    var contentName: String = ""
+    var contentName: String = "",
+    var bookmarkType: String = "",
+    var codeUid: String = "",
+    var codeContestId: Int = 0,
+    var pdfLink: String = "",
+    var pdfName: String = ""
 ) : BaseModel()
 
 @Entity

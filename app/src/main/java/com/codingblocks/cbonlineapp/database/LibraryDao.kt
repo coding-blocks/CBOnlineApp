@@ -12,7 +12,7 @@ import com.codingblocks.cbonlineapp.database.models.ContentLecture
 @Dao
 interface LibraryDao {
     @Query("""
-        SELECT c.bookmarkUid,c.runAttemptId,c.contentId,c.sectionId,c.createdAt,b.title as contentName ,s.name as sectionName FROM  BookmarkModel c
+        SELECT c.bookmarkUid,c.runAttemptId,c.contentId,c.sectionId,c.createdAt,b.title as contentName ,s.name as sectionName, b.contentable as bookmarkType, b.codeContestId as codeContestId, b.codeUid as codeUid, b.documentPdfLink as pdfLink, b.documentName as pdfName FROM  BookmarkModel c
         INNER JOIN ContentModel b ON b.ccid = c.contentId
  	   INNER JOIN SectionModel s ON s.csid = c.sectionId
        WHERE c.runAttemptId = :id ORDER BY c.createdAt DESC
