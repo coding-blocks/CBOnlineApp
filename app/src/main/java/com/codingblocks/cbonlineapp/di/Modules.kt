@@ -80,7 +80,7 @@ val viewModelModule = module {
     single { MyCourseRepository(get(), get(), get(), get(), get(), get(), get(), get()) }
     single { TracksRepository() }
     single { ProfileRepository(get()) }
-    single { CodeChallengeRepository(get()) }
+    single { CodeChallengeRepository(get(), get()) }
     single { AuthRepository(get()) }
     single { CampaignRepository(get()) }
 }

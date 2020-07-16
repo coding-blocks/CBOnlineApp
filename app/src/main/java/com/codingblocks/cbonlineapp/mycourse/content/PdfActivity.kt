@@ -11,13 +11,17 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBActivity
+import com.codingblocks.cbonlineapp.database.LibraryDao
+import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.MediaUtils
+import com.codingblocks.cbonlineapp.util.livedata.observer
 import com.codingblocks.cbonlineapp.util.receivers.DownloadBroadcastReceiver
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import es.voghdev.pdfviewpager.library.PDFViewPager
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter
 import kotlinx.android.synthetic.main.activity_pdf.*
 import org.jetbrains.anko.AnkoLogger
+import org.koin.android.ext.android.inject
 import java.io.File
 
 class PdfActivity : BaseCBActivity(), AnkoLogger {
@@ -26,6 +30,7 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
     var fileName: String? = null
     var path: String? = null
     var isDownloaded: Boolean = false
+    val libraryDao: LibraryDao by inject()
     lateinit var receiver: DownloadBroadcastReceiver
     lateinit var intentFilter: IntentFilter
 
@@ -37,8 +42,16 @@ class PdfActivity : BaseCBActivity(), AnkoLogger {
         fileName = intent.getStringExtra("fileName").replace(" ", "_")
 
         if (url.isNullOrEmpty() || fileName.isNullOrEmpty()) {
-            Toast.makeText(this, "Error fetching document", Toast.LENGTH_SHORT).show()
-            finish()
+            val contentID = intent.getStringExtra(CONTENT_ID)
+            if (contentID.isNullOrEmpty()){
+                Toast.makeText(this, "Error fetching document", Toast.LENGTH_SHORT).show()
+                finish()
+            }else{
+                libraryDao.getPDF(contentID).observer(this){ pdfModel->
+                    url = pdfModel.documentPdfLink
+                    fileName = pdfModel.documentName
+                }
+            }
         }
 
         if (MediaUtils.checkPermission(this)) {

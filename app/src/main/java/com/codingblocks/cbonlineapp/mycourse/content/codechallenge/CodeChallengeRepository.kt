@@ -1,6 +1,7 @@
 package com.codingblocks.cbonlineapp.mycourse.content.codechallenge
 
 import com.codingblocks.cbonlineapp.database.CodeChallengeDao
+import com.codingblocks.cbonlineapp.database.LibraryDao
 import com.codingblocks.cbonlineapp.database.models.CodeChallengeModel
 import com.codingblocks.cbonlineapp.database.models.CodeDetailsModel
 import com.codingblocks.cbonlineapp.database.models.ProblemModel
@@ -14,7 +15,8 @@ import com.codingblocks.onlineapi.models.TimeLimits
 import com.codingblocks.onlineapi.safeApiCall
 
 class CodeChallengeRepository(
-    private val codeDao: CodeChallengeDao
+    private val codeDao: CodeChallengeDao,
+    private val libraryDao: LibraryDao
 ) {
     suspend fun fetchCodeChallenge(codeId: Int, contestId: String) = safeApiCall { CBOnlineLib.onlineV2JsonApi.getCodeChallenge(codeId, contestId) }
 
@@ -110,4 +112,6 @@ class CodeChallengeRepository(
             )
         }
     }
+
+    suspend fun getCodeId(ccid: String) = libraryDao.getCodeChallenge(ccid)
 }

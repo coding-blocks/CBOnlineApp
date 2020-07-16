@@ -59,12 +59,11 @@ class LibraryViewFragment : BaseCBFragment() {
                         createVideoPlayerActivityIntent(requireContext(), item.lectureContentId, item.lectureSectionId)
                     )
                     is BookmarkModel -> {
-                        when (item.bookmarkType) {
+                        when (item.contentable) {
                             DOCUMENT ->
                                 startActivity(
                                     intentFor<PdfActivity>(
-                                        "fileUrl" to item.pdfLink,
-                                        "fileName" to item.pdfName + ".pdf"
+                                        CONTENT_ID to item.contentId
                                     )
                                 )
                             LECTURE ->
@@ -86,9 +85,7 @@ class LibraryViewFragment : BaseCBFragment() {
                                 startActivity(
                                 intentFor<CodeChallengeActivity>(
                                     CONTENT_ID to item.contentId,
-                                    SECTION_ID to item.sectionId,
-                                    CONTEST_ID to item.codeContestId.toString(),
-                                    CODE_ID to item.codeUid
+                                    SECTION_ID to item.sectionId
                                 )
                             )
                         }

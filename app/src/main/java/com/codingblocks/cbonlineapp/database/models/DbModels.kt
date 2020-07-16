@@ -134,11 +134,7 @@ data class BookmarkModel(
     var createdAt: String = "",
     var sectionName: String = "",
     var contentName: String = "",
-    var bookmarkType: String = "",
-    var codeUid: String = "",
-    var codeContestId: Int = 0,
-    var pdfLink: String = "",
-    var pdfName: String = ""
+    var contentable: String = ""
 ) : BaseModel()
 
 @Entity
@@ -165,6 +161,16 @@ class FormModel(
     val required: Boolean,
     val title: String,
     val type: String
+)
+
+data class CodeModel(
+    val codeUid: String,
+    val codeContestId: Int
+)
+
+data class PdfModel(
+    val documentPdfLink: String,
+    val documentName: String
 )
 
 @Entity
