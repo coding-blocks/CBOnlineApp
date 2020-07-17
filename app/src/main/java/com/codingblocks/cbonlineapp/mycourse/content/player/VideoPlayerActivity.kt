@@ -23,6 +23,7 @@ import android.view.WindowManager
 import android.widget.RelativeLayout
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
+import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
@@ -89,8 +90,10 @@ import org.jetbrains.anko.excludeFromRecents
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import org.jetbrains.anko.toast
+import org.json.JSONException
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 import java.io.File
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
@@ -333,12 +336,16 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
             setPlayer(player)
             setFullscreenActionListener(this@VideoPlayerActivity)
             setControllerVisibilityListener(this@VideoPlayerActivity)
+            setVdoParamsGenerator(vdoParamsGenerator)
+
         }
         showControls(true)
         vm.getOtpProgress.observer(this) {
             if (it && ::videoPlayer.isInitialized) {
                 try {
                     videoPlayer.load(getVdoParams())
+                    if (playerControlView.vdo_error.isVisible)
+                        playerControlView.retryAfterError()
                 } catch (e: Exception) {
                     toast("Player not ready please try again!!")
                 }
@@ -348,6 +355,7 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
     }
 
     /**Function to generate new /Reload Video for opt and videoId*/
+    @WorkerThread
     private fun getVdoParams(): VdoPlayer.VdoInitParams? {
         return if (vm.isDownloaded) {
             VdoPlayer.VdoInitParams.createParamsForOffline(vm.currentVideoId.value)
@@ -794,6 +802,25 @@ class VideoPlayerActivity : BaseCBActivity(), EditNoteClickListener, AnkoLogger,
         }
         if (::youtubePlayer.isInitialized) {
             youtubePlayer.pause()
+        }
+    }
+
+    private val vdoParamsGenerator: VdoPlayerControls.VdoParamsGenerator = object : VdoPlayerControls.VdoParamsGenerator {
+
+
+        override fun getNewVdoInitParams(): VdoPlayer.VdoInitParams? {
+            return try {
+                getVdoParams()
+            } catch (e: IOException) {
+                e.printStackTrace()
+                log("Error generating new otp and playbackInfo")
+                null
+            } catch (e: JSONException) {
+                e.printStackTrace()
+                log("Error generating new otp and playbackInfo")
+
+                null
+            }
         }
     }
 

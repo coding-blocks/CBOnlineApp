@@ -1,6 +1,8 @@
 package com.codingblocks.cbonlineapp.util.widgets
 
 import android.content.Context
+import android.os.Handler
+import android.os.HandlerThread
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +14,7 @@ import android.widget.ListAdapter
 import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import com.airbnb.lottie.LottieAnimationView
 import com.codingblocks.cbonlineapp.R
@@ -21,10 +24,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vdocipher.aegis.media.ErrorDescription
 import com.vdocipher.aegis.media.Track
 import com.vdocipher.aegis.player.VdoPlayer
+import com.vdocipher.aegis.player.VdoPlayer.VdoInitParams
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import kotlin.math.max
 import kotlin.math.min
+
 
 class VdoPlayerControls @JvmOverloads constructor(
     context: Context,
@@ -60,6 +65,14 @@ class VdoPlayerControls @JvmOverloads constructor(
         fun onFullscreenAction(enterFullscreen: Boolean): Boolean
     }
 
+    interface VdoParamsGenerator {
+        /**
+         * @return new vdo params
+         */
+        fun getNewVdoInitParams(): VdoInitParams?
+    }
+
+
     private val playButton: View
     private val pauseButton: View
     private val fastForwardButton: LottieAnimationView
@@ -69,6 +82,9 @@ class VdoPlayerControls @JvmOverloads constructor(
     private val seekBar: SeekBar
     private val speedControlButton: ImageButton
     private val backButton: ImageButton
+
+    private var helperThread: HandlerThread? = null
+    private var helperHandler: Handler? = null
 
     //    private val captionsButton: ImageButton
     private val qualityButton: ImageButton
@@ -89,13 +105,17 @@ class VdoPlayerControls @JvmOverloads constructor(
     private var fullscreen: Boolean = false
     private var chosenSpeedIndex = 2
 
+    private var needNewVdoParams = false
     private var player: VdoPlayer? = null
     private val uiListener: UiListener
     private var lastErrorParams: VdoPlayer.VdoInitParams? = null
     private var fullscreenActionListener: FullscreenActionListener? = null
     private var visibilityListener: ControllerVisibilityListener? = null
+    private var vdoParamsGenerator: VdoParamsGenerator? = null
 
     private val hideAction = Runnable { hide() }
+
+    private val ERROR_CODES_FOR_NEW_PARAMS: List<Int> = listOf(2013, 2018)
 
     init {
         ffwdMs = DEFAULT_FAST_FORWARD_MS
@@ -167,6 +187,10 @@ class VdoPlayerControls @JvmOverloads constructor(
         hideAfterTimeout()
     }
 
+    fun setVdoParamsGenerator(vdoParamsGenerator: VdoParamsGenerator) {
+        this.vdoParamsGenerator = vdoParamsGenerator
+    }
+
     fun hide() {
         if (controllerVisible() && lastErrorParams == null) {
             controlPanel.visibility = GONE
@@ -183,12 +207,20 @@ class VdoPlayerControls @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         attachedToWindow = true
+
+        helperThread = HandlerThread(TAG)
+        helperThread!!.start()
+        helperHandler = Handler(helperThread!!.looper)
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         attachedToWindow = false
         removeCallbacks(hideAction)
+
+        helperThread!!.quit()
+        helperThread = null
+        helperHandler = null
     }
 
     fun controllerVisible(): Boolean {
@@ -363,19 +395,35 @@ class VdoPlayerControls @JvmOverloads constructor(
         controlPanel.visibility = View.GONE
         errorView.visibility = View.VISIBLE
         errorTextView.visibility = View.VISIBLE
-        val errMsg = "An error occurred : " + errorDescription.errorCode + "\nTap to retry"
+        val errMsg = "An error occurred : " + errorDescription.errorCode + "\nRetrying again"
         errorTextView.text = errMsg
         show()
     }
 
-    private fun retryAfterError() {
-        player?.let { player ->
-            lastErrorParams?.let {
+    fun retryAfterError() {
+        if (player != null && lastErrorParams != null) {
+            if (!needNewVdoParams) {
                 errorView.visibility = GONE
                 errorTextView.visibility = GONE
                 controlPanel.visibility = VISIBLE
-                player.load(it)
+                player!!.load(lastErrorParams)
                 lastErrorParams = null
+            } else if (vdoParamsGenerator != null && helperHandler != null) {
+                helperHandler!!.post {
+                    val retryParams = vdoParamsGenerator!!.getNewVdoInitParams()
+                    if (retryParams != null) {
+                        post {
+                            errorView.visibility = GONE
+                            errorTextView.visibility = GONE
+                            controlPanel.visibility = VISIBLE
+                            player!!.load(retryParams)
+                            lastErrorParams = null
+                        }
+                    }
+                }
+            } else {
+                Log.e(TAG, "cannot retry loading params");
+                Toast.makeText(context, "cannot retry loading params", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -476,6 +524,7 @@ class VdoPlayerControls @JvmOverloads constructor(
 
         override fun onLoadError(vdoParams: VdoPlayer.VdoInitParams, errorDescription: ErrorDescription) {
             lastErrorParams = vdoParams
+            needNewVdoParams = ERROR_CODES_FOR_NEW_PARAMS.contains(errorDescription.errorCode);
             showError(errorDescription)
         }
 
@@ -485,6 +534,7 @@ class VdoPlayerControls @JvmOverloads constructor(
 
         override fun onError(vdoParams: VdoPlayer.VdoInitParams, errorDescription: ErrorDescription) {
             lastErrorParams = vdoParams
+            needNewVdoParams = ERROR_CODES_FOR_NEW_PARAMS.contains(errorDescription.errorCode);
             showError(errorDescription)
         }
 
