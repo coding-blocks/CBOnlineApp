@@ -89,6 +89,7 @@ class SettingsActivity : BaseCBActivity() {
 
     private fun updateDeleteAllTv() {
         if (isSomethingDownloaded) {
+            deleteAllTv.visibility = View.VISIBLE
             deleteAllTv.setOnClickListener {
                 showDialog(
                     type = "Delete",
