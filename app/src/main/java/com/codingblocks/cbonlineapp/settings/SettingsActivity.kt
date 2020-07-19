@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
 import android.util.Log
+import android.view.View
 import android.widget.SeekBar
 import androidx.lifecycle.lifecycleScope
 import com.codingblocks.cbonlineapp.R
@@ -28,6 +29,8 @@ class SettingsActivity : BaseCBActivity() {
 
     private val stat by lazy { StatFs(Environment.getExternalStorageDirectory().path) }
 
+    private var isSomethingDownloaded = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -42,33 +45,8 @@ class SettingsActivity : BaseCBActivity() {
             getPrefs().SP_WIFI = wifiSwitch.isChecked
         }
         updateSpaceStats()
-        deleteAllTv.setOnClickListener {
-            showDialog(
-                type = "Delete",
-                image = R.drawable.ic_info,
-                cancelable = false,
-                primaryText = R.string.confirmation,
-                secondaryText = R.string.delete_video_desc,
-                primaryButtonText = R.string.confirm,
-                secondaryButtonText = R.string.cancel,
-                callback = { confirmed ->
-                    if (confirmed) {
-                        lifecycleScope.launch {
-                            val files = viewModel.getDownloads()
-                            files.forEach { content ->
+        updateDeleteAllTv()
 
-                                val folderFile = File(file, "/${content.contentLecture.lectureId}")
-
-                                withContext(Dispatchers.IO) {
-                                    FileUtils.deleteRecursive(folderFile)
-                                }
-                                runOnUiThread { updateSpaceStats() }
-                            }
-                        }
-                    }
-                }
-            )
-        }
         setSeekbarMaxValue()
         seekbarLimit.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -105,6 +83,42 @@ class SettingsActivity : BaseCBActivity() {
         Log.v("usedSpace","Used Space is $usedSpace")
         storageProgress.max = bytesAvailable.toInt() / 1048576
         storageProgress.progress = usedSpace.toInt()
+
+        isSomethingDownloaded = usedSpace != 0.0
+    }
+
+    private fun updateDeleteAllTv() {
+        if (isSomethingDownloaded) {
+            deleteAllTv.setOnClickListener {
+                showDialog(
+                    type = "Delete",
+                    image = R.drawable.ic_info,
+                    cancelable = false,
+                    primaryText = R.string.confirmation,
+                    secondaryText = R.string.delete_video_desc,
+                    primaryButtonText = R.string.confirm,
+                    secondaryButtonText = R.string.cancel,
+                    callback = { confirmed ->
+                        if (confirmed) {
+                            lifecycleScope.launch {
+                                val files = viewModel.getDownloads()
+                                files.forEach { content ->
+
+                                    val folderFile = File(file, "/${content.contentLecture.lectureId}")
+
+                                    withContext(Dispatchers.IO) {
+                                        FileUtils.deleteRecursive(folderFile)
+                                    }
+                                    runOnUiThread { updateSpaceStats() }
+                                }
+                            }
+                        }
+                    }
+                )
+            }
+        } else {
+            deleteAllTv.visibility = View.INVISIBLE
+        }
     }
 
     private fun setSeekbarProgress(progress: Int) {
