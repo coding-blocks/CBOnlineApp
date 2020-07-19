@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 30,
-    "identityHash": "9e33b16b1d6a2e55f4d951f4ccf8f6be",
+    "identityHash": "ae1e8118b22c4761329d738ebcfebc81",
     "entities": [
       {
         "tableName": "CourseModel",
@@ -1172,7 +1172,7 @@
       },
       {
         "tableName": "RunAttemptModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`attemptId` TEXT NOT NULL, `certificateApproved` INTEGER NOT NULL, `end` TEXT NOT NULL, `premium` INTEGER NOT NULL, `revoked` INTEGER NOT NULL, `approvalRequested` INTEGER NOT NULL, `doubtSupport` TEXT NOT NULL, `completedContents` INTEGER NOT NULL, `lastAccessedAt` TEXT NOT NULL, `runId` TEXT NOT NULL, `certificateUrl` TEXT NOT NULL, `runTier` TEXT NOT NULL, PRIMARY KEY(`attemptId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`attemptId` TEXT NOT NULL, `certificateApproved` INTEGER NOT NULL, `end` TEXT NOT NULL, `premium` INTEGER NOT NULL, `revoked` INTEGER NOT NULL, `approvalRequested` INTEGER NOT NULL, `doubtSupport` TEXT NOT NULL, `completedContents` INTEGER NOT NULL, `lastAccessedAt` TEXT NOT NULL, `runId` TEXT NOT NULL, `certificateUrl` TEXT NOT NULL, `runTier` TEXT NOT NULL, `paused` INTEGER NOT NULL, `pauseTimeLeft` TEXT, `lastPausedLeft` TEXT, PRIMARY KEY(`attemptId`))",
         "fields": [
           {
             "fieldPath": "attemptId",
@@ -1245,6 +1245,24 @@
             "columnName": "runTier",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "paused",
+            "columnName": "paused",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pauseTimeLeft",
+            "columnName": "pauseTimeLeft",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastPausedLeft",
+            "columnName": "lastPausedLeft",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -1600,7 +1618,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9e33b16b1d6a2e55f4d951f4ccf8f6be')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ae1e8118b22c4761329d738ebcfebc81')"
     ]
   }
 }

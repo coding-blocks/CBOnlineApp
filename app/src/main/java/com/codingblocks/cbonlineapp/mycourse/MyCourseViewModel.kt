@@ -26,18 +26,18 @@ import com.codingblocks.cbonlineapp.util.CONTENT_ID
 import com.codingblocks.cbonlineapp.util.COURSE_NAME
 import com.codingblocks.cbonlineapp.util.PREMIUM
 import com.codingblocks.cbonlineapp.util.PreferenceHelper
-import com.codingblocks.cbonlineapp.workers.ProgressWorker
 import com.codingblocks.cbonlineapp.util.RUN_ATTEMPT_ID
 import com.codingblocks.cbonlineapp.util.RUN_ID
-import com.codingblocks.cbonlineapp.util.livedata.DoubleTrigger
 import com.codingblocks.cbonlineapp.util.extensions.runIO
 import com.codingblocks.cbonlineapp.util.extensions.savedStateValue
+import com.codingblocks.cbonlineapp.util.livedata.DoubleTrigger
+import com.codingblocks.cbonlineapp.workers.ProgressWorker
 import com.codingblocks.onlineapi.ResultWrapper
 import com.codingblocks.onlineapi.fetchError
 import com.codingblocks.onlineapi.models.Leaderboard
 import com.codingblocks.onlineapi.models.ResetRunAttempt
-import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.Dispatchers
+import java.util.concurrent.TimeUnit
 
 class MyCourseViewModel(
     private val handle: SavedStateHandle,
@@ -159,7 +159,7 @@ class MyCourseViewModel(
                     }
                 } else {
                     if (code() == 404)
-                    emit(emptyList<Leaderboard>())
+                        emit(emptyList<Leaderboard>())
                     else
                         setError(fetchError(code()))
                 }
@@ -247,6 +247,36 @@ class MyCourseViewModel(
     }
 
     fun getHackerBlocksPerformance() = repo.getHackerBlocksPerformance()
+
+    fun pauseCourse() = liveData {
+        when (val response = repo.pauseCourse(attemptId)) {
+            is ResultWrapper.GenericError -> setError(response.error)
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful) {
+                    body()?.let { repo.updateRunAttempt(it) }
+                    emit(true)
+                } else {
+                    errorLiveData.postValue("There was some error")
+                }
+            }
+        }
+    }
+
+    fun unPauseCourse() = liveData {
+        when (val response = repo.unPauseCourse(attemptId)) {
+            is ResultWrapper.GenericError -> setError(response.error)
+            is ResultWrapper.Success -> with(response.value) {
+                if (isSuccessful) {
+                    body()?.let { repo.updateRunAttempt(it) }
+                    emit(true)
+                } else {
+                    errorLiveData.postValue("There was some error")
+                }
+            }
+        }
+    }
+
+    fun getRunAttempt() = repo.getRunAttempt(attemptId!!)
 }
 
 //    fun fetchExtensions(productId: Int): MutableLiveData<List<ProductExtensionsItem>> {

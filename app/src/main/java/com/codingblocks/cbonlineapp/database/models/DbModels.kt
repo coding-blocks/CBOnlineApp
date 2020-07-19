@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 import com.codingblocks.cbonlineapp.CBOnlineApp
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.onlineapi.models.Course
+import java.io.Serializable
 import java.sql.Date
 
 @Entity
@@ -90,7 +91,7 @@ data class NotesModel(
     var createdAt: String = "",
     var deletedAt: String? = "",
     val contentTitle: String = ""
-) : BaseModel()
+) : BaseModel(),Serializable
 
 @Entity
 data class Notification(

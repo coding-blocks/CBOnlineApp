@@ -124,7 +124,7 @@ class Clients internal constructor(
 
     private val onlineV2JsonRetrofit = Retrofit.Builder()
         .client(clientInterceptor)
-        .baseUrl("http://$PROD/api/v2/")
+        .baseUrl("http://$DEBUG/api/v2/")
         .addConverterFactory(JSONAPIConverterFactory(onlineApiResourceConverter))
         .addConverterFactory(JacksonConverterFactory.create(om))
         .build()
@@ -138,7 +138,7 @@ class Clients internal constructor(
 
     private val retrofit = Retrofit.Builder()
         .client(clientInterceptor)
-        .baseUrl("http://$PROD/api/")
+        .baseUrl("http://$DEBUG/api/")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
     val api: OnlineRestApi = retrofit.create(OnlineRestApi::class.java)

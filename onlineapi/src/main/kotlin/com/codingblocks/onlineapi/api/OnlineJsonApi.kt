@@ -141,9 +141,19 @@ interface OnlineJsonApi {
         @Query("include") include: String = "instructors,runs"
     ): Response<List<Course>>
 
-    @GET("run_attempts/{runid}")
+    @GET("run_attempts/{id}")
     suspend fun enrolledCourseById(
-        @Path("runid") id: String
+        @Path("id") id: String
+    ): Response<RunAttempts>
+
+    @PATCH("run_attempts/{id}/pause")
+    suspend fun pauseCourse(
+        @Path("id") id: String
+    ): Response<RunAttempts>
+
+    @PATCH("run_attempts/{id}/unpause")
+    suspend fun unPauseCourse(
+        @Path("id") id: String
     ): Response<RunAttempts>
 
     @GET("sections/{sectionId}/relationships/contents")
@@ -155,6 +165,19 @@ interface OnlineJsonApi {
     suspend fun getNotesByAttemptId(
         @Path("runAttemptId") id: String
     ): Response<List<Note>>
+
+    @GET("notes")
+    suspend fun getNotesForContent(
+        @Query("filter[runAttemptId]") attemptId: String,
+        @Query("filter[contentId]") contentId: String
+        ): Response<List<Note>>
+
+
+    @GET("doubts")
+    suspend fun getDoubtsForContent(
+        @Query("filter[runAttemptId]") attemptId: String,
+        @Query("filter[contentId]") contentId: String
+    ): Response<List<Doubts>>
 
     @GET("bookmarks")
     suspend fun getBookmarksByAttemptId(

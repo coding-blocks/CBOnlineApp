@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.codingblocks.cbonlineapp.database.models.ContentModel
 
 fun <T> LiveData<T>.observer(owner: LifecycleOwner, onEmission: (T) -> Unit) {
@@ -60,8 +61,8 @@ fun pageChangeCallback(
     fnState: (Int) -> Unit = { },
     fnSelected: (Int) -> Unit = { },
     fnScrolled: (Int, Float, Int) -> Unit
-): ViewPager.OnPageChangeListener {
-    return object : ViewPager.OnPageChangeListener {
+): ViewPager2.OnPageChangeCallback {
+    return object : ViewPager2.OnPageChangeCallback() {
         override fun onPageScrollStateChanged(state: Int) = fnState(state)
         override fun onPageSelected(position: Int) = fnSelected(position)
         override fun onPageScrolled(

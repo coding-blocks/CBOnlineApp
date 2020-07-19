@@ -14,15 +14,22 @@ import com.codingblocks.cbonlineapp.R
 import com.codingblocks.cbonlineapp.baseclasses.BaseCBFragment
 import com.codingblocks.cbonlineapp.database.models.BaseModel
 import com.codingblocks.cbonlineapp.database.models.BookmarkModel
+import com.codingblocks.cbonlineapp.database.models.NotesModel
 import com.codingblocks.cbonlineapp.database.models.ContentLecture
 import com.codingblocks.cbonlineapp.database.models.LibraryTypes
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
 import com.codingblocks.cbonlineapp.util.FileUtils
 import com.codingblocks.cbonlineapp.util.MediaUtils
 import com.codingblocks.cbonlineapp.util.extensions.setRv
 import com.codingblocks.cbonlineapp.util.extensions.showDialog
 import com.codingblocks.cbonlineapp.util.widgets.ProgressDialog
+import android.view.WindowManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.bottom_sheet_note.view.*
+import org.jetbrains.anko.support.v4.toast
+import java.util.*
 import java.io.File
 import kotlinx.android.synthetic.main.fragment_library_view.*
 import kotlinx.coroutines.Dispatchers
@@ -37,6 +44,8 @@ class LibraryViewFragment : BaseCBFragment() {
     private val vm by sharedViewModel<LibraryViewModel>()
     private lateinit var libraryListAdapter: LibraryListAdapter
     private var selectionTracker: SelectionTracker<String>? = null
+    private val dialog: BottomSheetDialog by lazy { BottomSheetDialog(requireContext()) }
+    private val sheetDialog: View by lazy { layoutInflater.inflate(R.layout.bottom_sheet_note, null) }
     private val itemClickListener: ItemClickListener by lazy {
         object : ItemClickListener {
             override fun onClick(item: BaseModel) {
@@ -47,7 +56,7 @@ class LibraryViewFragment : BaseCBFragment() {
                     is BookmarkModel -> startActivity(
                         createVideoPlayerActivityIntent(requireContext(), item.contentId, item.sectionId)
                     )
-//                    is NotesModel -> startActivity(intentFor<VideoPlayerActivity>(CONTENT_ID to item.contentId, SECTION_ID to item.sectionId).singleTop())
+                    is NotesModel -> updateNotes(item)
                 }
             }
         }
@@ -64,6 +73,7 @@ class LibraryViewFragment : BaseCBFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpBottomSheet()
         typeTv.text = vm.type
         when (vm.type) {
             getString(R.string.notes) -> {
@@ -212,4 +222,45 @@ class LibraryViewFragment : BaseCBFragment() {
             }
         }
     }
+
+
+    private fun setUpBottomSheet() {
+        dialog.dismissWithAnimation = true
+        dialog.setContentView(sheetDialog)
+        Objects.requireNonNull(dialog.window)?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        dialog.setOnShowListener {
+            val d = it as BottomSheetDialog
+            val sheet = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)!!
+            BottomSheetBehavior.from(sheet).setState(BottomSheetBehavior.STATE_EXPANDED)
+        }
+    }
+
+    private fun updateNotes(item: NotesModel) {
+        sheetDialog.apply {
+            bottomSheetTitleTv.text = getString(R.string.add_note)
+            doubtTitleTv.isVisible = false
+            bottoSheetDescTv.setText(item.text)
+            bottomSheetInfoTv.text = "${item.contentTitle}"
+            bottomSheetCancelBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+            bottomSheetSaveBtn.setOnClickListener {
+                val desc = sheetDialog.bottoSheetDescTv.text.toString()
+                when {
+                    desc.isEmpty() -> {
+                        toast("Note cannot be empty!!")
+                    }
+                    desc == item.text -> {
+                        toast("Same note cannot be added.")
+                    }
+                    else -> {
+                        vm.updateNote(item.apply { text = sheetDialog.bottoSheetDescTv.text.toString() })
+                        dialog.dismiss()
+                    }
+                }
+            }
+        }
+        dialog.show()
+    }
+
 }

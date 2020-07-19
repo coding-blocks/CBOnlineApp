@@ -85,7 +85,7 @@ class NotificationsActivity : BaseCBActivity() {
                     // get the id of element which needs to be deleted
                     val deleteUID = notifications[position].id
                     // remove the item from database
-                    async(Dispatchers.IO) { notificationDao.deleteNotificationByID(deleteUID) }
+                    launch (Dispatchers.IO) { notificationDao.deleteNotificationByID(deleteUID) }
                 }
             }
         }

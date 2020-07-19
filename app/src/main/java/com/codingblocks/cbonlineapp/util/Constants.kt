@@ -109,3 +109,6 @@ const val CONTEST_ID = "contestId"
 const val CODE_ID = "codeId"
 
 const val DELETE_DOWNLOADED_VIDEO = "deleteDownloadedVideo"
+
+const val TAB_POS: String = "tabPosition"
+

@@ -41,14 +41,14 @@ class OnBoardingActivity : BaseCBActivity() {
             adapter = mAdapter
             currentItem = 0
             offscreenPageLimit = 1
-            addOnPageChangeListener(
-                    pageChangeCallback { pos, _, _ ->
-                        for (i in 0 until dotsCount) {
-                            dots[i].isSelected = false
-                        }
-                        dots[pos].isSelected = true
-                    }
-            )
+//            addOnPageChangeListener(
+//                    pageChangeCallback { pos, _, _ ->
+//                        for (i in 0 until dotsCount) {
+//                            dots[i].isSelected = false
+//                        }
+//                        dots[pos].isSelected = true
+//                    }
+//            )
             setScrollDuration(200)
         }
         dotsCount = mAdapter.count

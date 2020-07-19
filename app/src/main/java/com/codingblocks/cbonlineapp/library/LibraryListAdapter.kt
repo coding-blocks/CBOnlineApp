@@ -82,6 +82,7 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
                     tracker?.let {
                         val item = getItem(position) as NotesModel
                         bind(item, it.isSelected(item.nttUid))
+                        itemClickListener = onItemClick
                     }
                 }
             }
@@ -108,6 +109,8 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
     }
 
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var itemClickListener: ItemClickListener? = null
+
         fun bind(item: NotesModel, isActivated: Boolean = false) = with(itemView) {
 
             noteTitleTv.text = item.contentTitle
@@ -115,6 +118,10 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
             noteTimeTv.text = item.createdAt.timeAgo()
             selectionImg.isVisible = isActivated
             noteTimeTv.isVisible = !isActivated
+            editNote.isVisible = !isActivated
+            editNote.setOnClickListener {
+                itemClickListener?.onClick(item)
+            }
         }
 
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> =
@@ -134,9 +141,6 @@ class LibraryListAdapter(val type: LibraryTypes) : ListAdapter<BaseModel, Recycl
             noteVDescriptionTv.text = item.text
             noteVTimeTv.text = item.createdAt.timeAgo()
             noteVCreateTv.text = item.duration.secToTime()
-//            noteVDeleteImg.setOnClickListener {
-//                deleteClickListener?.onClick(item.nttUid, adapterPosition, itemView)
-//            }
             noteVEditImg.setOnClickListener {
                 editClickListener?.onClick(item)
             }
@@ -212,7 +216,7 @@ class DiffCallback : DiffUtil.ItemCallback<BaseModel>() {
 }
 
 interface DeleteNoteClickListener {
-    fun onClick(noteId: String, position: Int, view: View)
+    fun onClick(noteId: String, position: Int)
 }
 
 interface EditNoteClickListener {

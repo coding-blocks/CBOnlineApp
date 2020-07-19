@@ -23,10 +23,9 @@ import com.codingblocks.cbonlineapp.database.models.ContentModel
 import com.codingblocks.cbonlineapp.database.models.SectionModel
 import com.codingblocks.cbonlineapp.mycourse.MyCourseActivity
 import com.codingblocks.cbonlineapp.mycourse.MyCourseViewModel
-import com.codingblocks.cbonlineapp.mycourse.PdfActivity
-import com.codingblocks.cbonlineapp.mycourse.codechallenge.CodeChallengeActivity
-import com.codingblocks.cbonlineapp.mycourse.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
-import com.codingblocks.cbonlineapp.mycourse.quiz.QuizActivity
+import com.codingblocks.cbonlineapp.mycourse.content.codechallenge.CodeChallengeActivity
+import com.codingblocks.cbonlineapp.mycourse.content.player.VideoPlayerActivity.Companion.createVideoPlayerActivityIntent
+import com.codingblocks.cbonlineapp.mycourse.content.quiz.QuizActivity
 import com.codingblocks.cbonlineapp.util.CODE
 import com.codingblocks.cbonlineapp.util.CODE_ID
 import com.codingblocks.cbonlineapp.util.CONTENT_ID
@@ -245,29 +244,8 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
         attemptId: String,
         sectionId: String
     ) {
-//        val constraints = if (getPrefs(requireContext()).SP_WIFI)
-//            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
-//        else
-//            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-//        val videoData = workDataOf(
-//            VIDEO_ID to videoId,
-//            "title" to title,
-//            SECTION_ID to sectionId,
-//            RUN_ATTEMPT_ID to attemptId,
-//            CONTENT_ID to contentId
-//        )
 
         DownloadService.startService(requireContext(), sectionId, attemptId, videoId, contentId, title)
-
-//        val request: OneTimeWorkRequest =
-//            OneTimeWorkRequestBuilder<DownloadWorker>()
-//                .setConstraints(constraints)
-//                .setInputData(videoData)
-//                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
-//                .build()
-//
-//        WorkManager.getInstance()
-//            .enqueue(request)
     }
 
     override fun startSectionDownlod(sectionId: String) {
@@ -277,36 +255,6 @@ class CourseContentFragment : BaseCBFragment(), AnkoLogger, DownloadStarter {
             SectionDownloadService.startService(requireContext(), sectionId, viewModel.attemptId!!)
         }
 
-//        val constraints = if (getPrefs(requireContext()).SP_WIFI)
-//            Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
-//        else
-//            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-//        val videoData = workDataOf(
-//            SECTION_ID to sectionId,
-//            RUN_ATTEMPT_ID to viewModel.attemptId
-//        )
-//
-//        val request: OneTimeWorkRequest =
-//            OneTimeWorkRequestBuilder<SectionDownloadService>()
-//                .setConstraints(constraints)
-//                .addTag(SECTION_DOWNLOAD)
-//                .setInputData(videoData)
-//                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
-//                .build()
-//        val pendingRequest = WorkManager.getInstance().getWorkInfosByTag(SECTION_DOWNLOAD).get()
-//        SectionService.startService(requireContext(), sectionId,viewModel.attemptId!!)
-//        pendingRequest.let { workList ->
-//            if (workList.size == 0) {
-//                WorkManager.getInstance().enqueue(request)
-//            } else if (workList.size == 1 && workList[0].state == WorkInfo.State.RUNNING) {
-//                toast("Section Download in Progress")
-//            } else if (workList[0].state == WorkInfo.State.FAILED) {
-//                WorkManager.getInstance().pruneWork()
-//                WorkManager.getInstance().enqueue(request)
-//            } else {
-//                toast("Cannot Start Download !!!")
-//            }
-//        }
     }
 
     private fun popUpWindowSection(): PopupWindow {
